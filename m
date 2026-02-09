@@ -1,63 +1,64 @@
-Return-Path: <linux-pm+bounces-42374-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42375-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0Bu5LRxximnPKQAAu9opvQ
-	(envelope-from <linux-pm+bounces-42374-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 00:43:24 +0100
+	id wBeTISRximnPKQAAu9opvQ
+	(envelope-from <linux-pm+bounces-42375-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 00:43:32 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2C601156B0
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 00:43:23 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EB1B1156C0
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 00:43:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4145530072AB
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 23:43:21 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8B5D8302BDC8
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 23:43:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0063830CDB1;
-	Mon,  9 Feb 2026 23:43:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5326232B98A;
+	Mon,  9 Feb 2026 23:43:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LnG4cjgw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jTOS2Z4e"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B802264D3;
-	Mon,  9 Feb 2026 23:43:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0801A30F543;
+	Mon,  9 Feb 2026 23:43:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770680597; cv=none; b=hc1CcSxr1mZ5YK6trK0JVBMjW13L5hjmo/3Rygd2rc2UoVY4ifk9HgebqiwJrwiLNK+gr6VWjwjUv45RMkxPQafCaUjXmxhSWbChPHzRME7WkgfFVdJe3uLGLxLk51xILhsOz66Qlen6PWzrkYgkdv1Gmxg/mL9ckndIx0bt3s8=
+	t=1770680599; cv=none; b=Au3USxCQ4TcVpgKOz6xwBSM+u/7iMqrXUL8tlqUDRlBcFMjdJUoyrNhbX35i/vWbVX8IM5sfmGYXfg7juwK2lQ9RrnvRcibB4VgKIBLPuqQo26U2uho0qU415lFVXlDmoxuesIVW/cjg2msMiQmSGc3atOzjtCuZg0pQcAr937c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770680597; c=relaxed/simple;
-	bh=M+HntxgdXL+stp25upW8vr0XmT7TRUjfT8tfFf52PCM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=neILV4AVJU8gMLB2kx8vTC5KSR3TbnlrJTqCc1D1bgEBxfvsGWAFufIieXYAGFKaPwsklS3CDPI5lpvi4HhatbA9yxZwrIYIuci4mtDrbkspaZgXkf18qWbjAUYGgfdAhzGfu2pJKHu0BSHYbn+eCKZgrX+J/RF8xjR7XejI/JA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LnG4cjgw; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1770680599; c=relaxed/simple;
+	bh=S+zr8lfsS9Knuv4YXV7nh50ifkEwNLPUtzbkxnNYRyU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=U6B3FQ3yKf4HxDzKIdAafmkPorK6kZdcXJzOQrdOEtxGvRr80K0RCxgZSzbiPE4//IEXjUYD+FW5esU5bCPPd55A50Xar4YXGEnMw3/QaxXgghNKWVV62ix0+O1GE42B8sOA+q9XcakCqZdoRe+oDakDu2ToI40E41lLUgFF9Y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jTOS2Z4e; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770680596; x=1802216596;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=M+HntxgdXL+stp25upW8vr0XmT7TRUjfT8tfFf52PCM=;
-  b=LnG4cjgwtuMxB5ayAPguIk7+pZvm25OJvt6aJKPpI3DA4OIPSHqfwEHc
-   ukxmGoyzCQIIhYEBjadpHnD8EQFWKCWL/dcYCfDgdTbymIAP3vvFDQBil
-   7l+yy+o0C+T0hqXn5FOWRKlCcFeHQLWQHpZ8xpKTURRd9OdbY2oZ0Ti5b
-   Hq5vqR8Q7Pj5nAX8xS2OPhhbbOLONi51GJtHts5LA6qlXu70JLfYOE6cL
-   Wm4nSor/NST3mLV4oD/HL1ktepwfpNvi28jXiJBpfm4cS42H2j7Yab9e5
-   dIDazkFNV5Q7+JnlVpAcnJgADj1qiI/EWHWQHVSWOycJbbjdMGYTZHJmP
-   w==;
-X-CSE-ConnectionGUID: aBTbFwLiQ4mwqwsPbNI4WA==
-X-CSE-MsgGUID: 5u4cfQG+SmWXHVesiOvSwA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11696"; a="89385233"
+  t=1770680598; x=1802216598;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=S+zr8lfsS9Knuv4YXV7nh50ifkEwNLPUtzbkxnNYRyU=;
+  b=jTOS2Z4enK9MozKlCVXGHOJDciY3q6EMxh8BaWE1Xe/DArjksGOVjf2g
+   ih70jt1EDM5BkSMFF7znOdG3DtMaTXOBm+Lc6is6L8u9VhqTWUgw9R2n5
+   JZKGkOzea8jMl1iLmRrvBeqzNMhiqeLy/ttPnqXh1VNGF20Z8OhO58RNS
+   ZbC4Clte+0R6u1hROxALpDUL691GGyIyKEo/PQz7KPUwnnhxr9IUctg9m
+   JmpqCVevaRX6QsTwfDFWV3cZm5lUfyXfZYZ5oEebObnnualaZuHEra3ia
+   ELe3uXCmVXt+tskskJ6TH8LZl3LaYPvK4GlPM6nfLQrBjHTorRziJPDJY
+   g==;
+X-CSE-ConnectionGUID: 6+sc1zNJQ2++ks91LnAYUg==
+X-CSE-MsgGUID: NegkI9UJQTmT1quGnsJA4Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11696"; a="89385235"
 X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="89385233"
+   d="scan'208";a="89385235"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
   by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2026 15:43:15 -0800
-X-CSE-ConnectionGUID: 3CgsUpAhTTaUMXaXNu62aQ==
-X-CSE-MsgGUID: NBAHA8UvR4a+Kdfxg/oVcQ==
+X-CSE-ConnectionGUID: 4Vd+x0s6SPu8gEaZkdcy5w==
+X-CSE-MsgGUID: 6WrRfO+1QzSgKCqUR5d1cg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="242351917"
+   d="scan'208";a="242351919"
 Received: from skuppusw-desk2.jf.intel.com ([10.165.154.101])
   by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2026 15:43:15 -0800
 From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -65,10 +66,12 @@ To: "Rafael J . Wysocki" <rafael@kernel.org>
 Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/2] Fix RAPL PMU access from non-lead CPUs
-Date: Mon,  9 Feb 2026 15:43:08 -0800
-Message-ID: <20260209234310.1440722-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v1 1/2] powercap: intel_rapl: Remove incorrect CPU check in PMU context
+Date: Mon,  9 Feb 2026 15:43:09 -0800
+Message-ID: <20260209234310.1440722-2-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260209234310.1440722-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+References: <20260209234310.1440722-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -83,16 +86,16 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-42374-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42375-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[sathyanarayanan.kuppuswamy@linux.intel.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
@@ -101,58 +104,113 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-pm];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.intel.com:mid]
-X-Rspamd-Queue-Id: E2C601156B0
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,intel.com:email,intel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 2EB1B1156C0
 X-Rspamd-Action: no action
 
-This series fixes issues with RAPL PMU event access when using CPUs
-other than the package lead_cpu.
+The RAPL MSR read path incorrectly validates CPU context when called
+from the PMU subsystem:
 
-The problem was discovered when turbostat reported zero power values
-when run on a non-lead CPU in the package.
+    if (atomic) {
+        if (unlikely(smp_processor_id() != cpu))
+            return -EIO;
+        rdmsrq(ra->reg.msr, ra->value);
+    }
 
-Investigation revealed two issues:
+This check fails for package-scoped MSRs like RAPL energy counters,
+which are readable from any CPU within the package.
 
-1. The RAPL MSR driver incorrectly validated that the current CPU must
-   match the lead CPU of the package when reading from PMU context, even
-   though package-scoped MSRs are readable from any CPU in the package.
+The perf tool avoids hitting this check by validating against
+/sys/bus/event_source/devices/power/cpumask before opening events.
+However, turbostat does not perform this validation and may attempt
+reads from non-lead CPUs, causing the check to fail and return zero
+power values.
 
-2. The RAPL PMU cpumask only exposed one CPU per package (the lead_cpu)
-   for both MSR and TPMI interfaces, forcing tools to use that specific
-   CPU even though package-scoped registers are readable from any CPU
-   in the package.
+Since package-scoped MSRs are architecturally accessible from any CPU
+in the package, remove the CPU matching check.
 
-The perf tool avoided issue #1 by checking the cpumask before opening
-events, but turbostat does not perform this validation. The restrictive
-cpumask in issue #2 was unnecessary since both MSR and TPMI interfaces
-support reads from any CPU in the package for package-scoped registers.
+Also rename 'atomic' to 'pmu_ctx' to clarify this indicates PMU context
+where rdmsrq() can be used directly instead of rdmsrl_safe_on_cpu().
 
-These patches:
-- Remove the incorrect CPU validation check in PMU context
-- Expand the PMU cpumask to include all CPUs in each package for both
-  MSR and TPMI RAPL interfaces
-- Rename 'atomic' parameter to 'pmu_ctx' for clarity
-
-After these changes, tools can successfully read RAPL events from any
-CPU in the package, matching the architectural capability of the
-hardware for both MSR and TPMI based RAPL implementations.
-
-Testing (PTL & GNR platform):
-- Verified turbostat --no-msr --show power works on all CPUs
-- Verified perf stat -e power/energy-pkg/ works on all CPUs
-- Confirmed /sys/bus/event_source/devices/power/cpumask shows all
-  package CPUs instead of just lead_cpu
-- Tested on both MSR-based (PTL) and TPMI-based (GNR) RAPL system
-
-Kuppuswamy Sathyanarayanan (2):
-  powercap: intel_rapl: Remove incorrect CPU check in PMU context
-  powercap: intel_rapl: Expose all package CPUs in PMU cpumask
-
- drivers/powercap/intel_rapl_common.c | 21 ++++++++-------------
+Fixes: 748d6ba43afd ("powercap: intel_rapl: Enable MSR-based RAPL PMU support")
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Tested-by: Furquim Ulisses <ulisses.furquim@intel.com>
+---
+ drivers/powercap/intel_rapl_common.c |  6 +++---
  drivers/powercap/intel_rapl_msr.c    | 12 +++++-------
  include/linux/intel_rapl.h           |  2 +-
- 3 files changed, 14 insertions(+), 21 deletions(-)
+ 3 files changed, 9 insertions(+), 11 deletions(-)
 
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index 3ff6da3bf4e6..3705d0608a0f 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -254,7 +254,7 @@ static void rapl_init_domains(struct rapl_package *rp);
+ static int rapl_read_data_raw(struct rapl_domain *rd,
+ 			      enum rapl_primitives prim,
+ 			      bool xlate, u64 *data,
+-			      bool atomic);
++			      bool pmu_ctx);
+ static int rapl_write_data_raw(struct rapl_domain *rd,
+ 			       enum rapl_primitives prim,
+ 			       unsigned long long value);
+@@ -832,7 +832,7 @@ prim_fixups(struct rapl_domain *rd, enum rapl_primitives prim)
+  */
+ static int rapl_read_data_raw(struct rapl_domain *rd,
+ 			      enum rapl_primitives prim, bool xlate, u64 *data,
+-			      bool atomic)
++			      bool pmu_ctx)
+ {
+ 	u64 value;
+ 	enum rapl_primitives prim_fixed = prim_fixups(rd, prim);
+@@ -854,7 +854,7 @@ static int rapl_read_data_raw(struct rapl_domain *rd,
+ 
+ 	ra.mask = rpi->mask;
+ 
+-	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra, atomic)) {
++	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra, pmu_ctx)) {
+ 		pr_debug("failed to read reg 0x%llx for %s:%s\n", ra.reg.val, rd->rp->name, rd->name);
+ 		return -EIO;
+ 	}
+diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
+index 9a7e150b3536..152893dca565 100644
+--- a/drivers/powercap/intel_rapl_msr.c
++++ b/drivers/powercap/intel_rapl_msr.c
+@@ -110,16 +110,14 @@ static int rapl_cpu_down_prep(unsigned int cpu)
+ 	return 0;
+ }
+ 
+-static int rapl_msr_read_raw(int cpu, struct reg_action *ra, bool atomic)
++static int rapl_msr_read_raw(int cpu, struct reg_action *ra, bool pmu_ctx)
+ {
+ 	/*
+-	 * When called from atomic-context (eg PMU event handler)
+-	 * perform MSR read directly using rdmsrq().
++	 * When called from PMU context, perform MSR read directly using
++	 * rdmsrq() without IPI overhead. Package-scoped MSRs are readable
++	 * from any CPU in the package.
+ 	 */
+-	if (atomic) {
+-		if (unlikely(smp_processor_id() != cpu))
+-			return -EIO;
+-
++	if (pmu_ctx) {
+ 		rdmsrq(ra->reg.msr, ra->value);
+ 		goto out;
+ 	}
+diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
+index f479ef5b3341..fa1f328d6712 100644
+--- a/include/linux/intel_rapl.h
++++ b/include/linux/intel_rapl.h
+@@ -152,7 +152,7 @@ struct rapl_if_priv {
+ 	union rapl_reg reg_unit;
+ 	union rapl_reg regs[RAPL_DOMAIN_MAX][RAPL_DOMAIN_REG_MAX];
+ 	int limits[RAPL_DOMAIN_MAX];
+-	int (*read_raw)(int id, struct reg_action *ra, bool atomic);
++	int (*read_raw)(int id, struct reg_action *ra, bool pmu_ctx);
+ 	int (*write_raw)(int id, struct reg_action *ra);
+ 	void *defaults;
+ 	void *rpi;
 -- 
 2.43.0
 
