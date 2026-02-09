@@ -1,71 +1,71 @@
-Return-Path: <linux-pm+bounces-42307-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42308-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YN/ZLLRCiWmK5QQAu9opvQ
-	(envelope-from <linux-pm+bounces-42307-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 03:13:08 +0100
+	id qCk9KFBFiWkT5gQAu9opvQ
+	(envelope-from <linux-pm+bounces-42308-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 03:24:16 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E99610B001
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 03:13:08 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id E98CC10B104
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 03:24:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DAAA830160DA
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 02:12:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EEA773013B7F
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 02:22:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8102A2C0260;
-	Mon,  9 Feb 2026 02:12:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 072162BDC29;
+	Mon,  9 Feb 2026 02:22:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XRZUVrfZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SOKRM+R0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1289298CC9;
-	Mon,  9 Feb 2026 02:12:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A557123D291;
+	Mon,  9 Feb 2026 02:22:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770603162; cv=none; b=g02vYWycedeVO5TotGbnXQ3iUPDAErC6D+ma3dnXvlExN28ZklTr7iaxSMBNdFhc1GaDVG2rEYcp8uNSYfc9gN5Zf7vDag08GPTM1cj4F/r+x/fpgTkTh7TD9w8daIcVyEMMfF8WSs9rVpUje7iHkO3m1lOn7ALMchFIVYb3JF8=
+	t=1770603760; cv=none; b=fUTdhN3Onmm1I/O0YU5BJZM7IJvX3D1k+0yS4fxF0zcJFKNqWfEvzf/JhKC4aA7A2hY3r9CZ87flUhDtyxr0LsbVR76npdEJGce9wPIZMCLzHE+R44Sqkuqfkl3ccw55ObZJt+o7MvvOkFFJWysVkXCC3h4S5XgwQSBHQF6amaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770603162; c=relaxed/simple;
-	bh=JimVqJbGLErbVoUw3/1ZrbUgMnX0GyqHbji4ngZyjxg=;
+	s=arc-20240116; t=1770603760; c=relaxed/simple;
+	bh=lN29YV+zBAydXqnE2rZS6mvynhrdF/TkVSR0zGXivNw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pghK4iAe241F0swaUWEsRTwwfndheTAZJxSiMd7Hh+aT8Rf/lALVpvd2b/fsHsO7GVASvr4Bsfmhvjfj9Yn92Ejkpovq2zMGv/37T+cfuUxVX2vKYEhzXO5iwHeex48zm2u5JA89ytLmeGSg/Kl9CWZ4yNKgiElx7ryFHzSFZTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XRZUVrfZ; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=C/GGF4VebFvAiUGr2UYAaE2iSZPM5yyksqKPAakpcf0mit7rXDIXurSa1em0p40hlUK1Ck2VWUMniTUyxJ/q7WKMAP3MKq9ibl0jAZXX8tRlZ/y9BblLrKqf/DqsAv0MYdiZruMpsZ7Vjt4x4AHNulK5VXAFuLVQbkimwTH8uBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SOKRM+R0; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770603162; x=1802139162;
+  t=1770603761; x=1802139761;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JimVqJbGLErbVoUw3/1ZrbUgMnX0GyqHbji4ngZyjxg=;
-  b=XRZUVrfZN1YeqcWqOV3iaLeLkICotbytFhmKAYWDtEBtAKp6nbnt8Jgy
-   nH2VkHdget2mUJfBy2z4dtLpv2UzpFn6Uc+I413cKfhgiV7+oWY3ycxmB
-   9wxMlIm4cprop2N3zD4enfYh89xZxAwxuNkC9JR4YB3+l98QNMjSwbjBP
-   bOZQp96BzqsvCvM0z4rzk2goHUlXk62rUbu/JA5cWbp6fX5+li4Kywknc
-   AjO/20b4OCkeeZDHOFFMOqtdWEOpBZwTQU4mXDcBiEdGwkvQvHoVLJ5rP
-   mOxURgPm9MwIEq+vZt4Y0m1vSl5CvjvvF/KAfjksGmtO4Dni0tBYEE43U
-   Q==;
-X-CSE-ConnectionGUID: pHpeYrKrR+yK0NtvwnfcxA==
-X-CSE-MsgGUID: oVqHP5o/Rm+ZxER3vPk8Wg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11695"; a="83152686"
+  bh=lN29YV+zBAydXqnE2rZS6mvynhrdF/TkVSR0zGXivNw=;
+  b=SOKRM+R0/vzHBNMav07l4ZRcr20e9pREyMIjL86+eBdyOZUSO0Ql5S/y
+   HL/+PTVtAYXAS0wnDWkoifN6F4S13WAFvNLGlTIV8C+Ny8xkeO7EhPvlZ
+   J06KOW/yL+cPVRFzUYa7b76YOx7rL8lzZZgE4RUfvYcLuW6UK7RXDiUf8
+   GLXnVrbHA4PzL0MapoG/6kYhI8IEj9/FXdvjZ+ANMBO46sSTylAM4QAJB
+   HdD5+dNqy5BNVIB31FCoWMB0sNxMoSZmrrXn4vhJbf2xag4uZZeCJNUPH
+   dkcYk/CyL0eMqVwHqmS9g9Ilv9jwh09dNblST2QahL/s4+OoBqrHxjbsR
+   A==;
+X-CSE-ConnectionGUID: D7hi41ZeSK2rgCxpFGIJOg==
+X-CSE-MsgGUID: NYd0jqiwRDKzgNc1UpfKYg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11695"; a="97170091"
 X-IronPort-AV: E=Sophos;i="6.21,281,1763452800"; 
-   d="scan'208";a="83152686"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2026 18:12:41 -0800
-X-CSE-ConnectionGUID: xhkRuhfrTKGXkNC6w+H8Gw==
-X-CSE-MsgGUID: V2n4KtwMTbyb4rXhMCRIhQ==
+   d="scan'208";a="97170091"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2026 18:22:40 -0800
+X-CSE-ConnectionGUID: CJ2DLclWQsCDNhy6DDl/HQ==
+X-CSE-MsgGUID: WlgPUJxwRzOOIAmFmBzJ9w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,281,1763452800"; 
-   d="scan'208";a="211241351"
+   d="scan'208";a="241664631"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 08 Feb 2026 18:12:34 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 08 Feb 2026 18:22:33 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vpGlL-00000000mVk-0Sao;
-	Mon, 09 Feb 2026 02:12:31 +0000
-Date: Mon, 9 Feb 2026 10:12:02 +0800
+	id 1vpGv1-00000000mVw-0scF;
+	Mon, 09 Feb 2026 02:22:31 +0000
+Date: Mon, 9 Feb 2026 10:22:28 +0800
 From: kernel test robot <lkp@intel.com>
 To: Nhat Pham <nphamcs@gmail.com>, linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -81,9 +81,10 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
 	linux-pm@vger.kernel.org, peterx@redhat.com, riel@surriel.com,
 	joshua.hahnjy@gmail.com
-Subject: Re: [PATCH v3 18/20] memcg: swap: only charge physical swap slots
-Message-ID: <202602091006.0jXoavPW-lkp@intel.com>
-References: <20260208215839.87595-19-nphamcs@gmail.com>
+Subject: Re: [PATCH v3 01/20] mm/swap: decouple swap cache from physical swap
+ infrastructure
+Message-ID: <202602091044.soVrWeDA-lkp@intel.com>
+References: <20260208215839.87595-2-nphamcs@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -92,21 +93,21 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260208215839.87595-19-nphamcs@gmail.com>
+In-Reply-To: <20260208215839.87595-2-nphamcs@gmail.com>
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[lists.linux.dev,linux-foundation.org,cmpxchg.org,google.com,linux.dev,kernel.org,intel.com,tencent.com,gmail.com,arm.com,huaweicloud.com,zeniv.linux.org.uk,redhat.com,suse.de,oracle.com,csgroup.eu,meta.com,vger.kernel.org,surriel.com];
 	RCPT_COUNT_TWELVE(0.00)[33];
-	TAGGED_FROM(0.00)[bounces-42307-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42308-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -119,11 +120,11 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
 	DKIM_TRACE(0.00)[intel.com:+];
 	NEURAL_HAM(-0.00)[-0.995];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,01.org:url,intel.com:email,intel.com:dkim,intel.com:mid,git-scm.com:url]
-X-Rspamd-Queue-Id: 3E99610B001
+	DBL_BLOCKED_OPENRESOLVER(0.00)[01.org:url,git-scm.com:url,intel.com:email,intel.com:dkim,intel.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E98CC10B104
 X-Rspamd-Action: no action
 
 Hi Nhat,
@@ -139,177 +140,154 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Nhat-Pham/swap-rearrange-the-swap-header-file/20260209-065842
 base:   linus/master
-patch link:    https://lore.kernel.org/r/20260208215839.87595-19-nphamcs%40gmail.com
-patch subject: [PATCH v3 18/20] memcg: swap: only charge physical swap slots
-config: sparc64-defconfig (https://download.01.org/0day-ci/archive/20260209/202602091006.0jXoavPW-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20260208215839.87595-2-nphamcs%40gmail.com
+patch subject: [PATCH v3 01/20] mm/swap: decouple swap cache from physical swap infrastructure
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260209/202602091044.soVrWeDA-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260209/202602091006.0jXoavPW-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260209/202602091044.soVrWeDA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602091006.0jXoavPW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602091044.soVrWeDA-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/vswap.c:637:2: error: call to undeclared function 'mem_cgroup_clear_swap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     637 |         mem_cgroup_clear_swap(entry, 1);
-         |         ^
-   mm/vswap.c:637:2: note: did you mean 'mem_cgroup_uncharge_swap'?
-   include/linux/swap.h:658:20: note: 'mem_cgroup_uncharge_swap' declared here
-     658 | static inline void mem_cgroup_uncharge_swap(swp_entry_t entry,
+>> mm/vmscan.c:715:3: error: call to undeclared function 'swap_cache_lock_irq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     715 |                 swap_cache_lock_irq();
+         |                 ^
+>> mm/vmscan.c:762:3: error: call to undeclared function 'swap_cache_unlock_irq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     762 |                 swap_cache_unlock_irq();
+         |                 ^
+   mm/vmscan.c:762:3: note: did you mean 'swap_cluster_unlock_irq'?
+   mm/swap.h:350:20: note: 'swap_cluster_unlock_irq' declared here
+     350 | static inline void swap_cluster_unlock_irq(struct swap_cluster_info *ci)
          |                    ^
->> mm/vswap.c:661:2: error: call to undeclared function 'mem_cgroup_record_swap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     661 |         mem_cgroup_record_swap(folio, entry);
+   mm/vmscan.c:801:3: error: call to undeclared function 'swap_cache_unlock_irq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     801 |                 swap_cache_unlock_irq();
+         |                 ^
+   3 errors generated.
+--
+>> mm/shmem.c:2168:2: error: call to undeclared function 'swap_cache_lock_irq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2168 |         swap_cache_lock_irq();
          |         ^
-   mm/vswap.c:661:2: note: did you mean 'mem_cgroup_uncharge_swap'?
-   include/linux/swap.h:658:20: note: 'mem_cgroup_uncharge_swap' declared here
-     658 | static inline void mem_cgroup_uncharge_swap(swp_entry_t entry,
-         |                    ^
+>> mm/shmem.c:2173:2: error: call to undeclared function 'swap_cache_unlock_irq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2173 |         swap_cache_unlock_irq();
+         |         ^
    2 errors generated.
 
 
-vim +/mem_cgroup_clear_swap +637 mm/vswap.c
+vim +/swap_cache_lock_irq +715 mm/vmscan.c
 
-   528	
-   529	/*
-   530	 * Caller needs to handle races with other operations themselves.
-   531	 *
-   532	 * Specifically, this function is safe to be called in contexts where the swap
-   533	 * entry has been added to the swap cache and the associated folio is locked.
-   534	 * We cannot race with other accessors, and the swap entry is guaranteed to be
-   535	 * valid the whole time (since swap cache implies one refcount).
-   536	 *
-   537	 * We cannot assume that the backends will be of the same type,
-   538	 * contiguous, etc. We might have a large folio coalesced from subpages with
-   539	 * mixed backend, which is only rectified when it is reclaimed.
-   540	 */
-   541	 static void release_backing(swp_entry_t entry, int nr)
-   542	{
-   543		struct vswap_cluster *cluster = NULL;
-   544		struct swp_desc *desc;
-   545		unsigned long flush_nr, phys_swap_start = 0, phys_swap_end = 0;
-   546		unsigned long phys_swap_released = 0;
-   547		unsigned int phys_swap_type = 0;
-   548		bool need_flushing_phys_swap = false;
-   549		swp_slot_t flush_slot;
-   550		int i;
-   551	
-   552		VM_WARN_ON(!entry.val);
-   553	
-   554		rcu_read_lock();
-   555		for (i = 0; i < nr; i++) {
-   556			desc = vswap_iter(&cluster, entry.val + i);
-   557			VM_WARN_ON(!desc);
-   558	
-   559			/*
-   560			 * We batch contiguous physical swap slots for more efficient
-   561			 * freeing.
-   562			 */
-   563			if (phys_swap_start != phys_swap_end &&
-   564					(desc->type != VSWAP_SWAPFILE ||
-   565						swp_slot_type(desc->slot) != phys_swap_type ||
-   566						swp_slot_offset(desc->slot) != phys_swap_end)) {
-   567				need_flushing_phys_swap = true;
-   568				flush_slot = swp_slot(phys_swap_type, phys_swap_start);
-   569				flush_nr = phys_swap_end - phys_swap_start;
-   570				phys_swap_start = phys_swap_end = 0;
-   571			}
-   572	
-   573			if (desc->type == VSWAP_ZSWAP && desc->zswap_entry) {
-   574				zswap_entry_free(desc->zswap_entry);
-   575			} else if (desc->type == VSWAP_SWAPFILE) {
-   576				phys_swap_released++;
-   577				if (!phys_swap_start) {
-   578					/* start a new contiguous range of phys swap */
-   579					phys_swap_start = swp_slot_offset(desc->slot);
-   580					phys_swap_end = phys_swap_start + 1;
-   581					phys_swap_type = swp_slot_type(desc->slot);
-   582				} else {
-   583					/* extend the current contiguous range of phys swap */
-   584					phys_swap_end++;
-   585				}
-   586			}
-   587	
-   588			desc->slot.val = 0;
-   589	
-   590			if (need_flushing_phys_swap) {
-   591				spin_unlock(&cluster->lock);
-   592				cluster = NULL;
-   593				swap_slot_free_nr(flush_slot, flush_nr);
-   594				need_flushing_phys_swap = false;
-   595			}
-   596		}
-   597		if (cluster)
-   598			spin_unlock(&cluster->lock);
-   599		rcu_read_unlock();
-   600	
-   601		/* Flush any remaining physical swap range */
-   602		if (phys_swap_start) {
-   603			flush_slot = swp_slot(phys_swap_type, phys_swap_start);
-   604			flush_nr = phys_swap_end - phys_swap_start;
-   605			swap_slot_free_nr(flush_slot, flush_nr);
-   606		}
-   607	
-   608		if (phys_swap_released)
-   609			mem_cgroup_uncharge_swap(entry, phys_swap_released);
-   610	 }
-   611	
-   612	/*
-   613	 * Entered with the cluster locked, but might unlock the cluster.
-   614	 * This is because several operations, such as releasing physical swap slots
-   615	 * (i.e swap_slot_free_nr()) require the cluster to be unlocked to avoid
-   616	 * deadlocks.
-   617	 *
-   618	 * This is safe, because:
-   619	 *
-   620	 * 1. The swap entry to be freed has refcnt (swap count and swapcache pin)
-   621	 *    down to 0, so no one can change its internal state
-   622	 *
-   623	 * 2. The swap entry to be freed still holds a refcnt to the cluster, keeping
-   624	 *    the cluster itself valid.
-   625	 *
-   626	 * We will exit the function with the cluster re-locked.
-   627	 */
-   628	static void vswap_free(struct vswap_cluster *cluster, struct swp_desc *desc,
-   629		swp_entry_t entry)
-   630	{
-   631		/* Clear shadow if present */
-   632		if (xa_is_value(desc->shadow))
-   633			desc->shadow = NULL;
-   634		spin_unlock(&cluster->lock);
-   635	
-   636		release_backing(entry, 1);
- > 637		mem_cgroup_clear_swap(entry, 1);
-   638	
-   639		/* erase forward mapping and release the virtual slot for reallocation */
-   640		spin_lock(&cluster->lock);
-   641		release_vswap_slot(cluster, entry.val);
-   642	}
-   643	
-   644	/**
-   645	 * folio_alloc_swap - allocate virtual swap space for a folio.
-   646	 * @folio: the folio.
-   647	 *
-   648	 * Return: 0, if the allocation succeeded, -ENOMEM, if the allocation failed.
-   649	 */
-   650	int folio_alloc_swap(struct folio *folio)
-   651	{
-   652		swp_entry_t entry;
-   653	
-   654		VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
-   655		VM_BUG_ON_FOLIO(!folio_test_uptodate(folio), folio);
-   656	
-   657		entry = vswap_alloc(folio);
-   658		if (!entry.val)
-   659			return -ENOMEM;
-   660	
- > 661		mem_cgroup_record_swap(folio, entry);
-   662		swap_cache_add_folio(folio, entry, NULL);
-   663	
-   664		return 0;
-   665	}
-   666	
+   700	
+   701	/*
+   702	 * Same as remove_mapping, but if the folio is removed from the mapping, it
+   703	 * gets returned with a refcount of 0.
+   704	 */
+   705	static int __remove_mapping(struct address_space *mapping, struct folio *folio,
+   706				    bool reclaimed, struct mem_cgroup *target_memcg)
+   707	{
+   708		int refcount;
+   709		void *shadow = NULL;
+   710	
+   711		BUG_ON(!folio_test_locked(folio));
+   712		BUG_ON(mapping != folio_mapping(folio));
+   713	
+   714		if (folio_test_swapcache(folio)) {
+ > 715			swap_cache_lock_irq();
+   716		} else {
+   717			spin_lock(&mapping->host->i_lock);
+   718			xa_lock_irq(&mapping->i_pages);
+   719		}
+   720	
+   721		/*
+   722		 * The non racy check for a busy folio.
+   723		 *
+   724		 * Must be careful with the order of the tests. When someone has
+   725		 * a ref to the folio, it may be possible that they dirty it then
+   726		 * drop the reference. So if the dirty flag is tested before the
+   727		 * refcount here, then the following race may occur:
+   728		 *
+   729		 * get_user_pages(&page);
+   730		 * [user mapping goes away]
+   731		 * write_to(page);
+   732		 *				!folio_test_dirty(folio)    [good]
+   733		 * folio_set_dirty(folio);
+   734		 * folio_put(folio);
+   735		 *				!refcount(folio)   [good, discard it]
+   736		 *
+   737		 * [oops, our write_to data is lost]
+   738		 *
+   739		 * Reversing the order of the tests ensures such a situation cannot
+   740		 * escape unnoticed. The smp_rmb is needed to ensure the folio->flags
+   741		 * load is not satisfied before that of folio->_refcount.
+   742		 *
+   743		 * Note that if the dirty flag is always set via folio_mark_dirty,
+   744		 * and thus under the i_pages lock, then this ordering is not required.
+   745		 */
+   746		refcount = 1 + folio_nr_pages(folio);
+   747		if (!folio_ref_freeze(folio, refcount))
+   748			goto cannot_free;
+   749		/* note: atomic_cmpxchg in folio_ref_freeze provides the smp_rmb */
+   750		if (unlikely(folio_test_dirty(folio))) {
+   751			folio_ref_unfreeze(folio, refcount);
+   752			goto cannot_free;
+   753		}
+   754	
+   755		if (folio_test_swapcache(folio)) {
+   756			swp_entry_t swap = folio->swap;
+   757	
+   758			if (reclaimed && !mapping_exiting(mapping))
+   759				shadow = workingset_eviction(folio, target_memcg);
+   760			__swap_cache_del_folio(folio, swap, shadow);
+   761			memcg1_swapout(folio, swap);
+ > 762			swap_cache_unlock_irq();
+   763			put_swap_folio(folio, swap);
+   764		} else {
+   765			void (*free_folio)(struct folio *);
+   766	
+   767			free_folio = mapping->a_ops->free_folio;
+   768			/*
+   769			 * Remember a shadow entry for reclaimed file cache in
+   770			 * order to detect refaults, thus thrashing, later on.
+   771			 *
+   772			 * But don't store shadows in an address space that is
+   773			 * already exiting.  This is not just an optimization,
+   774			 * inode reclaim needs to empty out the radix tree or
+   775			 * the nodes are lost.  Don't plant shadows behind its
+   776			 * back.
+   777			 *
+   778			 * We also don't store shadows for DAX mappings because the
+   779			 * only page cache folios found in these are zero pages
+   780			 * covering holes, and because we don't want to mix DAX
+   781			 * exceptional entries and shadow exceptional entries in the
+   782			 * same address_space.
+   783			 */
+   784			if (reclaimed && folio_is_file_lru(folio) &&
+   785			    !mapping_exiting(mapping) && !dax_mapping(mapping))
+   786				shadow = workingset_eviction(folio, target_memcg);
+   787			__filemap_remove_folio(folio, shadow);
+   788			xa_unlock_irq(&mapping->i_pages);
+   789			if (mapping_shrinkable(mapping))
+   790				inode_lru_list_add(mapping->host);
+   791			spin_unlock(&mapping->host->i_lock);
+   792	
+   793			if (free_folio)
+   794				free_folio(folio);
+   795		}
+   796	
+   797		return 1;
+   798	
+   799	cannot_free:
+   800		if (folio_test_swapcache(folio)) {
+   801			swap_cache_unlock_irq();
+   802		} else {
+   803			xa_unlock_irq(&mapping->i_pages);
+   804			spin_unlock(&mapping->host->i_lock);
+   805		}
+   806		return 0;
+   807	}
+   808	
 
 -- 
 0-DAY CI Kernel Test Service
