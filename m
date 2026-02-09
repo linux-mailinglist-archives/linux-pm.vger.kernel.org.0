@@ -1,168 +1,158 @@
-Return-Path: <linux-pm+bounces-42372-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42373-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2GASIwlmimnpJwAAu9opvQ
-	(envelope-from <linux-pm+bounces-42372-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 23:56:09 +0100
+	id mMb0C6dsimkqKQAAu9opvQ
+	(envelope-from <linux-pm+bounces-42373-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 00:24:23 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9682115472
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 23:56:08 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A691D11560F
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 00:24:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B2CD4301690C
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 22:56:06 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 722A6301FAA2
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 23:24:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A22C6318B81;
-	Mon,  9 Feb 2026 22:56:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A61FB327783;
+	Mon,  9 Feb 2026 23:24:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QXGk/btW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JuRwjFU3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D752C314B8C;
-	Mon,  9 Feb 2026 22:56:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7342620DE3
+	for <linux-pm@vger.kernel.org>; Mon,  9 Feb 2026 23:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770677765; cv=none; b=bUPglIHmomxcDqMTidD/hLiSEmjKANKFoRNFfGqim0DgkPyX6oi46uLqa62fX2roT0/u7PKvSaxOVryyXFV3uUCcAhlCXMIIu1U417oGrb+H3FJBJgrls/1yVjBkdfagWy6tLR8SOYUXG9H1VRftHntWLpM+7+RCgBdkeXKyID0=
+	t=1770679458; cv=none; b=IDlDObkK326CiODxBMm9AbCasj9lY0rdMxppVlh7A8dfl1vNCPmMa5JV8fivo4DLon2968i69tnnGDURFDzSFm/MLyTEfgr34A2wj2PUFp37DmXCxAZEG7ZQdn34nQ1oUJwdM8c2uQzvmgNrwwaWChu2yyVewSDjXz4tjYw0pY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770677765; c=relaxed/simple;
-	bh=pxllvA1oRU/sAfBMNnSHEOxJ1U5ceEUXW1v/N8Yl2nM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=p9ZcL9189IXxgl9g/koM4J3ganQUHoHd4cLmVT6mlJv+/iJ6GvSlI5um1r2juIy1ba/SiF9Thn7qf5YGoBBKumSqL61g9iclaTszmAR33g9rtiHb1I1oWAjeSuqg6KYg9yQ8VSdG0MkGFEu1tPhj9BqM9cRyNL54ttikZyqMyeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QXGk/btW; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770677764; x=1802213764;
-  h=date:from:to:cc:subject:message-id;
-  bh=pxllvA1oRU/sAfBMNnSHEOxJ1U5ceEUXW1v/N8Yl2nM=;
-  b=QXGk/btWWkfX9/3kJiYWBo23dHmPVjey4t1Wu1ekMVb5GxGzXuOl6Wv+
-   H1IN/zAVSUgc+LNkEz+yKwwE4H/wBquf2/Kr4lYpNzJNf/JuDUXC1n2Wx
-   9e29AEwPoODEy37K1XzhVAyON9pshmH8Lp4BYBBjiQvLy7BO0ZogANuc5
-   szY7THzeHRI9hgpzWP8UYi1ibh1owQassS2+lkFRyMhi+jDCbdgsa8ExU
-   DkMVxqO+2ybct/Iaa9+5AJ31DII0nbwKhy85niNrteC5FFF5mA/l67asQ
-   h3zAF22tTZmR6LSEg7gT2Xqfvkcmo20dyreotUdB3HdufNSdSU7GDzr6l
-   w==;
-X-CSE-ConnectionGUID: ubBkWAljTp2lljoQXsbJjQ==
-X-CSE-MsgGUID: Ed7f0y3gQtaO+97lym/a1Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11696"; a="71700447"
-X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="71700447"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2026 14:56:04 -0800
-X-CSE-ConnectionGUID: KD/ORIirRvSGt272852uFQ==
-X-CSE-MsgGUID: GGBLUy3FSfaQyY1adeMPCA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="211545461"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 09 Feb 2026 14:56:02 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vpaAh-00000000oOE-2GJp;
-	Mon, 09 Feb 2026 22:55:59 +0000
-Date: Tue, 10 Feb 2026 06:55:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 321/334]
- drivers/platform/chrome/wilco_ec/event.c:514:33: error: unknown type name
- 'platform_device'; did you mean 'to_platform_device'?
-Message-ID: <202602100645.LWcwIOMw-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1770679458; c=relaxed/simple;
+	bh=BBTGk6b529pQcQ5ahNj83thUx09UB4cwxP4jhHO1y2Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ml1Lpa+yREadIwqOH641cfLwMLUgYC0XL4IkPkC8LhBX2q1UdyfDpF6Dii5GAJZ4ZtbiHt+rZbHJ0mt7NeI70W3bF/cCv3wU96pPo4738MLRcGplGrfs9umcr0ZAy52B5vu9hZKJ4yWzfZWk/Yo+5emvM3xioOzv74uwTb77YjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JuRwjFU3; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7950afac0ffso51526307b3.1
+        for <linux-pm@vger.kernel.org>; Mon, 09 Feb 2026 15:24:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770679456; x=1771284256; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dh86T8F3rGHGpWfUD88KFpAEHcvoYD6V6bsLPURnOBU=;
+        b=JuRwjFU3oJfeEhIl9PxtevSdjlnK4dKIrcS2ye67eDcnX9/QzHROQJJYfxrpCpL+cM
+         hIxUVYM2aqmNt5RcRJtzSuuOTlB7w3V79FIZK3woZghFHDsK3/MaZZhlX3gAb/6hBxGH
+         ao3gb+KWIiyNXwRySZ5ZAfvjr5cmJIibs+pmpbEt5wM6HdFNuggwOoD4ORPXz/ahQSqv
+         uxyKVnN6p8sY1JH/bousj19gBtMkzPXCkOHBuzo8Q4yIJ5AvajEWW0eO6IyJ3q6p/8qE
+         k/7bnSiyv6nxNL/A9DLD/bwl4EQtHIJ8niwT29u7x+zQXDS0XH06diK3p4oECfJkwMeZ
+         84ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770679456; x=1771284256;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dh86T8F3rGHGpWfUD88KFpAEHcvoYD6V6bsLPURnOBU=;
+        b=FCCchf2tzjDGlyBag+PvW/ImyBapKtroWEMEcJbXFhkIUEibMMA/oJIkm8qYxLhEJe
+         cwYB2qtq8bURt5MzRGvVI5J1E1FKVuIiJv27b3b5NbM27Yko5TJ6m40rzhZo4nL3LDBJ
+         yAYICDICOlq0oqaKUznrUmIw2mPsfuPVKJBgLIE8+O/UHJcExNvAsb0/SXiWde+S5nI2
+         fT3yae5mXdUju6A81gtGXpECqhwJpvVueAwt2FfFptaTOmW9pujDt6fvH4jliOTN6W+n
+         eWVMxytwxOcWLffWwytLszJucnVXrhth0ubfll2y8Ah1zOGrr8xD1J2/Hoea9D0dcr2+
+         g2Ig==
+X-Forwarded-Encrypted: i=1; AJvYcCWanP8ks3jLly2zeDW1oFBiMZYMKhQrITnpH/T8MDZ21HVkOoVSda+RouMzXcOF27LdJgEvlW/dVQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEp3+/AmzeqFtxg0MlZO/CD+KRKtS1G6ujs5kDfvV8o1j/sun9
+	iYLjWN6Mu7WdqIkQVxTomSbRhrVzKF2nrPglDqSCKfANbKX57hm76EZS
+X-Gm-Gg: AZuq6aL8KrWrUpz0QCl9rFG2uo07vThhIq8esriiKGL6dAdxEntIHxn/kodM/eA5V44
+	OsHFVQ6OzRZCYWSuQ+tzh/XVPqRfROAwZKr6lnx0M/lItMhklOWuIlTZ7ztXD+npThLApVul/4b
+	eSgBH/uODsIZLiBbFGhoKmw6819xkmJYb+5UA24MPByXB/hRZyRvW/MES/kP46StzwrZkiCehE1
+	QL6/qcl6NTO/H/eS7bhx5OSNMej++UrRdMk6rK3BYUT6e8pwXv1nW7G0/ktqagBrEl1pw6cfEnJ
+	1p8SHbObp2ftw7jzwOe/+Yuy9P7QJe4njrW5STrpk9mi2LspgWjG6SFYJPB7NzAHcN+70wyTcTh
+	VQCTROS/o8kTwgeFwVwjcOE0i4MYC97tMAiiVhDu7+UsgMDosepN3gUKzsNc1wK16hLhFpER/Iv
+	vDiWKFFGdiFEY9e/YKM86v+mD1ZF9Kmt6AOul/q31Paa1ABHMwyg==
+X-Received: by 2002:a05:690c:6e0f:b0:794:8a60:77da with SMTP id 00721157ae682-7965e1ac266mr6213037b3.11.1770679456546;
+        Mon, 09 Feb 2026 15:24:16 -0800 (PST)
+Received: from ?IPV6:2600:6c56:7d00:582f::64e? ([2600:6c56:7d00:582f::64e])
+        by smtp.googlemail.com with ESMTPSA id 00721157ae682-796401a19c6sm48506387b3.10.2026.02.09.15.24.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Feb 2026 15:24:15 -0800 (PST)
+Message-ID: <83e65606-cbbf-421a-9de6-9e39a7d872dd@gmail.com>
+Date: Mon, 9 Feb 2026 17:24:13 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/1] cpuidle: menu: Fix high wakeup latency on modern
+ platforms
+To: "Ionut Nechita (Sunlight Linux)" <sunlightlinux@gmail.com>,
+ christian.loehle@arm.com
+Cc: daniel.lezcano@linaro.org, ionut_n2001@yahoo.com,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org
+References: <20260122080937.22347-2-sunlightlinux@gmail.com>
+ <54478318-cbee-46f2-9ff1-9c0ae15a89ab@arm.com>
+ <20260126201943.11505-2-sunlightlinux@gmail.com>
+Content-Language: en-US
+From: Russell Haley <yumpusamongus@gmail.com>
+In-Reply-To: <20260126201943.11505-2-sunlightlinux@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	SUBJECT_ENDS_QUESTION(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[linaro.org,yahoo.com,vger.kernel.org,kernel.org];
+	TAGGED_FROM(0.00)[bounces-42373-lists,linux-pm=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,arm.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-42372-lists,linux-pm=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	RCVD_COUNT_FIVE(0.00)[6];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[01.org:url,intel.com:mid,intel.com:dkim,intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C9682115472
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[yumpusamongus@gmail.com,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A691D11560F
 X-Rspamd-Action: no action
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   8711f3ee7e5efcf1b795c80496b0fb68713e153a
-commit: 905eafcac9da580ca476fc3e1c246ca143ae51ed [321/334] platform/chrome: wilco_ec: event: Convert to a platform driver
-config: i386-randconfig-005-20260210 (https://download.01.org/0day-ci/archive/20260210/202602100645.LWcwIOMw-lkp@intel.com/config)
-compiler: gcc-13 (Debian 13.3.0-16) 13.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260210/202602100645.LWcwIOMw-lkp@intel.com/reproduce)
+On 1/26/26 2:19 PM, Ionut Nechita (Sunlight Linux) wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602100645.LWcwIOMw-lkp@intel.com/
+> I considered PM QoS and /dev/cpu_dma_latency, but they have limitations
+> for this use case:
+> 
+> 1. Global PM QoS affects all cores, not just the isolated ones
+> 2. Per-task PM QoS requires application modifications
+> 3. /dev/cpu_dma_latency is system-wide, not per-core
+> 
+> For isolated cores with NOHZ_FULL in a realtime environment, we want
+> the governor to make smarter decisions based on actual predicted idle
+> time rather than relying on next_timer_ns which can be arbitrarily large
+> on tickless cores.
+> 
 
-All errors (new ones prefixed by >>):
+In case it helps, you can write "1" to
 
->> drivers/platform/chrome/wilco_ec/event.c:514:33: error: unknown type name 'platform_device'; did you mean 'to_platform_device'?
-     514 | static void event_device_remove(platform_device *pdev)
-         |                                 ^~~~~~~~~~~~~~~
-         |                                 to_platform_device
->> drivers/platform/chrome/wilco_ec/event.c:533:19: error: 'event_device_remove' undeclared here (not in a function); did you mean 'event_device_probe'?
-     533 |         .remove = event_device_remove,
-         |                   ^~~~~~~~~~~~~~~~~~~
-         |                   event_device_probe
+    /sys/devices/system/cpu/cpu*/cpuidle/state*/disable
 
+to lock out any idle states that are too deep. That's per-core, although
+it's not as "crash clean" as holding an FD for /dev/cpu_dma_latency.
 
-vim +514 drivers/platform/chrome/wilco_ec/event.c
-
-   513	
- > 514	static void event_device_remove(platform_device *pdev)
-   515	{
-   516		struct event_device_data *dev_data = platform_get_drvdata(pdev);
-   517	
-   518		acpi_dev_remove_notify_handler(ACPI_COMPANION(&pdev->dev),
-   519					       ACPI_DEVICE_NOTIFY, event_device_notify);
-   520		cdev_device_del(&dev_data->cdev, &dev_data->dev);
-   521		ida_free(&event_ida, MINOR(dev_data->dev.devt));
-   522		hangup_device(dev_data);
-   523	}
-   524	
-   525	static const struct acpi_device_id event_acpi_ids[] = {
-   526		{ "GOOG000D", 0 },
-   527		{ }
-   528	};
-   529	MODULE_DEVICE_TABLE(acpi, event_acpi_ids);
-   530	
-   531	static struct platform_driver event_driver = {
-   532		.probe = event_device_probe,
- > 533		.remove = event_device_remove,
-   534		.driver = {
-   535			.name = DRV_NAME,
-   536			.acpi_match_table = event_acpi_ids,
-   537		},
-   538	};
-   539	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+- Russell Haley
 
