@@ -1,81 +1,81 @@
-Return-Path: <linux-pm+bounces-42343-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42344-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EOyYOLq6iWmEBQUAu9opvQ
-	(envelope-from <linux-pm+bounces-42343-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 11:45:14 +0100
+	id AEYuJ8m6iWlwBQUAu9opvQ
+	(envelope-from <linux-pm+bounces-42344-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 11:45:29 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9301710E44A
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 11:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CE4E10E467
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 11:45:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7B8443017503
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 10:44:42 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 45C90301588D
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 10:44:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A9B936AB43;
-	Mon,  9 Feb 2026 10:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96ACF368278;
+	Mon,  9 Feb 2026 10:44:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f1KSMayi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QEVQmzJP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F2D36A03C
-	for <linux-pm@vger.kernel.org>; Mon,  9 Feb 2026 10:44:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA3336998A
+	for <linux-pm@vger.kernel.org>; Mon,  9 Feb 2026 10:44:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770633876; cv=none; b=aCVuzCPUMEjpOWdHwgSu9AFb4B+bWG/v6ET3Bo9tHSAl0d+gTUqFcnoXpJCTvqtcY0SDtzFeOjkGs3I9CDL3Ds7MY8YmNRE/lsXPMrywjuAQrYGsfagxnr41x/lW59ufaABqA3UpJCXZTW8EOP20pEv2NwgiIjFdr543TmWRnGQ=
+	t=1770633877; cv=none; b=TK0BA0J5w1KzzkLD7CqefBo9W4IHsDgQfulxZXZ0/sfpdEnqyjlm0rg8XbhWVPiEMQvydV2jjEMpQlcfKMlrHnndA+2pL5x3exAAFekzR9sJ1yCb0ShrcbYBzIDxVJp5FkjnrxK6TjA32NDt10hxlYmIBVanhjLNJwXdUrIb6vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770633876; c=relaxed/simple;
-	bh=UfX7Y4kge1HoGiefxZCO8c5sDOxYGSr7IO7YjJ8srSc=;
+	s=arc-20240116; t=1770633877; c=relaxed/simple;
+	bh=ngKFCu3cqOl5gPWRaEKogf59QUayqMRH5eB6YPE7vFk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=J4k5/nhnDShkzrqDtuMrFqGOdVFNUNZ12fBe4hlMeCUy/4L8jcDoiNzXJgVGWtCErcdIUchKCeR1LMxhT0Pv+3UkQ22jNpwvws+kvJtmUq9xTqzZ54GSj023xeGTwjce9Ireni0Z/GX6Q0WtXRwmg2K9Ple20kfAoxHBBy0EraE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f1KSMayi; arc=none smtp.client-ip=209.85.167.51
+	 MIME-Version:Content-Type; b=Qq4abe4VLML7UM1hFjp3ZidHNtUy2i+8d7IvWbK/L0Z1pmPUHX54vuf6AfQ7ZvYZF0ORusrers2xt87X6XL+yMLdPh7VIoi4GiY3tafGaL6Wb3qWLMJdn7OwVAukgVC5MJOL2umIvy8sY4JPmc9hcCk8/F80npHTjYd3UevAbrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QEVQmzJP; arc=none smtp.client-ip=209.85.167.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-59b834e3d64so3127004e87.2
-        for <linux-pm@vger.kernel.org>; Mon, 09 Feb 2026 02:44:35 -0800 (PST)
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-59b6c89d302so4213536e87.1
+        for <linux-pm@vger.kernel.org>; Mon, 09 Feb 2026 02:44:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770633874; x=1771238674; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770633875; x=1771238675; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rjZiOg3lkMvh/gEkfmcLfpQWK2TTmdrTX3Exrd9Xdss=;
-        b=f1KSMayiRYaSmZSAknLAyhNxqFC7r8VZrhwgPdRUfJ+UmNDzfGLlFX9Vsajt2SZs0J
-         57gs49ceDCg9b3dhexQxZic4FLw4OnmWBeqDgVWAhSiIoltsKNxuhnS1rn2+EW92KCEG
-         Cg2T8/UC0RosgKtpJMhtTGRfsVQwWHXMWy1wZthIh8CnkrIhtgRZ1rgyX9HkSDP0sAjH
-         +2yxPwEfY7qBRiDtJzP2qtBTH9y7CttLHUTXCfzIpD/P0UzvvaFTEUnNoG4egrxeOPfM
-         ryie7RchwSBoOsRv9Pri1WP3bR/vrR6GChwO1YDXBX67APiC9bG5frZacO73roXF9Wo+
-         5Y8w==
+        bh=XIqndriki6fg3AQEF8QYByWC9DeqMY7pkJM5t0jf4fU=;
+        b=QEVQmzJPK1YE+CYWirktDsG0llMNQTi6y40dxxhCGeDZMx4znmtkyBnpCTZVzZ3Gcx
+         uYU/MQwMjXphMBX+zwYHCd2Bbtr/BO1xSRP0kVwFp3sZYZ3nvzTutihzLjcwxG8hBlGz
+         KQ1I5p/nqSz9nobl24l1NUwUDsT6diiCq3vZ1gT+eN71m66/IN6dFLdKyHPVcapHCa1y
+         7TaM4VDK2PogWE+CfBPPgwE3cN+bLF5neM9PPFsoLSoVcqfOuCYRONmXJmRkCI1ktvE0
+         d8okLgDBmD5sUO9D2t/As48/BzkxiK3W/BTMqPbzEZwt6lcRKPBLyW7AyI1+fkVVGT0M
+         X+rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770633874; x=1771238674;
+        d=1e100.net; s=20230601; t=1770633875; x=1771238675;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rjZiOg3lkMvh/gEkfmcLfpQWK2TTmdrTX3Exrd9Xdss=;
-        b=wkxPt+CkaKKP2AwdWQaruan9ec1/d+xhoXUXKefcHQkLXgj6nO9RL4ujqeCbgT0VUA
-         qFw+A5I+M5xyPQyqD9PXSivNnDWUrQMDZnfeXwo3Zz5oBhlfL6gwzh+7mjixkNE4HkZi
-         wW1ovzW3vGFZG7NMmaBsoVO9COUT5w+LAP8vc6YninpYv2GmFc5LAXhVNrRLJHLee+fW
-         qHxmujuWD6RzPFC890ozcX8noZH/oOaOe9QLQl1E8ZHKqG4/25ftREs0IqGRzJPR31FY
-         RP7mzaEW9pormS0zcXWJIcC2bwLo7gVwyQqDsyq+ABY2gUzHmAFfe8sFc5ZNbja9byc6
-         fa7w==
-X-Forwarded-Encrypted: i=1; AJvYcCXoQ0vF8LGLWVnRB3YRKz1xU3/x9/fIl3u7rkyu+jPCbj+zyLO13vjX7hozd4D777j8ZHlcd2Jq6A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0NBS/C1tZ0N7umyf8NSyTG8EYZFOMpAtVi9CLFvef9Jj/F05d
-	SfPG8AOD6Kj2GhTCPt+cy21NknnPLhY7zqz5DTCCBzdhCMrbjNfF4wqA
-X-Gm-Gg: AZuq6aL3Lxt+bjSFePOGV6k7hNbgotD1xpPWeaGRZQUSn1Z6n+gcuiYaQX5fW9iiXsO
-	Rn43QVwFibEY/KnrgM/TalKdIRgphUStiI/twlVzrzTEcqztPlnGiJ7iVxDcFZUYwJ9vLA25qfK
-	Rsf+7zTBbfyPpFRRlxp0q6U1i57OOaTl8LAKpHwu5yq6WveDGYfy2bH/O0nO7XtFMe3+2ACtLKH
-	KAgrS/X+2fI2tfRyD3mG9ZelxjGdKzusMN6AcZgPhpTTDN9Ym6AUoQDuj+GZ0TTRvNaTKb6UrJX
-	hquICpn5HNV/msh9+AxfcPw5s89ygVdykv97Dyq5Z0npOwhmCu/lD/MWg9oI0NSxlzM7pn4r5QA
-	LA0NhB0UZgilARd82L4Yl5UsTKTe2J1KA2O3nK7+EJfqUcvE7Ge45L9D0hjTm/eGePtGozhDc1a
-	X7
-X-Received: by 2002:a05:6512:108a:b0:59e:2262:f174 with SMTP id 2adb3069b0e04-59e4504b616mr3142015e87.15.1770633874109;
-        Mon, 09 Feb 2026 02:44:34 -0800 (PST)
+        bh=XIqndriki6fg3AQEF8QYByWC9DeqMY7pkJM5t0jf4fU=;
+        b=ZVW5SppdnCpkbY3xFqT+s5zsl89R/TYM56hVKm67p2ubc4pvcK2Zu1AXcCtD33riNQ
+         nlNnqMZuexKlx7oPYm4fSAC685h5Iv4GgLWxUOW2S6wnS7cJz0Vng6ldAi6sn9nk6oj7
+         JoUTI+7NaJoOBsSdRiFhtWI4JKn1EEUIviYkSq0sEX08PxCKqVHBUnctMH+vKcvmoWpr
+         27+8BzktP4HHEB4zxDGsOIGIE90wt7NOKO9Jb+YgqXHad9A4H78NnIjjdrZQhHMo019D
+         suf/pp5i6jyfriLr2OzY2CAfPXSH7qyrgF7jQo7qyEfh/3/m/QRk1krb7wHgy425h99x
+         G+oA==
+X-Forwarded-Encrypted: i=1; AJvYcCWe864DmgrTfH5Woar7ZgFUDoC8ww/d54agxf4woiTutRYUEUuFPfLmQe8jrgS95UQSev7p5VNaoA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZ6eJHiNGVbhHndDhfoXWMgWzhGlWirc9VAC+YuZX3vbjzI6ni
+	Q4krDbJhyxIWhuNU2jxYV1VPxXQqSNsnuI5HxEXADni94eTZjkwcL9lC
+X-Gm-Gg: AZuq6aII5kzoq9BG2JSQk7HoT4XBWloInwuOoaouw7XKb5LAt/eofZ+a5rA3ckJVhZS
+	KXi3feFjArepXVkIIHzibgndO6NksHc9Drob+VuNh6NtFtrrqWOoEVTUIHH2Yd347XdzDhuJelg
+	9aosRS01c6Mrnpm4+3FiVfaT+ybo71H+NJQQjAQnGlFDQbFlVSa6KzmUFaDSyU/EHACy7vatsVx
+	MMG9oh/v3G3I1AFFQS4ciu24Xr9j8QHdBahOWCwcbp+agKHpOBFqZUkHpnq52MfUOplNFs6/AB8
+	vazU+FAcH7LfyeBXok61zrOylwtiLZfOTRruhBghaRIseD0LGW/aoW35rdHGS3THKzsvRuRKPp0
+	eeCrWHDRQuA1ME27z1sRXCrVYinBcWSfqn9BeJdIP6iJPMY+1N0w6grmC42hmk1L//L8EuHgFz4
+	dq
+X-Received: by 2002:a05:6512:250c:b0:59e:5243:6c95 with SMTP id 2adb3069b0e04-59e52436ed4mr233533e87.24.1770633875248;
+        Mon, 09 Feb 2026 02:44:35 -0800 (PST)
 Received: from xeon ([188.163.112.51])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e44cf6f88sm2501469e87.21.2026.02.09.02.44.33
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e44cf6f88sm2501469e87.21.2026.02.09.02.44.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Feb 2026 02:44:33 -0800 (PST)
+        Mon, 09 Feb 2026 02:44:34 -0800 (PST)
 From: Svyatoslav Ryhel <clamor95@gmail.com>
 To: Lee Jones <lee@kernel.org>,
 	Rob Herring <robh@kernel.org>,
@@ -94,9 +94,9 @@ Cc: devicetree@vger.kernel.org,
 	linux-input@vger.kernel.org,
 	linux-leds@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH v2 6/9] input: keyboard: Add driver for Asus Transformer dock multimedia keys
-Date: Mon,  9 Feb 2026 12:44:04 +0200
-Message-ID: <20260209104407.116426-7-clamor95@gmail.com>
+Subject: [PATCH v2 7/9] leds: Add driver for Asus Transformer LEDs
+Date: Mon,  9 Feb 2026 12:44:05 +0200
+Message-ID: <20260209104407.116426-8-clamor95@gmail.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260209104407.116426-1-clamor95@gmail.com>
 References: <20260209104407.116426-1-clamor95@gmail.com>
@@ -120,7 +120,7 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42343-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42344-lists,linux-pm=lfdr.de];
 	FREEMAIL_TO(0.00)[kernel.org,gmail.com,arndb.de,linuxfoundation.org,rere.qmqm.pl,agorria.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -137,353 +137,169 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[agorria.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 9301710E44A
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qmqm.pl:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 5CE4E10E467
 X-Rspamd-Action: no action
 
 From: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 
-Add support for multimedia top button row of ASUS Transformer's Mobile
-Dock keyboard. Driver is made that function keys (F1-F12) are used by
-default which suits average Linux use better and with pressing
-ScreenLock + AltGr function keys layout is switched to multimedia keys.
-Since this only modifies codes sent by asus-ec-keys it doesn't affect
-normal keyboards at all.
+Asus Transformer tablets have a green and an amber LED on both the Pad
+and the Dock. If both LEDs are enabled simultaneously, the emitted light
+will be yellow.
 
-Co-developed-by: Ion Agorria <ion@agorria.com>
-Signed-off-by: Ion Agorria <ion@agorria.com>
-Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+Co-developed-by: Svyatoslav Ryhel <clamor95@gmail.com>
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 ---
- drivers/input/keyboard/Kconfig        |  10 +
- drivers/input/keyboard/Makefile       |   1 +
- drivers/input/keyboard/asus-ec-keys.c | 285 ++++++++++++++++++++++++++
- 3 files changed, 296 insertions(+)
- create mode 100644 drivers/input/keyboard/asus-ec-keys.c
+ drivers/leds/Kconfig        |  11 ++++
+ drivers/leds/Makefile       |   1 +
+ drivers/leds/leds-asus-ec.c | 104 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 116 insertions(+)
+ create mode 100644 drivers/leds/leds-asus-ec.c
 
-diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
-index 2ff4fef322c2..d23af13ab99a 100644
---- a/drivers/input/keyboard/Kconfig
-+++ b/drivers/input/keyboard/Kconfig
-@@ -89,6 +89,16 @@ config KEYBOARD_APPLESPI
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called applespi.
+diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+index 597d7a79c988..96dab210f6ca 100644
+--- a/drivers/leds/Kconfig
++++ b/drivers/leds/Kconfig
+@@ -120,6 +120,17 @@ config LEDS_OSRAM_AMS_AS3668
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called leds-as3668.
  
-+config KEYBOARD_ASUSEC
-+	tristate "Asus Transformer's Mobile Dock multimedia keys"
++config LEDS_ASUSEC
++	tristate "LED Support for Asus Transformer charging LED"
++	depends on LEDS_CLASS
 +	depends on MFD_ASUSEC
 +	help
-+	  Say Y here if you want to use multimedia keys present on Asus
-+	  Transformer's Mobile Dock.
++	  This option enables support for charging indicator on
++	  Asus Transformer's Pad and it's Dock.
 +
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called asus-ec-keys.
++	  To compile this driver as a module, choose M here: the module
++	  will be called leds-asus-ec.
 +
- config KEYBOARD_ATARI
- 	tristate "Atari keyboard"
- 	depends on ATARI
-diff --git a/drivers/input/keyboard/Makefile b/drivers/input/keyboard/Makefile
-index 2d906e14f3e2..7226aafddf7a 100644
---- a/drivers/input/keyboard/Makefile
-+++ b/drivers/input/keyboard/Makefile
-@@ -11,6 +11,7 @@ obj-$(CONFIG_KEYBOARD_ADP5585)		+= adp5585-keys.o
- obj-$(CONFIG_KEYBOARD_ADP5588)		+= adp5588-keys.o
- obj-$(CONFIG_KEYBOARD_AMIGA)		+= amikbd.o
- obj-$(CONFIG_KEYBOARD_APPLESPI)		+= applespi.o
-+obj-$(CONFIG_KEYBOARD_ASUSEC)		+= asus-ec-keys.o
- obj-$(CONFIG_KEYBOARD_ATARI)		+= atakbd.o
- obj-$(CONFIG_KEYBOARD_ATKBD)		+= atkbd.o
- obj-$(CONFIG_KEYBOARD_BCM)		+= bcm-keypad.o
-diff --git a/drivers/input/keyboard/asus-ec-keys.c b/drivers/input/keyboard/asus-ec-keys.c
+ config LEDS_AW200XX
+ 	tristate "LED support for Awinic AW20036/AW20054/AW20072/AW20108"
+ 	depends on LEDS_CLASS
+diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+index 8fdb45d5b439..1117304dfdf4 100644
+--- a/drivers/leds/Makefile
++++ b/drivers/leds/Makefile
+@@ -16,6 +16,7 @@ obj-$(CONFIG_LEDS_AN30259A)		+= leds-an30259a.o
+ obj-$(CONFIG_LEDS_APU)			+= leds-apu.o
+ obj-$(CONFIG_LEDS_ARIEL)		+= leds-ariel.o
+ obj-$(CONFIG_LEDS_AS3668)		+= leds-as3668.o
++obj-$(CONFIG_LEDS_ASUSEC)		+= leds-asus-ec.o
+ obj-$(CONFIG_LEDS_AW200XX)		+= leds-aw200xx.o
+ obj-$(CONFIG_LEDS_AW2013)		+= leds-aw2013.o
+ obj-$(CONFIG_LEDS_BCM6328)		+= leds-bcm6328.o
+diff --git a/drivers/leds/leds-asus-ec.c b/drivers/leds/leds-asus-ec.c
 new file mode 100644
-index 000000000000..42365db63bdf
+index 000000000000..5dd76c9247ee
 --- /dev/null
-+++ b/drivers/input/keyboard/asus-ec-keys.c
-@@ -0,0 +1,285 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
++++ b/drivers/leds/leds-asus-ec.c
+@@ -0,0 +1,104 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * ASUS Transformer Pad - multimedia keys
++ * ASUS EC driver - battery LED
 + */
 +
-+#include <linux/array_size.h>
 +#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/input.h>
++#include <linux/leds.h>
 +#include <linux/mfd/asus-ec.h>
 +#include <linux/mod_devicetable.h>
 +#include <linux/module.h>
 +#include <linux/platform_device.h>
 +#include <linux/slab.h>
 +
-+#define ASUSEC_EXT_KEY_CODES		0x20
++/*
++ * F[5] & 0x07
++ *  auto: brightness == 0
++ *  bit 0: blink / charger on
++ *  bit 1: amber on
++ *  bit 2: green on
++ */
 +
-+struct asus_ec_keys_data {
-+	struct notifier_block nb;
-+	struct asusec_info *ec;
-+	struct input_dev *xidev;
-+	bool special_key_pressed;
-+	bool special_key_mode;
-+	unsigned short keymap[ASUSEC_EXT_KEY_CODES * 2];
-+};
++#define ASUSEC_CTL_LED_BLINK		BIT_ULL(40)
++#define ASUSEC_CTL_LED_AMBER		BIT_ULL(41)
++#define ASUSEC_CTL_LED_GREEN		BIT_ULL(42)
 +
-+static void asus_ec_input_event(struct input_handle *handle,
-+				unsigned int event_type,
-+				unsigned int event_code, int value)
++static void asus_ec_led_set_brightness_amber(struct led_classdev *led,
++					     enum led_brightness brightness)
 +{
-+	struct asus_ec_keys_data *priv = handle->handler->private;
++	const struct asusec_info *ec = dev_get_drvdata(led->dev->parent);
 +
-+	/* Store special key state */
-+	if (event_type == EV_KEY && event_code == KEY_RIGHTALT)
-+		priv->special_key_pressed = !!value;
++	if (brightness)
++		asus_ec_set_ctl_bits(ec, ASUSEC_CTL_LED_AMBER);
++	else
++		asus_ec_clear_ctl_bits(ec, ASUSEC_CTL_LED_AMBER);
 +}
 +
-+static int asus_ec_input_connect(struct input_handler *handler, struct input_dev *dev,
-+				 const struct input_device_id *id)
++static void asus_ec_led_set_brightness_green(struct led_classdev *led,
++					     enum led_brightness brightness)
 +{
-+	struct input_handle *handle;
-+	int error;
++	const struct asusec_info *ec = dev_get_drvdata(led->dev->parent);
 +
-+	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
-+	if (!handle)
-+		return -ENOMEM;
-+
-+	handle->dev = dev;
-+	handle->handler = handler;
-+	handle->name = "asusec-media-handler";
-+
-+	error = input_register_handle(handle);
-+	if (error)
-+		goto err_free_handle;
-+
-+	error = input_open_device(handle);
-+	if (error)
-+		goto err_unregister_handle;
-+
-+	return 0;
-+
-+ err_unregister_handle:
-+	input_unregister_handle(handle);
-+ err_free_handle:
-+	kfree(handle);
-+
-+	return error;
++	if (brightness)
++		asus_ec_set_ctl_bits(ec, ASUSEC_CTL_LED_GREEN);
++	else
++		asus_ec_clear_ctl_bits(ec, ASUSEC_CTL_LED_GREEN);
 +}
 +
-+static void asus_ec_input_disconnect(struct input_handle *handle)
-+{
-+	input_close_device(handle);
-+	input_unregister_handle(handle);
-+	kfree(handle);
-+}
-+
-+static const struct input_device_id asus_ec_input_ids[] = {
-+	{
-+		.flags = INPUT_DEVICE_ID_MATCH_EVBIT,
-+		.evbit = { BIT_MASK(EV_KEY) },
-+	},
-+	{ }
-+};
-+
-+static struct input_handler asus_ec_input_handler = {
-+	.name =	"asusec-media-handler",
-+	.event = asus_ec_input_event,
-+	.connect = asus_ec_input_connect,
-+	.disconnect = asus_ec_input_disconnect,
-+	.id_table = asus_ec_input_ids,
-+};
-+
-+static const unsigned short asus_ec_dock_ext_keys[] = {
-+	/* Function keys [0x00 - 0x19] */
-+	[0x01] = KEY_DELETE,
-+	[0x02] = KEY_F1,
-+	[0x03] = KEY_F2,
-+	[0x04] = KEY_F3,
-+	[0x05] = KEY_F4,
-+	[0x06] = KEY_F5,
-+	[0x07] = KEY_F6,
-+	[0x08] = KEY_F7,
-+	[0x10] = KEY_F8,
-+	[0x11] = KEY_F9,
-+	[0x12] = KEY_F10,
-+	[0x13] = KEY_F11,
-+	[0x14] = KEY_F12,
-+	[0x15] = KEY_MUTE,
-+	[0x16] = KEY_VOLUMEDOWN,
-+	[0x17] = KEY_VOLUMEUP,
-+	/* Multimedia keys [0x20 - 0x39] */
-+	[0x21] = KEY_SCREENLOCK,
-+	[0x22] = KEY_WLAN,
-+	[0x23] = KEY_BLUETOOTH,
-+	[0x24] = KEY_TOUCHPAD_TOGGLE,
-+	[0x25] = KEY_BRIGHTNESSDOWN,
-+	[0x26] = KEY_BRIGHTNESSUP,
-+	[0x27] = KEY_BRIGHTNESS_AUTO,
-+	[0x28] = KEY_PRINT,
-+	[0x30] = KEY_WWW,
-+	[0x31] = KEY_CONFIG,
-+	[0x32] = KEY_PREVIOUSSONG,
-+	[0x33] = KEY_PLAYPAUSE,
-+	[0x34] = KEY_NEXTSONG,
-+	[0x35] = KEY_MUTE,
-+	[0x36] = KEY_VOLUMEDOWN,
-+	[0x37] = KEY_VOLUMEUP,
-+};
-+
-+static void asus_ec_keys_report_key(struct input_dev *dev, unsigned int code,
-+				    unsigned int key, bool value)
-+{
-+	input_event(dev, EV_MSC, MSC_SCAN, code);
-+	input_report_key(dev, key, value);
-+	input_sync(dev);
-+}
-+
-+static int asus_ec_keys_process_key(struct input_dev *dev, u8 code)
-+{
-+	struct asus_ec_keys_data *priv = dev_get_drvdata(dev->dev.parent);
-+	unsigned int key = 0;
-+
-+	if (code == 0)
-+		return NOTIFY_DONE;
-+
-+	/* Flip special key mode state when pressing key 1 with special key pressed */
-+	if (priv->special_key_pressed && code == 1) {
-+		priv->special_key_mode = !priv->special_key_mode;
-+		return NOTIFY_DONE;
-+	}
-+
-+	/*
-+	 * Relocate code to second "page" if pressed state XOR's mode state
-+	 * This way special key will invert the current mode
-+	 */
-+	if (priv->special_key_mode ^ priv->special_key_pressed)
-+		code += ASUSEC_EXT_KEY_CODES;
-+
-+	if (code < dev->keycodemax) {
-+		unsigned short *map = dev->keycode;
-+
-+		key = map[code];
-+	}
-+
-+	if (!key)
-+		key = KEY_UNKNOWN;
-+
-+	asus_ec_keys_report_key(dev, code, key, 1);
-+	asus_ec_keys_report_key(dev, code, key, 0);
-+
-+	return NOTIFY_OK;
-+}
-+
-+static int asus_ec_keys_notify(struct notifier_block *nb,
-+			       unsigned long action, void *data_)
-+{
-+	struct asus_ec_keys_data *priv = container_of(nb, struct asus_ec_keys_data, nb);
-+	u8 *data = data_;
-+
-+	if (action & ASUSEC_SMI_MASK)
-+		return NOTIFY_DONE;
-+
-+	if (action & ASUSEC_SCI_MASK)
-+		return asus_ec_keys_process_key(priv->xidev, data[2]);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static void asus_ec_keys_setup_keymap(struct asus_ec_keys_data *priv)
-+{
-+	struct input_dev *dev = priv->xidev;
-+	unsigned int i;
-+
-+	BUILD_BUG_ON(ARRAY_SIZE(priv->keymap) < ARRAY_SIZE(asus_ec_dock_ext_keys));
-+
-+	dev->keycode = priv->keymap;
-+	dev->keycodesize = sizeof(*priv->keymap);
-+	dev->keycodemax = ARRAY_SIZE(priv->keymap);
-+
-+	input_set_capability(dev, EV_MSC, MSC_SCAN);
-+	input_set_capability(dev, EV_KEY, KEY_UNKNOWN);
-+
-+	for (i = 0; i < ARRAY_SIZE(asus_ec_dock_ext_keys); i++) {
-+		unsigned int code = asus_ec_dock_ext_keys[i];
-+
-+		if (!code)
-+			continue;
-+
-+		__set_bit(code, dev->keybit);
-+		priv->keymap[i] = code;
-+	}
-+}
-+
-+static void asus_ec_input_handler_deregister(void *priv)
-+{
-+	input_unregister_handler(&asus_ec_input_handler);
-+}
-+
-+static int asus_ec_keys_probe(struct platform_device *pdev)
++static int asus_ec_led_probe(struct platform_device *pdev)
 +{
 +	struct asusec_info *ec = cell_to_ec(pdev);
-+	struct i2c_client *parent = to_i2c_client(pdev->dev.parent);
-+	struct asus_ec_keys_data *priv;
++	struct device *dev = &pdev->dev;
++	struct led_classdev *amber_led, *green_led;
 +	int ret;
 +
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
++	platform_set_drvdata(pdev, ec);
++
++	amber_led = devm_kzalloc(dev, sizeof(*amber_led), GFP_KERNEL);
++	if (!amber_led)
 +		return -ENOMEM;
 +
-+	platform_set_drvdata(pdev, priv);
-+	priv->ec = ec;
++	amber_led->name = devm_kasprintf(dev, GFP_KERNEL, "%s::amber", ec->name);
++	amber_led->max_brightness = 1;
++	amber_led->flags = LED_CORE_SUSPENDRESUME | LED_RETAIN_AT_SHUTDOWN;
++	amber_led->brightness_set = asus_ec_led_set_brightness_amber;
 +
-+	priv->xidev = devm_input_allocate_device(&pdev->dev);
-+	if (!priv->xidev)
++	ret = devm_led_classdev_register(dev, amber_led);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to register amber LED\n");
++
++	green_led = devm_kzalloc(dev, sizeof(*green_led), GFP_KERNEL);
++	if (!green_led)
 +		return -ENOMEM;
 +
-+	priv->xidev->name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
-+					   "%s Keyboard Ext", ec->model);
-+	priv->xidev->phys = devm_kasprintf(&pdev->dev, GFP_KERNEL,
-+					   "i2c-%u-%04x",
-+					   i2c_adapter_id(parent->adapter),
-+					   parent->addr);
-+	asus_ec_keys_setup_keymap(priv);
++	green_led->name = devm_kasprintf(dev, GFP_KERNEL, "%s::green", ec->name);
++	green_led->max_brightness = 1;
++	green_led->flags = LED_CORE_SUSPENDRESUME | LED_RETAIN_AT_SHUTDOWN;
++	green_led->brightness_set = asus_ec_led_set_brightness_green;
 +
-+	ret = input_register_device(priv->xidev);
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "failed to register extension keys: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	asus_ec_input_handler.private = priv;
-+
-+	ret = input_register_handler(&asus_ec_input_handler);
++	ret = devm_led_classdev_register(dev, green_led);
 +	if (ret)
-+		return ret;
++		return dev_err_probe(dev, ret, "failed to register green LED\n");
 +
-+	ret = devm_add_action_or_reset(&pdev->dev, asus_ec_input_handler_deregister,
-+				       priv);
-+	if (ret)
-+		return ret;
-+
-+	priv->nb.notifier_call = asus_ec_keys_notify;
-+
-+	return devm_asus_ec_register_notifier(pdev, &priv->nb);
++	return 0;
 +}
 +
-+static const struct of_device_id asus_ec_keys_match[] = {
-+	{ .compatible = "asus,ec-keys" },
++static const struct of_device_id asus_ec_led_match[] = {
++	{ .compatible = "asus,ec-led" },
 +	{ }
 +};
-+MODULE_DEVICE_TABLE(of, asus_ec_keys_match);
++MODULE_DEVICE_TABLE(of, asus_ec_led_match);
 +
-+static struct platform_driver asus_ec_keys_driver = {
++static struct platform_driver asus_ec_led_driver = {
 +	.driver = {
-+		.name = "asus-ec-keys",
-+		.of_match_table = asus_ec_keys_match,
++		.name = "asus-ec-led",
++		.of_match_table = asus_ec_led_match,
 +	},
-+	.probe = asus_ec_keys_probe,
++	.probe = asus_ec_led_probe,
 +};
-+module_platform_driver(asus_ec_keys_driver);
++module_platform_driver(asus_ec_led_driver);
 +
 +MODULE_AUTHOR("Michał Mirosław <mirq-linux@rere.qmqm.pl>");
-+MODULE_DESCRIPTION("ASUS Transformer's multimedia keys driver");
++MODULE_AUTHOR("Svyatoslav Ryhel <clamor95@gmail.com>");
++MODULE_DESCRIPTION("ASUS Transformer's charging LED driver");
 +MODULE_LICENSE("GPL");
 -- 
 2.51.0
