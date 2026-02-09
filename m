@@ -1,168 +1,239 @@
-Return-Path: <linux-pm+bounces-42353-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42354-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8CLhEJLUiWmCCAAAu9opvQ
-	(envelope-from <linux-pm+bounces-42353-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 13:35:30 +0100
+	id sGi0LffXiWlUCQAAu9opvQ
+	(envelope-from <linux-pm+bounces-42354-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 13:49:59 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA77110EB3F
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 13:35:29 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34E1710EFE2
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 13:49:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 234C9300E611
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 12:35:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A9B68303AF06
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 12:48:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF2B431B825;
-	Mon,  9 Feb 2026 12:35:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D72AE234973;
+	Mon,  9 Feb 2026 12:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jwXBGwWD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 346FC19F137;
-	Mon,  9 Feb 2026 12:35:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A48423373D
+	for <linux-pm@vger.kernel.org>; Mon,  9 Feb 2026 12:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770640526; cv=none; b=Etz7E3Dn3UbCg1W7W4NI1mvx7pFA5FkAJ0IFBdIgSVNKzDMUZXu5R/FQUfQq862NTxNPgkaT4Rh5fT1xIVOvOJ44hopFSlzhGFBthongzIB4dbcRXIKI2fZXHcvHsh6Imkxn7TGIOWMKfWHHEWG41kD/ZwkFPeE7PtxAsOY432A=
+	t=1770641283; cv=none; b=uQC0bX0bCJpNFLC/0HCBtMdj3CwXT4Mg1OZIoSRlWlhquTSDzQTzLZ4sH0Ql4haqokf+amzBJ2b1bLbVqzC19ZgwMvOOTZalFx9lJwUrP+2+fYLzaF3B8YWqzQ3JpqIFx1fJsyGh5udsv81MKWds4faM6MHy0sPMMRibloaZL4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770640526; c=relaxed/simple;
-	bh=sj7mQANebDT/iscz/tLf4MSoGTfOlNTid7jYxLX9dmA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ClJ08ZceUH5kIU3X1AFFdikl/gLkXOKlctA8ifrBwjEGn5af20J8C4UR2o59jo3atdI4KtMq/8xYE+2Vpit/BGb65dG9PeCi9+pkTxsvTGdUrWmXJTssHXDGLqiBzItkeaRn2C1wi2GQYvlZoCYHV/pEWaqZY+2iqc9SaXcjfbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48D55339;
-	Mon,  9 Feb 2026 04:35:19 -0800 (PST)
-Received: from [10.57.16.28] (unknown [10.57.16.28])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A71C73F63F;
-	Mon,  9 Feb 2026 04:35:23 -0800 (PST)
-Message-ID: <3aec2667-a62d-4a68-ba7d-bad7487dd0f7@arm.com>
-Date: Mon, 9 Feb 2026 12:35:26 +0000
+	s=arc-20240116; t=1770641283; c=relaxed/simple;
+	bh=+F9cXjrDCN4wD2HXJ6wTnDQyDW6SNlLEvh6QwBKxyM0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NCGw8Q/71g7daJ164YbFB6GeOuBldlLmMNnXYudRgGytZqCqTqYgRXZz+IXfC/T6fvfSelc7XctArKeLVzn/5c2lULTc6SgV09NuYbeiLesHRT51t48EIgsG8q8RpdHqPQIx3f2dy/PDSQB+B7QQZ8bEFvnIh6hMb1VIvqCm4GI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jwXBGwWD; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-59e4989dacdso2110698e87.1
+        for <linux-pm@vger.kernel.org>; Mon, 09 Feb 2026 04:48:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1770641281; x=1771246081; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cdQQK6HA2N5wcX6J2p0xOEK4xhy0f1zgRy0FKVKyb1w=;
+        b=jwXBGwWDDVff/LFw2wMswNZ8qlHnQ3Z3ZOStIH5RwRerUd9qW6yPDo4BY8DBj5LDG8
+         piGOPYUO71DH38aNE66uRDgT8sHPLRic3UI/FPq8KarU3LazoU/f24SM8ql4cqMKDGx9
+         5OQrU/ka7xWgVW9L0Iw0elEZNSS5PRun1ZxRXpJ8tXfoY6ze6h3+3qmWJh3bYdkao+zS
+         GzhY/Re0XxeeJ9YjvCcGUeZylKj32NtjkV5XmOVX+sTiy3w+Ebsei25qhWpmvpNCDsCQ
+         i9CVnXlQMSDsNKZ5Gd5B91mmEUIKvpIa4dtni7BuRYjGMdGVU99BLlJgWbfAoW8UggPc
+         FlRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770641281; x=1771246081;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cdQQK6HA2N5wcX6J2p0xOEK4xhy0f1zgRy0FKVKyb1w=;
+        b=DIB8cdks8L1ZpQOuPWDaYjk91KXZNauG6u+1i6134sugKqHqX8zKmEr/w5D/9mfT8D
+         oCf67GU+TBUfOmb623ugMEKJdA89y1rEekiI0QYmReJM3aICVQSaiqCwVo6F58oXHH7U
+         TJkglpFin4ddNpPlD+iBFqN5voxqpnG6iFlbXr09C0hleCDXF0ctKNnSD0KPtH5lf50u
+         SipTzQfNB5LX47V9ciKBryQOoVyDWNzGEqkfjPkQzZmsvOOjkHAz3PFLN8bN46PTAwts
+         6oiC9JVXa0hYZex3+vNOgCLDAsWfngy+aSns8/cStNVbDSN3fELY7VlthHwt/dYDRIDv
+         E+lQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUMoWzp7gMH/TvqhdfD6ApoEdnteshWciNjjk69hH+xsCd0PHvB90hfdGNwa8VG7EOiL//Ldgziqg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKvzJlUvL0d3YeJTG4ChV1AOuKgAwoavQLHT33ag18FyPZvvQ8
+	9wYNaiENKel/8gUHaxkFRRQHEVZVzFQYkjnUhsr4iL8RKqJbzPOp7A8S2o66dA8Su087qSpCo4V
+	ItE0a
+X-Gm-Gg: AZuq6aJon9mtWxs9N0320W0vHAcaxpCUwx6yDNUMZ1wjbgpCtnlcaixfgHccTs/2UxQ
+	9YaQ6jvHHVneS3632ezlVkBKpg6Jne3XyhW9r/V/0Jasv3kJQA+Ug765nsbcY0Drebkfb8rw8AH
+	46WcOQeev4TOijhX+3vTzyrwa8ia2QB4N303Zrw8ezdJFFdY5g2bctNtL5mU7Ql96HHCkDuJPA4
+	wxgU89nkSRdDblLbc4/92bI1gvU8rX1M/N7NXhyLA/+IIYZ/C8rOIFxOge4ofgtM09L3bjAgwNX
+	FYfqySYeeXXi4dK/C6BCCU30bfAggGU/6h7Qa0HAg2hozpovF0mBYPnwM2yytVQv3QNGDX5Y1YQ
+	UqiH8bFy0Vh2LLKYx8cU/lcscOReF2S06y06MhpJ6dw8h7yhAaTSyJX9SbWrhdcuHnNJGiPBZEQ
+	zF7k7N6KIWMsV1+MWnmSS7kxfsVllaoiQ=
+X-Received: by 2002:a05:6512:3ca1:b0:59d:e7ac:619f with SMTP id 2adb3069b0e04-59e4504c6b8mr3559631e87.18.1770641281237;
+        Mon, 09 Feb 2026 04:48:01 -0800 (PST)
+Received: from uffe-tuxpro14.. ([2a02:1406:249:f8a3:3249:60bc:db1:48cb])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e44cff6a5sm2622296e87.34.2026.02.09.04.48.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Feb 2026 04:48:00 -0800 (PST)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Linus <torvalds@linux-foundation.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] pmdomain updates for v7.0
+Date: Mon,  9 Feb 2026 13:47:57 +0100
+Message-ID: <20260209124757.554032-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] thermal: power_allocator: Ignore cutoff when integral
- is less than zero
-To: Xuewen Yan <xuewen.yan94@gmail.com>, Xuewen Yan <xuewen.yan@unisoc.com>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
- jeson.gao@unisoc.com, di.shen@unisoc.com
-References: <20260119015803.183-1-xuewen.yan@unisoc.com>
- <CAB8ipk93vxpuSF3msuryedefJ8v_4ZMrk56MFaGp8+Mh-EqnSA@mail.gmail.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAB8ipk93vxpuSF3msuryedefJ8v_4ZMrk56MFaGp8+Mh-EqnSA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.14 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42353-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,unisoc.com];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lukasz.luba@arm.com,linux-pm@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42354-lists,linux-pm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[linaro.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
 	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	R_DKIM_NA(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: CA77110EB3F
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linaro.org:mid,linaro.org:dkim]
+X-Rspamd-Queue-Id: 34E1710EFE2
 X-Rspamd-Action: no action
 
-Hi Xuewen,
+Hi Linus,
 
-On 1/26/26 03:24, Xuewen Yan wrote:
-> Hi lukasz,
-> 
-> Do you have any comments on this patch?
+Here's the pull-request with pmdomain updates for v7.0. Details about the
+highlights are as usual found in the signed tag.
 
-I missed that patch, my apologies.
+Please pull this in!
 
-> 
-> Thanks!
-> 
-> On Mon, Jan 19, 2026 at 10:00 AM Xuewen Yan <xuewen.yan@unisoc.com> wrote:
->>
->> From: Jeson Gao <jeson.gao@unisoc.com>
->>
->> The cutoff means threshold below which the error is no longer accumulated.
->> However, in some scenarios, this may cause performance degradation.
->>
->> For example:
->> the control-temp is 85, the cutoff is 0 or other small value:
->>
->> If the current temperature frequently exceeds the set temperature,
->> the negative integral will continuously accumulate.
->> Over an extended period, this will result in a significantly
->> large negative integral value, the positive integral can’t build up
->> because of the cutoff. This makes the power_range very low,
->> even if the temperature is already under the control target.
->>
->> So, if the err_integral is negative, ignore the cutoff to force
->> add the positive integral.
+Kind regards
+Ulf Hansson
 
-The accumulated Integral in the PID works like that, so no surprise
-here (the math is correct). The Integral part tires to 'compensate'
-the previous 'mistakes', e.g. slow down the rapid change which
-has been seen and caused the overshoot.
 
->>
->> Co-developed-by: Di Shen <di.shen@unisoc.com>
->> Signed-off-by: Di Shen <di.shen@unisoc.com>
->> Signed-off-by: Jeson Gao <jeson.gao@unisoc.com>
->> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
->> ---
->>   drivers/thermal/gov_power_allocator.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
->> index 0d9f636c80f4..404ae1d75612 100644
->> --- a/drivers/thermal/gov_power_allocator.c
->> +++ b/drivers/thermal/gov_power_allocator.c
->> @@ -263,7 +263,8 @@ static u32 pid_controller(struct thermal_zone_device *tz,
->>           */
->>          i = mul_frac(tz->tzp->k_i, params->err_integral);
->>
->> -       if (err < int_to_frac(tz->tzp->integral_cutoff)) {
->> +       if (err < int_to_frac(tz->tzp->integral_cutoff) ||
->> +           (err > 0 && params->err_integral < 0)) {
->>                  s64 i_next = i + mul_frac(tz->tzp->k_i, err);
->>
->>                  if (abs(i_next) < max_power_frac) {
->> --
->> 2.25.1
->>
+The following changes since commit e2c4c5b2bbd4f688a0f9f6da26cdf6d723c53478:
 
-Although, I might probably know where you're coming from and what you 
-are trying to achieve (what is your platform's situation). Let me do
-some simulations based on what you've described. I will look into
-those signals in those conditions.
+  pmdomain: imx8mp-blk-ctrl: Keep usb phy power domain on for system wakeup (2026-02-05 11:33:30 +0100)
 
-At the moment, I'm a bit afraid about your proposed simple change
-and possible impact to other platforms.
-Let me do my research and come back.
+are available in the Git repository at:
 
-Thank you for reporting this issue!
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v7.0
 
-Regards,
-Lukasz
+for you to fetch changes up to 1fca2a4426aac222a724770a56c71e6bb3cf96f2:
+
+  pmdomain: Merge branch fixes into next (2026-02-05 11:52:19 +0100)
+
+----------------------------------------------------------------
+pmdomain core:
+ - Extend debugfs support for domain idle states
+
+pmdomain providers:
+ - imx: Add suppport for child nodes for imx93-blk-ctrl power domains
+ - marvell: Add support for the audio power island for Marvell PXA1908
+ - mediatek: Add support for the MT7622 audio power domain
+ - mediatek: Expose shader_present as nvmem cell for mt8196-gpufreq
+ - mediatek: Add support for the the MT8189 SoC
+ - ti: Handle wakeup constraint for out-of-band wakeup for ti_sci domains
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (2):
+      dt-bindings: power: mt7622-power: Add MT7622_POWER_DOMAIN_AUDIO
+      pmdomain: mediatek: scpsys: Add MT7622 Audio power domain to legacy driver
+
+Dmitry Baryshkov (1):
+      pmdomain: de-constify fields struct dev_pm_domain_attach_data
+
+Felix Gu (2):
+      pmdomain: ti: omap_prm: Fix a reference leak on device node
+      pmdomain: imx: scu-pd: Fix device_node reference leak during ->probe()
+
+Gabor Juhos (1):
+      pmdomain: qcom: rpmpd: drop stray semicolon
+
+Irving-CH Lin (3):
+      dt-bindings: power: Add MediaTek MT8189 power domain
+      pmdomain: mediatek: Add bus protect control flow for MT8189
+      pmdomain: mediatek: Add power domain driver for MT8189 SoC
+
+Karel Balej (2):
+      dt-bindings: power: define ID for Marvell PXA1908 audio domain
+      pmdomain: add audio power island for Marvell PXA1908 SoC
+
+Kendall Willis (1):
+      pmdomain: ti_sci: handle wakeup constraint for out-of-band wakeup
+
+Krzysztof Kozlowski (1):
+      pmdomain: mediatek: Simplify with scoped for each OF child loop
+
+Marco Felsch (3):
+      pmdomain: imx93-blk-ctrl: cleanup error path
+      pmdomain: imx93-blk-ctrl: convert to devm_* only
+      pmdomain: imx93-blk-ctrl: add support for optional subnodes
+
+Nicolas Frattaroli (2):
+      dt-bindings: power: mt8196-gpufreq: Describe nvmem provider ability
+      pmdomain: mediatek: mtk-mfg: Expose shader_present as nvmem cell
+
+Rafael J. Wysocki (1):
+      pmdomain: imx: gpcv2: Discard pm_runtime_put() return value
+
+Ulf Hansson (13):
+      pmdomain: Merge branch dt into next
+      pmdomain: Merge branch fixes into next
+      pmdomain: Merge branch fixes into next
+      pmdomain: Merge branch fixes into next
+      pmdomain: Merge branch dt into next
+      pmdomain: core: Restructure domain idle states data for genpd in debugfs
+      pmdomain: core: Show latency/residency for domain idle states in debugfs
+      pmdomain: core: Extend statistics for domain idle states with s2idle data
+      pmdomain: Merge branch fixes into next
+      pmdomain: Merge branch fixes into next
+      pmdomain: Merge branch dt into next
+      pmdomain: Merge branch core into next
+      pmdomain: Merge branch fixes into next
+
+ .../bindings/power/mediatek,mt8196-gpufreq.yaml    |  13 +
+ .../bindings/power/mediatek,power-controller.yaml  |   1 +
+ drivers/pmdomain/core.c                            |  59 ++-
+ drivers/pmdomain/imx/gpcv2.c                       |   4 +-
+ drivers/pmdomain/imx/imx93-blk-ctrl.c              |  77 ++--
+ drivers/pmdomain/imx/scu-pd.c                      |   1 +
+ .../pmdomain/marvell/pxa1908-power-controller.c    |  39 +-
+ drivers/pmdomain/mediatek/mt8189-pm-domains.h      | 485 +++++++++++++++++++++
+ drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c       |  59 +++
+ drivers/pmdomain/mediatek/mtk-pm-domains.c         |  44 +-
+ drivers/pmdomain/mediatek/mtk-pm-domains.h         |   5 +
+ drivers/pmdomain/mediatek/mtk-scpsys.c             |  10 +
+ drivers/pmdomain/qcom/rpmpd.c                      |   2 +-
+ drivers/pmdomain/ti/omap_prm.c                     |   1 +
+ drivers/pmdomain/ti/ti_sci_pm_domains.c            |   5 +-
+ include/dt-bindings/power/marvell,pxa1908-power.h  |   1 +
+ include/dt-bindings/power/mediatek,mt8189-power.h  |  38 ++
+ include/dt-bindings/power/mt7622-power.h           |   1 +
+ include/linux/pm_domain.h                          |   5 +-
+ 19 files changed, 779 insertions(+), 71 deletions(-)
+ create mode 100644 drivers/pmdomain/mediatek/mt8189-pm-domains.h
+ create mode 100644 include/dt-bindings/power/mediatek,mt8189-power.h
 
