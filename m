@@ -1,113 +1,165 @@
-Return-Path: <linux-pm+bounces-42364-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42365-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AKEjDvkfimnLHQAAu9opvQ
-	(envelope-from <linux-pm+bounces-42364-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 18:57:13 +0100
+	id OKWYNNE7imlvIgAAu9opvQ
+	(envelope-from <linux-pm+bounces-42365-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 20:56:01 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAAD91134B0
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 18:57:12 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36C82114469
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 20:56:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 94C983016259
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 17:57:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 19158301CC78
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 19:56:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA9583859D7;
-	Mon,  9 Feb 2026 17:57:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32E91426D13;
+	Mon,  9 Feb 2026 19:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JVfpnW++"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hiJuw3Wn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A4C3793D9;
-	Mon,  9 Feb 2026 17:57:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54C943A0B1E;
+	Mon,  9 Feb 2026 19:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770659828; cv=none; b=vAcR/feBNh7xBpFZS2tTjhcWElKTqssrigUJj/Fign5cD+SmNwlrPCac3HrQkyz3+FP6xVqB4OeeVCeqJ5AtFsEWoHQLNRVZpZBLgm8X0053fDMzMLNfpn08591pxfl2mNy/hBJG6CmCzrgjtjcj+1DJO/Bn20ahc1qndNU2ooc=
+	t=1770666959; cv=none; b=qYOlVnHC0XRazUtz9Zeq4Bs9e8eU85aJeKqd//Kq3q0Z5jVBZMmMECVvVXhE7GW99Uq+zGdPikxtV3FYsLeFjK+keN0to3J4yEe8vtbmwzGXoax5+S8K+k85OeL4ceIixjwiqw0gLm9hGC0kwezQKFGw/2jKyGoanJZ5KS2DuvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770659828; c=relaxed/simple;
-	bh=856Kwd/pThJAAJaQCb3VCvhPWwgKfNaoq1rbMEQh96Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GCej+ohdux6VZPfRb+GamM7XcQfgoc2yE/4rfBfRS2f9BmiW6/7JCdFiLTfJ8faWpj6OBYnuQCka+skvQkUbDo15h56YXYQvGiF8IL/xQr1eQfwJ1uXvthl8JHQjBLKeIxXSX9I5t4nvkQHt52jbedBp2eBqW1haJ3/ForCw/x4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JVfpnW++; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10B1AC116C6;
-	Mon,  9 Feb 2026 17:57:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770659828;
-	bh=856Kwd/pThJAAJaQCb3VCvhPWwgKfNaoq1rbMEQh96Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JVfpnW++UfnqkCLXvrxoEODMMCE1rIQOm4Oso2M0V+9pyxzqj1tzwfnHQ3JwWSv5i
-	 Mil182Oi5/i6zr+b/0hGMcBMB6MFKrS7rNvAPfshTpDXnv/bk6EcEdTOp8QbmmrZDa
-	 AWCGOvipYJogChJUiQTZ7gnBZIKiV0uMZPWmRlwAPxQDxcOYr5m6fMUez0D2c+y/X0
-	 ko3WAwp6WwPSUvhJTAV9D76TWRjzV61IF5NPiYJoPQLpeg+xVeQ4cUqxweLdTp4z22
-	 A5Rlb+FcxYjuBcZoSmun1HJBt+JYOrJWY8qoVH6p5sG6hCl0xPUTbuX85J4oTdd7dL
-	 3rlVqeG2APxIw==
-Date: Mon, 9 Feb 2026 11:57:07 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Tony Lindgren <tony@atomide.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-	Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH v1 1/2] dt-bindings: power: supply: cpcap-battery:
- document monitored-battery property
-Message-ID: <177065982675.1491615.16948217039462649956.robh@kernel.org>
-References: <20260130134021.353688-1-clamor95@gmail.com>
- <20260130134021.353688-2-clamor95@gmail.com>
+	s=arc-20240116; t=1770666959; c=relaxed/simple;
+	bh=Kri/6798PkMwyZy4c1p5aMyRdc5CV8j/kQSXj8xR28Y=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=j3XRaCchWa2CVUyzcJIc05fd+YgBYVrrLKAIpO2zbzgsRBEYBsYUchPPLlKjI4WHThzvgWf6zhLIIwnZNWICshmtnPgv/zaZ3nH/4cj7dTNpgURTOW3Q4Ig74w79OKycekrFVgx3S9RCi459VZBLfYeB61BI3v0FS8VYsUss1No=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hiJuw3Wn; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770666959; x=1802202959;
+  h=date:from:to:cc:subject:message-id;
+  bh=Kri/6798PkMwyZy4c1p5aMyRdc5CV8j/kQSXj8xR28Y=;
+  b=hiJuw3WnoSmchjRUWGSOyhrw+Sm0OLiRWGvaQsnNTnpc3h8sgs9Vpuc8
+   fGQ6sxuqlmYFHOd6eReQD7KriJLlFvlkrm7ia53D8SXLYbtQZNJhbmP/C
+   n5jgtYhtH1eR5fIfqegGpakC7Aiw7jQT9qHyS2unqYHuwdvf6FSsZXhWN
+   jKxcuBamxoOqV0pp9LXcSB3L1AhewCMCIB0XnB5jnQV2joR7jWqStFX6u
+   TdqJnZDZWuTHfbRv7TOxf2EW+v88RxIw/DLh0GanS9OtN+iNzDsAiyyjR
+   +pLDiuWagctK3yRghVjV0EgB5CSUu0ydpUclDkls63CcBzuUkbw8E2d/e
+   A==;
+X-CSE-ConnectionGUID: mq0uxTBfTZObu1Y9O06dYw==
+X-CSE-MsgGUID: 6ynGoWAnTGmsFgE9iyKwfg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11696"; a="83228728"
+X-IronPort-AV: E=Sophos;i="6.21,282,1763452800"; 
+   d="scan'208";a="83228728"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2026 11:55:58 -0800
+X-CSE-ConnectionGUID: baGu/zitQvCCIM6eLQnM+Q==
+X-CSE-MsgGUID: V4GNt2mdRIefFW1tSvCj1g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,282,1763452800"; 
+   d="scan'208";a="211694789"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 09 Feb 2026 11:55:56 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vpXMP-00000000oI0-3b6j;
+	Mon, 09 Feb 2026 19:55:53 +0000
+Date: Tue, 10 Feb 2026 03:55:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 313/334]
+ drivers/platform/chrome/chromeos_privacy_screen.c:113:46: error: 'adev'
+ undeclared; did you mean 'pdev'?
+Message-ID: <202602100346.fLNnmZhR-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260130134021.353688-2-clamor95@gmail.com>
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	SUBJECT_ENDS_QUESTION(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42364-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-42365-lists,linux-pm=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCPT_COUNT_THREE(0.00)[4];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: BAAD91134B0
+	TAGGED_RCPT(0.00)[linux-pm];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:mid,intel.com:dkim,intel.com:email,01.org:url]
+X-Rspamd-Queue-Id: 36C82114469
 X-Rspamd-Action: no action
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   e54545ecac98b5c4581cce71acdbb1a3728157da
+commit: 0e7efd17fb4c556eadb575bc7b30b359604e3ac1 [313/334] platform/chrome: Convert ChromeOS privacy-screen driver to platform
+config: loongarch-randconfig-002-20260210 (https://download.01.org/0day-ci/archive/20260210/202602100346.fLNnmZhR-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 15.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260210/202602100346.fLNnmZhR-lkp@intel.com/reproduce)
 
-On Fri, 30 Jan 2026 15:40:20 +0200, Svyatoslav Ryhel wrote:
-> Document monitored-battery used to describe static battery cell properties.
-> 
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> ---
->  .../devicetree/bindings/power/supply/cpcap-battery.yaml          | 1 +
->  1 file changed, 1 insertion(+)
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602100346.fLNnmZhR-lkp@intel.com/
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+All errors (new ones prefixed by >>):
 
+   drivers/platform/chrome/chromeos_privacy_screen.c: In function 'chromeos_privacy_screen_probe':
+>> drivers/platform/chrome/chromeos_privacy_screen.c:113:46: error: 'adev' undeclared (first use in this function); did you mean 'pdev'?
+     113 |                                             &adev->dev);
+         |                                              ^~~~
+         |                                              pdev
+   drivers/platform/chrome/chromeos_privacy_screen.c:113:46: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +113 drivers/platform/chrome/chromeos_privacy_screen.c
+
+3fb57847f6ec30 Rajat Jain        2022-01-07  107  
+0e7efd17fb4c55 Rafael J. Wysocki 2026-02-09  108  static int chromeos_privacy_screen_probe(struct platform_device *pdev)
+3fb57847f6ec30 Rajat Jain        2022-01-07  109  {
+3fb57847f6ec30 Rajat Jain        2022-01-07  110  	struct drm_privacy_screen *drm_privacy_screen =
+0e7efd17fb4c55 Rafael J. Wysocki 2026-02-09  111  		drm_privacy_screen_register(&pdev->dev,
+3fb57847f6ec30 Rajat Jain        2022-01-07  112  					    &chromeos_privacy_screen_ops,
+3fb57847f6ec30 Rajat Jain        2022-01-07 @113  					    &adev->dev);
+3fb57847f6ec30 Rajat Jain        2022-01-07  114  
+3fb57847f6ec30 Rajat Jain        2022-01-07  115  	if (IS_ERR(drm_privacy_screen)) {
+0e7efd17fb4c55 Rafael J. Wysocki 2026-02-09  116  		dev_err(&pdev->dev, "Error registering privacy-screen\n");
+3fb57847f6ec30 Rajat Jain        2022-01-07  117  		return PTR_ERR(drm_privacy_screen);
+3fb57847f6ec30 Rajat Jain        2022-01-07  118  	}
+3fb57847f6ec30 Rajat Jain        2022-01-07  119  
+0e7efd17fb4c55 Rafael J. Wysocki 2026-02-09  120  	platform_set_drvdata(pdev, drm_privacy_screen);
+0e7efd17fb4c55 Rafael J. Wysocki 2026-02-09  121  	dev_info(&pdev->dev, "registered privacy-screen '%s'\n",
+3fb57847f6ec30 Rajat Jain        2022-01-07  122  		 dev_name(&drm_privacy_screen->dev));
+3fb57847f6ec30 Rajat Jain        2022-01-07  123  
+3fb57847f6ec30 Rajat Jain        2022-01-07  124  	return 0;
+3fb57847f6ec30 Rajat Jain        2022-01-07  125  }
+3fb57847f6ec30 Rajat Jain        2022-01-07  126  
+
+:::::: The code at line 113 was first introduced by commit
+:::::: 3fb57847f6ec30e9aa27af7b37aed7a7419d50aa platform/chrome: Add driver for ChromeOS privacy-screen
+
+:::::: TO: Rajat Jain <rajatja@google.com>
+:::::: CC: Hans de Goede <hdegoede@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
