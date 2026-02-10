@@ -1,82 +1,82 @@
-Return-Path: <linux-pm+bounces-42383-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42384-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OP41B0+VimmuMAAAu9opvQ
-	(envelope-from <linux-pm+bounces-42383-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 03:17:51 +0100
+	id wHJcOWqVimmuMAAAu9opvQ
+	(envelope-from <linux-pm+bounces-42384-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 03:18:18 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2AA911639C
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 03:17:50 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 492CB1163C7
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 03:18:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9C77B302BDD5
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 02:17:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5490A30398A2
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 02:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57C972D3ECF;
-	Tue, 10 Feb 2026 02:17:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8ABA2D2491;
+	Tue, 10 Feb 2026 02:17:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f3mFHdyO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZG0CgFv+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF332BD597
-	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 02:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6C42C21FE
+	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 02:17:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770689869; cv=none; b=Kk/29uM+yrQL7buLHlIEM0GUEvfQRLPjYapxT+wK3Hjew8c+IvimY5nfk4YqMxCSsNPCdW8mfDSwKW9mDCJOAOSrgiKnOtn5pBltmQDI47Ygf//RXoea8fnnE8OGuhynJ1WJU7EOyTz7eOSJE+NjrOduVPF59yIxBM2bKr50qxo=
+	t=1770689870; cv=none; b=EQmFluYGdnDRhEZfwT00YtkXl+cxQcajdFwbq734V/Nm+8o+2bAcYAT5Zld7VDTJnEB84svY+5/RH80PH4S2Dt/+FvAuGOAQ23qlYTK/pD3wtHSGjmu51voohOFahOm+OlPNVV1aXbWRiHVHH1ek2I4ZevfyywuRIV+zkX6jAKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770689869; c=relaxed/simple;
-	bh=q0l/IFdNUOrbgH5VkX+Ntm6uWvWVBaEQ5fVCuOy9WmQ=;
+	s=arc-20240116; t=1770689870; c=relaxed/simple;
+	bh=ecL4HzrmaN1g6G3Gfzm4vg8zhMlqzVByTHdXOIbJymY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ILVdL7UDnTQ7ztwdok2/L5HdjDVL6xCmIq2GIBvzs6wnw2DN14vRdnV2eaXy9ga6ba6VazRPWjnOFTQoHWd6CRtqBuI1fSoofRgRhYVugEOShkepeC84LviDXkc9Eyxdf/ucLtWHtUNGdeMtVkO4ya53+QIBdvuQJ7AumShntY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f3mFHdyO; arc=none smtp.client-ip=209.85.219.44
+	 MIME-Version; b=O6lhhmF4dFY2vnAFhr66GT/iUGhjuC3+mk1DTRAXn1Jsm3pGaPkUERzgdaQoP9lD39/MbLAG9kyZyyqQAmUh140Dn3abIWdYUbhv6YCJaC0X40CftTTQeRRMb/oBxbwVykMAIgO46sFsPMU1gvgKCAnX6nw8DVSqpkGIETyFv90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZG0CgFv+; arc=none smtp.client-ip=209.85.219.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-896ff127650so26837336d6.3
-        for <linux-pm@vger.kernel.org>; Mon, 09 Feb 2026 18:17:47 -0800 (PST)
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-897002b7576so3992116d6.3
+        for <linux-pm@vger.kernel.org>; Mon, 09 Feb 2026 18:17:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770689867; x=1771294667; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770689869; x=1771294669; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lZ0SptXf6V+p9mpcL89pKBpX2aGQtF7sm9wlbyJP5XY=;
-        b=f3mFHdyOOTX9l9hFJ/WfUYZmf2ThZDC4Ljjki+eX6iZSNrCj49rd6+dDcWN06X5E16
-         xYaIaGr1mDSYxf/iiZPlXuch0+MhFH4C3sMfB8/o9EGn1BT2W/YUldXbaD0fLiQkrKEN
-         iki01gm05xo+FmncOA1BAiM9kHtHZDurOCsWmm0CWN/dFDojKBQ4gVE8jk2tx+fqNqvM
-         HtkDGoiDr+W4oeL3e5D1eVSehw/q3+A68k1EBR7IQfGoF6TEwLp5JXs92MJv+2enwF1d
-         46m86gb3OdWHw34SkqrT2V2AupHx0S2D3ORvuN4MfxSq5B7buNXmMBjtGEj2a9Iofhlw
-         ZFbA==
+        bh=IPeTKP/Rf3na6Mzwukzowm8bsD512Ev2e43pKFOWzjM=;
+        b=ZG0CgFv+2P4jJhUlTeky+U2gEfsUAIQSSLzrxWlzGXs7a9JcGon0QiV0CMnscRAh+Q
+         vPSxk7pYqrO+reXBSuWY6Ns7WAENoDwluU2UUsOGvupWHZFhezJG+eLkXkJ3jnVOFga/
+         BwdQqoGOptSOSWXcBFZAVi2DuA0gcsIaSEzwAeuKzCKjWE58PMvv6XBMybV35/g2IMwI
+         1Hph8zk63MjWWchMvztW6lzYSJ2JMOyMt3u9BLl7tR+DgjXomXGQmLqvsYRk+D8e2AEX
+         +5LV1s1H3cwuxLiVdBbni186shjj/MXySYw7imbHBW3SdhoqaTnNziSePVv3GlMPHF3H
+         bIVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770689867; x=1771294667;
+        d=1e100.net; s=20230601; t=1770689869; x=1771294669;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lZ0SptXf6V+p9mpcL89pKBpX2aGQtF7sm9wlbyJP5XY=;
-        b=NfJnRWRQM7IHuP3gl8rnJhEDRNKLa9lo+SRTpLqwibSb4Ma/UwWg4j8aGlIOwinhg4
-         kPNYj3JY7x1HcdvWTwbdLjMYWqsxsHP6Nq9eS76tdI8tdJTjd7dxB1cNEhiqN/4ZTkIE
-         ORS85vTE3iUijDAyod9+COct/hrPxTt/n0x6AlqJbnWjycv4DzLlCjcPO1St1jMJJ2Z3
-         XNf9rAfIWRwjnbdqUNEpkwZto3F4ZTHxndXumYoABiZCl+zofDJ+lvFos+mvOBtZjBd1
-         tIi4f3prcEfTg368ppYEABEBZ4IPRU6BRBhyMVFvrjqdQ6kClCgKaEKze2eDMxeaROCl
-         a1/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUr2iMxwP5H6ffBpr3WK3DzhpeNSU3bDw/M1Lj5KDKVzDwVC7a/gAKxVKTIRwET5iezUv+hQW92cQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoJju2OWA0kdvsnxtPe6vvmkTeFdEAhmDv8RCt/GEaNdWLTaGq
-	p/ckhUHGixwVZ1zoiLB1X/CJLISdUWDssiXivS45D3GiLxtsXec0ho/E
-X-Gm-Gg: AZuq6aJ127F4NLl0UVj5qxfL63s+Z+VV2IAQMM8j0KVOIXgAYTMwUslpTlbRIlVdbY9
-	NpOOwzL5KbFW9dtvcLwCQ6yV7oWYOzxZlE5v+yrLlaQLlSEc3moNjSLcD5k7wRwqC5BERi1dpa5
-	SWEPMlb/cRVyTBs+dGhRORh2+RSwUMVdbbzRC55ipNx8E4dqkSB4JozAzRqC2I20uQtp31nf7zX
-	r61ivmA6pyHCqFcL2ihBS2GBPycd8qZ5Dd/KZXiEeYY7GuDUo6Bbrbpm84rSG3kBHtRpUxhKpfd
-	vAongkwZewg6rrXdKdUQBy7KJwcJUziM8+RrGokd3OI+T18u4v7SxSRYSQ6Ql5ju8iElSKhCJOd
-	VbcRNfaP31z5BjT6eObsctOVMNYK+xKpyixH3UHr2QiBkPxiCqvzi8XWvBwItyBo2UPLqXNtmsc
-	RhMkiPKAMmId3OlbaXA6EOOSHQJxbessaU6M3av0cj7mh52nZegZkyKLWYiWLz8KHhp2CqQJ4FX
-	xTfgNgOrHRgxEk=
-X-Received: by 2002:a05:6214:e66:b0:895:635:c00e with SMTP id 6a1803df08f44-8953cb80e8fmr203705356d6.45.1770689867064;
-        Mon, 09 Feb 2026 18:17:47 -0800 (PST)
+        bh=IPeTKP/Rf3na6Mzwukzowm8bsD512Ev2e43pKFOWzjM=;
+        b=SfnwVnzVT3r47Il6FPPQGktOQ+GKO/2Kbib/YbcE5Z+7Ph2wdXwcVOqs4D4tdDtSKV
+         oV19z+eScjXtjzHy/vrugPBTcO4uC0N2jZKMpOD+1TJAx4l3kerWTJezLBzb/CBugpu4
+         J9eZQkCeo5VqbSbMLaxkS1T3cE6NjYCqi5RRB0cJ9i3R160+fqjb59fgHNZIJwLk66Zi
+         nFndK/GQHFVp75jrfzZNvMHi4DhTQt+qL/SdafkGI8rtdST/ac6wowLWNj4iCt5P2GRX
+         IO/QNDoywhVmyeu1bQtcABuYTWeIAmnXdEpUIPHbSVjLhQtC0tP+QOG3AqLjlwT0/rBL
+         4A7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV0IGQOv0+3l7fnkMZUATxxhwttEMRSEVrnflkFJoN1HUCJYgzuzX5gKMAhN2g32EfE5h0rUqaaPw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YydnwbEYdA7jEJUOJ2MW0miOQB3CTJPeG4yUMe/puP558NAia02
+	/b3dq1goCioRJ9xLXInIUq5dNHf9dqiT770DyF8O7C3FAqC9W+LK9lSJ
+X-Gm-Gg: AZuq6aKh0/IzF93UrMxfPh/eJYNSiuCtUybtykTwPjwVIBxuhXqdLOHSi17vpBn/VpG
+	kEXYHpTb4lknJOK5X1TyaaJmF2f/TcZCxQi++kRHS/xZLYJrOzU5zKDWRqVpP6CPHl8C7v8l23b
+	sI/XhAkQ7GAgtOEa1WOtnaGlGE5nFhAd7EWZd7DhqhLtDZ0qI3OPt8fBly5y7EoKf3qHxbpKy0U
+	1igNugf4b2sgVuVztjSBoAyqspbS4yfh4rfBYF63b7JuyABu+1FVz1kVE+dTUAn29OEqgePYqqS
+	GSK9zvFHsGMAPgDkkt91p8HboEqh2yxlvDw5XuT1I25o4w1AX7Fr5m66/ZHOgFxhCIVstYkNW1r
+	7JKT/C9IvSlG5MIndt9yDFxxm+PTE4pc4vTUXpBIH5hY5hUg/b2YOdEHgfSUaJZWpxva0qT969e
+	2x1qksznPFB+oym9TgVSNO7B5fTOrW83HbsLyrwAo8megKgxoW3IeLk0nCr9iwOUsOZYZM9vQpq
+	GGcYZi1JStjfT3xy1w4pYkhmA==
+X-Received: by 2002:a05:6214:21a3:b0:896:f3de:cc2d with SMTP id 6a1803df08f44-896f3decd51mr114935096d6.21.1770689868858;
+        Mon, 09 Feb 2026 18:17:48 -0800 (PST)
 Received: from localhost (bras-base-toroon21-grc-75-184-144-58-243.dsl.bell.ca. [184.144.58.243])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8963ac2ab29sm57519146d6.3.2026.02.09.18.17.46
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8caf7aed5d9sm930556585a.14.2026.02.09.18.17.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Feb 2026 18:17:46 -0800 (PST)
+        Mon, 09 Feb 2026 18:17:48 -0800 (PST)
 From: Richard Acayan <mailingradian@gmail.com>
 To: Lee Jones <lee@kernel.org>,
 	Rob Herring <robh@kernel.org>,
@@ -96,9 +96,9 @@ To: Lee Jones <lee@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-pm@vger.kernel.org
 Cc: Richard Acayan <mailingradian@gmail.com>
-Subject: [PATCH 2/3] thermal: qcom-spmi-adc-tm5: Correct the voltage-code scaling for HC
-Date: Mon,  9 Feb 2026 21:18:18 -0500
-Message-ID: <20260210021819.12673-3-mailingradian@gmail.com>
+Subject: [PATCH 3/3] arm64: dts: qcom: pm660: add thermal monitor
+Date: Mon,  9 Feb 2026 21:18:19 -0500
+Message-ID: <20260210021819.12673-4-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260210021819.12673-1-mailingradian@gmail.com>
 References: <20260210021819.12673-1-mailingradian@gmail.com>
@@ -112,63 +112,69 @@ Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42383-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[18];
+	TAGGED_FROM(0.00)[bounces-42384-lists,linux-pm=lfdr.de];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	FREEMAIL_TO(0.00)[kernel.org,gmail.com,linaro.org,intel.com,arm.com,vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[gmail.com];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[mailingradian@gmail.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D2AA911639C
+	DBL_PROHIBIT(0.00)[0.0.13.72:email,0.0.17.148:email];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,0.0.0.85:email]
+X-Rspamd-Queue-Id: 492CB1163C7
 X-Rspamd-Action: no action
 
-When support was added for the HC variant, the full_scale_code_volt
-value was copied from the tm5 variant. From the downstream kernel, the
-scaling value is 0x70e4 on PMI632 (tm5 variant), but it is 0x4000 on
-PM660 and PM8998 (HC variant). Correct the ADC code to voltage
-scaling factor for the HC variant.
+The thermal monitor is used to monitor arbitrary ADC-based thermal
+sensors. It is suitable for use in thermal zones. Add support for it in
+PM660.
 
-Fixes: f6c83676c6097 ("thermal/drivers/qcom/spmi-adc-tm5: Add support for HC variant")
 Signed-off-by: Richard Acayan <mailingradian@gmail.com>
 ---
- drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/pm660.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-index d7f2e6ca92c2..6ccd02fe0e4c 100644
---- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-+++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-@@ -909,7 +909,7 @@ static const struct adc_tm5_data adc_tm5_data_pmic = {
- };
+diff --git a/arch/arm64/boot/dts/qcom/pm660.dtsi b/arch/arm64/boot/dts/qcom/pm660.dtsi
+index 156b2ddff0dc..7cedf6980b34 100644
+--- a/arch/arm64/boot/dts/qcom/pm660.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm660.dtsi
+@@ -197,6 +197,16 @@ channel@85 {
+ 			};
+ 		};
  
- static const struct adc_tm5_data adc_tm_hc_data_pmic = {
--	.full_scale_code_volt = 0x70e4,
-+	.full_scale_code_volt = 0x4000,
- 	.decimation = (unsigned int []) { 256, 512, 1024 },
- 	.hw_settle = (unsigned int []) { 0, 100, 200, 300, 400, 500, 600, 700,
- 					 1000, 2000, 4000, 6000, 8000, 10000 },
++		pm660_adc_tm: adc-tm@3400 {
++			compatible = "qcom,spmi-adc-tm-hc";
++			reg = <0x3400>;
++			interrupts = <0x0 0x34 0x0 IRQ_TYPE_EDGE_RISING>;
++			#thermal-sensor-cells = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++
+ 		pm660_rradc: adc@4500 {
+ 			compatible = "qcom,pm660-rradc";
+ 			reg = <0x4500>;
 -- 
 2.53.0
 
