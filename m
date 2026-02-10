@@ -1,202 +1,136 @@
-Return-Path: <linux-pm+bounces-42458-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42459-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0MWBAbZSi2kMUAAAu9opvQ
-	(envelope-from <linux-pm+bounces-42458-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 16:45:58 +0100
+	id cC40D5tYi2ljUAAAu9opvQ
+	(envelope-from <linux-pm+bounces-42459-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 17:11:07 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1243811CB23
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 16:45:57 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0779511CEFB
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 17:11:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4F33C300532F
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 15:45:54 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D008630055F6
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 16:11:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9656381709;
-	Tue, 10 Feb 2026 15:45:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AC6E3876CE;
+	Tue, 10 Feb 2026 16:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Optq0Ucr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D50031984E
-	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 15:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFED52750FB;
+	Tue, 10 Feb 2026 16:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770738350; cv=none; b=VdJc08Z/fdlTQBZqCAQzCF7XNrUgqSE/iU1w1/I1jOBprZaYI1XzgWb16hLdFryfKlC1r6zBnzeASyL1qgiatCcQgGbBUH2mBe4QA9uJkLtJqi6Y7iM/OJSul2x/00eddU4dFO5w9cRoZ7DolD/zAr3kp3q/jkr/9eJS3XoAfNQ=
+	t=1770739857; cv=none; b=onmmOV1XgViTpTB+68PcUchZ5Lbc5Ito7BmpUBrHtuOhZUw1CVPosw26Of+/LAlA33vi4imUzpmecGtZeYDMTaKHHUSKDrc5PO2cEHoO6O/qHKAEI172q9KeM1SwTa4K1/3RvRo9URQypQj7HEa/vc0lyR9lUgKZMIKFYvTNeVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770738350; c=relaxed/simple;
-	bh=JAEKzDPjAbshWtKnNxJk09xXOVyfSE3QNBnq1GJYJsY=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=mSDcABqiwYbX7NqN7Z4JxF3/UHQo32iUO6pYEqQyszA3pPgY5tDxF1lFy3v3DyZEhK5aP5CMqyM/ulSkjs+I+bCrE2iAouTTvltih0v4Fk7xooQ/4l2z2nmvOu7RD1Ivs9cHbTWYwO8n+hdIGf16SQmYWHomm8MSa+FcTtC4hzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-7d475e17bd3so9373295a34.1
-        for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 07:45:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770738348; x=1771343148;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=umYiyPeqfv4hz6b8WdCAw8Mf6WoinfgY1PV/QiXW0KY=;
-        b=eqaevQwD7Wnzax7R4sd/JTOeZaxTRBpUEKgYw6RA/R2OB1RMLUXU2TvW8YnjrClOjG
-         NcrBlX3ks7munvnhGNIK6P1bUzul0QEnep+b7MpiHPz6OZNluuQP3Ei2WGcu9vOlCaSy
-         KiF7y18nUS22+vzp0zC6v0HHQtOaGveH6mnVYTZAi2Ah2GrEB/PcUqtsMNKC2xj6Eqe8
-         1Tj6bDED2fhpYEbIjD3ehTE4FLvfLOr7ztFgL7WKtUJqiHLM+k2rbPgBjE0sMSd5tN/a
-         AS5kGNwSLNkqselJn7EYexN+w94maYyrpbLpw3u2X828+bRJnNuPRgdlloxTP0VwRbwI
-         ChEg==
-X-Forwarded-Encrypted: i=1; AJvYcCWo9lSJaktJ8NLrWW8dyjMZAvnCix3HgpvSRPAB0A+7fmhi6W/NCQgRhgVcYvnY2ZAZq0jlygT1qw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZf7ayC+9YWdnWQUJFzA6f+SKFk2kc7G+1965XeysPebDnr3h3
-	TVQVzFR0qwvs5r0p0QUKHODvRg8lJABPVPcPto2IFVO2iN+ZAsfr6VBa/RTcYbN+ezqsyUUVlqO
-	oQ0SXry5Q9sgDFR3xFZA3Hh+ZURZskk61TNReH87cby7JWlbiXzhgAUrSii4=
+	s=arc-20240116; t=1770739857; c=relaxed/simple;
+	bh=lLVDD99fYBVm2CdLzN2zj/HZbrLO0z3wX6Z5az0oTNk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=D/w/RKLr3/sSAlHyH/BOKw9jGAh1xozbq4Sj4OJN24cHgv++fjVye+jxl39qjeQeON4Qrs0OE4+BpdQGcYFlaptLRPQvwe5QsFCViCqf8G4tLLgZPJYtKXYDnlB4oRpM7tLkFrwhXVAr73SkS51VlHQjVQATZvYwGa/YV76KC94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Optq0Ucr; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1770739854;
+	bh=lLVDD99fYBVm2CdLzN2zj/HZbrLO0z3wX6Z5az0oTNk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Optq0UcrlWtJQoGV5TU1aPGXWMxciVd3yJJkWNEa2bsRMWsKuy8W78gGRRLF4teCR
+	 Q+pHjGV3xH4zYuSzAIfryAVNEGS3mb8tdsnj05HHae8WxCkCoYSh+lJNQNjjvbAp5g
+	 zGG/tvVB//HewOto7KknXDt4dpeAu2iPADwm9Vp32UJqpxOsU0rhhJObNTZs3/q2tF
+	 sCMw1dqm6GzpJZlNwO0EvQeJTWTsAih8PPZg/fm0jgnthFOQSgHkaAGTd4hvGgHXmC
+	 rSGf747THQxMwGzHA/UaSEXlTUyffdrzcX0KwYmdvX3C7pm+hFUZTuOUoTzDVkQgij
+	 pkT6RRU4DxoBA==
+Received: from laura.lan (unknown [IPv6:2001:b07:646b:e2:7872:ec71:6d40:b8ea])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: laura.nao)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 4503317E0E90;
+	Tue, 10 Feb 2026 17:10:53 +0100 (CET)
+From: Laura Nao <laura.nao@collabora.com>
+To: aford173@gmail.com
+Cc: angelogioacchino.delregno@collabora.com,
+	broonie@kernel.org,
+	laura.nao@collabora.com,
+	lgirdwood@gmail.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	matthias.bgg@gmail.com,
+	mturquette@baylibre.com,
+	nfraprado@collabora.com,
+	sboyd@kernel.org,
+	ulf.hansson@linaro.org
+Subject: Re: [PATCH 2/5] clk: mediatek: Fix MT8196 topckgen2 orphan clocks
+Date: Tue, 10 Feb 2026 17:10:49 +0100
+Message-Id: <20260210161049.42621-1-laura.nao@collabora.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20260210053708.17239-2-aford173@gmail.com>
+References: <20260210053708.17239-2-aford173@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:818b:b0:66d:ecba:b3f4 with SMTP id
- 006d021491bc7-672e62cc5a8mr1455324eaf.31.1770738348353; Tue, 10 Feb 2026
- 07:45:48 -0800 (PST)
-Date: Tue, 10 Feb 2026 07:45:48 -0800
-In-Reply-To: <20260208215839.87595-1-nphamcs@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <698b52ac.a70a0220.2c38d7.0076.GAE@google.com>
-Subject: [syzbot ci] Re: Virtual Swap Space
-From: syzbot ci <syzbot+ci0e6a00c2d76396f3@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, axelrasmussen@google.com, baohua@kernel.org, 
-	bhe@redhat.com, cgroups@vger.kernel.org, chengming.zhou@linux.dev, 
-	chrisl@kernel.org, christophe.leroy@csgroup.eu, gourry@gourry.net, 
-	hannes@cmpxchg.org, huang.ying.caritas@gmail.com, hughd@google.com, 
-	jannh@google.com, joshua.hahnjy@gmail.com, kasong@tencent.com, 
-	kernel-team@meta.com, len.brown@intel.com, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-pm@vger.kernel.org, lorenzo.stoakes@oracle.com, 
-	mhocko@kernel.org, muchun.song@linux.dev, npache@redhat.com, 
-	nphamcs@gmail.com, osalvador@suse.de, pavel@kernel.org, peterx@redhat.com, 
-	pfalcato@suse.de, rafael@kernel.org, riel@surriel.com, 
-	roman.gushchin@linux.dev, ryan.roberts@arm.com, shakeel.butt@linux.dev, 
-	shikemeng@huaweicloud.com, viro@zeniv.linux.org.uk, weixugc@google.com, 
-	yosry.ahmed@linux.dev, yuanchu@google.com, zhengqi.arch@bytedance.com
-Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.14 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[collabora.com:s=mail];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42458-lists,linux-pm=lfdr.de,ci0e6a00c2d76396f3];
+	FREEMAIL_CC(0.00)[collabora.com,kernel.org,gmail.com,lists.infradead.org,vger.kernel.org,baylibre.com,linaro.org];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[linux-foundation.org,google.com,kernel.org,redhat.com,vger.kernel.org,linux.dev,csgroup.eu,gourry.net,cmpxchg.org,gmail.com,tencent.com,meta.com,intel.com,kvack.org,oracle.com,suse.de,surriel.com,arm.com,huaweicloud.com,zeniv.linux.org.uk,bytedance.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-pm@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-42459-lists,linux-pm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[laura.nao@collabora.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[collabora.com:+];
 	TO_DN_NONE(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	R_DKIM_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[42];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,googlesource.com:url,googlegroups.com:email,appspotmail.com:email]
-X-Rspamd-Queue-Id: 1243811CB23
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[collabora.com:mid,collabora.com:dkim,collabora.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 0779511CEFB
 X-Rspamd-Action: no action
 
-syzbot ci has tested the following series
+Hi,
 
-[v3] Virtual Swap Space
-https://lore.kernel.org/all/20260208215839.87595-1-nphamcs@gmail.com
-* [PATCH v3 01/20] mm/swap: decouple swap cache from physical swap infrastructure
-* [PATCH v3 02/20] swap: rearrange the swap header file
-* [PATCH v3 03/20] mm: swap: add an abstract API for locking out swapoff
-* [PATCH v3 04/20] zswap: add new helpers for zswap entry operations
-* [PATCH v3 05/20] mm/swap: add a new function to check if a swap entry is in swap cached.
-* [PATCH v3 06/20] mm: swap: add a separate type for physical swap slots
-* [PATCH v3 07/20] mm: create scaffolds for the new virtual swap implementation
-* [PATCH v3 08/20] zswap: prepare zswap for swap virtualization
-* [PATCH v3 09/20] mm: swap: allocate a virtual swap slot for each swapped out page
-* [PATCH v3 10/20] swap: move swap cache to virtual swap descriptor
-* [PATCH v3 11/20] zswap: move zswap entry management to the virtual swap descriptor
-* [PATCH v3 12/20] swap: implement the swap_cgroup API using virtual swap
-* [PATCH v3 13/20] swap: manage swap entry lifecycle at the virtual swap layer
-* [PATCH v3 14/20] mm: swap: decouple virtual swap slot from backing store
-* [PATCH v3 15/20] zswap: do not start zswap shrinker if there is no physical swap slots
-* [PATCH v3 16/20] swap: do not unnecesarily pin readahead swap entries
-* [PATCH v3 17/20] swapfile: remove zeromap bitmap
-* [PATCH v3 18/20] memcg: swap: only charge physical swap slots
-* [PATCH v3 19/20] swap: simplify swapoff using virtual swap
-* [PATCH v3 20/20] swapfile: replace the swap map with bitmaps
+On 2/10/26 06:37, Adam Ford wrote:
+> There are a few clocks with names spelled incorrecly, so when a child tries
+> to associate itself to a parent, there isn't a parent.  Fixing the names
+> restores the proper parent-child relations of these clocks and eliminates
+> the orphaned clocks.
+>
+> Fixes: b093e0f17099 ("clk: mediatek: Add MT8196 topckgen2 clock support")
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 
-and found the following issue:
-possible deadlock in vswap_iter
+I intended to drop the ck_ prefix from the clock names in the original 
+driver submission, but it appears I missed some of them.
 
-Full report is available here:
-https://ci.syzbot.org/series/b9defda6-daec-4c41-bbf9-7d3b7fabd7cb
+Reviewed-by: Laura Nao <laura.nao@collabora.com>
 
-***
+Thanks!
 
-possible deadlock in vswap_iter
+Laura
 
-tree:      bpf
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf.git
-base:      05f7e89ab9731565d8a62e3b5d1ec206485eeb0b
-arch:      amd64
-compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-config:    https://ci.syzbot.org/builds/f444cfbe-4ce0-4917-94aa-3a8bd96ee376/config
-C repro:   https://ci.syzbot.org/findings/7b8c50b1-47d6-42e0-bcfc-814e7b3bb596/c_repro
-syz repro: https://ci.syzbot.org/findings/7b8c50b1-47d6-42e0-bcfc-814e7b3bb596/syz_repro
-
-loop0: detected capacity change from 0 to 764
-============================================
-WARNING: possible recursive locking detected
-syzkaller #0 Not tainted
---------------------------------------------
-syz-executor625/5806 is trying to acquire lock:
-ffff88811884c018 (&cluster->lock){+.+.}-{3:3}, at: spin_lock include/linux/spinlock.h:351 [inline]
-ffff88811884c018 (&cluster->lock){+.+.}-{3:3}, at: vswap_iter+0xfa/0x1b0 mm/vswap.c:274
-
-but task is already holding lock:
-ffff88811884c018 (&cluster->lock){+.+.}-{3:3}, at: spin_lock_irq include/linux/spinlock.h:376 [inline]
-ffff88811884c018 (&cluster->lock){+.+.}-{3:3}, at: swap_cache_lock_irq+0xe2/0x190 mm/vswap.c:1586
-
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(&cluster->lock);
-  lock(&cluster->lock);
-
- *** DEADLOCK ***
-
- May be due to missing lock nesting notation
-
-3 locks held by syz-executor625/5806:
- #0: ffff888174bc2800 (&mm->mmap_lock){++++}-{4:4}, at: mmap_read_lock include/linux/mmap_lock.h:391 [inline]
- #0: ffff888174bc2800 (&mm->mmap_lock){++++}-{4:4}, at: madvise_lock+0x152/0x2e0 mm/madvise.c:1789
- #1: ffff88811884c018 (&cluster->lock){+.+.}-{3:3}, at: spin_lock_irq include/linux/spinlock.h:376 [inline]
- #1: ffff88811884c018 (&cluster->lock){+.+.}-{3:3}, at: swap_cache_lock_irq+0xe2/0x190 mm/vswap.c:1586
- #2: ffffffff8e55a360 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
- #2: ffffffff8e55a360 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:867 [inline]
- #2: ffffffff8e55a360 (rcu_read_lock){....}-{1:3}, at: vswap_cgroup_record+0x40/0x290 mm/vswap.c:1925
-
-stack backtrace:
-
-
-***
-
-If these findings have caused you to resend the series or submit a
-separate fix, please add the following tag to your commit message:
-  Tested-by: syzbot@syzkaller.appspotmail.com
-
----
-This report is generated by a bot. It may contain errors.
-syzbot ci engineers can be reached at syzkaller@googlegroups.com.
 
