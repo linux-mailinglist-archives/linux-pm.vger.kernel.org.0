@@ -1,197 +1,160 @@
-Return-Path: <linux-pm+bounces-42443-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42444-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QKCYLGUci2nSPwAAu9opvQ
-	(envelope-from <linux-pm+bounces-42443-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 12:54:13 +0100
+	id QA4FEfUci2nSPwAAu9opvQ
+	(envelope-from <linux-pm+bounces-42444-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 12:56:37 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1541711A6D5
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 12:54:13 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C71B911A75C
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 12:56:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B0D85301ECD6
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 11:54:09 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2FAE4300BCA1
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 11:56:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E9103271FD;
-	Tue, 10 Feb 2026 11:54:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15B46327798;
+	Tue, 10 Feb 2026 11:56:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I+8epu/o"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="IgiSaRlf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3651A283FE5;
-	Tue, 10 Feb 2026 11:54:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DEBE326D4F;
+	Tue, 10 Feb 2026 11:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770724448; cv=none; b=a0Gpkt0p5w9gBhaeElMZW65VKHmKJp73wwp5cmSyGlcSg58G1tu0dzxkiuJ3X6shVAvcDI+b+RMWsY3U1MDgJqHY9EY2CgdPLyrlJsVtJgrXsHScYH6UPFsgeqh1Bsc89r5IHx7pq/p7DS0zLYL+z4Ar+KakPzurWe+DhvtQK4w=
+	t=1770724590; cv=none; b=Mfy7hXUDGsRe6eOFw408cVqDTtl5q0TRaCtYJGKGUTPHwgTY45sWFkvn150aaoLrdnbKDOe07+TSis7zrwVOOe48GPvyJM4ok/5Er1eUy1cRGPwqLG2cgJJ0NVqFhzI+wlXePiJkYG0lG1B8KkKGTtx6wzW8PszAjyQRRsXAhLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770724448; c=relaxed/simple;
-	bh=lmDdD2WeTv3lwci6Ykf/RIhBMheOxhbiTk1zUMfWMzg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r1r5kQOm7+++n5A2cjN2agoYezABo6V87OD7bXgYsym85hjrX4lAC0FYOiqkWkYeQndvfnyyUbScwAKUFnB1leHq2Jv4gQ+OsdvVBrPOt1VCxIdR7eGzuY6zuIOSICA+1jdttLW/AAS9SZiFvdkrKaWgqWoQKzwR0Gw9ACSay3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I+8epu/o; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9582DC116C6;
-	Tue, 10 Feb 2026 11:54:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770724447;
-	bh=lmDdD2WeTv3lwci6Ykf/RIhBMheOxhbiTk1zUMfWMzg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=I+8epu/oy1hLJdp8OpelQL+5iw0fu9QUgheRbyAnpYB4742UkoL165ZL6tb4hlX5c
-	 S40T5nSnMYJfDnDJJtzg1efRP5Hk6rzNFbVP0ungZVzkv89kqY26DdEUnD8T3/HLvW
-	 jEumig+ItJiE8KgSYH5f2Hn07dGaPIzaVnixoSb4WfMU4bXLpTR450VkXVCq1Kuooa
-	 TAkc5yzySPmVMIHQppmGMWm/vV2Y0Cm9+0OQS89YkUpgzau4M8/dGBhW0oy6YzpnFu
-	 4vAl5oogxfoDANrXkA0teUKLuTvQMsibCkCuHtO66Nm2x+pZEGyEeHz5JDzvd1nlRI
-	 wzBNM/feiz7sA==
-Message-ID: <ec3b39d6-51ec-429d-b083-e5af2b4a9c65@kernel.org>
-Date: Tue, 10 Feb 2026 12:54:01 +0100
+	s=arc-20240116; t=1770724590; c=relaxed/simple;
+	bh=dgxy4so066YHaxUDv0l6pgU/XUbdPC8yZ24lQYqVoWA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jhA25p//8MJTN8h5hkYBLmvyvHT+cwzLu03+cm6lL74yiw48zLgTTg4OzrSLWxTySpxYzZoCRL3ITG+6sNsm1/EeGZLlwCOc0uXT6x/oBp4idwyCcTY7oaHR4DkbqKiLc53S9KdQnllsK96FiDKmMaKwr2G6OM7n63IO8LrdQdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=IgiSaRlf; arc=none smtp.client-ip=113.46.200.217
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Dv6tqvwHIfldR6vZ4I9MU0ALFn0HJqjmyVFjqA6FX3Q=;
+	b=IgiSaRlfsZWi788hQ4yjxYhP/TCZjaeqvYW+26YdLMNdrdWpxe5X3/2q1s5NR1pmjHFg5EFif
+	ed/txnaKoc4B3hYa5SIO0Nrsd+NTaTPIXMSI6vLN4xYOliyvigB09VWE/PvGnwhU87ROjrGvnkW
+	IlV2fW84sQ0+COYnFxOx6oM=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4f9KfT1PdNzcb0Q;
+	Tue, 10 Feb 2026 19:51:45 +0800 (CST)
+Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
+	by mail.maildlp.com (Postfix) with ESMTPS id CCD5940561;
+	Tue, 10 Feb 2026 19:56:18 +0800 (CST)
+Received: from localhost.localdomain (10.50.163.32) by
+ kwepemf200001.china.huawei.com (7.202.181.227) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 10 Feb 2026 19:56:17 +0800
+From: Lifeng Zheng <zhenglifeng1@huawei.com>
+To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <mingo@redhat.com>,
+	<peterz@infradead.org>, <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
+CC: <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>, <bsegall@google.com>,
+	<mgorman@suse.de>, <vschneid@redhat.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
+	<lihuisong@huawei.com>, <yubowen8@huawei.com>, <zhangpengjie2@huawei.com>,
+	<wangzhi12@huawei.com>, <linhongye@h-partners.com>, <zhenglifeng1@huawei.com>
+Subject: [PATCH 0/2] cpufreq: governor: Apply limits with target_freq instead of policy->cur
+Date: Tue, 10 Feb 2026 19:54:56 +0800
+Message-ID: <20260210115458.3493646-1-zhenglifeng1@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/9] dt-bindings: mfd: document ASUS Transformer EC
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Pavel Machek <pavel@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sebastian Reichel <sre@kernel.org>, =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?=
- <mirq-linux@rere.qmqm.pl>, Ion Agorria <ion@agorria.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20260209104407.116426-1-clamor95@gmail.com>
- <20260209104407.116426-4-clamor95@gmail.com>
- <20260210-sexy-grumpy-sambar-44edd2@quoll>
- <CAPVz0n3fizf=r58Fr4YQ6pnjHq5p-7yFz95obss6w6x0bfgnDg@mail.gmail.com>
- <d1973810-d3f5-4ed7-ba0f-6bf93c1c7f3d@kernel.org>
- <CAPVz0n1foyy9g7MAurSAyLCUHTzrPPu0ceqy9YpcDA9uzgjGng@mail.gmail.com>
- <cb91898e-10f1-4d64-bace-41bbed08179b@kernel.org>
- <CAPVz0n0O_uSAPYFtg8s+Ni0buyGJys6d0jEMob6SNWx-aeKUEw@mail.gmail.com>
- <dc7acd1e-91e8-492c-8665-cb680c6164fd@kernel.org>
- <CAPVz0n0u_0ZukcKXt0QpiyCMhWsg2VE-dE19wDCbRQvBvVOf+A@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <CAPVz0n0u_0ZukcKXt0QpiyCMhWsg2VE-dE19wDCbRQvBvVOf+A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemf200001.china.huawei.com (7.202.181.227)
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42443-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42444-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[6];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-pm@vger.kernel.org];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,arndb.de,linuxfoundation.org,rere.qmqm.pl,agorria.com,vger.kernel.org];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zhenglifeng1@huawei.com,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1541711A6D5
+	PRECEDENCE_BULK(0.00)[];
+	TO_DN_NONE(0.00)[];
+	DKIM_TRACE(0.00)[huawei.com:+];
+	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,huawei.com:mid,huawei.com:dkim]
+X-Rspamd-Queue-Id: C71B911A75C
 X-Rspamd-Action: no action
 
-On 10/02/2026 12:40, Svyatoslav Ryhel wrote:
->>>
->>> So you propose introduce a compatible for every single ec used in
->>> transformers instead of simply disable unpopulated functions? And how
->>> then battery and charger can reach monitored cell if they have no
->>> dedicated node?
->>
->> Just like for other bindings for nodes without resources, fold into
->> parent. This is already explained in writing bindings, so you could have
->> just read that. I will pass with answering more questions till you read
->> that doc.
->>
-> 
-> Unfolding asus,ec-pad and asus,ec-dock will result in this list:
-> 
-> asus,tf101-dock-ec
-> asus,tf101g-dock-ec
-> asus,sl101-pad-ec
-> asus,tf201-pad-ec
-> asus,tf201-dock-ec
-> asus,tf300t-pad-ec
-> asus,tf300t-dock-ec
-> asus,tf300tg-pad-ec
-> asus,tf300tg-dock-ec
-> asus,tf300tl-pad-ec
-> asus,tf300tl-dock-ec
-> asus,tf600t-pad-ec
-> asus,tf700t-pad-ec
-> asus,tf700t-dock-ec
-> asus,tf701t-pad-ec
-> asus,p1801-t-pad-ec
-> 
-> with minor variations in populated cells. Is this acceptible?
+The motivation for this patchset cames from a test on our platform:
 
+With conservative governor and some pressure on CPU, the frequency rapidly
+reach the max supported frequency, such as 2GHz.
 
-Yes, this looks correct.
+Later, some frequency division strategies on our platform were triggered
+and the actual frequency become 500MHz -- 1/4 of the OS distribution
+frequency.
 
-Best regards,
-Krzysztof
+At that time, if someone excecutes 'cat cpuinfo_cur_freq', the actual
+frequency will become 250MHz -- 1/4 of the min supported frequency.
+
+After the platform recovering from the frequency division, the frequency
+will stay on 1GHz, until the pressure disappear.
+
+The reason this happens is that in cpufreq_verify_current_freq(), if
+policy->cur != new_freq, policy->update will be queued, which will
+ultimately lead to a call to cpufreq_policy_apply_limits(), and update the
+target frequency to policy->min. And then in cs_dbs_update(), since the
+pressure never vanish, it will always hit the following branches:
+
+	if (load > dbs_data->up_threshold) {
+		dbs_info->down_skip = 0;
+
+		/* if we are already at full speed then break out early */
+		if (requested_freq == policy->max)
+			goto out;
+
+Therefore, the target frequency will always remain at the lowest frequency.
+
+The branching conditions in cs_dbs_update() may not be strict enough, but
+the root cause of this problem is that the target frequency was updated
+when querying cpuinfo_cur_freq. For ondemand and schedutil governor,
+although the frequency will not always remain at the lowest level without
+rising, will still be min_freq in a short period of time when the query
+action occurs.
+
+Using the freq requested by the governor to decide whether to update the
+target frequency is more reasonable in cpufreq_policy_apply_limits().
+
+Lifeng Zheng (2):
+  cpufreq: governor: Move requested_freq to policy_dbs_info
+  cpufreq: governor: Apply limits with requested_freq or next_freq
+
+ drivers/cpufreq/cpufreq_conservative.c | 14 ++++----------
+ drivers/cpufreq/cpufreq_governor.c     |  3 ++-
+ drivers/cpufreq/cpufreq_governor.h     | 12 ++++++++++++
+ drivers/cpufreq/cpufreq_ondemand.c     | 10 +++++-----
+ include/linux/cpufreq.h                |  7 ++++---
+ kernel/sched/cpufreq_schedutil.c       |  4 ++--
+ 6 files changed, 29 insertions(+), 21 deletions(-)
+
+-- 
+2.33.0
+
 
