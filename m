@@ -1,141 +1,175 @@
-Return-Path: <linux-pm+bounces-42464-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42465-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6DLiG39ji2nDUAAAu9opvQ
-	(envelope-from <linux-pm+bounces-42464-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 17:57:35 +0100
+	id SISNI5Rwi2lhUQAAu9opvQ
+	(envelope-from <linux-pm+bounces-42465-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 18:53:24 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D76AF11D7AD
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 17:57:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF73811E222
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 18:53:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C1E0630347B5
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 16:57:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 39884303A6F5
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 17:53:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE3EB322B88;
-	Tue, 10 Feb 2026 16:57:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84DB938A72E;
+	Tue, 10 Feb 2026 17:53:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ol2ePfby"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LI/5nS3u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0C831ED8B
-	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 16:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5E4326D46;
+	Tue, 10 Feb 2026 17:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770742652; cv=none; b=b8w0YST2X+RMJF5W3g57G7u3uqhzNS/aYEw6ywB45RCPb01r/5C6svkGf/oRBBRIfF3pt7tASufszVZR69ijUYYJwSlXbFIwaTetbJKrg/ogLusFX2QK3wuAIADHyBrR2ShspiiXrDml+3J1Yk7n8WpKbYUCbtgOoQT+4gQUJKs=
+	t=1770746001; cv=none; b=V58cQOZrKKS9t+09TpOCgpjEXGJlJ1DKIicZfdhbfpCV2+gAhnqbu/9joh1IhPd8aeQumdalYSL9OUtoy34zokfrvNrW3NtMONLartA9XCOZOgOdEp5bviq66AeivDA/S1pwuK/LBU/P2L+avdabonNRE1mbfHWrm/L8Jz6zk1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770742652; c=relaxed/simple;
-	bh=OFnms8PR8wjP0zRa5YZfOWeSHn09AqW4idkB6vN7oTU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I/lIltW8tse31TMOcOsPvSpzRHc9gqyA8bLFbQzhjv8aKQ1APKgqxaGPONyujMhjutQbB2w7pCHkQrW9A2nzmd1ynlWgr/iWSIon+qea6ihomA7QOMvhGsB9MQTUaizu7/pPWEVezKaL8xM4l0IHc97uZ0L66MvTHM0f3I5+dQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ol2ePfby; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50756C116C6
-	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 16:57:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770742652;
-	bh=OFnms8PR8wjP0zRa5YZfOWeSHn09AqW4idkB6vN7oTU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ol2ePfbyGJGTIYPB6w0K2bWNvgHkpCA4gbGdzmVfuQJPW87HKyQ0UV+GgDTSeqh6q
-	 s78FG3ea0sF+xwx8XcRij1OJYjBqO4V+zarP5MR1k+ceJ1+qpzEmd1CrlW+0jrk49a
-	 lYcC+nRNSzXGgn3O4tj0E/YD9sITogHiXDOGs9vSX/gyqndgK6ex2iZwdGptlVipmR
-	 EZwz1yhIpfuxdTclGjDAe/gkxdfxCi8GDuNSwGPLllYWxOLFeUv/ocOCcJ6ObU0lzK
-	 N1/PnhwzyN2II/PhTYXSvmhlX+yGjOk9o1yHrGEq7neNrJcOwUbXpie2DS/FHXfA9n
-	 JrMS26uxg8+ag==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-4042cd2a336so706597fac.0
-        for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 08:57:32 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWBeeU1xEw2GVdHnSxpf4/37vHmhJzkBarJfD1Ne8UNjfq/eAn4QIP9shng+GdqfOsX57qrJnUOyw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxB5nJ8paImXZ9wosERJ/gc2QKG5la5DSSk4YDF+hv4pD6rDBsu
-	UR3BY8ERmyllCZLfSH/3srGV2I2d1gfO0NOrpU9OoMw9OZwsYxtBXOv/WcLoskv+sMeR9BOTRhr
-	GJPT7ivwdbe8cSJ6Xjdh/97AhivdVgn4=
-X-Received: by 2002:a05:6871:3747:b0:40a:5a07:3598 with SMTP id
- 586e51a60fabf-40a96f947f8mr9204363fac.36.1770742651431; Tue, 10 Feb 2026
- 08:57:31 -0800 (PST)
+	s=arc-20240116; t=1770746001; c=relaxed/simple;
+	bh=wm0G/zTXeO7Fi58T0rdrAZcJO6SnbS5Dp2BsSwnb4OA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pPxxnOjysuByapHRRzH5/A98SSH9HiBMAq3yhb5s+mCSRSHgoVxhEXRIhe4nKNfJSN+ocyNTKHKYJ7boGL9Qh0GHZgpg8kAbdkLXkN75yKNwNmQLu/7ucrM0M7+CPWAzcQBYEGJcqvuA56lr2qSnL7nYPGUpTVYTWA2Ubj4Y3e4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LI/5nS3u; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770746000; x=1802282000;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=wm0G/zTXeO7Fi58T0rdrAZcJO6SnbS5Dp2BsSwnb4OA=;
+  b=LI/5nS3uVa+XPFk3RRVrPzdpj3DtPyYSwND2ZrBr/gWNvpmUyOXUNVRz
+   pzKIrtBNObgwsoaU6W+wR44orrb044ek0lRzmNWrsm8ksvRe4HiIm5HNf
+   1Pk2R1urlovkO6pdtxVdGWYrWsbAV+Vbhqo05+2VuTflJM/Tbn5VE9Wi+
+   /DMYWEjn8gDT7Ngn0p9IMKnMTXRvC0cOrwevHHI5QGXUyVDP0UdJujAdA
+   F+HGUZtWyIOCIeLWKdyIpWBZzA3QzfB0qbzSvBuLX+o6PykPFODDa2vW4
+   CU8xYDCBxMkeGzxEccXc9dt3Ph62IWFBDkyjbk2AiCPg6XQ+anQNh5Qti
+   g==;
+X-CSE-ConnectionGUID: oNekvLGSR3SAG6gvkwGOjQ==
+X-CSE-MsgGUID: X4SUFHstR/aVRbCzwxxmYw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="82204468"
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="82204468"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 09:53:20 -0800
+X-CSE-ConnectionGUID: Eh1PLkTnSoKq5Y1A/xf5BQ==
+X-CSE-MsgGUID: Vzz6dpnDQhec3XksDCaFzQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="249630968"
+Received: from spandruv-desk2.jf.intel.com ([10.88.27.176])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 09:53:19 -0800
+Message-ID: <62c8c3910e1becf49e96eddf892d7c37960c7c28.camel@linux.intel.com>
+Subject: Re: [PATCH v1 0/2] Fix RAPL PMU access from non-lead CPUs
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
+  "Rafael J . Wysocki"	 <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Tue, 10 Feb 2026 09:53:19 -0800
+In-Reply-To: <20260209234310.1440722-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+References: 
+	<20260209234310.1440722-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260205-topic-lpm-pmdomain-device-constraints-v2-0-61f7be7d35ac@baylibre.com>
- <20260205-topic-lpm-pmdomain-device-constraints-v2-1-61f7be7d35ac@baylibre.com>
-In-Reply-To: <20260205-topic-lpm-pmdomain-device-constraints-v2-1-61f7be7d35ac@baylibre.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 10 Feb 2026 17:57:19 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jCLSz_SeBKHwXOxRrwXvUBXiovXnQa4qx2nwOMgkuNSw@mail.gmail.com>
-X-Gm-Features: AZwV_Qg1FS_IwfkTx_0WMsDjuI_TC2iNl8qsZIhS_sJxi3-Um8hExBYNhaAfGGs
-Message-ID: <CAJZ5v0jCLSz_SeBKHwXOxRrwXvUBXiovXnQa4qx2nwOMgkuNSw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] PM / QoS: add flag to indicate latency applies system-wide
-To: "Kevin Hilman (TI)" <khilman@baylibre.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org, 
-	Dhruva Gole <d-gole@ti.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42464-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,baylibre.com:email]
-X-Rspamd-Queue-Id: D76AF11D7AD
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,intel.com:dkim];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[srinivas.pandruvada@linux.intel.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	PRECEDENCE_BULK(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42465-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[intel.com:+]
+X-Rspamd-Queue-Id: AF73811E222
 X-Rspamd-Action: no action
 
-On Fri, Feb 6, 2026 at 1:30=E2=80=AFAM Kevin Hilman (TI) <khilman@baylibre.=
-com> wrote:
->
-> By default, the QoS resume latency currenly only applied to runtime PM
-> decisions.
->
-> Add new PM_QOS_FLAG_LATENCY_SYS flag to indicate that the
-> resume latency QoS constraint should be applied to system-wide
-> PM *in addition to* runtime PM.
->
-> Signed-off-by: Kevin Hilman (TI) <khilman@baylibre.com>
+On Mon, 2026-02-09 at 15:43 -0800, Kuppuswamy Sathyanarayanan wrote:
+> This series fixes issues with RAPL PMU event access when using CPUs
+> other than the package lead_cpu.
+>=20
+> The problem was discovered when turbostat reported zero power values
+> when run on a non-lead CPU in the package.
+>=20
+> Investigation revealed two issues:
+>=20
+> 1. The RAPL MSR driver incorrectly validated that the current CPU
+> must
+> =C2=A0=C2=A0 match the lead CPU of the package when reading from PMU cont=
+ext,
+> even
+> =C2=A0=C2=A0 though package-scoped MSRs are readable from any CPU in the
+> package.
+>=20
+> 2. The RAPL PMU cpumask only exposed one CPU per package (the
+> lead_cpu)
+> =C2=A0=C2=A0 for both MSR and TPMI interfaces, forcing tools to use that
+> specific
+> =C2=A0=C2=A0 CPU even though package-scoped registers are readable from a=
+ny CPU
+> =C2=A0=C2=A0 in the package.
+>=20
+> The perf tool avoided issue #1 by checking the cpumask before opening
+> events, but turbostat does not perform this validation. The
+> restrictive
+> cpumask in issue #2 was unnecessary since both MSR and TPMI
+> interfaces
+> support reads from any CPU in the package for package-scoped
+> registers.
+>=20
+> These patches:
+> - Remove the incorrect CPU validation check in PMU context
+> - Expand the PMU cpumask to include all CPUs in each package for both
+> =C2=A0 MSR and TPMI RAPL interfaces
+> - Rename 'atomic' parameter to 'pmu_ctx' for clarity
+>=20
+> After these changes, tools can successfully read RAPL events from any
+> CPU in the package, matching the architectural capability of the
+> hardware for both MSR and TPMI based RAPL implementations.
+>=20
+> Testing (PTL & GNR platform):
+> - Verified turbostat --no-msr --show power works on all CPUs
+> - Verified perf stat -e power/energy-pkg/ works on all CPUs
+> - Confirmed /sys/bus/event_source/devices/power/cpumask shows all
+> =C2=A0 package CPUs instead of just lead_cpu
+> - Tested on both MSR-based (PTL) and TPMI-based (GNR) RAPL system
+>=20
+> Kuppuswamy Sathyanarayanan (2):
+> =C2=A0 powercap: intel_rapl: Remove incorrect CPU check in PMU context
+> =C2=A0 powercap: intel_rapl: Expose all package CPUs in PMU cpumask
+>=20
 
-Acked-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
+Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-> ---
->  include/linux/pm_qos.h | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
-> index 6cea4455f867..aededda52b6b 100644
-> --- a/include/linux/pm_qos.h
-> +++ b/include/linux/pm_qos.h
-> @@ -37,6 +37,8 @@ enum pm_qos_flags_status {
->  #define PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT (-1)
->
->  #define PM_QOS_FLAG_NO_POWER_OFF       (1 << 0)
-> +/* latency value applies to system-wide suspend/s2idle */
-> +#define PM_QOS_FLAG_LATENCY_SYS                (2 << 0)
->
->  enum pm_qos_type {
->         PM_QOS_UNITIALIZED,
->
-> --
-> 2.51.0
->
->
+
+> =C2=A0drivers/powercap/intel_rapl_common.c | 21 ++++++++-------------
+> =C2=A0drivers/powercap/intel_rapl_msr.c=C2=A0=C2=A0=C2=A0 | 12 +++++-----=
+--
+> =C2=A0include/linux/intel_rapl.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
+> =C2=A03 files changed, 14 insertions(+), 21 deletions(-)
 
