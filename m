@@ -1,120 +1,230 @@
-Return-Path: <linux-pm+bounces-42412-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42413-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qEk4IQzzimnUOwAAu9opvQ
-	(envelope-from <linux-pm+bounces-42412-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 09:57:48 +0100
+	id OBowI/L2imkePAAAu9opvQ
+	(envelope-from <linux-pm+bounces-42413-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 10:14:26 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1D49118729
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 09:57:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D34F4118B98
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 10:14:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 5C628300BE96
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 08:57:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7EAAA3029AEB
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 09:14:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87D7E33C1BD;
-	Tue, 10 Feb 2026 08:57:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC3B335547;
+	Tue, 10 Feb 2026 09:14:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="W1ls57pX";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Huyfihg/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DBA73375AA;
-	Tue, 10 Feb 2026 08:57:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965AF33CE9D
+	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 09:14:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770713853; cv=none; b=bczAW0BIEdH0DqdH0YsVGhc8lWB70PMsXecOG794UHQfSsjTAWv8kvNvhZvTMBvCd1O1FpUFx9LmI9XiT6VOElHvtUVwJUw/AehzDzavI2yiMGHeFCEIJYf0AIj053wCHCpQARnqrzsGA49s/q2ikEvbzYaQH4ALPc8/7Xpa3CE=
+	t=1770714859; cv=none; b=rkVq8nCm22BBUyMQ9feF5nbVvjVRbVELNqCrnqTQXJkF5GRSogaCUGuFaVeW1Hg61AJIYDJ8SHTifo+FpceDAVy3tbYp/JBY2Ma3DXyA3D4NGaGzUt/4rYNM9rg/bkRADRh01IwwttgQrKQp/sM59EUhGvIuXanwblba7nbFqFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770713853; c=relaxed/simple;
-	bh=j3PmniGhuDoQ4/vEh3AHo+Nka8lVaTgFBrcLO+s8oGw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hRAaBFfV+51JUN00+CTpUF+ihquVZk9mR/KM3f/LbJrsNSb10wI8+FyKfmlrrycVefJr+2h/5ATqEhVKc4hDRirBercYgYGgttYp/G68tc4uxtXorYPHYx4aG1gtDJMC7k6+xd1ZVCjYtMG3RH+JmJnIUG1IDjBSB8btN0JmWro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CFECD339;
-	Tue, 10 Feb 2026 00:57:23 -0800 (PST)
-Received: from [10.1.31.20] (unknown [10.1.31.20])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 49A5D3F740;
-	Tue, 10 Feb 2026 00:57:28 -0800 (PST)
-Message-ID: <946c9ff1-a0cf-4faa-aeb9-405f89121b81@arm.com>
-Date: Tue, 10 Feb 2026 08:57:26 +0000
+	s=arc-20240116; t=1770714859; c=relaxed/simple;
+	bh=vi9EVrWEQjBwehzjUvNaI+VOOZW9+/2nbX9SJhHs+H8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hCDxIJy7KUOWm/zFcrxuOylwUQ+MbwcByotLbqCaW0G3KY5TXdzDeotViilBx7z/iaGerCOJukVHc7F/rPCjcmy3SoRp4tu2hF6rdjsbHTRRY/BqC9jc1vN2ss0/kYMuYHQMk+0Klq1pZHqaImKv4euxF0pGc3QVUZmzqf+GVTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=W1ls57pX; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Huyfihg/; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61A7705H1151743
+	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 09:14:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=V0LHFUrSxEKNl1fCDeVASC1nXWmst1l3Toc
+	VZHIMdGg=; b=W1ls57pXz1y87v8eTvQ6UoSnuQJv2Y+KA9/WkmToKz920wgikY9
+	/wpGXZP2yGu9pXfyMHd0arBvPAX0jjzY4zpnhLt/7cps4tFA6+DprBILuVYt6oMf
+	I/e8BXAzWeLRguohEMgPAR9Su59plwGjj9kYLqfqxueDgXgc1j6JWbW5fWskMqN+
+	/p6Fyz1c211oBGmToIYmOOTxunfFyHq8ecjP6CB7kS6axOXV7DQYk1KoESoTH0tq
+	AEC3GLbvouhkmMFSJyTg7SebxW44XLDIvffbYr0hThmBdCEjILWESUbG4MbZs7DZ
+	5WOLw1oTgY6qLi6SHwOlr+rlKs4qEWr6i9A==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c800j8evt-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 09:14:17 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8c5e166fb75so1638734485a.0
+        for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 01:14:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1770714857; x=1771319657; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V0LHFUrSxEKNl1fCDeVASC1nXWmst1l3TocVZHIMdGg=;
+        b=Huyfihg/lchQta4UEFvSjZIl7Cb1O3r3GRKL1CRoXSbsRvuVTBJcwffPrD8ku1CTV4
+         nHL3yX/wvif9TSwQO/KhXCpAyatOFfKqjwLIQZJfDiruGA5rchzJPHNo0Fqgm2AZ8LFU
+         xlBL87DU1sMP0/TrXyDFshYBOE+3qY2GsVxxIzRzzhLEdBN7BD6e6y0EcCSX9zUdntoA
+         dAhN8NG5L4tSpwT5v/kkPmgt7px3T6135opsUgcKB6O5HYL4jMALLqy4FrWW4bKvlrYL
+         TICiXBBF9bORtvNtX2XbWbtNhAr9M2gfn3X8STkouWWp2TZ6xVK15tjNibyzbI3I4Lik
+         pNEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770714857; x=1771319657;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V0LHFUrSxEKNl1fCDeVASC1nXWmst1l3TocVZHIMdGg=;
+        b=LcUkhoyO/3rGY8RRG5S3U/blKjtUVozjE2bu2peAWfhRyX8tLr40YjMrR5L7771owW
+         iLpjrK6zmbOZ4vgo4kBF7aFY+mKWgAN7JpwNkDuIYz2Ycw1rHq+n4flcFTCzcVjEFjm6
+         btDikbeMw4ynGEY5HfKUr7EYWHL5mi5RsMIV6PbRJDQu3ghCtLwoMJB3M+bRp6aFHffc
+         Too/RveMEWWstjkJH+XZuED8Eaa7LlcWm4l3aVqYvVa2zdcL0tTGvSYrmUQ9DVa4o5vN
+         8jy/ARFu7m1SNgfKdjguyE7KlsZ654gSNH3IRaNm4qgfJ9lilS0vEytd0pCaL8fu7wse
+         67dw==
+X-Gm-Message-State: AOJu0YytcFOFyL//vb5a7PXPNcf8Zl6FzKBNApN0T2BLlWGxaiLyjzFk
+	jrJNPnFDDHxmagV7b2oqW2C3Ibftbp1aJDrg2y4IswUoNlNckMKMhNKDvxSeYhft11C4cZ+Kzc1
+	rJnGI7maDeEpvUuJafeMkzajziiFmD58Gx6hp0CkRSlHEyI7hJnA9DUH1sHKmaQ==
+X-Gm-Gg: AZuq6aJQ3BMMmvZI9DiXWn10jmuRLx6lJX91wRU21anH8g3t3D1LGXPat7c2889bQmk
+	7urTnFQKAF5/10m5IXl4zBSX0ZKC38S7yT+H6icda0e5uy5HemMVEGZrVthXZEcf44mOsfbJ7+p
+	nfoyOo+PRHS/bjs59ekVk1O5KXK7l1L2qNriiY50AbZcbi6185FFJPbIcL/5XKd4KRW0lX2Xa8+
+	qTMRcwxdPd+BuOFsENBymbPA72pCQY+onvitiVXmCsJ8QCsqibzFqcFQ0MPCMr2MQnGdc7GQRNV
+	bMqObtNt75kvvkhOwHXs9QQguYcRXh2P2bZuVyq/MAK1NLcrmHahFmV4wGOeT+jGcbENxdBySGz
+	SyPj4WxzMxyxNz6DrmxfFUXufqq6BNNS3dxZc+f477aT4SgxwkrI=
+X-Received: by 2002:a05:620a:7103:b0:8b1:be0f:da52 with SMTP id af79cd13be357-8cb1f6b208cmr166194185a.7.1770714856806;
+        Tue, 10 Feb 2026 01:14:16 -0800 (PST)
+X-Received: by 2002:a05:620a:7103:b0:8b1:be0f:da52 with SMTP id af79cd13be357-8cb1f6b208cmr166191485a.7.1770714856368;
+        Tue, 10 Feb 2026 01:14:16 -0800 (PST)
+Received: from brgl-qcom.home ([2a01:cb1d:dc:7e00:1964:f977:ccfd:e173])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483209eeef0sm107399225e9.20.2026.02.10.01.14.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Feb 2026 01:14:15 -0800 (PST)
+From: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: [GIT PULL] power sequencing updates for v7.0-rc1
+Date: Tue, 10 Feb 2026 10:14:01 +0100
+Message-ID: <20260210091401.24342-1-bartosz.golaszewski@oss.qualcomm.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Performance regressions introduced via Revert "cpuidle: menu:
- Avoid discarding useful information" on 5.15 LTS
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Doug Smythies <dsmythies@telus.net>,
- "'Rafael J. Wysocki'" <rafael@kernel.org>,
- 'Harshvardhan Jha' <harshvardhan.j.jha@oracle.com>,
- 'Sasha Levin' <sashal@kernel.org>,
- 'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org,
- stable@vger.kernel.org, 'Daniel Lezcano' <daniel.lezcano@linaro.org>
-References: <CAJZ5v0gcSb_6QPMfHkjSMJ6OOF+PaCZrUKOafYQ++tHE2jBB4w@mail.gmail.com>
- <3b0720d2-9b72-48d0-998a-1fd091cec44f@arm.com>
- <5d4b624c-f993-49aa-95ab-5f279f7f6599@oracle.com>
- <8fd5a9d4-e555-4db1-aa02-8fe5b8a2962c@arm.com>
- <3395ad0b-425e-40f5-844c-627cff471353@oracle.com>
- <3f0cfac2-b753-413c-9a7e-0892c23cdbf4@arm.com>
- <CAJZ5v0j+jfTHog+rVO0816mofk7nSSKCt7dbwSa2QCpYSN013Q@mail.gmail.com>
- <005401dc9638$b3e2ea40$1ba8bec0$@telus.net>
- <m7pzdjfjcm2gr4gpru3rk26o2wn5iarihff6kz3o7n3slsvonx@k6jkyemuywgk>
- <29b3287e-0a08-4648-9e54-32889c99b1e3@arm.com>
- <ioyakugzog4uecwugy4b5ysxdimvh7qtosainou37rwp5bpoks@5csx6sn7ziso>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <ioyakugzog4uecwugy4b5ysxdimvh7qtosainou37rwp5bpoks@5csx6sn7ziso>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEwMDA3NiBTYWx0ZWRfX7X2ysU4LrDJh
+ tTsOSILN3LSFFUyH+JjxKRe3j8MKx5evW8T2n8jsvsbcmU82KDklOeu0iP895i6OZJJZOXwb71/
+ drs31BBJ46PsxdhXZdqwbogFhKzA8d+dU/qUOEiolmyv1sT4qZ4Xe5xESuXolr/l6z34A/QH04Q
+ wyuGyuZ7e7K7hHzdshuHSypu2Y+GSmp1cNxCWtdFfN1tA0JpGEj8FaRqqP/tmjOZGH8+1AuOWyB
+ 7yGy6hI0V52KYB29kKlAgDC9UW4zmsv6e6Qer5VS/DwoeS91RB/mUnhIwlywzKHaPBkFxBfhynh
+ CUwydLgSv/ORk/oDVwy+xH/mAKwyxLiQupvAeAkq3DvxWygDlYoIjOyhDAkTLRmTAXOwmKUzvDg
+ QGIcydgAuDftGCYFVh60TtQEvO1mO/fAamSANV+bB30gW1f0Pp7OCGbZMFX8R7qVIysWwZkvkWy
+ 6F3UKAhNos6gjOLBqKw==
+X-Proofpoint-GUID: LY5NfGXJ3Y99cStwr-zl5PYGSELPbnPB
+X-Proofpoint-ORIG-GUID: LY5NfGXJ3Y99cStwr-zl5PYGSELPbnPB
+X-Authority-Analysis: v=2.4 cv=b9u/I9Gx c=1 sm=1 tr=0 ts=698af6e9 cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=HzLeVaNsDn8A:10
+ a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
+ a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=33PpWzlZdlaQRvv78ZcA:9
+ a=PEH46H7Ffwr30OY-TuGO:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-09_01,2026-02-09_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 impostorscore=0 lowpriorityscore=0 priorityscore=1501
+ clxscore=1015 adultscore=0 spamscore=0 suspectscore=0 malwarescore=0
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602100076
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.36 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,arm.com:mid];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
 	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_DKIM_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[christian.loehle@arm.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42412-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42413-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[]
-X-Rspamd-Queue-Id: B1D49118729
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bartosz.golaszewski@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,oss.qualcomm.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:dkim];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: D34F4118B98
 X-Rspamd-Action: no action
 
-On 2/10/26 08:02, Sergey Senozhatsky wrote:
-> On (26/02/05 07:15), Christian Loehle wrote:
-> [..]
->> @Doug given this is on Chromebooks base=84.5 and revert=59.5 doesn't necessarily mean
->> 29.6% decrease in system performance in a traditional throughput sense.
->> The "benchmark" might me measuring dropped frames, user input latency or what have you.
->> Nonetheless @Sergey do feel free to expand.
-> 
-> I'm not on the performance team and I don't define those metrics, so
-> I can't really comment.  But frame drops during Google Docs scrolling,
-> for instance, or typing is a user visible regression, that people tend
-> to notice.
+Linus,
 
-Yeah I guess that was my point already, i.e. it isn't implausible that
-e.g. a frequency reduction from 2.2GHz to 2.0GHz (-10%) might result in
-double the number of dropped frames (= score reduction of 50%).
-Everything just an example but don't be thrown off by the 29.6% reduction in
-score and expect to go looking for -29.6% cpu frequency (like you would expect
-for many purely cpubound benchmarks).
+Please pull the following set of updates for the power sequencing
+subsystem for the v7.0 cycle. There's one new driver and support for more
+models added to the existing qcom-wcn driver as well as some minor tweaks
+and fixes.
+
+Details are in the signed tag.
+
+Thanks,
+Bartosz
+
+The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+
+  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/pwrseq-updates-for-v7.0-rc1
+
+for you to fetch changes up to ecfcae7885f105b29898ff71d3cb70abd56ef96e:
+
+  power: sequencing: qcom-wcn: fix error path for VDDIO handling (2026-02-09 10:32:27 +0100)
+
+----------------------------------------------------------------
+power sequencing updates for v7.0-rc1
+
+New drivers:
+- add the power sequencing driver for PCIe M.2 connectors
+
+Driver improvements:
+- use device_get_match_data() where applicable
+- add support for the WCN39xx family of models to pwrseq-qcom-wcn
+
+Fixes:
+- fix a locking issue in pwrseq core
+- fix retval check in pwrseq-qcom-wcn
+
+----------------------------------------------------------------
+Bartosz Golaszewski (1):
+      power: sequencing: qcom-wcn: use device_get_match_data()
+
+Dmitry Baryshkov (3):
+      regulator: dt-bindings: qcom,wcn3990-pmu: describe PMUs on WCN39xx
+      power: sequencing: qcom-wcn: add support for WCN39xx
+      power: sequencing: qcom-wcn: fix error path for VDDIO handling
+
+Manivannan Sadhasivam (2):
+      dt-bindings: connector: Add PCIe M.2 Mechanical Key M connector
+      power: sequencing: Add the Power Sequencing driver for the PCIe M.2 connectors
+
+Ziyi Guo (1):
+      power: sequencing: fix missing state_lock in pwrseq_power_on() error path
+
+ .../bindings/connector/pcie-m2-m-connector.yaml    | 145 ++++++++++++++++++
+ .../bindings/regulator/qcom,wcn3990-pmu.yaml       | 100 ++++++++++++
+ MAINTAINERS                                        |   7 +
+ drivers/power/sequencing/Kconfig                   |   8 +
+ drivers/power/sequencing/Makefile                  |   1 +
+ drivers/power/sequencing/core.c                    |   6 +-
+ drivers/power/sequencing/pwrseq-pcie-m2.c          | 168 +++++++++++++++++++++
+ drivers/power/sequencing/pwrseq-qcom-wcn.c         | 133 +++++++++++++++-
+ 8 files changed, 560 insertions(+), 8 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/qcom,wcn3990-pmu.yaml
+ create mode 100644 drivers/power/sequencing/pwrseq-pcie-m2.c
 
