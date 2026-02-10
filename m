@@ -1,175 +1,492 @@
-Return-Path: <linux-pm+bounces-42465-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42466-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SISNI5Rwi2lhUQAAu9opvQ
-	(envelope-from <linux-pm+bounces-42465-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 18:53:24 +0100
+	id CL9KAjZyi2m7UQAAu9opvQ
+	(envelope-from <linux-pm+bounces-42466-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 19:00:22 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF73811E222
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 18:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 696CD11E2F8
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 19:00:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 39884303A6F5
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 17:53:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C096C303CE8A
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 18:00:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84DB938A72E;
-	Tue, 10 Feb 2026 17:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEFF038A9B1;
+	Tue, 10 Feb 2026 18:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LI/5nS3u"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hYZLmwgQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5E4326D46;
-	Tue, 10 Feb 2026 17:53:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770746001; cv=none; b=V58cQOZrKKS9t+09TpOCgpjEXGJlJ1DKIicZfdhbfpCV2+gAhnqbu/9joh1IhPd8aeQumdalYSL9OUtoy34zokfrvNrW3NtMONLartA9XCOZOgOdEp5bviq66AeivDA/S1pwuK/LBU/P2L+avdabonNRE1mbfHWrm/L8Jz6zk1s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770746001; c=relaxed/simple;
-	bh=wm0G/zTXeO7Fi58T0rdrAZcJO6SnbS5Dp2BsSwnb4OA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pPxxnOjysuByapHRRzH5/A98SSH9HiBMAq3yhb5s+mCSRSHgoVxhEXRIhe4nKNfJSN+ocyNTKHKYJ7boGL9Qh0GHZgpg8kAbdkLXkN75yKNwNmQLu/7ucrM0M7+CPWAzcQBYEGJcqvuA56lr2qSnL7nYPGUpTVYTWA2Ubj4Y3e4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LI/5nS3u; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770746000; x=1802282000;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=wm0G/zTXeO7Fi58T0rdrAZcJO6SnbS5Dp2BsSwnb4OA=;
-  b=LI/5nS3uVa+XPFk3RRVrPzdpj3DtPyYSwND2ZrBr/gWNvpmUyOXUNVRz
-   pzKIrtBNObgwsoaU6W+wR44orrb044ek0lRzmNWrsm8ksvRe4HiIm5HNf
-   1Pk2R1urlovkO6pdtxVdGWYrWsbAV+Vbhqo05+2VuTflJM/Tbn5VE9Wi+
-   /DMYWEjn8gDT7Ngn0p9IMKnMTXRvC0cOrwevHHI5QGXUyVDP0UdJujAdA
-   F+HGUZtWyIOCIeLWKdyIpWBZzA3QzfB0qbzSvBuLX+o6PykPFODDa2vW4
-   CU8xYDCBxMkeGzxEccXc9dt3Ph62IWFBDkyjbk2AiCPg6XQ+anQNh5Qti
-   g==;
-X-CSE-ConnectionGUID: oNekvLGSR3SAG6gvkwGOjQ==
-X-CSE-MsgGUID: X4SUFHstR/aVRbCzwxxmYw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="82204468"
-X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="82204468"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 09:53:20 -0800
-X-CSE-ConnectionGUID: Eh1PLkTnSoKq5Y1A/xf5BQ==
-X-CSE-MsgGUID: Vzz6dpnDQhec3XksDCaFzQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="249630968"
-Received: from spandruv-desk2.jf.intel.com ([10.88.27.176])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 09:53:19 -0800
-Message-ID: <62c8c3910e1becf49e96eddf892d7c37960c7c28.camel@linux.intel.com>
-Subject: Re: [PATCH v1 0/2] Fix RAPL PMU access from non-lead CPUs
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-  "Rafael J . Wysocki"	 <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Tue, 10 Feb 2026 09:53:19 -0800
-In-Reply-To: <20260209234310.1440722-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: 
-	<20260209234310.1440722-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E542F38A9A0
+	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 18:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770746415; cv=pass; b=U0CZe4lDUi2dX5yS8R5lBrqTdx9dnEcaL43T9XBOlKcF/WlXmrZwPuxPNPajw0706fLkoWQRRMFbylw7OdPsVSEnneFke+Soz4tjljLGSqDjOzvjzV2jozzThbqZ20C9gXFsZZ6xk5dKEt0yMR51LW7HWJOUjS1LHrMUZHpd7n4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770746415; c=relaxed/simple;
+	bh=S87tUlL4GFpfKiosQaW863Ba71AxTPRsXc2HVeG+yI4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EpQE1yn78TMLgdm6RjHXwqeLD2totL9OILrXI0D3ah41KV97pDiir1qFqX7/fQyMfw95O+DLZwDLju71vpvBnIosn4JIX5jfxsUn3N5J4PNW2o68ZC3Kycviv3FHmUx/RGxaawwtqEjlfRhGBg8sNgqkE/g1/Wt9X+aJEmDMnJo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hYZLmwgQ; arc=pass smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b8849dc12f6so170583566b.1
+        for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 10:00:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770746412; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FvPRMyTrXX5wLR7AGHvzFEk76k+SA4QC/NJ/FN8WL8tkeOT6EP2QsiUr0yDHz8DETN
+         ndtWLS7JPQ7BhsYJFWGHIwsWUM7EJtuvxQk3xDbqdeQMSJVd6AuSPZfGM0kQ5sN4EQpM
+         ltfjWQLkGe6UQR/ln3Hqbul2RsIj1y8IsRN/2VPDpcrEg+1Dnny51F54RMPnXazLZizK
+         eJeOpW248AyFgVLijLuIWYn2yMbZ31ZQ1rd+d9xMkJp7nozbHcuiJeg9s9Z1+Kym4f2x
+         NioqIBjiM0FXtNICw0qvoNf65+PsdC/zLOUXiO/KvOgKv/DIjLmeOYm5mlsfAHatJwG3
+         MC1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0M5Ou8Dr19t94K73pKgRAsY639KugQQU9W89/USRqN0=;
+        fh=PaCB8IsPvs7uSakqtEENJn3/cFm9eX65wAgFq+KXHs8=;
+        b=HJuME6kEruzO5yuLdBjdYzzW+2PQEY7FgnITNnQilGNs7K4fuFJQzHEADnbHViKzkh
+         hgcABiw4Dqq/DhJgE5r7LoDJLD73Oh2ciOlfT2ezHEsovRAIS2crcDIIaZRN/JXqGob3
+         k8zhs/zSeDZhH/0Idh5alRUX9L4S1eKrSNrtXWmzTJC/5u7nHwu9EkZXqIwAlesmTV9w
+         DIxbfiEIiJuFRFQRti01Wzc/1kaBnafy9lbejW1+m/sshJOzNkXYIVpsNpFdO9VzANQ/
+         exR6QbFGCpNCnlCUbuo2zNkHOY8JY+oSsb7Ez+LTa/twtdIC7xYHhEl/EqtTgNwH0KMY
+         Bm2Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770746412; x=1771351212; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0M5Ou8Dr19t94K73pKgRAsY639KugQQU9W89/USRqN0=;
+        b=hYZLmwgQ/ycsuQ+OxXnW2hsjwk889p5tuWO0nWnC31tcFk8Nw7GlKdqUWjBJ/GbPn2
+         i7B8VDtk2yZHa6SIwiEit/+986XcDcX8HWwl04hBsSHR/+XvYve1/ZXji43YJiKx7AFu
+         9gea2snWykd5n0rhuiAcZp18vqKyI3BI09UJMb2Kc9H1QUDdXKhzZgh3/H//nFI9xA58
+         fb2VREcNrTF+K+RGxKYntfGh+/Qf4Kl12oBUoHyxrWBINxqtqTXC8qHLHfWmjIF9SKaw
+         vzE0N/NfU454q+4SPY8qw13DhZ4+Ru3SldA5A0DDzqovma/nTMe6AEJSo+Vxm/7zkQFQ
+         Q26A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770746412; x=1771351212;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0M5Ou8Dr19t94K73pKgRAsY639KugQQU9W89/USRqN0=;
+        b=jP3Za9ojcvy0OrDmXDT/XGCKOvMY7xdqsFpl1BEqGi5LVCtFO9/M1U2+rzbnCBdDRw
+         nUn6SZ4/n3ITwOy+AWrCN2ZlfCkAaAPYCAI3RBs8Y+UVhkX8Ev9iaMjR0o/o2EzJp33E
+         DfkreigP9Vjbn0TieJROQDKb3JAp+VOAKz30XPSPmoMeK3hhrYLWWqLvKMxN8Dc0egvw
+         wxs9sS6xoZNRzyNPfpEHvEJwynwHJpvlyI/PJNf78lLzWqL1k3Dq+nqIUtpRJOQcX+7p
+         WLvyxtngMZq/TGe7ipGO78T+O8opTWfpjaHsWver70PBlV7jAVOB/aNx/5YiAfwuBYQK
+         ZwMw==
+X-Forwarded-Encrypted: i=1; AJvYcCU3IY+gkbptjXTMEyyZjBnlvA15bL15c5C0dSPSzCZjnPe3EUa0Ga39cjW19Ay8maUZY9FC1ULyHA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwS7euZGACTsvY+k6nUP7HQcVWt3bszGc2LpA/9AiVf1MDB60cA
+	O96ASdborABvRfDyyqoPFOjMcBVr3kfLKIOMAVLwRFBZ7zKo8kAE4/6CuuqJGFqCKHXbr6tx/Ws
+	UeGHfkAX8yoSGmNRq/dRFi9EcLu2EJ5Q=
+X-Gm-Gg: AZuq6aIYyTFdI7CjJdCl8q87qDK0iWYoh8DKKDWlD/vjCFk93QztSo4PU+TRNi3Dq+j
+	J/EVJsyahKTp5qnwBTa7D9ner2KJGFnhAQKs0lLeN5NoESvHV+/4T9pjMZ1+uGziku2BWN96D0P
+	r5HkGP6xICIbtToSeP4+nRbiuzaCwco7TlDm1R5s1COe5cyhCRZyPuzFuJABbT57S/mvPp38VrZ
+	TJqnQawTGZJXqba6vwKUP7s9VgVye3v4GKZgd7be+swRsOUjNmLMtQU5pzM6k+Xxi5TjDka/6MV
+	8Guo6zdLKlS0QQ6nhTYPLkabWqwyQ6VmaajfhRouvNA/nU3XKLc=
+X-Received: by 2002:a17:907:97cc:b0:b8e:3877:d1cb with SMTP id
+ a640c23a62f3a-b8edf45cf7fmr962300066b.62.1770746411856; Tue, 10 Feb 2026
+ 10:00:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260208215839.87595-2-nphamcs@gmail.com> <20260208222652.328284-1-nphamcs@gmail.com>
+In-Reply-To: <20260208222652.328284-1-nphamcs@gmail.com>
+From: Kairui Song <ryncsn@gmail.com>
+Date: Wed, 11 Feb 2026 01:59:34 +0800
+X-Gm-Features: AZwV_QgjgrVezF-d_BQ-9HaqLNY-NJc1Y-8aDIlBfdscQkLqG0fjwgzeysl6W44
+Message-ID: <CAMgjq7AQNGK-a=AOgvn4-V+zGO21QMbMTVbrYSW_R2oDSLoC+A@mail.gmail.com>
+Subject: Re: [PATCH v3 00/20] Virtual Swap Space
+To: Nhat Pham <nphamcs@gmail.com>
+Cc: linux-mm@kvack.org, akpm@linux-foundation.org, hannes@cmpxchg.org, 
+	hughd@google.com, yosry.ahmed@linux.dev, mhocko@kernel.org, 
+	roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev, 
+	len.brown@intel.com, chengming.zhou@linux.dev, chrisl@kernel.org, 
+	huang.ying.caritas@gmail.com, ryan.roberts@arm.com, shikemeng@huaweicloud.com, 
+	viro@zeniv.linux.org.uk, baohua@kernel.org, bhe@redhat.com, osalvador@suse.de, 
+	christophe.leroy@csgroup.eu, pavel@kernel.org, kernel-team@meta.com, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-pm@vger.kernel.org, peterx@redhat.com, riel@surriel.com, 
+	joshua.hahnjy@gmail.com, npache@redhat.com, gourry@gourry.net, 
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, 
+	rafael@kernel.org, jannh@google.com, pfalcato@suse.de, 
+	zhengqi.arch@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,intel.com:dkim];
+	RCPT_COUNT_TWELVE(0.00)[38];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[srinivas.pandruvada@linux.intel.com,linux-pm@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42466-lists,linux-pm=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[ryncsn@gmail.com,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kvack.org,linux-foundation.org,cmpxchg.org,google.com,linux.dev,kernel.org,intel.com,gmail.com,arm.com,huaweicloud.com,zeniv.linux.org.uk,redhat.com,suse.de,csgroup.eu,meta.com,vger.kernel.org,surriel.com,gourry.net,bytedance.com];
+	TAGGED_RCPT(0.00)[linux-pm];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42465-lists,linux-pm=lfdr.de];
-	DKIM_TRACE(0.00)[intel.com:+]
-X-Rspamd-Queue-Id: AF73811E222
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 696CD11E2F8
 X-Rspamd-Action: no action
 
-On Mon, 2026-02-09 at 15:43 -0800, Kuppuswamy Sathyanarayanan wrote:
-> This series fixes issues with RAPL PMU event access when using CPUs
-> other than the package lead_cpu.
->=20
-> The problem was discovered when turbostat reported zero power values
-> when run on a non-lead CPU in the package.
->=20
-> Investigation revealed two issues:
->=20
-> 1. The RAPL MSR driver incorrectly validated that the current CPU
-> must
-> =C2=A0=C2=A0 match the lead CPU of the package when reading from PMU cont=
-ext,
-> even
-> =C2=A0=C2=A0 though package-scoped MSRs are readable from any CPU in the
-> package.
->=20
-> 2. The RAPL PMU cpumask only exposed one CPU per package (the
-> lead_cpu)
-> =C2=A0=C2=A0 for both MSR and TPMI interfaces, forcing tools to use that
-> specific
-> =C2=A0=C2=A0 CPU even though package-scoped registers are readable from a=
-ny CPU
-> =C2=A0=C2=A0 in the package.
->=20
-> The perf tool avoided issue #1 by checking the cpumask before opening
-> events, but turbostat does not perform this validation. The
-> restrictive
-> cpumask in issue #2 was unnecessary since both MSR and TPMI
-> interfaces
-> support reads from any CPU in the package for package-scoped
-> registers.
->=20
-> These patches:
-> - Remove the incorrect CPU validation check in PMU context
-> - Expand the PMU cpumask to include all CPUs in each package for both
-> =C2=A0 MSR and TPMI RAPL interfaces
-> - Rename 'atomic' parameter to 'pmu_ctx' for clarity
->=20
-> After these changes, tools can successfully read RAPL events from any
-> CPU in the package, matching the architectural capability of the
-> hardware for both MSR and TPMI based RAPL implementations.
->=20
-> Testing (PTL & GNR platform):
-> - Verified turbostat --no-msr --show power works on all CPUs
-> - Verified perf stat -e power/energy-pkg/ works on all CPUs
-> - Confirmed /sys/bus/event_source/devices/power/cpumask shows all
-> =C2=A0 package CPUs instead of just lead_cpu
-> - Tested on both MSR-based (PTL) and TPMI-based (GNR) RAPL system
->=20
-> Kuppuswamy Sathyanarayanan (2):
-> =C2=A0 powercap: intel_rapl: Remove incorrect CPU check in PMU context
-> =C2=A0 powercap: intel_rapl: Expose all package CPUs in PMU cpumask
->=20
+On Mon, Feb 9, 2026 at 7:57=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrote:
+>
+> Anyway, resending this (in-reply-to patch 1 of the series):
 
-Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Hi Nhat,
 
+> Changelog:
+> * RFC v2 -> v3:
+>     * Implement a cluster-based allocation algorithm for virtual swap
+>       slots, inspired by Kairui Song and Chris Li's implementation, as
+>       well as Johannes Weiner's suggestions. This eliminates the lock
+>           contention issues on the virtual swap layer.
+>     * Re-use swap table for the reverse mapping.
+>     * Remove CONFIG_VIRTUAL_SWAP.
 
-> =C2=A0drivers/powercap/intel_rapl_common.c | 21 ++++++++-------------
-> =C2=A0drivers/powercap/intel_rapl_msr.c=C2=A0=C2=A0=C2=A0 | 12 +++++-----=
---
-> =C2=A0include/linux/intel_rapl.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
-> =C2=A03 files changed, 14 insertions(+), 21 deletions(-)
+I really do think we better make this optional, not a replacement or
+mandatory. There are many hard to evaluate effects as this
+fundamentally changes the swap workflow with a lot of behavior changes
+at once. e.g. it seems the folio will be reactivated instead of
+splitted if the physical swap device is fragmented; slot is allocated
+at IO and not at unmap, and maybe many others. Just like zswap is
+optional. Some common workloads would see an obvious performance or
+memory usage regression following this design, see below.
+
+>     * Reducing the size of the swap descriptor from 48 bytes to 24
+>       bytes, i.e another 50% reduction in memory overhead from v2.
+
+Honestly if you keep reducing that you might just end up
+reimplementing the swap table format :)
+
+> This patch series is based on 6.19. There are a couple more
+> swap-related changes in the mm-stable branch that I would need to
+> coordinate with, but I would like to send this out as an update, to show
+> that the lock contention issues that plagued earlier versions have been
+> resolved and performance on the kernel build benchmark is now on-par with
+> baseline. Furthermore, memory overhead has been substantially reduced
+> compared to the last RFC version.
+
+Thanks for the effort!
+
+> * Operationally, static provisioning the swapfile for zswap pose
+>   significant challenges, because the sysadmin has to prescribe how
+>   much swap is needed a priori, for each combination of
+>   (memory size x disk space x workload usage). It is even more
+>   complicated when we take into account the variance of memory
+>   compression, which changes the reclaim dynamics (and as a result,
+>   swap space size requirement). The problem is further exarcebated for
+>   users who rely on swap utilization (and exhaustion) as an OOM signal.
+
+So I thought about it again, this one seems not to be an issue. In
+most cases, having a 1:1 virtual swap setup is enough, and very soon
+the static overhead will be really trivial. There won't even be any
+fragmentation issue either, since if the physical memory size is
+identical to swap space, then you can always find a matching part. And
+besides, dynamic growth of swap files is actually very doable and
+useful, that will make physical swap files adjustable at runtime, so
+users won't need to waste a swap type id to extend physical swap
+space.
+
+> * Another motivation is to simplify swapoff, which is both complicated
+>   and expensive in the current design, precisely because we are storing
+>   an encoding of the backend positional information in the page table,
+>   and thus requires a full page table walk to remove these references.
+
+The swapoff here is not really a clean swapoff, minor faults will
+still be triggered afterwards, and metadata is not released. So this
+new swapoff cannot really guarantee the same performance as the old
+swapoff. And on the other hand we can already just read everything
+into the swap cache then ignore the page table walk with the older
+design too, that's just not a clean swapoff.
+
+> struct swp_desc {
+>         union {
+>                 swp_slot_t         slot;                 /*     0     8 *=
+/
+>                 struct zswap_entry * zswap_entry;        /*     0     8 *=
+/
+>         };                                               /*     0     8 *=
+/
+>         union {
+>                 struct folio *     swap_cache;           /*     8     8 *=
+/
+>                 void *             shadow;               /*     8     8 *=
+/
+>         };                                               /*     8     8 *=
+/
+>         unsigned int               swap_count;           /*    16     4 *=
+/
+>         unsigned short             memcgid:16;           /*    20: 0  2 *=
+/
+>         bool                       in_swapcache:1;       /*    22: 0  1 *=
+/
+
+A standalone bit for swapcache looks like the old SWAP_HAS_CACHE that
+causes many issues...
+
+>
+>         /* Bitfield combined with previous fields */
+>
+>         enum swap_type             type:2;               /*    20:17  4 *=
+/
+>
+>         /* size: 24, cachelines: 1, members: 6 */
+>         /* bit_padding: 13 bits */
+>         /* last cacheline: 24 bytes */
+> };
+
+Having a struct larger than 8 bytes means you can't load it
+atomically, that limits your lock design. About a year ago Chris
+shared with me an idea to use CAS on swap entries once they are small
+and unified, that's why swap table is using atomic_long_t and have
+helpers like __swap_table_xchg, we are not making good use of them yet
+though. Meanwhile we have already consolidated the lock scope to folio
+in many places, holding the folio lock then doing the CAS without
+touching cluster lock at all for many swap operations might be
+feasible soon.
+
+E.g. we already have a cluster-lockless version of swap check in swap table=
+ p3:
+https://lore.kernel.org/linux-mm/20260128-swap-table-p3-v2-11-fe0b67ef0215@=
+tencent.com/
+
+That might also greatly simplify the locking on IO and migration
+performance between swap devices.
+
+> Doing the same math for the disk swap, which is the worst case for
+> virtual swap in terms of swap backends:
+
+Actually this worst case is a very common case... see below.
+
+> 0% usage, or 0 entries: 0.00 MB
+> * Old design total overhead: 25.00 MB
+> * Vswap total overhead: 2.00 MB
+>
+> 25% usage, or 2,097,152 entries:
+> * Old design total overhead: 41.00 MB
+> * Vswap total overhead: 66.25 MB
+>
+> 50% usage, or 4,194,304 entries:
+> * Old design total overhead: 57.00 MB
+> * Vswap total overhead: 130.50 MB
+>
+> 75% usage, or 6,291,456 entries:
+> * Old design total overhead: 73.00 MB
+> * Vswap total overhead: 194.75 MB
+>
+> 100% usage, or 8,388,608 entries:
+> * Old design total overhead: 89.00 MB
+> * Vswap total overhead: 259.00 MB
+>
+> The added overhead is 170MB, which is 0.5% of the total swapfile size,
+> again in the worst case when we have a sizing oracle.
+
+Hmm.. With the swap table we will have a stable 8 bytes per slot in
+all cases, in current mm-stable we use 11 bytes (8 bytes dyn and 3
+bytes static), and in the posted p3 we already get 10 bytes (8 bytes
+dyn and 2 bytes static). P4 or follow up was already demonstrated
+last year with working code, and it makes everything dynamic
+(8 bytes fully dyn, I'll rebase and send that once p3 is merged).
+
+So with mm-stable and follow up, for 32G swap device:
+
+0% usage, or 0/8,388,608 entries: 0.00 MB
+* mm-stable total overhead: 25.50 MB (which is swap table p2)
+* swap-table p3 overhead: 17.50 MB
+* swap-table p4 overhead: 0.50 MB
+* Vswap total overhead: 2.00 MB
+
+100% usage, or 8,388,608/8,388,608 entries:
+* mm-stable total overhead: 89.5 MB (which is swap table p2)
+* swap-table p3 overhead: 81.5 MB
+* swap-table p4 overhead: 64.5 MB
+* Vswap total overhead: 259.00 MB
+
+That 3 - 4 times more memory usage, quite a trade off. With a
+128G device, which is not something rare, it would be 1G of memory.
+Swap table p3 / p4 is about 320M / 256M, and we do have a way to cut
+that down close to be <1 byte or 3 byte per page with swap table
+compaction, which was discussed in LSFMM last year, or even 1 bit
+which was once suggested by Baolin, that would make it much smaller
+down to <24MB (This is just an idea for now, but the compaction is
+very doable as we already have "LRU"s for swap clusters in swap
+allocator).
+
+I don't think it looks good as a mandatory overhead. We do have a huge
+user base of swap over many different kinds of devices, it was not
+long ago two new kernel bugzilla issue  or bug reported was sent to
+the maillist about swap over disk, and I'm still trying to investigate
+one of them which seems to be actually a page LRU issue and not swap
+problem..  OK a little off topic, anyway, I'm not saying that we don't
+want more features, as I mentioned above, it would be better if this
+can be optional and minimal. See more test info below.
+
+> We actually see a slight improvement in systime (by 1.5%) :) This is
+> likely because we no longer have to perform swap charging for zswap
+> entries, and virtual swap allocator is simpler than that of physical
+> swap.
+
+Congrats! Yeah, I guess that's because vswap has a smaller lock scope
+than zswap with a reduced callpath?
+
+>
+> Using SSD swap as the backend:
+>
+> Baseline:
+> real: mean: 200.3s, stdev: 2.33s
+> sys: mean: 489.88s, stdev: 9.62s
+>
+> Vswap:
+> real: mean: 201.47s, stdev: 2.98s
+> sys: mean: 487.36s, stdev: 5.53s
+>
+> The performance is neck-to-neck.
+
+Thanks for the bench, but please also test with global pressure too.
+One mistake I made when working on the prototype of swap tables was
+only focusing on cgroup memory pressure, which is really not how
+everyone uses Linux, and that's why I reworked it for a long time to
+tweak the RCU allocation / freeing of swap table pages so there won't
+be any regression even for lowend and global pressure. That's kind of
+critical for devices like Android.
+
+I did an overnight bench on this with global pressure, comparing to
+mainline 6.19 and swap table p3 (I do include such test for each swap
+table serie, p2 / p3 is close so I just rebase and latest p3 on top of
+your base commit just to be fair and that's easier for me too) and it
+doesn't look that good.
+
+Test machine setup for vm-scalability:
+# lscpu | grep "Model name"
+Model name:          AMD EPYC 7K62 48-Core Processor
+
+# free -m
+              total        used        free      shared  buff/cache   avail=
+able
+Mem:          31582         909       26388           8        4284       2=
+9989
+Swap:         40959          41       40918
+
+The swap setup follows the recommendation from Huang
+(https://lore.kernel.org/linux-mm/87ed474kvx.fsf@yhuang6-desk2.ccr.corp.int=
+el.com/).
+
+Test (average of 18 test run):
+vm-scalability/usemem --init-time -O -y -x -n 1 56G
+
+6.19:
+Throughput: 618.49 MB/s (stdev 31.3)
+Free latency: 5754780.50us (stdev 69542.7)
+
+swap-table-p3 (3.8%, 0.5% better):
+Throughput: 642.02 MB/s (stdev 25.1)
+Free latency: 5728544.16us (stdev 48592.51)
+
+vswap (3.2%, 244% worse):
+Throughput: 598.67 MB/s (stdev 25.1)
+Free latency: 13987175.66us (stdev 125148.57)
+
+That's a huge regression with freeing. I have a vm-scatiliby test
+matrix, not every setup has such significant >200% regression, but on
+average the freeing time is about at least 15 - 50% slower (for
+example /data/vm-scalability/usemem --init-time -O -y -x -n 32 1536M
+the regression is about 2583221.62us vs 2153735.59us). Throughput is
+all lower too.
+
+Freeing is important as it was causing many problems before, it's the
+reason why we had a swap slot freeing cache years ago (and later we
+removed that since the freeing cache causes more problems and swap
+allocator already improved it better than having the cache). People
+even tried to optimize that:
+https://lore.kernel.org/linux-mm/20250909065349.574894-1-liulei.rjpt@vivo.c=
+om/
+(This seems a already fixed downstream issue, solved by swap allocator
+or swap table). Some workloads might amplify the free latency greatly
+and cause serious lags as shown above.
+
+Another thing I personally cares about is how swap works on my daily
+laptop :), building the kernel in a 2G test VM using NVME as swap,
+which is a very practical workload I do everyday, the result is also
+not good (average of 8 test run, make -j12):
+#free -m
+               total        used        free      shared  buff/cache   avai=
+lable
+Mem:            1465         216        1026           0         300       =
+ 1248
+Swap:           4095          36        4059
+
+6.19 systime:
+109.6s
+swap-table p3:
+108.9s
+vswap systime:
+118.7s
+
+On a build server, it's also slower (make -j48 with 4G memory VM and
+NVME swap, average of 10 testrun):
+# free -m
+               total        used        free      shared  buff/cache   avai=
+lable
+Mem:            3877        1444        2019         737        1376       =
+ 2432
+Swap:          32767        1886       30881
+
+# lscpu | grep "Model name"
+Model name:                              Intel(R) Xeon(R) Platinum
+8255C CPU @ 2.50GHz
+
+6.19 systime:
+435.601s
+swap-table p3:
+432.793s
+vswap systime:
+455.652s
+
+In conclusion it's about 4.3 - 8.3% slower for common workloads under
+global pressure, and there is a up to 200% regression on freeing. ZRAM
+shows an even larger workload regression but I'll skip that part since
+your series is focusing on zswap now. Redis is also ~20% slower
+compared to mm-stable (327515.00 RPS vs 405827.81 RPS), that's mostly
+due to swap-table-p2 in mm-stable so I didn't do further comparisons.
+
+So if that's not a bug with this series, I think the double free or
+decoupling of swap / underlying slots might be the problem with the
+freeing regression shown above. That's really a serious issue, and the
+global pressure might be a critical issue too as the metadata is much
+larger, and is already causing regressions for very common workloads.
+Low end users could hit the min watermark easily and could have
+serious jitters or allocation failures.
+
+That's part of the issue I've found, so I really do think we need a
+flexible way to implementa that and not have a mandatory layer. After
+swap table P4 we should be able to figure out a way to fit all needs,
+with a clean defined set of swap API, metadata and layers, as was
+discussed at LSFMM last year.
 
