@@ -1,240 +1,275 @@
-Return-Path: <linux-pm+bounces-42397-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42398-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id jYv9DNzQimluOAAAu9opvQ
-	(envelope-from <linux-pm+bounces-42397-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 07:31:56 +0100
+	id RmyUDX3SimmxOAAAu9opvQ
+	(envelope-from <linux-pm+bounces-42398-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 07:38:53 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D28B1175F5
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 07:31:55 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA98E11767F
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 07:38:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E343F301466D
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 06:31:53 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 1C5F6300C315
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 06:38:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E04E93126C1;
-	Tue, 10 Feb 2026 06:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6D9232E68F;
+	Tue, 10 Feb 2026 06:38:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U7N2G8Uw"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aPaMhkZc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7009D28314E
-	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 06:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CECE32D0EA
+	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 06:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770705112; cv=none; b=A3JsbDURinkVqtb8sLk/HjlBIT1WetN9EFy/bQkI6Zxt3WWgJIBDkKA6rvhCP5EeW8FVTeIWFA46yGAiqZEFf9/zknFfLVsfImbnFu0hLyt5SGeWypRvdMkizhIUrSJSMkCT8IkLUNFowIY5CWUmV8a48K/1E0WgTfbYyZeJikw=
+	t=1770705530; cv=none; b=uBpQR9XhzTikzLBbhJAM5k38w5s2zIha6lorm32EEqyUegOmohgTVPTB2BMWHWjY4LM3c1+LW512kGlyicHn9wc0Ex//AvVpYW+b+D0ClNGO77r+6J3K3kq/YFukA3SFOFd+5hXcTDtJxVyYUeFCqneK403h/rNun7fB2jbWkvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770705112; c=relaxed/simple;
-	bh=+dY5A7nwRVBRBd7BJ1hDL2J+oBIHOmLAIhWPxMtTN4o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=kpZZ6AnYfoI2oPftvffkj/nGULtgIXwW4IK5lmhqL8uzoxmr7wEU+b3V9zqHsOA7ka5q/BxAD32410q/KCn+Tbw3Nt1F0LaNjkc4M+uY60JzbWVAcpYBydU7G1VCQVJFoCmEuE/bnEpQVX6nOKSYcNEJsFLhLJvGTCVY+2bJKPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=U7N2G8Uw; arc=none smtp.client-ip=209.85.128.66
+	s=arc-20240116; t=1770705530; c=relaxed/simple;
+	bh=Tzvqbf/lzUX+Xryn3wOPmUQNw3pnqvGuG9huSDJZPn4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=b6ZyuIdcVymsBxjnEqkIEfO5IxpIR0PsWyCwi1ZTIvYGM6M3CJ0+8jJdoD0RiKFutsr3SfUI/Ql7bSMnFf1KbYww6kAYaeRBHSNPRTw4PHj825j+E/pSNG4oPzhg0AhW6pdA4geZar2YqeJrM1mvzkjRnn7Lap6JiSX7iqWU6Qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aPaMhkZc; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-47ee0291921so35829055e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 09 Feb 2026 22:31:51 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47ee937ecf2so49449085e9.0
+        for <linux-pm@vger.kernel.org>; Mon, 09 Feb 2026 22:38:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1770705110; x=1771309910; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PuIvHjahYrqUwfgodntxdfFSIIlE9ggIgaeNW8+YxZc=;
-        b=U7N2G8UwMwtnwPmbDdvrXVal6o2WZS+jJKtOpyf6nSz7PeirStusIC/NsW3quXzBoc
-         vij7WcD9hovtkXX2KNlfJmPgdHRmpXQR/4nyu3+OuYaLulj1pWdvNLSgQCkqTUdxhUqx
-         yrBDt93abC13ieuEMefe+LGue4Xw94xxdtyG8cCS3lZhMtxg3hOGFG4z+1W2JolhGdT/
-         F5w4aP5VbYQwhDEnXFUwLGYxCjqelQMMqp6+xBfdOaoeZfiu+r7++Q+GQxNoCrx1alzI
-         UI7RYfl1nOWafRxgjidgCFF0FUfb2ng69fvy16uGN1QBEUlCHwL0cz06E9+t3yPGMUfu
-         sM+w==
+        d=linaro.org; s=google; t=1770705528; x=1771310328; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lLdYDGt/+DrOZdYJB2wqY0IBiaBFC8iK50DATmXPJZs=;
+        b=aPaMhkZcfXpmP2tm/iJaq/CWcrBT5oUwIPYKVQunfq07wAHYn5QH79di58LjJZCCKZ
+         ElWls/ygW5HHWkNDwOfos/MTuCMj6r8QfeKoK5qeFFRXQZE0Jzb5MgWfuIQtwbB7SgTI
+         t0w/NgrN4Qvdqu4Ro03urdFF/zw5By8GRlEd50bbXeMHCJ6oVqTrqwaUwvztZSeCzJcn
+         3+NfnuTuWPqRVUpRVvW5khABjNpmtMnLrM/nhazeMNrk05OgjuO1/R8+Jr+2tBrXsHtU
+         wndcURxtIj4wsyMcBnt+G1R2Pj/3iRi9vELwS8GP9yQLL/vDhAW/ntof0pq3Aw01JPGf
+         JTnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770705110; x=1771309910;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PuIvHjahYrqUwfgodntxdfFSIIlE9ggIgaeNW8+YxZc=;
-        b=BCkjbxCZx0e5G9EExKUGUWBFw/Dc2wgDOMrBgbofha2Hi2wrNQDo/NpsP1ppKFNjjM
-         xsjVsY7dmjXobbnijY+kaxlBaThvdvNgY2hkfLaoVvPdWnf3xSgPUmoDP2CoVi/iFkCH
-         pWGpp6/+utIBz/bl4HVeXMlScZuTf/jxa6aHWeLcOyCThMAYqKLIRhNhFhgs84ah3wUF
-         x21xmDBDKBvzV7PWovFXKxHIwtdz4W954nK4qGu5x7G+8RB1XMZtljsXB2cFYO4Wit9b
-         i6wYUkkNVZuP2yHil4lFO1F4erpUCQfiC9KxMI5t8kWEx+RRMMpT/hg82AQ9oOMlasyZ
-         0nfA==
-X-Forwarded-Encrypted: i=1; AJvYcCVj4XIRDQWsYLE1sG+EexV+pkq9E52UwE1qkyYTKPE+t3Q/sMg88J3hmSD6NYx/gzUxF2SsKTTHxg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJNw7CZaSDpX+v9iWsZHgy/KnM/o+1WZTKw3ralbcQRJTqjbqb
-	ngjdV1lzpm+ELrkiXCRlBuOYlxqtiZx3e68qG68UsJPFxVSkDLcdC4JA1RECN7RQvpo=
-X-Gm-Gg: AZuq6aISSPDlxHpyCLiCIh/pLj6dfu7KjtOGZXj7W8LrgTlSUj2itYdNGnTJRn+xzfE
-	uKOuvfoZSC3zgtzQLR50zYgxTsdQE+HGrJuGbs09BmUB3TRgE3wkafcN6RAqpIGQU2Y/scDwJcz
-	theqMmzoT7MDOgTmV2AjY/FKe6aKOkF37C/vr11AXNHkSnpoPhoW02HwO6YWIdCypKkdzwYq2Ds
-	M3V6uECgTWJRArC2WAf2J3s2auVcgZJP8Mj7cO8vRMAv+WNCtlwxP2LDw8o/StxUT/YJfHhL486
-	s6wItyGuV3Qah3e99FuFaokkUFq3KQiffr/BtvMKZW3lhcXNjaCfzvIuiZNblPpfT6DE52h4+Er
-	WeSNgjC8n9FTs22SLFrfjHkusR2sx0vuBPzWyOA9Vbas+GsO6SY7xeXGWsSVTlWh4Db2svui3YT
-	pDUwcezOTW90HEjrsQcAOzK/+P3NUL
-X-Received: by 2002:a05:600c:4f8a:b0:47a:8cce:2940 with SMTP id 5b1f17b1804b1-483201e3aaemr189459165e9.14.1770705109669;
-        Mon, 09 Feb 2026 22:31:49 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48320961505sm215017735e9.4.2026.02.09.22.31.48
+        d=1e100.net; s=20230601; t=1770705528; x=1771310328;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lLdYDGt/+DrOZdYJB2wqY0IBiaBFC8iK50DATmXPJZs=;
+        b=qnqxuljhj/Xlih3QSnMWj/jWSZfKZIgfzAEwj3ET1mxTRFWdm1e8d9+hS6tYb4v8ti
+         LHGckSi4x7WpHS3YUR8iBSq4TG85q2vpgJhjnMEucFgHs9Yl+M59iUPK3HaeacaUcdNd
+         YiDdXWAFGSZQvFJSK9YgXWD7jAMBCgBrBtJ6Njwc8WAYvXnrga2xbjZh8osrc2PXZKsR
+         Pnym8qBhY4l7EAPn2SNvNf5hmMN+q2ypPu/1E/bPgOqnRvIrSP1blx+PNXvAEv/++fn8
+         TuBT9xr2M+p4aa08KbF43xffSFhs+1k64jORzwZm8EdnoKRXZNhhOy0FP22GDSp+m3Uh
+         BAXw==
+X-Forwarded-Encrypted: i=1; AJvYcCXHp+yrirh3MaT9IS8PAptbqp7oIZtrNRES36LOlpmf1XL8kL568K3i2hM7aZ5zJuy+ucYSmGmb2A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyij8D3Q6OyBlm0B4UxgPt27yq1ChPbKxcAIV1JCN4bsoJ/XWU/
+	vC2ff26mM892e0Nhm7kc/cyDvPxnKwrIYooOwwXEw//p4oHxoxF3TzIaoUsvYusvCfg=
+X-Gm-Gg: AZuq6aIHnlc70jy52t0mZn3EBMkeunQ0eytBYpDJc+FKeJWL/ur76cD2S1U8u0PT3vd
+	XjF9hpy046V/IbwhB1ogZe+lS95asfTPFKMKF4YjkKlmPxATMQT4kYJw+0VJ2gM9YUQTbBlUS+l
+	HaO6XaU7V47kzhT5dktF/yu/UodR8PWc/HPV6REwe8viy6bSlEunRc6umjmug/PB6klu4Lz07r5
+	IN1WxITkuFT7fmCRBDct1khjfBZYq2XsE2psYMs6WkChiNXRFsyBCCI8cT/FXu6ooOeSA4Mkvtk
+	fBo/Kn992/iKA79e9U098P5CucC7v3QBEfMx29nCbtiQGi3gLWvRSQ6BcD1azLjZV9mR+gzWoFL
+	24qUQrUWZAWmtruZJeMoVxtZYSVu+0NfbAjjXsTc9WtUhgdVZWtXdA+A8N0VqtyX7b6y8TUfsrL
+	OW9yXeLt4+MIMQ1KNIy35m2A9gdSB8aA==
+X-Received: by 2002:a05:600c:c086:b0:47e:e7de:7c41 with SMTP id 5b1f17b1804b1-4834ffb08f0mr12556465e9.16.1770705527668;
+        Mon, 09 Feb 2026 22:38:47 -0800 (PST)
+Received: from draszik.lan ([212.129.79.225])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d8334a8sm37397915e9.12.2026.02.09.22.38.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Feb 2026 22:31:49 -0800 (PST)
-Date: Tue, 10 Feb 2026 09:31:46 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: oe-kbuild@lists.linux.dev, Nhat Pham <nphamcs@gmail.com>,
-	linux-mm@kvack.org
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, akpm@linux-foundation.org,
-	hannes@cmpxchg.org, hughd@google.com, yosry.ahmed@linux.dev,
-	mhocko@kernel.org, roman.gushchin@linux.dev, shakeel.butt@linux.dev,
-	muchun.song@linux.dev, len.brown@intel.com,
-	chengming.zhou@linux.dev, kasong@tencent.com, chrisl@kernel.org,
-	huang.ying.caritas@gmail.com, ryan.roberts@arm.com,
-	shikemeng@huaweicloud.com, viro@zeniv.linux.org.uk,
-	baohua@kernel.org, bhe@redhat.com, osalvador@suse.de,
-	lorenzo.stoakes@oracle.com, christophe.leroy@csgroup.eu,
-	pavel@kernel.org, kernel-team@meta.com,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-pm@vger.kernel.org, peterx@redhat.com, riel@surriel.com,
-	joshua.hahnjy@gmail.com
-Subject: Re: [PATCH v3 14/20] mm: swap: decouple virtual swap slot from
- backing store
-Message-ID: <202602092300.lZO4Ee4N-lkp@intel.com>
+        Mon, 09 Feb 2026 22:38:47 -0800 (PST)
+Message-ID: <9fce298c842533bc6ede7f1a97040337236351d8.camel@linaro.org>
+Subject: Re: [PATCH v5 4/5] power: supply: max77759: add charger driver
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Amit Sunil Dhamne <amitsd@google.com>, Sebastian Reichel
+ <sre@kernel.org>,  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,  Lee Jones
+ <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Badhri
+ Jagan Sridharan	 <badhri@google.com>, Heikki Krogerus
+ <heikki.krogerus@linux.intel.com>,  Peter Griffin
+ <peter.griffin@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, Alim
+ Akhtar	 <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, RD
+ Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+Date: Tue, 10 Feb 2026 06:39:14 +0000
+In-Reply-To: <277e1c95-e221-4c07-a00e-d0f0a1a7553f@google.com>
+References: <20260203-max77759-charger-v5-0-b50395376a5f@google.com>
+	 <20260203-max77759-charger-v5-4-b50395376a5f@google.com>
+	 <3ab2d8cd112441dc1d7ab5097f5b1b64c7e415ab.camel@linaro.org>
+	 <277e1c95-e221-4c07-a00e-d0f0a1a7553f@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-2+build4 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260208215839.87595-15-nphamcs@gmail.com>
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
 	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42397-lists,linux-pm=lfdr.de];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42398-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[lists.linux.dev,gmail.com,kvack.org];
-	RCPT_COUNT_TWELVE(0.00)[34];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[intel.com,lists.linux.dev,linux-foundation.org,cmpxchg.org,google.com,linux.dev,kernel.org,tencent.com,gmail.com,arm.com,huaweicloud.com,zeniv.linux.org.uk,redhat.com,suse.de,oracle.com,csgroup.eu,meta.com,vger.kernel.org,surriel.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dan.carpenter@linaro.org,linux-pm@vger.kernel.org];
 	DKIM_TRACE(0.00)[linaro.org:+];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andre.draszik@linaro.org,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:email,linaro.org:dkim]
-X-Rspamd-Queue-Id: 6D28B1175F5
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linaro.org:mid,linaro.org:dkim]
+X-Rspamd-Queue-Id: BA98E11767F
 X-Rspamd-Action: no action
 
-Hi Nhat,
+Hi Amit,
 
-kernel test robot noticed the following build warnings:
+On Mon, 2026-02-09 at 16:42 -0800, Amit Sunil Dhamne wrote:
+> Hi Andre',
+>=20
+> On 2/4/26 4:49 AM, Andr=C3=A9 Draszik wrote:
+> > On Tue, 2026-02-03 at 22:50 +0000, Amit Sunil Dhamne via B4 Relay wrote=
+:
+> >=20
+> > > +
+> > > +static void psy_work_item(struct work_struct *work)
+> > > +{
+> > > +	struct max77759_charger *chg =3D
+> > > +		container_of(work, struct max77759_charger, psy_work.work);
+> > > +	union power_supply_propval current_limit, online;
+> > > +	int ret;
+> > > +
+> > > +	ret =3D power_supply_get_property(chg->tcpm_psy,
+> > > +					POWER_SUPPLY_PROP_CURRENT_MAX,
+> > > +					&current_limit);
+> > > +	if (ret) {
+> > > +		dev_err(chg->dev,
+> > > +			"Failed to get CURRENT_MAX psy property, ret=3D%d",
+> > > +			ret);
+> > > +		goto err;
+> > > +	}
+> > > +
+> > > +	ret =3D power_supply_get_property(chg->tcpm_psy, POWER_SUPPLY_PROP_=
+ONLINE,
+> > > +					&online);
+> > > +	if (ret) {
+> > > +		dev_err(chg->dev,
+> > > +			"Failed to get ONLINE psy property, ret=3D%d",
+> > > +			ret);
+> > > +		goto err;
+> > > +	}
+> > > +
+> > > +	if (online.intval && current_limit.intval) {
+> > > +		ret =3D set_input_current_limit(chg, current_limit.intval);
+> > > +		if (ret) {
+> > > +			dev_err(chg->dev,
+> > > +				"Unable to set current limit, ret=3D%d", ret);
+> > > +			goto err;
+> > > +		}
+> > > +
+> > > +		charger_set_mode(chg, MAX77759_CHGR_MODE_CHG_BUCK_ON);
+> > > +	} else {
+> > > +		charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
+> > > +	}
+> > > +
+> > > +	chg->psy_work_retry_cnt =3D 0;
+> > > +	return;
+> > > +
+> > > +err:
+> > > +	charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
+> > > +	if (chg->psy_work_retry_cnt >=3D MAX_NUM_RETRIES)
+> > > +		return;
+> > I'd say this final giving up could benefit from a dev_err(), while ...
+>=20
+> I want to clarify if you want me to add this final giving up print just=
+=20
+> once or every time I am returning early?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nhat-Pham/mm-swap-decouple-swap-cache-from-physical-swap-infrastructure/20260209-120606
-base:   05f7e89ab9731565d8a62e3b5d1ec206485eeb0b
-patch link:    https://lore.kernel.org/r/20260208215839.87595-15-nphamcs%40gmail.com
-patch subject: [PATCH v3 14/20] mm: swap: decouple virtual swap slot from backing store
-config: powerpc-randconfig-r073-20260209 (https://download.01.org/0day-ci/archive/20260209/202602092300.lZO4Ee4N-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 15.2.0
-smatch version: v0.5.0-8994-gd50c5a4c
+I meant something along the lines of this:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202602092300.lZO4Ee4N-lkp@intel.com/
++	if (chg->psy_work_retry_cnt)
++		dev_dbg(chg->dev, "chg psy_work succeeded after %d\n",
++			chg->psy_work_retry_cnt)
++	chg->psy_work_retry_cnt =3D 0;
++	return;
++
++err:
++	charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
++	if (chg->psy_work_retry_cnt >=3D MAX_NUM_RETRIES) {
++		dev_warn(chg->dev, "chg psy_work failed, giving up",
++			 chg->psy_work_retry_cnt, MAX_NUM_RETRIES);
++		return;
++	}
 
-smatch warnings:
-mm/vswap.c:733 vswap_alloc_swap_slot() warn: variable dereferenced before check 'folio' (see line 701)
+> >=20
+> > > +
+> > > +	++chg->psy_work_retry_cnt;
+> > > +	dev_err(chg->dev, "Retrying %u/%u chg psy_work",
+> > > +		chg->psy_work_retry_cnt, MAX_NUM_RETRIES);
+> > ... this one could be demoted (but doesn't have to).
+> >=20
+> > That'd make it easier to determine if it's still in the process of
+> > trying, or if it has given up fully.
+>=20
+> I was assuming the printing of "3/3" would indicate the final giving up=
+=20
+> and sufficient.
 
-vim +/folio +733 mm/vswap.c
 
-19a5fe94e9aae4 Nhat Pham 2026-02-08  694  bool vswap_alloc_swap_slot(struct folio *folio)
-19a5fe94e9aae4 Nhat Pham 2026-02-08  695  {
-19a5fe94e9aae4 Nhat Pham 2026-02-08  696  	int i, nr = folio_nr_pages(folio);
-19a5fe94e9aae4 Nhat Pham 2026-02-08  697  	struct vswap_cluster *cluster = NULL;
-19a5fe94e9aae4 Nhat Pham 2026-02-08  698  	struct swap_info_struct *si;
-19a5fe94e9aae4 Nhat Pham 2026-02-08  699  	struct swap_cluster_info *ci;
-19a5fe94e9aae4 Nhat Pham 2026-02-08  700  	swp_slot_t slot = { .val = 0 };
-19a5fe94e9aae4 Nhat Pham 2026-02-08 @701  	swp_entry_t entry = folio->swap;
+If you see 3/3 in the log, you'll know that it has scheduled the work (for
+the last attempt), but you won't easily know if 3/3 has ran yet or if it
+has completed successfully this time or if it was still unsuccessful.
 
-folio dereference here
+> >=20
+> > > +	schedule_delayed_work(&chg->psy_work,
+> > > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 msecs_to_jiffies(PSY_WORK_RETRY_DE=
+LAY_MS));
+> > > +}
+> > > +
+> > > +static int psy_changed(struct notifier_block *nb, unsigned long evt,=
+ void *data)
+> > > +{
+> > > +	struct max77759_charger *chg =3D container_of(nb, struct max77759_c=
+harger,
+> > > +						=C2=A0=C2=A0=C2=A0 nb);
+> > > +	static const char *psy_name =3D "tcpm-source";
+> > > +	struct power_supply *psy =3D data;
+> > > +
+> > > +	if (!strnstr(psy->desc->name, psy_name, strlen(psy_name)) ||
+> > > +	=C2=A0=C2=A0=C2=A0 evt !=3D PSY_EVENT_PROP_CHANGED)
+> > > +		return NOTIFY_OK;
+> > > +
+> > > +	chg->tcpm_psy =3D psy;
+> > Do you need locking here? What if this is changed while a previous
+> > psy_work_item() is still executing?
+>=20
+> I=C2=A0 don't think that's ever possible in this case though. The power=
+=20
+> supply that this driver registers is downstream of the tcpm's.
 
-19a5fe94e9aae4 Nhat Pham 2026-02-08  702  	struct swp_desc *desc;
-19a5fe94e9aae4 Nhat Pham 2026-02-08  703  	bool fallback = false;
-19a5fe94e9aae4 Nhat Pham 2026-02-08  704  
-19a5fe94e9aae4 Nhat Pham 2026-02-08  705  	/*
-19a5fe94e9aae4 Nhat Pham 2026-02-08  706  	 * We might have already allocated a backing physical swap slot in past
-19a5fe94e9aae4 Nhat Pham 2026-02-08  707  	 * attempts (for instance, when we disable zswap). If the entire range is
-19a5fe94e9aae4 Nhat Pham 2026-02-08  708  	 * already swapfile-backed we can skip swapfile case.
-19a5fe94e9aae4 Nhat Pham 2026-02-08  709  	 */
-19a5fe94e9aae4 Nhat Pham 2026-02-08  710  	if (vswap_swapfile_backed(entry, nr))
-19a5fe94e9aae4 Nhat Pham 2026-02-08  711  		return true;
-19a5fe94e9aae4 Nhat Pham 2026-02-08  712  
-19a5fe94e9aae4 Nhat Pham 2026-02-08  713  	if (swap_slot_alloc(&slot, folio_order(folio)))
 
-and here
+A previous work could still be executing (e.g. due to retrying), no? It
+should also probably set chg->psy_work_retry_cnt =3D 0; here, to allow it
+to retry up to MAX_NUM_RETRIES when a new work is queued and a previous
+one was unsuccessful?
 
-19a5fe94e9aae4 Nhat Pham 2026-02-08  714  		return false;
-19a5fe94e9aae4 Nhat Pham 2026-02-08  715  
-19a5fe94e9aae4 Nhat Pham 2026-02-08  716  	if (!slot.val)
-19a5fe94e9aae4 Nhat Pham 2026-02-08  717  		return false;
-19a5fe94e9aae4 Nhat Pham 2026-02-08  718  
-7f88e3ea20f231 Nhat Pham 2026-02-08  719  	/* establish the vrtual <-> physical swap slots linkages. */
-7f88e3ea20f231 Nhat Pham 2026-02-08  720  	si = __swap_slot_to_info(slot);
-7f88e3ea20f231 Nhat Pham 2026-02-08  721  	ci = swap_cluster_lock(si, swp_slot_offset(slot));
-7f88e3ea20f231 Nhat Pham 2026-02-08  722  	vswap_rmap_set(ci, slot, entry.val, nr);
-7f88e3ea20f231 Nhat Pham 2026-02-08  723  	swap_cluster_unlock(ci);
-7f88e3ea20f231 Nhat Pham 2026-02-08  724  
-7f88e3ea20f231 Nhat Pham 2026-02-08  725  	rcu_read_lock();
-7f88e3ea20f231 Nhat Pham 2026-02-08  726  	for (i = 0; i < nr; i++) {
-7f88e3ea20f231 Nhat Pham 2026-02-08  727  		desc = vswap_iter(&cluster, entry.val + i);
-7f88e3ea20f231 Nhat Pham 2026-02-08  728  		VM_WARN_ON(!desc);
-7f88e3ea20f231 Nhat Pham 2026-02-08  729  
-19a5fe94e9aae4 Nhat Pham 2026-02-08  730  		if (desc->type == VSWAP_FOLIO) {
-19a5fe94e9aae4 Nhat Pham 2026-02-08  731  			/* case 1: fallback from zswap store failure */
-19a5fe94e9aae4 Nhat Pham 2026-02-08  732  			fallback = true;
-19a5fe94e9aae4 Nhat Pham 2026-02-08 @733  			if (!folio)
 
-So it can't be NULL here.
 
-19a5fe94e9aae4 Nhat Pham 2026-02-08  734  				folio = desc->swap_cache;
 
-So we'll never do this assignment and it will never become NULL.
-
-19a5fe94e9aae4 Nhat Pham 2026-02-08  735  			else
-19a5fe94e9aae4 Nhat Pham 2026-02-08  736  				VM_WARN_ON(folio != desc->swap_cache);
-19a5fe94e9aae4 Nhat Pham 2026-02-08  737  		} else {
-19a5fe94e9aae4 Nhat Pham 2026-02-08  738  			/*
-19a5fe94e9aae4 Nhat Pham 2026-02-08  739  			 * Case 2: zswap writeback.
-19a5fe94e9aae4 Nhat Pham 2026-02-08  740  			 *
-19a5fe94e9aae4 Nhat Pham 2026-02-08  741  			 * No need to free zswap entry here - it will be freed once zswap
-19a5fe94e9aae4 Nhat Pham 2026-02-08  742  			 * writeback suceeds.
-19a5fe94e9aae4 Nhat Pham 2026-02-08  743  			 */
-19a5fe94e9aae4 Nhat Pham 2026-02-08  744  			VM_WARN_ON(desc->type != VSWAP_ZSWAP);
-19a5fe94e9aae4 Nhat Pham 2026-02-08  745  			VM_WARN_ON(fallback);
-19a5fe94e9aae4 Nhat Pham 2026-02-08  746  		}
-19a5fe94e9aae4 Nhat Pham 2026-02-08  747  		desc->type = VSWAP_SWAPFILE;
-7f88e3ea20f231 Nhat Pham 2026-02-08  748  		desc->slot.val = slot.val + i;
-7f88e3ea20f231 Nhat Pham 2026-02-08  749  	}
-7f88e3ea20f231 Nhat Pham 2026-02-08  750  	spin_unlock(&cluster->lock);
-7f88e3ea20f231 Nhat Pham 2026-02-08  751  	rcu_read_unlock();
-19a5fe94e9aae4 Nhat Pham 2026-02-08  752  	return true;
-7f88e3ea20f231 Nhat Pham 2026-02-08  753  }
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
+Cheers,
+Andre
 
