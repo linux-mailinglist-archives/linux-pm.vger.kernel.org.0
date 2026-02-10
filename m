@@ -1,235 +1,192 @@
-Return-Path: <linux-pm+bounces-42423-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42424-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sA7tJiD+imlyPAAAu9opvQ
-	(envelope-from <linux-pm+bounces-42423-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 10:45:04 +0100
+	id gJ4pNdj+imnJPAAAu9opvQ
+	(envelope-from <linux-pm+bounces-42424-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 10:48:08 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E15A1190A1
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 10:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3560A119136
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 10:48:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 56F5A3069034
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 09:42:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 63A8B306B4ED
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 09:45:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E2AF341ADD;
-	Tue, 10 Feb 2026 09:42:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EE7B342510;
+	Tue, 10 Feb 2026 09:45:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MZwFvb4z"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="jr53nrQx";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="RFmbKYY/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE39341AB1
-	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 09:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770716546; cv=pass; b=LtujCtpQ67GLsMDAWV6TE1dkGc0TdoJOKzOY9S3/4cDFTa8uUcs/J+6FPwCtfROf6wtfn6MM3hSGaKe/C4OkZAeWLZM7dWpdDxwnkCme6r/fHcNpmKT/KKkh16oqd7lHHB53aD1zfXgyl5MJgNYrlcfPgyvugYsl9yxkv2bVvLE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770716546; c=relaxed/simple;
-	bh=oOjICXJg7ZpifL4ZDE4Mvkawuzo2HaLZVgTlYB0pvHs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rP4Uh7cGs63XcJdMhmTaa2JFGLcjfIPhiOGf+iYHL+CFCjAKbEVZ7BwzLJ6jcyaNH4hi43w0DFl8ALpgks/2eXwtf3WuhvlniONlCzC3YOyu1vgty57yLLGNnobGe5IHLpVzkBEm/XHQKAc+D7F7kGUlCEJlXnBFk7R7hdSdtL0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MZwFvb4z; arc=pass smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-436317c80f7so1804994f8f.1
-        for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 01:42:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770716543; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Ke4Twrw+G6q6JEfpdZLcCVNBCPJxNGnG6yaCqH/j43r53mOkGvpFqKi3lF20h/WAWl
-         Pluwv/L+/ludo+t4rpUUV2/BpX0HYVZXot8CBDLem+yTb+bqZsArR8AkCYW3HsJCvsiL
-         4v1HkYSJqOa9ZPHo4LPKVOW/oerSuYus2QxPKZ7Y4aKdYSvXumNaanTIKy+g8WXnaPa+
-         IssTN6eJnGwOJ81EIZwHC7oYLmsBSetvK2od6xYxQsnUiNqVeceSgaVIwe9HpE+r7D8a
-         uk1hcBBIxsol4f5MB7yLOMx+/Vz9wRvbxUD8hVg8vhp5EhI39XreSE6sKRnNxN0xY/qE
-         J+Rg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Ze1c4tMfcpX491+6mPiJXsJlYkup8lMt/xtrcGpqjuI=;
-        fh=aGoWRtdAmH6e30B2Yb04tWyIHDmIU7VNIIXktmuW6rc=;
-        b=TTY45i8B5EWJfIszRLznWNTiEdBuHp1vqTSr1wvRD2CHTDdPz+RYWPxKZ7iSFUQuJm
-         yW/jIW/kFibF1tWTKleKg7lbyJ8ku2AAlDGLpm8Ugno3ge+Izbb9oqMROa7Qz8wzcLbg
-         ReKPctAHLl7wkyTiWCVHRBdu/7VkaYwKHYja2KqL2qqHKa30VpkIZYCIsjmqRRaELDZt
-         aW85Qjs3Ci2vB9Swv0wAQHl6hkyKj9rpEGzvnyq5pxl9rj+ZwL6f8wO/ZmRI9omC8mw6
-         5HO6iIVwwk2skcHY3liiMrmQE8p5nVlDPTYM0I6dAHx4nPCCX4yckGGpjN9Wj/INxTVS
-         3O2w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A5A34217C
+	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 09:45:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770716739; cv=none; b=JWE++zE9ct9jTZv1phGywFTkSph/kj7cPOdya4jz2DTVQRb/DyRcDyqN9s2YW0FoGwtDbgo5kEq3Tt/4iF2+DrIuNZxfkcF4d0dOOFi1gd9DOvB4umNwSN1JaIWp/sHAqJ/k4MiidnzKe/crHJp/JHlWUvAJKftObDxrty2ncp8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770716739; c=relaxed/simple;
+	bh=lv7KlrnCejay2buvdXi6pnHH0RiwuflO/iJK5ExEMzo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AKSpL8jAFsxIjmSmxQzx8bcPQdmZnABPLx8STnpIGmOM3gk47KblXpqgEsZb/g2CDqgBDLZ8uH9Z8p/AOzrVyT1ecjrS2YxQafvytjfe8aeNeMLPj3lKRs/MRdtgzIb2wSZtmu4g2iUUJz5DrNU1NYYQfUfa7oYgjVmQ3393EQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=jr53nrQx; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=RFmbKYY/; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61A3AmVA4101763
+	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 09:45:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	zaPD6PuzL4nHx/o54FgD3qxJFfF5Wy40l1l5k2oP6og=; b=jr53nrQxD5aBHtMj
+	/j5r+VaKik/6bwjXcsaM4fboRJfkX6MzePBAX+6/Ty1K8EWWB4nIyKMo0Ghicfkk
+	7cYc+TTDzGc1ua2TM0vUXQDz8xIFGY+5P8sAzPuGZR9rssLy4w1GH8AeQkSRu+oe
+	lJ6BuXrUnsanD5XifHhw8zqGpFF3rfAhQkf2wWnjsOo5YDNktEk6Vj1e37S0zVIf
+	KYPxrCvHMkaOV16trPA2mdz+2+RT7uhkMRALSJS67J5S3f6IATiOpFLJ4tayQpfc
+	A2XZ8coM9xHCxeKhT1gsfCn9DYtJ6NUGPLbqIKbeY8Te8CkDDH3STL3B6gaFSGZ4
+	d0Sv9w==
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c7k61k30u-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 09:45:37 +0000 (GMT)
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8c70cb31bcdso105796985a.1
+        for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 01:45:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770716543; x=1771321343; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ze1c4tMfcpX491+6mPiJXsJlYkup8lMt/xtrcGpqjuI=;
-        b=MZwFvb4zWxnfekjl+a8fsLfYtrscT0ebMy+djosDK9zMn1NLXNNuNkeJQ+YZDUZQSh
-         tcLsWoxPOHXM5b/VVpDIbtS9/eMQysU7DEuHttnRlEIfhi72G94wQcIDA7I3fwtUs6rj
-         nteoasqj8yMgzfcoesAhg58ZN4/uNGulmZC/d67iSwERAp7Mt+Jkxa2JWURr4iEkYGFy
-         oWBK9pnh/KpCD9NvHu7tDrSq5ISoB9FqNFpd0X2E75oWHDjPuoLdvUe22FRymBGnvtBr
-         cQthSGiuHgb/OH0zZ5bRLvrG3MUTNNcN1zPQOw4y/lRDOibeI+JZU3YRdmS7oBTm9slr
-         OHQQ==
+        d=oss.qualcomm.com; s=google; t=1770716737; x=1771321537; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zaPD6PuzL4nHx/o54FgD3qxJFfF5Wy40l1l5k2oP6og=;
+        b=RFmbKYY/F2JsUKRMdv4QmESyukFsMUdGYaqP/uYEfNexsBEo37hj+jROba7aqML7CF
+         jnQopQK45atcNJpvKfodyRLnlxRiMbGNQ7xftcBHNzsONfgpG5ycPGgzkYYM/LZIoLZU
+         i7O2CsQJhU95M4EpTzTJyG1tL9aiJLqU82thFQFeE7eGvBxXT11EzfKWkHtQSu4Vu98j
+         m92y+UPT8EQbiOTjp6JqV3ePHHNl16JS8dt04gcNG6LN4PpgfJZ2VIt7tpE9QBrQaC9T
+         JjFtW41jzKySOgVcCTzesnRrvFBD5YYan4rMZieFhx6CRoT4gjtrImkRGqgpYuABbABw
+         PdXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770716543; x=1771321343;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Ze1c4tMfcpX491+6mPiJXsJlYkup8lMt/xtrcGpqjuI=;
-        b=Y7fW2WQEo7unm8/8q2sIMFLmkecujRrBvnp4OL7QtF7GNwM5rksiNZJFqiroSjhUwc
-         qO8s06job6ysS/GH3znhdSPdiE+4rC7d7iJrIQ3fSYLl0OmfkgQWcbuF60KH4ZwJwK5W
-         p8Qv6yMyG6mUH4R0+84fcitBQj8Foptkq1cYJq1Mw2mECes3uSEIQ2XWbP2/5IYFddm0
-         eGFgGlf+VdGwTj2sNzzJOrF8hQYTymDcqf0IL+iXhKt/UkAHGgR2xv+SM1b5hg3aYPB/
-         +l/YgxJOrsg/yg66kDNxNDfdKHK9Pnj4+drL2j09aU54U49DhQ6b0o/0Eoy0PgP5nPdw
-         7JBw==
-X-Forwarded-Encrypted: i=1; AJvYcCXtQLG7aPDSdANElreUflYUyoVik1dWrFlnnpy6aBsDjFxVMeFqZDOQoZqSlc/ST05eM/KAc29+5g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZysScfsFzgxQMmPK6ox44QXmEXjiE/OWQO0FHdJ+sjxWU9IBD
-	4dCyUqG1yGn4M7BdEaTrEcc8deiPs3A8nWodkRs4Joe6WK/kyyP3NDdaIubm9hVeGaQ9F29FSRZ
-	WTpqQBWwqmKSmnMyIMOGsGHK8wMPa/vM=
-X-Gm-Gg: AZuq6aLwVrj893u+R494asmf32W6saVU7eOITG3v0BfarukifjXd8arSeKFcjuvT6U+
-	OpW9KlPyyJEmkmivdgZB89gEhLYlD/CgCtR/AsWdVg7kY/yqmHSXfIVzt8VoCT0zgiRBl0lwjnc
-	O4sRc1NCmC4EOyIYOmv0okAa1tHv2YEEef7GLVA7ukUyqQhRI2D8m9IohiG7UWDF2NfdWknmKaW
-	R2p+Le+dQ09sYj1s7OWmNS2hATF6TEtyYQwIxng9+1HQcgLyqioTpztbMcEeF/BEle3NXFQlSKA
-	r54dFuZo
-X-Received: by 2002:a05:6000:3111:b0:435:db9b:5881 with SMTP id
- ffacd0b85a97d-4377a1f2a30mr2055191f8f.25.1770716542552; Tue, 10 Feb 2026
- 01:42:22 -0800 (PST)
+        d=1e100.net; s=20230601; t=1770716737; x=1771321537;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zaPD6PuzL4nHx/o54FgD3qxJFfF5Wy40l1l5k2oP6og=;
+        b=volfho8p30CU2RJhtfR2JFnqcuWJlAJa4+Vz/T5o63v8kLU5wW4yD1yRyFfvm48NWf
+         lltCwkq7Bd5RaOMD66f6iaY4xGNAKA19zk8JaEckZdOO4drqvW5J1RTRP0Y5wPyHypS/
+         QZxrE3G/XF7DqNmrpSw7t/hxJt8/dmVF8ivKDySLE/JFvdHcM1wAW0PRkmzz8xx2CkbK
+         aMVB/txRCX2tvwbN07Z/QwWMc/OqMjCVGIurVwBLXQ/eVjAcGpzyUDwBXavEZM7RcLk3
+         veSE2d0YvKpaHqYtNWs2Omvzrq3QmOK1YquVfaWHe3Ekeb4KOn9xsE2IGTZ8ccITbyVq
+         tSeg==
+X-Forwarded-Encrypted: i=1; AJvYcCV4avJ9L8qwEn7dtLEKjJhHflSwgyyAvu4YpXNfeKmIemPUIaFiZEbydltWxMoHr2H2sKOUIGoq8A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0ingDfRi9xtsdZ4qPP2VO0wBCiEDmlt7hPktRDScTEuMEkrTe
+	YQHQVp3l9oOMV6OoynEtgnwoLpPQeQdw4vjBeUySo3tOnGFl+W/pB9FH7P15yQHGVeli6WBZpyb
+	SsQD6YABEtqoDMzo7WxIzSNJ1DSOs0Z8aYJbVbyrSbUXHJKpMDN+HzkY0tuGL5g==
+X-Gm-Gg: AZuq6aLoGDJ2IT3FQUjsFnghSaGsadDkp2MlPFeS4ORw2Tm4tcJ/D2arbrNd7wcLczd
+	tfFE7tUiWqiawhXlwE4WpW6a6rIXK0P5dZA9pZ71xEnQ0lrKb2YYgj6035TW51IokNcgvkXG7Ox
+	K0zqDCcULcNjakVvT7bdR7Zz5ioaJwjcVZbYPN8n9gY64Pb0jK+SAjL+QIUoor9dpVLpTf39o7M
+	9Bai71Mx2cJ7Zm3AHXC1T/7J5L9E0CUFDN3Dwp36zPAcH2jhZwbAyKF3/6lWUOgbGS4B5MlZ01W
+	eI6nwEnmLJZ0/z2UU3//BZxgl7MmNwxWldS4GqH0ixBpQSBT0p+vNny2qG4FvOihrzSskBOuHNV
+	fy714kE/b9kggpueDHHFR/fel4gVbnhc6ewAz8SC1gZ9Lr0Ac7WcaqTzi3u3Xd2hh4uK6XQ6S1n
+	+Wg6k=
+X-Received: by 2002:a05:620a:29d0:b0:8c6:a719:d16f with SMTP id af79cd13be357-8cb1fee43f8mr114784885a.4.1770716736762;
+        Tue, 10 Feb 2026 01:45:36 -0800 (PST)
+X-Received: by 2002:a05:620a:29d0:b0:8c6:a719:d16f with SMTP id af79cd13be357-8cb1fee43f8mr114782585a.4.1770716736336;
+        Tue, 10 Feb 2026 01:45:36 -0800 (PST)
+Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8edae6f7edsm502779166b.66.2026.02.10.01.45.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Feb 2026 01:45:35 -0800 (PST)
+Message-ID: <4d76a2dd-6ccc-4918-9e6e-0152af57c917@oss.qualcomm.com>
+Date: Tue, 10 Feb 2026 10:45:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260209104407.116426-1-clamor95@gmail.com> <20260209104407.116426-2-clamor95@gmail.com>
- <20260210-hidden-swinging-galago-fdcfa3@quoll>
-In-Reply-To: <20260210-hidden-swinging-galago-fdcfa3@quoll>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Tue, 10 Feb 2026 11:42:11 +0200
-X-Gm-Features: AZwV_Qhn-R0xjZTEGY6wy39uV3chiY2pUKepim55rxxDwQzXQ4tGrjUlByAc-JY
-Message-ID: <CAPVz0n3Pzvzt+LmOH_peCtpx8DP2-GiRv--6-ppQUaa51AXRFw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] dt-bindings: misc: document ASUS Transformers EC DockRAM
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Sebastian Reichel <sre@kernel.org>, =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>, 
-	Ion Agorria <ion@agorria.com>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 3/5] soc: qcom: pmic_glink: Add support for Glymur and
+ Kaanapali
+To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>,
+        andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20260209204915.1983997-1-anjelique.melendez@oss.qualcomm.com>
+ <20260209204915.1983997-4-anjelique.melendez@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20260209204915.1983997-4-anjelique.melendez@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=M8lA6iws c=1 sm=1 tr=0 ts=698afe41 cx=c_pps
+ a=qKBjSQ1v91RyAK45QCPf5w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
+ a=EUspDBNiAAAA:8 a=8hPSHKJayuMM37MLa0YA:9 a=QEXdDO2ut3YA:10
+ a=NFOGd7dJGGMPyQGDc5-O:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEwMDA4MSBTYWx0ZWRfX2Z/jwVYagpKh
+ LsLdK0Ve2dvwY/GW1Ijm+Z4k+/PLPT7B9rDsJGu0x2l0ibJaEqwmClmq/Rh1fWwwqQ0vcLCl/ll
+ l9Iqwt5GfaKYpw4S6h89mPrJCiHZPYKJ0tJ1oD3YZEvUDj3US5vSmPk5FM/tRWqLDKIW0HvwBYP
+ WQ80OfmIOF4Xk4FwA/pc1M4xOrQNQAk7b+hT/aRTpDkVoygvhJxMyYjL6zAYwnecBKqtbxRknCw
+ LJ5Zf8IFsZyWYe2WNW6LFNWILu7y3O+bhexVWC4h4vlzQnaeCG0WLObvENUs98zUCtgZDwXDb/m
+ WdkQZpwMO0jKr5q/3MujMQtdC4hfOTV2ZeNlml+yBG7oLxxGRL5HVfWB59whODTQ2FRup6D8Ly7
+ mIV9/6aYKgVtuJ9WAcb33jonIqG2nGXaHTJ88+ZCU0TGYDG+LxdyczZnisFLAx7rKE2XG75yBG3
+ osiTIQr/OnwgFG+151g==
+X-Proofpoint-GUID: _OFwVaDL2iwVILrCO5AdB9LNZMPnEyBQ
+X-Proofpoint-ORIG-GUID: _OFwVaDL2iwVILrCO5AdB9LNZMPnEyBQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-09_01,2026-02-09_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0 spamscore=0
+ bulkscore=0 adultscore=0 clxscore=1015 impostorscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602100081
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42423-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-42424-lists,linux-pm=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,oss.qualcomm.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email,qualcomm.com:dkim];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-pm@vger.kernel.org];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,arndb.de,linuxfoundation.org,rere.qmqm.pl,agorria.com,vger.kernel.org];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	MISSING_XM_UA(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[devicetree.org:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3E15A1190A1
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 3560A119136
 X-Rspamd-Action: no action
 
-=D0=B2=D1=82, 10 =D0=BB=D1=8E=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 11:25 Krzy=
-sztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On Mon, Feb 09, 2026 at 12:43:59PM +0200, Svyatoslav Ryhel wrote:
-> > Documenting an I2C device used in conjunction with the EC on ASUS
-> > Transformers. The main function of DockRAM (the name used by downstream
-> > ASUS sources) is to provide power-related functions, such as battery an=
-d
-> > charger communication. The device is exposed as an individual entity
-> > because multiple embedded controllers can utilize the same DockRAM
-> > instance.
-> >
-> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> > ---
-> >  .../bindings/misc/asus,dockram.yaml           | 40 +++++++++++++++++++
-> >  1 file changed, 40 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/misc/asus,dockram=
-.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/misc/asus,dockram.yaml b=
-/Documentation/devicetree/bindings/misc/asus,dockram.yaml
-> > new file mode 100644
-> > index 000000000000..0cfde619ba01
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/misc/asus,dockram.yaml
->
-> Not a misc device. Find appropriate place, e.g. for EC or docking or
-> laptop devices or power-related.
->
+On 2/9/26 9:49 PM, Anjelique Melendez wrote:
+> On Glymur, a compute platform, and Kaanapali, a mobile platform, charger
+> FW runs on SOCCP (another subsystem). SOCCP does not have any specific
+> charger PDs defined. So, add support for Glymur and Kaanapali compatible
+> strings.
+> 
+> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+> ---
 
-Why not misc? be more specific pls where you want it to be.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-> > @@ -0,0 +1,40 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/misc/asus,dockram.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Asus Transformer EC DockRAM
-> > +
-> > +maintainers:
-> > +  - Svyatoslav Ryhel <clamor95@gmail.com>
-> > +
-> > +description:
-> > +  Dedicated i2c device used to provide power related functions of the
-> > +  embedded controller used in ASUS Transformer device family.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: asus,dockram
->
-> Way too generic compatible. You are not documenting here all ASUS
-> laptops/devices dockram. For example this implies dockram is also on
-> ASUS Vivobook... or on any other asus device.
->
-
-Asus were not so generous to provide more specific data, they call
-this device dockram in their sources.
-
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
->
-> Device looks weirdly empty. Probably you have it only to instantiate I2C
-> handle, so what you really wanted is i2c-parent. This is not a real
-> device.
->
-
-WDYM? it is a real physical i2c device located on a i2c bus and probed
-by i2c driver just fine. Maybe you will deny RTC being a real device
-like it was done for example for max77663 which now causes a massive
-issues since it can occupy different i2c addresses?
-
-> Best regards,
-> Krzysztof
->
+Konrad
 
