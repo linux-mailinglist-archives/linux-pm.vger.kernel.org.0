@@ -1,56 +1,56 @@
-Return-Path: <linux-pm+bounces-42445-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42446-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EMkrHv0ci2nSPwAAu9opvQ
-	(envelope-from <linux-pm+bounces-42445-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 12:56:45 +0100
+	id cEKsMiwdi2nSPwAAu9opvQ
+	(envelope-from <linux-pm+bounces-42446-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 12:57:32 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D731F11A76B
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 12:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B75E11A7A7
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 12:57:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2209A303EFA4
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 11:56:34 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 615493038D19
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 11:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A24A327C0D;
-	Tue, 10 Feb 2026 11:56:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4338F329369;
+	Tue, 10 Feb 2026 11:56:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="DUaTAaQm"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="JsnRuv4l"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
+Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67543271FD;
-	Tue, 10 Feb 2026 11:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500A4327C12;
+	Tue, 10 Feb 2026 11:56:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770724590; cv=none; b=DC08vga28n6n6WeSViaPy+YgLTtmHJhNUl0qtK52iEJRvEQVYy7OXQ1EzzAqouuUVAhoxoMiIn96Yd0r8+OIlfJ9NGvg5pQUR/XIZD3HK3EElxoSrbcSkynhbbzLRSNGIBHX8ndo1ta0m5rJx2hc/RSjAkX0QEYxmAMQWz7T1lM=
+	t=1770724592; cv=none; b=hoYjN3rxu9q6cneADiuCGEX5KZce52ajxLdOB5NOVMstOgNs2NyXJtquB/gfXGKPPlP9O4DVRl9bhaYPvea2yPqaKLd3tsMdqTB2lqC4w0sq2NnMPV6/8wb30E7emgNhbT8F3ryHRxvxJQwt67vqrSten5loGtCgs05vK/SXu/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770724590; c=relaxed/simple;
-	bh=2cDa0jQh4BLNwvHRHhy5tWEKBg2vJbZED/67EOm3xVA=;
+	s=arc-20240116; t=1770724592; c=relaxed/simple;
+	bh=gKMRH/aLkRG1X8AMTxqq4G1qvUizMsrR814hGf7zKW4=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RDPZ5hx9YiRXJZTszwSenCCOr05WFBhk4vf+acFyRwp47OnFDSs3fcLdlD/AAOxJK7NwBbLydGujh5w/mkhmLcVff7zfqEs9xsi7E6uZUIbiRDJQ4Lkx+gQ05vii6HcfWfcD40JQwtlJe5upMD0RD4/4foO3IwxyqBGAvRVWAJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=DUaTAaQm; arc=none smtp.client-ip=113.46.200.222
+	 MIME-Version:Content-Type; b=iegxG3ypq78reDUt2nNkSpiup1xUoI9VLdhBtpPMyf558LMj2QPYo5mLZTG2gvf+QPG8mMhYQpoDgSKRsssoa6mZGlXGBOdtX8W+gp+CHJ/Y348Pcho7cyUd/Qs5uuVGrXC6ON6InuQ614zNLSIANReI5z8ffRlTFEus9LnUHDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=JsnRuv4l; arc=none smtp.client-ip=113.46.200.226
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=Zp2BHvySpCxWBmHqdxSZ5PZi/J2OrljwE43C5Nhh+xg=;
-	b=DUaTAaQmB7GvKabIgfEj7ll2nd9t8ISbTCHhTh2kcCFqMfN3uR1zeinGsBGlh4dUVMy0flwGL
-	TLTC84VzElJCn7Tcd5+K8OL8Ij3tv8Xoa3RpoNM1GT9WRXn2NqG1DYvM8JB/G86FG704md7IH5a
-	scnaUvagzSRykJKB03R8n4o=
-Received: from mail.maildlp.com (unknown [172.19.162.92])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4f9KfQ0DXGzLlSM;
-	Tue, 10 Feb 2026 19:51:42 +0800 (CST)
+	bh=pX2drFtYIUoNQzQZWGgYsvjHHfDRllFOEjGok0tW7FU=;
+	b=JsnRuv4l/cL59vJVvX3+1zr9MhWRZEBba8jV2ve7Qdd9sncyRUowqygfdHfaOQbQF+mouBJFM
+	dekYVUhcj2334v+/mwNvRShP9rmdQKYMZqlwCu54DTTLlapLG0Ej/c2EHifX+RzTPcCLvFy2fO1
+	xsvfl/mfGMMtKKIK9NoeZXk=
+Received: from mail.maildlp.com (unknown [172.19.163.163])
+	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4f9KfP6vV6zKm4R;
+	Tue, 10 Feb 2026 19:51:41 +0800 (CST)
 Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
-	by mail.maildlp.com (Postfix) with ESMTPS id A6B2940565;
-	Tue, 10 Feb 2026 19:56:19 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 5D84940565;
+	Tue, 10 Feb 2026 19:56:20 +0800 (CST)
 Received: from localhost.localdomain (10.50.163.32) by
  kwepemf200001.china.huawei.com (7.202.181.227) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 10 Feb 2026 19:56:18 +0800
+ 15.2.1544.11; Tue, 10 Feb 2026 19:56:19 +0800
 From: Lifeng Zheng <zhenglifeng1@huawei.com>
 To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <mingo@redhat.com>,
 	<peterz@infradead.org>, <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
@@ -60,9 +60,9 @@ CC: <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>, <bsegall@google.com>,
 	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
 	<lihuisong@huawei.com>, <yubowen8@huawei.com>, <zhangpengjie2@huawei.com>,
 	<wangzhi12@huawei.com>, <linhongye@h-partners.com>, <zhenglifeng1@huawei.com>
-Subject: [PATCH 1/2] cpufreq: governor: Move requested_freq to policy_dbs_info
-Date: Tue, 10 Feb 2026 19:54:57 +0800
-Message-ID: <20260210115458.3493646-2-zhenglifeng1@huawei.com>
+Subject: [PATCH 2/2] cpufreq: governor: Apply limits with requested_freq or next_freq
+Date: Tue, 10 Feb 2026 19:54:58 +0800
+Message-ID: <20260210115458.3493646-3-zhenglifeng1@huawei.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20260210115458.3493646-1-zhenglifeng1@huawei.com>
 References: <20260210115458.3493646-1-zhenglifeng1@huawei.com>
@@ -87,7 +87,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42445-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42446-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -102,157 +102,89 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCPT_COUNT_TWELVE(0.00)[22];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:mid,huawei.com:dkim,huawei.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D731F11A76B
+X-Rspamd-Queue-Id: 5B75E11A7A7
 X-Rspamd-Action: no action
 
-Conservative governor uses requested_freq to store the last target freq
-requested by the governor. This member variable can also be useful for the
-ondemand governor. So move it to struct policy_dbs_info and update it each
-time request a frequency.
+For conservative, ondemand and schedutil governor,
+cpufreq_policy_apply_limits() is called in .limits(). This function updates
+the target because the limits (policy->max and policy->min) may be changed.
+However, it uses policy->cur as the reference for the target frequency.
+This may cause some problems because the value of policy->cur is influenced
+by a variety of factors.
+
+For example, for some reason, the platform determines a final
+frequency divided from the frequency distributed by the OS, and this is
+reflected in policy->cur. After that, cpufreq_policy_apply_limits() is
+called and because policy->cur is out of limmit, policy->min will be used
+as the new target. This caused the real frequency lower but it's
+unnecessary. Consertative and ondemand governor use requested_freq and
+schedutil governor uses next_freq to represent the target frequency. It's
+more reasonable to use them in cpufreq_policy_apply_limits().
+
+At the same time, use policy->cur as the initial value of next_freq in
+schedutil governor's start() callback.
 
 Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
 ---
- drivers/cpufreq/cpufreq_conservative.c | 14 ++++----------
- drivers/cpufreq/cpufreq_governor.c     |  1 +
- drivers/cpufreq/cpufreq_governor.h     | 12 ++++++++++++
- drivers/cpufreq/cpufreq_ondemand.c     | 10 +++++-----
- 4 files changed, 22 insertions(+), 15 deletions(-)
+ drivers/cpufreq/cpufreq_governor.c | 2 +-
+ include/linux/cpufreq.h            | 7 ++++---
+ kernel/sched/cpufreq_schedutil.c   | 4 ++--
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
-index cce6a8d113e1..2980ca19c580 100644
---- a/drivers/cpufreq/cpufreq_conservative.c
-+++ b/drivers/cpufreq/cpufreq_conservative.c
-@@ -14,7 +14,6 @@
- struct cs_policy_dbs_info {
- 	struct policy_dbs_info policy_dbs;
- 	unsigned int down_skip;
--	unsigned int requested_freq;
- };
- 
- static inline struct cs_policy_dbs_info *to_dbs_info(struct policy_dbs_info *policy_dbs)
-@@ -59,7 +58,7 @@ static unsigned int cs_dbs_update(struct cpufreq_policy *policy)
- {
- 	struct policy_dbs_info *policy_dbs = policy->governor_data;
- 	struct cs_policy_dbs_info *dbs_info = to_dbs_info(policy_dbs);
--	unsigned int requested_freq = dbs_info->requested_freq;
-+	unsigned int requested_freq = policy_dbs->requested_freq;
- 	struct dbs_data *dbs_data = policy_dbs->dbs_data;
- 	struct cs_dbs_tuners *cs_tuners = dbs_data->tuners;
- 	unsigned int load = dbs_update(policy);
-@@ -79,7 +78,7 @@ static unsigned int cs_dbs_update(struct cpufreq_policy *policy)
- 	 */
- 	if (requested_freq > policy->max || requested_freq < policy->min) {
- 		requested_freq = policy->cur;
--		dbs_info->requested_freq = requested_freq;
-+		policy_dbs->requested_freq = requested_freq;
- 	}
- 
- 	freq_step = get_freq_step(cs_tuners, policy);
-@@ -111,9 +110,7 @@ static unsigned int cs_dbs_update(struct cpufreq_policy *policy)
- 		if (requested_freq > policy->max)
- 			requested_freq = policy->max;
- 
--		__cpufreq_driver_target(policy, requested_freq,
--					CPUFREQ_RELATION_HE);
--		dbs_info->requested_freq = requested_freq;
-+		gov_freq_request(policy, requested_freq, CPUFREQ_RELATION_HE);
- 		goto out;
- 	}
- 
-@@ -135,9 +132,7 @@ static unsigned int cs_dbs_update(struct cpufreq_policy *policy)
- 		else
- 			requested_freq = policy->min;
- 
--		__cpufreq_driver_target(policy, requested_freq,
--					CPUFREQ_RELATION_LE);
--		dbs_info->requested_freq = requested_freq;
-+		gov_freq_request(policy, requested_freq, CPUFREQ_RELATION_LE);
- 	}
- 
-  out:
-@@ -310,7 +305,6 @@ static void cs_start(struct cpufreq_policy *policy)
- 	struct cs_policy_dbs_info *dbs_info = to_dbs_info(policy->governor_data);
- 
- 	dbs_info->down_skip = 0;
--	dbs_info->requested_freq = policy->cur;
- }
- 
- static struct dbs_governor cs_governor = {
 diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
-index 1a7fcaf39cc9..7ec38407230f 100644
+index 7ec38407230f..dade45f7e57c 100644
 --- a/drivers/cpufreq/cpufreq_governor.c
 +++ b/drivers/cpufreq/cpufreq_governor.c
-@@ -524,6 +524,7 @@ int cpufreq_dbs_governor_start(struct cpufreq_policy *policy)
+@@ -573,7 +573,7 @@ void cpufreq_dbs_governor_limits(struct cpufreq_policy *policy)
+ 		goto out;
  
- 	policy_dbs->is_shared = policy_is_shared(policy);
- 	policy_dbs->rate_mult = 1;
-+	policy_dbs->requested_freq = policy->cur;
+ 	mutex_lock(&policy_dbs->update_mutex);
+-	cpufreq_policy_apply_limits(policy);
++	cpufreq_policy_apply_limits(policy, policy_dbs->requested_freq);
+ 	gov_update_sample_delay(policy_dbs, 0);
+ 	mutex_unlock(&policy_dbs->update_mutex);
  
- 	sampling_rate = dbs_data->sampling_rate;
- 	ignore_nice = dbs_data->ignore_nice_load;
-diff --git a/drivers/cpufreq/cpufreq_governor.h b/drivers/cpufreq/cpufreq_governor.h
-index 168c23fd7fca..51db1abced93 100644
---- a/drivers/cpufreq/cpufreq_governor.h
-+++ b/drivers/cpufreq/cpufreq_governor.h
-@@ -97,6 +97,8 @@ struct policy_dbs_info {
- 	/* Status indicators */
- 	bool is_shared;		/* This object is used by multiple CPUs */
- 	bool work_in_progress;	/* Work is being queued up or in progress */
-+
-+	unsigned int requested_freq;	/* Last frequency requested by the governor */
- };
- 
- static inline void gov_update_sample_delay(struct policy_dbs_info *policy_dbs,
-@@ -105,6 +107,16 @@ static inline void gov_update_sample_delay(struct policy_dbs_info *policy_dbs,
- 	policy_dbs->sample_delay_ns = delay_us * NSEC_PER_USEC;
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 0465d1e6f72a..4d7341ef3645 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -657,12 +657,13 @@ static inline bool sugov_is_governor(struct cpufreq_policy *policy)
  }
+ #endif
  
-+static inline void gov_freq_request(struct cpufreq_policy *policy,
-+				    unsigned int requested_freq,
-+				    unsigned int relation)
-+{
-+	struct policy_dbs_info *policy_dbs = policy->governor_data;
-+
-+	__cpufreq_driver_target(policy, requested_freq, relation);
-+	policy_dbs->requested_freq = requested_freq;
-+}
-+
- /* Per cpu structures */
- struct cpu_dbs_info {
- 	u64 prev_cpu_idle;
-diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
-index a6ecc203f7b7..fb6d4183d589 100644
---- a/drivers/cpufreq/cpufreq_ondemand.c
-+++ b/drivers/cpufreq/cpufreq_ondemand.c
-@@ -101,8 +101,8 @@ static void dbs_freq_increase(struct cpufreq_policy *policy, unsigned int freq)
- 	else if (policy->cur == policy->max)
- 		return;
- 
--	__cpufreq_driver_target(policy, freq, od_tuners->powersave_bias ?
--			CPUFREQ_RELATION_LE : CPUFREQ_RELATION_HE);
-+	gov_freq_request(policy, freq, od_tuners->powersave_bias ?
-+			 CPUFREQ_RELATION_LE : CPUFREQ_RELATION_HE);
+-static inline void cpufreq_policy_apply_limits(struct cpufreq_policy *policy)
++static inline void cpufreq_policy_apply_limits(struct cpufreq_policy *policy,
++					       unsigned int target_freq)
+ {
+-	if (policy->max < policy->cur)
++	if (policy->max < target_freq)
+ 		__cpufreq_driver_target(policy, policy->max,
+ 					CPUFREQ_RELATION_HE);
+-	else if (policy->min > policy->cur)
++	else if (policy->min > target_freq)
+ 		__cpufreq_driver_target(policy, policy->min,
+ 					CPUFREQ_RELATION_LE);
  }
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 0ab5f9d4bc59..8d239fe3afa8 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -848,7 +848,7 @@ static int sugov_start(struct cpufreq_policy *policy)
  
- /*
-@@ -142,7 +142,7 @@ static void od_update(struct cpufreq_policy *policy)
- 								 freq_next,
- 								 CPUFREQ_RELATION_LE);
+ 	sg_policy->freq_update_delay_ns	= sg_policy->tunables->rate_limit_us * NSEC_PER_USEC;
+ 	sg_policy->last_freq_update_time	= 0;
+-	sg_policy->next_freq			= 0;
++	sg_policy->next_freq			= policy->cur;
+ 	sg_policy->work_in_progress		= false;
+ 	sg_policy->limits_changed		= false;
+ 	sg_policy->cached_raw_freq		= 0;
+@@ -895,7 +895,7 @@ static void sugov_limits(struct cpufreq_policy *policy)
  
--		__cpufreq_driver_target(policy, freq_next, CPUFREQ_RELATION_CE);
-+		gov_freq_request(policy, freq_next, CPUFREQ_RELATION_CE);
- 	}
- }
- 
-@@ -160,8 +160,8 @@ static unsigned int od_dbs_update(struct cpufreq_policy *policy)
- 	 * it then.
- 	 */
- 	if (sample_type == OD_SUB_SAMPLE && policy_dbs->sample_delay_ns > 0) {
--		__cpufreq_driver_target(policy, dbs_info->freq_lo,
--					CPUFREQ_RELATION_HE);
-+		gov_freq_request(policy, dbs_info->freq_lo,
-+				 CPUFREQ_RELATION_HE);
- 		return dbs_info->freq_lo_delay_us;
+ 	if (!policy->fast_switch_enabled) {
+ 		mutex_lock(&sg_policy->work_lock);
+-		cpufreq_policy_apply_limits(policy);
++		cpufreq_policy_apply_limits(policy, sg_policy->next_freq);
+ 		mutex_unlock(&sg_policy->work_lock);
  	}
  
 -- 
