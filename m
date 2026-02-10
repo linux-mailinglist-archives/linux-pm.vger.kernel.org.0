@@ -1,532 +1,374 @@
-Return-Path: <linux-pm+bounces-42470-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42471-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gMPBLDuDi2l4VAAAu9opvQ
-	(envelope-from <linux-pm+bounces-42470-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 20:12:59 +0100
+	id cKROOE+Ei2neVAAAu9opvQ
+	(envelope-from <linux-pm+bounces-42471-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 20:17:35 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B86311E8B9
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 20:12:58 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5704311E93D
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 20:17:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9A736300A622
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 19:11:27 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CC8D63038F35
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 19:17:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E51B132E6AB;
-	Tue, 10 Feb 2026 19:11:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A4E4381717;
+	Tue, 10 Feb 2026 19:17:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GyHyKfnf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OL0pYQ79"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC2F32B996
-	for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 19:11:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8858630C348;
+	Tue, 10 Feb 2026 19:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770750686; cv=pass; b=rGtKVmGAAJeypgO5bpekoy1OOaa+SbEjNdn/yo1K9fvvIqWJXEw4CwSC/LBvue4ybFFYGPwcTkpZ/YJvBTZ59aX9BLEMfgqrNQh2BaPOpB+0Y3PthTeS9iHuoTaglBZcAqjgiLydZApPFBkQa58+k/wb3FgSz8Z3PJrERCAyykE=
+	t=1770751027; cv=fail; b=MqfbLFr8rkTm44R47MFhv5cXG/e3qHkwzrE5M1tKAXM+kI4+Uqi6zu9Y9Fqm5b+smYrRbA569e0RGKDmv0e3ajDDKdCvGq0FKnjV4BU6+1OvBm0bg3Dql7XDBPb9uYLJhpaQirQNEEe9TgIYtE57IhQMJVKQNqfNxKEqU7uSYAQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770750686; c=relaxed/simple;
-	bh=tizEDa9qdihKrfH7YnsQNHmYf1GEpRXuwlEcHKQrBxo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ms2riEJpAzxACtFRNkMBnvgp8E6EIJGizWAdmh44/ruvT5PKcrZbc92eiyEicQrHCuBdN1XQ3l1BpOqLvr978pGxygj/BMo83M8J35zOTScKPpZQ1WpzXQ/KvsBDKgsk4CL3KdiZRv12UzW5RXIhvthVCaCz7mKOVKlPYK/uLFw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GyHyKfnf; arc=pass smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-481188b7760so42744245e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 10 Feb 2026 11:11:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770750683; cv=none;
-        d=google.com; s=arc-20240605;
-        b=cz5XdSeqG8B4iuM4eJJzORWOYyktQPyrI1LgwFIpSl5/mSFyj1csO8toLr6dplkblH
-         J2+WoqUvU3u8sfb7a84EP3o4JOF8vzTL4KUhcra4JfBQVIVVn1WcGOSGtSe64s/UYha4
-         RxVImFL1aALLsCRczknxNcZP/n/y020bfB68BwI211wT7cUqkCGuZJxzZ/gZMfWS5T3I
-         CSJ1727JJsCDHPpbb01FKipCI07XuRNTbQ0sicEoF8hOZkNaLPAv5QVpszcI+YgnxTYp
-         xf/XD92hc9OE3IF8jQsRVxlWlu0K5DBmFBVqvmzggduzVZqtaSiGoWX2szgz9PeP1zft
-         AkRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lg02zJ+zmG8JzV6FX7AzgYv4xtyX97EATX1939W+INc=;
-        fh=od9PeThYNA8u9wCbS/U0JX8GGi+IJrjtLGQy69FcHZI=;
-        b=cDIxo+2spHQ9X89i32ti/1w+5k6AWcGa2miQEJkXWvq4J02D4EcA2mVLyRuTB4yIr5
-         bOdR+6b55E5Uxi80p5xebTPQjbetXfO57sS7yzI7UPj5i1VRUpW70qVnfogL9dro4WDh
-         4qp9TDs4xktzJszHS1oDIYwyxSdWGuzEj4WxoUdnZmbitKXA4KIvExl//w1XjAy5dbgv
-         hbqe45JYZQ7BKWQVEFBjmJ8/6klQdB5DnDivFGsSkm53EOa6LjbZF/nC/TQbAwuFoLLw
-         y6ZxUHLOE96hjIYtFWwJzH7D67eYNW3tYxmPphOur+vgxpUeWMTOwFCie2wNeuXs7WfB
-         mBzA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770750683; x=1771355483; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lg02zJ+zmG8JzV6FX7AzgYv4xtyX97EATX1939W+INc=;
-        b=GyHyKfnfx8CXLGrc6e+VMkj0zOzQpARe9krjSJZTNLUEiMedId7bTrZ/KU/DXGMoTS
-         eJjbnS8YewgPEJ3Hwi1CVOg6B4yKjAi9ycx42k69RnCKW5JnbNmOpT3HNWY23UNe5d66
-         Hfru0J0TsyLl+WUG6QxY6cLrVtEIUVIyOQJn+woW38XRtLLscewMFZmq2urXLgaABzmY
-         q7wPnAK2MlmNZiF8lgoKMbl1slzn/8VMfVkIqN+deZDSVNVzxYdcwh7FwwRhv5N728Ei
-         OF3bq+vph9NBRl/3TApU5yuJR4sWAs5kuLuuvMFZdK/boFvBa6mODg1xi+rPMYUVwg7P
-         u7Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770750683; x=1771355483;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lg02zJ+zmG8JzV6FX7AzgYv4xtyX97EATX1939W+INc=;
-        b=qpvFgrs4WrW5Zlj06E6yg+ReZrquPUCa52M5zdVkHjWyS6hYs8O3EafoM9bLlaQrwS
-         ItCa8djwg461UFv/mP/nQcYvht7ri48L+uDoqCZDOTDA62guXJSzg5nytD4LJlyTgAzb
-         mvWOxkONZFKqYmEUblqnX2uJKj3xOm6iiarDcKIb3t5AKtmSIIrJdQSfBh4pv+dLhUGX
-         RL62e+rRdhBcmcTq5WqMio1ySogGK1sc2fprIeG9tugfJETgWtuiUPaCRb0f2g4Ma7Db
-         1OXwTm7WMXu9Rfle3bGAZbZzgBjrBawbnYfKdWu26/TPzl5vCIRyio2G/uduS3yQRBc7
-         0xsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU8KHSXKXheuOc8oeuOjL+F4w2vRY8IpLkmYwvwiRzHcoEubI67E91skZnhZR9GgA24rCsbQQykBQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyVlAbV82XzDVyvjdC+n98UkLKVuB1BX0sbpXFZWoVN1ovl8Kj
-	o9zpZebV2vGaBjc+Q+K4z/g5YZ5rAsojNl2rvGUJVcqBb536imbrINuPKTPIwfzOM2oBS+3yBjV
-	DCLZSYTZWl2Pc0ktU6GxyQVzd8nsnZmA=
-X-Gm-Gg: AZuq6aK44xcQJAGK+h/C4tV8t96t+j37FM1mUElZihGlQCbJyABb08jkzlnrGfGgThj
-	lY15DGmAw5wVXdj8qCEu9LaqPwWXupACZhSskPPPncG+IVGUIKZAWpId6QK6kY4WbsF7FCR118M
-	ZUZA+Lo3nm/SsZheAux71TAbklZfYuDHTLDgwt9zuFAA1U5t20oKxolLUjOVuHDRog1kMbERm8b
-	mAdQmzGY14+jTLKt3E3f/SK/wP4cFw2oqdicw1l9xQKmjZNXcN22nv85Za40HtQEhYx3WJhe3dp
-	gQlA0F9pkICAq/jTQnkndrsVlG+SX1Ibj18guG8=
-X-Received: by 2002:a05:600c:348a:b0:480:3ad0:93bf with SMTP id
- 5b1f17b1804b1-48320966729mr228687565e9.24.1770750682952; Tue, 10 Feb 2026
- 11:11:22 -0800 (PST)
+	s=arc-20240116; t=1770751027; c=relaxed/simple;
+	bh=VgZa9DXgnXi1al9nfT72qQJ7tbQyZ7SnL4AfLT3E/ug=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=CBBvNJ9qyaDvvrdilShPV8J338R07TDJl3VQGgz93msAzI/QbKctPgGbu3ag4kqldfL0nYSD0bON/xwTPQgnd3E4UP+zjPq1kZqQpig+ihq2c562BSy8iHfbsjpOOOgaUpqcANdwITL2HyNoRifLITem+TCYzuznSgmHmHdK3no=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OL0pYQ79; arc=fail smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770751026; x=1802287026;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=VgZa9DXgnXi1al9nfT72qQJ7tbQyZ7SnL4AfLT3E/ug=;
+  b=OL0pYQ79U4IkjUWVX8ZL7qeCUSxqnu9XLrvfSHykLYFLJ278sJx1Km/l
+   S/9DjeH63JQSgcl3bePrSKb5E2FRthnuKtwhn+hKnPSwwdh3mJmAStiqM
+   kAMKdr7bpSDz7LIgSDnJLYcWUSWznNZRGcfDbHYB7zY/BaOXyT0v3nFrb
+   tlf9SzjCrHIvSZbziv4dZp4nyPWQSiSPzr2FT6iOhp+/y9zg2YzuGHgjW
+   8f8xQM1Ws4gwPXgJ89p0UfYeKkv0MWRV7W2/Y9Ixssba9J+v9IxjezwbZ
+   TSifNcWcBrQyL61QlD2rpvxV1DYY0z5M76Hh7Ko+IyVgdepW2c9kPdVu4
+   g==;
+X-CSE-ConnectionGUID: CJVaKAZfSg28aLey5lYe8A==
+X-CSE-MsgGUID: bb6/vq4TTUK2LeXBrg3eSQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="59455363"
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="59455363"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 11:17:05 -0800
+X-CSE-ConnectionGUID: u9DNiRkRR22uFjXPYTbW0A==
+X-CSE-MsgGUID: ohuI3/hGRO+UOjznoaJ66w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="211638250"
+Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 11:17:04 -0800
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Tue, 10 Feb 2026 11:17:04 -0800
+Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Tue, 10 Feb 2026 11:17:04 -0800
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.36)
+ by edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Tue, 10 Feb 2026 11:17:04 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=j4UznF63zjsF4nUg7EhG61ibjc9bmvsOdP3VGXheB88h2ZnnpP6DPNmXEnroIoNmnvbiWa0SYPl6AbX6bbu+khSGb1nzwvEsiymLsldhie6R/Nv1bK2WPLWINp5RuRgyphHCtbDQApTrRRhSU4i74dVnMVJSi7cbgmbL75s0eGnS7hWq25NjfXzC7fyKaYAxnmhmFeUp9KWo6Q/YStbdVMoAYfytDWJF5iXrp4PE1waPUmcMEx6ulXnQyFEm7Gj4StXuHBCqmQqJSkH5ZnIQsNH4kRSHm/m6Z9SYTguF42gmaviCVaNun9NYazzfXcegcBLsTCEswzGWdi5gGKybAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KZr9vQHnUHRRorGPltbuPMNWo9ccXwkpdr0kuyH5MOc=;
+ b=W1ekCjzdn5C90RBP5AypbZtuBeiDC4oSoPreI8QA1V0vjRtiR7VUduOSWkOY8mpsQlDJvZoJsmCvJIPFZts+7Gz/R+Bt0g6JpiZV3Q8aL8QXnfOkEJxrSjuGuUA9LsU+MYK/lp+sGoooe9htxkRBMHi6IFn3XH7R6wibVAQiwyy0j+Y+zGQ3RIOy2ZhzGeW0fGEHvgs/ZweDZP9ErV/x3UK9DfR6NK3HLEKYNxH3yXrY1RRN6O44RCDyi6Uy48jv3B20pmlm3bHPuiJOq6uYIQIvpjV/PBG4ELeeWi01VUfMOYsWrQlkXuMysXZOYZlFuRbw/wWPurWv38fsP+tfnA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS4PPF0BAC23327.namprd11.prod.outlook.com (2603:10b6:f:fc02::9)
+ by MW4PR11MB8267.namprd11.prod.outlook.com (2603:10b6:303:1e2::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.8; Tue, 10 Feb
+ 2026 19:17:00 +0000
+Received: from DS4PPF0BAC23327.namprd11.prod.outlook.com
+ ([fe80::b437:3b5f:e6c1:3d13]) by DS4PPF0BAC23327.namprd11.prod.outlook.com
+ ([fe80::b437:3b5f:e6c1:3d13%6]) with mapi id 15.20.9587.017; Tue, 10 Feb 2026
+ 19:16:59 +0000
+Date: Tue, 10 Feb 2026 11:16:49 -0800
+From: Alison Schofield <alison.schofield@intel.com>
+To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+CC: <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Vishal Verma
+	<vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan Williams
+	<dan.j.williams@intel.com>, Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Yazen Ghannam <yazen.ghannam@amd.com>, Dave Jiang <dave.jiang@intel.com>,
+	Davidlohr Bueso <dave@stgolabs.net>, Matthew Wilcox <willy@infradead.org>,
+	Jan Kara <jack@suse.cz>, "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown
+	<len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, Li Ming
+	<ming.li@zohomail.com>, Jeff Johnson <jeff.johnson@oss.qualcomm.com>, "Ying
+ Huang" <huang.ying.caritas@gmail.com>, Yao Xingtao <yaoxt.fnst@fujitsu.com>,
+	Peter Zijlstra <peterz@infradead.org>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Nathan Fontenot <nathan.fontenot@amd.com>,
+	Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
+	Benjamin Cheatham <benjamin.cheatham@amd.com>, Zhijian Li
+	<lizhijian@fujitsu.com>, Borislav Petkov <bp@alien8.de>, Tomasz Wolski
+	<tomasz.wolski@fujitsu.com>
+Subject: Re: [PATCH v6 0/9] dax/hmem, cxl: Coordinate Soft Reserved handling
+ with CXL and HMEM
+Message-ID: <aYuEIRabA954iSfR@aschofie-mobl2.lan>
+References: <20260210064501.157591-1-Smita.KoralahalliChannabasappa@amd.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260210064501.157591-1-Smita.KoralahalliChannabasappa@amd.com>
+X-ClientProxiedBy: SJ0P220CA0021.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:a03:41b::8) To DS4PPF0BAC23327.namprd11.prod.outlook.com
+ (2603:10b6:f:fc02::9)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260208215839.87595-2-nphamcs@gmail.com> <20260208222652.328284-1-nphamcs@gmail.com>
- <CAMgjq7AQNGK-a=AOgvn4-V+zGO21QMbMTVbrYSW_R2oDSLoC+A@mail.gmail.com>
-In-Reply-To: <CAMgjq7AQNGK-a=AOgvn4-V+zGO21QMbMTVbrYSW_R2oDSLoC+A@mail.gmail.com>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Tue, 10 Feb 2026 11:11:11 -0800
-X-Gm-Features: AZwV_QjiOO6j26eMiBTeyevvXh-PkDtsFLmP_Tcm2odsndmNAGBnH1r-vL0qIJ0
-Message-ID: <CAKEwX=OUni7PuUqGQUhbMDtErurFN_i=1RgzyQsNXy4LABhXoA@mail.gmail.com>
-Subject: Re: [PATCH v3 00/20] Virtual Swap Space
-To: Kairui Song <ryncsn@gmail.com>
-Cc: linux-mm@kvack.org, akpm@linux-foundation.org, hannes@cmpxchg.org, 
-	hughd@google.com, yosry.ahmed@linux.dev, mhocko@kernel.org, 
-	roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev, 
-	len.brown@intel.com, chengming.zhou@linux.dev, chrisl@kernel.org, 
-	huang.ying.caritas@gmail.com, ryan.roberts@arm.com, shikemeng@huaweicloud.com, 
-	viro@zeniv.linux.org.uk, baohua@kernel.org, bhe@redhat.com, osalvador@suse.de, 
-	christophe.leroy@csgroup.eu, pavel@kernel.org, kernel-team@meta.com, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-pm@vger.kernel.org, peterx@redhat.com, riel@surriel.com, 
-	joshua.hahnjy@gmail.com, npache@redhat.com, gourry@gourry.net, 
-	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, 
-	rafael@kernel.org, jannh@google.com, pfalcato@suse.de, 
-	zhengqi.arch@bytedance.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS4PPF0BAC23327:EE_|MW4PR11MB8267:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0b5bbb18-1282-4208-65ce-08de68d8f6d3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?w1sIAhyrlgSJdEfUkeDECe9xUVtOlVASI7ezHJmrVqPDEhY/jTDQiCoeireW?=
+ =?us-ascii?Q?I/Gk+/iiNRkBlXqNW6qbHRCvDJruv4xTHGW1lfC4yA0coGHA0N1CQpqhcbEU?=
+ =?us-ascii?Q?HCUJ6QnVPreFRdvNpRfvG4a1P6S/juKmvyqPeEhSFCJwIpvDn0haE3gfEX7f?=
+ =?us-ascii?Q?lbgo+RY+TZ0ChdNXVs13M3q+Mk7xCIJ53i7/Bv+yS//8Qgc3gDJmuh+ci8BU?=
+ =?us-ascii?Q?wEVXwigVyQ0aekj7vzr9duC0rPeeBZQrG4Iq0raxXwwpCA/lXMujNdIP49mZ?=
+ =?us-ascii?Q?KH9jjMjgr4dEpS/lyB3bDnV8K4Cju3D2LBM1UayNGnHOosMDLy2v2pDyJnl7?=
+ =?us-ascii?Q?HEPYB8K3fEka7Wh6zj9pWJUPSo5PIOJyxlhbrdJzl2wJA6+vuwHTN2ag9tOV?=
+ =?us-ascii?Q?DVFujSA94T9HlCkXhavqn3lwmMDJQH47M61I7lIdl4df9APV8HkNoxro+R/i?=
+ =?us-ascii?Q?6iUwThZ+n94g+u85nTS1ciFJ+FYoJUaVznJLbO/mU/GtHfol9p+SgwlsCIbs?=
+ =?us-ascii?Q?uQVtOD2YoFRWV1S9ePYvH5tGS/uHho4ZDlxRbf8/aFEsUirB+PphWJolWL5b?=
+ =?us-ascii?Q?8lOEEJBJBi/y/M2ZRCsXuDfNvQ7J/qewb8wgimsiSbR6/dkILkrQPArKrXvU?=
+ =?us-ascii?Q?ah52kAOSLc3FxStazdtnZaChaBB/nNeKRgE+1f7oORMK0Yj2fR9Uoak7Ru4y?=
+ =?us-ascii?Q?i0aFCchcEiSWf9OLwQTdN4/nf2jrxRPRCzyT2+YmDkDv8i4Wgpxw177s6t+S?=
+ =?us-ascii?Q?u9aUERLFhuAPmIokBOtKPK+Q90572tCRi4OTYdcmfA/lhHfl101oRxeoyY4A?=
+ =?us-ascii?Q?5FYNx3J1X37uNZYBDyt6e/QAdr+BuTbuhUna/1eUZUbLCvuKcaOLKogFGjMS?=
+ =?us-ascii?Q?PBRQ3XzWXEL6mEz4hbMsmKhOl1RZTUTDBMcNQcHFe0ySvf1GSWsCPIinFrPU?=
+ =?us-ascii?Q?aSBBtsssw2xvcofXGtwYJ5MXqKZxn2vCalYa1ygTJFZzYsdiIZauEiCE8K5y?=
+ =?us-ascii?Q?xeGNptCuUybYO2RAsHgbpgaD7OCVnpLxvS96izNdY9/9UGm7ZAa2hLUc5c1c?=
+ =?us-ascii?Q?k0TaDS/o+DBb8NAJq//8zb9WYpKBCoV7qUN5A6vK+eLWvDDHhUNT8NPQjV1o?=
+ =?us-ascii?Q?7E35tAfRKiLyxety/Gx3vLaS5BdSDejyS2Wf9Va9EE2Ddo5JfVFhrLPgi3zS?=
+ =?us-ascii?Q?xk0d4Rnu15mN8MZDgr4CYSvnaW19jS0LZVD5/Fuad2xGLVnIlqcunLf3bvbq?=
+ =?us-ascii?Q?Toj34b6kX4lKsqFXY/QTKFPl7RVaNTQdNiEBRVKwM5emipAklVg5IfAiam4w?=
+ =?us-ascii?Q?VRnvMtukglDLJe1TlBLgxUUezw9KUeB9X8zf58+Rf86MHGuSq8PXaoqdmSRA?=
+ =?us-ascii?Q?TNb5ndwXxYCOggGMGrdX/UdIdxXtzzvwepZDyFZrQhR7qsLOHPsV3iBjPzwG?=
+ =?us-ascii?Q?UphiHeN4dChgTgMTZTGovgQITTeGIv9wI94tPXoiKly+rSmccUX+iB8zkkii?=
+ =?us-ascii?Q?GW2T9QbMhsf9QUGGM4wMNBTEiO/S4XdNt21ANIaTMRBeGS7gTDOqE6D0JCm/?=
+ =?us-ascii?Q?63MCI29bPO9LejPDHN1VVqWfmquH9mqSR53l4OCW?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS4PPF0BAC23327.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ilxvwRRfbAaUEtCsVnT7cOPkYUXb7wn05Uwa0FjFW6D/wWdNucPbmwezl4U2?=
+ =?us-ascii?Q?+k4IOHA94EuJPoCz7l1PKTcRL3jdr+8p89O3SsVr5GQZe9XoI/3jqcIFnQ36?=
+ =?us-ascii?Q?tPqvLfNOCmrJFjZRyVXp5zgX10rJEnXHp5KCELz/aJnAO2JLYia7SqdA+4ER?=
+ =?us-ascii?Q?appX0cK7Rdo+HWv7qwcUN4gCbeujzBRTJ6mxEp2neuz5YA0cES5KnxSdiOSB?=
+ =?us-ascii?Q?prHqowM7nWISRQVOga3k3CmJm2eUAaq4E0oZoy5KxBNAJV7n5SKXTKRNkOQ1?=
+ =?us-ascii?Q?1QxB41DBzkUL4sV8I+1DOVHNK8VXRNy+AtkItiODnwSYah4x8SbMoKyPawGt?=
+ =?us-ascii?Q?MvLt+l28gCKq4amVBoNoReR7rul+sBx2eL407VtZiwRCvKFJjO2wypCgm62D?=
+ =?us-ascii?Q?djW9C/79m8fYp4vJ9QqR3ZKvtt5bWS9XNJlz5oEp16rjc0PxA1sLSy+sXOPO?=
+ =?us-ascii?Q?Nqv8Q1QbE4+QXB0ezaGPMuSbuYwTcZ7q3dpdDWeV3ZaSer+Gd2NBrWuS+uTr?=
+ =?us-ascii?Q?9X1O5iHKB8kasMM4THu2CpNi5iu4W580zk/lPXuhfuaqhnMaKlYo/3pl4AKQ?=
+ =?us-ascii?Q?doqM07SpUOdBKhK33/j7eX3kltUAxyLKJ7dqRpTa9ZS9xHvVeLopxOIDQTd9?=
+ =?us-ascii?Q?EECh4IuygDOcnPdU32Chg+geJRVg2eOJILbBGzfzR77ej1n+SFpToJLNEx/g?=
+ =?us-ascii?Q?Du+Aj9qpz2pqT6NiSkChRLShLcV2rJrk9I6lbCDlGx/ir1Fu+X8rrwl2bEwn?=
+ =?us-ascii?Q?1myQWW3IvVx3v4dZhlPV5VrVi/MAKGEj9uzP1OxaqIigJ/y9awqdqGt1peZg?=
+ =?us-ascii?Q?wx+ezDDYml4Eu+87c4csfxjAxlg+C8yxRaDLot4nYlVnxNSkUhhF72xcs7of?=
+ =?us-ascii?Q?puxLTT/AzfPHGYTyFQgBL5ilGSuXDAFoztkZw1sCmpAMd77fG4i/NpyUpL9z?=
+ =?us-ascii?Q?tWWA0aMXECA77+KMIL228zTVBgcTodqN7fGpiWHBnuln2HozRehl7s0HOCOE?=
+ =?us-ascii?Q?2BFhN296d3GXIbJfAjtByBThM3j20TYq/X+8MhAgb2x6DiFsVYR+HOzKsGyg?=
+ =?us-ascii?Q?MhtSSHMRZkWsGx8N1YJMcd3US4lzAuaiQ82/2J+qbut/B0XXnd+LEjpfcqwk?=
+ =?us-ascii?Q?qaFXMAs/ofZG/xGP4C4AEFzZYbmCcc4lxtdNgxFpgkm6l1gfVyh0HGwwIAD5?=
+ =?us-ascii?Q?Yfcv/6YhySvybTbDruBusY/LLhio1t9mT6WIsXkygAUuHpSR/f7etHKA1Ks8?=
+ =?us-ascii?Q?fYprbw8ZjDmdILHV2BB99t4vlrIQwawtiImKyb5DK6j/R1o0tOP/7we1Lb00?=
+ =?us-ascii?Q?/arUKhg6qoEJWbYTt2RkRrSINHz0ILXe0sdIyciJooZPyJTLhFx3R0mf5hOH?=
+ =?us-ascii?Q?H18gMRjxHMwACS/4r6BN6PseI6ydyXEwrFgTQCk7reXl2As5ogj5wbhq1nWq?=
+ =?us-ascii?Q?dtb7PbIjuTXFcwY6Vh/4Gaqw2cdQm9oZXhFyhlHAz44nFArn+X3kryDPQVE4?=
+ =?us-ascii?Q?GhWvSYHIsdb2LP0oI+hEyI+SGrjWgfs3plRQZfZ1PQ+aMv4GpPnfma7eRV6+?=
+ =?us-ascii?Q?LyYHDmEQq29rXeE+dAGr7kY1AXXYXeMgd+rr57Sls+vtEXq070qjwkzIhYK/?=
+ =?us-ascii?Q?8ZuoL41xTrC1+DXbvm1bJ7xvNkCaX7ypGK2zdhJi4KUavYtx+d4z69oB2ZvF?=
+ =?us-ascii?Q?IMSDOoq6w5wFVnG0Tkysljr4VyZKINJ8xS0hQ1OfDgvDesgLd4AIyfqGehhe?=
+ =?us-ascii?Q?spP+M3YIH/bcwf957IQdy+OIAWif8jM=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b5bbb18-1282-4208-65ce-08de68d8f6d3
+X-MS-Exchange-CrossTenant-AuthSource: DS4PPF0BAC23327.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2026 19:16:59.7989
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uV/Qf5LIZ52YLrc8hbSG3ZBLXU0x6XDOlP/QuRFo12PY6GmkJU5NgswILfitRz+21TG4hERiP2eEMqnN2hbQNo/XUNKyKouBj8/oUhC/iFA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB8267
+X-OriginatorOrg: intel.com
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [1.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[38];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-42471-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42470-lists,linux-pm=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[aschofie-mobl2.lan:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:dkim];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[32];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,kernel.org,intel.com,huawei.com,amd.com,stgolabs.net,infradead.org,suse.cz,zohomail.com,oss.qualcomm.com,gmail.com,fujitsu.com,linuxfoundation.org,alien8.de];
+	DKIM_TRACE(0.00)[intel.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alison.schofield@intel.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
 	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nphamcs@gmail.com,linux-pm@vger.kernel.org];
-	FREEMAIL_CC(0.00)[kvack.org,linux-foundation.org,cmpxchg.org,google.com,linux.dev,kernel.org,intel.com,gmail.com,arm.com,huaweicloud.com,zeniv.linux.org.uk,redhat.com,suse.de,csgroup.eu,meta.com,vger.kernel.org,surriel.com,gourry.net,bytedance.com];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 2B86311E8B9
+	RCVD_COUNT_SEVEN(0.00)[10]
+X-Rspamd-Queue-Id: 5704311E93D
 X-Rspamd-Action: no action
 
-On Tue, Feb 10, 2026 at 10:00=E2=80=AFAM Kairui Song <ryncsn@gmail.com> wro=
-te:
->
-> On Mon, Feb 9, 2026 at 7:57=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrot=
-e:
-> >
-> > Anyway, resending this (in-reply-to patch 1 of the series):
->
-> Hi Nhat,
->
-> > Changelog:
-> > * RFC v2 -> v3:
-> >     * Implement a cluster-based allocation algorithm for virtual swap
-> >       slots, inspired by Kairui Song and Chris Li's implementation, as
-> >       well as Johannes Weiner's suggestions. This eliminates the lock
-> >           contention issues on the virtual swap layer.
-> >     * Re-use swap table for the reverse mapping.
-> >     * Remove CONFIG_VIRTUAL_SWAP.
->
-> I really do think we better make this optional, not a replacement or
-> mandatory. There are many hard to evaluate effects as this
-> fundamentally changes the swap workflow with a lot of behavior changes
-> at once. e.g. it seems the folio will be reactivated instead of
-> splitted if the physical swap device is fragmented; slot is allocated
-> at IO and not at unmap, and maybe many others. Just like zswap is
-> optional. Some common workloads would see an obvious performance or
-> memory usage regression following this design, see below.
+On Tue, Feb 10, 2026 at 06:44:52AM +0000, Smita Koralahalli wrote:
+> This series aims to address long-standing conflicts between HMEM and
+> CXL when handling Soft Reserved memory ranges.
+> 
+> Reworked from Dan's patch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/patch/?id=ab70c6227ee6165a562c215d9dcb4a1c55620d5d
+> 
+> Previous work:
+> https://lore.kernel.org/all/20250715180407.47426-1-Smita.KoralahalliChannabasappa@amd.com/
+> 
+> Link to v5:
+> https://lore.kernel.org/all/20260122045543.218194-1-Smita.KoralahalliChannabasappa@amd.com
+> 
+> The series is based on branch "for-7.0/cxl-init" and base-commit is
+> base-commit: bc62f5b308cbdedf29132fe96e9d591e526527e1
+> 
+> [1] After offlining the memory I can tear down the regions and recreate
+> them back. dax_cxl creates dax devices and onlines memory.
+> 850000000-284fffffff : CXL Window 0
+>   850000000-284fffffff : region0
+>     850000000-284fffffff : dax0.0
+>       850000000-284fffffff : System RAM (kmem)
+> 
+> [2] With CONFIG_CXL_REGION disabled, all the resources are handled by
+> HMEM. Soft Reserved range shows up in /proc/iomem, no regions come up
+> and dax devices are created from HMEM.
+> 850000000-284fffffff : CXL Window 0
+>   850000000-284fffffff : Soft Reserved
+>     850000000-284fffffff : dax0.0
+>       850000000-284fffffff : System RAM (kmem)
+> 
+> [3] Region assembly failure works same as [2].
+> 
+> [4] REGISTER path:
+> When CXL_BUS = y (with CXL_ACPI, CXL_PCI, CXL_PORT, CXL_MEM = y),
+> the dax_cxl driver is probed and completes initialization before dax_hmem
+> probes. This scenario was tested with CXL = y, DAX_CXL = m and
+> DAX_HMEM = m. To validate the REGISTER path, I forced REGISTER even in
+> cases where SR completely overlaps the CXL region as I did not have access
+> to a system where the CXL region range is smaller than the SR range.
+> 
+> 850000000-284fffffff : Soft Reserved
+>   850000000-284fffffff : CXL Window 0
+>     850000000-280fffffff : region0
+>       850000000-284fffffff : dax0.0
+>         850000000-284fffffff : System RAM (kmem)
+> 
+> "path":"\/platform\/ACPI0017:00\/root0\/decoder0.0\/region0\/dax_region0",
+> "id":0,
+> "size":"128.00 GiB (137.44 GB)",
+> "align":2097152
+> 
+> [   35.961707] cxl-dax: cxl_dax_region_init()
+> [   35.961713] cxl-dax: registering driver.
+> [   35.961715] cxl-dax: dax_hmem work flushed.
+> [   35.961754] alloc_dev_dax_range:  dax0.0: alloc range[0]:
+> 0x000000850000000:0x000000284fffffff
+> [   35.976622] hmem: hmem_platform probe started.
+> [   35.980821] cxl_bus_probe: cxl_dax_region dax_region0: probe: 0
+> [   36.819566] hmem_platform hmem_platform.0: Soft Reserved not fully
+> contained in CXL; using HMEM
+> [   36.819569] hmem_register_device: hmem_platform hmem_platform.0:
+> registering CXL range: [mem 0x850000000-0x284fffffff flags 0x80000200]
+> [   36.934156] alloc_dax_region: hmem hmem.6: dax_region resource conflict
+> for [mem 0x850000000-0x284fffffff]
+> [   36.989310] hmem hmem.6: probe with driver hmem failed with error -12
+> 
+> [5] When CXL_BUS = m (with CXL_ACPI, CXL_PCI, CXL_PORT, CXL_MEM = m),
+> DAX_CXL = m and DAX_HMEM = y the results are as expected. To validate the
+> REGISTER path, I forced REGISTER even in cases where SR completely
+> overlaps the CXL region as I did not have access to a system where the
+> CXL region range is smaller than the SR range.
+> 
+> 850000000-284fffffff : Soft Reserved
+>   850000000-284fffffff : CXL Window 0
+>     850000000-280fffffff : region0
+>       850000000-284fffffff : dax6.0
+>         850000000-284fffffff : System RAM (kmem)
+> 
+> "path":"\/platform\/hmem.6",
+> "id":6,
+> "size":"128.00 GiB (137.44 GB)",
+> "align":2097152
+> 
+> [   30.897665] devm_cxl_add_dax_region: cxl_region region0: region0:
+> register dax_region0
+> [   30.921015] hmem: hmem_platform probe started.
+> [   31.017946] hmem_platform hmem_platform.0: Soft Reserved not fully
+> contained in CXL; using HMEM
+> [   31.056310] alloc_dev_dax_range:  dax6.0: alloc range[0]:
+> 0x0000000850000000:0x000000284fffffff
+> [   34.781516] cxl-dax: cxl_dax_region_init()
+> [   34.781522] cxl-dax: registering driver.
+> [   34.781523] cxl-dax: dax_hmem work flushed.
+> [   34.781549] alloc_dax_region: cxl_dax_region dax_region0: dax_region
+> resource conflict for [mem 0x850000000-0x284fffffff]
+> [   34.781552] cxl_bus_probe: cxl_dax_region dax_region0: probe: -12
+> [   34.781554] cxl_dax_region dax_region0: probe with driver cxl_dax_region
+> failed with error -12
+> 
+> v6 updates:
+> - Patch 1-3 no changes.
+> - New Patches 4-5.
+> - (void *)res -> res.
+> - cxl_region_contains_soft_reserve -> region_contains_soft_reserve.
+> - New file include/cxl/cxl.h
+> - Introduced singleton workqueue.
+> - hmem to queue the work and cxl to flush.
+> - cxl_contains_soft_reserve() -> soft_reserve_has_cxl_match().
+> - Included descriptions for dax_cxl_mode.
+> - kzalloc -> kmalloc in add_soft_reserve_into_iomem()
+> - dax_cxl_mode is exported to CXL.
+> - Introduced hmem_register_cxl_device() for walking only CXL
+> intersected SR ranges the second time.
 
-Ideally, if we can close the performance gap and have only one
-version, then that would be the best :)
+During v5 review of this patch:
 
-Problem with making it optional, or maintaining effectively two swap
-implementations, is that it will make the patch series unreadable and
-unreviewable, and the code base unmaintanable :) You'll have x2 the
-amount of code to reason about and test, much more merge conflicts at
-rebase and cherry-pick time. And any improvement to one version takes
-extra work to graft onto the other version.
+[PATCH v5 6/7] dax/hmem, cxl: Defer and resolve ownership of Soft Reserved memory ranges
 
->
-> >     * Reducing the size of the swap descriptor from 48 bytes to 24
-> >       bytes, i.e another 50% reduction in memory overhead from v2.
->
-> Honestly if you keep reducing that you might just end up
-> reimplementing the swap table format :)
+there was discussion around handling region teardown. It's not mentioned
+in the changelog, and the teardown is completely removed from the patch.
 
-There's nothing wrong with that ;)
+The discussion seemed to be leaning towards not tearing down 'all', but
+it's not clear to me that we decided not to tear down anything - which
+this update now does. 
 
-I like the swap table format (and your cluster-based swap allocator) a
-lot. This patch series does not aim to remove that design - I just
-want to separate the address space of physical and virtual swaps to
-enable new use cases...
+And, as you may be guessing, I'm seeing disabled regions with DAX children
+and figuring out what can be done with them.
 
->
-> > This patch series is based on 6.19. There are a couple more
-> > swap-related changes in the mm-stable branch that I would need to
-> > coordinate with, but I would like to send this out as an update, to sho=
-w
-> > that the lock contention issues that plagued earlier versions have been
-> > resolved and performance on the kernel build benchmark is now on-par wi=
-th
-> > baseline. Furthermore, memory overhead has been substantially reduced
-> > compared to the last RFC version.
->
-> Thanks for the effort!
->
-> > * Operationally, static provisioning the swapfile for zswap pose
-> >   significant challenges, because the sysadmin has to prescribe how
-> >   much swap is needed a priori, for each combination of
-> >   (memory size x disk space x workload usage). It is even more
-> >   complicated when we take into account the variance of memory
-> >   compression, which changes the reclaim dynamics (and as a result,
-> >   swap space size requirement). The problem is further exarcebated for
-> >   users who rely on swap utilization (and exhaustion) as an OOM signal.
->
-> So I thought about it again, this one seems not to be an issue. In
+Can you explain the new approach so I can test against that intention?
 
-I mean, it is a real production issue :) We have a variety of server
-machines and services. Each of the former has its own memory and drive
-size. Each of the latter has its own access characteristics,
-compressibility, latency tolerance (and hence would prefer a different
-swapping solutions - zswap, disk swap, zswap x disk swap). Coupled
-with the fact that now multiple services can cooccur on one host, and
-one services can be deployed on different kinds of hosts, statically
-sizing the swapfile becomes operationally impossible and leaves a lot
-of wins on the table. So swap space has to be dynamic.
+FYI - I am able to confirm the dax regions are back for no-soft-reserved
+case, and my basic hotplug flow works with v6.
 
-
-> most cases, having a 1:1 virtual swap setup is enough, and very soon
-> the static overhead will be really trivial. There won't even be any
-> fragmentation issue either, since if the physical memory size is
-> identical to swap space, then you can always find a matching part. And
-> besides, dynamic growth of swap files is actually very doable and
-> useful, that will make physical swap files adjustable at runtime, so
-> users won't need to waste a swap type id to extend physical swap
-> space.
-
-By "dynamic growth of swap files", do you mean dynamically adjusting
-the size of the swapfile? then that capacity does not exist right now,
-and I don't see a good design laid out for it... At the very least,
-the swap allocator needs to be dynamic in nature. I assume it's going
-to look something very similar to vswap's current attempt, which
-relies on a tree structure (radix tree i.e xarray). Sounds familiar?
-;)
-
-I feel like each of the problem I mention in this cover letter can be
-solved partially with some amount of hacks, but none of them will
-solve it all. And once you slaps all the hacks together, you just get
-virtual swap, potentially shoved within specific backend codebase
-(zswap or zram). That's not... ideal.
-
->
-> > * Another motivation is to simplify swapoff, which is both complicated
-> >   and expensive in the current design, precisely because we are storing
-> >   an encoding of the backend positional information in the page table,
-> >   and thus requires a full page table walk to remove these references.
->
-> The swapoff here is not really a clean swapoff, minor faults will
-> still be triggered afterwards, and metadata is not released. So this
-> new swapoff cannot really guarantee the same performance as the old
-> swapoff. And on the other hand we can already just read everything
-> into the swap cache then ignore the page table walk with the older
-> design too, that's just not a clean swapoff.
-
-I don't understand your point regarding the "reading everything into
-swap cache". Yes, you can do that, but you would still lock the swap
-device in place, because the page table entries still refer to slots
-on the physical swap device - you cannot free the swap device, nor
-space on disk, not even the swapfile's metadata (especially since the
-swap cache is now intertwined with the physical swap layer).
-
->
-> > struct swp_desc {
-> >         union {
-> >                 swp_slot_t         slot;                 /*     0     8=
- */
-> >                 struct zswap_entry * zswap_entry;        /*     0     8=
- */
-> >         };                                               /*     0     8=
- */
-> >         union {
-> >                 struct folio *     swap_cache;           /*     8     8=
- */
-> >                 void *             shadow;               /*     8     8=
- */
-> >         };                                               /*     8     8=
- */
-> >         unsigned int               swap_count;           /*    16     4=
- */
-> >         unsigned short             memcgid:16;           /*    20: 0  2=
- */
-> >         bool                       in_swapcache:1;       /*    22: 0  1=
- */
->
-> A standalone bit for swapcache looks like the old SWAP_HAS_CACHE that
-> causes many issues...
-
-Yeah this was based on 6.19, which did not have your swap cache change yet =
-:)
-
-I have taken a look at your latest swap table work in mm-stable, and I
-think most of that can conceptually incorporated in to this line of
-work as well.
-
-Chiefly, the new swap cache synchronization scheme (i.e whoever puts
-the folio in swap cache first gets exclusive rights) still works in
-virtual swap world (and hence, the removal of swap cache pin, which is
-one bit in the virtual swap descriptor).
-
-Similarly, do you think we cannot hold the folio lock in place of the
-cluster lock in the virtual swap world? Same for a lot of the memory
-overhead reduction tricks (such as using shadow for cgroup id instead
-of a separate swap_cgroup unsigned short field). I think comparing the
-two this way is a bit apples-to-oranges (especially given the new
-features enabled by vswap).
-
-[...]
-
-> That 3 - 4 times more memory usage, quite a trade off. With a
-> 128G device, which is not something rare, it would be 1G of memory.
-> Swap table p3 / p4 is about 320M / 256M, and we do have a way to cut
-> that down close to be <1 byte or 3 byte per page with swap table
-> compaction, which was discussed in LSFMM last year, or even 1 bit
-> which was once suggested by Baolin, that would make it much smaller
-> down to <24MB (This is just an idea for now, but the compaction is
-> very doable as we already have "LRU"s for swap clusters in swap
-> allocator).
->
-> I don't think it looks good as a mandatory overhead. We do have a huge
-> user base of swap over many different kinds of devices, it was not
-> long ago two new kernel bugzilla issue  or bug reported was sent to
-> the maillist about swap over disk, and I'm still trying to investigate
-> one of them which seems to be actually a page LRU issue and not swap
-> problem..  OK a little off topic, anyway, I'm not saying that we don't
-> want more features, as I mentioned above, it would be better if this
-> can be optional and minimal. See more test info below.
-
-Side note - I might have missed this. If it's still ongoing, would
-love to help debug this :)
-
->
-> > We actually see a slight improvement in systime (by 1.5%) :) This is
-> > likely because we no longer have to perform swap charging for zswap
-> > entries, and virtual swap allocator is simpler than that of physical
-> > swap.
->
-> Congrats! Yeah, I guess that's because vswap has a smaller lock scope
-> than zswap with a reduced callpath?
-
-Ah yeah that too. I neglected to mention this, but with vswap you can
-merge several swap operations in zswap code path and no longer have to
-release-then-reacquire the swap locks, since zswap entries live in the
-same lock scope as swap cache entries.
-
-It's more of a side note either way, because my main goal with this
-patch series is to enable new features. Getting a performance win is
-always nice of course :)
-
->
-> >
-> > Using SSD swap as the backend:
-> >
-> > Baseline:
-> > real: mean: 200.3s, stdev: 2.33s
-> > sys: mean: 489.88s, stdev: 9.62s
-> >
-> > Vswap:
-> > real: mean: 201.47s, stdev: 2.98s
-> > sys: mean: 487.36s, stdev: 5.53s
-> >
-> > The performance is neck-to-neck.
->
-> Thanks for the bench, but please also test with global pressure too.
-
-Do you mean using memory to the point where it triggered the global waterma=
-rks?
-
-> One mistake I made when working on the prototype of swap tables was
-> only focusing on cgroup memory pressure, which is really not how
-> everyone uses Linux, and that's why I reworked it for a long time to
-> tweak the RCU allocation / freeing of swap table pages so there won't
-> be any regression even for lowend and global pressure. That's kind of
-> critical for devices like Android.
->
-> I did an overnight bench on this with global pressure, comparing to
-> mainline 6.19 and swap table p3 (I do include such test for each swap
-> table serie, p2 / p3 is close so I just rebase and latest p3 on top of
-> your base commit just to be fair and that's easier for me too) and it
-> doesn't look that good.
->
-> Test machine setup for vm-scalability:
-> # lscpu | grep "Model name"
-> Model name:          AMD EPYC 7K62 48-Core Processor
->
-> # free -m
->               total        used        free      shared  buff/cache   ava=
-ilable
-> Mem:          31582         909       26388           8        4284      =
- 29989
-> Swap:         40959          41       40918
->
-> The swap setup follows the recommendation from Huang
-> (https://lore.kernel.org/linux-mm/87ed474kvx.fsf@yhuang6-desk2.ccr.corp.i=
-ntel.com/).
->
-> Test (average of 18 test run):
-> vm-scalability/usemem --init-time -O -y -x -n 1 56G
->
-> 6.19:
-> Throughput: 618.49 MB/s (stdev 31.3)
-> Free latency: 5754780.50us (stdev 69542.7)
->
-> swap-table-p3 (3.8%, 0.5% better):
-> Throughput: 642.02 MB/s (stdev 25.1)
-> Free latency: 5728544.16us (stdev 48592.51)
->
-> vswap (3.2%, 244% worse):
-> Throughput: 598.67 MB/s (stdev 25.1)
-> Free latency: 13987175.66us (stdev 125148.57)
->
-> That's a huge regression with freeing. I have a vm-scatiliby test
-> matrix, not every setup has such significant >200% regression, but on
-> average the freeing time is about at least 15 - 50% slower (for
-> example /data/vm-scalability/usemem --init-time -O -y -x -n 32 1536M
-> the regression is about 2583221.62us vs 2153735.59us). Throughput is
-> all lower too.
->
-> Freeing is important as it was causing many problems before, it's the
-> reason why we had a swap slot freeing cache years ago (and later we
-> removed that since the freeing cache causes more problems and swap
-> allocator already improved it better than having the cache). People
-> even tried to optimize that:
-> https://lore.kernel.org/linux-mm/20250909065349.574894-1-liulei.rjpt@vivo=
-.com/
-> (This seems a already fixed downstream issue, solved by swap allocator
-> or swap table). Some workloads might amplify the free latency greatly
-> and cause serious lags as shown above.
->
-> Another thing I personally cares about is how swap works on my daily
-> laptop :), building the kernel in a 2G test VM using NVME as swap,
-> which is a very practical workload I do everyday, the result is also
-> not good (average of 8 test run, make -j12):
-
-Hmm this one I don't think I can reproduce without your laptop ;)
-
-Jokes aside, I did try to run the kernel build with disk swapping, and
-the performance is on par with baseline. Swap performance with NVME
-swap tends to be dominated by IO work in my experiments. Do you think
-I missed something here? Maybe it's the concurrency difference (since
-I always run with -j$(nproc), i.e the number of workers =3D=3D the number
-of processors).
-
-> #free -m
->                total        used        free      shared  buff/cache   av=
-ailable
-> Mem:            1465         216        1026           0         300     =
-   1248
-> Swap:           4095          36        4059
->
-> 6.19 systime:
-> 109.6s
-> swap-table p3:
-> 108.9s
-> vswap systime:
-> 118.7s
->
-> On a build server, it's also slower (make -j48 with 4G memory VM and
-> NVME swap, average of 10 testrun):
-> # free -m
->                total        used        free      shared  buff/cache   av=
-ailable
-> Mem:            3877        1444        2019         737        1376     =
-   2432
-> Swap:          32767        1886       30881
->
-> # lscpu | grep "Model name"
-> Model name:                              Intel(R) Xeon(R) Platinum
-> 8255C CPU @ 2.50GHz
->
-> 6.19 systime:
-> 435.601s
-> swap-table p3:
-> 432.793s
-> vswap systime:
-> 455.652s
->
-> In conclusion it's about 4.3 - 8.3% slower for common workloads under
-> global pressure, and there is a up to 200% regression on freeing. ZRAM
-> shows an even larger workload regression but I'll skip that part since
-> your series is focusing on zswap now. Redis is also ~20% slower
-> compared to mm-stable (327515.00 RPS vs 405827.81 RPS), that's mostly
-> due to swap-table-p2 in mm-stable so I didn't do further comparisons.
-
-I'll see if I can reproduce the issues! I'll start with usemem one
-first, as that seems easier to reproduce...
-
->
-> So if that's not a bug with this series, I think the double free or
-
-It could be a non-crashing bug that subtly regresses certain swap
-operations, but yeah let me study your test case first!
-
-> decoupling of swap / underlying slots might be the problem with the
-> freeing regression shown above. That's really a serious issue, and the
-> global pressure might be a critical issue too as the metadata is much
-> larger, and is already causing regressions for very common workloads.
-> Low end users could hit the min watermark easily and could have
-> serious jitters or allocation failures.
->
-> That's part of the issue I've found, so I really do think we need a
-> flexible way to implementa that and not have a mandatory layer. After
-> swap table P4 we should be able to figure out a way to fit all needs,
-> with a clean defined set of swap API, metadata and layers, as was
-> discussed at LSFMM last year.
+-- Alison
 
