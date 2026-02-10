@@ -1,193 +1,147 @@
-Return-Path: <linux-pm+bounces-42446-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42447-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cEKsMiwdi2nSPwAAu9opvQ
-	(envelope-from <linux-pm+bounces-42446-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 12:57:32 +0100
+	id iLSqNtIhi2lyQQAAu9opvQ
+	(envelope-from <linux-pm+bounces-42447-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 13:17:22 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B75E11A7A7
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 12:57:32 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46B3B11A9D1
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 13:17:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 615493038D19
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 11:56:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C80F6302F70F
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Feb 2026 12:16:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4338F329369;
-	Tue, 10 Feb 2026 11:56:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 609B4320A23;
+	Tue, 10 Feb 2026 12:16:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="JsnRuv4l"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xcl/860p"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500A4327C12;
-	Tue, 10 Feb 2026 11:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E216231B11E;
+	Tue, 10 Feb 2026 12:16:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770724592; cv=none; b=hoYjN3rxu9q6cneADiuCGEX5KZce52ajxLdOB5NOVMstOgNs2NyXJtquB/gfXGKPPlP9O4DVRl9bhaYPvea2yPqaKLd3tsMdqTB2lqC4w0sq2NnMPV6/8wb30E7emgNhbT8F3ryHRxvxJQwt67vqrSten5loGtCgs05vK/SXu/4=
+	t=1770725799; cv=none; b=W5VqkSkPosI2s26abNbbPXKBZr8dP4KANyA3QMBQxrq7//+IOCVkM4UMKY/ac+1cIuJndf/AJ2KEjfRk4KIhLv2ZBClOfYBUxPz4IxgSZJnXbaJ5u0jWCPkyQlts+G/weixZ6DW5cWXuvVd+eg+sMCyrstl7kv4wYwKSRkXhHXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770724592; c=relaxed/simple;
-	bh=gKMRH/aLkRG1X8AMTxqq4G1qvUizMsrR814hGf7zKW4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iegxG3ypq78reDUt2nNkSpiup1xUoI9VLdhBtpPMyf558LMj2QPYo5mLZTG2gvf+QPG8mMhYQpoDgSKRsssoa6mZGlXGBOdtX8W+gp+CHJ/Y348Pcho7cyUd/Qs5uuVGrXC6ON6InuQ614zNLSIANReI5z8ffRlTFEus9LnUHDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=JsnRuv4l; arc=none smtp.client-ip=113.46.200.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=pX2drFtYIUoNQzQZWGgYsvjHHfDRllFOEjGok0tW7FU=;
-	b=JsnRuv4l/cL59vJVvX3+1zr9MhWRZEBba8jV2ve7Qdd9sncyRUowqygfdHfaOQbQF+mouBJFM
-	dekYVUhcj2334v+/mwNvRShP9rmdQKYMZqlwCu54DTTLlapLG0Ej/c2EHifX+RzTPcCLvFy2fO1
-	xsvfl/mfGMMtKKIK9NoeZXk=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4f9KfP6vV6zKm4R;
-	Tue, 10 Feb 2026 19:51:41 +0800 (CST)
-Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5D84940565;
-	Tue, 10 Feb 2026 19:56:20 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- kwepemf200001.china.huawei.com (7.202.181.227) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 10 Feb 2026 19:56:19 +0800
-From: Lifeng Zheng <zhenglifeng1@huawei.com>
-To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <mingo@redhat.com>,
-	<peterz@infradead.org>, <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
-CC: <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>, <bsegall@google.com>,
-	<mgorman@suse.de>, <vschneid@redhat.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
-	<lihuisong@huawei.com>, <yubowen8@huawei.com>, <zhangpengjie2@huawei.com>,
-	<wangzhi12@huawei.com>, <linhongye@h-partners.com>, <zhenglifeng1@huawei.com>
-Subject: [PATCH 2/2] cpufreq: governor: Apply limits with requested_freq or next_freq
-Date: Tue, 10 Feb 2026 19:54:58 +0800
-Message-ID: <20260210115458.3493646-3-zhenglifeng1@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20260210115458.3493646-1-zhenglifeng1@huawei.com>
-References: <20260210115458.3493646-1-zhenglifeng1@huawei.com>
+	s=arc-20240116; t=1770725799; c=relaxed/simple;
+	bh=Vsl82wTVGHxBGouLrnPGIwzMws2HTm59b4l8xWGMBXw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CUKCyY515Ko9zBy05EtnXQW+GNOzGSrNDYPi8Cznuc/VCVzePE8rALna9goM9X/+aBx/PtHPjSBw/OfM6u47j1Gm9DrLj01DJe637oUzUag7guhENqudK0RIes7bPsZzM/pDFbImlz27b78OvEmXzAizNMYWSPatt4RE/v72a4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xcl/860p; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770725798; x=1802261798;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Vsl82wTVGHxBGouLrnPGIwzMws2HTm59b4l8xWGMBXw=;
+  b=Xcl/860pRihzv1KqO1lJlTn32UXvmAP6PQcM8NAfEbB7c6WB+Xp8rvYJ
+   faeLY5wNdn+oSS04UdKRl90tvVO/F6OYs2jXbU0BSFJYUstRm0qS+bg8W
+   XBWnCKteofnJtblRCboZ2ZyrO12bmO6U5qmDbgLR2OD01d8A6q9rBiVLI
+   jHG0h4tq2U5HlyRl+NPNMoWOw5eyHpYKtBtkNE4nqwJt8s4thopqFqHwV
+   zHgddKniF3X9mNSRQ5YVdJo+X2Pj3HZtdPuIFOK83gEmL3wtDyc86+o/6
+   nVUszdRvCE88pz+VzJvGI/rg4NbLlFcWq2aHPml1Yi67KEewj963opKiD
+   A==;
+X-CSE-ConnectionGUID: J+TkkfgyRYioANGLzQ4JXQ==
+X-CSE-MsgGUID: mt8jJW/kQqa6GxfiRALHRw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11696"; a="82175415"
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="82175415"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 04:16:38 -0800
+X-CSE-ConnectionGUID: fRMyhIK2SOy4UkOSimVp1g==
+X-CSE-MsgGUID: KhRtkdbuSMqkO7lHM614jA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="211233693"
+Received: from iherna2-mobl4.amr.corp.intel.com (HELO kuha) ([10.124.223.110])
+  by orviesa010.jf.intel.com with SMTP; 10 Feb 2026 04:16:33 -0800
+Received: by kuha (sSMTP sendmail emulation); Tue, 10 Feb 2026 14:16:01 +0200
+Date: Tue, 10 Feb 2026 14:16:01 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
+	gregkh@linuxfoundation.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 4/5] usb: typec: ucsi: ucsi_glink: Add support for
+ Glymur and Kaanapali
+Message-ID: <aYshgbUfxnhFdC1v@kuha>
+References: <20260209204915.1983997-1-anjelique.melendez@oss.qualcomm.com>
+ <20260209204915.1983997-5-anjelique.melendez@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemf200001.china.huawei.com (7.202.181.227)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260209204915.1983997-5-anjelique.melendez@oss.qualcomm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42446-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_FROM(0.00)[bounces-42447-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zhenglifeng1@huawei.com,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	TO_DN_NONE(0.00)[];
-	DKIM_TRACE(0.00)[huawei.com:+];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_TWELVE(0.00)[22];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:mid,huawei.com:dkim,huawei.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5B75E11A7A7
+	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,intel.com:dkim]
+X-Rspamd-Queue-Id: 46B3B11A9D1
 X-Rspamd-Action: no action
 
-For conservative, ondemand and schedutil governor,
-cpufreq_policy_apply_limits() is called in .limits(). This function updates
-the target because the limits (policy->max and policy->min) may be changed.
-However, it uses policy->cur as the reference for the target frequency.
-This may cause some problems because the value of policy->cur is influenced
-by a variety of factors.
+Mon, Feb 09, 2026 at 12:49:14PM -0800, Anjelique Melendez kirjoitti:
+> Add Glymur and Kaanapali compatible strings which both need
+> UCSI_DELAY_DEVICE_PDOS quirk.
+> 
+> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
 
-For example, for some reason, the platform determines a final
-frequency divided from the frequency distributed by the OS, and this is
-reflected in policy->cur. After that, cpufreq_policy_apply_limits() is
-called and because policy->cur is out of limmit, policy->min will be used
-as the new target. This caused the real frequency lower but it's
-unnecessary. Consertative and ondemand governor use requested_freq and
-schedutil governor uses next_freq to represent the target frequency. It's
-more reasonable to use them in cpufreq_policy_apply_limits().
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-At the same time, use policy->cur as the initial value of next_freq in
-schedutil governor's start() callback.
+> ---
+>  drivers/usb/typec/ucsi/ucsi_glink.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> index 11b3e24e34e2..c7878ea0d37a 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> @@ -373,6 +373,8 @@ static unsigned long quirk_sc8280xp = UCSI_NO_PARTNER_PDOS | UCSI_DELAY_DEVICE_P
+>  static unsigned long quirk_sm8450 = UCSI_DELAY_DEVICE_PDOS;
+>  
+>  static const struct of_device_id pmic_glink_ucsi_of_quirks[] = {
+> +	{ .compatible = "qcom,glymur-pmic-glink", .data = &quirk_sm8450, },
+> +	{ .compatible = "qcom,kaanapali-pmic-glink", .data = &quirk_sm8450, },
+>  	{ .compatible = "qcom,qcm6490-pmic-glink", .data = &quirk_sc8280xp, },
+>  	{ .compatible = "qcom,sc8180x-pmic-glink", .data = &quirk_sc8180x, },
+>  	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = &quirk_sc8280xp, },
+> -- 
+> 2.34.1
 
-Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
----
- drivers/cpufreq/cpufreq_governor.c | 2 +-
- include/linux/cpufreq.h            | 7 ++++---
- kernel/sched/cpufreq_schedutil.c   | 4 ++--
- 3 files changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
-index 7ec38407230f..dade45f7e57c 100644
---- a/drivers/cpufreq/cpufreq_governor.c
-+++ b/drivers/cpufreq/cpufreq_governor.c
-@@ -573,7 +573,7 @@ void cpufreq_dbs_governor_limits(struct cpufreq_policy *policy)
- 		goto out;
- 
- 	mutex_lock(&policy_dbs->update_mutex);
--	cpufreq_policy_apply_limits(policy);
-+	cpufreq_policy_apply_limits(policy, policy_dbs->requested_freq);
- 	gov_update_sample_delay(policy_dbs, 0);
- 	mutex_unlock(&policy_dbs->update_mutex);
- 
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 0465d1e6f72a..4d7341ef3645 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -657,12 +657,13 @@ static inline bool sugov_is_governor(struct cpufreq_policy *policy)
- }
- #endif
- 
--static inline void cpufreq_policy_apply_limits(struct cpufreq_policy *policy)
-+static inline void cpufreq_policy_apply_limits(struct cpufreq_policy *policy,
-+					       unsigned int target_freq)
- {
--	if (policy->max < policy->cur)
-+	if (policy->max < target_freq)
- 		__cpufreq_driver_target(policy, policy->max,
- 					CPUFREQ_RELATION_HE);
--	else if (policy->min > policy->cur)
-+	else if (policy->min > target_freq)
- 		__cpufreq_driver_target(policy, policy->min,
- 					CPUFREQ_RELATION_LE);
- }
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 0ab5f9d4bc59..8d239fe3afa8 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -848,7 +848,7 @@ static int sugov_start(struct cpufreq_policy *policy)
- 
- 	sg_policy->freq_update_delay_ns	= sg_policy->tunables->rate_limit_us * NSEC_PER_USEC;
- 	sg_policy->last_freq_update_time	= 0;
--	sg_policy->next_freq			= 0;
-+	sg_policy->next_freq			= policy->cur;
- 	sg_policy->work_in_progress		= false;
- 	sg_policy->limits_changed		= false;
- 	sg_policy->cached_raw_freq		= 0;
-@@ -895,7 +895,7 @@ static void sugov_limits(struct cpufreq_policy *policy)
- 
- 	if (!policy->fast_switch_enabled) {
- 		mutex_lock(&sg_policy->work_lock);
--		cpufreq_policy_apply_limits(policy);
-+		cpufreq_policy_apply_limits(policy, sg_policy->next_freq);
- 		mutex_unlock(&sg_policy->work_lock);
- 	}
- 
 -- 
-2.33.0
-
+heikki
 
