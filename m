@@ -1,148 +1,316 @@
-Return-Path: <linux-pm+bounces-42514-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42515-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MIcZJZmyjGlLsQAAu9opvQ
-	(envelope-from <linux-pm+bounces-42514-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 17:47:21 +0100
+	id SOo7GSO3jGnlsQAAu9opvQ
+	(envelope-from <linux-pm+bounces-42515-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 18:06:43 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1137D1264C1
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 17:47:21 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B722212669E
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 18:06:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 02E45300E145
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 16:47:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0018B301014A
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 17:06:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9669B2F6910;
-	Wed, 11 Feb 2026 16:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B090F343216;
+	Wed, 11 Feb 2026 17:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HD0OiU/X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O8ABi0LK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DE121883E;
-	Wed, 11 Feb 2026 16:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE2131197C;
+	Wed, 11 Feb 2026 17:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770828437; cv=none; b=cC90v+7DYBj5yKSTFsxsbmGT3f6YwgmI4qU+tl4gJHD0cbjwhV7u9RzhOL8MsL6gVF20aIwaxpTYtaqmLLg1u1baOeSC+MuYWAz6TyjWlwQF8c1HPGUnTBz+IiQB5y2IL9Q5yxCvVjGl/3pY5O1v7PhWMKFb1C909mA3vsObx3Q=
+	t=1770829597; cv=none; b=lD/MkQvFMjJoDKIMxc4wblxbuODg2wPrwTEK7h0LJ9dXfleUsrzdys+rbaBu6mQyboF5M46XYyEjEV7ST3oSDCnqUeiUHTbuWv76MlPADrqJ+r3a7sVDsA4o4CmXjKF6znolJ9DcMt/piXY5dlIVFrAuKT6Y2uDGM2V16faUYx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770828437; c=relaxed/simple;
-	bh=Axd6+FAx+svU01taZF9dBwsFOMn//n4UUyQCxOZzxLE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=bCZWXqyeC5LHibBmCwZ+ZnOSy9lxf/SjP21/Adyplvn4KCQx1ZC89qmDzfr1/Aya7mZzuUeIcAmiYm685Rz9tEFqZRzS6gBbztyYY6xP2OnPKU5GNuC99Phgjs64nvNL1q/6yXfitFBkY2rAl6fAIRmeYdINj39sjTl6CerBRMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HD0OiU/X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B434C4CEF7;
-	Wed, 11 Feb 2026 16:47:11 +0000 (UTC)
+	s=arc-20240116; t=1770829597; c=relaxed/simple;
+	bh=5/mcrSaCWXevZn1xgFspCk2VjAB+ct0uw/F/l3YfssY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hoB3NhF8YutSQ0VTepoLpy7tLOEOqp5nPHM2Y87qjiE/s+iYJGfLuqAEjPEcsCuSDGi2fi0LuwMYbTNCm7NRUbkeUK7PfXy3g0yfdGEbOzKLHhC7Euj2ZAdxcysjs3226Ew3yYQgXjzP6Cc3fFlWPejfxarFG3pWbBzwrGELM8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O8ABi0LK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86123C4CEF7;
+	Wed, 11 Feb 2026 17:06:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770828437;
-	bh=Axd6+FAx+svU01taZF9dBwsFOMn//n4UUyQCxOZzxLE=;
-	h=Date:Cc:To:From:Subject:References:In-Reply-To:From;
-	b=HD0OiU/X9XdxIPhqSht4yMAhClrCU0+gnVun0CaAq5Yb9HV7dl3p8e2GOuzP81AKF
-	 LjXvjZqzFdaux5+yWWAZsZ5CqvQqa6Ab+c99OfMXICjFS3xCHxzgWrR2iSI5CqvZt+
-	 F8nVhOZTY8JCg42YOpMEXhZ5+3qYBGKaAM8OJvKHaTfEw4H0N5K6GQ37DacuCQs+sN
-	 Yxah6cvl7+np9/YZHGg/IMr+itaSy5o5Ve4aiV0tSw+3DE+wpnfRoVaye1PMmcPa7K
-	 WMlcMazd4fO80Pw3fNwBlK0HRNFHEHdmBgVbHVme1p+R2iaqooeeLy9/wuBwK+9tAE
-	 S0nGTPkw+HslQ==
+	s=k20201202; t=1770829597;
+	bh=5/mcrSaCWXevZn1xgFspCk2VjAB+ct0uw/F/l3YfssY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=O8ABi0LKTGRSUMbyeePfqYveaQYS7/lOY6vUIAjF9bVpzymxlrB2p4uh5qeDycVdp
+	 zs4QlwBI53WPcEqrBRldR2pBSi0c8Wl51P8SUivtGAERRWZd/BtFNUh9DEeOQYxxRg
+	 W6nwoIA4YEloJYgXhSxafmNq2F5I3XDJLZMEJtH0ADrB1q3LPhNYpoSL+g4aMFqckk
+	 59TZyy/OHLpDf6SsHGepNFEIyU0tQEBDI92cD4+xXvgKbZetpxykOlQU0y3vZau+tW
+	 4S5SyBVonmHN8nHaa4f/iPJEijb4sLIBfxbIX96dX6idHQKF4YP+8RfQJGRC4G0IcT
+	 VlDzPQkjPyoGw==
+Date: Wed, 11 Feb 2026 18:06:33 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Shrikanth Hegde <sshegde@linux.ibm.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, Vasily Gorbik <gor@linux.ibm.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Kieran Bingham <kbingham@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Xin Zhao <jackzxcui1989@163.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Mel Gorman <mgorman@suse.de>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	linux-s390@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	linux-pm@vger.kernel.org, Uladzislau Rezki <urezki@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Heiko Carstens <hca@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [PATCH 00/15 v2] tick/sched: Refactor idle cputime accounting
+Message-ID: <aYy3GTXDwZFM3VLy@localhost.localdomain>
+References: <20260206142245.58987-1-frederic@kernel.org>
+ <f5f7cc0e-81c1-49c4-9bfa-61b111c69ae2@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 11 Feb 2026 17:47:09 +0100
-Message-Id: <DGCAAE4YEDLO.299F5M641E90B@kernel.org>
-Cc: "Boris Brezillon" <boris.brezillon@collabora.com>, "Daniel Almeida"
- <daniel.almeida@collabora.com>, "Alice Ryhl" <aliceryhl@google.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, "Viresh Kumar"
- <viresh.kumar@linaro.org>, "Maarten Lankhorst"
- <maarten.lankhorst@linux.intel.com>, "Thomas Zimmermann"
- <tzimmermann@suse.de>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
- <simona@ffwll.ch>, "Drew Fustini" <fustini@kernel.org>, "Guo Ren"
- <guoren@kernel.org>, "Fu Wei" <wefu@redhat.com>,
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, "Michael
- Turquette" <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>,
- "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>,
- "Gary Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
- <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <dri-devel@lists.freedesktop.org>, <linux-riscv@lists.infradead.org>,
- <linux-pwm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>
-To: "Maxime Ripard" <mripard@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
-References: <518D8B09-B9A1-4DB4-85CD-37A2DD3D5FB1@collabora.com>
- <DFSLCI9U4NCW.2HI2UPUI7G134@kernel.org>
- <20260119-weightless-pelican-of-anger-190db0@houat>
- <DFSN4FDCYHMW.3J3237PEBV2ZP@kernel.org>
- <20260122-majestic-masterful-jaguarundi-d0abde@houat>
- <2F3D3A40-6EF9-46FC-A769-E5A3AAF67E65@collabora.com>
- <20260204-nickel-seal-of-poetry-8fdefb@houat>
- <91A92D84-1F2E-45F3-82EC-6A97D32E2A78@collabora.com>
- <20260204-angelic-vermilion-beagle-fd1507@houat>
- <20260209105047.693f2515@fedora>
- <20260211-flawless-feathered-boar-0b87ad@houat>
-In-Reply-To: <20260211-flawless-feathered-boar-0b87ad@houat>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f5f7cc0e-81c1-49c4-9bfa-61b111c69ae2@linux.ibm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42514-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[collabora.com,google.com,kernel.org,linaro.org,linux.intel.com,suse.de,gmail.com,ffwll.ch,redhat.com,baylibre.com,garyguo.net,protonmail.com,umich.edu,vger.kernel.org,lists.freedesktop.org,lists.infradead.org];
-	RCPT_COUNT_TWELVE(0.00)[30];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-42515-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[35];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,linux.ibm.com,linaro.org,kernel.org,redhat.com,163.com,nvidia.com,gmail.com,suse.de,arm.com,google.com,ellerman.id.au,linutronix.de,siemens.com,infradead.org,goodmis.org,lists.ozlabs.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dakr@kernel.org,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[frederic@kernel.org,linux-pm@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1137D1264C1
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[localhost.localdomain:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B722212669E
 X-Rspamd-Action: no action
 
-On Wed Feb 11, 2026 at 5:37 PM CET, Maxime Ripard wrote:
-> I do think we can find a compromise though. Miguel suggested for example
-> to make the current enable/prepare/disable/unprepare function unsafe,
-> and that's totally reasonable to me.
->
-> Then we can implement the "managed" clock version on that unsafe API,
+Le Wed, Feb 11, 2026 at 07:13:45PM +0530, Shrikanth Hegde a écrit :
+> Hi Frederic,
+> Gave this series a spin on the same system as v1.
+> 
+> On 2/6/26 7:52 PM, Frederic Weisbecker wrote:
+> > Hi,
+> > 
+> > After the issue reported here:
+> > 
+> >          https://lore.kernel.org/all/20251210083135.3993562-1-jackzxcui1989@163.com/
+> > 
+> > It occurs that the idle cputime accounting is a big mess that
+> > accumulates within two concurrent statistics, each having their own
+> > shortcomings:
+> > 
+> > * The accounting for online CPUs which is based on the delta between
+> >    tick_nohz_start_idle() and tick_nohz_stop_idle().
+> > 
+> >    Pros:
+> >         - Works when the tick is off
+> > 
+> >         - Has nsecs granularity
+> > 
+> >    Cons:
+> >         - Account idle steal time but doesn't substract it from idle
+> >           cputime.
+> > 
+> >         - Assumes CONFIG_IRQ_TIME_ACCOUNTING by not accounting IRQs but
+> >           the IRQ time is simply ignored when
+> >           CONFIG_IRQ_TIME_ACCOUNTING=n
+> > 
+> >         - The windows between 1) idle task scheduling and the first call
+> >           to tick_nohz_start_idle() and 2) idle task between the last
+> >           tick_nohz_stop_idle() and the rest of the idle time are
+> >           blindspots wrt. cputime accounting (though mostly insignificant
+> >           amount)
+> > 
+> >         - Relies on private fields outside of kernel stats, with specific
+> >           accessors.
+> > 
+> > * The accounting for offline CPUs which is based on ticks and the
+> >    jiffies delta during which the tick was stopped.
+> > 
+> >    Pros:
+> >         - Handles steal time correctly
+> > 
+> >         - Handle CONFIG_IRQ_TIME_ACCOUNTING=y and
+> >           CONFIG_IRQ_TIME_ACCOUNTING=n correctly.
+> > 
+> >         - Handles the whole idle task
+> > 
+> >         - Accounts directly to kernel stats, without midlayer accumulator.
+> > 
+> >     Cons:
+> >         - Doesn't elapse when the tick is off, which doesn't make it
+> >           suitable for online CPUs.
+> > 
+> >         - Has TICK_NSEC granularity (jiffies)
+> > 
+> >         - Needs to track the dyntick-idle ticks that were accounted and
+> >           substract them from the total jiffies time spent while the tick
+> >           was stopped. This is an ugly workaround.
+> > 
+> > Having two different accounting for a single context is not the only
+> > problem: since those accountings are of different natures, it is
+> > possible to observe the global idle time going backward after a CPU goes
+> > offline, as reported by Xin Zhao.
+> > 
+> > Clean up the situation with introducing a hybrid approach that stays
+> > coherent, fixes the backward jumps and works for both online and offline
+> > CPUs:
+> > 
+> > * Tick based or native vtime accounting operate before the tick is
+> >    stopped and resumes once the tick is restarted.
+> > 
+> > * When the idle loop starts, switch to dynticks-idle accounting as is
+> >    done currently, except that the statistics accumulate directly to the
+> >    relevant kernel stat fields.
+> > 
+> > * Private dyntick cputime accounting fields are removed.
+> > 
+> > * Works on both online and offline case.
+> > 
+> > * Move most of the relevant code to the common sched/cputime subsystem
+> > 
+> > * Handle CONFIG_IRQ_TIME_ACCOUNTING=n correctly such that the
+> >    dynticks-idle accounting still elapses while on IRQs.
+> > 
+> > * Correctly substract idle steal cputime from idle time
+> > 
+> > Changes since v1:
+> > 
+> > - Fix deadlock involving double seq count lock on idle
+> > 
+> > - Fix build breakage on powerpc
+> > 
+> > - Fix build breakage on s390 (Heiko)
+> > 
+> > - Fix broken sysfs s390 idle time file (Heiko)
+> > 
+> > - Convert most ktime usage here into u64 (Peterz)
+> > 
+> > - Add missing (or too implicit) <linux/sched/clock.h> (Peterz)
+> > 
+> > - Fix whole idle time acccounting breakage due to missing TS_FLAG_ set
+> >    on idle entry (Shrikanth Hegde)
+> > 
+> > git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+> > 	timers/core-v2
+> > 
+> > HEAD: 21458b98c80a0567d48131240317b7b73ba34c3c
+> > Thanks,
+> > 	Frederic
+> 
+> idle and runtime utilization with mpstat while running stress-ng looks
+> correct now.
+> 
+> However, when running hackbench I am noticing the below data. hackbench shows
+> severe regressions.
+> 
+> base: tip/master at 9c61ebbdb587a3950072700ab74a9310afe3ad73.
+> (nit: patch 7 is already part of tip. so skipped applying it)
+> +-----------------------------------------------+-------+---------+-----------+
+> | Test                                          | base  | +series | % Diff    |
+> +-----------------------------------------------+-------+---------+-----------+
+> | HackBench Process 10 groups                   |  2.23 |  3.05   |   -36.77%  |
+> | HackBench Process 20 groups                   |  4.17 |  5.82   |   -39.57%  |
+> | HackBench Process 30 groups                   |  6.04 |  8.49   |   -40.56%  |
+> | HackBench Process 40 groups                   |  7.90 | 11.10   |   -40.51%  |
+> | HackBench thread 10                           |  2.44 |  3.36   |   -37.70%  |
+> | HackBench thread 20                           |  4.57 |  6.35   |   -38.95%  |
+> | HackBench Process(Pipe) 10                    |  1.76 |  2.29   |   -30.11%  |
+> | HackBench Process(Pipe) 20                    |  3.49 |  4.76   |   -36.39%  |
+> | HackBench Process(Pipe) 30                    |  5.21 |  7.13   |   -36.85%  |
+> | HackBench Process(Pipe) 40                    |  6.89 |  9.31   |   -35.12%  |
+> | HackBench thread(Pipe) 10                     |  1.91 |  2.50   |   -30.89%  |
+> | HackBench thread(Pipe) 20                     |  3.74 |  5.16   |   -37.97%  |
+> +-----------------------------------------------+-------+---------+-----------+
+> 
+> I have these in .config and I don't have nohz_full or isolated cpus.
+> 
+> CONFIG_TICK_ONESHOT=y
+> CONFIG_NO_HZ_COMMON=y
+> # CONFIG_HZ_PERIODIC is not set
+> # CONFIG_NO_HZ_IDLE is not set
+> CONFIG_NO_HZ_FULL=y
+> 
+> # CPU/Task time and stats accounting
+> #
+> CONFIG_VIRT_CPU_ACCOUNTING=y
+> CONFIG_VIRT_CPU_ACCOUNTING_GEN=y
+> CONFIG_IRQ_TIME_ACCOUNTING=y
+> CONFIG_HAVE_SCHED_AVG_IRQ=y
+> 
+> I did a git bisect and below is what it says.
+> 
+> git bisect start
+> # status: waiting for both good and bad commits
+> # bad: [6821315886a3b5267ea31d29dba26fd34647fbbc] sched/cputime: Handle dyntick-idle steal time correctly
+> git bisect bad 6821315886a3b5267ea31d29dba26fd34647fbbc
+> # status: waiting for good commit(s), bad commit known
+> # good: [9c61ebbdb587a3950072700ab74a9310afe3ad73] Merge branch into tip/master: 'x86/sev'
+> git bisect good 9c61ebbdb587a3950072700ab74a9310afe3ad73
+> # good: [dc8bb3c84d162f7d9aa6becf9f8392474f92655a] tick/sched: Remove nohz disabled special case in cputime fetch
+> git bisect good dc8bb3c84d162f7d9aa6becf9f8392474f92655a
+> # good: [5070a778a581cd668f5d717f85fb22b078d8c20c] tick/sched: Account tickless idle cputime only when tick is stopped
+> git bisect good 5070a778a581cd668f5d717f85fb22b078d8c20c
+> # bad: [1e0ccc25a9a74b188b239c4de716fde279adbf8e] sched/cputime: Provide get_cpu_[idle|iowait]_time_us() off-case
+> git bisect bad 1e0ccc25a9a74b188b239c4de716fde279adbf8e
+> # bad: [ee7c735b76071000d401869fc2883c451ee3fa61] tick/sched: Consolidate idle time fetching APIs
+> git bisect bad ee7c735b76071000d401869fc2883c451ee3fa61
+> # first bad commit: [ee7c735b76071000d401869fc2883c451ee3fa61] tick/sched:
+> Consolidate idle time fetching APIs
 
-What do you mean with "managed" clock? Do you mean devres managed? If so, I
-don't think there is any reason to switch to the unsafe API to be able to
-implement devres managed APIs (see also [1]).
+I see. Can you try this? (or fetch timers/core-v3 from my tree)
+Perhaps that mistake had some impact on cpufreq.
 
-[1] https://lore.kernel.org/all/DFVW9MS5YLON.CVJDBYQKJ0P6@kernel.org/
+diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+index 057fdc00dbc6..08550a6d9469 100644
+--- a/kernel/sched/cputime.c
++++ b/kernel/sched/cputime.c
+@@ -524,7 +524,7 @@ static u64 get_cpu_sleep_time_us(int cpu, enum cpu_usage_stat idx,
+ 	do_div(res, NSEC_PER_USEC);
+ 
+ 	if (last_update_time)
+-		*last_update_time = res;
++		*last_update_time = ktime_to_us(now);
+ 
+ 	return res;
+ }
 
-> and we would end up with a "raw", unsafe, version kind of equivalent to
-> the one we have today, and where callers would have to justify why their
-> usage of the API is actually safe, or the new, managed, variant that is
-> safe and can be easily used by most drivers.
->
-> And we can call these RawClk vs Clk, or Clk vs ManagedClk, or whatever.
->
-> How does that sound?
 
-What about we just wait until we have a user that really requires an unsafe=
- API
-for some reason? And if it never appears, even better. :)
+
 
