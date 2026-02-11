@@ -1,173 +1,246 @@
-Return-Path: <linux-pm+bounces-42504-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42505-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6AQwM6KZjGkhrgAAu9opvQ
-	(envelope-from <linux-pm+bounces-42504-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 16:00:50 +0100
+	id CMJeCTefjGmPrgAAu9opvQ
+	(envelope-from <linux-pm+bounces-42505-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 16:24:39 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCB831255DE
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 16:00:45 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BCF41259AD
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 16:24:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7A2053020EBE
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 15:00:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 411BF300D30F
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 15:22:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56354284671;
-	Wed, 11 Feb 2026 15:00:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A181E2DE6F1;
+	Wed, 11 Feb 2026 15:22:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Cr1D1YC4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C4DE280318;
-	Wed, 11 Feb 2026 15:00:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770822019; cv=none; b=ICTI5cVWlJUAe0nWAkOp4HAfIWX58KGHYwQOKAsjhiBZPg00QGdYUcbC6Qmo6u2g2H5gEotocyZCsR1sgOs25wAGTD+IL1ToG94Hxlwf22TGMhfrYe2Citmquh0EKnkyU24wqqSUFoICu9gtnJ8M2Puc9t9cj4oxyzisNh5ZvzI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770822019; c=relaxed/simple;
-	bh=Gi90zCxNvXM2M+qVL9FKfvEkfnqdO6DquYJ+qhVUB40=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=plQYr4Qx0r6JTJ/lDrKmLCcjNzk0vV2MVZdUTSu1mDt9V5WiYt4+xFyihpszCg1UHjeg2YVY+NLYKqAGM7Aw2HsBiUcWJ7R2s+6lgAsd3jj+Dv8DXzg3QNiWBUl80OPCCj3x6LilCjtgQts+suBraX09w0FGuBFfT6ImznqNjIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D407A339;
-	Wed, 11 Feb 2026 07:00:09 -0800 (PST)
-Received: from [10.1.36.100] (e127648.arm.com [10.1.36.100])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4ED083F63F;
-	Wed, 11 Feb 2026 07:00:15 -0800 (PST)
-Message-ID: <c3d670cd-fc54-49a8-b640-fb16f9bd0487@arm.com>
-Date: Wed, 11 Feb 2026 15:00:13 +0000
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245032DB7AD
+	for <linux-pm@vger.kernel.org>; Wed, 11 Feb 2026 15:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770823321; cv=pass; b=ehROI7Y6t0Iutw5zNhYiSus3Ocd9E0EZdbrxscIEStFcsXPUoQrjc/+gFBUuP66uO6ymSA8BUDQJ4AwGvjtGlyCdL/7VtKuxkf+m777vGTPGMh8cfcByXgR/nfo+Cw8mvF6+nDa9joGK3KRm2pCUuQ7X/XKYjscFV3WsoGFUQnA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770823321; c=relaxed/simple;
+	bh=jKgnH55cP6rygXD28uxPooGQFmgnbRJFPJU7uSCkyCM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rLSDNDcD2iukn/GBFqJY9auKWgqHEHl08cFtaMGX7bE0J+58n1/pTsk/H87hrkZDFop6TlVMHGyLTWUQCvwghYYv6XOd5KpiRBbeBqGa5pskcfWhOsg7D6A55HiUmjcR9acxnFr7wEt3am/wyeh4WYpnHoMM3fGLwFio79i3Bao=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Cr1D1YC4; arc=pass smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-59e4a04f054so2509946e87.3
+        for <linux-pm@vger.kernel.org>; Wed, 11 Feb 2026 07:21:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770823318; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Uq+f4IP3gZiL6LcFBsNwUH4uCw66RAOeHIupwo50udO1xWc1+RMJaP67ts8rdOIOhy
+         yy3b3kdfzBu09fZFViB4z6v7BCFRzKlsZtKq1hqVdyT9W5su9TrLd9RJ/IZbvwilneJQ
+         uOJSwgo3L5gLoBS0DbYxAKegKea5/oUVFaXa0m8pe/YZt1Q4AcSJ8hC/Qp/Kuwfd9zdF
+         ewZlRJjTaWIoqi6rivoAJ8N2pfHhj/SznwGG2/eUYvVxBoAxlDc7HKHnX7i7VNEBg3BO
+         VgkNRmgZspDof++luHXzHbEXsORRisDenSwcyATd8NIkzcjhvRMCtqhp/KoKBbk3fstE
+         nLyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=D8tEaQ6SYPSExfheur4wSJ9KP74RCbKGRXJfEtk6eHc=;
+        fh=Tmba6WJzq/Ty1xt6AtkCttCtlhkHdbnAA1ICy2+fpXI=;
+        b=ci+Aurr/BbOCeKpxTq7wlweBNyBcsjVO4G6l09oUog3LgrO6y6491EuA0cRZPvW9Tq
+         eZ5x2MM83QCOKy5xL9VSQyN4ybgLCmGAXDJGAwT8Zw1GOjXWtqYdwmwOrqOsftDAQNA8
+         dwbBfi4x1L9Vyg7M6tcwYF3r3RNDTTjVMAs7BauHsJrh8waaCLUF+rYi/MeGsle6LsAS
+         u2tZhhcJ6FpQN3J7op3SG0FDDyUQu5nU8TWrzoo9sY/UAKkRGHXBcFmCuL6h9gdQYtZ8
+         lZKM2oC2RN8tIi2LelZQBw3lTFKuz8q7E6rpipYYBeMycCUpm7xd2SA5KJ41m/CZYuTq
+         dqyQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1770823318; x=1771428118; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D8tEaQ6SYPSExfheur4wSJ9KP74RCbKGRXJfEtk6eHc=;
+        b=Cr1D1YC4J51agWTPL3i2QI3a3E5aaDqXAbF2wi8RF4s3N+Xzy4Ze/Ly/z6TihKlccb
+         OaOVvyXVjAoKjFETbl1jcmIb+Bt8raHH0pAla3QWpUlVcrfM5CxmY0NrWNLlZh4mRMMO
+         lAtdulLRC2DOvb1kqlEUgxpwEBkMYJh89Ds6k7Jhm2RpS9f1Wt7fag9dsXf0YpCVl35b
+         iWOPwjwiOyBjKBkQtf1rA22IZ32ni7b+lpEKMauXFbk4pQBQ6xnR0YLKwIhCvesZ00N3
+         NOc+0MakQtxK8EzudQ9QkA/OBspcxIrQNXDbXFFTfBRWMYQpSd3MM534CNdzXPDhTn+b
+         Ojcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770823318; x=1771428118;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=D8tEaQ6SYPSExfheur4wSJ9KP74RCbKGRXJfEtk6eHc=;
+        b=I5VAZNhouxiAMn+aWuunhQmxEBmQbRpMrSZ08uhsk1hK1EAPF79X8//lPy/BFxFqLe
+         BEdPgXL3GS11aEsjuAumY/g7OYgbHPYZdnHk0bBNcLlySQv0RPEMZPMV3LshF/ZSI1Be
+         eWaWnbVbF9cDJnfsMMBrctFHU9wdDfb7Mdt1ff4RSf7SyghgZW/yzmvUu9vSGB0oKtBd
+         HUCMsX7kZDmB+QLqxHjiQS7gg6U6X+2Z96e5ibekVdEtNMmOura6oTDuMGdX2ctLPDUL
+         8PgwtzRARCe0hbBWRacwXUYZXfDiwzgF0EhntigE2Rry144DK6zsBN2XQ6s5JBMTVhcl
+         Cuuw==
+X-Forwarded-Encrypted: i=1; AJvYcCW6lyXEkxuJTDgvoMYsvI+RZP5qy3iAgWirX8ZtA8Ul0uo6UCyMB/J5+wAxZUBoHXBwCBaR7j1dTQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuM4Y26G2HZklduTtcnx9yR8q9QVD2wxVNMXiilxiR9vkdk7Fg
+	FYd9KaAsX3sEE/w4rZf1d+HugN8AM+jf80pvkXdU3LFvZ9WTlFnlbE3fEEbvgWUFQevo4FYOHr4
+	M3ygvqCX1lfmUgZmEn0ujfxH+AaP3mGuR5mThNquJnw==
+X-Gm-Gg: AZuq6aIGUW7g+9L3mJeFyV19RT+AI2crhk4zo0TXEUnEsEk5bXRECwxN9JJQH14E2P7
+	dngDpIxg6oWqe/Od89DDcgwux2ai3Kv4IeJ9fdtTLHfr5WYhPF4oWY72tDJgwPucjXOGce4Awt2
+	5MR6wXfy5X8W+DKZTxjan3ZqbJTYBK+6qo1FR+85E4ai3M6+ydgSOzELnGdv0rKar7w4zBgWV6y
+	dxPcIxP30jwnSZL5xCDz6dcIUaug541UjvUFosTMK9Z+yvethUX/xuC740WGLgaUt17w3P8PL8E
+	ywBovp52
+X-Received: by 2002:a05:6512:15a9:b0:59d:e5dd:2bf8 with SMTP id
+ 2adb3069b0e04-59e45043c8bmr6830204e87.4.1770823318175; Wed, 11 Feb 2026
+ 07:21:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpuidle: ladder: Fix state index when only one idle state
- is registered
-To: Aboorva Devarajan <aboorvad@linux.ibm.com>, rafael@kernel.org,
- daniel.lezcano@linaro.org
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260211053552.739337-1-aboorvad@linux.ibm.com>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <20260211053552.739337-1-aboorvad@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260206-imx8mm_gpu_power_domain-v4-1-52fb603da502@nxp.com>
+In-Reply-To: <20260206-imx8mm_gpu_power_domain-v4-1-52fb603da502@nxp.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 11 Feb 2026 16:21:21 +0100
+X-Gm-Features: AZwV_Qh6uuJ5R6yExA5NxdnwgpEPG3g1Bp9Nwj2TBDZ8Mr0Gl4mQPg_5pQZVBWI
+Message-ID: <CAPDyKFqkXBa=9qW0rd4=Cf2gjVAVDw3No5DbnSQ4OFuze00Yfg@mail.gmail.com>
+Subject: Re: [PATCH v4] pmdomain: imx: gpcv2: Fix the imx8mm gpu hang due to
+ wrong adb400 reset
+To: Jacky Bai <ping.bai@nxp.com>
+Cc: Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Lucas Stach <l.stach@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Saravana Kannan <saravanak@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-pm@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, stable@vger.kernel.org, 
+	Philipp Zabel <p.zabel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.36 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42504-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-42505-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[linaro.org:+];
 	TO_DN_SOME(0.00)[];
-	RSPAMD_EMAILBL_FAIL(0.00)[aboorvad.linux.ibm.com:query timed out];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[christian.loehle@arm.com,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_DKIM_NA(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,arm.com:mid]
-X-Rspamd-Queue-Id: BCB831255DE
+	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,pengutronix.de,gmail.com,linuxfoundation.org,vger.kernel.org,lists.linux.dev,lists.infradead.org];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:dkim,nxp.com:email,pengutronix.de:email]
+X-Rspamd-Queue-Id: 7BCF41259AD
 X-Rspamd-Action: no action
 
-On 2/11/26 05:35, Aboorva Devarajan wrote:
-> On certain platforms (PowerNV systems without a power-mgt DT node),
-> cpuidle may register only a single idle state. In cases where that
-> single state is a polling state (state 0), the ladder governor may
-> incorrectly treat state 1 as the first usable state and pass an
-> out-of-bounds index. This can lead to a NULL enter callback being
-> invoked, ultimately resulting in a system crash.
-> 
-> [   13.342636] cpuidle-powernv : Only Snooze is available
-> [   13.351854] Faulting instruction address: 0x00000000
-> [   13.376489] NIP [0000000000000000] 0x0
-> [   13.378351] LR  [c000000001e01974] cpuidle_enter_state+0x2c4/0x668
-> 
-> Fix this by determining the first non-polling state index based on
-> the number of registered states, and by returning state 0 when only
-> one state is registered.
-> 
-> Fixes: dc2251bf98c6 ("cpuidle: Eliminate the CPUIDLE_DRIVER_STATE_START symbol")
-> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+On Fri, 6 Feb 2026 at 15:42, Jacky Bai <ping.bai@nxp.com> wrote:
+>
+> On i.MX8MM, the GPUMIX, GPU2D, and GPU3D blocks share a common reset
+> domain. Due to this hardware limitation, powering off/on GPU2D or GPU3D
+> also triggers a reset of the GPUMIX domain, including its ADB400 port.
+> However, the ADB400 interface must always be placed into power=E2=80=91do=
+wn mode
+> before being reset.
+>
+> Currently the GPUMIX and GPU2D/3D power domains rely on runtime PM to
+> handle dependency ordering. In some corner cases, the GPUMIX power off
+> sequence is skipped, leaving the ADB400 port active when GPU2D/3D reset.
+> This causes the GPUMIX ADB400 port to be reset while still active,
+> leading to unpredictable bus behavior and GPU hangs.
+>
+> To avoid this, refine the power=E2=80=91domain control logic so that the =
+GPUMIX
+> ADB400 port is explicitly powered down and powered up as part of the GPU
+> power domain on/off sequence. This ensures proper ordering and prevents
+> incorrect ADB400 reset.
+>
+> Fixes: 055467378bf1 ("driver core: Enable fw_devlink=3Drpm by default")
+> Cc: stable@vger.kernel.org
+> Suggested-by: Lucas Stach <l.stach@pengutronix.de>
+> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+> Tested-by: Philipp Zabel <p.zabel@pengutronix.de>
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 
-Agreed that the current behavior is a bug, but is there really much value
-in using a cpuidle governor with just a polling state?
-It's dead code and trivial to bail out of in cpuidle, right?
+This doesn't apply cleanly on my next branch, can you please rebase
+and re-submit a new version?
+
+Kind regards
+Uffe
 
 > ---
->  drivers/cpuidle/governors/ladder.c | 24 ++++++++++++++++++++----
->  1 file changed, 20 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/cpuidle/governors/ladder.c b/drivers/cpuidle/governors/ladder.c
-> index 6617eb494a11..294a688ed0bb 100644
-> --- a/drivers/cpuidle/governors/ladder.c
-> +++ b/drivers/cpuidle/governors/ladder.c
-> @@ -42,6 +42,21 @@ struct ladder_device {
->  
->  static DEFINE_PER_CPU(struct ladder_device, ladder_devices);
->  
-> +/**
-> + * ladder_get_first_idx - get the first non-polling state index
-> + * @drv: cpuidle driver
-> + *
-> + * Returns the index of the first non-polling state, or 0 if state 0 is not
-> + * polling or if there's only one state available.
-> + */
-> +static inline int ladder_get_first_idx(struct cpuidle_driver *drv)
-> +{
-> +	if (drv->state_count > 1 &&
-> +	    drv->states[0].flags & CPUIDLE_FLAG_POLLING)
-> +		return 1;
-> +	return 0;
-> +}
-> +
->  /**
->   * ladder_do_selection - prepares private data for a state change
->   * @dev: the CPU
-> @@ -70,16 +85,17 @@ static int ladder_select_state(struct cpuidle_driver *drv,
->  	struct ladder_device *ldev = this_cpu_ptr(&ladder_devices);
->  	struct ladder_device_state *last_state;
->  	int last_idx = dev->last_state_idx;
-> -	int first_idx = drv->states[0].flags & CPUIDLE_FLAG_POLLING ? 1 : 0;
-> +	int first_idx;
->  	s64 latency_req = cpuidle_governor_latency_req(dev->cpu);
->  	s64 last_residency;
->  
-> -	/* Special case when user has set very strict latency requirement */
-> -	if (unlikely(latency_req == 0)) {
-> +	/* Special case when there's only one state or strict latency requirement */
-> +	if (unlikely(drv->state_count <= 1 || latency_req == 0)) {
->  		ladder_do_selection(dev, ldev, last_idx, 0);
->  		return 0;
->  	}
->  
-> +	first_idx = ladder_get_first_idx(drv);
->  	last_state = &ldev->states[last_idx];
->  
->  	last_residency = dev->last_residency_ns - drv->states[last_idx].exit_latency_ns;
-> @@ -134,7 +150,7 @@ static int ladder_enable_device(struct cpuidle_driver *drv,
->  				struct cpuidle_device *dev)
->  {
->  	int i;
-> -	int first_idx = drv->states[0].flags & CPUIDLE_FLAG_POLLING ? 1 : 0;
-> +	int first_idx = ladder_get_first_idx(drv);
->  	struct ladder_device *ldev = &per_cpu(ladder_devices, dev->cpu);
->  	struct ladder_device_state *lstate;
->  	struct cpuidle_state *state;
-
+> Changes in v4:
+> - Add the Fixes tag
+> - Link to v3: https://lore.kernel.org/r/20260123-imx8mm_gpu_power_domain-=
+v3-1-3752618050c9@nxp.com
+>
+> Changes in v3:
+> - Fix the Suggested-by tag typo
+> - Link to v2: https://lore.kernel.org/r/20260120-imx8mm_gpu_power_domain-=
+v2-1-be10fd018108@nxp.com
+>
+> Changes in v2:
+> - add prefix to patch subject as suggested by Krzysztof
+> - refine the patch to move the GPUMIX ADB400 into GPU power domain
+> - Link to v1: https://lore.kernel.org/r/20260119-imx8mm_gpu_power_domain-=
+v1-0-34d81c766916@nxp.com
+> ---
+>  drivers/pmdomain/imx/gpcv2.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/pmdomain/imx/gpcv2.c b/drivers/pmdomain/imx/gpcv2.c
+> index b7cea89140ee8923f32486eab953c0e1a36bf06d..a829f8da5be70d0392276bd13=
+5fb7fc1bbf10496 100644
+> --- a/drivers/pmdomain/imx/gpcv2.c
+> +++ b/drivers/pmdomain/imx/gpcv2.c
+> @@ -165,13 +165,11 @@
+>  #define IMX8M_VPU_HSK_PWRDNREQN                        BIT(5)
+>  #define IMX8M_DISP_HSK_PWRDNREQN               BIT(4)
+>
+> -#define IMX8MM_GPUMIX_HSK_PWRDNACKN            BIT(29)
+> -#define IMX8MM_GPU_HSK_PWRDNACKN               (BIT(27) | BIT(28))
+> +#define IMX8MM_GPU_HSK_PWRDNACKN               GENMASK(29, 27)
+>  #define IMX8MM_VPUMIX_HSK_PWRDNACKN            BIT(26)
+>  #define IMX8MM_DISPMIX_HSK_PWRDNACKN           BIT(25)
+>  #define IMX8MM_HSIO_HSK_PWRDNACKN              (BIT(23) | BIT(24))
+> -#define IMX8MM_GPUMIX_HSK_PWRDNREQN            BIT(11)
+> -#define IMX8MM_GPU_HSK_PWRDNREQN               (BIT(9) | BIT(10))
+> +#define IMX8MM_GPU_HSK_PWRDNREQN               GENMASK(11, 9)
+>  #define IMX8MM_VPUMIX_HSK_PWRDNREQN            BIT(8)
+>  #define IMX8MM_DISPMIX_HSK_PWRDNREQN           BIT(7)
+>  #define IMX8MM_HSIO_HSK_PWRDNREQN              (BIT(5) | BIT(6))
+> @@ -794,8 +792,6 @@ static const struct imx_pgc_domain imx8mm_pgc_domains=
+[] =3D {
+>                 .bits  =3D {
+>                         .pxx =3D IMX8MM_GPUMIX_SW_Pxx_REQ,
+>                         .map =3D IMX8MM_GPUMIX_A53_DOMAIN,
+> -                       .hskreq =3D IMX8MM_GPUMIX_HSK_PWRDNREQN,
+> -                       .hskack =3D IMX8MM_GPUMIX_HSK_PWRDNACKN,
+>                 },
+>                 .pgc   =3D BIT(IMX8MM_PGC_GPUMIX),
+>                 .keep_clocks =3D true,
+>
+> ---
+> base-commit: 0f853ca2a798ead9d24d39cad99b0966815c582a
+> change-id: 20260113-imx8mm_gpu_power_domain-56c22ce012a1
+>
+> Best regards,
+> --
+> Jacky Bai <ping.bai@nxp.com>
+>
 
