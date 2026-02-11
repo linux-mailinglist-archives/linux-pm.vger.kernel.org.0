@@ -1,60 +1,65 @@
-Return-Path: <linux-pm+bounces-42499-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42500-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WLTtMrB2jGktpAAAu9opvQ
-	(envelope-from <linux-pm+bounces-42499-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 13:31:44 +0100
+	id 4AS5DPl2jGk6ogAAu9opvQ
+	(envelope-from <linux-pm+bounces-42500-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 13:32:57 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42B3B1243DE
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 13:31:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E5DA1244C7
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 13:32:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9673330157CC
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 12:31:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8C2383019197
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 12:31:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A603194AD7;
-	Wed, 11 Feb 2026 12:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47D11194AD7;
+	Wed, 11 Feb 2026 12:31:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PpX6NjUB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CR/9dh3/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC9A1862;
-	Wed, 11 Feb 2026 12:31:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22EA0219FC;
+	Wed, 11 Feb 2026 12:31:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770813100; cv=none; b=DmNSkQ/uldYBpzXy4DTQPR764zGrkojGjp6d8yrac9U89d1UAQ6R1l5/kerC1TG6Dfv+D7kf4ejsumqNR4oWrcu3NWD9Ju5nY6MuI52FQiIkPMwhCryyaeNS485LoNIf0F1lQ/wSLd78BldL4quhl9pkLS7TLnkEUlWDqRVf744=
+	t=1770813106; cv=none; b=c4VcQXlftNzKpUQkBf6ZWoftUCjopv9QR857EmDtfQS4IQwLLvkbxqIEPfGwxAMvZ978WFGEzDXwO1oCwHFGmBBISCfGso+2AIslpC9a5eHM23nEMSwtjLdMqt1Hk9BnJW6wmaDyIhvcPQv6LW57qORSKMiV+GyU0aUtCdy7oCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770813100; c=relaxed/simple;
-	bh=deJUF3dkn3Zq7a88bQb2bHUI8BcwpQprT+NQbmTzwB0=;
+	s=arc-20240116; t=1770813106; c=relaxed/simple;
+	bh=ENlGDnCCpVbCweAatB+Bj6R2+QrSPPC9d8pacjFF0Tg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Cdx/yzn7TBbpiHxybAobOUoiEzkGzupOaXmuxk+EbK4HKng0IAk4SBw0K4RUvs87U/JP4K1MXjxGX6kbYvvNY+b6FVL4C54jCZ85jOPmcyXYED4MEWHKKQbQGNOoTuKpvnlUVQJWVZUFaMOYyN6haBtD2Kknn/BXdk+32MXLIqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PpX6NjUB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C198BC2BCAF;
-	Wed, 11 Feb 2026 12:31:39 +0000 (UTC)
+	 MIME-Version; b=VQvcU84zRHlwaz5usyqdyXci9yamvjfY1Ud5msqLJjlxkqMJfaIodISzKW+CrRNrSjJIGe4a78xWZZ5qWrlG7GNISI4oLWSYa7BNqKJq4t48fHtKVmOrfpQZ2QcvpMNmmVIo/FLVy28B4VaN3kD19dj+YZtu5pXZuJq1cO6y7wA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CR/9dh3/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D039BC19421;
+	Wed, 11 Feb 2026 12:31:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770813100;
-	bh=deJUF3dkn3Zq7a88bQb2bHUI8BcwpQprT+NQbmTzwB0=;
+	s=k20201202; t=1770813106;
+	bh=ENlGDnCCpVbCweAatB+Bj6R2+QrSPPC9d8pacjFF0Tg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PpX6NjUBJvy3MsqOuWnpUhZaL6jRCYtM0xVp7r42p9roMdBnGe03sVhuagBoydgUY
-	 bKooW5+rd3S5Pw3uJEk9DWzH5ufekpVYmD3gMsjJwj+VGHA93zSZ3x6GMsPIxojOVJ
-	 IOvsEkc2k9RJR5jLdrp3d4+2Mc8ZzHPNSYm3tGM7AxIo1miu8ZOTfqn2ZcAi+89qB+
-	 K5D08P6rsu2gN7TBgL+ss8PKtKbXPiZRs/TUIFXfItV6UNXIwGSmVbldSdyu5saPvj
-	 KGbHyuILYwxhmr+GubMEDrFi7LiHGDm9LROVgVRujfsCCyneicRy+cY2okRlP+Omjz
-	 QCoSEDIF6jVDg==
+	b=CR/9dh3/it36j2UWHDJuoG3MWY8i3jdeA9fp1soqleCxEB4wjC3YdrQzGO8bkBUGG
+	 CrOek9imnPaRkud0Q3/61neX/RQLrLcRlowDfpYwJRjS9QZ6eQWtAlb4zRdZ7Vg5RZ
+	 i6DuQLsAMI6S1SHGVoq04uspz4QfbwlBZy3FYwJMXg3NQGN/3SEMITnadRmqQcS9QI
+	 wX1uqkkO3xOFRhsSrAKbajvF0CbvFQXHnu9rQ/uhPWUuCvSifUB4P32oVhApj7N9q3
+	 vH8cFUtsUdeefi3tbd/kHcADtB0bg95YOvaQN6sGBzR2fihdWIcdix9xmHUeyuiLWm
+	 qQ2kOcc4IFVzg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+Cc: Alexandre Courbot <acourbot@nvidia.com>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
 	Sasha Levin <sashal@kernel.org>,
 	rafael@kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-6.6] cpufreq: dt-platdev: Block the driver from probing on more QC platforms
-Date: Wed, 11 Feb 2026 07:30:23 -0500
-Message-ID: <20260211123112.1330287-13-sashal@kernel.org>
+	ojeda@kernel.org,
+	lossin@kernel.org,
+	gary@garyguo.net,
+	linux-pm@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.19-6.18] rust: cpufreq: always inline functions using build_assert with arguments
+Date: Wed, 11 Feb 2026 07:30:26 -0500
+Message-ID: <20260211123112.1330287-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260211123112.1330287-1-sashal@kernel.org>
 References: <20260211123112.1330287-1-sashal@kernel.org>
@@ -67,187 +72,195 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.19
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42499-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-42500-lists,linux-pm=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	PRECEDENCE_BULK(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,linaro.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 42B3B1243DE
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[collabora.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:email,nvidia.com:email]
+X-Rspamd-Queue-Id: 9E5DA1244C7
 X-Rspamd-Action: no action
 
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+From: Alexandre Courbot <acourbot@nvidia.com>
 
-[ Upstream commit 7b781899072c5701ef9538c365757ee9ab9c00bd ]
+[ Upstream commit 8c8b12a55614ea05953e8d695e700e6e1322a05d ]
 
-Add a number of QC platforms to the blocklist, they all use either the
-qcom-cpufreq-hw driver.
+`build_assert` relies on the compiler to optimize out its error path.
+Functions using it with its arguments must thus always be inlined,
+otherwise the error path of `build_assert` might not be optimized out,
+triggering a build error.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-## Analysis
+Now I have all the information needed for a thorough analysis. Here is
+my assessment:
 
-### 1. Commit Message Analysis
+---
 
-The commit adds three Qualcomm platform compatible strings
-(`qcom,sm6125`, `qcom,sm6150`, `qcom,sm7125`) to the cpufreq-dt-platdev
-blocklist. The message states these platforms all use the `qcom-cpufreq-
-hw` driver and should not use the generic `cpufreq-dt` driver. The same
-author (Konrad Dybcio from Qualcomm) made a nearly identical batch
-blocklist addition in commit `0aea7a2f88a5` in 2023.
+## Analysis: `rust: cpufreq: always inline functions using build_assert
+with arguments`
 
-### 2. Code Change Analysis
+### 1. What the Commit Does
 
-The change adds exactly 3 lines to the `blocklist[]` table in `cpufreq-
-dt-platdev.c`:
+This commit adds `#[inline(always)]` (plus explanatory comment) to the
+`const fn copy_name()` function in `rust/kernel/cpufreq.rs`. This
+function uses `build_assert!` to validate that a driver name string fits
+within `CPUFREQ_NAME_LEN`.
 
-```c
-{ .compatible = "qcom,sm6125", },
-{ .compatible = "qcom,sm6150", },
-{ .compatible = "qcom,sm7125", },
+### 2. The Bug Mechanism (Build Fix)
+
+The `build_assert!` macro works by calling `build_error()` on the error
+path. `build_error()` (defined in `rust/build_error.rs`) is exported
+with the symbol name `rust_build_error`. Crucially, in the Makefile:
+
+```25:26:rust/Makefile
+always-$(CONFIG_RUST) += build_error.o
+endif
 ```
 
-The logic in `cpufreq_dt_platdev_init()` (line 220-238) works as
-follows:
-1. If platform matches `allowlist` → create cpufreq-dt device (OPPv1
-   platforms)
-2. If CPU0 has `operating-points-v2` AND platform is NOT in `blocklist`
-   → create cpufreq-dt device
-3. Otherwise → don't create the device
+When `CONFIG_RUST_BUILD_ASSERT_ALLOW` is NOT set (the default),
+`build_error.o` is compiled but **not linked** into the kernel. This
+means any reference to `rust_build_error` in the final binary causes a
+**linker error** -- this is the deliberate mechanism that turns
+`build_assert!` into a build-time check.
 
-Without the blocklist entries, a platform that has `operating-points-v2`
-on CPU nodes but uses a dedicated cpufreq driver (like `qcom-cpufreq-
-hw`) will get a spurious `cpufreq-dt` platform device created, leading
-to driver conflict.
+The problem: if `copy_name()` is not inlined, the compiler generates a
+standalone function body where the `name` parameter is opaque. It cannot
+prove that `src.len() <= CPUFREQ_NAME_LEN` will always hold, so it
+preserves the `build_error()` call. This creates a reference to the
+deliberately-missing `rust_build_error` symbol, causing a **build
+failure**.
 
-### 3. Impact Analysis for Each Platform
+With `#[inline(always)]`, the function body is always expanded at the
+call site where the actual argument (`T::NAME`) is a known const value.
+The compiler can then evaluate the condition, prove it's true, and
+eliminate the error path -- allowing successful linking.
 
-**SM7125 (the most important for stable):**
-- `sm7125.dtsi` includes `sc7180.dtsi`, which defines CPU nodes with
-  `operating-points-v2` and `qcom,freq-domain = <&cpufreq_hw>`.
-- SC7180 is already blocklisted, but SM7125 boards declare `compatible =
-  "xiaomi,curtana", "qcom,sm7125"` — NOT `"qcom,sc7180"`.
-- Therefore `of_machine_device_match(blocklist)` doesn't match, but
-  `cpu0_node_has_opp_v2_prop()` returns true (inherited from sc7180).
-- Result: `cpufreq-dt` platform device is incorrectly registered.
-- SM7125 DTS was added in v6.7, so this bug affects stable 6.12+.
-- Real devices affected: Xiaomi Redmi Note 9S (Curtana), Xiaomi Redmi
-  Note 9 Pro (Joyeuse).
+### 3. Established Pattern -- Sibling Patches Were All Tagged for Stable
 
-**SM6150:**
-- Used by QCS615 platform (talos.dtsi), which has `cpufreq_hw` and
-  `operating-points-v2` on CPU nodes.
-- The cpufreq-hw OPP tables were only added in v6.19-rc1, so this only
-  affects very new kernels.
+This commit is part of a broader effort by Alexandre Courbot to fix all
+`build_assert!`-using functions that lack `#[inline(always)]`. The
+**four sibling patches** (all with identical commit messages) that fix
+this in other files **all have** `Cc: stable@vger.kernel.org` and
+`Fixes:` tags:
 
-**SM6125:**
-- CPU nodes in `sm6125.dtsi` do NOT currently have `operating-
-  points-v2`, so `cpu0_node_has_opp_v2_prop()` returns false and the bug
-  doesn't trigger. This is a proactive addition.
+- `d6ff6e870077a` - `rust: sync: refcount` -- **Cc: stable, Fixes:
+  bb38f35b35f9**
+- `09c3c9112d71c` - `rust: bits` -- **Cc: stable, Fixes: cc84ef3b88f4**
+- `5d9c4c272ba06` - `rust: irq` -- **Cc: stable, Fixes: 746680ec6696**
+- `33d19f621641d` - `rust: io` -- **Cc: stable, Fixes: ce30d94e6855**
 
-### 4. Real-World Symptom
+The cpufreq variant likely lacks the stable tag because it was sent
+through a different maintainer tree (Viresh Kumar's cpufreq tree, not
+the Rust or DRM trees), not because it's less important.
 
-The SM8650 blocklist commit (`fc5414a4774e`) documents the exact
-symptom:
+### 4. Consistency with Existing Code
 
-```
-[    0.388525] cpufreq-dt cpufreq-dt: failed register driver: -17
-[    0.388537] cpufreq-dt cpufreq-dt: probe with driver cpufreq-dt
-failed with error -17
-```
+Identical patterns in the codebase **already have** `#[inline(always)]`:
+- `i2c.rs:45` - `pub const fn new()` with `build_assert!` on string
+  length
+- `acpi.rs:38` - `pub const fn new()` with `build_assert!` on string
+  length
+- `ioctl.rs:12` - `const fn _IOC()` with multiple `build_assert!` calls
+- `bits.rs:31-32` - `bit_*` and `genmask_*` functions
+- `irq/flags.rs:100-101` - `const fn new()`
+- `io/resource.rs:230-231` - `const fn new()`
+- `num/bounded.rs:369-370` - `from_expr()`
 
-Error `-17` is `-EEXIST` — the `qcom-cpufreq-hw` driver (registered at
-`postcore_initcall`) is already in place when `cpufreq-dt` tries to
-register (at `device_initcall` level). If module loading order changes
-(e.g., one is built as a module), the wrong driver could actually handle
-CPU frequency scaling.
+The `cpufreq.rs` `copy_name` function is the exact same pattern (const
+fn taking an argument, using `build_assert!` on it) but was missing the
+annotation -- clearly an oversight.
 
-### 5. Precedent
+### 5. Affected Stable Trees
 
-This exact type of change (adding platform compatible strings to the
-blocklist) has been done **20+ times** in the file's history:
-- `032b149bcc547` - SDM670 blocklist (2024-02-09)
-- `b14ceb82c3a1b` - SM7325 blocklist (2024-08-08)
-- `fc5414a4774e1` - SM8650 blocklist (2025-04-05)
-- `0aea7a2f88a55` - Batch QC blocklist (2023-08-09) — same author
-
-All of these are structurally identical 1-3 line table additions.
+The file `rust/kernel/cpufreq.rs` was introduced in v6.16. I confirmed
+the vulnerable `copy_name` function (without `#[inline(always)]`) exists
+in:
+- **v6.18.9** (latest 6.18 stable)
+- **v6.17.13** (latest 6.17 stable)
+- **v6.16** (and its stable updates)
 
 ### 6. Risk Assessment
 
-- **Risk: Essentially zero.** Adding entries to a blocklist table cannot
-  introduce regressions. The only conceivable failure mode would be
-  blocking a platform that actually needs cpufreq-dt, but these
-  platforms are confirmed to use qcom-cpufreq-hw.
-- **Scope:** 3 lines, 1 file, pure data table change.
-- **No dependencies:** The change is completely self-contained.
+- **Change size**: 2 lines (1 comment + 1 attribute annotation)
+- **Behavioral change**: Zero runtime change. `#[inline(always)]` only
+  affects compilation.
+- **Regression risk**: Effectively zero. The function was likely already
+  being inlined by the optimizer; this just guarantees it, matching the
+  established pattern.
+- **Benefit**: Prevents potential build failures that could occur with
+  different Rust compiler versions, optimization levels, or future code
+  changes that affect inlining decisions.
 
-### 7. Stable Applicability
+### 7. Classification
 
-- SM7125 exists in stable 6.12 (DTS added in v6.7, board files in v6.9).
-  The bug is active there.
-- SM6150 is too new for current stable trees (cpufreq-hw support only in
-  v6.19).
-- SM6125 is proactive and harmless.
-- The patch applies cleanly to any stable tree that has the surrounding
-  blocklist entries (which all current stable trees do).
+This is a **build fix** -- one of the categories explicitly approved for
+stable backporting. It prevents a linker error that could occur when the
+compiler decides not to inline `copy_name`. The sibling fixes were all
+explicitly tagged for stable by the author and maintainers.
+
+### 8. Dependencies
+
+None. This is a self-contained 2-line change with no dependencies on
+other patches.
 
 ### Conclusion
 
-This is a trivial, safe blocklist addition that prevents incorrect
-driver probing on Qualcomm SM7125 devices. It follows a pattern that has
-been applied 20+ times before, fixes a real dmesg error (and potential
-wrong-driver issue) on actual consumer hardware (Xiaomi phones), and has
-zero risk of regression. The SM7125 fix is relevant for 6.12 stable.
+This is a minimal, zero-risk build fix that follows an established
+pattern across the Rust kernel codebase. Every sibling patch from the
+same author fixing the exact same class of issue was tagged `Cc:
+stable@vger.kernel.org`. The affected code exists in 6.16.y, 6.17.y, and
+6.18.y stable trees. The only reason this specific patch lacks the
+stable tag is likely that it went through a different maintainer tree.
+The fix is obviously correct, small, and prevents potential build
+failures.
 
 **YES**
 
- drivers/cpufreq/cpufreq-dt-platdev.c | 3 +++
- 1 file changed, 3 insertions(+)
+ rust/kernel/cpufreq.rs | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index b06a43143d23c..2fecab989dacc 100644
---- a/drivers/cpufreq/cpufreq-dt-platdev.c
-+++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -169,8 +169,11 @@ static const struct of_device_id blocklist[] __initconst = {
- 	{ .compatible = "qcom,sdm845", },
- 	{ .compatible = "qcom,sdx75", },
- 	{ .compatible = "qcom,sm6115", },
-+	{ .compatible = "qcom,sm6125", },
-+	{ .compatible = "qcom,sm6150", },
- 	{ .compatible = "qcom,sm6350", },
- 	{ .compatible = "qcom,sm6375", },
-+	{ .compatible = "qcom,sm7125", },
- 	{ .compatible = "qcom,sm7225", },
- 	{ .compatible = "qcom,sm7325", },
- 	{ .compatible = "qcom,sm8150", },
+diff --git a/rust/kernel/cpufreq.rs b/rust/kernel/cpufreq.rs
+index f968fbd228905..0879a79485f8e 100644
+--- a/rust/kernel/cpufreq.rs
++++ b/rust/kernel/cpufreq.rs
+@@ -1015,6 +1015,8 @@ impl<T: Driver> Registration<T> {
+         ..pin_init::zeroed()
+     };
+ 
++    // Always inline to optimize out error path of `build_assert`.
++    #[inline(always)]
+     const fn copy_name(name: &'static CStr) -> [c_char; CPUFREQ_NAME_LEN] {
+         let src = name.to_bytes_with_nul();
+         let mut dst = [0; CPUFREQ_NAME_LEN];
 -- 
 2.51.0
 
