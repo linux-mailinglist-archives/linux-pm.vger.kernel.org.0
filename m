@@ -1,268 +1,350 @@
-Return-Path: <linux-pm+bounces-42501-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42502-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CGzKKoR3jGktpAAAu9opvQ
-	(envelope-from <linux-pm+bounces-42501-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 13:35:16 +0100
+	id wMHJNo6HjGmHqgAAu9opvQ
+	(envelope-from <linux-pm+bounces-42502-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 14:43:42 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 334B6124580
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 13:35:16 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8267124E04
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 14:43:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 54562308BCD1
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 12:32:24 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id EC8173003BF5
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Feb 2026 13:43:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30275246798;
-	Wed, 11 Feb 2026 12:32:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCDD32C11D0;
+	Wed, 11 Feb 2026 13:43:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OCGLOi/8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JPVjVjWD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBA0194AD7;
-	Wed, 11 Feb 2026 12:32:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FEB9191F94;
+	Wed, 11 Feb 2026 13:43:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770813143; cv=none; b=F58eqAmTLuvtqx1sAYWNw2+jwrYwK9lpQI+N08uQS4U0kNosrrrdiSY+klPDsdVhQ0FmxdZYkJyTyrGtB3qH93Bl6xioneR95GeblhDFGnfU77JXQS7k1ov2tzoGw5HSSGNkHRyZr/cK+YPvq9F724/vWhuG07lba0edKwT0fvw=
+	t=1770817416; cv=none; b=S+tzmVn0ClHLH33aCucEWqFxTLzdYV+1885Du3z+HVO2jzIb16lh4Ize1jVtOxAjvueY/0f6jHRqGFKD3XdrNivFc+P4i0p77OaiaK3ifqEvEYmKTZRyozpmWrfqagLGupDMyMznFAhVufAGv0A9Cr7ZZHe9VDaa5acJs9W4jf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770813143; c=relaxed/simple;
-	bh=5o8P1nGD6kgmgbm0HLIZNXR6vykIjvxqUEwtAJh61tE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SFzr9/aStv+Ahf74X72sLlHPAcmZapKio6FnJD7hCKN3j4MP8DA7wLv+pYvzkh/yyT5YoU12UFwSw4IYOmJpykaJXjfbLgiwk45ZpuZ/k+q6Loa5KUhWN/9/HGc4INogdAJnL2HGkVyNcTnV5INx5VrevmbeOKCOQTXP/xOGZSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OCGLOi/8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30D55C19421;
-	Wed, 11 Feb 2026 12:32:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770813142;
-	bh=5o8P1nGD6kgmgbm0HLIZNXR6vykIjvxqUEwtAJh61tE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OCGLOi/8nPLxiXm9P4G0ftYyQ29oLDDV1m/+UUhzsmxtpSh7VB/D6HteHlvw+iDGW
-	 tNlfi2GTK5UTRqgmYMSYoyaYYIJTEtKi47Tq6hmAJVMqInb2Pgrf2AFfO/p1Ivcx0v
-	 3NFm01ipPPly9CugzVJBPMb4zIdhChf92BfpWxku5T59KCpSRzUERdIauFzoISHe+Q
-	 TYzWfzph3b1y4pxjXil1b2atrQDyQQ1GSNEWuw7PIUkz8TzYB+SwEx9Rs4SGdtdUvm
-	 A9HRarZKGLD6IZBBF1yuiL7pB9QBOcVbprMgJw/VAzaNBd3zJbVHyHVkbfuaac4Q06
-	 Vyv+Nfa607B7A==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Daniel Tang <danielzgtg.opensource@gmail.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Sasha Levin <sashal@kernel.org>,
-	rafael@kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-6.12] powercap: intel_rapl: Add PL4 support for Ice Lake
-Date: Wed, 11 Feb 2026 07:30:44 -0500
-Message-ID: <20260211123112.1330287-34-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260211123112.1330287-1-sashal@kernel.org>
-References: <20260211123112.1330287-1-sashal@kernel.org>
+	s=arc-20240116; t=1770817416; c=relaxed/simple;
+	bh=wEJz6UAJ/YDJm9FyFpIp7xlD4O0stl9h6zZkBnYZOxY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C8pG8ycnKDtg7e6rMlAmx0O+RcW5OMeFz0WyFbRiYZnaRo+B/ZT79RNUWkzMiA/U/4ZCNZl/waXQ/x8rbXNlzuN4vHzQO422AVFW5cyXgf+Os6rnFqK5zPkAnSJOAxmc9jLdFq3mT8MaqNpYA4paTntLv2PRKGWxMO5+t8lRkko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JPVjVjWD; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770817414; x=1802353414;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wEJz6UAJ/YDJm9FyFpIp7xlD4O0stl9h6zZkBnYZOxY=;
+  b=JPVjVjWD4kyRd1qzcjvV4vKwQ9g65zCyTJ38jnksskggw1+kSlwzD64S
+   gk8wjXLAjydS+YjDPXUz634XK0wGBilYlaYmTNpiZDTSNWqxgT4of9J4+
+   Hv8+v5LdV+DY9g77r00QcBAwTie2ARNM6bjyTHVh+iV0bbIdqgotOTVVl
+   xcOhxlSK+vIBZEw1w6BJk2UKcG8reyFewVs8fhRVvLCyvR0xEg96jm1Mw
+   kVf85ibOWzbNF0BrC+VdT4Cw/9tRrB+6jm9B59PQpAMDJchKjPf3LMSXo
+   rZHPVLQ6JCuDTInj7fdr6ufvpcYaY35FwhhrXGFtqy7zI/zT4+/3CdMxP
+   g==;
+X-CSE-ConnectionGUID: FTS3Gya0TeaMDlKI6fI4lg==
+X-CSE-MsgGUID: TkP0yNLXQ26VGowlbX52lQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11698"; a="72007570"
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="72007570"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 05:43:33 -0800
+X-CSE-ConnectionGUID: R3H5VLSkRWCLn8vcnT5v2A==
+X-CSE-MsgGUID: n5aq+60TScCI4U8b3U0n8A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="216757612"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5404a91d123) ([10.211.93.152])
+  by fmviesa005.fm.intel.com with ESMTP; 11 Feb 2026 05:43:26 -0800
+Received: from kbuild by e5404a91d123 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vqAV2-0000000015Z-01aG;
+	Wed, 11 Feb 2026 13:43:24 +0000
+Date: Wed, 11 Feb 2026 14:42:24 +0100
+From: kernel test robot <lkp@intel.com>
+To: Nhat Pham <nphamcs@gmail.com>, linux-mm@kvack.org
+Cc: oe-kbuild-all@lists.linux.dev, akpm@linux-foundation.org,
+	hannes@cmpxchg.org, hughd@google.com, yosry.ahmed@linux.dev,
+	mhocko@kernel.org, roman.gushchin@linux.dev, shakeel.butt@linux.dev,
+	muchun.song@linux.dev, len.brown@intel.com,
+	chengming.zhou@linux.dev, kasong@tencent.com, chrisl@kernel.org,
+	huang.ying.caritas@gmail.com, ryan.roberts@arm.com,
+	shikemeng@huaweicloud.com, viro@zeniv.linux.org.uk,
+	baohua@kernel.org, bhe@redhat.com, osalvador@suse.de,
+	lorenzo.stoakes@oracle.com, christophe.leroy@csgroup.eu,
+	pavel@kernel.org, kernel-team@meta.com,
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-pm@vger.kernel.org, peterx@redhat.com, riel@surriel.com,
+	joshua.hahnjy@gmail.com
+Subject: Re: [PATCH v3 09/20] mm: swap: allocate a virtual swap slot for each
+ swapped out page
+Message-ID: <202602111445.rP38hmwx-lkp@intel.com>
+References: <20260208215839.87595-10-nphamcs@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.19
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260208215839.87595-10-nphamcs@gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com,intel.com,kernel.org,vger.kernel.org];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42501-lists,linux-pm=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-pm@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-42502-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,kvack.org];
+	RCPT_COUNT_TWELVE(0.00)[32];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[lists.linux.dev,linux-foundation.org,cmpxchg.org,google.com,linux.dev,kernel.org,intel.com,tencent.com,gmail.com,arm.com,huaweicloud.com,zeniv.linux.org.uk,redhat.com,suse.de,oracle.com,csgroup.eu,meta.com,vger.kernel.org,surriel.com];
+	DKIM_TRACE(0.00)[intel.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,msgid.link:url]
-X-Rspamd-Queue-Id: 334B6124580
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:mid,intel.com:dkim,intel.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,01.org:url]
+X-Rspamd-Queue-Id: D8267124E04
 X-Rspamd-Action: no action
 
-From: Daniel Tang <danielzgtg.opensource@gmail.com>
+Hi Nhat,
 
-[ Upstream commit 54b3cd55a515c7c0fcfa0c1f0b10d62c11d64bcc ]
+kernel test robot noticed the following build errors:
 
-Microsoft Surface Pro 7 firmware throttles the processor upon
-boot/resume. Userspace needs to be able to restore the correct value.
+[auto build test ERROR on 05f7e89ab9731565d8a62e3b5d1ec206485eeb0b]
 
-Link: https://github.com/linux-surface/linux-surface/issues/706
-Signed-off-by: Daniel Tang <danielzgtg.opensource@gmail.com>
-Link: https://patch.msgid.link/6088605.ChMirdbgyp@daniel-desktop3
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+url:    https://github.com/intel-lab-lkp/linux/commits/Nhat-Pham/mm-swap-decouple-swap-cache-from-physical-swap-infrastructure/20260209-120606
+base:   05f7e89ab9731565d8a62e3b5d1ec206485eeb0b
+patch link:    https://lore.kernel.org/r/20260208215839.87595-10-nphamcs%40gmail.com
+patch subject: [PATCH v3 09/20] mm: swap: allocate a virtual swap slot for each swapped out page
+config: x86_64-rhel-9.4 (https://download.01.org/0day-ci/archive/20260211/202602111445.rP38hmwx-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260211/202602111445.rP38hmwx-lkp@intel.com/reproduce)
 
-LLM Generated explanations, may be completely bogus:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602111445.rP38hmwx-lkp@intel.com/
 
-I now have all the information needed for a thorough analysis.
+All errors (new ones prefixed by >>):
 
----
+   In file included from include/linux/local_lock.h:5,
+                    from include/linux/mmzone.h:24,
+                    from include/linux/gfp.h:7,
+                    from include/linux/mm.h:7,
+                    from mm/vswap.c:7:
+   mm/vswap.c: In function 'vswap_cpu_dead':
+>> include/linux/percpu-defs.h:221:45: error: initialization from pointer to non-enclosed address space
+     221 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                             ^
+   include/linux/local_lock_internal.h:105:40: note: in definition of macro '__local_lock_acquire'
+     105 |                 __l = (local_lock_t *)(lock);                           \
+         |                                        ^~~~
+   include/linux/local_lock.h:17:41: note: in expansion of macro '__local_lock'
+      17 | #define local_lock(lock)                __local_lock(this_cpu_ptr(lock))
+         |                                         ^~~~~~~~~~~~
+   include/linux/percpu-defs.h:245:9: note: in expansion of macro '__verify_pcpu_ptr'
+     245 |         __verify_pcpu_ptr(ptr);                                         \
+         |         ^~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:256:27: note: in expansion of macro 'raw_cpu_ptr'
+     256 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/local_lock.h:17:54: note: in expansion of macro 'this_cpu_ptr'
+      17 | #define local_lock(lock)                __local_lock(this_cpu_ptr(lock))
+         |                                                      ^~~~~~~~~~~~
+   mm/vswap.c:653:9: note: in expansion of macro 'local_lock'
+     653 |         local_lock(&percpu_cluster->lock);
+         |         ^~~~~~~~~~
+   include/linux/percpu-defs.h:221:45: note: expected 'const __seg_gs void *' but pointer is of type 'local_lock_t *'
+     221 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                             ^
+   include/linux/local_lock_internal.h:105:40: note: in definition of macro '__local_lock_acquire'
+     105 |                 __l = (local_lock_t *)(lock);                           \
+         |                                        ^~~~
+   include/linux/local_lock.h:17:41: note: in expansion of macro '__local_lock'
+      17 | #define local_lock(lock)                __local_lock(this_cpu_ptr(lock))
+         |                                         ^~~~~~~~~~~~
+   include/linux/percpu-defs.h:245:9: note: in expansion of macro '__verify_pcpu_ptr'
+     245 |         __verify_pcpu_ptr(ptr);                                         \
+         |         ^~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:256:27: note: in expansion of macro 'raw_cpu_ptr'
+     256 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/local_lock.h:17:54: note: in expansion of macro 'this_cpu_ptr'
+      17 | #define local_lock(lock)                __local_lock(this_cpu_ptr(lock))
+         |                                                      ^~~~~~~~~~~~
+   mm/vswap.c:653:9: note: in expansion of macro 'local_lock'
+     653 |         local_lock(&percpu_cluster->lock);
+         |         ^~~~~~~~~~
+>> include/linux/percpu-defs.h:221:45: error: initialization from pointer to non-enclosed address space
+     221 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                             ^
+   include/linux/local_lock_internal.h:107:27: note: in definition of macro '__local_lock_acquire'
+     107 |                 _Generic((lock),                                        \
+         |                           ^~~~
+   include/linux/local_lock.h:17:41: note: in expansion of macro '__local_lock'
+      17 | #define local_lock(lock)                __local_lock(this_cpu_ptr(lock))
+         |                                         ^~~~~~~~~~~~
+   include/linux/percpu-defs.h:245:9: note: in expansion of macro '__verify_pcpu_ptr'
+     245 |         __verify_pcpu_ptr(ptr);                                         \
+         |         ^~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:256:27: note: in expansion of macro 'raw_cpu_ptr'
+     256 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/local_lock.h:17:54: note: in expansion of macro 'this_cpu_ptr'
+      17 | #define local_lock(lock)                __local_lock(this_cpu_ptr(lock))
+         |                                                      ^~~~~~~~~~~~
+   mm/vswap.c:653:9: note: in expansion of macro 'local_lock'
+     653 |         local_lock(&percpu_cluster->lock);
+         |         ^~~~~~~~~~
+   include/linux/percpu-defs.h:221:45: note: expected 'const __seg_gs void *' but pointer is of type 'local_lock_t *'
+     221 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                             ^
+   include/linux/local_lock_internal.h:107:27: note: in definition of macro '__local_lock_acquire'
+     107 |                 _Generic((lock),                                        \
+         |                           ^~~~
+   include/linux/local_lock.h:17:41: note: in expansion of macro '__local_lock'
+      17 | #define local_lock(lock)                __local_lock(this_cpu_ptr(lock))
+         |                                         ^~~~~~~~~~~~
+   include/linux/percpu-defs.h:245:9: note: in expansion of macro '__verify_pcpu_ptr'
+     245 |         __verify_pcpu_ptr(ptr);                                         \
+         |         ^~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:256:27: note: in expansion of macro 'raw_cpu_ptr'
+     256 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/local_lock.h:17:54: note: in expansion of macro 'this_cpu_ptr'
+      17 | #define local_lock(lock)                __local_lock(this_cpu_ptr(lock))
+         |                                                      ^~~~~~~~~~~~
+   mm/vswap.c:653:9: note: in expansion of macro 'local_lock'
+     653 |         local_lock(&percpu_cluster->lock);
+         |         ^~~~~~~~~~
+>> include/linux/percpu-defs.h:221:45: error: initialization from pointer to non-enclosed address space
+     221 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                             ^
+   include/linux/local_lock_internal.h:176:40: note: in definition of macro '__local_lock_release'
+     176 |                 __l = (local_lock_t *)(lock);                           \
+         |                                        ^~~~
+   include/linux/local_lock.h:38:41: note: in expansion of macro '__local_unlock'
+      38 | #define local_unlock(lock)              __local_unlock(this_cpu_ptr(lock))
+         |                                         ^~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:245:9: note: in expansion of macro '__verify_pcpu_ptr'
+     245 |         __verify_pcpu_ptr(ptr);                                         \
+         |         ^~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:256:27: note: in expansion of macro 'raw_cpu_ptr'
+     256 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/local_lock.h:38:56: note: in expansion of macro 'this_cpu_ptr'
+      38 | #define local_unlock(lock)              __local_unlock(this_cpu_ptr(lock))
+         |                                                        ^~~~~~~~~~~~
+   mm/vswap.c:665:9: note: in expansion of macro 'local_unlock'
+     665 |         local_unlock(&percpu_cluster->lock);
+         |         ^~~~~~~~~~~~
+   include/linux/percpu-defs.h:221:45: note: expected 'const __seg_gs void *' but pointer is of type 'local_lock_t *'
+     221 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                             ^
+   include/linux/local_lock_internal.h:176:40: note: in definition of macro '__local_lock_release'
+     176 |                 __l = (local_lock_t *)(lock);                           \
+         |                                        ^~~~
+   include/linux/local_lock.h:38:41: note: in expansion of macro '__local_unlock'
+      38 | #define local_unlock(lock)              __local_unlock(this_cpu_ptr(lock))
+         |                                         ^~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:245:9: note: in expansion of macro '__verify_pcpu_ptr'
+     245 |         __verify_pcpu_ptr(ptr);                                         \
+         |         ^~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:256:27: note: in expansion of macro 'raw_cpu_ptr'
+     256 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/local_lock.h:38:56: note: in expansion of macro 'this_cpu_ptr'
+      38 | #define local_unlock(lock)              __local_unlock(this_cpu_ptr(lock))
+         |                                                        ^~~~~~~~~~~~
+   mm/vswap.c:665:9: note: in expansion of macro 'local_unlock'
+     665 |         local_unlock(&percpu_cluster->lock);
+         |         ^~~~~~~~~~~~
+>> include/linux/percpu-defs.h:221:45: error: initialization from pointer to non-enclosed address space
+     221 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                             ^
+   include/linux/local_lock_internal.h:179:27: note: in definition of macro '__local_lock_release'
+     179 |                 _Generic((lock),                                        \
+         |                           ^~~~
+   include/linux/local_lock.h:38:41: note: in expansion of macro '__local_unlock'
+      38 | #define local_unlock(lock)              __local_unlock(this_cpu_ptr(lock))
+         |                                         ^~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:245:9: note: in expansion of macro '__verify_pcpu_ptr'
+     245 |         __verify_pcpu_ptr(ptr);                                         \
+         |         ^~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:256:27: note: in expansion of macro 'raw_cpu_ptr'
+     256 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/local_lock.h:38:56: note: in expansion of macro 'this_cpu_ptr'
+      38 | #define local_unlock(lock)              __local_unlock(this_cpu_ptr(lock))
+         |                                                        ^~~~~~~~~~~~
+   mm/vswap.c:665:9: note: in expansion of macro 'local_unlock'
+     665 |         local_unlock(&percpu_cluster->lock);
+         |         ^~~~~~~~~~~~
+   include/linux/percpu-defs.h:221:45: note: expected 'const __seg_gs void *' but pointer is of type 'local_lock_t *'
+     221 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                             ^
+   include/linux/local_lock_internal.h:179:27: note: in definition of macro '__local_lock_release'
+     179 |                 _Generic((lock),                                        \
+         |                           ^~~~
+   include/linux/local_lock.h:38:41: note: in expansion of macro '__local_unlock'
+      38 | #define local_unlock(lock)              __local_unlock(this_cpu_ptr(lock))
+         |                                         ^~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:245:9: note: in expansion of macro '__verify_pcpu_ptr'
+     245 |         __verify_pcpu_ptr(ptr);                                         \
+         |         ^~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:256:27: note: in expansion of macro 'raw_cpu_ptr'
+     256 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/local_lock.h:38:56: note: in expansion of macro 'this_cpu_ptr'
+      38 | #define local_unlock(lock)              __local_unlock(this_cpu_ptr(lock))
+         |                                                        ^~~~~~~~~~~~
+   mm/vswap.c:665:9: note: in expansion of macro 'local_unlock'
+     665 |         local_unlock(&percpu_cluster->lock);
+         |         ^~~~~~~~~~~~
 
-## Detailed Analysis
 
-### 1. Commit Message Analysis
+vim +221 include/linux/percpu-defs.h
 
-**Subject**: `powercap: intel_rapl: Add PL4 support for Ice Lake`
+62fde54123fb64 Tejun Heo 2014-06-17  207  
+9c28278a24c01c Tejun Heo 2014-06-17  208  /*
+6fbc07bbe2b5a8 Tejun Heo 2014-06-17  209   * __verify_pcpu_ptr() verifies @ptr is a percpu pointer without evaluating
+6fbc07bbe2b5a8 Tejun Heo 2014-06-17  210   * @ptr and is invoked once before a percpu area is accessed by all
+6fbc07bbe2b5a8 Tejun Heo 2014-06-17  211   * accessors and operations.  This is performed in the generic part of
+6fbc07bbe2b5a8 Tejun Heo 2014-06-17  212   * percpu and arch overrides don't need to worry about it; however, if an
+6fbc07bbe2b5a8 Tejun Heo 2014-06-17  213   * arch wants to implement an arch-specific percpu accessor or operation,
+6fbc07bbe2b5a8 Tejun Heo 2014-06-17  214   * it may use __verify_pcpu_ptr() to verify the parameters.
+9c28278a24c01c Tejun Heo 2014-06-17  215   *
+9c28278a24c01c Tejun Heo 2014-06-17  216   * + 0 is required in order to convert the pointer type from a
+9c28278a24c01c Tejun Heo 2014-06-17  217   * potential array type to a pointer to a single item of the array.
+9c28278a24c01c Tejun Heo 2014-06-17  218   */
+eba117889ac444 Tejun Heo 2014-06-17  219  #define __verify_pcpu_ptr(ptr)						\
+eba117889ac444 Tejun Heo 2014-06-17  220  do {									\
+9c28278a24c01c Tejun Heo 2014-06-17 @221  	const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;	\
+9c28278a24c01c Tejun Heo 2014-06-17  222  	(void)__vpp_verify;						\
+9c28278a24c01c Tejun Heo 2014-06-17  223  } while (0)
+9c28278a24c01c Tejun Heo 2014-06-17  224  
 
-**Body**: States the Microsoft Surface Pro 7 firmware throttles the
-processor upon boot/resume, and userspace needs to be able to restore
-the correct value. Links to a GitHub issue.
-
-**Key observations**:
-- "Add PL4 support" sounds like a feature addition
-- But the commit message explains a **concrete hardware problem**:
-  firmware incorrectly throttles the CPU
-- Links to a well-documented issue with multiple affected users over 4+
-  years
-
-### 2. Code Change Analysis
-
-The change is a single line addition:
-
-```c
-X86_MATCH_VFM(INTEL_ICELAKE_L, NULL),
-```
-
-added to the `pl4_support_ids[]` array. This is a **CPU ID table
-addition** to an existing, mature driver feature.
-
-**How it works mechanically**: In `rapl_msr_probe()`, the driver checks
-`x86_match_cpu(pl4_support_ids)`. If the running CPU matches, the
-driver:
-1. Sets `BIT(POWER_LIMIT4)` in the package limits
-2. Registers `MSR_VR_CURRENT_CONFIG` (0x601) as the PL4 register
-3. This exposes a `peak_power` constraint in the powercap sysfs
-   interface
-
-Without ICELAKE_L in the list, there is **no kernel-provided mechanism**
-for userspace to read or write MSR 0x601 on Ice Lake systems. The only
-workaround is raw MSR access via `wrmsr`, which doesn't work with Secure
-Boot/SELinux.
-
-### 3. Real-World Impact Assessment
-
-The linked GitHub issue (#706) documents a severe problem:
-
-- **Affected hardware**: Microsoft Surface Pro 7 (Intel Ice Lake /
-  ICELAKE_L, model 0x7E)
-- **Symptoms**: CPU throttled to 400-1500 MHz after boot or resume from
-  suspend. Devices become essentially unusable.
-- **Root cause**: Surface Pro 7 firmware sets MSR_VR_CURRENT_CONFIG to a
-  very low value (e.g., 0x78 = ~15A peak current, far too low for normal
-  operation)
-- **Severity**: Multiple users over 4+ years reported this issue. Some
-  users reported getting stuck at 400 MHz even at 100% battery.
-- **Affected user base**: The linux-surface project has 7,000+ GitHub
-  stars, and Surface Pro 7 was a popular device
-
-The workaround proven by the community (manually writing MSR 0x601)
-confirms that exposing PL4 control is the correct fix.
-
-### 4. Classification: Device ID / Hardware Quirk
-
-This commit falls squarely within the **"New Device IDs"** exception
-category for stable backports:
-
-- The PL4 infrastructure (`pl4_support_ids`, `POWER_LIMIT4`,
-  `MSR_VR_CURRENT_CONFIG`, the sysfs interface) **already exists in all
-  current stable trees** (verified: v5.10, v5.15, v6.1, v6.6, v6.12)
-- Only the CPU ID (ICELAKE_L) is new
-- The driver already supports Ice Lake for all other RAPL functionality;
-  PL4 is the only missing piece
-- This is analogous to a **hardware quirk/workaround** for broken
-  firmware behavior on specific devices
-
-### 5. Scope and Risk Assessment
-
-- **Size**: 1 line added to a static const array
-- **Files touched**: 1 (`drivers/powercap/intel_rapl_msr.c`)
-- **Risk of regression**: Effectively zero. The change only affects
-  systems with INTEL_ICELAKE_L CPUs. All other systems are completely
-  unaffected. The PL4 mechanism is well-tested on Tiger Lake, Alder
-  Lake, Raptor Lake, Meteor Lake, Arrow Lake, etc.
-- **Worst case**: PL4 sysfs interface appears on Ice Lake systems but
-  nobody uses it (no harm - it's read-only until userspace writes to it)
-
-### 6. Backport Compatibility
-
-The `pl4_support_ids[]` array exists in all stable trees but uses
-different macro formats:
-
-- **v6.12**: Uses `X86_MATCH_VFM()` - **patch applies cleanly**
-- **v6.6**: Uses `X86_MATCH_INTEL_FAM6_MODEL()` - trivial adaptation
-  needed: `X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_L, NULL)`
-- **v6.1, v5.15**: Uses raw struct format - trivial adaptation: `{
-  X86_VENDOR_INTEL, 6, INTEL_FAM6_ICELAKE_L, X86_FEATURE_ANY }`
-
-All adaptations are mechanical and `INTEL_FAM6_ICELAKE_L` (0x7E) is
-defined in all these stable trees.
-
-### 7. Dependency Check
-
-No dependencies. The entire PL4 infrastructure (commit `8365a898fe53f`
-from 2020) is already in all active stable kernels. This is a standalone
-one-line addition.
-
-### 8. Summary
-
-| Criterion | Assessment |
-|-----------|-----------|
-| Fixes real bug | Yes - firmware throttling making devices unusable |
-| Obviously correct | Yes - identical pattern to 14 other CPU IDs in
-same list |
-| Small and contained | Yes - 1 line in 1 file |
-| No new features | Correct - enables existing feature for additional
-hardware |
-| Tested | Yes - author tested on Surface Pro 7, community validated MSR
-approach |
-| Risk | Extremely low |
-| User impact | High - Surface Pro 7 users affected for 4+ years |
-
-This is a textbook CPU ID addition to an existing driver, enabling a
-critical workaround for broken firmware behavior on popular hardware. It
-meets all stable kernel criteria and falls within the well-established
-exception for device ID additions and hardware quirks.
-
-**YES**
-
- drivers/powercap/intel_rapl_msr.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-index 9a7e150b3536b..a2bc0a9c1e103 100644
---- a/drivers/powercap/intel_rapl_msr.c
-+++ b/drivers/powercap/intel_rapl_msr.c
-@@ -162,6 +162,7 @@ static int rapl_msr_write_raw(int cpu, struct reg_action *ra)
- 
- /* List of verified CPUs. */
- static const struct x86_cpu_id pl4_support_ids[] = {
-+	X86_MATCH_VFM(INTEL_ICELAKE_L, NULL),
- 	X86_MATCH_VFM(INTEL_TIGERLAKE_L, NULL),
- 	X86_MATCH_VFM(INTEL_ALDERLAKE, NULL),
- 	X86_MATCH_VFM(INTEL_ALDERLAKE_L, NULL),
 -- 
-2.51.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
