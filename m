@@ -1,198 +1,194 @@
-Return-Path: <linux-pm+bounces-42552-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42553-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EL4XM9q6jWl96AAAu9opvQ
-	(envelope-from <linux-pm+bounces-42552-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 12:34:50 +0100
+	id eLQ8KG29jWnL6QAAu9opvQ
+	(envelope-from <linux-pm+bounces-42553-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 12:45:49 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F7F412D0A5
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 12:34:50 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEC3B12D1EF
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 12:45:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AEC20303C2AE
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 11:34:48 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 472123007B28
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 11:45:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 318D0314A6B;
-	Thu, 12 Feb 2026 11:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C40C34D93B;
+	Thu, 12 Feb 2026 11:45:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MHK3JeyG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XcXQ2kG0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CBD305E2E
-	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 11:34:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0FC3469FA
+	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 11:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770896087; cv=pass; b=W4rCH7HeDvBzTtgEb5Jt4raUai7IyOi7fH+yV/rRJbkJOHpDfdXhpioM/VeyiwVLGGrPtIszpjbEXDHqxi00qPJp4utwYanVkZvuadlIjhmUqXEumwzx0v0Z8+xlZCco0OX5E7Hw+tumWFT1kE2Pz85CafPmqzsohbdFMnpTjZo=
+	t=1770896744; cv=pass; b=I1AUfvoVOM0bbS6M4yrZXgIBTBNxACRUB0hvnmT01GDXwQny28+QrZJq1rg/34cIHc4z4FhMFznkQnMFjsPIcY4V6rJ+ZI19yyZGhum6KMj2xUWvuN6oCnsIwC4FtNtTOOXD4rHhuSslvtCu9m45bOZzmlAmised/u/NhDBxJZs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770896087; c=relaxed/simple;
-	bh=PyOdwR8RmEZLeNzaYMYibBHCDqDFlBy+4FJ9rtN8PaQ=;
+	s=arc-20240116; t=1770896744; c=relaxed/simple;
+	bh=aGVkLIr22yJ6JQpgXmUzvygoH7/3iICzBNHCpv+ndoI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=muf2jg9JHHuDhktiiwj238pf6Uxh+M+xA8BNyGpEfLp2kXlCFI35h0sWPmMwMlyLWpMQBk08GeCG3Qnl+jDswqJpjivjF5aglSLH5JBvtpZHrXctaSkbeBlrACLfRD4J0mnIltsGKcS6L59CuJTYnCDZRHBtpVxSpBCLQ7iZCbc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MHK3JeyG; arc=pass smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-59e4989dacdso5909957e87.1
-        for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 03:34:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770896084; cv=none;
+	 To:Cc:Content-Type; b=tyHhA3nfESAaixq6Qp0OoWrwRunoH5Z8cf5cc9opk7lqjKFu/BH4A5zlIZqlyDAXzXEFVkrOymNxAMO/xF/8HrpRH7jNXWwh11c8WsCV/kgaH9yHOt/77QMn+vGAJsGs4cyURSNHACBdbU56+E8xhwR7BytvFzPoVdzqaMzted8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XcXQ2kG0; arc=pass smtp.client-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-124b07e5fe4so602142c88.3
+        for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 03:45:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770896741; cv=none;
         d=google.com; s=arc-20240605;
-        b=FLU2rW9ucIw/u9hmh6rEHsCtkzP+g2Ll6coJZd/y/xcd5ouD+cj+RIfHHsc00C7o/l
-         9LIIPhzONPSaBEYEvwLadYpRZIbz3c92Tsmqx4XeFn0fpLMOE8foyp10Oo9xKnPEb3tP
-         0Dvn4m5U7mCdPEi5bWeb69wesuD54gjEP7N/Y8d4ICRd3F16qhb+RB40PXotc0Q7L1v6
-         exbxrXexokYYpJxRGystddExynllQnQK8Y94NsI/gFBJMUlPzPKW4vwFfLtG9mgMYEtV
-         +JOr5OEnVkKmkMLGNza6Xt1RsHCEBJ1cRzb2abE7jy2gLHuWjbUjfDyDnPz9gIMwkKyL
-         kOWw==
+        b=hIaW5li+Ll4QykgsC8sCkbC42Cm6QAcRhFBNqKkrxzvRZGavNqYxu6SbxouK8CmDZd
+         dy1d5CQLcfAZUUZk5dN9mYDdNpriy514NYk33dJF2wD7mk1ux0xm8VLGjRNgqib0Bpkn
+         ocVY3T8Oudf9O8hE094TgDTtaqbEwDD+FgNEbhvIW1oGK1eWIe9OP3mralb9A8k8v3tG
+         94zpLHzE9IKOKICqlM69Wb/XIk00eJgzhPRXqhj0Gs/4j+TIZXDEp8yC4L7xzFGzXAlh
+         7jnQgOkE16UrTZkce4AuqRQ3DMuLV9sF8y8jUQlXXBPRTHLRD1zSnEBlIz5Qem5v1H4S
+         8QTw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=Ct48jaILiyeWuqBIUxAF+6ly5hlTe20+NjTg9trJyi0=;
-        fh=hljeu5hZqVkWDifWMNN3ogCasfsyz/wDnNgCN2APpMs=;
-        b=MMLRhMvv5h58I3kZn3hHkvbS+qaHE2tcRJ8WyOhpW418reRFvTH64GImRfegxIw2rJ
-         LfdhGIjwDh3KbjGOX4zCrPA23bGqiUmW3XBVogjWsDA8VzlbZzBxhU8A4+GuD7wDIPPC
-         IdyIPsxyoWyTZ8ce9Yoju66DNkmabMF5zaYoXb3Z/STKeWtavHl3xNs7GMlyaS/31/Ok
-         zmQCY7v7ese4d/Vm7ApcZlq0WVudgmJmbK2XT4T5PuiiMBoH5RHbuVvyuz8MDbtUbTkO
-         pojSfIS0i3Ma1Tfnht7Q07pIJZkvOTVih41bENwP1wG/3Cb9VJJZxg78I4KdxKrz41QB
-         P84A==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=aGVkLIr22yJ6JQpgXmUzvygoH7/3iICzBNHCpv+ndoI=;
+        fh=qZS9jMDvwSQbwwvX2NuYHBLawqblIN2yYRw1JEJi2sg=;
+        b=P8UsMVrdrFpnW2U4U/pQXanHYZdzPcTPhB8tFwM3dL6eoo/thxMTVdXiLKzcfvUOUp
+         HRqLWrKvZG1zcoZFUwtyrvVOCSfuHhMGC4QlRw7BoPvN9RJZO2N/xk5ZEGNGKuw0JOfi
+         UfSOZ6GGlkzkhW58jrzib/QtUxDmqLyeOuq4NjrgfCC+wnaaG9pyJ1cGDDcpkwK7tATW
+         nNVJZJ8OuKQHm8SGXCBVLS4+hWmJkHfmi7ehg0p2KmbeWpk2Fqkv+J4u3Wcw05b8kGJi
+         FDVRNVUlnWIhOZmLE+e88+wWHPSdftcKdctfoa8SymCHirun9ykE6UaAdHpEkoci3szi
+         Mjcg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1770896084; x=1771500884; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ct48jaILiyeWuqBIUxAF+6ly5hlTe20+NjTg9trJyi0=;
-        b=MHK3JeyGHT9ejXB37U64B5DN96uJY5TTXSMnTYyIUrxlpCQC4fySv7PkAbRK7kV7Dq
-         DfjiKMipvsv90pCGV1WYMMmyPGoNqXn+oyHHfZ3QHNkAlnlywF1siKhuttds5+bbGaoi
-         Op/MPUQB9DWfSsrB4s2J6ljO2CqL7HWz0OduunRZFkbm4JDDHN7LekN24DgQLyLxs0SN
-         Xeg0PRI04ESilKLfMxUGStyEyUJu6He8h0k+6xItZYBYVDifsh53W7Mx2/dNS8Rh6SSw
-         dkmrym58vkr0BRd9kJio0S9Y5TIUbfgTgHvxzu0pLBFd2txLe7Y7bMXIqtMAsjA73SmE
-         EwVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770896084; x=1771500884;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1770896741; x=1771501541; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ct48jaILiyeWuqBIUxAF+6ly5hlTe20+NjTg9trJyi0=;
-        b=sbuAauAYpwxZmwye+ET5hOuJQQHS88xCEG1BZ8hzR57Wzgqun1evjHhOMqsXpVGoU/
-         mzkgI7SWw6Zh+KeqHWAzUQdyyhx6E6zsSFPKUA+kQuFHm2J4zWi5HcRjCJjpICTNgeRY
-         2Ns7JDgrlLcbbCOdMzGFRKbMPthLGu+J8qlJP06Fw+2hWTAg9J+A4Jx5wDR0/e2Pzw/M
-         UpIW56O8pUeXBCQim8W4vdnoKxfN6hZqXA1mC00yqnEQGEKBx0zypIECbpb8K/yXeeWM
-         MgpY0uWxvxGT+ZG7TqVBtM992OYzYLGcF9lj727DXbl431QeZn7/sNS1e4GpVGmURxzJ
-         rj9g==
-X-Forwarded-Encrypted: i=1; AJvYcCVDwFRxOUmM7O+pDYWFj4eTyT5bSaGft+naVzV0xd1tr1Y6tEOx7lPM4xVnmPG42RbzFiEbR696eA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAIApIIxx53le6CMFIrVPzsqwGBVGNSuRNtj0s4pW3lVMXULOu
-	fUHvfJny7kvdu0cHsGs+eV7Zu9sACy3mOuOFL0//m9RG0QJxu5exqZJjZ0/OaKUJLn+EFbnONIA
-	ZSs3APDkuxMY9QDr6DHvzDJsNlA0kKbGDOWIgPrBihg==
-X-Gm-Gg: AZuq6aKA5WH8rXA4pD0UFrnqR2dtYf0IGHmYpVqluwQzjOtiUbQCfbrbh4j96oF6tFS
-	BT4Js9i3logJHxwZRGKzNT46vham+IHhVcE7xEr4PxfqwVCvyo9Thznv+Lls9UHjZaySIIcagdp
-	RvFdPn2F2bLPkURGF1B7i9jtnZnPa+tIBvblrPn0xr/RKbSswHDrBg5Ow1hCHY7lqP63YgMZeCe
-	NaorECzctOoCrRpAwUVD5hfLHhmC5/XeGk5sCT1fe/ztg9bV0yitmyYgy62C1wvDNZXoQag8gKB
-	kPL1cxzU
-X-Received: by 2002:a05:6512:22d5:b0:59e:5d0c:e2 with SMTP id
- 2adb3069b0e04-59e6414e8bemr537633e87.30.1770896083713; Thu, 12 Feb 2026
- 03:34:43 -0800 (PST)
+        bh=aGVkLIr22yJ6JQpgXmUzvygoH7/3iICzBNHCpv+ndoI=;
+        b=XcXQ2kG0/4oTcSyjVdNx8+Np+emwCX7SxewOCDoYQO53GU1RfCDS+wbmFt8WJcVnPD
+         S3ZGBGfvxltS3SsK8zLuIuBdr4eof35tH4TYPKzywNW1wwYlx7Vt8JxnQPPpmBSL0fCT
+         ESYJoYHTkhuJTc3H07AfjOOQ5U5nLbjV4YXmG0VDO8pfsffKkNFkDJbqzk8hJ7/MwIZ4
+         n+q7nhmjxJxcAzMVxSCtMU0vMwbxejKEn9280PjektUEpiOCTK/ceXDyO1QCLCRHImqw
+         jBranbPi5vQl3qSlT5sJG+VfjFLUmejLYGAjQ9z1JqsCSabyLjcOYdMFrsvJXWmIYi7i
+         mwYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770896741; x=1771501541;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=aGVkLIr22yJ6JQpgXmUzvygoH7/3iICzBNHCpv+ndoI=;
+        b=O/hFg6V9FWAHlJMOcU9f9KJNkwdWrHvgICHuBepB2j7hFe86qLUPC9SoX0QK5KOUib
+         pednPY13zgswZMwLPCDlBPp+vsXKZl7ySWDpnDFn6aS+JmXbM3bOptX1gJr/ZL9k/KDf
+         IX24GqJRsMxvF1WYYDNRmOyWgOMxlxH64wNXLFIDM2XVoWcboC/mBo5ItaK2MO0+Nli0
+         /tdlfdzIVI1FRPQh+8IOIz9RnbwQeqkB07ZQE1CPaRuACBDV7/OdDhJbjqPpiyv9UjyQ
+         cU3o0BHLcP+aQpGl0/rYH9oVHcXmmh1Vct5T7CU+Pq9bweEYphZIV5hn4o0G9hUF238M
+         Tm/A==
+X-Forwarded-Encrypted: i=1; AJvYcCXPRlV9xV/hlbgvtoJHozrWOM1ieVTRDT1DCxlKVTu905QnPD+txoN/7y+3V9tA073TAYPC/BjkLA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzc47PCB4lhES8sjhW+CPp9qQ13L/NAT/Xr7dbCK1SpK5FL8U+k
+	0nxPgmlKXGr/eUaaiRPiq0U9XZdAT3pORigSX2D8A8LU7NJUZ7CXZ2dhoUal3N4mkKMHfp/xOW+
+	gDuGLl8B1Iz0sFf3J3YeUYbBQ+syrt/8=
+X-Gm-Gg: AZuq6aIaNcrog+/bCJKC6zdV9k+Cd/H4mGgL1PZfn6/rn//UW5gXcxb4DXAD/NPgzXm
+	BDsYcfO59EVgvWkpR/BlWkVWN4oEV/BK5tBynP3oN9CCgNLIb3tj/Nzw39MT6ziIvkRm36iwuXY
+	CC8xObzR5jf87A2EYZXvdUansFIJkvkAPsFElpiuPTkgvmDEGlFbndlcE1d5hmKHE9vy6IRMyxL
+	PvnEFQntRbSBczo5QH5A6KefDtdpfN+SPrgZMBS87J86mdEYcoN0jw15UNSbIf2cy3F1ZRkP+YZ
+	IyvpGAPbpv429KLsGtxO6nLy7E+0me9Rf87bCOs0arzS8dbcB3lkhCXqkLBSMrbZ0CUoA2i+LSb
+	ZxpYFS2st+jG7NdxaTWPesVNJ
+X-Received: by 2002:a05:7300:aca6:b0:2ae:5245:d50e with SMTP id
+ 5a478bee46e88-2baa806e40bmr507989eec.8.1770896740603; Thu, 12 Feb 2026
+ 03:45:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260210053708.17239-1-aford173@gmail.com>
-In-Reply-To: <20260210053708.17239-1-aford173@gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 12 Feb 2026 12:34:07 +0100
-X-Gm-Features: AZwV_QgO3Ow5QyeJg9yfF4esWqYhwcZC_L0GtKjw3_i47HZRQkNGD5zGxr2FDM4
-Message-ID: <CAPDyKFrsMY8q+rvrbOdppYnefX6TA1-EhF+e+pGG6k49KpeTRA@mail.gmail.com>
-Subject: Re: [PATCH 1/5] pmdomain: mediatek: Fix power domain count
-To: Adam Ford <aford173@gmail.com>, angelogioacchino.delregno@collabora.com
-Cc: linux-mediatek@lists.infradead.org, 
+References: <20260119-weightless-pelican-of-anger-190db0@houat>
+ <DFSN4FDCYHMW.3J3237PEBV2ZP@kernel.org> <20260122-majestic-masterful-jaguarundi-d0abde@houat>
+ <2F3D3A40-6EF9-46FC-A769-E5A3AAF67E65@collabora.com> <20260204-nickel-seal-of-poetry-8fdefb@houat>
+ <91A92D84-1F2E-45F3-82EC-6A97D32E2A78@collabora.com> <20260204-angelic-vermilion-beagle-fd1507@houat>
+ <20260209105047.693f2515@fedora> <20260211-flawless-feathered-boar-0b87ad@houat>
+ <DGCAAE4YEDLO.299F5M641E90B@kernel.org> <20260212-obedient-faithful-koel-d8aaf6@houat>
+In-Reply-To: <20260212-obedient-faithful-koel-d8aaf6@houat>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 12 Feb 2026 12:45:28 +0100
+X-Gm-Features: AZwV_Qgkz-xkhnIAg7JBqdav3KKnsGWyI0KDQ-RkibJi23X0-5wEzPLcw-SuW5I
+Message-ID: <CANiq72m67XpoE-M2eiJn7RF3LvxRLKZ17YExJJFOFw+H0Bw39A@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Danilo Krummrich <dakr@kernel.org>, Boris Brezillon <boris.brezillon@collabora.com>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Alice Ryhl <aliceryhl@google.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Drew Fustini <fustini@kernel.org>, 
+	Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
 	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Laura Nao <laura.nao@collabora.com>, 
-	=?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>, 
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-riscv@lists.infradead.org, 
+	linux-pwm@vger.kernel.org, linux-clk@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-42553-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,collabora.com];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	TAGGED_FROM(0.00)[bounces-42552-lists,linux-pm=lfdr.de];
-	DKIM_TRACE(0.00)[linaro.org:+];
+	RCPT_COUNT_TWELVE(0.00)[31];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-pm@vger.kernel.org];
-	FREEMAIL_CC(0.00)[lists.infradead.org,baylibre.com,kernel.org,gmail.com,collabora.com,vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[miguelojedasandonis@gmail.com,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,collabora.com,google.com,linaro.org,linux.intel.com,suse.de,gmail.com,ffwll.ch,redhat.com,baylibre.com,garyguo.net,protonmail.com,umich.edu,vger.kernel.org,lists.freedesktop.org,lists.infradead.org];
 	TAGGED_RCPT(0.00)[linux-pm];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:dkim,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 2F7F412D0A5
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: CEC3B12D1EF
 X-Rspamd-Action: no action
 
-On Tue, 10 Feb 2026 at 06:40, Adam Ford <aford173@gmail.com> wrote:
+On Thu, Feb 12, 2026 at 8:59=E2=80=AFAM Maxime Ripard <mripard@kernel.org> =
+wrote:
 >
-> The wrong value of the number of domains is wrong which leads to
-> failures when trying to enumerate nested power domains.
->
->  PM: genpd_xlate_onecell: invalid domain index 0
->  PM: genpd_xlate_onecell: invalid domain index 1
->  PM: genpd_xlate_onecell: invalid domain index 3
->  PM: genpd_xlate_onecell: invalid domain index 4
->  PM: genpd_xlate_onecell: invalid domain index 5
->  PM: genpd_xlate_onecell: invalid domain index 13
->  PM: genpd_xlate_onecell: invalid domain index 14
->
-> Attempts to use these power domains fail, so fix this by
-> using the correct value of calculated power domains.
->
-> Signed-off-by: Adam Ford <aford173@gmail.com>
+> And the "oh but driver is using the API" is kind of ironic in the
+> context of the Rust bindings which have globally been in that situation
+> for years. You can't argue it both ways.
 
-We should have a fixes tag for this too I think:
+I don't think this is true, if I understand you correctly.
 
-Fixes: 88914db077b6 ("pmdomain: mediatek: Add support for Hardware
-Voter power domains")
+To give some context, when Rust was close to land in mainline, we were
+explicitly asked to cut down what we had out-of-tree to a minimum of
+APIs, which was fair. So I did exactly that, to a point where you
+could essentially only declare a module for x86_64 and use `pr_info!`
+in it (pretty much). I even considered dropping the `pr_info!` too...
+:)
 
+Then we started upstreaming bits piece by piece, getting agreement and
+input from the relevant maintainers for each bit, and so on, which
+took years for several reasons, one of which was precisely waiting for
+actual users for APIs.
 
-> ---
->  drivers/pmdomain/mediatek/mtk-pm-domains.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> index 58648f4f689b..d2b8d0332951 100644
-> --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> @@ -1228,7 +1228,7 @@ static int scpsys_probe(struct platform_device *pdev)
->         scpsys->soc_data = soc;
->
->         scpsys->pd_data.domains = scpsys->domains;
-> -       scpsys->pd_data.num_domains = soc->num_domains;
-> +       scpsys->pd_data.num_domains = num_domains;
+[ Others were getting maintainers engaged and involved for some of the
+core APIs/subsystems, getting authors of the original code to submit
+it upstream via patches was yet another, reworking and cleaning the
+code with the new, better approaches we found meanwhile (like
+pin-init), and so on and so forth. ]
 
-Not sure this is the complete fix, as scpsys_add_one_domain() seems to
-be using the wrong value of "num_domains" too, no?
-
->
->         parent = dev->parent;
->         if (!parent) {
-> --
-> 2.51.0
->
-
-Kind regards
-Uffe
+Cheers,
+Miguel
 
