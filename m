@@ -1,171 +1,194 @@
-Return-Path: <linux-pm+bounces-42547-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42548-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AIPIHYypjWkK5wAAu9opvQ
-	(envelope-from <linux-pm+bounces-42547-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 11:21:00 +0100
+	id ENzLKZqtjWmz5wAAu9opvQ
+	(envelope-from <linux-pm+bounces-42548-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 11:38:18 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0E6512C6C9
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 11:20:58 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F9C312C93B
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 11:38:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C39553057298
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 10:16:42 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 69E87305421B
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 10:38:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18D6D2D46B4;
-	Thu, 12 Feb 2026 10:16:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D2B62F12A3;
+	Thu, 12 Feb 2026 10:38:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="f7tr/E4L"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="bAwf02t0";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="hd5sJTIs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-m1973194.qiye.163.com (mail-m1973194.qiye.163.com [220.197.31.94])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3C22EC569;
-	Thu, 12 Feb 2026 10:16:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0EE52C08CB
+	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 10:38:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770891397; cv=none; b=DAdkFJkA1UstPyNA7+4GOGuowDbetP0bqepnpW5R7XiKVpVAmmOOyDbUECj2bjf0awicmt4KoueZ2HFwtINvZ7BMbNUhzKM5bNzssSnD+HZaUUZimib4GXmw08nQB5sp3Xz3jPCVPRNBcdc03MPmoTzKh4oSPpkWoDMdPWjtVHc=
+	t=1770892685; cv=none; b=RceLkiRfiIQtcR64siBpcVd7jEeMtlUVFVVF1CSoAfFJpEqWb9Lc9SSUxRmKnzw7LiH0pFyPCXAznIvtImveO6FNdaax0SPTo43LBuYfIUN2WckeTpYhWfC8Pq+lsIGQORohBUyQqPSsxiToNvxrz151zZQmUINUrmuxzfow3Xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770891397; c=relaxed/simple;
-	bh=S0aN7p4YQN4RmlyDDCPare7qU/HGNXtlRHX0+vqggF0=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=ImYNGbfnpQb3FZo99ukb/iUEB/hvBH68IG6cujHgxtuBDU90+UUXmdSqpHezWHM0U6cqDyju+3dDAuQKe9jcJyHJwErYrewMN964DyozTHh6fdG+cnOga2U7dZxduCcu29DD+7ok+rFnrwt9rMBd9nn3ST19aWWehAZ2CRbAsRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=f7tr/E4L; arc=none smtp.client-ip=220.197.31.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 33fa08078;
-	Thu, 12 Feb 2026 18:16:21 +0800 (GMT+08:00)
-From: Shawn Lin <shawn.lin@rock-chips.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Finley Xiao <finley.xiao@rock-chips.com>,
-	Frank Zhang <rmxpzlb@gmail.com>,
-	linux-pm@vger.kernel.org,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	linux-rockchip@lists.infradead.org,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] pmdomain: rockchip: Fix rkvdec0/1 and venc0/1 for RK3588
-Date: Thu, 12 Feb 2026 18:16:04 +0800
-Message-Id: <1770891364-52147-1-git-send-email-shawn.lin@rock-chips.com>
-X-Mailer: git-send-email 2.7.4
-X-HM-Tid: 0a9c515a082f09cckunm305a02041ef9af
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGh9JSlYeTh1MSktPTE5PTRpWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=f7tr/E4LX48FgGZFCGkczgOcuFAT9VbPhusium2zsAa0QDxmpmNN4PypuvtTVlIxkv843sPIAXHGkBF6cjXvQIRWyWdChEU7u8MMHroicK43UuzL5bbmIXcXYhoo25lhqqii1mMBpJkNSrj+4iR8i3pfIcyGHv6JJdTJOPONs/E=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=GFR9wRVn0Qke2uoGUoqI/yXbVDXXXiIpaex2yOx3ucY=;
-	h=date:mime-version:subject:message-id:from;
+	s=arc-20240116; t=1770892685; c=relaxed/simple;
+	bh=dzivrYVlNO2Gn+ga2q/0v5yze+ovu0iMlHs2iGufm0g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fEOr0SG1VmlpgmOOFV8Y6zLr1OUMWSqU9SOcie211lFhUzyL3rDkF0iTOlFa0npGF1fzS5Zzrgk3kE3nKCaZ9TMy7neAKE959Ha8pRLLBLQ8UIsWJhV6f9EFgSzWgy8BVnbpJ5KU2NfM79Q903q8/u5+DUKwDLiOE5HE5XHA9+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=bAwf02t0; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=hd5sJTIs; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61C3S0mL2545139
+	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 10:38:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	7E6S3bjat2cxjUHSftIQdUL7rqVbAfh3aOYtI8Y17Ec=; b=bAwf02t0MyG/GtM/
+	2g2kanFqZz4clxYE+FH2QDr0kGthcClGfExw8901dlMkSAplHjrIXaTD0JsP4zOK
+	t7cDqPR7WhG/ZldIaKKffFt0u6xRQja+/u9AYNabAi9NJFTCOSgyMTNdwYZRWR9d
+	hGigQzCH9sC3ZZB++jyhQyaDP8GZX2QANqeFNuqBl3kAVAt3pk20y9BCfPY5uH8k
+	AD8/cnim/8IV9CYBkLIJXuOrayhc7dXaUiyBZDwUnugAT9dd6Ivn24U02TAp4CCd
+	ONdDp8XbaPPYqQETLc9ZU4sXEaxPXK/257Z22u/0ycuCfHUYP+DOj8OV6Si6fHoC
+	dZN2Ug==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c8wtpjxdv-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 10:38:01 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8cb399597fbso6012685a.3
+        for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 02:38:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1770892681; x=1771497481; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7E6S3bjat2cxjUHSftIQdUL7rqVbAfh3aOYtI8Y17Ec=;
+        b=hd5sJTIsxO49OlJSH3YkIaz/sGlcWKGGd2jYJP5uTLUXdBoCqhO5KbBBidrRgTfnxb
+         KpqPWGl9bjiO+bJcigt2jpfPj/Uhd33WA3mGsZKTtf/VVh8m7fYH3p3qi06KBg/qfxKN
+         U8N8aN+90m9HwrRXabIchB9Pj4Gn5mKPZktyw0PUMs5W224SpbsPj1GvgHxnViZaQtIF
+         w2xRusA0+QLuDcn1Ja0yGH9Fugpghb1dwqkoIB1fXW/1hnmED8MPv3oNRqBwy4vC2u6H
+         0l6CABRzXChVq0pm/1FdqNO6fN/UYUKpmiWHkEssHUUxN+OVRbBoQ9tOf8H1IJil3z8K
+         vEfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770892681; x=1771497481;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7E6S3bjat2cxjUHSftIQdUL7rqVbAfh3aOYtI8Y17Ec=;
+        b=sCP1LTkXYywqTiMvUyVAT/VRMoLzqlRW9na/T7u1/1J9vYVSjOgV8uTkXeYsg4/zqR
+         bozvqkxVtZqgUH5WzyQELdMfk+meI+Lw8V267aIZvXep/7v+g+Kjd8o6yKaxgo2lD48F
+         yw55b4ga1PKwzD7L4UFL/GYveSDwHGkuO9F2RFnFa09FX5XtyV7geU3yAwAitfjN59Ln
+         cmcyHRVJDN7Msv/0GDnPgivAVDXll7J/fAbIRSUWlY3qFOw/szFm/ZYMp0qpyW9RUpX9
+         I0ZDAZjx53NfNIOufKIVGtvNL3uqyd/T966lDMQ5JBC3mf8YTptpvDdrlPFUIobtkRxy
+         MX1g==
+X-Forwarded-Encrypted: i=1; AJvYcCXbXJBgDw7A5p9hSF1aVZqjqgKv68uML2MgbXBjJRZ4UZIie42k1MVYN/CrJ+E+n0QEH6MHhxymnQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTYrw1j3S8Nlj4WNCS1vM1pmFwvDHlu1UUaogL+f/S3msnwuud
+	uOEL/UZyhzVYRwpTy+LL2tUh3yv6Co6XoS7+u6zkFinN/KAV4SNyxinhyOVlL7Umc8H41csp+Xg
+	qmlkrdSIenj0hVfFbIjgxJi5yZI6+vXm4T6NipLXJNYaesWggdGdl5bFBz0Gaaw==
+X-Gm-Gg: AZuq6aK3sFtsx8ogmbLN0NYQEHHRqM73B/c0w1y0qCBgB+2JKG8ZP7L3f9ZUCgiIxe2
+	G6bzmLNEsB8SQFX41Gmqo/mVWX9HN//qSHiNVe9Fgjf3dZLX6KoYgpc4d0NXfUBZtjy2e1lJ63q
+	SS1yOB3S1ExwZhdMy5T1io3pj0qN7H2sNI667RjmlENVqPIS36dxhucp0jwzSnFzZGGCYaww1t5
+	iJ2bHEPaHXWpTcIizZAPLUvQ2RDJ+GfePZKrbEShHtf5RkotxsSWZaCiciQ+83a/XoKIq8fqmij
+	lGK19xBh1HBqZY8uSJgzmtFO6X2VmJfvFKOiHjgfugHht7QXrVDdDhWN43MStE+htPYy8yLeJ6T
+	s/n02IdrU8W2VoJSjB0HiLbYbs3ZyIUjzA1xkUDmuGbkTF2qiyp1QGb75UjWruiUTywGT79HvO1
+	4jCG0=
+X-Received: by 2002:a05:620a:45a2:b0:8b2:ea2d:a5 with SMTP id af79cd13be357-8cb3311bdc8mr190987185a.7.1770892681170;
+        Thu, 12 Feb 2026 02:38:01 -0800 (PST)
+X-Received: by 2002:a05:620a:45a2:b0:8b2:ea2d:a5 with SMTP id af79cd13be357-8cb3311bdc8mr190985685a.7.1770892680703;
+        Thu, 12 Feb 2026 02:38:00 -0800 (PST)
+Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-65a3cf38c5dsm1643228a12.22.2026.02.12.02.37.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Feb 2026 02:38:00 -0800 (PST)
+Message-ID: <e7d77381-4e03-47d8-8583-3724f50291dd@oss.qualcomm.com>
+Date: Thu, 12 Feb 2026 11:37:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: talos: Add clocks for QoS
+ configuration
+To: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
+        Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Tipton <mike.tipton@oss.qualcomm.com>
+References: <20260211091112.3285626-1-odelu.kukatla@oss.qualcomm.com>
+ <20260211091112.3285626-4-odelu.kukatla@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20260211091112.3285626-4-odelu.kukatla@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=baxmkePB c=1 sm=1 tr=0 ts=698dad89 cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
+ a=EUspDBNiAAAA:8 a=QD8XKuxi8VSVazGx0XQA:9 a=QEXdDO2ut3YA:10
+ a=PEH46H7Ffwr30OY-TuGO:22
+X-Proofpoint-GUID: u07Z2Bhz6qgeu-uRcS-R95oe_zGdBK0t
+X-Proofpoint-ORIG-GUID: u07Z2Bhz6qgeu-uRcS-R95oe_zGdBK0t
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEyMDA3OSBTYWx0ZWRfX1liR4F5WVTOM
+ W4rvvB4Dt50thEID+rk6P6mXtQ1wK5P2mRh9Hgj3ff8KC9Mpebqu7VIkOav2gmoidaEJuf7Fuye
+ FU5nkHfBJWs6MdvDrSnLCpdyhfZq5400Af3sSQ+JeyHDh7hw7yDmcFj5HdH+ZJwAtzlvpa3JSdD
+ mTw+7PH8jC4oPB2mVUeoASLlQJoIlYiPQwVkSnF2K4yV5RZJvC7be9JaI9pv9tQ9uJLJtOdWGeA
+ FEuntr7bT0DZr7yfG4j52XY6AL+4z0Szbad6RkeReqZD72BuvXSEXTzzDSULf689BvYvvkRZqPD
+ Mv+WMkZJ9vLllCypxWSmv6m85/f89jdI6oIKfmVc29qJAf186GXHAOYjlbq5Jg6PFWditkR46hF
+ i6e+rKOq6Lz8chTDPHAr9aI5Hng6VjYuPRrFH3ePrwV7dLGhQSTdJkrt9Rbo1Fmp7cc0eqvGW4F
+ jc/17mnZEqKv7l0/Ziw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-12_03,2026-02-11_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 impostorscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0
+ priorityscore=1501 adultscore=0 phishscore=0 suspectscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602120079
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[rock-chips.com,none];
-	R_DKIM_ALLOW(-0.20)[rock-chips.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_CC(0.00)[rock-chips.com,gmail.com,vger.kernel.org,collabora.com,sntech.de,lists.infradead.org];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42547-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42548-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,oss.qualcomm.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qualcomm.com:email,qualcomm.com:dkim];
 	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[shawn.lin@rock-chips.com,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[rock-chips.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: F0E6512C6C9
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 3F9C312C93B
 X-Rspamd-Action: no action
 
-From the RK3588 TRM Table 1-1 RK3588 Voltage Domain and Power Domain Summary,
-PD_RKVDEC0/1 and PD_VENC0/1 rely on VD_VCODEC which require extra voltages to
-be applied, otherwise it breaks RK3588-evb1-v10 board after vdec support landed[1].
-The panic looks like below:
+On 2/11/26 10:11 AM, Odelu Kukatla wrote:
+> Add clocks which need to be enabled for configuring QoS on
+> talos SoC.
+> 
+> Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+> ---
 
-  rockchip-pm-domain fd8d8000.power-management:power-controller: failed to set domain 'rkvdec0' on, val=0
-  rockchip-pm-domain fd8d8000.power-management:power-controller: failed to set domain 'rkvdec1' on, val=0
-  ...
-  Hardware name: Rockchip RK3588S EVB1 V10 Board (DT)
-  Workqueue: pm genpd_power_off_work_fn
-  Call trace:
-  show_stack+0x18/0x24 (C)
-  dump_stack_lvl+0x40/0x84
-  dump_stack+0x18/0x24
-  vpanic+0x1ec/0x4fc
-  vpanic+0x0/0x4fc
-  check_panic_on_warn+0x0/0x94
-  arm64_serror_panic+0x6c/0x78
-  do_serror+0xc4/0xcc
-  el1h_64_error_handler+0x3c/0x5c
-  el1h_64_error+0x6c/0x70
-  regmap_mmio_read32le+0x18/0x24 (P)
-  _regmap_bus_reg_read+0xfc/0x130
-  _regmap_read+0x188/0x1ac
-  regmap_read+0x54/0x78
-  rockchip_pd_power+0xcc/0x5f0
-  rockchip_pd_power_off+0x1c/0x4c
-  _genpd_power_off+0x84/0x120
-  genpd_power_off+0x1b4/0x260
-  genpd_power_off_work_fn+0x38/0x58
-  process_scheduled_works+0x194/0x2c4
-  worker_thread+0x2ac/0x3d8
-  kthread+0x104/0x124
-  ret_from_fork+0x10/0x20
-  SMP: stopping secondary CPUs
-  Kernel Offset: disabled
-  CPU features: 0x3000000,000e0005,40230521,0400720b
-  Memory Limit: none
-  ---[ end Kernel panic - not syncing: Asynchronous SError Interrupt ]---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-[1] https://lore.kernel.org/linux-rockchip/20251020212009.8852-2-detlev.casanova@collabora.com/
-Fixes: db6df2e3fc16 ("pmdomain: rockchip: add regulator support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
-
----
-
- drivers/pmdomain/rockchip/pm-domains.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-index 997e93c..040aa5f 100644
---- a/drivers/pmdomain/rockchip/pm-domains.c
-+++ b/drivers/pmdomain/rockchip/pm-domains.c
-@@ -1315,10 +1315,10 @@ static const struct rockchip_domain_info rk3588_pm_domains[] = {
- 	[RK3588_PD_NPUTOP]	= DOMAIN_RK3588("nputop",  0x0, BIT(3),  0,       0x0, BIT(11), BIT(2),  0x0, BIT(1),  BIT(1),  false, false),
- 	[RK3588_PD_NPU1]	= DOMAIN_RK3588("npu1",    0x0, BIT(4),  0,       0x0, BIT(12), BIT(3),  0x0, BIT(2),  BIT(2),  false, false),
- 	[RK3588_PD_NPU2]	= DOMAIN_RK3588("npu2",    0x0, BIT(5),  0,       0x0, BIT(13), BIT(4),  0x0, BIT(3),  BIT(3),  false, false),
--	[RK3588_PD_VENC0]	= DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       0x0, BIT(14), BIT(5),  0x0, BIT(4),  BIT(4),  false, false),
--	[RK3588_PD_VENC1]	= DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       0x0, BIT(15), BIT(6),  0x0, BIT(5),  BIT(5),  false, false),
--	[RK3588_PD_RKVDEC0]	= DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,       0x0, BIT(16), BIT(7),  0x0, BIT(6),  BIT(6),  false, false),
--	[RK3588_PD_RKVDEC1]	= DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,       0x0, BIT(17), BIT(8),  0x0, BIT(7),  BIT(7),  false, false),
-+	[RK3588_PD_VENC0]	= DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       0x0, BIT(14), BIT(5),  0x0, BIT(4),  BIT(4),  false, true),
-+	[RK3588_PD_VENC1]	= DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       0x0, BIT(15), BIT(6),  0x0, BIT(5),  BIT(5),  false, true),
-+	[RK3588_PD_RKVDEC0]	= DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,       0x0, BIT(16), BIT(7),  0x0, BIT(6),  BIT(6),  false, true),
-+	[RK3588_PD_RKVDEC1]	= DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,       0x0, BIT(17), BIT(8),  0x0, BIT(7),  BIT(7),  false, true),
- 	[RK3588_PD_VDPU]	= DOMAIN_RK3588("vdpu",    0x0, BIT(10), 0,       0x0, BIT(18), BIT(9),  0x0, BIT(8),  BIT(8),  false, false),
- 	[RK3588_PD_RGA30]	= DOMAIN_RK3588("rga30",   0x0, BIT(11), 0,       0x0, BIT(19), BIT(10), 0x0, 0,       0,       false, false),
- 	[RK3588_PD_AV1]		= DOMAIN_RK3588("av1",     0x0, BIT(12), 0,       0x0, BIT(20), BIT(11), 0x0, BIT(9),  BIT(9),  false, false),
--- 
-2.7.4
-
+Konrad
 
