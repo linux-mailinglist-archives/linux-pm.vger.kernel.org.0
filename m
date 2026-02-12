@@ -1,242 +1,198 @@
-Return-Path: <linux-pm+bounces-42551-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42552-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yNG3JlK2jWl96AAAu9opvQ
-	(envelope-from <linux-pm+bounces-42551-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 12:15:30 +0100
+	id EL4XM9q6jWl96AAAu9opvQ
+	(envelope-from <linux-pm+bounces-42552-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 12:34:50 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AB0D12CE5E
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 12:15:29 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F7F412D0A5
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 12:34:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id ADF94305DA7F
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 11:15:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AEC20303C2AE
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 11:34:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E2172E3B1C;
-	Thu, 12 Feb 2026 11:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 318D0314A6B;
+	Thu, 12 Feb 2026 11:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ps0HFXzU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MHK3JeyG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B29B17B50F;
-	Thu, 12 Feb 2026 11:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770894927; cv=none; b=hJsip6bDXalOpLPq06UhDnPdqnNSDDG44YVESFZdqQ8hUBXuQFSFmlT0EqSe8FDnvIshPyR/XFR1BcaQEgS7JB+ffrSNTUqCtJVvsSGxCHRElR2UHlYEGdFRFbn+jA1rIJ80Nu31MTa3xUfjNWd2vxHVgXDmtdw5JtMTAF/S9J4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770894927; c=relaxed/simple;
-	bh=PkNrrH4GKmmT+PDGVmEmRURG14F9GTcvVWwsKASKDEs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VXodBvT9nFlF4QgUlynbc4KCmYz6bf6VrO79b4b3hhfkJCR7rob88YMz5V/F5ZNVbo1sCo+dRBV54YZWUvZJsew3VNCW8umLUvEQFpFHPPu6ZoDiZoVEKNo9ckQC8E+ka+fhNfqvU6PbiPQ9xvyk8I/j5ts6igcbFxUtcx+rvwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ps0HFXzU; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1770894918;
-	bh=PkNrrH4GKmmT+PDGVmEmRURG14F9GTcvVWwsKASKDEs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ps0HFXzUSqRov8F/80F/npFPUEy86MI3CeLp5Bu0UBisLMYSj7UUMDMsYU/gIpH2+
-	 eSNhecsxai16QHW33cSZL9DEU2bgG25iYJQpR4LW2GwBAD7StBr5eBgS2VgagX07Eq
-	 Pa4pn8sa3UbOMYYU/y5aoc4YlY3ga/KVTjkdYnLD0LSFlaaPfB0o5zXVnArft0hnUZ
-	 Uiu6eVaoq4dqTc28hkgQe4QCN4z3Og6otA0m5X3OfFwwHnYW+7cFyuJdHvqOyAytPe
-	 3HrPVOyBRYA7ZTphoCmQe60+5MctsshmmOK7qOuY5hQrVfAbdspQjYghYK4kh6I6ra
-	 l/pB+lIPMBYaQ==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id CCA2D17E114C;
-	Thu, 12 Feb 2026 12:15:17 +0100 (CET)
-Message-ID: <8fc93d93-7d99-4d38-9fa8-92951a0acdcf@collabora.com>
-Date: Thu, 12 Feb 2026 12:15:17 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CBD305E2E
+	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 11:34:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770896087; cv=pass; b=W4rCH7HeDvBzTtgEb5Jt4raUai7IyOi7fH+yV/rRJbkJOHpDfdXhpioM/VeyiwVLGGrPtIszpjbEXDHqxi00qPJp4utwYanVkZvuadlIjhmUqXEumwzx0v0Z8+xlZCco0OX5E7Hw+tumWFT1kE2Pz85CafPmqzsohbdFMnpTjZo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770896087; c=relaxed/simple;
+	bh=PyOdwR8RmEZLeNzaYMYibBHCDqDFlBy+4FJ9rtN8PaQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=muf2jg9JHHuDhktiiwj238pf6Uxh+M+xA8BNyGpEfLp2kXlCFI35h0sWPmMwMlyLWpMQBk08GeCG3Qnl+jDswqJpjivjF5aglSLH5JBvtpZHrXctaSkbeBlrACLfRD4J0mnIltsGKcS6L59CuJTYnCDZRHBtpVxSpBCLQ7iZCbc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MHK3JeyG; arc=pass smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-59e4989dacdso5909957e87.1
+        for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 03:34:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770896084; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FLU2rW9ucIw/u9hmh6rEHsCtkzP+g2Ll6coJZd/y/xcd5ouD+cj+RIfHHsc00C7o/l
+         9LIIPhzONPSaBEYEvwLadYpRZIbz3c92Tsmqx4XeFn0fpLMOE8foyp10Oo9xKnPEb3tP
+         0Dvn4m5U7mCdPEi5bWeb69wesuD54gjEP7N/Y8d4ICRd3F16qhb+RB40PXotc0Q7L1v6
+         exbxrXexokYYpJxRGystddExynllQnQK8Y94NsI/gFBJMUlPzPKW4vwFfLtG9mgMYEtV
+         +JOr5OEnVkKmkMLGNza6Xt1RsHCEBJ1cRzb2abE7jy2gLHuWjbUjfDyDnPz9gIMwkKyL
+         kOWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=Ct48jaILiyeWuqBIUxAF+6ly5hlTe20+NjTg9trJyi0=;
+        fh=hljeu5hZqVkWDifWMNN3ogCasfsyz/wDnNgCN2APpMs=;
+        b=MMLRhMvv5h58I3kZn3hHkvbS+qaHE2tcRJ8WyOhpW418reRFvTH64GImRfegxIw2rJ
+         LfdhGIjwDh3KbjGOX4zCrPA23bGqiUmW3XBVogjWsDA8VzlbZzBxhU8A4+GuD7wDIPPC
+         IdyIPsxyoWyTZ8ce9Yoju66DNkmabMF5zaYoXb3Z/STKeWtavHl3xNs7GMlyaS/31/Ok
+         zmQCY7v7ese4d/Vm7ApcZlq0WVudgmJmbK2XT4T5PuiiMBoH5RHbuVvyuz8MDbtUbTkO
+         pojSfIS0i3Ma1Tfnht7Q07pIJZkvOTVih41bENwP1wG/3Cb9VJJZxg78I4KdxKrz41QB
+         P84A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1770896084; x=1771500884; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ct48jaILiyeWuqBIUxAF+6ly5hlTe20+NjTg9trJyi0=;
+        b=MHK3JeyGHT9ejXB37U64B5DN96uJY5TTXSMnTYyIUrxlpCQC4fySv7PkAbRK7kV7Dq
+         DfjiKMipvsv90pCGV1WYMMmyPGoNqXn+oyHHfZ3QHNkAlnlywF1siKhuttds5+bbGaoi
+         Op/MPUQB9DWfSsrB4s2J6ljO2CqL7HWz0OduunRZFkbm4JDDHN7LekN24DgQLyLxs0SN
+         Xeg0PRI04ESilKLfMxUGStyEyUJu6He8h0k+6xItZYBYVDifsh53W7Mx2/dNS8Rh6SSw
+         dkmrym58vkr0BRd9kJio0S9Y5TIUbfgTgHvxzu0pLBFd2txLe7Y7bMXIqtMAsjA73SmE
+         EwVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770896084; x=1771500884;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ct48jaILiyeWuqBIUxAF+6ly5hlTe20+NjTg9trJyi0=;
+        b=sbuAauAYpwxZmwye+ET5hOuJQQHS88xCEG1BZ8hzR57Wzgqun1evjHhOMqsXpVGoU/
+         mzkgI7SWw6Zh+KeqHWAzUQdyyhx6E6zsSFPKUA+kQuFHm2J4zWi5HcRjCJjpICTNgeRY
+         2Ns7JDgrlLcbbCOdMzGFRKbMPthLGu+J8qlJP06Fw+2hWTAg9J+A4Jx5wDR0/e2Pzw/M
+         UpIW56O8pUeXBCQim8W4vdnoKxfN6hZqXA1mC00yqnEQGEKBx0zypIECbpb8K/yXeeWM
+         MgpY0uWxvxGT+ZG7TqVBtM992OYzYLGcF9lj727DXbl431QeZn7/sNS1e4GpVGmURxzJ
+         rj9g==
+X-Forwarded-Encrypted: i=1; AJvYcCVDwFRxOUmM7O+pDYWFj4eTyT5bSaGft+naVzV0xd1tr1Y6tEOx7lPM4xVnmPG42RbzFiEbR696eA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAIApIIxx53le6CMFIrVPzsqwGBVGNSuRNtj0s4pW3lVMXULOu
+	fUHvfJny7kvdu0cHsGs+eV7Zu9sACy3mOuOFL0//m9RG0QJxu5exqZJjZ0/OaKUJLn+EFbnONIA
+	ZSs3APDkuxMY9QDr6DHvzDJsNlA0kKbGDOWIgPrBihg==
+X-Gm-Gg: AZuq6aKA5WH8rXA4pD0UFrnqR2dtYf0IGHmYpVqluwQzjOtiUbQCfbrbh4j96oF6tFS
+	BT4Js9i3logJHxwZRGKzNT46vham+IHhVcE7xEr4PxfqwVCvyo9Thznv+Lls9UHjZaySIIcagdp
+	RvFdPn2F2bLPkURGF1B7i9jtnZnPa+tIBvblrPn0xr/RKbSswHDrBg5Ow1hCHY7lqP63YgMZeCe
+	NaorECzctOoCrRpAwUVD5hfLHhmC5/XeGk5sCT1fe/ztg9bV0yitmyYgy62C1wvDNZXoQag8gKB
+	kPL1cxzU
+X-Received: by 2002:a05:6512:22d5:b0:59e:5d0c:e2 with SMTP id
+ 2adb3069b0e04-59e6414e8bemr537633e87.30.1770896083713; Thu, 12 Feb 2026
+ 03:34:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 04/10] pmdomain: mediatek: Refactor bus protection
- regmaps retrieval
-To: =?UTF-8?B?TWFjcGF1bCBMaW4gKOael+aZuuaWjCk=?= <Macpaul.Lin@mediatek.com>,
- Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
-Cc: =?UTF-8?B?UGFibG8gU3VuICjlravmr5Pnv5Qp?= <pablo.sun@mediatek.com>,
- "lihongbo22@huawei.com" <lihongbo22@huawei.com>,
- "robh@kernel.org" <robh@kernel.org>,
- "kernel@collabora.com" <kernel@collabora.com>,
- "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
- =?UTF-8?B?TW91ZHkgSG8gKOS9leWul+WOnyk=?= <Moudy.Ho@mediatek.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- =?UTF-8?B?QmVhciBXYW5nICjokKnljp/mg5/lvrcp?= <bear.wang@mediatek.com>,
- "mbrugger@suse.com" <mbrugger@suse.com>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
- Nicolas Prado <nfraprado@collabora.com>,
- "wenst@chromium.org" <wenst@chromium.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "y.oudjana@protonmail.com" <y.oudjana@protonmail.com>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
- =?UTF-8?B?TWFuZHlKSCBMaXUgKOWKieS6uuWDlik=?= <MandyJH.Liu@mediatek.com>,
- "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
- Sjoerd Simons <sjoerd@collabora.com>
-References: <20250805074746.29457-1-angelogioacchino.delregno@collabora.com>
- <20250805074746.29457-5-angelogioacchino.delregno@collabora.com>
- <a2eae87efe46ebf397bcec3580eb9bc152b80846.camel@collabora.com>
- <be3a2d50-044b-429a-820c-5260c6ce730c@collabora.com>
- <fd071501b66fb332439617f2b270c837043b0862.camel@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <fd071501b66fb332439617f2b270c837043b0862.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20260210053708.17239-1-aford173@gmail.com>
+In-Reply-To: <20260210053708.17239-1-aford173@gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 12 Feb 2026 12:34:07 +0100
+X-Gm-Features: AZwV_QgO3Ow5QyeJg9yfF4esWqYhwcZC_L0GtKjw3_i47HZRQkNGD5zGxr2FDM4
+Message-ID: <CAPDyKFrsMY8q+rvrbOdppYnefX6TA1-EhF+e+pGG6k49KpeTRA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] pmdomain: mediatek: Fix power domain count
+To: Adam Ford <aford173@gmail.com>, angelogioacchino.delregno@collabora.com
+Cc: linux-mediatek@lists.infradead.org, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Laura Nao <laura.nao@collabora.com>, 
+	=?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
-	R_DKIM_ALLOW(-0.20)[collabora.com:s=mail];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42551-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[mediatek.com,huawei.com,kernel.org,collabora.com,linaro.org,vger.kernel.org,suse.com,chromium.org,lists.infradead.org,protonmail.com,gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[23];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,collabora.com];
+	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	TAGGED_FROM(0.00)[bounces-42552-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[linaro.org:+];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[angelogioacchino.delregno@collabora.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[collabora.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,collabora.com:mid,collabora.com:dkim]
-X-Rspamd-Queue-Id: 0AB0D12CE5E
+	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[lists.infradead.org,baylibre.com,kernel.org,gmail.com,collabora.com,vger.kernel.org];
+	TAGGED_RCPT(0.00)[linux-pm];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:dkim,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 2F7F412D0A5
 X-Rspamd-Action: no action
 
-Il 12/02/26 08:58, Macpaul Lin (林智斌) ha scritto:
-> On Tue, 2025-10-14 at 11:59 +0200, AngeloGioacchino Del Regno wrote:
->>
->> External email : Please do not click links or open attachments until
->> you have verified the sender or the content.
->>
->>
->> Il 13/10/25 15:41, Sjoerd Simons ha scritto:
->>> Hey,
->>>
->>> On Tue, 2025-08-05 at 09:47 +0200, AngeloGioacchino Del Regno
->>> wrote:
->>>> In preparation to add support for new generation SoCs like
->>>> MT8196,
->>>> MT6991 and other variants, which require to set bus protection on
->>>> different busses than the ones found on legacy chips, and to also
->>>> simplify and reduce memory footprint of this driver, refactor the
->>>> mechanism to retrieve and use the bus protection regmaps.
->>>>
->>>> This is done by removing the three pointers to struct regmap from
->>>> struct scpsys_domain (allocated for each power domain) and moving
->>>> them to the main struct scpsys (allocated per driver instance) as
->>>> an array of pointers to regmap named **bus_prot.
->>>
->>> Trying to boot v6.18.0-rc1 on a Genio 700 EVK using the arm64
->>> defconfig,
->>> ends up hanging at boot (seemingly when probing MTU3 and/or mmc,
->>> but that
->>> might be a red herring).
->>>
->>> Either reverting this patch *or* having CONFIG_MTK_MMSYS builtin
->>> rather
->>> then a module seems to solve that.
->>>
->>
->> Thanks for the report.
->>
->> This is not a problem with this patch specifically, but surely some
->> race condition
->> that was already present before and that does get uncovered with this
->> one in some
->> conditions.
->>
->> Without the devicetree updates (which are not upstream yet) this
->> patch is
->> fully retaining the legacy functionality 1-to-1.
->>
->> I'll check what's going on ASAP.
->>
->> Cheers,
->> Angelo
->>
-> 
-> This issue also happened on mt8195. I've done bisect on linux-next
-> master with mt8195-genio-1200-evk board.
-> The result shows c29345fa5f66bea0790cf2219f57b974d4fc177b is the first
-> bad commit.
-> 
-> I cannot simply revert this commit since there are some dependencies
-> commits.
-> 
-> I'm not sure if there are any API or flag change would
-> affect interaction between the pm-domain driver and scp firmware.
+On Tue, 10 Feb 2026 at 06:40, Adam Ford <aford173@gmail.com> wrote:
+>
+> The wrong value of the number of domains is wrong which leads to
+> failures when trying to enumerate nested power domains.
+>
+>  PM: genpd_xlate_onecell: invalid domain index 0
+>  PM: genpd_xlate_onecell: invalid domain index 1
+>  PM: genpd_xlate_onecell: invalid domain index 3
+>  PM: genpd_xlate_onecell: invalid domain index 4
+>  PM: genpd_xlate_onecell: invalid domain index 5
+>  PM: genpd_xlate_onecell: invalid domain index 13
+>  PM: genpd_xlate_onecell: invalid domain index 14
+>
+> Attempts to use these power domains fail, so fix this by
+> using the correct value of calculated power domains.
+>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 
-I'm 99% sure that the SCP firmware has nothing to do with this - but then
-even if it did, there's some quirk to be uncovered and properly handled.
+We should have a fixes tag for this too I think:
 
-So - if it is (again, most probably not) a firmware issue, it was only a
-matter of time until this situation would've happened. It's pretty common
-to see two wrongs making one thing right (but in 100% of the cases it does
-eventually break).
+Fixes: 88914db077b6 ("pmdomain: mediatek: Add support for Hardware
+Voter power domains")
 
-> Just a remind it is hard for MediaTek to update scp firmware for a
-> mass production chip. Each scp firmware seems specifically designed for
-> each chip separately which leads the API might be changed between each
-> chip.
-> 
 
-Adding Louis-Alexis to the loop;
+> ---
+>  drivers/pmdomain/mediatek/mtk-pm-domains.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> index 58648f4f689b..d2b8d0332951 100644
+> --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> @@ -1228,7 +1228,7 @@ static int scpsys_probe(struct platform_device *pdev)
+>         scpsys->soc_data = soc;
+>
+>         scpsys->pd_data.domains = scpsys->domains;
+> -       scpsys->pd_data.num_domains = soc->num_domains;
+> +       scpsys->pd_data.num_domains = num_domains;
 
-Louis, can you please try to reproduce this one on any of our boards?
-I can't seem to be able to reproduce here.
+Not sure this is the complete fix, as scpsys_add_one_domain() seems to
+be using the wrong value of "num_domains" too, no?
 
-Cheers,
-Angelo
+>
+>         parent = dev->parent;
+>         if (!parent) {
+> --
+> 2.51.0
+>
 
-> The error log occurs on emmc at first and than rcu_preempt happens.
-> [    1.291055] mtk-msdc 11240000.mmc: msdc_track_cmd_data: cmd=8
-> arg=000001AA; host->error=0x00000002
-> [    1.292775] mtk-msdc 11240000.mmc: msdc_track_cmd_data: cmd=55
-> arg=00000000; host->error=0x00000002
-> [    1.294539] mtk-msdc 11240000.mmc: msdc_track_cmd_data: cmd=55
-> arg=00000000; host->error=0x00000002
-> [    1.296293] mtk-msdc 11240000.mmc: msdc_track_cmd_data: cmd=55
-> arg=00000000; host->error=0x00000002
-> ...
-> [    1.430408] mtk-msdc 11240000.mmc: msdc_track_cmd_data: cmd=55
-> arg=00000000; host->error=0x00000002
-> [    1.433766] mmc0: Failed to initialize a non-removable card
-> [   22.297240] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> [   22.298723] rcu:     6-...0: (2 ticks this GP)
-> idle=104c/1/0x4000000000000000 softirq=45/45 fqs=37
-> [   22.299827] rcu:     (detected by 2, t=5256 jiffies, g=-1051, q=200
-> ncpus=8)
-> [   22.300689] Sending NMI from CPU 2 to CPUs 6:
-> ...
-> 
-> Best regards,
-> Macpaul Lin
-> 
-
+Kind regards
+Uffe
 
