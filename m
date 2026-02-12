@@ -1,193 +1,277 @@
-Return-Path: <linux-pm+bounces-42545-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42546-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2OVjODqcjWlT5QAAu9opvQ
-	(envelope-from <linux-pm+bounces-42545-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 10:24:10 +0100
+	id MF9XAPSjjWlh5gAAu9opvQ
+	(envelope-from <linux-pm+bounces-42546-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 10:57:08 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49E9D12BD3A
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 10:24:10 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E38C12C1D0
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 10:57:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 74773308B420
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 09:23:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5F969300E15F
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 09:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE62C2DB7A1;
-	Thu, 12 Feb 2026 09:23:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63F5E2E8B82;
+	Thu, 12 Feb 2026 09:56:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tu8+kgNT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NBX1+q3s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B21298CC4;
-	Thu, 12 Feb 2026 09:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253072E6CD9
+	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 09:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770888203; cv=none; b=SD+59MQQnQcgnNsw/eFyAvjUz1mGO0Ma8SeBvV8MPt0bUsB8de03j68FvS06et8E5Tv+hCSQAW3qSEUUBZnEgsXDeiW5M1H59K4Pdu6jMfrP0v//wFBnIuLGeC7HOvX89Z0/gB7sOsnxWpcYQwwWdpTnEnWWHd2i/uU5Ef+d4I0=
+	t=1770890188; cv=none; b=rkBjsGLZgsrJLjJ9YH5cp2ZmQPxX4OJUUcHzjhBLdMzcQacuxRag8v5/QOq8h5Se+Ky4Ls21ofXBU5lF0tBLnBk1J0W4jGDuKzX69sHBbqfw7+mBk1mzFFFCNpd/iyb+zIT+Nzq+THXOOGVCUTC3ldKSqNpJwha54jZ/tZKi1Sg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770888203; c=relaxed/simple;
-	bh=Bd0vkkESwpTKZrM6Vj4/m5riIZawL87UTsB4+AHYnNg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=YMqr7qObt1zlBvRYqkD1Smt3gkTB53nMyg4y+hc9E7aNd19Oosts61RwgQQiyIQYWq9mH9M9qGCvHWhcfVKLFDs7+4CeQyKLTSkYJXkuKLoCk46nI+2KrDUq40H104wtQPuuoUYqT6FxXB8uMLtWvWifkgp86Z0AlqHqbzupntE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tu8+kgNT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A151BC19424;
-	Thu, 12 Feb 2026 09:23:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770888203;
-	bh=Bd0vkkESwpTKZrM6Vj4/m5riIZawL87UTsB4+AHYnNg=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=tu8+kgNTsI25fjEIsePbpW59UwxIvafjlf1pasP2zMu512PKeIgPylM/1OArUzV6T
-	 vf/ycxcTeVizc6s4S3CnGwKJS4UDfVhHqOj4BHC3HIVQdyfjr3HbQTM+iPghBAGWsc
-	 vUIzJH4quJs90SP6wD5GFiadmkJlIRKdmOjuYZx0KcOjryG0S5fq4+lhH3yrEEHP8n
-	 WoFhQqjaPatTkRju6OnjsCIWDVehxF8EiDB8nrUdvlRm5PNubZV6+hPXWC4wtMYwqf
-	 DeYNpb4bIDz8lByRQXpC/fVg8EmZfmZozq0mNVeOGBi5y/RK+4jkixgwHk15ZDoYK5
-	 r0Q42I2WSLPXg==
+	s=arc-20240116; t=1770890188; c=relaxed/simple;
+	bh=bm5c2DB94uUyrmyglOpsvupAxM8sAv2B1xXqGM1GJFs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MueCfZiUh2cm916C/KzM5e7kaWEVzz3K+ouKMUSCHDmRTKF3fxymSkYjZ8RjyPtSLsi3lU5OTMOQirruf1yqlw2bc9fuBmXPgsLqd1aNhg6P7s8RXHiUlATwVF0ZiJNnZs5G4jkrDTdwgjF5IyhP0qmmcOHqY0A8oaCPBnWF0Nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NBX1+q3s; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4801d7c72a5so49374265e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 01:56:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770890183; x=1771494983; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Phtp8Z4ei388aKllZFARYn5zwlBsIT6J1/fUx6EVP8E=;
+        b=NBX1+q3sG3mz5yo+4PTok6RS0Rp9dEpR09+Y/JRk3u6e/64D04ue1Vm9XVkCusdVXu
+         NU3WJvXA/Q+dK+oBZz+2re44DDJ0aNRgUR8oq0glWiZvELc11mKMFW0ZNXaRiz1FwbDl
+         3kum0bbwFJHel7oltVfP+rxyeZEgtlPDoU9m4kCOJ1mKK/Rx/N9WnOd74jf+d8M7g2au
+         yscatCcL8N2Ntt7JN2wdoT5baluHz8sx6Y751dwHYyRknl84qrPr/ABBiYzpydA2evGn
+         5l4w9ak5lIPOuSfe8gbBTLD9GwhQ7CX8KHMX2+xVE9uTBBISVe4xnzhgArj9Ln1esdZF
+         yFYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770890183; x=1771494983;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Phtp8Z4ei388aKllZFARYn5zwlBsIT6J1/fUx6EVP8E=;
+        b=WalEm7Yk1/ccpHd3AnMXn4qy3R6+jN37GjUpaG2HOWWcXinuRklBvm/7Vb9GyGwvyK
+         z0XpzV+QvrtGMPsI5x281UDkUQtdJSkRQP+F6QPDqdPv4+uMo7EP1jfWCLv5WoL8hEom
+         IPcBtVC91+E+lPH1NpIs1/AXbC2VEBSRSMAPW5DLyZDtSQ0AolJdeGKt6135+OphASvQ
+         0Xsddn1NO3VxfjiZFSq74qo7kH1IQ7cHJz0F7a7cGpLW4IUUoBZ1f7SWpGtxGTZwLXSO
+         27uYxZao4itzg3FY+hua4DsAa3UToEZ4xTANtB1hQWgdQUx7+VUI448poF7X6Gwa/J9Y
+         RrSA==
+X-Forwarded-Encrypted: i=1; AJvYcCXekQ5B/V3MyZ/JR8zVyfeKPTAypirIz+Z+qse8sFXayFXII/TdQZVz1TiFi6Iu5cKt+vn88MU/yA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGnhYBeFuXHwtctxOjVZRqWH+oIwvxQQJ2O5yj5NsUqmEqwuXh
+	Micf7Sbb0rHhqAljrOaWZDhPp0RMJo6Vmaid3UIvJ5WjfFaTVyR0c9JJ
+X-Gm-Gg: AZuq6aIUQ30MuSoJzyuVa+nDCKi8pCcuK4KYEM2gKMZ69pHHzHfCKi/qTRrkC0osgLG
+	1SA+Uv/Pmhqr3HrMtTt/NmzqsJUiZ5Vobl3z3pKKhNEnMhKAfGJIavhhEzIMyUhe3ugy5TWKxHo
+	TKd/rjG8l7czm740DWwYXFuDHOxNkax96AKpDThcH9BL5+3E8lZ0oDAETC1ovfK9EX2FrJbTxFr
+	IDlLD1jRyVQUM572a4KgaDmP4iRz4b1dUWGLfz0Vxsyy0HSsOvoCZUStdgaB8ssdsZkRDnJSmn2
+	gfikUfiDwgSRi5d5k+aDtP8lUZfxdGI/bbFX8n8g2NUHMh6RvZVOwYFuAH+pLNJSMK/SI71Lp/2
+	AxXXobHd6MmpsJATWjfnSx8Qym5c26ZPbZX623tIK2KPTKX1KHSE6YY50nl6EYoUZ66LczWZIO1
+	NuQp+hizmgyZWanbZpoSJTew5AXc3K+p/fvWD3bHolIZwd1w2OBpytN3OlqL+KyzeJ
+X-Received: by 2002:a05:600c:4fcb:b0:480:1a9a:e571 with SMTP id 5b1f17b1804b1-4836570e48amr25658585e9.22.1770890183038;
+        Thu, 12 Feb 2026 01:56:23 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d82a4c4sm330608855e9.10.2026.02.12.01.56.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Feb 2026 01:56:22 -0800 (PST)
+Date: Thu, 12 Feb 2026 09:56:21 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+ bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+ will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
+ mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
+ rafael@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com,
+ zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com,
+ joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
+ konrad.wilk@oracle.com
+Subject: Re: [PATCH v9 01/12] asm-generic: barrier: Add
+ smp_cond_load_relaxed_timeout()
+Message-ID: <20260212095621.4d99317b@pumpkin>
+In-Reply-To: <20260209023153.2661784-2-ankur.a.arora@oracle.com>
+References: <20260209023153.2661784-1-ankur.a.arora@oracle.com>
+	<20260209023153.2661784-2-ankur.a.arora@oracle.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 12 Feb 2026 10:23:16 +0100
-Message-Id: <DGCVH2B2OSFR.1C912TO7G7DGL@kernel.org>
-Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
-Cc: "Boris Brezillon" <boris.brezillon@collabora.com>, "Daniel Almeida"
- <daniel.almeida@collabora.com>, "Alice Ryhl" <aliceryhl@google.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, "Viresh Kumar"
- <viresh.kumar@linaro.org>, "Maarten Lankhorst"
- <maarten.lankhorst@linux.intel.com>, "Thomas Zimmermann"
- <tzimmermann@suse.de>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
- <simona@ffwll.ch>, "Drew Fustini" <fustini@kernel.org>, "Guo Ren"
- <guoren@kernel.org>, "Fu Wei" <wefu@redhat.com>,
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, "Michael
- Turquette" <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>,
- "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>,
- "Gary Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
- <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <dri-devel@lists.freedesktop.org>, <linux-riscv@lists.infradead.org>,
- <linux-pwm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>
-To: "Maxime Ripard" <mripard@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20260119-weightless-pelican-of-anger-190db0@houat>
- <DFSN4FDCYHMW.3J3237PEBV2ZP@kernel.org>
- <20260122-majestic-masterful-jaguarundi-d0abde@houat>
- <2F3D3A40-6EF9-46FC-A769-E5A3AAF67E65@collabora.com>
- <20260204-nickel-seal-of-poetry-8fdefb@houat>
- <91A92D84-1F2E-45F3-82EC-6A97D32E2A78@collabora.com>
- <20260204-angelic-vermilion-beagle-fd1507@houat>
- <20260209105047.693f2515@fedora>
- <20260211-flawless-feathered-boar-0b87ad@houat>
- <DGCAAE4YEDLO.299F5M641E90B@kernel.org>
- <20260212-obedient-faithful-koel-d8aaf6@houat>
-In-Reply-To: <20260212-obedient-faithful-koel-d8aaf6@houat>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42545-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[collabora.com,google.com,kernel.org,linaro.org,linux.intel.com,suse.de,gmail.com,ffwll.ch,redhat.com,baylibre.com,garyguo.net,protonmail.com,umich.edu,vger.kernel.org,lists.freedesktop.org,lists.infradead.org];
-	RCPT_COUNT_TWELVE(0.00)[30];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-42546-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,arndb.de,arm.com,kernel.org,infradead.org,linux-foundation.org,amazon.com,gentwo.org,linaro.org,gmail.com,huawei.com,linux.alibaba.com,oracle.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dakr@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 49E9D12BD3A
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[davidlaightlinux@gmail.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[infradead.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,arndb.de:email,oracle.com:email]
+X-Rspamd-Queue-Id: 6E38C12C1D0
 X-Rspamd-Action: no action
 
-On Thu Feb 12, 2026 at 8:59 AM CET, Maxime Ripard wrote:
-> On Wed, Feb 11, 2026 at 05:47:09PM +0100, Danilo Krummrich wrote:
->> On Wed Feb 11, 2026 at 5:37 PM CET, Maxime Ripard wrote:
->> > I do think we can find a compromise though. Miguel suggested for examp=
-le
->> > to make the current enable/prepare/disable/unprepare function unsafe,
->> > and that's totally reasonable to me.
->> >
->> > Then we can implement the "managed" clock version on that unsafe API,
->>=20
->> What do you mean with "managed" clock? Do you mean devres managed? If so=
-, I
->> don't think there is any reason to switch to the unsafe API to be able t=
-o
->> implement devres managed APIs (see also [1]).
->>=20
->> [1] https://lore.kernel.org/all/DFVW9MS5YLON.CVJDBYQKJ0P6@kernel.org/
->
-> By that, I mean what Daniel has been proposing to achieve with this serie=
-s.
->
->> > and we would end up with a "raw", unsafe, version kind of equivalent t=
-o
->> > the one we have today, and where callers would have to justify why the=
-ir
->> > usage of the API is actually safe, or the new, managed, variant that i=
-s
->> > safe and can be easily used by most drivers.
->> >
->> > And we can call these RawClk vs Clk, or Clk vs ManagedClk, or whatever=
-.
->> >
->> > How does that sound?
->>=20
->> What about we just wait until we have a user that really requires an uns=
-afe API
->> for some reason? And if it never appears, even better. :)
->
-> It works *today*.
->
-> And the "oh but driver is using the API" is kind of ironic in the
-> context of the Rust bindings which have globally been in that situation
-> for years. You can't argue it both ways.
+On Sun,  8 Feb 2026 18:31:42 -0800
+Ankur Arora <ankur.a.arora@oracle.com> wrote:
 
-I can't remember ever advocating for merging code that does not have at lea=
-st a
-user in prospect.
+> Add smp_cond_load_relaxed_timeout(), which extends
+> smp_cond_load_relaxed() to allow waiting for a duration.
+> 
+> We loop around waiting for the condition variable to change while
+> peridically doing a time-check. The loop uses cpu_poll_relax() to slow
+> down the busy-waiting, which, unless overridden by the architecture
+> code, amounts to a cpu_relax().
+> 
+> Note that there are two ways for the time-check to fail: the usual
+> timeout case or, @time_expr_ns returning an invalid value (negative
+> or zero). The second failure mode allows for clocks attached to the
+> clock-domain of @cond_expr, which might cease to operate meaningfully
+> once some state internal to @cond_expr has changed.
+> 
+> Evaluation of @time_expr_ns: in the fastpath we want to keep the
+> performance close to smp_cond_load_relaxed(). To do that we defer
+> evaluation of the potentially costly @time_expr_ns to when we hit
+> the slowpath.
+> 
+> This also means that there will always be some hardware dependent
+> duration that has passed in cpu_poll_relax() iterations at the time of
+> first evaluation. Additionally cpu_poll_relax() is not guaranteed to
+> return at timeout boundary. In sum, expect timeout overshoot when we
+> exit due to expiration of the timeout.
+> 
+> The number of spin iterations before time-check, SMP_TIMEOUT_POLL_COUNT
+> is chosen to be 200 by default. With a cpu_poll_relax() iteration
+> taking ~20-30 cycles (measured on a variety of x86 platforms), we expect
+> a tim-check every ~4000-6000 cycles.
+    ^ time-check
 
-> Either way, I'm not sure what the point of that submission was if you
-> will just dismiss diverging opinions, including attempts to compromise.
+Plus the cost of evaluating cond_expr 200 times.
+I guess that isn't expected to contain a PCIe read :-)
 
-Sorry -- I'm a bit confused here, since I did not submit this code.
+	David
 
-I'm also not dismissing your opinion; I just have a different one.
+> 
+> The outer limit of the overshoot is double that when working with the
+> parameters above. This might be higher or lower depending on the
+> implementation of cpu_poll_relax() across architectures.
+> 
+> Lastly, config option ARCH_HAS_CPU_RELAX indicates availability of a
+> cpu_poll_relax() that is cheaper than polling. This might be relevant
+> for cases with a prolonged timeout.
+> 
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: linux-arch@vger.kernel.org
+> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> ---
+> Notes:
+>   - Defer evaluation of @time_expr_ns to when we hit the slowpath.
+>   - This also helps get rid of the labelled gotos which were used to
+>     handle the early failure case (since now there's no early init
+>     to be concerned with.)
+>   - Add a comment mentioning that the cpu_poll_relax() implementation
+>     is better than polling if ARCH_HAS_CPU_RELAX.
+> 
+>  include/asm-generic/barrier.h | 72 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+> 
+> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
+> index d4f581c1e21d..2738fe35c1df 100644
+> --- a/include/asm-generic/barrier.h
+> +++ b/include/asm-generic/barrier.h
+> @@ -273,6 +273,68 @@ do {									\
+>  })
+>  #endif
+>  
+> +/*
+> + * Number of times we iterate in the loop before doing the time check.
+> + */
+> +#ifndef SMP_TIMEOUT_POLL_COUNT
+> +#define SMP_TIMEOUT_POLL_COUNT		200
+> +#endif
+> +
+> +/*
+> + * Platforms with ARCH_HAS_CPU_RELAX have a cpu_poll_relax() implementation
+> + * that is expected to be cheaper (lower power) than pure polling.
+> + */
+> +#ifndef cpu_poll_relax
+> +#define cpu_poll_relax(ptr, val, timeout_ns)	cpu_relax()
+> +#endif
+> +
+> +/**
+> + * smp_cond_load_relaxed_timeout() - (Spin) wait for cond with no ordering
+> + * guarantees until a timeout expires.
+> + * @ptr: pointer to the variable to wait on.
+> + * @cond: boolean expression to wait for.
+> + * @time_expr_ns: expression that evaluates to monotonic time (in ns) or,
+> + *  on failure, returns a negative value.
+> + * @timeout_ns: timeout value in ns
+> + * Both of the above are assumed to be compatible with s64; the signed
+> + * value is used to handle the failure case in @time_expr_ns.
+> + *
+> + * Equivalent to using READ_ONCE() on the condition variable.
+> + *
+> + * Callers that expect to wait for prolonged durations might want to
+> + * take into account the availability of ARCH_HAS_CPU_RELAX.
+> + */
+> +#ifndef smp_cond_load_relaxed_timeout
+> +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,			\
+> +				      time_expr_ns, timeout_ns)		\
+> +({									\
+> +	typeof(ptr) __PTR = (ptr);					\
+> +	__unqual_scalar_typeof(*ptr) VAL;				\
+> +	u32 __n = 0, __spin = SMP_TIMEOUT_POLL_COUNT;			\
+> +	s64 __timeout = (s64)timeout_ns;				\
+> +	s64 __time_now, __time_end = 0;					\
+> +									\
+> +	for (;;) {							\
+> +		VAL = READ_ONCE(*__PTR);				\
+> +		if (cond_expr) 						\
+> +			break;						\
+> +		cpu_poll_relax(__PTR, VAL, (u64)__timeout);		\
+> +		if (++__n < __spin)					\
+> +			continue;					\
+> +		__time_now = (s64)(time_expr_ns);			\
+> +		if (unlikely(__time_end == 0))				\
+> +			__time_end = __time_now + __timeout;		\
+> +		__timeout = __time_end - __time_now;			\
+> +		if (__time_now <= 0 || __timeout <= 0) {		\
+> +			VAL = READ_ONCE(*__PTR);			\
+> +			break;						\
+> +		}							\
+> +		__n = 0;						\
+> +	}								\
+> +	(typeof(*ptr))VAL;						\
+> +})
+> +#endif
+> +
+>  /*
+>   * pmem_wmb() ensures that all stores for which the modification
+>   * are written to persistent storage by preceding instructions have
 
-In particular, I don't think we need an unsafe API until we see a concrete
-example where the proposed safe API does not work (and no other safe API wo=
-uld
-work either).
-
-Framing a difference in opinion as "dismissing diverging opinions" doesn't =
-feel
-fair to me.
-
-> Do whatever you want, but it's really hard to root for you some times.
-
-I'm starting to wonder if the mail is addressed to me in the first place.
-
-Thanks,
-Danilo
 
