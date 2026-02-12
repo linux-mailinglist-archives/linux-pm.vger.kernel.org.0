@@ -1,249 +1,217 @@
-Return-Path: <linux-pm+bounces-42569-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42571-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gHM0IxLrjWn78gAAu9opvQ
-	(envelope-from <linux-pm+bounces-42569-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 16:00:34 +0100
+	id ANE9Mlb6jWnz9wAAu9opvQ
+	(envelope-from <linux-pm+bounces-42571-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 17:05:42 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A0EB12EB45
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 16:00:29 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E3DB12F386
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 17:05:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A64BC307C482
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 14:58:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8567A3008D2C
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 16:03:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C7C35B64F;
-	Thu, 12 Feb 2026 14:58:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D585F32FA2D;
+	Thu, 12 Feb 2026 16:03:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="Gvu6J4Wa"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="KXaABoxW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from relay.yourmailgateway.de (relay.yourmailgateway.de [188.68.63.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B3443ABC;
-	Thu, 12 Feb 2026 14:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770908303; cv=pass; b=gNcgksE0YVcHWTYnJbFSGvnFQU3JBImzmkGNol6BS4NlUhwmUdvvettrr2xfKg1r6g9CcAJXjcdCPLngQWM6hByKyV2u+GCrCgfoUD3Hh202TasnPlgrpzjRyn2UmiRANtcVbB6AmK0hDbIAstGNvyy71+0KxQnes8zVVQ0gA6Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770908303; c=relaxed/simple;
-	bh=Uqg+1i9fzmYpJWilVjNVALXs0GMRJU++P8SXvGfrlbg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k1yFbWIiwYBWCobJ5WdetQeCFq8G0K3Sq8BjEPTP26j2NAIMVAPGrW41gS0E951Au4v6aG+W74sTAWg3Q8auTNVijG/Nnssed2NEDX+lNrMP383inCpaxpc/HI+ED8xhx1gyzvPtzZM7NbXIvYgdsnU1+NJdJG355JQEZ92pZmg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=Gvu6J4Wa; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1770908288; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=bdBJfciw+SLKHwce3M1xZeBNSh9/dUONzlxiisNvSAhA9Y/azTwPYL7lBuRhhDNN0vpXmD0e0M9w9bnORC8xpArw1JQv4Vc6Ew8HeHpRufv67M7pKk1CLOzy20GP/uxD1oFbaZghR0miSsD3zzsizXeFPmJXUMuZFMAklECth/c=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1770908288; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=ewJ17yZssUQQjHgmzfTqhJeBawC3u74ghBag/166lsk=; 
-	b=EhP6TrIUfa4578JrGFn6RoN+JGO6Umocs7CWeEJjnfmRombZJWxvbZ5EobxFCaHuf7ivV7raxO3nIl+jnGSvBnvf6l9iU5G31FG+TBzMUzizyG72kmS5FtuaQ++llZzCQzVrs/O8DWMi/Sr05FaiXf9el+1W1eAlwizdHnzx1JI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1770908288;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=ewJ17yZssUQQjHgmzfTqhJeBawC3u74ghBag/166lsk=;
-	b=Gvu6J4Waf/OsLu1RLrAJg6LtJ0jCuzkBxwpJI6yXyprFKG6RAAaD0yvRfbvX10Wi
-	/xV2ZO95dE5GMdDvIxAfdQbOzpYKDyFm0aH0JG3xNczQHAgaJ+mzqANxqKpCOd7+C5m
-	Zf+7drziXG6/xtlkLgF4rrFvuv+JTHQ4av3DBjgU=
-Received: by mx.zohomail.com with SMTPS id 1770908287347603.7883798586333;
-	Thu, 12 Feb 2026 06:58:07 -0800 (PST)
-Received: by venus (Postfix, from userid 1000)
-	id 1869F18248B; Thu, 12 Feb 2026 15:58:03 +0100 (CET)
-Date: Thu, 12 Feb 2026 15:58:03 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Shawn Lin <shawn.lin@rock-chips.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, 
-	Finley Xiao <finley.xiao@rock-chips.com>, Frank Zhang <rmxpzlb@gmail.com>, linux-pm@vger.kernel.org, 
-	Detlev Casanova <detlev.casanova@collabora.com>, Heiko Stuebner <heiko@sntech.de>, 
-	linux-rockchip@lists.infradead.org, stable@vger.kernel.org
-Subject: Re: [PATCH] pmdomain: rockchip: Fix rkvdec0/1 and venc0/1 for RK3588
-Message-ID: <aY3oqqaoAM5QtHWl@venus>
-References: <1770891364-52147-1-git-send-email-shawn.lin@rock-chips.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E680010785;
+	Thu, 12 Feb 2026 16:03:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.68.63.102
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770912207; cv=none; b=AaL7pbl8NQ3ogtXYSDGVS2uyMhzZoE+MnLVHB+vYy8VIvGDWlARe/czGQVUWarCyVuSaXOTZi11fayVKpfHCWC1L4tUzpG7Gkqqh39zEIVcoqnzGOYCrtSS1DCqey6KHlkx9VKabTXaNQUjMC+X/75qKDC8IJzq8Sj2n72z8NPs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770912207; c=relaxed/simple;
+	bh=fs4w3huEAMgTOhifbnB9LHX97Yl+dRlz32ijMU82YCo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AZbSCC2ZsAX81puE3xIyMPVFEkxrqGdTqn7oq2YQNC/eemM5uOG8eiyJyn/vJKpsMrLmdRwflWojQz/0QPrRTR+5+XeB0FVtbcZbGz9t7t49LYJvhjSZe6TGwl5i9ULN/bLWC1/TtgwE8ioU1Vxur0k7qscBxoq5q1mFZlFYqJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=KXaABoxW; arc=none smtp.client-ip=188.68.63.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+Received: from mors-relay-2502.netcup.net (localhost [127.0.0.1])
+	by mors-relay-2502.netcup.net (Postfix) with ESMTPS id 4fBfzT2Gd0z6Fd4;
+	Thu, 12 Feb 2026 16:56:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=leemhuis.info;
+	s=key2; t=1770911765;
+	bh=fs4w3huEAMgTOhifbnB9LHX97Yl+dRlz32ijMU82YCo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KXaABoxWVsYbLH1gh5xbpYr4RkIYvFazojx35JpLiQfH4ESE2DGnzN62Q3Ua94F37
+	 siKuyCVms2KCwFOC433ahcfrLiJ3fER3bl0SM6TK0TeBO0qdMP+UK4s9nvoARTjh1z
+	 dol/CxH7oRK5iugLIQ+Vr1cmsz9/jKLWRPdLnjFE/hC0zTMQ3wZW3IuygXylAW5l+h
+	 zc53JMrZd0ZP7wDIrWoaww/COLQNBdB4aaW/bRYELE4M4AQiDSyPl5blYRVvVmct4P
+	 Pl9DbSHpjFZp3TnN8vmUdLfwycIUswEED7pXhiBHG1CjDfHT/ehNxviJSXRYV5wsP3
+	 fhQ9BqZN/rxeg==
+Received: from policy01-mors.netcup.net (unknown [46.38.225.35])
+	by mors-relay-2502.netcup.net (Postfix) with ESMTPS id 4fBfzT1XlZz4xhk;
+	Thu, 12 Feb 2026 16:56:05 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at policy01-mors.netcup.net
+X-Spam-Flag: NO
+X-Spam-Score: -2.898
+X-Spam-Level: 
+Received: from mxe9fb.netcup.net (unknown [10.243.12.53])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by policy01-mors.netcup.net (Postfix) with ESMTPS id 4fBfzR3jgZz8sbV;
+	Thu, 12 Feb 2026 16:56:03 +0100 (CET)
+Received: from [IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f] (unknown [IPv6:2a02:8108:8984:1d00:a0cf:1912:4be:477f])
+	by mxe9fb.netcup.net (Postfix) with ESMTPSA id 0A9F1671B1;
+	Thu, 12 Feb 2026 16:56:02 +0100 (CET)
+Authentication-Results: mxe9fb;
+        spf=pass (sender IP is 2a02:8108:8984:1d00:a0cf:1912:4be:477f) smtp.mailfrom=regressions@leemhuis.info smtp.helo=[IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f]
+Received-SPF: pass (mxe9fb: connection is authenticated)
+Message-ID: <f82b7734-6ddc-4029-b38d-147e9a1de021@leemhuis.info>
+Date: Thu, 12 Feb 2026 16:56:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kclqcghfrdw46u3s"
-Content-Disposition: inline
-In-Reply-To: <1770891364-52147-1-git-send-email-shawn.lin@rock-chips.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-0.1.0.1.4.3/270.907.16
-X-ZohoMailClient: External
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm/imagination: Convert to
+ dev_pm_domain_{at,de}tach_list()
+To: Marek Vasut <marek.vasut@mailbox.org>,
+ Matt Coster <Matt.Coster@imgtec.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Frank Binns <Frank.Binns@imgtec.com>,
+ Brajesh Gupta <Brajesh.Gupta@imgtec.com>,
+ Alessio Belle <Alessio.Belle@imgtec.com>,
+ Alexandru Dadu <Alexandru.Dadu@imgtec.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: 
+ <194465eda54d1f852a9226cf691ddc5aa208e0a3.1769097977.git.geert+renesas@glider.be>
+ <ffdf3982-e22c-4d01-afa6-5449ed381000@imgtec.com>
+ <CAMuHMdWMh_oJFg-KtapcTDGvYWZ-hg_ZEJ2=E5Tp1apOEc8tnQ@mail.gmail.com>
+ <b3b4f10e-1222-44f7-b308-db7199c67147@mailbox.org>
+ <3e0def93-2f6c-4bcf-8ee5-bf607f2ca382@imgtec.com>
+ <f5d3dde6-edec-42f4-93cb-459c8677245a@mailbox.org>
+From: Thorsten Leemhuis <regressions@leemhuis.info>
+Content-Language: de-DE, en-US
+In-Reply-To: <f5d3dde6-edec-42f4-93cb-459c8677245a@mailbox.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-PPP-Message-ID: <177091176259.2119832.3617988698706173767@mxe9fb.netcup.net>
+X-NC-CID: J5czT71szw5Ql5dY1Tz1SLQRGPcYJeYH0q9GxvoioYLNmk5ORlI=
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-3.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[collabora.com:s=zohomail];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[leemhuis.info:s=key2];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linaro.org,rock-chips.com,gmail.com,vger.kernel.org,collabora.com,sntech.de,lists.infradead.org];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[linux-m68k.org,imgtec.com,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,lists.freedesktop.org,vger.kernel.org,lists.linux.dev];
+	DMARC_NA(0.00)[leemhuis.info];
+	TAGGED_FROM(0.00)[bounces-42571-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42569-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[collabora.com:+];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	DKIM_TRACE(0.00)[leemhuis.info:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,imgtec.com:email,leemhuis.info:mid,leemhuis.info:dkim];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sebastian.reichel@collabora.com,linux-pm@vger.kernel.org];
-	RSPAMD_EMAILBL_FAIL(0.00)[stable.vger.kernel.org:query timed out,sebastian.reichel.collabora.com:query timed out];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[regressions@leemhuis.info,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 3A0EB12EB45
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 6E3DB12F386
 X-Rspamd-Action: no action
 
+On 2/12/26 15:38, Marek Vasut wrote:
+> On 2/12/26 10:00 AM, Matt Coster wrote:
+>> On 11/02/2026 19:17, Marek Vasut wrote:
+>>> On 1/23/26 2:50 PM, Geert Uytterhoeven wrote:
+>>>> On Fri, 23 Jan 2026 at 14:36, Matt Coster <Matt.Coster@imgtec.com>
+>>>> wrote:
+>>>>> On 22/01/2026 16:08, Geert Uytterhoeven wrote:
+>>>>>> Call the dev_pm_domain_attach_list() and dev_pm_domain_detach_list()
+>>>>>> helpers instead of open-coding multi PM Domain handling.
+>>>>>>
+>>>>>> This changes behavior slightly:
+>>>>>>     - The new handling is also applied in case of a single PM Domain,
+>>>>>>     - PM Domains are now referred to by index instead of by name, but
+>>>>>>       "make dtbs_check" enforces the actual naming and ordering
+>>>>>> anyway,
+>>>>>>     - There are no longer device links created between virtual domain
+>>>>>>       devices, only between virtual devices and the parent device.
+>>>>>
+>>>>> We still need this guarantee, both at start and end of day. In the
+>>>>> current implementation dev_pm_domain_attach_list() iterates forwards,
+>>>>> but so does dev_pm_domain_detach_list(). Even if we changed that, I'd
+>>>>> prefer not to rely on the implementation details when we can
+>>>>> declare the
+>>>>> dependencies explicitly.
+>>>>
+>>>> Note that on R-Car, the PM Domains are nested (see e.g.
+>>>> r8a7795_areas[]),
+>>>> so they are always (un)powered in the correct order.  But that may not
+>>>> be the case in the integration on other SoCs.
+>>>>
+>>>>> We had/have a patch (attached) kicking around internally to use the
+>>>>> *_list() functions but keep the inter-domain links in place; it got
+>>>>> held
+>>>>> up by discussions as to whether we actually need those dependencies
+>>>>> for
+>>>>> the hardware to behave correctly. Your patch spurred me to run around
+>>>>> the office and nag people a bit, and it seems we really do need to
+>>>>> care
+>>>>> about the ordering.
+>>>>
+>>>> OK.
+>>>>
+>>>>> Can you add the links back in for a V2 or I can properly send the
+>>>>> attached patch instead, I don't mind either way.
+>>>>
+>>>> Please move forward with your patch, you are the expert.
+>>>> I prefer not to be blamed for any breakage ;-)
+>>>
+>>> Has there been any progress on fixing this kernel crash ?
+>>>
+>>> There are already two proposed solutions, but no fix is upstream.
+>>
+>> Yes and no. Our patch to use dev_pm_domain_attach_list() has landed in
+>> drm-misc-next as commit e19cc5ab347e3 ("drm/imagination: Use>> dev_pm_domain_attach_list()"), but this does not fix the underlying
+>> issue of missing synchronization in the PM core[1] is still unresolved
+>> as far as I'm aware.
+> 
+> OK, but the pvr driver can currently easily crash the kernel on boot if
+> firmware is missing, so that should be fixed soon, right ?
 
---kclqcghfrdw46u3s
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] pmdomain: rockchip: Fix rkvdec0/1 and venc0/1 for RK3588
-MIME-Version: 1.0
+Well, drm-misc-next afaik means that the above mentioned fix would only
+be merged in 7.1, which is ~4 months away, which is not really "soon"
+I'd say. Or did I misjudge this?
 
-Hi,
+> I added the regressions list onto CC, because this seems like a problem
+> worth tracking.
 
-On Thu, Feb 12, 2026 at 06:16:04PM +0800, Shawn Lin wrote:
-> From the RK3588 TRM Table 1-1 RK3588 Voltage Domain and Power Domain Summ=
-ary,
+Noticed that and wondered what change caused the regression. Did not
+find a answer in a quick search on lore[1]. Because if it's a
+regression, we maybe should just revert the culprit for now according to
+Linus:
+https://lore.kernel.org/lkml/CAHk-=wi86AosXs66-yi54+mpQjPu0upxB8ZAfG+LsMyJmcuMSA@mail.gmail.com/
 
-That's Table 7-1 :)
+Ciao, Thorsten
 
-> PD_RKVDEC0/1 and PD_VENC0/1 rely on VD_VCODEC which require extra voltage=
-s to
-> be applied, otherwise it breaks RK3588-evb1-v10 board after vdec support =
-landed[1].
-> The panic looks like below:
->=20
->   rockchip-pm-domain fd8d8000.power-management:power-controller: failed t=
-o set domain 'rkvdec0' on, val=3D0
->   rockchip-pm-domain fd8d8000.power-management:power-controller: failed t=
-o set domain 'rkvdec1' on, val=3D0
->   ...
->   Hardware name: Rockchip RK3588S EVB1 V10 Board (DT)
->   Workqueue: pm genpd_power_off_work_fn
->   Call trace:
->   show_stack+0x18/0x24 (C)
->   dump_stack_lvl+0x40/0x84
->   dump_stack+0x18/0x24
->   vpanic+0x1ec/0x4fc
->   vpanic+0x0/0x4fc
->   check_panic_on_warn+0x0/0x94
->   arm64_serror_panic+0x6c/0x78
->   do_serror+0xc4/0xcc
->   el1h_64_error_handler+0x3c/0x5c
->   el1h_64_error+0x6c/0x70
->   regmap_mmio_read32le+0x18/0x24 (P)
->   _regmap_bus_reg_read+0xfc/0x130
->   _regmap_read+0x188/0x1ac
->   regmap_read+0x54/0x78
->   rockchip_pd_power+0xcc/0x5f0
->   rockchip_pd_power_off+0x1c/0x4c
->   _genpd_power_off+0x84/0x120
->   genpd_power_off+0x1b4/0x260
->   genpd_power_off_work_fn+0x38/0x58
->   process_scheduled_works+0x194/0x2c4
->   worker_thread+0x2ac/0x3d8
->   kthread+0x104/0x124
->   ret_from_fork+0x10/0x20
->   SMP: stopping secondary CPUs
->   Kernel Offset: disabled
->   CPU features: 0x3000000,000e0005,40230521,0400720b
->   Memory Limit: none
->   ---[ end Kernel panic - not syncing: Asynchronous SError Interrupt ]---
->=20
-> [1] https://lore.kernel.org/linux-rockchip/20251020212009.8852-2-detlev.c=
-asanova@collabora.com/
-> Fixes: db6df2e3fc16 ("pmdomain: rockchip: add regulator support")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
-
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
-Greetings,
-
--- Sebastian
-
-> ---
->=20
->  drivers/pmdomain/rockchip/pm-domains.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/ro=
-ckchip/pm-domains.c
-> index 997e93c..040aa5f 100644
-> --- a/drivers/pmdomain/rockchip/pm-domains.c
-> +++ b/drivers/pmdomain/rockchip/pm-domains.c
-> @@ -1315,10 +1315,10 @@ static const struct rockchip_domain_info rk3588_p=
-m_domains[] =3D {
->  	[RK3588_PD_NPUTOP]	=3D DOMAIN_RK3588("nputop",  0x0, BIT(3),  0,       =
-0x0, BIT(11), BIT(2),  0x0, BIT(1),  BIT(1),  false, false),
->  	[RK3588_PD_NPU1]	=3D DOMAIN_RK3588("npu1",    0x0, BIT(4),  0,       0x=
-0, BIT(12), BIT(3),  0x0, BIT(2),  BIT(2),  false, false),
->  	[RK3588_PD_NPU2]	=3D DOMAIN_RK3588("npu2",    0x0, BIT(5),  0,       0x=
-0, BIT(13), BIT(4),  0x0, BIT(3),  BIT(3),  false, false),
-> -	[RK3588_PD_VENC0]	=3D DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       0=
-x0, BIT(14), BIT(5),  0x0, BIT(4),  BIT(4),  false, false),
-> -	[RK3588_PD_VENC1]	=3D DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       0=
-x0, BIT(15), BIT(6),  0x0, BIT(5),  BIT(5),  false, false),
-> -	[RK3588_PD_RKVDEC0]	=3D DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,      =
- 0x0, BIT(16), BIT(7),  0x0, BIT(6),  BIT(6),  false, false),
-> -	[RK3588_PD_RKVDEC1]	=3D DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,      =
- 0x0, BIT(17), BIT(8),  0x0, BIT(7),  BIT(7),  false, false),
-> +	[RK3588_PD_VENC0]	=3D DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       0=
-x0, BIT(14), BIT(5),  0x0, BIT(4),  BIT(4),  false, true),
-> +	[RK3588_PD_VENC1]	=3D DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       0=
-x0, BIT(15), BIT(6),  0x0, BIT(5),  BIT(5),  false, true),
-> +	[RK3588_PD_RKVDEC0]	=3D DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,      =
- 0x0, BIT(16), BIT(7),  0x0, BIT(6),  BIT(6),  false, true),
-> +	[RK3588_PD_RKVDEC1]	=3D DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,      =
- 0x0, BIT(17), BIT(8),  0x0, BIT(7),  BIT(7),  false, true),
->  	[RK3588_PD_VDPU]	=3D DOMAIN_RK3588("vdpu",    0x0, BIT(10), 0,       0x=
-0, BIT(18), BIT(9),  0x0, BIT(8),  BIT(8),  false, false),
->  	[RK3588_PD_RGA30]	=3D DOMAIN_RK3588("rga30",   0x0, BIT(11), 0,       0=
-x0, BIT(19), BIT(10), 0x0, 0,       0,       false, false),
->  	[RK3588_PD_AV1]		=3D DOMAIN_RK3588("av1",     0x0, BIT(12), 0,       0x=
-0, BIT(20), BIT(11), 0x0, BIT(9),  BIT(9),  false, false),
-> --=20
-> 2.7.4
->=20
-
---kclqcghfrdw46u3s
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmmN6ncACgkQ2O7X88g7
-+ppwDQ/+MgfaLtM2QMPFgYQWMUHMFC/mO4X+3ZKAKoQSPbnUptASff0G8voyFYfZ
-Ld74ACLB5gLXtv5sIbBHw/4N6WWUZOD+XwAYyHd9ceAU2jKoWycZHP2YcuFOQROS
-HND+GtGq5Yl4QFruqt2wpo7IW3bRMF0tufXeOz01o5ezyPuYFDPqWeEUQSuBXwVj
-YzPrz+hUgrTjun8EzWRz73NGtO1NsQkVGarg1o8gvczEK7qyyETZNonKSksZSpBc
-wHMDmuBowxqQcGPvd58gB/mGRH6WnDnZJV5Pi828STqG0kpGSkvT+XcdUcOZhWjR
-OdjQJ6YkA6V+a+e+wHCw6B7AsUagiBzojzgsGPq6/pCJ+AJ4oDQuizufPJ6nSLdn
-bX6/5aLfYH2Ys9sPKpKlOoNnc8xxdmmMZqSA7w7Js+XUNuZRCBN51TAkjy+0g7qx
-dUneQsnJsD0SVswpbXvdCn2+xrHJ6midhpBclOxWxSVzkVILO7M6OA6Uin9G6OLw
-faVkLh0SNqZ/lpI3tQ5UN5jTH7kfhp6s3LxpDVQ6CPGjKmmuGCwaZff32nx5JVh4
-AsgIfwCZYbNtwm/BQx/Zb4AWN2Z5sssHxz8n0S5ZmV7UwhTNLYnrt+YyNFuKMF3l
-Y8DuMDmno5RWMlldvN3R8qp0AbUi9BDyNkD3y3LbUPVRzK3p754=
-=KpAz
------END PGP SIGNATURE-----
-
---kclqcghfrdw46u3s--
+[1] I guess this was the initial report from Geert?
+https://lore.kernel.org/all/CAMuHMdWapT40hV3c+CSBqFOW05aWcV1a6v_NiJYgoYi0i9_PDQ@mail.gmail.com/
 
