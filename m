@@ -1,319 +1,229 @@
-Return-Path: <linux-pm+bounces-42554-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42555-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wDS0M57BjWlt6gAAu9opvQ
-	(envelope-from <linux-pm+bounces-42554-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 13:03:42 +0100
+	id 0IMVAFTEjWnT6gAAu9opvQ
+	(envelope-from <linux-pm+bounces-42555-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 13:15:16 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F18E12D404
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 13:03:42 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BD5B12D572
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 13:15:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 04623303E768
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 12:03:41 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 71F163009E33
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 12:15:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 108CB356A07;
-	Thu, 12 Feb 2026 12:03:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 602223570CC;
+	Thu, 12 Feb 2026 12:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hPevaUBM"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="kBJeRUxD";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="XQQ7ObxE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833E9284895
-	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 12:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1790220DD75
+	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 12:15:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770897820; cv=none; b=qRRJrISup7u/aoaYsXXMWaZZpAMD+oFZlAB1KfzM/C6Z2SOHyJb7ULMQizPvTgnPR2BNXlzWDWmbPdWGB0PjnHRR9p93BL1eRGPTtSKVD08f9iArXrsSrIKRCw9WM0Q0tUYufaJLuQVYPciNJZVbu9sPRCaHTAMlK3ZSvE9xrNQ=
+	t=1770898511; cv=none; b=uOUjVNsrX2k3aiFJW05VfWKXBOxIufFOIrJI562a12gs3MtVBWXBqZS6nuebOcjbaBjmX+8FL4lTJJz4Ce9uAftolrx5NMkDP5nmxsPP0hEkbyVJiYwiN8XapjbrSKML0+F+2jYgMYBuRGh1fEfOFowcXpuT8sk9+rHnatN4znU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770897820; c=relaxed/simple;
-	bh=orrgARdRVXY24gkPcC6wmruEl81dP2QFKl4esYE/FQM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YDhAnDQJCoKR4BHyv7yb/6OxL2orOhWo4pX1GFooVwLl229SRny1mtErTcO7ISCsJdVJKYYiBdfx130D4imMoJscN7Ybc8CDnxUikstQ8QRNoHWDx+C/GgwtjS72n+g25umYqKr0oKI/otT9wEka/oRmjK+QFV40/IgpGXfbdBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hPevaUBM; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43590777e22so3937992f8f.3
-        for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 04:03:38 -0800 (PST)
+	s=arc-20240116; t=1770898511; c=relaxed/simple;
+	bh=Oby4EjJcHADz63zj/1EGulJp1MJlXVouqqj8/ZX/hF4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i4tBypPTlpg+XhmJyYGcNVkE6YmkQANbtGfxrQ9tB+tlHQlIckKENgAO151RFWgManAJ6jmH7KP23Gb59JuvtLg61V6a/71TeUcBB5R1Iks9q6YmqpHneg+ztSuxr2t7xjYarw6NRNzvrdBB//zhIK4C35Ghq3YZmBjL+n1hnMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=kBJeRUxD; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=XQQ7ObxE; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61CAGJe84112117
+	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 12:15:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	pfMwg8PmT1mIWqEb1KGB08f7tOELO1EnRMqkw0s9nXA=; b=kBJeRUxDd7YU1RO/
+	CrVfKp82fJpDdh1WwhFuk/tqtxQwJ0FtlCYaaBFuLvmXbP+Vc/jlJROLmr3FourQ
+	mpUwGpzHBSTbWIeVHx0DaZTZP0KBIhpS3515GMAXLqdFoYRrDqRazfUHaffGNZ9a
+	3dEzMsjn9R6CqtbO8ETz2iDO9f/pdqU+IBXrb1Mh+AtzftD9rhVlXEm4cNr5RWFQ
+	P0J6mymyxPz1jGy8RyTiDqzItV7ww8STqfFSn5iz04sP7p3e74+yZjv85dvvxj3n
+	Ico5oes99ez094LOjpTHy3AJMmZMaDIfpZRzZbSdkH8qQDukkHSpaZVnAgx0qbei
+	HePf0g==
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c9cya8bgj-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 12:15:08 +0000 (GMT)
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-8954b9b5da7so19415846d6.2
+        for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 04:15:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1770897817; x=1771502617; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IPXBLe0yJUYbIoGyT5kMiHrz15M67LzrqjA/DC/nqFM=;
-        b=hPevaUBMTdCmjZpAIUz7m6NyBYoypy0QXWXugrn8NpEoAZXFHNDiiVOl2Smyqm4YPk
-         duPm5qjppAE7oLpC8XXBzbDWq60ZRcG12QbaR2uXf7ONwcFatznIFD+oNs4fpUh2Ui8E
-         xlgvLjnhdqxdRlZSIPTM9nCFj4AY0/En66eOiSDmMGrA0z4qIhRjtp+cGju6MOgub0d8
-         F2mg7IFc+KbfPOAI8mt/PwHDSYaDxlWkX2hA7gjiivtVKrQ4xD5WSMGQLJkQjeAHaFcM
-         APc/D+5Wdu4XdpcFQhN7B6YXPd4088r7i6+fHkw42j0DTzABWXajFLe+BzuFDXBda3ZH
-         KDqA==
+        d=oss.qualcomm.com; s=google; t=1770898508; x=1771503308; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pfMwg8PmT1mIWqEb1KGB08f7tOELO1EnRMqkw0s9nXA=;
+        b=XQQ7ObxEP7RD20y+rlt9g12iLOvitWvwk5GpuhYWHA3VZHnMqcdNx/7sFzJMJF7kaD
+         /JFTLTjiFG5TC4B7qPyqr/KpsViA/9D+6a0tLFhEaSzYbf/oxMe6TbjqD5YazP2TQb9s
+         EjVs2sQezTeB4097bN0AXpSmA0Bg9vT4hKyzsI4i7UV86KgtPYsEGT1fOEiq7ooiwgD4
+         Jf0igaVC6n3gNIfLDpAAUg+0qXZ/oxgFkXsgBUYHVdjtpIZjzC42qs0cA1FO036e+x6e
+         6tV/ovg0W3Ge70NwBF3eaE+26+sDhWQ5hJUjsb3WG3vxfk7I1tAZbVN2LvGY1OTI/rX9
+         VTaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770897817; x=1771502617;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IPXBLe0yJUYbIoGyT5kMiHrz15M67LzrqjA/DC/nqFM=;
-        b=KV0SOfixtBV2q96UhWBc8D9dds/ahNN11epl6ig8vB3XqmfH5alnjhUjOafurD0abJ
-         AwGaL6oh593SxmQxVHF3wz0oBy7pLQRPZ1cJ2mwRLE0nJwPepThD7hqN1PCPXn9O8hJr
-         E5s/lC68RTiLeE5kbtlnLRvSOwMggchhXOFpwOu77z7OsXU1VstSDCrvomS65wHQ6QNJ
-         8+4cMzosYOmUKtR+1gSME+3EO9z9lj2UCSN7gMe2Hi9k/sb4r0/D37jBlLZZZD3lob9S
-         42C0v0MqsQ0GOci+dP3dGjPg2bR1j4OR4JM5i+C58yNji0kwOh7svFA2+o0NvCLXifxZ
-         hn1w==
-X-Forwarded-Encrypted: i=1; AJvYcCXem7AbbwrxmWFq8NMfG6gGMOOj0wu7N6b4UfJdTea8hD5rCXvUJDt63lihfv9thAQVjzlEK8Usyg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhsmEeNw0cclh+OFv1eKoWYLV4vdNAHRdsr9qnRbJTTb0yi0jL
-	8110+oeHOCNVZA6ByECC7aCx8ejUyZ1pJvu57eIXX6TLoFMXiMIOpRNU8ZiMxPR7kbw=
-X-Gm-Gg: AZuq6aKWvP5VxtWlHwLdTt4TGz12GNs/KFnjTBkhN7xw84xxe/+fspQUIt/DZmCvdUg
-	rTHw+aSAYj6kenONoDBUJJg4rd9B/vFAh3Mf6RGnLQT0XG68NxyxYd5ye1AYs3Co4VcLCGGCLCv
-	UjSc7ZmFa+SqdabQZ54AEO5DPOqfe9UDiZi2ZOdCHAB/i/EbKVjzAMfShTxosJtu6BMsH+S6O4G
-	DWHGMEOcCd0F5ZPRgJ+z3m00OYGsUKrs0zFVgC9a+48XNVDwczlqgAyOOFwjcqJSEH/wfBasuR3
-	WYGU6mXrjDY1ZP/fwwyt2BTouDfMDkiHpjnzwrnLMm4pkOjwfDTQSBWMoDupsmZ9VwpNZC+ZPtu
-	RTias2eLHsMjOJGUebZGFNDdNzGCoe2/os740X4KQ6sHakRKv10v2n4frZa/v7sge7Bik9q8Tbu
-	4smGyHkh/8ify7GJFQ+BC/Un775SSC3NmN871LvS7S
-X-Received: by 2002:a05:6000:2901:b0:436:233c:c7c2 with SMTP id ffacd0b85a97d-4378aa0c732mr4446267f8f.16.1770897816772;
-        Thu, 12 Feb 2026 04:03:36 -0800 (PST)
-Received: from draszik.lan ([212.129.82.233])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43783dfc8b9sm11365172f8f.24.2026.02.12.04.03.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Feb 2026 04:03:36 -0800 (PST)
-Message-ID: <b5078af810a681333043f64d71b7d6ea55ff44bb.camel@linaro.org>
-Subject: Re: [PATCH v5 04/10] dt-bindings: soc: google: gs101-pmu: allow
- power domains as children
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar
- <alim.akhtar@samsung.com>,  Conor Dooley <conor+dt@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Ulf Hansson	 <ulf.hansson@linaro.org>, Liam
- Girdwood <lgirdwood@gmail.com>, Mark Brown	 <broonie@kernel.org>, Peter
- Griffin <peter.griffin@linaro.org>, Tudor Ambarus	
- <tudor.ambarus@linaro.org>, Juan Yescas <jyescas@google.com>, Will McVicker
-	 <willmcvicker@google.com>, kernel-team@android.com, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Marek Szyprowski <m.szyprowski@samsung.com>
-Date: Thu, 12 Feb 2026 12:03:38 +0000
-In-Reply-To: <20260211211229.GA3882182-robh@kernel.org>
-References: <20260205-gs101-pd-v5-0-ede49cdb57a6@linaro.org>
-	 <20260205-gs101-pd-v5-4-ede49cdb57a6@linaro.org>
-	 <20260211211229.GA3882182-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-2+build4 
+        d=1e100.net; s=20230601; t=1770898508; x=1771503308;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pfMwg8PmT1mIWqEb1KGB08f7tOELO1EnRMqkw0s9nXA=;
+        b=TG9GTSgKiKEr0rdKZizKtoQ2jx8h5jEs6+MDAUTHzVhOLtyRIDafCUp3RVlozSl1SN
+         6FjuI25nLhZDDBEeWiHEqH7VC3BvL2iUNUDJ+BzvAWcBS1Z2JkTaWuB8BJO51BWTA14T
+         KetjbUdE2X3NmxoTCCxQ29dMUQqddoY2+uiQLII4pHJkVSX5y/axXt1TG2vBP7qlCV3F
+         +8FI52K1OCi4gO4b5btDsSumpZ9OyCyhwL+bN7OgHRUX4/oWeo85jnowZI2LXgLoPuBS
+         E7RcyJkVITxUq24x/F9kr94r4P2I93Iqw6bgpinQbkjqeSXk2CyUyfQIgYzOcCDH7q+y
+         +81g==
+X-Forwarded-Encrypted: i=1; AJvYcCWDP8/cvz6y5z+n3/065DojbfYsG8YMXDYAvHwSHoGo63KKieHCK2aoRORpDXc52XZBUcAjVcyC2A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywe4Cu+75ai7+08k/Zt5cy5p4NAd6iMY3d7ejG1v2FFOk+uWSw8
+	8BdUBvt3Pka9vvztFefUUtKD3yKLmMZQLrJoUecvkvFpYfXsoy4HCxRUWG8HzLnHUhy1jBLUBVi
+	Neh4B8SIAmYj0IDCswjHJYQNhJclDy9LcydJIMPtvqEDr4L0N8tUpo92h3fdotA==
+X-Gm-Gg: AZuq6aKLojshX0c7TBbvaKxy1qN2iUl6G+ae7FGzu16RBi/AWtNYVAj7IQKqjR7MaZ1
+	ZtTaDY9vqnhp1XFAcPJOQ0sYSrw+ITOiNENA6SWWPCCZb4gkpIrFSHyeljXoJu8yb4sESy6dlze
+	jHKBkzxnn2HZ9px59mJCmCcvo/WaLy2o5nKIBu0NYh8doJSWmANHEz1ER23G6Wno+9wzHVUJb6U
+	9co4YxKHZMJnz9wxOTp2SKnxIlmDzdkSjfiqk52qhcRf8owychJF1dG66vvCSFEQeGuCHIvWFni
+	e4qJBqBBHjcvd1sWnueqoLRuRN0tjtm0epPKotIre2usEoNnlimc5/XIZgZataEbZLcAJmqGnZr
+	ccqVebbQzUlPmRWY89BbbJ1/bYJo6Yccbcu3ULmNxwHFtxcsV0HGDKv+Xc+HYnxko91cGItCrTG
+	5s+c0=
+X-Received: by 2002:a05:6214:6014:b0:897:1e9:57a8 with SMTP id 6a1803df08f44-897279b33b7mr28266296d6.1.1770898508370;
+        Thu, 12 Feb 2026 04:15:08 -0800 (PST)
+X-Received: by 2002:a05:6214:6014:b0:897:1e9:57a8 with SMTP id 6a1803df08f44-897279b33b7mr28265956d6.1.1770898507944;
+        Thu, 12 Feb 2026 04:15:07 -0800 (PST)
+Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-65a3cf38c5dsm1712289a12.22.2026.02.12.04.15.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Feb 2026 04:15:07 -0800 (PST)
+Message-ID: <f1fc24ad-054f-4731-b982-4c579abf46c1@oss.qualcomm.com>
+Date: Thu, 12 Feb 2026 13:15:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: pm660: add thermal monitor
+To: Richard Acayan <mailingradian@gmail.com>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        Stephen Boyd <sboyd@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20260210021819.12673-1-mailingradian@gmail.com>
+ <20260210021819.12673-4-mailingradian@gmail.com>
+ <e72ede03-94cb-45c3-95e7-63dff0ca3888@oss.qualcomm.com>
+ <aYvNX718diaXDsBy@rdacayan>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <aYvNX718diaXDsBy@rdacayan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: -kApw4oHGZAFvQVYOy9dL9zIWZIKfwxq
+X-Authority-Analysis: v=2.4 cv=OrBCCi/t c=1 sm=1 tr=0 ts=698dc44c cx=c_pps
+ a=wEM5vcRIz55oU/E2lInRtA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
+ a=VwQbUJbxAAAA:8 a=x7XoQ9lxPK0ULKPy1m0A:9 a=QEXdDO2ut3YA:10
+ a=OIgjcC2v60KrkQgK7BGD:22
+X-Proofpoint-ORIG-GUID: -kApw4oHGZAFvQVYOy9dL9zIWZIKfwxq
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEyMDA5MCBTYWx0ZWRfX8N0fus5+IZg9
+ yrSGq/eBnfxOhxanFG2GMeYNpUG9KwSbTLEeyqDcu5K4/6w2KhweyR27Ji3f0z8vRRvaPUM1sUG
+ g2nEc5SR5ivKMMicULMXryAouldqAZKHNqUgZ48ZlsMiBQ6vhgV1m3oy5pVnQ/5xkqv7s92L4Y0
+ JslY22uRkhNqJG6M+910ctAa9jrycEdH/AYZ2px4QtvoPIYy2yk9QvkKfPMHy0z2vkh8QEipade
+ 5ICCi5k3kanITJi3TLAcUQxhSUnvqI+7qSiZ+SFNvU1tP3bxWOO4KNL8k1UCmvubFX5Q7dGQuNi
+ 90P4kz5D2wnPOPggjCNT08sq1yA8rsAQebT0UTp4kHv2LjUN9Hapv17cVlyRHZAlEZhKxhUZd6j
+ JtlYDJ90UkUwUrUYrgUNUHGyggML1AgGHEptbQUOwIpuK8UlJ/rj/ycAaYnoKMhgRIqBcfsSZBY
+ TZKUKLurxDpXumrs9Pg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-12_03,2026-02-12_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 bulkscore=0 suspectscore=0 spamscore=0 impostorscore=0
+ malwarescore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
+ clxscore=1015 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602120090
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,samsung.com,linaro.org,gmail.com,google.com,android.com,lists.infradead.org,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-42554-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	TAGGED_FROM(0.00)[bounces-42555-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andre.draszik@linaro.org,linux-pm@vger.kernel.org];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,linaro.org,intel.com,arm.com,vger.kernel.org];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.0:email,qualcomm.com:dkim,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_PROHIBIT(0.00)[0.0.7.208:email,1.10.107.32:email];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	DBL_PROHIBIT(0.00)[0.0.13.72:email];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[samsung.com:email,1e00:email,linaro.org:mid,linaro.org:dkim,linaro.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3F18E12D404
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 0BD5B12D572
 X-Rspamd-Action: no action
 
-Hi Rob,
+On 2/11/26 1:29 AM, Richard Acayan wrote:
+> On Tue, Feb 10, 2026 at 10:59:20AM +0100, Konrad Dybcio wrote:
+>> On 2/10/26 3:18 AM, Richard Acayan wrote:
+> (snip)
+>>> +		pm660_adc_tm: adc-tm@3400 {
+>>> +			compatible = "qcom,spmi-adc-tm-hc";
+>>> +			reg = <0x3400>;
+>>> +			interrupts = <0x0 0x34 0x0 IRQ_TYPE_EDGE_RISING>;
+>>> +			#thermal-sensor-cells = <1>;
+>>> +			#address-cells = <1>;
+>>> +			#size-cells = <0>;
+>>> +			status = "disabled";
+>>
+>> Can we enable it by default?
+> 
+> No, the thermal monitor fails to probe if it doesn't have any channels:
+> 
+> 	[   17.728926] qcom-spmi-adc-tm5 c440000.spmi:pmic@0:adc-tm@3400: error -EINVAL: get dt data failed
+> 	[   17.728945] qcom-spmi-adc-tm5 c440000.spmi:pmic@0:adc-tm@3400: probe with driver qcom-spmi-adc-tm5 failed with error -22
+> 
+> Triggered by https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/thermal/qcom/qcom-spmi-adc-tm5.c?h=next-20260209#n945
 
-On Wed, 2026-02-11 at 15:12 -0600, Rob Herring wrote:
-> On Thu, Feb 05, 2026 at 09:42:32PM +0000, Andr=C3=A9 Draszik wrote:
-> > The power domains are a property of / implemented in the PMU. As such,
-> > they should be modelled as child nodes of the PMU.
-> >=20
-> > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
-> > ---
-> > v4:
-> > - consistent quoting using " (Krzysztof)
-> > - add samsung,dtzpc to example
-> >=20
-> > Note: Ideally, the newly added properties (ranges, etc.) should only be
-> > 'required' if "^power-domain@[0-9a-f]+$" exists as a patternProperty,
-> > as they're needed only in that case. As-is, this patch now causes
-> > warnings for existing DTs as they don't specify the new properties (and
-> > they shouldn't need to).=20
->=20
-> We can't have warnings added if they aren't valid.
->=20
-> > Only if DTs are updated to include
-> > power-domains, such an update should also add the new properties.
-> >=20
-> > I've not been able to come up with the correct schema syntax to achieve
-> > that. dependencies, dependentRequired, and dependentSchemas don't seem
-> > to support patterns. Similarly,
-> > =C2=A0 - if:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 required:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - ...
-> > =C2=A0=C2=A0=C2=A0 then:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 required:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - ...
-> >=20
-> > doesn't allow patterns in the 'if' block (or I didn't get the syntax
-> > right).
-> >=20
-> > Rob said in
-> > https://lore.kernel.org/all/20251010141357.GA219719-robh@kernel.org/
-> > that this is a known limitation in json-schema.
->=20
-> For a given compatible, you should either have child nodes or you don't.=
-=20
-> The h/w is not variable. So something like this should work:
->=20
-> if:
-> =C2=A0 properties:
-> =C2=A0=C2=A0=C2=A0 compatible:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 contains:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const: foo,bar
->=20
-> then:
-> =C2=A0 required:
-> =C2=A0=C2=A0=C2=A0 - ranges
-> =C2=A0=C2=A0=C2=A0 - '#address-cells'
-> =C2=A0=C2=A0=C2=A0 - '#size-cells'
->=20
+You can define the following ones in the common dt:
 
-Thanks Rob, yes, that works in general, but unfortunately in this case exis=
-ting
-DTs don't specify ranges etc for the google,gs101-pmu compatible. (This bin=
-ding
-is specifically for google,gs101-pmu only anyway).
+REF_GND
+1.25VREF
+VREF_VADC
+VPH_PWR
+VCOIN
+DIE_TEMP
+ANA_IN
 
-The above suggestion will cause the same validation warnings for existing D=
-Ts
-which is no different to just adding those properties to the top-level requ=
-ired:
-as my patch is doing. Unless I misunderstood your suggestion.
+as they're (almost or) always going to be present
 
-The compatible doesn't change with these patches. So I'm not sure how to ma=
-ke
-your suggestion work without causing warnings for existing DTs. We can eith=
-er
-have an old incomplete DT+binding:
+Konrad
 
-	pmu_system_controller: system-controller@17460000 {
-		compatible =3D "google,gs101-pmu";
-		reg =3D <0x17460000 0x10000>;
-	};
-
-or the new one:
-
-	pmu_system_controller: system-controller@17460000 {
-		compatible =3D "google,gs101-pmu";
-		reg =3D <0x17460000 0x10000>;
-		ranges;
-		#address-cells =3D <1>;
-		#size-cells =3D <1>;
-
-		power-domain@1c00 {
-			compatible =3D "google,gs101-pd";
-			reg =3D <0x1c00 0x80>;
-			#power-domain-cells =3D <0>;
-			label =3D "eh";
-			samsung,dtzpc =3D <&dtzpc_eh>;
-		};
-	};
-
-I.e. in the old case (when binding + DT were incomplete) ranges etc. are
-not 'required' (and shouldn't be), while with the power-domain@[0-9a-f]+
-child node(s) added, ranges etc must be specified.=20
-
-If power-domain@[0-9a-f]+ wasn't a pattern, it'd be easy, but I really want
-it to be a pattern, not least because there are so many instances.
-
-What works (at the top level) is:
-
-    dependentRequired:
-      power-domain@1e00: [ranges]
-
-but it would require spelling out all the instances instead of a pattern. T=
-he
-following (or various variations I've tried) doesn't:
-
-    dependentRequired:
-      power-domain@.*: [ranges]
-
-I've also tried to come up with something involving dependentSchemas:, but =
-to no
-avail.
-
-Similarly,
-
-    allOf:
-      - if:
-          anyOf:
-            - required: [power-domain@1e00]
-            - required: [power-domain@2000]
-        then:
-          required:
-            - ranges
-
-works, but when using a regex, it doesn't:
-
-    allOf:
-      - if:
-          anyOf:
-            - required: [power-domain@.*]
-        then:
-          required:
-            - ranges
-
-I've also tried:
-
-    allOf:
-      - if:
-          required:
-            - "^power-domain@[0-9a-f]+$"
-        then:
-          required:
-            - ranges
-
-and
-
-    anyOf:
-      - required:
-          - power-domain@1e00
-          - ranges
-          - reg
-      - required:
-          - reg
-
-and
-
-    anyOf:
-      - required:
-          - "^power-domain@[0-9a-f]+$"
-          - ranges
-          - reg
-      - required:
-          - reg
-
-None of these seem to do what I would like (even the non-regex one).
-
-
-Cheers,
-Andre'
 
