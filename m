@@ -1,181 +1,210 @@
-Return-Path: <linux-pm+bounces-42567-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42568-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id APQSEsHnjWkm8gAAu9opvQ
-	(envelope-from <linux-pm+bounces-42567-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 15:46:25 +0100
+	id qOaMIIjojWmP8gAAu9opvQ
+	(envelope-from <linux-pm+bounces-42568-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 15:49:44 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A69012E767
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 15:46:24 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED0EA12E8A0
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 15:49:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E28F9305A1C4
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 14:39:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 04F8F3028C30
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 14:44:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E309C35CB8D;
-	Thu, 12 Feb 2026 14:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 074C435D5FD;
+	Thu, 12 Feb 2026 14:44:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="hkpRxZnV"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="gapSrQNC";
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="O0FA7yBS";
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="O0FA7yBS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from mail1.bemta41.messagelabs.com (mail1.bemta41.messagelabs.com [195.245.230.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFE935CB88;
-	Thu, 12 Feb 2026 14:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDD135CBA8;
+	Thu, 12 Feb 2026 14:44:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.245.230.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770907130; cv=none; b=nDqbjNxtoG7WURT8+xhr3UFczSaPofFXh4DaryH04X1fsxV7/0DUUJ+aeqenvUHXTgdIr+FHZiccj717f46cfdfHD8dvAsAQgRe9cYDFo2SnpgqDbjPiCKjjDNPNBZGgujNbME4pszeay79Fa9cPnh+ZXlzyI0grKWHjdYUFMxs=
+	t=1770907475; cv=none; b=pHcEVEEK7rbfjkU9B6T2SjSPos+m+lvUoS5OHq0Wrj7NNw3NSPwQDeGt8veYlLOJx4pmcl2tdaC0jGBbmA4ty5xSZXZtMLrjEI1C8pO1eiW2jPB+F9HKcCRtsxnTMFt2b1S/mIkxuj6Km7dw07IQ1qniGZbGlDnU4qWvLjLEzLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770907130; c=relaxed/simple;
-	bh=7gEtrTZqfCsga0dH/u2j1nxhfGCSN9L3pxdLBXwgRKc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pgW4VJJd3C2nbbjtTNxFHNlNWr841eRiiEwEllIGcw3WfcW6k5G8h1KxAzRELqNyUYk+X2e+6nEN5MALaxGsJx/8ajTjAw/ZXl8niTkFU1iCJQfE4V7IpkvlhvAw2i4mOMLqABmGH/ADt1WjOM5qCOYyn82TNp2OE2uUtAlcsCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=hkpRxZnV; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	s=arc-20240116; t=1770907475; c=relaxed/simple;
+	bh=0qI2wDlRiVDjHJSxny5kDsk2/uU/zB905Nc28yYvU60=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=dGjgT4QRGQPJPrElNuV8b3WXK6nHXlDOgDfPw84prx9vu8gkfqojiGrjG2MTt9PN3U8K/UwHw9Zhylue2gf1NXcrapw7S76nmQtcPgdwem9RshBkFYXcMKxvdG/pk166++o/tEHVh49zjtn0a/NLqkt3FJGlEug7wijExO99Jjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=gapSrQNC; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=O0FA7yBS; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=O0FA7yBS; arc=none smtp.client-ip=195.245.230.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+	s=170520fj; t=1770907472; i=@fujitsu.com;
+	bh=0qI2wDlRiVDjHJSxny5kDsk2/uU/zB905Nc28yYvU60=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	b=gapSrQNCYUSJp3fqFiQCE86ujRDUD+6ty1OGTYVW33ERCA30BA8E3AcT2XN+21dW2
+	 Pgw7grWZMs9OVS/hxSPCxJBICgkvGjx5OROZDb5zyltAjdfCiGWRvtIjnt8rBD1oqG
+	 GRfNq3l9ehcyIfQZX8FPrJpaXIf95fkUEDfG5ojpuDsfCS4BtdpB1vobaucQYksBkz
+	 h7YkciNjSmx+ub99jchz0zT8tYuMSK/2Hg7IWa70CWvBNbuYDeeMGmwreUgROzsx92
+	 0XmsZ8QMtzh+sHvhrn5D4cx7bMgmqVlt551X8sD3kvmM9rLARcKJv5weVkAElkuGLv
+	 JaWAethgQnJgQ==
+X-Brightmail-Tracker: H4sIAAAAAAAAA22Sf0wTZxjHee+u14O05CggJypzVUkkoYCL7s3
+  CHNmW5eI0gEZgRrcVuNFm/bVe2crGYlltBGYHY1ZCocDGhlDYmGWIMJSCjYMGgaHoQFCDdmoJ
+  Q0JXIYhbC8O5ZP89yefz/T7PHw+BCi7ikQSj1TBqhVgmxIOw3YmEOHbvPaM0vmcwHk7eGcbho
+  mcWwC+rvQic//EJDstNwwD2jRXgsGmsGUB9XQsOh1of47DbdQ+DleV6BJadG0Wh9etrODSfPI
+  /AIbMTg13n+zF4pbMKh/NGB4CG6hkAC10mBDYuPObAwlkdCn8x2hFo8ZhQOHGqHsBmzxwKb/Q
+  NceB46SUELi34shcct7CkKPqR4QuMNows43SHeZJLH3PMcOjWhhi6rusBQtusRTjdbWnm0vdb
+  KwBtdy8D2lR5lB6odXDpeVsUvVR5CaQEH+JIFZlK7bscybHOE1yVjqPt9NzCdaAIKwZBhID8C
+  VBnRu+DYhBIYGQyVTzSjPsBRp7FqJLTVzl+ICCPI5RhOmhNWvpjEPyPZAGUe+xl/4yTcdRvX1
+  WttIaRUdT1ls85/gBK1uKUa+Ih1w9Cybcpx+kC7mrrNupReRnun/nkbqrNMLYSpsjnqBpT/8q
+  CQHIHtWSZ+WdZAjXuPMtZ9UOo/oq7mH9Gfb6+rRJdzUZTo4M2tBSEmp/RzM9otQCxAsgy6g8Z
+  dWyCKFMtzZFo5GKpTCT+ODZLxOSqlSom9iOG1SSIcrJUIoZlRWyePEuWLVIwGhvwfVLQw+cTz
+  4HZZUNcL1hPIMJw/pVSo1QQnKnMzpOIWck76lwZw/aCjQQhpPh/3vWxEDWTw2jfk8p8/7iGKY
+  InDOPHu3yYz6rEclaas4qc4AWiqLvYjhJzD0w9qABTKBVMZAT/rymfSvpVSa7iadHab4+ATZG
+  hfBAQECDgqRi1XKr5L3eDCAIIQ/lJv/taeFKF5uk+t+8UxHfKDf3KKRrxvyhShxyKOxz3Zkth
+  Rpvx03WLaXvn57ae2vnSZuHt7dqFbciRxtDjWebwkxHXgwWaAxElgQGaqhJr9WdJNdMZU1PD9
+  gGloD91IX3/Yurt6e6fX6tP59zMy5an7ch835F/rfhyyoXDPWmD31pq+sJ3cS39Hm8u74eB9m
+  SMF5NSvjlleN9Fwrvu1dj2phcLwuwfyAOebJFtuik50pA/1BXSqJtJfqtFW3EgcahOMrlrZ8N
+  3Tds7dNY3+M6Bb7JfAQdTpftESu/rd9wJZ1zmObelnrIdvRzdfrWsabahI2ND2Ce/IlEbvg/U
+  Ne4HiVbRxEba4Dyxhxhn0reY9uSvj/bq3XUjRQ62lyfEWIk4IQZVs+K/AS4+BA9WBAAA
+X-Env-Sender: tomasz.wolski@fujitsu.com
+X-Msg-Ref: server-5.tower-859.messagelabs.com!1770907468!228754!1
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received:
+X-StarScan-Version: 9.121.0; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 29395 invoked from network); 12 Feb 2026 14:44:28 -0000
+Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
+  by server-5.tower-859.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 12 Feb 2026 14:44:28 -0000
+Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
+	by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id 177F5100351;
+	Thu, 12 Feb 2026 14:44:28 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 n03ukasimr01.n03.fujitsu.local 177F5100351
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+	s=dspueurope; t=1770907468;
+	bh=0qI2wDlRiVDjHJSxny5kDsk2/uU/zB905Nc28yYvU60=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=O0FA7yBSbJnF/0bttTalPSo7FkQmYeyYXpsypiDQ8dpNYAx3BiPML7oFM4TAhXY42
+	 xnoGWcayNAp2rDsU0Kljoz/tax5vOML7hSw8GNlkWHdc70MUUGT4gZpEerqEia4mnB
+	 N9LGD6B6tLXbgUXFtlVY/KOp1qXtDmTO4myN+NLh5QkOShRQhTYm6M+kITs9zaN0J0
+	 GrdDiNpaMn8E8U6GN5htZwjbzcHZjuGG/b++Btj/PZFmNrNQiQYah2+pjh9NNMfS6F
+	 AWFWM65KN/AmdmYXc04oEriVWJIddzd721JtfkqzpVRWETITjT2SpHhl3Fgpup1kNS
+	 3jc9uJPoKVNbQ==
+Received: from ubuntudhcp (unknown [10.172.107.4])
+	(using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4fBdGF2LM5z9sRl;
-	Thu, 12 Feb 2026 15:38:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1770907125;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/tASHD0fqztvwzzYhG9wjA3X6Sb887HuRt+4PzQxJS8=;
-	b=hkpRxZnV4NZ8j1b1klMnWvP1cEFlt4/bJdJBzk3P8iXEt+NmPgvT+JdunIi7ZAYa6dsVDw
-	6sKIkgJrYfcHS9Tvyucnz+KLHnl3lgC2ObC/himMo/eRH9pGUnE2pI9AkpCink6X8rFtcd
-	wp0k1PSqOwpdbkdtO1o2SUN1ybCvMRxI/ek4OP7tRvpJubVdw4HOluLuZWYHa8wWXBIXmS
-	pGURxTQqKWWxC3VZGkWJFVWqPkqJ0w+bzPwDc/I3Ecu4XAvymoqBPqS3kHOnjTI+DljDp3
-	pCF8DZrbxLAp/lwtwXmdMuGdbyS8tQ8fRY9s3u/EIgwuPREyWcub6oS43KkNdw==
-Message-ID: <f5d3dde6-edec-42f4-93cb-459c8677245a@mailbox.org>
-Date: Thu, 12 Feb 2026 15:38:40 +0100
+	by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id E89BC10034D;
+	Thu, 12 Feb 2026 14:44:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 n03ukasimr01.n03.fujitsu.local E89BC10034D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+	s=dspueurope; t=1770907468;
+	bh=0qI2wDlRiVDjHJSxny5kDsk2/uU/zB905Nc28yYvU60=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=O0FA7yBSbJnF/0bttTalPSo7FkQmYeyYXpsypiDQ8dpNYAx3BiPML7oFM4TAhXY42
+	 xnoGWcayNAp2rDsU0Kljoz/tax5vOML7hSw8GNlkWHdc70MUUGT4gZpEerqEia4mnB
+	 N9LGD6B6tLXbgUXFtlVY/KOp1qXtDmTO4myN+NLh5QkOShRQhTYm6M+kITs9zaN0J0
+	 GrdDiNpaMn8E8U6GN5htZwjbzcHZjuGG/b++Btj/PZFmNrNQiQYah2+pjh9NNMfS6F
+	 AWFWM65KN/AmdmYXc04oEriVWJIddzd721JtfkqzpVRWETITjT2SpHhl3Fgpup1kNS
+	 3jc9uJPoKVNbQ==
+Received: from isar2.ecs00.fujitsu.local (unknown [10.172.183.27])
+	by ubuntudhcp (Postfix) with ESMTP id 8338C2204EA;
+	Thu, 12 Feb 2026 14:44:27 +0000 (UTC)
+From: Tomasz Wolski <tomasz.wolski@fujitsu.com>
+To: alison.schofield@intel.com
+Cc: Smita.KoralahalliChannabasappa@amd.com,
+	ardb@kernel.org,
+	benjamin.cheatham@amd.com,
+	bp@alien8.de,
+	dan.j.williams@intel.com,
+	dave.jiang@intel.com,
+	dave@stgolabs.net,
+	gregkh@linuxfoundation.org,
+	huang.ying.caritas@gmail.com,
+	ira.weiny@intel.com,
+	jack@suse.cz,
+	jeff.johnson@oss.qualcomm.com,
+	jonathan.cameron@huawei.com,
+	len.brown@intel.com,
+	linux-cxl@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	lizhijian@fujitsu.com,
+	ming.li@zohomail.com,
+	nathan.fontenot@amd.com,
+	nvdimm@lists.linux.dev,
+	pavel@kernel.org,
+	peterz@infradead.org,
+	rafael@kernel.org,
+	rrichter@amd.com,
+	terry.bowman@amd.com,
+	tomasz.wolski@fujitsu.com,
+	vishal.l.verma@intel.com,
+	willy@infradead.org,
+	yaoxt.fnst@fujitsu.com,
+	yazen.ghannam@amd.com
+Subject: Re: [PATCH v6 0/9] dax/hmem, cxl: Coordinate Soft Reserved handling with CXL and HMEM
+Date: Thu, 12 Feb 2026 15:44:15 +0100
+Message-Id: <20260212144415.10418-1-tomasz.wolski@fujitsu.com>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <aYuEIRabA954iSfR@aschofie-mobl2.lan>
+References: <aYuEIRabA954iSfR@aschofie-mobl2.lan>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] drm/imagination: Convert to
- dev_pm_domain_{at,de}tach_list()
-To: Matt Coster <Matt.Coster@imgtec.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
- Thorsten Leemhuis <regressions@leemhuis.info>,
- Frank Binns <Frank.Binns@imgtec.com>,
- Brajesh Gupta <Brajesh.Gupta@imgtec.com>,
- Alessio Belle <Alessio.Belle@imgtec.com>,
- Alexandru Dadu <Alexandru.Dadu@imgtec.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <194465eda54d1f852a9226cf691ddc5aa208e0a3.1769097977.git.geert+renesas@glider.be>
- <ffdf3982-e22c-4d01-afa6-5449ed381000@imgtec.com>
- <CAMuHMdWMh_oJFg-KtapcTDGvYWZ-hg_ZEJ2=E5Tp1apOEc8tnQ@mail.gmail.com>
- <b3b4f10e-1222-44f7-b308-db7199c67147@mailbox.org>
- <3e0def93-2f6c-4bcf-8ee5-bf607f2ca382@imgtec.com>
-Content-Language: en-US
-From: Marek Vasut <marek.vasut@mailbox.org>
-In-Reply-To: <3e0def93-2f6c-4bcf-8ee5-bf607f2ca382@imgtec.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-MBO-RS-META: m5na1oyisi5kf9qja4q3ixf1e5yo8yfw
-X-MBO-RS-ID: 5c189705801aa560717
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[mailbox.org,reject];
-	R_DKIM_ALLOW(-0.20)[mailbox.org:s=mail20150812];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[fujitsu.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_DKIM_ALLOW(-0.20)[fujitsu.com:s=170520fj,fujitsu.com:s=dspueurope];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42567-lists,linux-pm=lfdr.de];
-	FREEMAIL_CC(0.00)[linux-m68k.org,leemhuis.info,imgtec.com,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,lists.freedesktop.org,vger.kernel.org,lists.linux.dev];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[amd.com,kernel.org,alien8.de,intel.com,stgolabs.net,linuxfoundation.org,gmail.com,suse.cz,oss.qualcomm.com,huawei.com,vger.kernel.org,fujitsu.com,zohomail.com,lists.linux.dev,infradead.org];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	DKIM_TRACE(0.00)[mailbox.org:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	FROM_NEQ_ENVFROM(0.00)[marek.vasut@mailbox.org,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42568-lists,linux-pm=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[33];
+	FROM_NEQ_ENVFROM(0.00)[tomasz.wolski@fujitsu.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[fujitsu.com:+];
 	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 5A69012E767
+	TO_DN_NONE(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: ED0EA12E8A0
 X-Rspamd-Action: no action
 
-On 2/12/26 10:00 AM, Matt Coster wrote:
-> On 11/02/2026 19:17, Marek Vasut wrote:
->> On 1/23/26 2:50 PM, Geert Uytterhoeven wrote:
->>
->> Hello everyone,
->>
->>> On Fri, 23 Jan 2026 at 14:36, Matt Coster <Matt.Coster@imgtec.com> wrote:
->>>> On 22/01/2026 16:08, Geert Uytterhoeven wrote:
->>>>> Call the dev_pm_domain_attach_list() and dev_pm_domain_detach_list()
->>>>> helpers instead of open-coding multi PM Domain handling.
->>>>>
->>>>> This changes behavior slightly:
->>>>>     - The new handling is also applied in case of a single PM Domain,
->>>>>     - PM Domains are now referred to by index instead of by name, but
->>>>>       "make dtbs_check" enforces the actual naming and ordering anyway,
->>>>>     - There are no longer device links created between virtual domain
->>>>>       devices, only between virtual devices and the parent device.
->>>>
->>>> We still need this guarantee, both at start and end of day. In the
->>>> current implementation dev_pm_domain_attach_list() iterates forwards,
->>>> but so does dev_pm_domain_detach_list(). Even if we changed that, I'd
->>>> prefer not to rely on the implementation details when we can declare the
->>>> dependencies explicitly.
->>>
->>> Note that on R-Car, the PM Domains are nested (see e.g. r8a7795_areas[]),
->>> so they are always (un)powered in the correct order.  But that may not
->>> be the case in the integration on other SoCs.
->>>
->>>> We had/have a patch (attached) kicking around internally to use the
->>>> *_list() functions but keep the inter-domain links in place; it got held
->>>> up by discussions as to whether we actually need those dependencies for
->>>> the hardware to behave correctly. Your patch spurred me to run around
->>>> the office and nag people a bit, and it seems we really do need to care
->>>> about the ordering.
->>>
->>> OK.
->>>
->>>> Can you add the links back in for a V2 or I can properly send the
->>>> attached patch instead, I don't mind either way.
->>>
->>> Please move forward with your patch, you are the expert.
->>> I prefer not to be blamed for any breakage ;-)
->>
->> Has there been any progress on fixing this kernel crash ?
->>
->> There are already two proposed solutions, but no fix is upstream.
->>
-> 
-> Yes and no. Our patch to use dev_pm_domain_attach_list() has landed in
-> drm-misc-next as commit e19cc5ab347e3 ("drm/imagination: Use
-> dev_pm_domain_attach_list()"), but this does not fix the underlying
-> issue of missing synchronization in the PM core[1] is still unresolved
-> as far as I'm aware.
+>
+>FYI - I am able to confirm the dax regions are back for no-soft-reserved
+>case, and my basic hotplug flow works with v6.
+>
+>-- Alison
 
-OK, but the pvr driver can currently easily crash the kernel on boot if 
-firmware is missing, so that should be fixed soon, right ?
+Hello Alison,
 
-I added the regressions list onto CC, because this seems like a problem 
-worth tracking.
+I wanted to ask about this scenario.
+Is my understanding correct that this fix is needed for cases without Soft Reserve and:
+1) CXL memory is installed in the server (no hotplug) and OS is started
+2) CXL memory is hot-plugged after the OS starts
+3) Tests with cxl-test driver
+
+In such case either the admin fails to manually create region via cxl cli (if there
+was no auto-regions) or regions fails to be created automatically during driver probe
+
+Is this correct?
+
+Best regards,
+Tomasz
 
