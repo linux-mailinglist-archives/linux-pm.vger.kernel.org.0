@@ -1,156 +1,166 @@
-Return-Path: <linux-pm+bounces-42535-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42536-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QEfOIlsnjWlOzgAAu9opvQ
-	(envelope-from <linux-pm+bounces-42535-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 02:05:31 +0100
+	id 0FXNLxpgjWnN1gAAu9opvQ
+	(envelope-from <linux-pm+bounces-42536-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 06:07:38 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C56EE128C5B
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 02:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2081612A5AA
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 06:07:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id ED6A230B0FE5
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 01:02:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B9B4E3104439
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 05:07:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FDF58405C;
-	Thu, 12 Feb 2026 01:02:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D85652749D9;
+	Thu, 12 Feb 2026 05:07:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ebAb3zVK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VThiPv5S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B627D18AFD;
-	Thu, 12 Feb 2026 01:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9B1214812
+	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 05:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770858160; cv=none; b=PQhACfR4uk/To9vm47l7nxyJ2MczuJRt0g6zpMQbW49oy+Lh2L4DNUZ/IB94xAf69Ina1yiqbwCp5M2A2PYSM7Cocypt+JheAH53ogyrnvQaVmlI0QvTxjpnahpVw1CJHjY1m/ib45ctU2w9fjz02pvIluzaOndG9fmyvKjPmWU=
+	t=1770872853; cv=none; b=Z4DvCxY1gAAetlR3TfkCYk9a/zKNpN3KYuRv2p65j/Eku/ZvoCoCs4B7KCjheXMx5+uKpZub0CxDQ+3q8eFlVxm+bJGkWOABpeWC2OiZEjMyw4SkIdEmmMcFFIcV7T5DGhJXXXFFp5PoyycybwsiryvaksWnwQhVBige4OetLSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770858160; c=relaxed/simple;
-	bh=Vuc/g5n1fUCA+bCinhAqUXWUdfl52uU+nfuIIunGGEc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VwknA6JApfpCiLNfwHREvCr8m3YqdgcLL6KvO+XzPEG3S6v+kWDiUU1Fht8jSFwb3AOcA+3ze4weQslQTi38IIbFHhk4PdP9uP4J+l7zyha3bip8IiFkJ/i9U4r5zcA9PeCbLkxYfJRlhF9vDfDg8kQVyzU1ISMYg0sZxkaqTWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ebAb3zVK; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770858158; x=1802394158;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=Vuc/g5n1fUCA+bCinhAqUXWUdfl52uU+nfuIIunGGEc=;
-  b=ebAb3zVKeWt7/4I8CXSje+c/2Bua/V896BZF4cSx6Sp7dXIueBEnHMPc
-   e3a6+1JY+V2xIugGUB3pE+GRjbY4HSNdqwhAjVFNQ/IjhPG9BwYFFUQmm
-   4663sVm3zn+UPJnuyg9oxQTwe71MOz9pQlZTV0AT8CZUav8HIFdZOf+Lf
-   Ptr3YqCXFWdu9yTRgvYVF+CYLAZEPu5cxktxVwBHB1h5CLCOpy1DzRzmM
-   OtDdy9VQPaQoljJ0GLAVARZAcdzIb02+TjfLHIWgaIm0YKq+fPstmbdby
-   qmZTCR3fs4305J0j9vLHOzQZjBSxrDlPn1ERCqSggun3MnY36TeeA9JkZ
-   A==;
-X-CSE-ConnectionGUID: xba4Pa45SH+KTOoj1A15Kg==
-X-CSE-MsgGUID: fspgPeK7Qxi3fLPBLnUzKA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11698"; a="71045220"
-X-IronPort-AV: E=Sophos;i="6.21,285,1763452800"; 
-   d="scan'208";a="71045220"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 17:02:37 -0800
-X-CSE-ConnectionGUID: 1By/JMSMQF2EOFfgOTR8Fw==
-X-CSE-MsgGUID: XMN56S7hTbaswW/DrhzX2g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,285,1763452800"; 
-   d="scan'208";a="235395864"
-Received: from spandruv-desk2.jf.intel.com ([10.88.27.176])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 17:02:37 -0800
-Message-ID: <42845834adf97303b19f421965d4f694732b8980.camel@linux.intel.com>
-Subject: Re: [PATCH v1] powercap: intel_rapl_tpmi: Remove FW_BUG from
- invalid version check
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-  "Rafael J . Wysocki"	 <rafael@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Wed, 11 Feb 2026 17:02:36 -0800
-In-Reply-To: <20260211223401.1575776-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: 
-	<20260211223401.1575776-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	s=arc-20240116; t=1770872853; c=relaxed/simple;
+	bh=EosASMTX2s9CcIWPWVdD9Epc98EOoJxCZ11MXv+yVnM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tzr4rpTJUCbkDplUAMo6WeOWS4EKISutt9HS35j+/YuFZz/ZbGmZwcfLdLS2bMdripgfzHEkXJ8BMtTmziu6YFuiXhQe4xRcz8HN1NLFYOyrsz7VT9X8aeey6Cfn38z/AXOdWojJhtMc1uVzJJP9yqvrEVYlL4znJCqrP/+vxKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VThiPv5S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D3F6C19425
+	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 05:07:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770872853;
+	bh=EosASMTX2s9CcIWPWVdD9Epc98EOoJxCZ11MXv+yVnM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=VThiPv5SMbZEL/DadPMgq+mMtrYpHmln/TSs8AhEw97M7Faeeuws9vFsH/bCmqQpu
+	 33dlouVWkrWPCw1pE80IHQqSFazOJOEkWlHdV/UHniqoY/VJFSL4g6I0b2QF62SFjn
+	 JphkosFI2fy9ggHqegdKfnsPbznEG7wdwxQwqeECOpU3r7Kl8FMDuqBIEBDBuoAA5g
+	 BmhZF9+nJ/SxHVLT/fKJu1TJnGVT8I8kHATrFpK74MvOrTccFT6DqBAkxGiOvT7NHQ
+	 EyH11HrBCNf+QHgfdcYfHSP2AnBin6I02bH3NyfJgOrOk+tAGLHCfD/oR1EwtD0rdS
+	 5d/P67ie+zDRw==
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-7946a1f2430so57014817b3.1
+        for <linux-pm@vger.kernel.org>; Wed, 11 Feb 2026 21:07:33 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXfJ0UpD7MAWQSu8BycxbeXNzEYlMVGTF3vTLsiGj5uiTHaAQZtud8BNLtI3+Ey/s1Djk7ZPDcGlA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5aR/KE8QaSimO0oitGeIJy2wMseZjqWX0aOsLyKH3hwBfgvJr
+	LLtHjiu7w+YgwQ9rKQh4DTUID5EJTOYEv+eOhEGwkPQWX2vqrueel4vJVJdtC/D9GGFX06hI/5A
+	2gdTRDanLedes3gUk8GKCv2Kdwt4ZqB12T2TRuv/7Gg==
+X-Received: by 2002:a05:690c:fc8:b0:794:dac2:89de with SMTP id
+ 00721157ae682-7972f113502mr19419047b3.17.1770872852305; Wed, 11 Feb 2026
+ 21:07:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260208215839.87595-2-nphamcs@gmail.com> <20260208222652.328284-1-nphamcs@gmail.com>
+ <CAMgjq7AQNGK-a=AOgvn4-V+zGO21QMbMTVbrYSW_R2oDSLoC+A@mail.gmail.com> <CAKEwX=OUni7PuUqGQUhbMDtErurFN_i=1RgzyQsNXy4LABhXoA@mail.gmail.com>
+In-Reply-To: <CAKEwX=OUni7PuUqGQUhbMDtErurFN_i=1RgzyQsNXy4LABhXoA@mail.gmail.com>
+From: Chris Li <chrisl@kernel.org>
+Date: Wed, 11 Feb 2026 21:07:20 -0800
+X-Gmail-Original-Message-ID: <CACePvbWCZhdF6vyP6BEhyCGXurST7EewNk=HGcE_qVGAwJpFPg@mail.gmail.com>
+X-Gm-Features: AZwV_Qi4jBzTgP6vyYE2l1ny_j4kHipqIQCjBTH1peMA4w-c1bJcYp0Pl-VIEPg
+Message-ID: <CACePvbWCZhdF6vyP6BEhyCGXurST7EewNk=HGcE_qVGAwJpFPg@mail.gmail.com>
+Subject: Re: [PATCH v3 00/20] Virtual Swap Space
+To: Nhat Pham <nphamcs@gmail.com>
+Cc: Kairui Song <ryncsn@gmail.com>, linux-mm@kvack.org, akpm@linux-foundation.org, 
+	hannes@cmpxchg.org, hughd@google.com, yosry.ahmed@linux.dev, 
+	mhocko@kernel.org, roman.gushchin@linux.dev, shakeel.butt@linux.dev, 
+	muchun.song@linux.dev, len.brown@intel.com, chengming.zhou@linux.dev, 
+	huang.ying.caritas@gmail.com, ryan.roberts@arm.com, shikemeng@huaweicloud.com, 
+	viro@zeniv.linux.org.uk, baohua@kernel.org, bhe@redhat.com, osalvador@suse.de, 
+	christophe.leroy@csgroup.eu, pavel@kernel.org, kernel-team@meta.com, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-pm@vger.kernel.org, peterx@redhat.com, riel@surriel.com, 
+	joshua.hahnjy@gmail.com, npache@redhat.com, gourry@gourry.net, 
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, 
+	rafael@kernel.org, jannh@google.com, pfalcato@suse.de, 
+	zhengqi.arch@bytedance.com, minchan@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[srinivas.pandruvada@linux.intel.com,linux-pm@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-42536-lists,linux-pm=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,kvack.org,linux-foundation.org,cmpxchg.org,google.com,linux.dev,kernel.org,intel.com,arm.com,huaweicloud.com,zeniv.linux.org.uk,redhat.com,suse.de,csgroup.eu,meta.com,vger.kernel.org,surriel.com,gourry.net,bytedance.com];
+	RCPT_COUNT_TWELVE(0.00)[39];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42535-lists,linux-pm=lfdr.de];
-	DKIM_TRACE(0.00)[intel.com:+]
-X-Rspamd-Queue-Id: C56EE128C5B
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[chrisl@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 2081612A5AA
 X-Rspamd-Action: no action
 
-On Wed, 2026-02-11 at 14:34 -0800, Kuppuswamy Sathyanarayanan wrote:
-> On partitioned systems, multiple TPMI instances may exist per
-> package,
-> but RAPL registers are only valid on one instance since RAPL has
-> package-scope control. Other instances return invalid versions during
-> domain parsing, which is expected behavior on such systems.
->=20
-> Currently this generates a firmware bug warning:
-> =C2=A0 intel_rapl_tpmi: [Firmware Bug]: Invalid version
->=20
-> Remove the FW_BUG tag, downgrade to pr_debug(), and update the
-> message
-> to clarify that invalid versions are expected on partitioned systems
-> where only one instance can be valid.
->=20
-> Fixes: 9eef7f9da928 ("powercap: intel_rapl: Introduce RAPL TPMI
-> interface driver")
-> Reported-by: Zhang Rui <rui.zhang@intel.com>
-> Signed-off-by: Kuppuswamy Sathyanarayanan
-> <sathyanarayanan.kuppuswamy@linux.intel.com>
+On Tue, Feb 10, 2026 at 11:11=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrot=
+e:
+>
+> On Tue, Feb 10, 2026 at 10:00=E2=80=AFAM Kairui Song <ryncsn@gmail.com> w=
+rote:
+> >
+> > On Mon, Feb 9, 2026 at 7:57=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wr=
+ote:
+> > >
+> > > Anyway, resending this (in-reply-to patch 1 of the series):
+> >
+> > Hi Nhat,
+> >
+> > > Changelog:
+> > > * RFC v2 -> v3:
+> > >     * Implement a cluster-based allocation algorithm for virtual swap
+> > >       slots, inspired by Kairui Song and Chris Li's implementation, a=
+s
+> > >       well as Johannes Weiner's suggestions. This eliminates the lock
+> > >           contention issues on the virtual swap layer.
+> > >     * Re-use swap table for the reverse mapping.
+> > >     * Remove CONFIG_VIRTUAL_SWAP.
+> >
+> > I really do think we better make this optional, not a replacement or
+> > mandatory. There are many hard to evaluate effects as this
+> > fundamentally changes the swap workflow with a lot of behavior changes
+> > at once. e.g. it seems the folio will be reactivated instead of
+> > splitted if the physical swap device is fragmented; slot is allocated
+> > at IO and not at unmap, and maybe many others. Just like zswap is
+> > optional. Some common workloads would see an obvious performance or
+> > memory usage regression following this design, see below.
+>
+> Ideally, if we can close the performance gap and have only one
+> version, then that would be the best :)
+>
+> Problem with making it optional, or maintaining effectively two swap
+> implementations, is that it will make the patch series unreadable and
+> unreviewable, and the code base unmaintanable :) You'll have x2 the
+> amount of code to reason about and test, much more merge conflicts at
+> rebase and cherry-pick time. And any improvement to one version takes
+> extra work to graft onto the other version.
 
- Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+I second that this should be run time optional for other types of
+swap. It should not be mandatory for other swap that does not benefit
+from it. e.g. zram.
 
-> ---
-> =C2=A0drivers/powercap/intel_rapl_tpmi.c | 2 +-
-> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/powercap/intel_rapl_tpmi.c
-> b/drivers/powercap/intel_rapl_tpmi.c
-> index 0a0b85f4528b..0f8abdc592bc 100644
-> --- a/drivers/powercap/intel_rapl_tpmi.c
-> +++ b/drivers/powercap/intel_rapl_tpmi.c
-> @@ -157,7 +157,7 @@ static int parse_one_domain(struct
-> tpmi_rapl_package *trp, u32 offset)
-> =C2=A0	tpmi_domain_flags =3D tpmi_domain_header >> 32 & 0xffff;
-> =C2=A0
-> =C2=A0	if (tpmi_domain_version =3D=3D TPMI_VERSION_INVALID) {
-> -		pr_warn(FW_BUG "Invalid version\n");
-> +		pr_debug("Invalid version, other instances may be
-> valid\n");
-> =C2=A0		return -ENODEV;
-> =C2=A0	}
-> =C2=A0
+Chris
 
