@@ -1,277 +1,171 @@
-Return-Path: <linux-pm+bounces-42546-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42547-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MF9XAPSjjWlh5gAAu9opvQ
-	(envelope-from <linux-pm+bounces-42546-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 10:57:08 +0100
+	id AIPIHYypjWkK5wAAu9opvQ
+	(envelope-from <linux-pm+bounces-42547-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 11:21:00 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E38C12C1D0
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 10:57:07 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0E6512C6C9
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 11:20:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5F969300E15F
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 09:57:06 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C39553057298
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 10:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63F5E2E8B82;
-	Thu, 12 Feb 2026 09:56:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18D6D2D46B4;
+	Thu, 12 Feb 2026 10:16:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NBX1+q3s"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="f7tr/E4L"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m1973194.qiye.163.com (mail-m1973194.qiye.163.com [220.197.31.94])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253072E6CD9
-	for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 09:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3C22EC569;
+	Thu, 12 Feb 2026 10:16:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.94
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770890188; cv=none; b=rkBjsGLZgsrJLjJ9YH5cp2ZmQPxX4OJUUcHzjhBLdMzcQacuxRag8v5/QOq8h5Se+Ky4Ls21ofXBU5lF0tBLnBk1J0W4jGDuKzX69sHBbqfw7+mBk1mzFFFCNpd/iyb+zIT+Nzq+THXOOGVCUTC3ldKSqNpJwha54jZ/tZKi1Sg=
+	t=1770891397; cv=none; b=DAdkFJkA1UstPyNA7+4GOGuowDbetP0bqepnpW5R7XiKVpVAmmOOyDbUECj2bjf0awicmt4KoueZ2HFwtINvZ7BMbNUhzKM5bNzssSnD+HZaUUZimib4GXmw08nQB5sp3Xz3jPCVPRNBcdc03MPmoTzKh4oSPpkWoDMdPWjtVHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770890188; c=relaxed/simple;
-	bh=bm5c2DB94uUyrmyglOpsvupAxM8sAv2B1xXqGM1GJFs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MueCfZiUh2cm916C/KzM5e7kaWEVzz3K+ouKMUSCHDmRTKF3fxymSkYjZ8RjyPtSLsi3lU5OTMOQirruf1yqlw2bc9fuBmXPgsLqd1aNhg6P7s8RXHiUlATwVF0ZiJNnZs5G4jkrDTdwgjF5IyhP0qmmcOHqY0A8oaCPBnWF0Nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NBX1+q3s; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4801d7c72a5so49374265e9.0
-        for <linux-pm@vger.kernel.org>; Thu, 12 Feb 2026 01:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770890183; x=1771494983; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Phtp8Z4ei388aKllZFARYn5zwlBsIT6J1/fUx6EVP8E=;
-        b=NBX1+q3sG3mz5yo+4PTok6RS0Rp9dEpR09+Y/JRk3u6e/64D04ue1Vm9XVkCusdVXu
-         NU3WJvXA/Q+dK+oBZz+2re44DDJ0aNRgUR8oq0glWiZvELc11mKMFW0ZNXaRiz1FwbDl
-         3kum0bbwFJHel7oltVfP+rxyeZEgtlPDoU9m4kCOJ1mKK/Rx/N9WnOd74jf+d8M7g2au
-         yscatCcL8N2Ntt7JN2wdoT5baluHz8sx6Y751dwHYyRknl84qrPr/ABBiYzpydA2evGn
-         5l4w9ak5lIPOuSfe8gbBTLD9GwhQ7CX8KHMX2+xVE9uTBBISVe4xnzhgArj9Ln1esdZF
-         yFYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770890183; x=1771494983;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Phtp8Z4ei388aKllZFARYn5zwlBsIT6J1/fUx6EVP8E=;
-        b=WalEm7Yk1/ccpHd3AnMXn4qy3R6+jN37GjUpaG2HOWWcXinuRklBvm/7Vb9GyGwvyK
-         z0XpzV+QvrtGMPsI5x281UDkUQtdJSkRQP+F6QPDqdPv4+uMo7EP1jfWCLv5WoL8hEom
-         IPcBtVC91+E+lPH1NpIs1/AXbC2VEBSRSMAPW5DLyZDtSQ0AolJdeGKt6135+OphASvQ
-         0Xsddn1NO3VxfjiZFSq74qo7kH1IQ7cHJz0F7a7cGpLW4IUUoBZ1f7SWpGtxGTZwLXSO
-         27uYxZao4itzg3FY+hua4DsAa3UToEZ4xTANtB1hQWgdQUx7+VUI448poF7X6Gwa/J9Y
-         RrSA==
-X-Forwarded-Encrypted: i=1; AJvYcCXekQ5B/V3MyZ/JR8zVyfeKPTAypirIz+Z+qse8sFXayFXII/TdQZVz1TiFi6Iu5cKt+vn88MU/yA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGnhYBeFuXHwtctxOjVZRqWH+oIwvxQQJ2O5yj5NsUqmEqwuXh
-	Micf7Sbb0rHhqAljrOaWZDhPp0RMJo6Vmaid3UIvJ5WjfFaTVyR0c9JJ
-X-Gm-Gg: AZuq6aIUQ30MuSoJzyuVa+nDCKi8pCcuK4KYEM2gKMZ69pHHzHfCKi/qTRrkC0osgLG
-	1SA+Uv/Pmhqr3HrMtTt/NmzqsJUiZ5Vobl3z3pKKhNEnMhKAfGJIavhhEzIMyUhe3ugy5TWKxHo
-	TKd/rjG8l7czm740DWwYXFuDHOxNkax96AKpDThcH9BL5+3E8lZ0oDAETC1ovfK9EX2FrJbTxFr
-	IDlLD1jRyVQUM572a4KgaDmP4iRz4b1dUWGLfz0Vxsyy0HSsOvoCZUStdgaB8ssdsZkRDnJSmn2
-	gfikUfiDwgSRi5d5k+aDtP8lUZfxdGI/bbFX8n8g2NUHMh6RvZVOwYFuAH+pLNJSMK/SI71Lp/2
-	AxXXobHd6MmpsJATWjfnSx8Qym5c26ZPbZX623tIK2KPTKX1KHSE6YY50nl6EYoUZ66LczWZIO1
-	NuQp+hizmgyZWanbZpoSJTew5AXc3K+p/fvWD3bHolIZwd1w2OBpytN3OlqL+KyzeJ
-X-Received: by 2002:a05:600c:4fcb:b0:480:1a9a:e571 with SMTP id 5b1f17b1804b1-4836570e48amr25658585e9.22.1770890183038;
-        Thu, 12 Feb 2026 01:56:23 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d82a4c4sm330608855e9.10.2026.02.12.01.56.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Feb 2026 01:56:22 -0800 (PST)
-Date: Thu, 12 Feb 2026 09:56:21 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
- will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
- mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
- rafael@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com,
- zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com,
- joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
- konrad.wilk@oracle.com
-Subject: Re: [PATCH v9 01/12] asm-generic: barrier: Add
- smp_cond_load_relaxed_timeout()
-Message-ID: <20260212095621.4d99317b@pumpkin>
-In-Reply-To: <20260209023153.2661784-2-ankur.a.arora@oracle.com>
-References: <20260209023153.2661784-1-ankur.a.arora@oracle.com>
-	<20260209023153.2661784-2-ankur.a.arora@oracle.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	s=arc-20240116; t=1770891397; c=relaxed/simple;
+	bh=S0aN7p4YQN4RmlyDDCPare7qU/HGNXtlRHX0+vqggF0=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=ImYNGbfnpQb3FZo99ukb/iUEB/hvBH68IG6cujHgxtuBDU90+UUXmdSqpHezWHM0U6cqDyju+3dDAuQKe9jcJyHJwErYrewMN964DyozTHh6fdG+cnOga2U7dZxduCcu29DD+7ok+rFnrwt9rMBd9nn3ST19aWWehAZ2CRbAsRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=f7tr/E4L; arc=none smtp.client-ip=220.197.31.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 33fa08078;
+	Thu, 12 Feb 2026 18:16:21 +0800 (GMT+08:00)
+From: Shawn Lin <shawn.lin@rock-chips.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Finley Xiao <finley.xiao@rock-chips.com>,
+	Frank Zhang <rmxpzlb@gmail.com>,
+	linux-pm@vger.kernel.org,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	linux-rockchip@lists.infradead.org,
+	Shawn Lin <shawn.lin@rock-chips.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] pmdomain: rockchip: Fix rkvdec0/1 and venc0/1 for RK3588
+Date: Thu, 12 Feb 2026 18:16:04 +0800
+Message-Id: <1770891364-52147-1-git-send-email-shawn.lin@rock-chips.com>
+X-Mailer: git-send-email 2.7.4
+X-HM-Tid: 0a9c515a082f09cckunm305a02041ef9af
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGh9JSlYeTh1MSktPTE5PTRpWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=f7tr/E4LX48FgGZFCGkczgOcuFAT9VbPhusium2zsAa0QDxmpmNN4PypuvtTVlIxkv843sPIAXHGkBF6cjXvQIRWyWdChEU7u8MMHroicK43UuzL5bbmIXcXYhoo25lhqqii1mMBpJkNSrj+4iR8i3pfIcyGHv6JJdTJOPONs/E=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=GFR9wRVn0Qke2uoGUoqI/yXbVDXXXiIpaex2yOx3ucY=;
+	h=date:mime-version:subject:message-id:from;
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[rock-chips.com,none];
+	R_DKIM_ALLOW(-0.20)[rock-chips.com:s=default];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[rock-chips.com,gmail.com,vger.kernel.org,collabora.com,sntech.de,lists.infradead.org];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42546-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42547-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,arndb.de,arm.com,kernel.org,infradead.org,linux-foundation.org,amazon.com,gentwo.org,linaro.org,gmail.com,huawei.com,linux.alibaba.com,oracle.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[shawn.lin@rock-chips.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[rock-chips.com:+];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[davidlaightlinux@gmail.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[infradead.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,arndb.de:email,oracle.com:email]
-X-Rspamd-Queue-Id: 6E38C12C1D0
+	RCPT_COUNT_SEVEN(0.00)[10];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: F0E6512C6C9
 X-Rspamd-Action: no action
 
-On Sun,  8 Feb 2026 18:31:42 -0800
-Ankur Arora <ankur.a.arora@oracle.com> wrote:
+From the RK3588 TRM Table 1-1 RK3588 Voltage Domain and Power Domain Summary,
+PD_RKVDEC0/1 and PD_VENC0/1 rely on VD_VCODEC which require extra voltages to
+be applied, otherwise it breaks RK3588-evb1-v10 board after vdec support landed[1].
+The panic looks like below:
 
-> Add smp_cond_load_relaxed_timeout(), which extends
-> smp_cond_load_relaxed() to allow waiting for a duration.
-> 
-> We loop around waiting for the condition variable to change while
-> peridically doing a time-check. The loop uses cpu_poll_relax() to slow
-> down the busy-waiting, which, unless overridden by the architecture
-> code, amounts to a cpu_relax().
-> 
-> Note that there are two ways for the time-check to fail: the usual
-> timeout case or, @time_expr_ns returning an invalid value (negative
-> or zero). The second failure mode allows for clocks attached to the
-> clock-domain of @cond_expr, which might cease to operate meaningfully
-> once some state internal to @cond_expr has changed.
-> 
-> Evaluation of @time_expr_ns: in the fastpath we want to keep the
-> performance close to smp_cond_load_relaxed(). To do that we defer
-> evaluation of the potentially costly @time_expr_ns to when we hit
-> the slowpath.
-> 
-> This also means that there will always be some hardware dependent
-> duration that has passed in cpu_poll_relax() iterations at the time of
-> first evaluation. Additionally cpu_poll_relax() is not guaranteed to
-> return at timeout boundary. In sum, expect timeout overshoot when we
-> exit due to expiration of the timeout.
-> 
-> The number of spin iterations before time-check, SMP_TIMEOUT_POLL_COUNT
-> is chosen to be 200 by default. With a cpu_poll_relax() iteration
-> taking ~20-30 cycles (measured on a variety of x86 platforms), we expect
-> a tim-check every ~4000-6000 cycles.
-    ^ time-check
+  rockchip-pm-domain fd8d8000.power-management:power-controller: failed to set domain 'rkvdec0' on, val=0
+  rockchip-pm-domain fd8d8000.power-management:power-controller: failed to set domain 'rkvdec1' on, val=0
+  ...
+  Hardware name: Rockchip RK3588S EVB1 V10 Board (DT)
+  Workqueue: pm genpd_power_off_work_fn
+  Call trace:
+  show_stack+0x18/0x24 (C)
+  dump_stack_lvl+0x40/0x84
+  dump_stack+0x18/0x24
+  vpanic+0x1ec/0x4fc
+  vpanic+0x0/0x4fc
+  check_panic_on_warn+0x0/0x94
+  arm64_serror_panic+0x6c/0x78
+  do_serror+0xc4/0xcc
+  el1h_64_error_handler+0x3c/0x5c
+  el1h_64_error+0x6c/0x70
+  regmap_mmio_read32le+0x18/0x24 (P)
+  _regmap_bus_reg_read+0xfc/0x130
+  _regmap_read+0x188/0x1ac
+  regmap_read+0x54/0x78
+  rockchip_pd_power+0xcc/0x5f0
+  rockchip_pd_power_off+0x1c/0x4c
+  _genpd_power_off+0x84/0x120
+  genpd_power_off+0x1b4/0x260
+  genpd_power_off_work_fn+0x38/0x58
+  process_scheduled_works+0x194/0x2c4
+  worker_thread+0x2ac/0x3d8
+  kthread+0x104/0x124
+  ret_from_fork+0x10/0x20
+  SMP: stopping secondary CPUs
+  Kernel Offset: disabled
+  CPU features: 0x3000000,000e0005,40230521,0400720b
+  Memory Limit: none
+  ---[ end Kernel panic - not syncing: Asynchronous SError Interrupt ]---
 
-Plus the cost of evaluating cond_expr 200 times.
-I guess that isn't expected to contain a PCIe read :-)
+[1] https://lore.kernel.org/linux-rockchip/20251020212009.8852-2-detlev.casanova@collabora.com/
+Fixes: db6df2e3fc16 ("pmdomain: rockchip: add regulator support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
 
-	David
+---
 
-> 
-> The outer limit of the overshoot is double that when working with the
-> parameters above. This might be higher or lower depending on the
-> implementation of cpu_poll_relax() across architectures.
-> 
-> Lastly, config option ARCH_HAS_CPU_RELAX indicates availability of a
-> cpu_poll_relax() that is cheaper than polling. This might be relevant
-> for cases with a prolonged timeout.
-> 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: linux-arch@vger.kernel.org
-> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> ---
-> Notes:
->   - Defer evaluation of @time_expr_ns to when we hit the slowpath.
->   - This also helps get rid of the labelled gotos which were used to
->     handle the early failure case (since now there's no early init
->     to be concerned with.)
->   - Add a comment mentioning that the cpu_poll_relax() implementation
->     is better than polling if ARCH_HAS_CPU_RELAX.
-> 
->  include/asm-generic/barrier.h | 72 +++++++++++++++++++++++++++++++++++
->  1 file changed, 72 insertions(+)
-> 
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index d4f581c1e21d..2738fe35c1df 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
-> @@ -273,6 +273,68 @@ do {									\
->  })
->  #endif
->  
-> +/*
-> + * Number of times we iterate in the loop before doing the time check.
-> + */
-> +#ifndef SMP_TIMEOUT_POLL_COUNT
-> +#define SMP_TIMEOUT_POLL_COUNT		200
-> +#endif
-> +
-> +/*
-> + * Platforms with ARCH_HAS_CPU_RELAX have a cpu_poll_relax() implementation
-> + * that is expected to be cheaper (lower power) than pure polling.
-> + */
-> +#ifndef cpu_poll_relax
-> +#define cpu_poll_relax(ptr, val, timeout_ns)	cpu_relax()
-> +#endif
-> +
-> +/**
-> + * smp_cond_load_relaxed_timeout() - (Spin) wait for cond with no ordering
-> + * guarantees until a timeout expires.
-> + * @ptr: pointer to the variable to wait on.
-> + * @cond: boolean expression to wait for.
-> + * @time_expr_ns: expression that evaluates to monotonic time (in ns) or,
-> + *  on failure, returns a negative value.
-> + * @timeout_ns: timeout value in ns
-> + * Both of the above are assumed to be compatible with s64; the signed
-> + * value is used to handle the failure case in @time_expr_ns.
-> + *
-> + * Equivalent to using READ_ONCE() on the condition variable.
-> + *
-> + * Callers that expect to wait for prolonged durations might want to
-> + * take into account the availability of ARCH_HAS_CPU_RELAX.
-> + */
-> +#ifndef smp_cond_load_relaxed_timeout
-> +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,			\
-> +				      time_expr_ns, timeout_ns)		\
-> +({									\
-> +	typeof(ptr) __PTR = (ptr);					\
-> +	__unqual_scalar_typeof(*ptr) VAL;				\
-> +	u32 __n = 0, __spin = SMP_TIMEOUT_POLL_COUNT;			\
-> +	s64 __timeout = (s64)timeout_ns;				\
-> +	s64 __time_now, __time_end = 0;					\
-> +									\
-> +	for (;;) {							\
-> +		VAL = READ_ONCE(*__PTR);				\
-> +		if (cond_expr) 						\
-> +			break;						\
-> +		cpu_poll_relax(__PTR, VAL, (u64)__timeout);		\
-> +		if (++__n < __spin)					\
-> +			continue;					\
-> +		__time_now = (s64)(time_expr_ns);			\
-> +		if (unlikely(__time_end == 0))				\
-> +			__time_end = __time_now + __timeout;		\
-> +		__timeout = __time_end - __time_now;			\
-> +		if (__time_now <= 0 || __timeout <= 0) {		\
-> +			VAL = READ_ONCE(*__PTR);			\
-> +			break;						\
-> +		}							\
-> +		__n = 0;						\
-> +	}								\
-> +	(typeof(*ptr))VAL;						\
-> +})
-> +#endif
-> +
->  /*
->   * pmem_wmb() ensures that all stores for which the modification
->   * are written to persistent storage by preceding instructions have
+ drivers/pmdomain/rockchip/pm-domains.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
+index 997e93c..040aa5f 100644
+--- a/drivers/pmdomain/rockchip/pm-domains.c
++++ b/drivers/pmdomain/rockchip/pm-domains.c
+@@ -1315,10 +1315,10 @@ static const struct rockchip_domain_info rk3588_pm_domains[] = {
+ 	[RK3588_PD_NPUTOP]	= DOMAIN_RK3588("nputop",  0x0, BIT(3),  0,       0x0, BIT(11), BIT(2),  0x0, BIT(1),  BIT(1),  false, false),
+ 	[RK3588_PD_NPU1]	= DOMAIN_RK3588("npu1",    0x0, BIT(4),  0,       0x0, BIT(12), BIT(3),  0x0, BIT(2),  BIT(2),  false, false),
+ 	[RK3588_PD_NPU2]	= DOMAIN_RK3588("npu2",    0x0, BIT(5),  0,       0x0, BIT(13), BIT(4),  0x0, BIT(3),  BIT(3),  false, false),
+-	[RK3588_PD_VENC0]	= DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       0x0, BIT(14), BIT(5),  0x0, BIT(4),  BIT(4),  false, false),
+-	[RK3588_PD_VENC1]	= DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       0x0, BIT(15), BIT(6),  0x0, BIT(5),  BIT(5),  false, false),
+-	[RK3588_PD_RKVDEC0]	= DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,       0x0, BIT(16), BIT(7),  0x0, BIT(6),  BIT(6),  false, false),
+-	[RK3588_PD_RKVDEC1]	= DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,       0x0, BIT(17), BIT(8),  0x0, BIT(7),  BIT(7),  false, false),
++	[RK3588_PD_VENC0]	= DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       0x0, BIT(14), BIT(5),  0x0, BIT(4),  BIT(4),  false, true),
++	[RK3588_PD_VENC1]	= DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       0x0, BIT(15), BIT(6),  0x0, BIT(5),  BIT(5),  false, true),
++	[RK3588_PD_RKVDEC0]	= DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,       0x0, BIT(16), BIT(7),  0x0, BIT(6),  BIT(6),  false, true),
++	[RK3588_PD_RKVDEC1]	= DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,       0x0, BIT(17), BIT(8),  0x0, BIT(7),  BIT(7),  false, true),
+ 	[RK3588_PD_VDPU]	= DOMAIN_RK3588("vdpu",    0x0, BIT(10), 0,       0x0, BIT(18), BIT(9),  0x0, BIT(8),  BIT(8),  false, false),
+ 	[RK3588_PD_RGA30]	= DOMAIN_RK3588("rga30",   0x0, BIT(11), 0,       0x0, BIT(19), BIT(10), 0x0, 0,       0,       false, false),
+ 	[RK3588_PD_AV1]		= DOMAIN_RK3588("av1",     0x0, BIT(12), 0,       0x0, BIT(20), BIT(11), 0x0, BIT(9),  BIT(9),  false, false),
+-- 
+2.7.4
 
 
