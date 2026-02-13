@@ -1,739 +1,112 @@
-Return-Path: <linux-pm+bounces-42598-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42602-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UH/NOntjjmn1BwEAu9opvQ
-	(envelope-from <linux-pm+bounces-42598-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 00:34:19 +0100
+	id iJVxL3+cjmkODQEAu9opvQ
+	(envelope-from <linux-pm+bounces-42602-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 04:37:35 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C9DB131C44
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 00:34:18 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36D6B132AF8
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 04:37:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8160231B81CE
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Feb 2026 23:31:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 02361308197B
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 03:37:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90B4F2F25E4;
-	Thu, 12 Feb 2026 23:30:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D392323EA84;
+	Fri, 13 Feb 2026 03:37:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k6mljKBx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qq4/3kEg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42912E6CD2;
-	Thu, 12 Feb 2026 23:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5E72248B4;
+	Fri, 13 Feb 2026 03:37:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770939059; cv=none; b=DJMEBMvHJ8jpmRvZceF/0IvRXxj2OOCv8u7BL1zx4G11imhUl27F/hgO7qabfzMqo++gqUPYOIGOvEBiuM1RyjVjqKw2qpYlAyLhb25JARPqsep60xdLUT3EmYkKQFLEMiPE8e1ma1F0iS2xf6jS65tG0urK3mPsju4T5/jgFcQ=
+	t=1770953851; cv=none; b=NaR4lYDBqUQB6qFK5ZE0RMR4ZMy6NQdyY1KP56PgE2ZHXuZ7ZYKBS+ofne1OluleV8YSBLLD4mPS9/Mf9SaGDTIk4sw2C1TBQfs7IxYYPRLkcSuaz8su9iVxKuY1keUNK9gY0e3AayAoJ04tcpXW6AbkZXxNZ2b86rkkmuEq7w4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770939059; c=relaxed/simple;
-	bh=IPf/llxp/jgwA3ioH3/TuaAC/Uvnbuefh7w9jGfzorg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nH3+mJXztyH+4GyAYZP7JORHctENr2yIJMzvUxOOToxEmDPwjsRMgWHtwQLGGhflc82rvGQl35pTjR0RSjsC1RynMiOmOYeOeaFzQC+j1JsJAWYdvzFqSSgI2FnZQhU9CBi/Dpkc4KSYwv1HP9INZXz00/IleFNBw3affFqpDvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k6mljKBx; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770939054; x=1802475054;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=IPf/llxp/jgwA3ioH3/TuaAC/Uvnbuefh7w9jGfzorg=;
-  b=k6mljKBxUx/MyRmi0MElVa6MMrvADW/4O+92w6FquV0Zaduy5sHT5O3z
-   yT4HEBRPCXuKPiCG8ddYOW8wBCOCU5+Qls6TueHMLIrlIzIq9nwqpaZEO
-   hRLuei1C97Zit4NViB8kLGq4yXqvM7QQWppVOQ/ExLPG4fFSLrtw8031g
-   KN5JgLddmMDG0Gh+yiw4MZXg3aLTMuYi+PvLif9S+aCvBuPLR1SWgDoug
-   nuM1XJa/e6FcAheJFkymWt1/ea0e47D57yLz2sLrvotJmoUz706pQ2ijD
-   KKDlVHgOITSVMJOip9DiHMYUXyOrBLdx4UtTrD28FKwWAwXFlA+7nRKod
-   A==;
-X-CSE-ConnectionGUID: 5wwCv50lReysBWbR0PHydQ==
-X-CSE-MsgGUID: 5bwKV0y/Q/6Sbbo/RxEvtA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11699"; a="72017451"
-X-IronPort-AV: E=Sophos;i="6.21,287,1763452800"; 
-   d="scan'208";a="72017451"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2026 15:30:49 -0800
-X-CSE-ConnectionGUID: L6v8KBNSTBqrbd02vZTVcQ==
-X-CSE-MsgGUID: 6YTxY+HxQeyw7OgvVG10PQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,287,1763452800"; 
-   d="scan'208";a="211845414"
-Received: from skuppusw-desk2.jf.intel.com ([10.165.154.101])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2026 15:30:46 -0800
-From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 12/12] powercap: intel_rapl: Move MSR default settings into MSR interface driver
-Date: Thu, 12 Feb 2026 15:30:44 -0800
-Message-ID: <20260212233044.329790-13-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260212233044.329790-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20260212233044.329790-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+	s=arc-20240116; t=1770953851; c=relaxed/simple;
+	bh=dy7Po0av5ljXLp4uvLTjdU4xUl/t+U3aK4iH2q9kyRc=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=kdUcpJ7jZW8K8ckDyKB0aum5K+twz75xVVxgwvh2LQqKniMfdtTGqi6dHyFUcOAaiDToHZSpGCrovjhVIxYUmZJVFyoopJxECoEFyhHmvJHQ0JdTuZFO6lTXNvpBt9tdoFvWkTQb2pdcqWRKjzlr593K7g4Hy+W6dJRIxlIpkjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qq4/3kEg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37D17C4CEF7;
+	Fri, 13 Feb 2026 03:37:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770953851;
+	bh=dy7Po0av5ljXLp4uvLTjdU4xUl/t+U3aK4iH2q9kyRc=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=qq4/3kEgwlsFhkQ8xpuYRjyhQzWPMG9jE+WBxZ4S6JiAa1jstDpQGqZx0NL3vGX+L
+	 L7SvaAjGVk4LdSDPdzzrv7hlYYxRhZrcixyC4IzzvjVvs0TrYN+IVSoAPnfDdFbSGw
+	 cRyK6DuBjXW1Htos8yJ1RMTh0aqGq7Ouo4gOxKQInoli0Qo+a3OHjQddzohFG2B4HJ
+	 pJv0sRiRcbpyMKGjOgCbX338K2VDnq3+9QU/5WqMMX4Yz0SQsb9HTd4cIQluFZ87eB
+	 +8TcmQ+IfBagapQWBon2gAV+C+k6sB8/Xahdb7iWQ5LCu1Nhco6CyeBGPRDaL/DTIY
+	 lOk7QJcT+Zm9g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8546B3931093;
+	Fri, 13 Feb 2026 03:37:26 +0000 (UTC)
+Subject: Re: [GIT PULL] power-supply changes for 7.0
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <aY5Y09CgG1iUvWQZ@venus>
+References: <aY5Y09CgG1iUvWQZ@venus>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <aY5Y09CgG1iUvWQZ@venus>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v7.0
+X-PR-Tracked-Commit-Id: 12bdf471e374b34cb0e48b29bb9eb9127ed26fc5
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7563f7e0e9fc79c41b2aea045a87b8de942fd616
+Message-Id: <177095384519.1834955.6885119311332006514.pr-tracker-bot@kernel.org>
+Date: Fri, 13 Feb 2026 03:37:25 +0000
+To: Sebastian Reichel <sre@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42598-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sathyanarayanan.kuppuswamy@linux.intel.com,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42602-lists,linux-pm=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NO_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	DKIM_TRACE(0.00)[intel.com:+];
+	FROM_NEQ_ENVFROM(0.00)[pr-tracker-bot@kernel.org,linux-pm@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,linux.intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1C9DB131C44
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 36D6B132AF8
 X-Rspamd-Action: no action
 
-MSR-specific RAPL defaults differ from those used by the TPMI interface.
-The MMIO and MSR interfaces shared the same rapl_defaults pointer in the
-common driver, but MMIO does not require the CPU-specific variations
-needed by MSR. Keeping these in the common driver adds unnecessary
-complexity and MSR-specific initialization.
+The pull request you sent on Fri, 13 Feb 2026 00:00:07 +0100:
 
-Move MSR defaults and CPU matching into the MSR interface driver.
+> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v7.0
 
-Moves
------
-  * Move rapl_check_unit_atom(), set_floor_freq_atom(), and
-    rapl_compute_time_window_atom() into intel_rapl_msr.c.
-  * Move MSR unit-field GENMASK definitions and local constants.
-  * Move all MSR-related rapl_defaults tables and the CPU-ID matching
-    logic (rapl_ids[]) into the MSR driver.
-  * Move iosf_mbi dependencies (floor-frequency control and related MBI
-    register definitions) as they are MSR-platform specific.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7563f7e0e9fc79c41b2aea045a87b8de942fd616
 
-Modifications
--------------
-  * Replace the common driver's platform-device manual alloc/add sequence
-    with platform_device_register_data() in the MSR driver to pass
-    matching rapl_defaults as platform_data.
-  * Update MSR driver probe to assign pdev->dev.platform_data to
-    priv->defaults.
-  * Update Atom helper functions to use rp->lead_cpu directly for MSR
-    reads/writes instead of the generic get_rid().
-  * Update Atom floor frequency logic to access defaults via the
-    package private data pointer.
-  * Convert MSR device creation from fs_initcall() to module_init().
-    This preserves existing enumeration behavior as the driver was
-    already using module_init().
-  * Since rapl_ids need to exist after boot, remove __initconst
-    specifier.
+Thank you!
 
-No functional changes are expected.
-
-Co-developed-by: Zhang Rui <rui.zhang@intel.com>
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/powercap/intel_rapl_common.c | 232 -------------------------
- drivers/powercap/intel_rapl_msr.c    | 250 ++++++++++++++++++++++++++-
- 2 files changed, 249 insertions(+), 233 deletions(-)
-
-diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index 0d363451cb0d..94abe535a931 100644
---- a/drivers/powercap/intel_rapl_common.c
-+++ b/drivers/powercap/intel_rapl_common.c
-@@ -28,7 +28,6 @@
- 
- #include <asm/cpu_device_id.h>
- #include <asm/intel-family.h>
--#include <asm/iosf_mbi.h>
- #include <asm/msr.h>
- 
- /* bitmasks for RAPL MSRs, used by primitive access functions */
-@@ -213,8 +212,6 @@ static int get_pl_prim(struct rapl_domain *rd, int pl, enum pl_prims prim)
- #define power_zone_to_rapl_domain(_zone) \
- 	container_of(_zone, struct rapl_domain, power_zone)
- 
--static const struct rapl_defaults *defaults_msr;
--
- static const struct rapl_defaults *get_defaults(struct rapl_package *rp)
- {
- 	return rp->priv->defaults;
-@@ -766,7 +763,6 @@ static int rapl_config(struct rapl_package *rp)
- 	/* MMIO I/F shares the same register layout as MSR registers */
- 	case RAPL_IF_MMIO:
- 	case RAPL_IF_MSR:
--		rp->priv->defaults = defaults_msr;
- 		rp->priv->rpi = (void *)rpi_msr;
- 		break;
- 	case RAPL_IF_TPMI:
-@@ -960,34 +956,6 @@ int rapl_default_check_unit(struct rapl_domain *rd)
- }
- EXPORT_SYMBOL_NS_GPL(rapl_default_check_unit, "INTEL_RAPL");
- 
--static int rapl_check_unit_atom(struct rapl_domain *rd)
--{
--	struct reg_action ra;
--	u32 value;
--
--	ra.reg = rd->regs[RAPL_DOMAIN_REG_UNIT];
--	ra.mask = ~0;
--	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra, false)) {
--		pr_err("Failed to read power unit REG 0x%llx on %s:%s, exit.\n",
--			ra.reg.val, rd->rp->name, rd->name);
--		return -ENODEV;
--	}
--
--	value = (ra.value & ENERGY_UNIT_MASK) >> ENERGY_UNIT_OFFSET;
--	rd->energy_unit = ENERGY_UNIT_SCALE * (1ULL << value);
--
--	value = (ra.value & POWER_UNIT_MASK) >> POWER_UNIT_OFFSET;
--	rd->power_unit = (1ULL << value) * MILLIWATT_PER_WATT;
--
--	value = (ra.value & TIME_UNIT_MASK) >> TIME_UNIT_OFFSET;
--	rd->time_unit = USEC_PER_SEC >> value;
--
--	pr_debug("Atom %s:%s energy=%dpJ, time=%dus, power=%duW\n",
--		 rd->rp->name, rd->name, rd->energy_unit, rd->time_unit, rd->power_unit);
--
--	return 0;
--}
--
- static void power_limit_irq_save_cpu(void *info)
- {
- 	u32 l, h = 0;
-@@ -1068,30 +1036,6 @@ void rapl_default_set_floor_freq(struct rapl_domain *rd, bool mode)
- }
- EXPORT_SYMBOL_NS_GPL(rapl_default_set_floor_freq, "INTEL_RAPL");
- 
--static void set_floor_freq_atom(struct rapl_domain *rd, bool enable)
--{
--	static u32 power_ctrl_orig_val;
--	const struct rapl_defaults *defaults = get_defaults(rd->rp);
--	u32 mdata;
--
--	if (!defaults->floor_freq_reg_addr) {
--		pr_err("Invalid floor frequency config register\n");
--		return;
--	}
--
--	if (!power_ctrl_orig_val)
--		iosf_mbi_read(BT_MBI_UNIT_PMC, MBI_CR_READ,
--			      defaults->floor_freq_reg_addr,
--			      &power_ctrl_orig_val);
--	mdata = power_ctrl_orig_val;
--	if (enable) {
--		mdata &= ~GENMASK(14, 8);
--		mdata |= BIT(8);
--	}
--	iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_CR_WRITE,
--		       defaults->floor_freq_reg_addr, mdata);
--}
--
- u64 rapl_default_compute_time_window(struct rapl_domain *rd, u64 value, bool to_raw)
- {
- 	u64 f, y;		/* fraction and exp. used for time unit */
-@@ -1125,149 +1069,6 @@ u64 rapl_default_compute_time_window(struct rapl_domain *rd, u64 value, bool to_
- }
- EXPORT_SYMBOL_NS_GPL(rapl_default_compute_time_window, "INTEL_RAPL");
- 
--static u64 rapl_compute_time_window_atom(struct rapl_domain *rd, u64 value,
--					 bool to_raw)
--{
--	if (to_raw)
--		return div64_u64(value, rd->time_unit);
--
--	/*
--	 * Atom time unit encoding is straight forward val * time_unit,
--	 * where time_unit is default to 1 sec. Never 0.
--	 */
--	return (value) ? value * rd->time_unit : rd->time_unit;
--}
--
--static const struct rapl_defaults rapl_defaults_core = {
--	.floor_freq_reg_addr = 0,
--	.check_unit = rapl_default_check_unit,
--	.set_floor_freq = rapl_default_set_floor_freq,
--	.compute_time_window = rapl_default_compute_time_window,
--};
--
--static const struct rapl_defaults rapl_defaults_hsw_server = {
--	.check_unit = rapl_default_check_unit,
--	.set_floor_freq = rapl_default_set_floor_freq,
--	.compute_time_window = rapl_default_compute_time_window,
--	.dram_domain_energy_unit = 15300,
--};
--
--static const struct rapl_defaults rapl_defaults_spr_server = {
--	.check_unit = rapl_default_check_unit,
--	.set_floor_freq = rapl_default_set_floor_freq,
--	.compute_time_window = rapl_default_compute_time_window,
--	.psys_domain_energy_unit = NANOJOULE_PER_JOULE,
--	.spr_psys_bits = true,
--};
--
--static const struct rapl_defaults rapl_defaults_byt = {
--	.floor_freq_reg_addr = IOSF_CPU_POWER_BUDGET_CTL_BYT,
--	.check_unit = rapl_check_unit_atom,
--	.set_floor_freq = set_floor_freq_atom,
--	.compute_time_window = rapl_compute_time_window_atom,
--};
--
--static const struct rapl_defaults rapl_defaults_tng = {
--	.floor_freq_reg_addr = IOSF_CPU_POWER_BUDGET_CTL_TNG,
--	.check_unit = rapl_check_unit_atom,
--	.set_floor_freq = set_floor_freq_atom,
--	.compute_time_window = rapl_compute_time_window_atom,
--};
--
--static const struct rapl_defaults rapl_defaults_ann = {
--	.floor_freq_reg_addr = 0,
--	.check_unit = rapl_check_unit_atom,
--	.set_floor_freq = NULL,
--	.compute_time_window = rapl_compute_time_window_atom,
--};
--
--static const struct rapl_defaults rapl_defaults_cht = {
--	.floor_freq_reg_addr = 0,
--	.check_unit = rapl_check_unit_atom,
--	.set_floor_freq = NULL,
--	.compute_time_window = rapl_compute_time_window_atom,
--};
--
--static const struct rapl_defaults rapl_defaults_amd = {
--	.check_unit = rapl_default_check_unit,
--};
--
--static const struct x86_cpu_id rapl_ids[] __initconst = {
--	X86_MATCH_VFM(INTEL_SANDYBRIDGE,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_SANDYBRIDGE_X,		&rapl_defaults_core),
--
--	X86_MATCH_VFM(INTEL_IVYBRIDGE,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_IVYBRIDGE_X,		&rapl_defaults_core),
--
--	X86_MATCH_VFM(INTEL_HASWELL,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_HASWELL_L,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_HASWELL_G,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_HASWELL_X,			&rapl_defaults_hsw_server),
--
--	X86_MATCH_VFM(INTEL_BROADWELL,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_BROADWELL_G,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_BROADWELL_D,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_BROADWELL_X,		&rapl_defaults_hsw_server),
--
--	X86_MATCH_VFM(INTEL_SKYLAKE,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_SKYLAKE_L,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_SKYLAKE_X,			&rapl_defaults_hsw_server),
--	X86_MATCH_VFM(INTEL_KABYLAKE_L,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_KABYLAKE,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_CANNONLAKE_L,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ICELAKE_L,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ICELAKE,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ICELAKE_NNPI,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ICELAKE_X,			&rapl_defaults_hsw_server),
--	X86_MATCH_VFM(INTEL_ICELAKE_D,			&rapl_defaults_hsw_server),
--	X86_MATCH_VFM(INTEL_COMETLAKE_L,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_COMETLAKE,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_TIGERLAKE_L,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_TIGERLAKE,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ROCKETLAKE,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ALDERLAKE,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ALDERLAKE_L,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ATOM_GRACEMONT,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_RAPTORLAKE,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_RAPTORLAKE_P,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_RAPTORLAKE_S,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_BARTLETTLAKE,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_METEORLAKE,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_METEORLAKE_L,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_SAPPHIRERAPIDS_X,		&rapl_defaults_spr_server),
--	X86_MATCH_VFM(INTEL_EMERALDRAPIDS_X,		&rapl_defaults_spr_server),
--	X86_MATCH_VFM(INTEL_LUNARLAKE_M,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_PANTHERLAKE_L,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_WILDCATLAKE_L,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_NOVALAKE,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_NOVALAKE_L,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ARROWLAKE_H,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ARROWLAKE,			&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ARROWLAKE_U,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_LAKEFIELD,			&rapl_defaults_core),
--
--	X86_MATCH_VFM(INTEL_ATOM_SILVERMONT,		&rapl_defaults_byt),
--	X86_MATCH_VFM(INTEL_ATOM_AIRMONT,		&rapl_defaults_cht),
--	X86_MATCH_VFM(INTEL_ATOM_SILVERMONT_MID,	&rapl_defaults_tng),
--	X86_MATCH_VFM(INTEL_ATOM_SILVERMONT_MID2,	&rapl_defaults_ann),
--	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT_PLUS,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT_D,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ATOM_TREMONT,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ATOM_TREMONT_D,		&rapl_defaults_core),
--	X86_MATCH_VFM(INTEL_ATOM_TREMONT_L,		&rapl_defaults_core),
--
--	X86_MATCH_VFM(INTEL_XEON_PHI_KNL,		&rapl_defaults_hsw_server),
--	X86_MATCH_VFM(INTEL_XEON_PHI_KNM,		&rapl_defaults_hsw_server),
--
--	X86_MATCH_VENDOR_FAM(AMD, 0x17,			&rapl_defaults_amd),
--	X86_MATCH_VENDOR_FAM(AMD, 0x19,			&rapl_defaults_amd),
--	X86_MATCH_VENDOR_FAM(AMD, 0x1A,			&rapl_defaults_amd),
--	X86_MATCH_VENDOR_FAM(HYGON, 0x18,		&rapl_defaults_amd),
--	{}
--};
--MODULE_DEVICE_TABLE(x86cpu, rapl_ids);
--
- /* Read once for all raw primitive data for domains */
- static void rapl_update_domain_data(struct rapl_package *rp)
- {
-@@ -2290,39 +2091,6 @@ struct rapl_package *rapl_add_package(int id, struct rapl_if_priv *priv, bool id
- }
- EXPORT_SYMBOL_NS_GPL(rapl_add_package, "INTEL_RAPL");
- 
--static struct platform_device *rapl_msr_platdev;
--
--static int __init rapl_init(void)
--{
--	const struct x86_cpu_id *id;
--	int ret;
--
--	id = x86_match_cpu(rapl_ids);
--	if (id) {
--		defaults_msr = (const struct rapl_defaults *)id->driver_data;
--
--		rapl_msr_platdev = platform_device_alloc("intel_rapl_msr", 0);
--		if (!rapl_msr_platdev)
--			return -ENOMEM;
--
--		ret = platform_device_add(rapl_msr_platdev);
--		if (ret) {
--			platform_device_put(rapl_msr_platdev);
--			return ret;
--		}
--	}
--
--	return 0;
--}
--
--static void __exit rapl_exit(void)
--{
--	platform_device_unregister(rapl_msr_platdev);
--}
--
--fs_initcall(rapl_init);
--module_exit(rapl_exit);
--
- MODULE_DESCRIPTION("Intel Runtime Average Power Limit (RAPL) common code");
- MODULE_AUTHOR("Jacob Pan <jacob.jun.pan@intel.com>");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-index 6f23e601832d..d3cd62a0f053 100644
---- a/drivers/powercap/intel_rapl_msr.c
-+++ b/drivers/powercap/intel_rapl_msr.c
-@@ -21,15 +21,33 @@
- #include <linux/intel_rapl.h>
- #include <linux/processor.h>
- #include <linux/platform_device.h>
-+#include <linux/units.h>
-+#include <linux/bits.h>
- 
- #include <asm/cpu_device_id.h>
- #include <asm/intel-family.h>
-+#include <asm/iosf_mbi.h>
- #include <asm/msr.h>
- 
- /* Local defines */
- #define MSR_PLATFORM_POWER_LIMIT	0x0000065C
- #define MSR_VR_CURRENT_CONFIG		0x00000601
- 
-+#define ENERGY_UNIT_SCALE		1000	/* scale from driver unit to powercap unit */
-+
-+#define POWER_UNIT_OFFSET		0x00
-+#define POWER_UNIT_MASK			GENMASK(3, 0)
-+
-+#define ENERGY_UNIT_OFFSET		0x08
-+#define ENERGY_UNIT_MASK		GENMASK(12, 8)
-+
-+#define TIME_UNIT_OFFSET		0x10
-+#define TIME_UNIT_MASK			GENMASK(19, 16)
-+
-+/* Sideband MBI registers */
-+#define IOSF_CPU_POWER_BUDGET_CTL_BYT	0x02
-+#define IOSF_CPU_POWER_BUDGET_CTL_TNG	0xDF
-+
- /* private data for RAPL MSR Interface */
- static struct rapl_if_priv *rapl_msr_priv;
- 
-@@ -186,6 +204,201 @@ static const struct x86_cpu_id pmu_support_ids[] = {
- 	{}
- };
- 
-+static int rapl_check_unit_atom(struct rapl_domain *rd)
-+{
-+	struct reg_action ra;
-+	u32 value;
-+
-+	ra.reg = rd->regs[RAPL_DOMAIN_REG_UNIT];
-+	ra.mask = ~0;
-+	if (rapl_msr_read_raw(rd->rp->lead_cpu, &ra, false)) {
-+		pr_err("Failed to read power unit REG 0x%llx on %s:%s, exit.\n",
-+			ra.reg.val, rd->rp->name, rd->name);
-+		return -ENODEV;
-+	}
-+
-+	value = (ra.value & ENERGY_UNIT_MASK) >> ENERGY_UNIT_OFFSET;
-+	rd->energy_unit = ENERGY_UNIT_SCALE * (1ULL << value);
-+
-+	value = (ra.value & POWER_UNIT_MASK) >> POWER_UNIT_OFFSET;
-+	rd->power_unit = (1ULL << value) * MILLIWATT_PER_WATT;
-+
-+	value = (ra.value & TIME_UNIT_MASK) >> TIME_UNIT_OFFSET;
-+	rd->time_unit = USEC_PER_SEC >> value;
-+
-+	pr_debug("Atom %s:%s energy=%dpJ, time=%dus, power=%duW\n",
-+		 rd->rp->name, rd->name, rd->energy_unit, rd->time_unit, rd->power_unit);
-+
-+	return 0;
-+}
-+
-+static void set_floor_freq_atom(struct rapl_domain *rd, bool enable)
-+{
-+	static u32 power_ctrl_orig_val;
-+	const struct rapl_defaults *defaults = rd->rp->priv->defaults;
-+	u32 mdata;
-+
-+	if (!defaults->floor_freq_reg_addr) {
-+		pr_err("Invalid floor frequency config register\n");
-+		return;
-+	}
-+
-+	if (!power_ctrl_orig_val)
-+		iosf_mbi_read(BT_MBI_UNIT_PMC, MBI_CR_READ,
-+			      defaults->floor_freq_reg_addr,
-+			      &power_ctrl_orig_val);
-+	mdata = power_ctrl_orig_val;
-+	if (enable) {
-+		mdata &= ~GENMASK(14, 8);
-+		mdata |= BIT(8);
-+	}
-+	iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_CR_WRITE,
-+		       defaults->floor_freq_reg_addr, mdata);
-+}
-+
-+static u64 rapl_compute_time_window_atom(struct rapl_domain *rd, u64 value,
-+					 bool to_raw)
-+{
-+	if (to_raw)
-+		return div64_u64(value, rd->time_unit);
-+
-+	/*
-+	 * Atom time unit encoding is straight forward val * time_unit,
-+	 * where time_unit is default to 1 sec. Never 0.
-+	 */
-+	return value ? value * rd->time_unit : rd->time_unit;
-+}
-+
-+static const struct rapl_defaults rapl_defaults_core = {
-+	.floor_freq_reg_addr = 0,
-+	.check_unit = rapl_default_check_unit,
-+	.set_floor_freq = rapl_default_set_floor_freq,
-+	.compute_time_window = rapl_default_compute_time_window,
-+};
-+
-+static const struct rapl_defaults rapl_defaults_hsw_server = {
-+	.check_unit = rapl_default_check_unit,
-+	.set_floor_freq = rapl_default_set_floor_freq,
-+	.compute_time_window = rapl_default_compute_time_window,
-+	.dram_domain_energy_unit = 15300,
-+};
-+
-+static const struct rapl_defaults rapl_defaults_spr_server = {
-+	.check_unit = rapl_default_check_unit,
-+	.set_floor_freq = rapl_default_set_floor_freq,
-+	.compute_time_window = rapl_default_compute_time_window,
-+	.psys_domain_energy_unit = NANOJOULE_PER_JOULE,
-+	.spr_psys_bits = true,
-+};
-+
-+static const struct rapl_defaults rapl_defaults_byt = {
-+	.floor_freq_reg_addr = IOSF_CPU_POWER_BUDGET_CTL_BYT,
-+	.check_unit = rapl_check_unit_atom,
-+	.set_floor_freq = set_floor_freq_atom,
-+	.compute_time_window = rapl_compute_time_window_atom,
-+};
-+
-+static const struct rapl_defaults rapl_defaults_tng = {
-+	.floor_freq_reg_addr = IOSF_CPU_POWER_BUDGET_CTL_TNG,
-+	.check_unit = rapl_check_unit_atom,
-+	.set_floor_freq = set_floor_freq_atom,
-+	.compute_time_window = rapl_compute_time_window_atom,
-+};
-+
-+static const struct rapl_defaults rapl_defaults_ann = {
-+	.floor_freq_reg_addr = 0,
-+	.check_unit = rapl_check_unit_atom,
-+	.set_floor_freq = NULL,
-+	.compute_time_window = rapl_compute_time_window_atom,
-+};
-+
-+static const struct rapl_defaults rapl_defaults_cht = {
-+	.floor_freq_reg_addr = 0,
-+	.check_unit = rapl_check_unit_atom,
-+	.set_floor_freq = NULL,
-+	.compute_time_window = rapl_compute_time_window_atom,
-+};
-+
-+static const struct rapl_defaults rapl_defaults_amd = {
-+	.check_unit = rapl_default_check_unit,
-+};
-+
-+static const struct x86_cpu_id rapl_ids[]  = {
-+	X86_MATCH_VFM(INTEL_SANDYBRIDGE,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_SANDYBRIDGE_X,		&rapl_defaults_core),
-+
-+	X86_MATCH_VFM(INTEL_IVYBRIDGE,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_IVYBRIDGE_X,		&rapl_defaults_core),
-+
-+	X86_MATCH_VFM(INTEL_HASWELL,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_HASWELL_L,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_HASWELL_G,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_HASWELL_X,			&rapl_defaults_hsw_server),
-+
-+	X86_MATCH_VFM(INTEL_BROADWELL,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_BROADWELL_G,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_BROADWELL_D,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_BROADWELL_X,		&rapl_defaults_hsw_server),
-+
-+	X86_MATCH_VFM(INTEL_SKYLAKE,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_SKYLAKE_L,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_SKYLAKE_X,			&rapl_defaults_hsw_server),
-+	X86_MATCH_VFM(INTEL_KABYLAKE_L,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_KABYLAKE,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_CANNONLAKE_L,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ICELAKE_L,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ICELAKE,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ICELAKE_NNPI,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ICELAKE_X,			&rapl_defaults_hsw_server),
-+	X86_MATCH_VFM(INTEL_ICELAKE_D,			&rapl_defaults_hsw_server),
-+	X86_MATCH_VFM(INTEL_COMETLAKE_L,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_COMETLAKE,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_TIGERLAKE_L,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_TIGERLAKE,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ROCKETLAKE,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ALDERLAKE,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ALDERLAKE_L,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ATOM_GRACEMONT,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_RAPTORLAKE,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_RAPTORLAKE_P,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_RAPTORLAKE_S,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_BARTLETTLAKE,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_METEORLAKE,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_METEORLAKE_L,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_SAPPHIRERAPIDS_X,		&rapl_defaults_spr_server),
-+	X86_MATCH_VFM(INTEL_EMERALDRAPIDS_X,		&rapl_defaults_spr_server),
-+	X86_MATCH_VFM(INTEL_LUNARLAKE_M,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_PANTHERLAKE_L,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_WILDCATLAKE_L,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_NOVALAKE,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_NOVALAKE_L,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ARROWLAKE_H,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ARROWLAKE,			&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ARROWLAKE_U,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_LAKEFIELD,			&rapl_defaults_core),
-+
-+	X86_MATCH_VFM(INTEL_ATOM_SILVERMONT,		&rapl_defaults_byt),
-+	X86_MATCH_VFM(INTEL_ATOM_AIRMONT,		&rapl_defaults_cht),
-+	X86_MATCH_VFM(INTEL_ATOM_SILVERMONT_MID,	&rapl_defaults_tng),
-+	X86_MATCH_VFM(INTEL_ATOM_SILVERMONT_MID2,	&rapl_defaults_ann),
-+	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT_PLUS,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ATOM_GOLDMONT_D,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ATOM_TREMONT,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ATOM_TREMONT_D,		&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_ATOM_TREMONT_L,		&rapl_defaults_core),
-+
-+	X86_MATCH_VFM(INTEL_XEON_PHI_KNL,		&rapl_defaults_hsw_server),
-+	X86_MATCH_VFM(INTEL_XEON_PHI_KNM,		&rapl_defaults_hsw_server),
-+
-+	X86_MATCH_VENDOR_FAM(AMD, 0x17,			&rapl_defaults_amd),
-+	X86_MATCH_VENDOR_FAM(AMD, 0x19,			&rapl_defaults_amd),
-+	X86_MATCH_VENDOR_FAM(AMD, 0x1A,			&rapl_defaults_amd),
-+	X86_MATCH_VENDOR_FAM(HYGON, 0x18,		&rapl_defaults_amd),
-+	{}
-+};
-+MODULE_DEVICE_TABLE(x86cpu, rapl_ids);
-+
- static int rapl_msr_probe(struct platform_device *pdev)
- {
- 	const struct x86_cpu_id *id = x86_match_cpu(pl4_support_ids);
-@@ -205,6 +418,7 @@ static int rapl_msr_probe(struct platform_device *pdev)
- 	}
- 	rapl_msr_priv->read_raw = rapl_msr_read_raw;
- 	rapl_msr_priv->write_raw = rapl_msr_write_raw;
-+	rapl_msr_priv->defaults = (const struct rapl_defaults *)pdev->dev.platform_data;
- 
- 	if (id) {
- 		rapl_msr_priv->limits[RAPL_DOMAIN_PACKAGE] |= BIT(POWER_LIMIT4);
-@@ -259,7 +473,41 @@ static struct platform_driver intel_rapl_msr_driver = {
- 	},
- };
- 
--module_platform_driver(intel_rapl_msr_driver);
-+static struct platform_device *rapl_msr_platdev;
-+
-+static int intel_rapl_msr_init(void)
-+{
-+	const struct rapl_defaults *def;
-+	const struct x86_cpu_id *id;
-+	int ret;
-+
-+	ret = platform_driver_register(&intel_rapl_msr_driver);
-+	if (ret)
-+		return ret;
-+
-+	/* Create the MSR RAPL platform device for supported platforms */
-+	id = x86_match_cpu(rapl_ids);
-+	if (!id)
-+		return 0;
-+
-+	def = (const struct rapl_defaults *)id->driver_data;
-+
-+	rapl_msr_platdev = platform_device_register_data(NULL, "intel_rapl_msr", 0, def,
-+							 sizeof(*def));
-+	if (IS_ERR(rapl_msr_platdev))
-+		pr_debug("intel_rapl_msr device register failed, ret:%ld\n",
-+			 PTR_ERR(rapl_msr_platdev));
-+
-+	return 0;
-+}
-+module_init(intel_rapl_msr_init);
-+
-+static void intel_rapl_msr_exit(void)
-+{
-+	platform_device_unregister(rapl_msr_platdev);
-+	platform_driver_unregister(&intel_rapl_msr_driver);
-+}
-+module_exit(intel_rapl_msr_exit);
- 
- MODULE_DESCRIPTION("Driver for Intel RAPL (Running Average Power Limit) control via MSR interface");
- MODULE_AUTHOR("Zhang Rui <rui.zhang@intel.com>");
 -- 
-2.43.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
