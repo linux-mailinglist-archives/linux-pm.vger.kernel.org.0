@@ -1,51 +1,43 @@
-Return-Path: <linux-pm+bounces-42613-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42614-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UOIDEHn5jmnbGAEAu9opvQ
-	(envelope-from <linux-pm+bounces-42613-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 11:14:17 +0100
+	id eE9RD9Eqj2kPKwEAu9opvQ
+	(envelope-from <linux-pm+bounces-42614-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 14:44:49 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD889134F3B
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 11:14:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 589A613672F
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 14:44:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 52B213042081
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 10:14:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8049830574B6
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 13:44:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 738DF350D48;
-	Fri, 13 Feb 2026 10:14:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s+NSQx3f"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0ED834F46D;
+	Fri, 13 Feb 2026 13:44:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D7C9350A33;
-	Fri, 13 Feb 2026 10:14:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBCAA14AD20;
+	Fri, 13 Feb 2026 13:44:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770977649; cv=none; b=Wt59ROXxgMB2g3fRhQOYP0+zEa1ZsQnSIZuTpjZ/QcOdlN3HBTMalGrSBNLgFY+dYByok84E2FLh8Vwd8k/hNHPG0/ul5qP5acF+gPJIRmwnwPGn58rOjNNqS9lYo3EklkLQXCOtmGaJdtMbW5DWC6W2yU555nlHb/kXNDK6M+o=
+	t=1770990285; cv=none; b=aYOZDmjf7z3Y9o6rwwrfH/I6e2VVzC6lTAwvgJCj3jKoQpNwI2epn4i+oYtETr0Ymavj8VMdsVjyDkagsH9qB9Wlx0rzxt+sOpP4wEqTd2x2b4TloJp30spAmv0a5mx7EKDARb392nFmJiCUh7BEkwLQLqUuMXzPc5lD1DgE2ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770977649; c=relaxed/simple;
-	bh=l5CYjcIX7ife3jcMHM5FPH09SSROAye2bDFMHLwLPa8=;
+	s=arc-20240116; t=1770990285; c=relaxed/simple;
+	bh=e1KK9/Flaa1UtwYQQSFPpDmB/yGazt0FwOkB4J8jOQ8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WrcEXkfBEOvjumLQXKGUSxAEI0xyuRN1mLEFvlIJfzs27fMQpUaaTlduSpEOk9n/tpEalvk6cmK9MBKjg0vRhbiriieYJBMrTUYz+shohu4xPM6DZoA7+TkBjtJnDOOBXKOFb0oaojLDuQQYBTWBgtlIDbPC9x0d5xug0Zx6Xq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s+NSQx3f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A793C116C6;
-	Fri, 13 Feb 2026 10:14:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770977649;
-	bh=l5CYjcIX7ife3jcMHM5FPH09SSROAye2bDFMHLwLPa8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=s+NSQx3fiUuq9jbg9LErpzv/uR1h2Ezs69bB/p3kQ6FuWyPi+1jCeJDRTmBcbFPr3
-	 3zG4HDC5O8SDQzhJ8dzQPXMI/iMZ6JIolrmBwsiH33xkM/kTcizliQXUcMTYu8MTTO
-	 cL9/kZF1Y7i5g02siyAxcnv6qw2duPvGKXlwg7SBQCl+w4Rpt6S7eku1ObX0xCvxLw
-	 LEKaanZLQdB0vEUz2jc2PvjYue029FWkdqHyRIVhDlP9UaMBDYQzT3QKTJiT3zUUFY
-	 G7iDEBG/XXl6aMChF5Tt7eruUiOuF2CC81BzhKyx3fqa8qWaYFGnuoC8TQUV8DD6AF
-	 ETLF2w5JQK5qQ==
-Message-ID: <1322b378-0208-4af8-b86c-5491c48aecd9@kernel.org>
-Date: Fri, 13 Feb 2026 11:14:02 +0100
+	 In-Reply-To:Content-Type; b=P2LFE+lPfkPrkUi1M9yp37OjutEfOf++chMzEyKmy+q05FdyrmR/5bi4uP0URx0M7WDmZludRtFUSDcTwUwJVa4a+70KWVMG1kd7bbdtVUiWMaDGcdU8jNejI/kiGVPACF7Q8fi8KBSKK9jj2sIU16n9oLqu6FgT7yFqSTha4hE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C52E1570;
+	Fri, 13 Feb 2026 05:44:36 -0800 (PST)
+Received: from [10.57.15.246] (unknown [10.57.15.246])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 794653F63F;
+	Fri, 13 Feb 2026 05:44:41 -0800 (PST)
+Message-ID: <aa4e56dc-d74b-44dc-b628-c7573159de99@arm.com>
+Date: Fri, 13 Feb 2026 13:44:39 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,115 +45,155 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 7/7] arm64: defconfig: enable Exynos ACPM thermal
- support
-To: Tudor Ambarus <tudor.ambarus@linaro.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Kees Cook <kees@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Peter Griffin <peter.griffin@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Cc: willmcvicker@google.com, jyescas@google.com, shin.son@samsung.com,
- linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-hardening@vger.kernel.org
-References: <20260119-acpm-tmu-v2-0-e02a834f04c6@linaro.org>
- <20260119-acpm-tmu-v2-7-e02a834f04c6@linaro.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH] cpuidle: ladder: Fix state index when only one idle state
+ is registered
+To: Aboorva Devarajan <aboorvad@linux.ibm.com>, rafael@kernel.org
+Cc: daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260211053552.739337-1-aboorvad@linux.ibm.com>
+ <c3d670cd-fc54-49a8-b640-fb16f9bd0487@arm.com>
+ <7297173684f500e006a2997b92c927262221336f.camel@linux.ibm.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260119-acpm-tmu-v2-7-e02a834f04c6@linaro.org>
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <7297173684f500e006a2997b92c927262221336f.camel@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42613-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[linaro.org,kernel.org,intel.com,arm.com,samsung.com,gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: DD889134F3B
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	R_DKIM_NA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[christian.loehle@arm.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42614-lists,linux-pm=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arm.com:mid]
+X-Rspamd-Queue-Id: 589A613672F
 X-Rspamd-Action: no action
 
-On 19/01/2026 13:08, Tudor Ambarus wrote:
-> Enable the Exynos ACPM thermal driver (CONFIG_EXYNOS_ACPM_THERMAL)
-> to allow temperature monitoring and thermal management on Samsung
-> Exynos SoCs that use the Alive Clock and Power Manager (ACPM)
-> protocol.
+On 2/13/26 08:29, Aboorva Devarajan wrote:
+> On Wed, 2026-02-11 at 15:00 +0000, Christian Loehle wrote:
+>> On 2/11/26 05:35, Aboorva Devarajan wrote:
+>>> On certain platforms (PowerNV systems without a power-mgt DT node),
+>>> cpuidle may register only a single idle state. In cases where that
+>>> single state is a polling state (state 0), the ladder governor may
+>>> incorrectly treat state 1 as the first usable state and pass an
+>>> out-of-bounds index. This can lead to a NULL enter callback being
+>>> invoked, ultimately resulting in a system crash.
+>>>
+>>> [   13.342636] cpuidle-powernv : Only Snooze is available
+>>> [   13.351854] Faulting instruction address: 0x00000000
+>>> [   13.376489] NIP [0000000000000000] 0x0
+>>> [   13.378351] LR  [c000000001e01974] cpuidle_enter_state+0x2c4/0x668
+>>>
+>>> Fix this by determining the first non-polling state index based on
+>>> the number of registered states, and by returning state 0 when only
+>>> one state is registered.
+>>>
+>>> Fixes: dc2251bf98c6 ("cpuidle: Eliminate the CPUIDLE_DRIVER_STATE_START symbol")
+>>> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+>>
+>> Agreed that the current behavior is a bug, but is there really much value
+>> in using a cpuidle governor with just a polling state?
+>> It's dead code and trivial to bail out of in cpuidle, right?
+>>
 > 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> Hi Christian,
+> 
+> Thanks for the review.
+> 
+> Other governors (teo, menu) already handle this single-state scenario
+> correctly. Fixing ladder's first_idx calculation seemed like the most
+> targeted fix, however since ladder is not widely used this is likely
+> to go unnoticed, it only popped up during testing with a missing
+> power-mgt device tree node.
+> 
+> yes, adding a bail-out in the core cpuidle_select() is also trivial and
+> would benefit all governors uniformly. Setting stop_tick to false keeps
+> the tick running, which is correct for a single state configuration.
+> 
+> Please let me know if you'd prefer this approach instead.
+> 
 > ---
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index c7876e9e024f..ea082419f7db 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -359,6 +359,16 @@ noinstr int cpuidle_enter_state(struct
+> cpuidle_device *dev,
+>  int cpuidle_select(struct cpuidle_driver *drv, struct cpuidle_device
+> *dev,
+>                    bool *stop_tick)
+>  {
+> +       /*
+> +        * If there is only a single idle state (or none), there is
+> nothing
+> +        * meaningful for the governor to choose. Skip the governor and
+> +        * always use state 0 with the tick running.
+> +        */
+> +       if (unlikely(drv->state_count <= 1)) {
 
-I'll take it after driver gets accepted.
+I think the unlikely isn't helping here, this just let the branch predictor
+handle this as it won't change anyway.
 
-Best regards,
-Krzysztof
+> +               *stop_tick = false;
+> +               return 0;
+> +       }
+> +
+>         return cpuidle_curr_governor->select(drv, dev, stop_tick);
+>  }
+> 
+
+I prefer this, additionally of course:
+
+-------8<-------
+
+diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors/menu.c
+index 64d6f7a1c776..fdfa5d7e10a6 100644
+--- a/drivers/cpuidle/governors/menu.c
++++ b/drivers/cpuidle/governors/menu.c
+@@ -271,7 +271,7 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+                data->bucket = BUCKETS - 1;
+        }
+ 
+-       if (unlikely(drv->state_count <= 1 || latency_req == 0) ||
++       if (unlikely(latency_req == 0) ||
+            ((data->next_timer_ns < drv->states[1].target_residency_ns ||
+              latency_req < drv->states[1].exit_latency_ns) &&
+             !dev->states_usage[0].disable)) {
+diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
+index 81ac5fd58a1c..9b5b8c617806 100644
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -317,12 +317,6 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+         */
+        cpu_data->sleep_length_ns = KTIME_MAX;
+ 
+-       /* Check if there is any choice in the first place. */
+-       if (drv->state_count < 2) {
+-               idx = 0;
+-               goto out_tick;
+-       }
+-
+        if (!dev->states_usage[0].disable)
+                idx = 0;
+ 
+
+
 
