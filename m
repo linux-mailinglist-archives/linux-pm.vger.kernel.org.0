@@ -1,256 +1,220 @@
-Return-Path: <linux-pm+bounces-42621-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42622-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IIbjJbKpj2mZSQEAu9opvQ
-	(envelope-from <linux-pm+bounces-42621-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 23:46:10 +0100
+	id SOrPKjqrj2nSSQEAu9opvQ
+	(envelope-from <linux-pm+bounces-42622-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 23:52:42 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40A08139D87
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 23:46:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56A79139E09
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 23:52:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 9B20930066B7
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 22:46:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9F936303CA5A
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 22:52:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38F342D061B;
-	Fri, 13 Feb 2026 22:46:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A35D3176E7;
+	Fri, 13 Feb 2026 22:52:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VXJBaBWE";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="GqPgINdd"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="nDfBIqoQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A15214204
-	for <linux-pm@vger.kernel.org>; Fri, 13 Feb 2026 22:46:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B68318152;
+	Fri, 13 Feb 2026 22:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771022766; cv=none; b=o0d3nO3m8Q+XETLUL0FT6vunRxXIXm6kjdJ1yZTGJBq8fdxQt3lmC8WhB0xQa1P9AvddM+2GlpF9n/pumlgLShFnZ+dnrzRFUbyfSk3RGWMnd5flw8AuToBDFWa0XpgsWsIc2+82gE6m9RYkSApwenv47HslAGGe73GfnCeivDw=
+	t=1771023160; cv=none; b=P9eQGyiRAUKdrDovLIrZoPf4UWTkdlQoYiroNA5ThfFLgEFgS72tu5tQEJ9afDa4xFQXCIRDWW5lQTcLaSeb6o34q8OfwT+2XZLMtI4d5F6eDOJzYgX/BTJd3Zfy3sjc+wcUzyIcvigxqdYLyEGy3O4gwMWg8zsMtPV36dYC7SE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771022766; c=relaxed/simple;
-	bh=knJBdqPjVtEV62c0/GHhHaUpxoq6PevP9pwkwQcrQXY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B/yMbGtenmfWyBK90SAQkYdxICC8DXl/KBr3CPHwHEdwq3uYX/Dl+rAv0pxyWr7AzHyaNHbJ3y/2k4FSXD143sJB7y3J8oYCDXVx0Byuvvp3zMHZoDzIxeIHrc3nLip+oWJH/2m7i1kAcUzzotwZ6BJrNghpPVHzIP5iEz4VjsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VXJBaBWE; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=GqPgINdd; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61DEOQLn3272967
-	for <linux-pm@vger.kernel.org>; Fri, 13 Feb 2026 22:46:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=3SsDYUO/omo5M8jNjG2gaAOl
-	NQh7/M+BuNJyGGLsXeE=; b=VXJBaBWEJSeBXk2+pKZW/Dyj5r9h7dypGiqmo5iA
-	mrISmWKXpPCs/3B4fsYgD8lWfOD3EMNXfIed9ZDL5vTONpT3TBuYkvfyR9PX8M1b
-	hz7OGbS4Si/VPQXMTF4rMjDexggRKqjoWti+D4yIdfU75OunRBTrH1KsXzDaAnAE
-	LIyNgdg+cLAeo04d7Wl9eJAZGQBCCxkno/u7w94i+5TcBNxjrGmybXwa38Xu4N4b
-	gKe1A/ASiHVw/aR2g5Zv5NO61mz7Q9g6O55BiF5hW12ijl2xPBVr+YBRRAGfpDaU
-	p0ez7ErsXgDASxeQYGypHxSf42/C4o6fz0+R6MjD62r8Tw==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ca5pd9pe0-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 13 Feb 2026 22:46:03 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8c7166a4643so520402185a.0
-        for <linux-pm@vger.kernel.org>; Fri, 13 Feb 2026 14:46:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1771022762; x=1771627562; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3SsDYUO/omo5M8jNjG2gaAOlNQh7/M+BuNJyGGLsXeE=;
-        b=GqPgINddxVkAiDmNlsMEaLzg6YGHj2FEkrrpvB5RiBl4hJYjc2v7z5S649BAG60iF9
-         oOm/vUETC3aY3NOYCJTRmS938694Ul5Tf/HlUXh8fFbtIB0Oo1SbQF1Sf/MCjIJOjVzE
-         Js577xiNeaeDWTPRkdNn3h5dT98wrca9NQKlnFKsUFJSQcy12T0hdrjCJrniu477YguN
-         jfRHM/6O5wjUAtLSeYJgxO2KeoeUhyorr4TBgh8MIlD8pRpC3pvCNsTxGw4VafCK6kMn
-         o833aJ6zwwr+XQvAXuDnddw+R4W7QGGpFeWF/LZso8ln4mogRkmibiTjwDpFMjsQS+9k
-         ipow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771022763; x=1771627563;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3SsDYUO/omo5M8jNjG2gaAOlNQh7/M+BuNJyGGLsXeE=;
-        b=KEY4OIgFs68Cv43dIHEd1Qkilis4XwZbmwmWMmQ3QMeg34Nt+fsZ/F4F4Q+QrqZrpc
-         pkWObSEzt/raUfrz4+9Emgej1eVuo+hFU2OwyDpTup35V4hj/48QiJ+QWlhXixiQ3Kes
-         PZCQnBTUrXofLXLhJwanGDKO+eiQGGEyegDVm1xjHEixG3nBExPdwf/Nj263YlVIduqw
-         bUl/MKn9ZwTKTY913DyPTaS0OKutJwvA4F/UnWObeq9XlzRrwpIlxG/W7jL04nNEARu0
-         5Vf/Y4tvwrm5sfxSZ0rzYGwW+J/R00jqPVI5lanNJx7zXx5zQw4M4YxgImG9IZLVKBAo
-         6dJg==
-X-Forwarded-Encrypted: i=1; AJvYcCXqzJ5/DQkc8h5+ibfySk/LtM82ImJguSKaVLlkEQC3ydodYpgpWiMXQxeSXxIT+Wh+32GON50Y5A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5R5HXSQ0u0eoYJZo/imzvvF2HwpF3Yu0zUwfvu1DF9b3TMyf+
-	4ny59ick5FHVHW+0ItBJT+KiPY/D0zXsr9K2O8XKYjY8wTtsj0lahu2oYYeih3dapZVbcg+0EXC
-	Ai3xx2XqRKf0bf9mN54qpKUIBCdn5wWIV7QEFS3mq4trK89y77w+/yrbNyCPubA==
-X-Gm-Gg: AZuq6aJ1jQNWxB7+0GaGzobNgOsXbswKzrt+9V0Rd0RzDAGAAiDdAMR3sQmgnkx6+CH
-	AngU2cCyWLjLocKXJcNgmSFaOk2gcFflG8G6H1h3UCi2MSZc1fq4foiXvATOMn56+Yd8FIqPz73
-	KnVEdHrwxfiZRojsZIjdeKLBeOBHrkdOhBYXr7W6RMmQ3qYMi+UdBp8YG02Vq32iE7jetUZgkxj
-	BlthpoWvYCSgXjBQXyCDmG0voZjteRKvAvvr+MNp0jMnq5Q7AgbBUuzHm2bf7ZmojzQnubi8Jq7
-	OGhVojG6OssMQMxP5P5tmHvQWoPzmVj+q70ht3xq6yfNsWaythLStHaxj++tL4JO4LWs6lv2NCh
-	//a3igWtLnEh69hNOhUdLuFHbZPNnCv/tlk6B6RnN/8sSnaxoDPTrohf9mI3wNiAE5ZSfPxtXIM
-	7kIQ+IzrvQRTo21+4kZ/2+zqVPYK9YhhXbeqo=
-X-Received: by 2002:a05:620a:460b:b0:8b1:728f:952e with SMTP id af79cd13be357-8cb42269571mr428793285a.31.1771022762592;
-        Fri, 13 Feb 2026 14:46:02 -0800 (PST)
-X-Received: by 2002:a05:620a:460b:b0:8b1:728f:952e with SMTP id af79cd13be357-8cb42269571mr428790285a.31.1771022762117;
-        Fri, 13 Feb 2026 14:46:02 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-387068925besm15182931fa.4.2026.02.13.14.45.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Feb 2026 14:46:00 -0800 (PST)
-Date: Sat, 14 Feb 2026 00:45:58 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Richard Acayan <mailingradian@gmail.com>
-Cc: Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sdm670: add thermal zones
-Message-ID: <3ekefztyorudtf4xcdcamoyxjrgylaszemb52qmqgoxflyp3jb@6gi2levlz3qt>
-References: <20260210021607.12576-1-mailingradian@gmail.com>
- <20260210021607.12576-3-mailingradian@gmail.com>
+	s=arc-20240116; t=1771023160; c=relaxed/simple;
+	bh=GDB2HAgsrLNI1U8xhPxOnqOpFKL7/IhToOd84WGIMIo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sEawpVSB9t4yVZnjtE6jcDF6fFsBJ4yMWK9FknC9OGFrh1LNSS5p0Cw0vU9tqpjsMqvghVdSxh5NR49YZ0VBpbdB/LUVqDP4N+Lfs67av4goEpColELXp8SdsIr2PQeG6cmDVkRF8s6BKTmseAIUPMoepQkgUSP6weWp/qxC5Io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=nDfBIqoQ; arc=none smtp.client-ip=80.241.56.161
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4fCS9Y5p7fz9sm6;
+	Fri, 13 Feb 2026 23:52:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1771023153;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OYMdHs/+oaaB9f+4cKWkLE7Mz2I2iGZ0F48QC7i5Xys=;
+	b=nDfBIqoQul/e7BI/OjW6TuLTAZbUyyZgXzctFELtYFeOcnPL5m17tUbKUdWcB8sW0EUNe2
+	2PP2SKN0bPfbBup5yWPy5sNTU/arlgdVSpmW6aMQXWldq01zXwKYXsZKIYDrjmlrWmbFtk
+	Glan+D26a6YnkTcPZZ9J7lVRGtgicsOncXpSsPSUZ9DnUsb3ITZf23C9QKQFxEqIUGFu8L
+	GJAU+9M/kEvfPvt02ZUSaSelN6ZqodRozdOfgjbJ4gMicIbtx70B0OEA4C2ZkgVjhPEW5O
+	RmmgrXxXMOyzFSl1KLUC/hPGXc/0OnZuyaMjdN1iMr38HbeyN0rJ3JYM5H107w==
+Message-ID: <fcf5ab75-029e-469e-8b2a-51fa5c2a2374@mailbox.org>
+Date: Fri, 13 Feb 2026 23:52:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260210021607.12576-3-mailingradian@gmail.com>
-X-Authority-Analysis: v=2.4 cv=Rp7I7SmK c=1 sm=1 tr=0 ts=698fa9ab cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=pGLkceISAAAA:8
- a=fwIEsm_0hnujN-Tp9KwA:9 a=CjuIK1q_8ugA:10 a=PEH46H7Ffwr30OY-TuGO:22
-X-Proofpoint-GUID: NWabcfSObjnoTJupTVFpRR9C7TuZqEQK
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEzMDE3NiBTYWx0ZWRfX8NnGoPSXQ6wX
- Tv6zDnniuJZGcXa+b4hF80eUYGZ9+e5aDyXwiAAOtARc3kK1nybDeeTEc3zpZ1sNR7Myt2UFpKa
- JQ+k9s8/m79xZYDs2KKhVHVRh+JGD+XOyIMvp1odlZa4lLIWHcO801Oo2kXwA53XZ7UiUmsBawL
- kuxqKR1i5mfjfWIeZxWFFWdfEQNxQoHw8q0/VxjKA0W3cSxhVrNs7YVBnyS4k8ATk8KnmiSWaeh
- 8uDWFqz4yG57BsS9pr0EukiDCHkzS74EtswvQvevBujzWKF7xr+pmyY/7PMcFZICp6zSWWdUMjs
- CktPU9fpo///RNw+jwRX236tRSIavWiRRYsCuTVwFU1/dIq42Qd5oaIv7MahnVr0pNP/FkQMFoz
- /Z2ZtNimBf7H3i58aNKn0cvyTa514g6Vr+eARTEuDVLEjZRz0gO0D5s1/HoVNx3HN/QZr+EzMpQ
- 25T0cBguSfkXriItNZA==
-X-Proofpoint-ORIG-GUID: NWabcfSObjnoTJupTVFpRR9C7TuZqEQK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-13_05,2026-02-13_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 bulkscore=0 adultscore=0 clxscore=1015 spamscore=0
- lowpriorityscore=0 suspectscore=0 impostorscore=0 malwarescore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
- definitions=main-2602130176
+Subject: Re: [PATCH] drm/imagination: Convert to
+ dev_pm_domain_{at,de}tach_list()
+To: Thorsten Leemhuis <regressions@leemhuis.info>,
+ Matt Coster <Matt.Coster@imgtec.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Frank Binns <Frank.Binns@imgtec.com>,
+ Brajesh Gupta <Brajesh.Gupta@imgtec.com>,
+ Alessio Belle <Alessio.Belle@imgtec.com>,
+ Alexandru Dadu <Alexandru.Dadu@imgtec.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <194465eda54d1f852a9226cf691ddc5aa208e0a3.1769097977.git.geert+renesas@glider.be>
+ <ffdf3982-e22c-4d01-afa6-5449ed381000@imgtec.com>
+ <CAMuHMdWMh_oJFg-KtapcTDGvYWZ-hg_ZEJ2=E5Tp1apOEc8tnQ@mail.gmail.com>
+ <b3b4f10e-1222-44f7-b308-db7199c67147@mailbox.org>
+ <3e0def93-2f6c-4bcf-8ee5-bf607f2ca382@imgtec.com>
+ <f5d3dde6-edec-42f4-93cb-459c8677245a@mailbox.org>
+ <f82b7734-6ddc-4029-b38d-147e9a1de021@leemhuis.info>
+Content-Language: en-US
+From: Marek Vasut <marek.vasut@mailbox.org>
+In-Reply-To: <f82b7734-6ddc-4029-b38d-147e9a1de021@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: 96c7hrsacadq8kc9oummy1uk1mamdons
+X-MBO-RS-ID: b7be86f54666a4ea61e
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	DMARC_POLICY_ALLOW(-0.50)[mailbox.org,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[mailbox.org:s=mail20150812];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42621-lists,linux-pm=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,qualcomm.com:dkim];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[15];
+	TAGGED_FROM(0.00)[bounces-42622-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[linux-m68k.org,imgtec.com,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,lists.freedesktop.org,vger.kernel.org,lists.linux.dev];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,linaro.org,intel.com,arm.com,vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dmitry.baryshkov@oss.qualcomm.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 40A08139D87
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[marek.vasut@mailbox.org,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[mailbox.org:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mailbox.org:mid,mailbox.org:dkim]
+X-Rspamd-Queue-Id: 56A79139E09
 X-Rspamd-Action: no action
 
-On Mon, Feb 09, 2026 at 09:16:07PM -0500, Richard Acayan wrote:
-> Add thermal zones to safeguard from overheating to high temperatures.
-> The temperatures are very high, but should still be safeguard for
-> devices that do not specify their own thermal zones.
+On 2/12/26 4:56 PM, Thorsten Leemhuis wrote:
+> On 2/12/26 15:38, Marek Vasut wrote:
+>> On 2/12/26 10:00 AM, Matt Coster wrote:
+>>> On 11/02/2026 19:17, Marek Vasut wrote:
+>>>> On 1/23/26 2:50 PM, Geert Uytterhoeven wrote:
+>>>>> On Fri, 23 Jan 2026 at 14:36, Matt Coster <Matt.Coster@imgtec.com>
+>>>>> wrote:
+>>>>>> On 22/01/2026 16:08, Geert Uytterhoeven wrote:
+>>>>>>> Call the dev_pm_domain_attach_list() and dev_pm_domain_detach_list()
+>>>>>>> helpers instead of open-coding multi PM Domain handling.
+>>>>>>>
+>>>>>>> This changes behavior slightly:
+>>>>>>>      - The new handling is also applied in case of a single PM Domain,
+>>>>>>>      - PM Domains are now referred to by index instead of by name, but
+>>>>>>>        "make dtbs_check" enforces the actual naming and ordering
+>>>>>>> anyway,
+>>>>>>>      - There are no longer device links created between virtual domain
+>>>>>>>        devices, only between virtual devices and the parent device.
+>>>>>>
+>>>>>> We still need this guarantee, both at start and end of day. In the
+>>>>>> current implementation dev_pm_domain_attach_list() iterates forwards,
+>>>>>> but so does dev_pm_domain_detach_list(). Even if we changed that, I'd
+>>>>>> prefer not to rely on the implementation details when we can
+>>>>>> declare the
+>>>>>> dependencies explicitly.
+>>>>>
+>>>>> Note that on R-Car, the PM Domains are nested (see e.g.
+>>>>> r8a7795_areas[]),
+>>>>> so they are always (un)powered in the correct order.  But that may not
+>>>>> be the case in the integration on other SoCs.
+>>>>>
+>>>>>> We had/have a patch (attached) kicking around internally to use the
+>>>>>> *_list() functions but keep the inter-domain links in place; it got
+>>>>>> held
+>>>>>> up by discussions as to whether we actually need those dependencies
+>>>>>> for
+>>>>>> the hardware to behave correctly. Your patch spurred me to run around
+>>>>>> the office and nag people a bit, and it seems we really do need to
+>>>>>> care
+>>>>>> about the ordering.
+>>>>>
+>>>>> OK.
+>>>>>
+>>>>>> Can you add the links back in for a V2 or I can properly send the
+>>>>>> attached patch instead, I don't mind either way.
+>>>>>
+>>>>> Please move forward with your patch, you are the expert.
+>>>>> I prefer not to be blamed for any breakage ;-)
+>>>>
+>>>> Has there been any progress on fixing this kernel crash ?
+>>>>
+>>>> There are already two proposed solutions, but no fix is upstream.
+>>>
+>>> Yes and no. Our patch to use dev_pm_domain_attach_list() has landed in
+>>> drm-misc-next as commit e19cc5ab347e3 ("drm/imagination: Use>> dev_pm_domain_attach_list()"), but this does not fix the underlying
+>>> issue of missing synchronization in the PM core[1] is still unresolved
+>>> as far as I'm aware.
+>>
+>> OK, but the pvr driver can currently easily crash the kernel on boot if
+>> firmware is missing, so that should be fixed soon, right ?
 > 
-> For some zones, do not include untested cooling devices (although the
-> GPU is untested).
+> Well, drm-misc-next afaik means that the above mentioned fix would only
+> be merged in 7.1, which is ~4 months away, which is not really "soon"
+> I'd say. Or did I misjudge this?
+
+The PM domain issue here crashes the kernel, so I think this would be 
+material for drm-misc-fixes .
+
+>> I added the regressions list onto CC, because this seems like a problem
+>> worth tracking.
 > 
-> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> ---
->  arch/arm64/boot/dts/qcom/sdm670.dtsi | 558 +++++++++++++++++++++++++++
->  1 file changed, 558 insertions(+)
+> Noticed that and wondered what change caused the regression.
+
+I think this one:
+
+330e76d31697 ("drm/imagination: Add power domain control")
+
+> Did not
+> find a answer in a quick search on lore[1]. Because if it's a
+> regression, we maybe should just revert the culprit for now according to
+> Linus:
+> https://lore.kernel.org/lkml/CAHk-=wi86AosXs66-yi54+mpQjPu0upxB8ZAfG+LsMyJmcuMSA@mail.gmail.com/
 > 
-> +
-> +		cpu0-thermal {
-> +			polling-delay-passive = <250>;
-> +			polling-delay = <1000>;
-> +
-> +			thermal-sensors = <&tsens0 1>;
-> +
-> +			cooling-maps {
-> +				map0 {
-> +					trip = <&cpu0_alert0>;
-> +					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> Ciao, Thorsten
+> 
+> [1] I guess this was the initial report from Geert?
+> https://lore.kernel.org/all/CAMuHMdWapT40hV3c+CSBqFOW05aWcV1a6v_NiJYgoYi0i9_PDQ@mail.gmail.com/
 
-Note, use of the CPUs as the cooling devices was removed for SDM845 in
-favour of using the LMh. Please consider switching to the LMh device
-instead.
+It is.
 
-> +				};
-> +			};
-> +
-> +			trips {
-> +				cpu0_alert0: trip-point0 {
-> +					temperature = <95000>;
-> +					hysteresis = <1000>;
-> +					type = "passive";
-> +				};
-> +
-> +				cpu0_crit: trip-point1 {
-> +					temperature = <125000>;
-> +					hysteresis = <1000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		cpu1-thermal {
-> +			polling-delay-passive = <250>;
-> +			polling-delay = <1000>;
-> +
-> +			thermal-sensors = <&tsens0 2>;
-> +
-> +			cooling-maps {
-> +				map0 {
-> +					trip = <&cpu1_alert0>;
-> +					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							 <&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-> +				};
-> +			};
-> +
-
--- 
-With best wishes
-Dmitry
+I think there are other SoCs which depend on the power domain commit, so 
+revert is not so clear cut anymore. But SoCs which have hierarchical 
+power domains and which manage to probe this driver without having a 
+firmware available for the GPU will simply end with crashed kernel, 
+which is really not good.
 
