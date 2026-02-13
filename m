@@ -1,289 +1,291 @@
-Return-Path: <linux-pm+bounces-42604-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42605-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yHCuBAXXjmmhFQEAu9opvQ
-	(envelope-from <linux-pm+bounces-42604-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 08:47:17 +0100
+	id 0ILIOU7hjmluFgEAu9opvQ
+	(envelope-from <linux-pm+bounces-42605-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 09:31:10 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ADB7133B0E
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 08:47:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 46DFF134108
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 09:31:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C5EE83045001
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 07:47:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BF5AF3059825
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 08:29:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EE4287258;
-	Fri, 13 Feb 2026 07:47:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4FD32D0E8;
+	Fri, 13 Feb 2026 08:29:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="q5i3pWgf"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jtmHJeME"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from OS0P286CU011.outbound.protection.outlook.com (mail-japanwestazon11010020.outbound.protection.outlook.com [52.101.228.20])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA67A1C862E;
-	Fri, 13 Feb 2026 07:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.228.20
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770968834; cv=fail; b=QpMjfw16MA5Pr6r0Y8Bnsp5ds/Cx+ie/GzLYV3Eh8AWvFucfNr/Ib0goY/F2nmEKcKgXhsAmCrNBIfrgztZoZ0WxPOVFVliIIbxUAlXk7ON+qAR/MqAutWt78+gluCKWaQD/XU0jwEPBNYRXMdspg66siX2tw0ZeMQeZTOeCHzM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770968834; c=relaxed/simple;
-	bh=hK2PwnY/yYODbSQYuUcO2aAqQTWSrw+OYOLjJaj+NNQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=D6Rt9ynu20KcK1u7bPJnrDGrhp+buknhz1dGMeAc1m4a3zMof8nG3TDtMMQNLKZdnwhsspvSxFjI0iwCZ8ueWgcUIyS6lHhDI9SWvMU+i93AntODCgxxX4vfJin7LWeuHAI4f9cCygud+XbLksaTBCyd3WiOk0xzmdS1SGfNtTo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=q5i3pWgf; arc=fail smtp.client-ip=52.101.228.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VFxeGbyZQ/OvGRkbynqxZhZwgAMC1kLpWljMTm1S9S/F+PdjjfJFMCbOcdN0dJ1/CLwxUwUkTht+rMAfV69fBLFlWuPonWkmtmQrXowhODNz/rTh5gD8PRh+M+SF0rytSbjt+lwIZsYzsVU1ebW30mW55D8iEPXyizXBISHZ2kQZKbqXUiaJCvofz6RCKE/Q3qSWW833/Zh7V4VlMyShYqvGzsy14M7R+vucoQFrS0a5meBdTVQyv9u7rRGMO0qA5mADyw7ESLwh+FCNKufX3lXwYniOmy6614Tt30xDAV+YXTZ59z7MYLSmleojEaYNrjXhGB2+y5PfPn5hWEuPaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hK2PwnY/yYODbSQYuUcO2aAqQTWSrw+OYOLjJaj+NNQ=;
- b=TdLZXT8A852ejjr/PEfQe3xlgibL9KPM8Ry5G6Koe5ZBZXW8yTAV6Jc4jLGDtYzqQ9fJzE3FtCjEGefBkat5kylDOwW9bzqUAarrNBHD9KGw7vTiRWYlyU4w64RSZwjFP8mNShFogxfaVu+Z+kDz3TGKlI0OpL+wAoB8LNaH77+xqBbbkwuSr76f0N48cTvTHjEnDhARYdwx7uRL+bjV6ftNvYNymcOlR4q8SbyhHXQZvvCiv+hIL4bNByY5R21Y3PxMDhcgPm3QmJixtFWYIkZDGtkzZyI35cuEog6qqR3d6vhlOya/rfetck+uYL/J+Fy5W9F7In2zkDB8cz9O8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hK2PwnY/yYODbSQYuUcO2aAqQTWSrw+OYOLjJaj+NNQ=;
- b=q5i3pWgfRjD2RHQ+1p/RPwbK4gfirfab246qwhHBKqi90wu26DDneoG/gFRP9pFV2FaIjBDmGImkVQujWbXs/oypNZv0Ai0Vsm2ayyAA09n8TJorZ3yOSUJkxC870CkqQ6ZZtlpNca07BnA4ATrgdoHGkDAd2nrMvAIO7/o3RJ7RrsMzLy7AgPAMeMWtW1QF4FA/Ptm4jQmowl/VbKjEql8PTjA6DJNFoHclGivUJsZ5ieDv8H1Spr2YIqK/gAwePgwYCpFFxviXVW50mIwAAa3rI/mckhMNHUI5/u7ttiOkcuJ+KhWEgrUH4NUr7JRYrk2IGx6/9mV90ksrk25VOA==
-Received: from TYRPR01MB16276.jpnprd01.prod.outlook.com
- (2603:1096:405:2f1::11) by OS9PR01MB12180.jpnprd01.prod.outlook.com
- (2603:1096:604:2e5::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.13; Fri, 13 Feb
- 2026 07:47:09 +0000
-Received: from TYRPR01MB16276.jpnprd01.prod.outlook.com
- ([fe80::464f:166d:23fe:e8cf]) by TYRPR01MB16276.jpnprd01.prod.outlook.com
- ([fe80::464f:166d:23fe:e8cf%4]) with mapi id 15.20.9611.012; Fri, 13 Feb 2026
- 07:47:09 +0000
-From: "Yasunori Goto (Fujitsu)" <y-goto@fujitsu.com>
-To: 'Alison Schofield' <alison.schofield@intel.com>, "Tomasz Wolski (Fujitsu)"
-	<tomasz.wolski@fujitsu.com>
-CC: "Smita.KoralahalliChannabasappa@amd.com"
-	<Smita.KoralahalliChannabasappa@amd.com>, "ardb@kernel.org"
-	<ardb@kernel.org>, "benjamin.cheatham@amd.com" <benjamin.cheatham@amd.com>,
-	"bp@alien8.de" <bp@alien8.de>, "dan.j.williams@intel.com"
-	<dan.j.williams@intel.com>, "dave.jiang@intel.com" <dave.jiang@intel.com>,
-	"dave@stgolabs.net" <dave@stgolabs.net>, "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>, "huang.ying.caritas@gmail.com"
-	<huang.ying.caritas@gmail.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
-	"jack@suse.cz" <jack@suse.cz>, "jeff.johnson@oss.qualcomm.com"
-	<jeff.johnson@oss.qualcomm.com>, "jonathan.cameron@huawei.com"
-	<jonathan.cameron@huawei.com>, "len.brown@intel.com" <len.brown@intel.com>,
-	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "Zhijian Li (Fujitsu)"
-	<lizhijian@fujitsu.com>, "ming.li@zohomail.com" <ming.li@zohomail.com>,
-	"nathan.fontenot@amd.com" <nathan.fontenot@amd.com>, "nvdimm@lists.linux.dev"
-	<nvdimm@lists.linux.dev>, "pavel@kernel.org" <pavel@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>, "rafael@kernel.org"
-	<rafael@kernel.org>, "rrichter@amd.com" <rrichter@amd.com>,
-	"terry.bowman@amd.com" <terry.bowman@amd.com>, "vishal.l.verma@intel.com"
-	<vishal.l.verma@intel.com>, "willy@infradead.org" <willy@infradead.org>,
-	"Xingtao Yao (Fujitsu)" <yaoxt.fnst@fujitsu.com>, "yazen.ghannam@amd.com"
-	<yazen.ghannam@amd.com>
-Subject: RE: [PATCH v6 0/9] dax/hmem, cxl: Coordinate Soft Reserved handling
- with CXL and HMEM
-Thread-Topic: [PATCH v6 0/9] dax/hmem, cxl: Coordinate Soft Reserved handling
- with CXL and HMEM
-Thread-Index: AQHcmljeqGwxci4vD0qX6xZEB4t9YbV8TuqAgALYgoCAAG4nAIAAnjxA
-Date: Fri, 13 Feb 2026 07:47:08 +0000
-Message-ID:
- <TYRPR01MB16276AE76EB8585F3786510F59061A@TYRPR01MB16276.jpnprd01.prod.outlook.com>
-References: <aYuEIRabA954iSfR@aschofie-mobl2.lan>
- <20260212144415.10418-1-tomasz.wolski@fujitsu.com>
- <aY5DpvAvqxqWZczR@aschofie-mobl2.lan>
-In-Reply-To: <aY5DpvAvqxqWZczR@aschofie-mobl2.lan>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- =?utf-8?B?TVNJUF9MYWJlbF8xZTkyZWY3My0wYWQxLTQwYzUtYWQ1NS00NmRlMzM5Njgw?=
- =?utf-8?B?MmZfQWN0aW9uSWQ9ZjYwOTg0YzAtMDU3Ni00N2NiLWJhYmItNmYxYmRjYzg3?=
- =?utf-8?B?NGI4O01TSVBfTGFiZWxfMWU5MmVmNzMtMGFkMS00MGM1LWFkNTUtNDZkZTMz?=
- =?utf-8?B?OTY4MDJmX0NvbnRlbnRCaXRzPTA7TVNJUF9MYWJlbF8xZTkyZWY3My0wYWQx?=
- =?utf-8?B?LTQwYzUtYWQ1NS00NmRlMzM5NjgwMmZfRW5hYmxlZD10cnVlO01TSVBfTGFi?=
- =?utf-8?B?ZWxfMWU5MmVmNzMtMGFkMS00MGM1LWFkNTUtNDZkZTMzOTY4MDJmX01ldGhv?=
- =?utf-8?B?ZD1Qcml2aWxlZ2VkO01TSVBfTGFiZWxfMWU5MmVmNzMtMGFkMS00MGM1LWFk?=
- =?utf-8?B?NTUtNDZkZTMzOTY4MDJmX05hbWU9RlVKSVRTVS1QVUJMSUPigIs7TVNJUF9M?=
- =?utf-8?B?YWJlbF8xZTkyZWY3My0wYWQxLTQwYzUtYWQ1NS00NmRlMzM5NjgwMmZfU2V0?=
- =?utf-8?B?RGF0ZT0yMDI2LTAyLTEzVDA2OjQ1OjAzWjtNU0lQX0xhYmVsXzFlOTJlZjcz?=
- =?utf-8?B?LTBhZDEtNDBjNS1hZDU1LTQ2ZGUzMzk2ODAyZl9TaXRlSWQ9YTE5ZjEyMWQt?=
- =?utf-8?B?ODFlMS00ODU4LWE5ZDgtNzM2ZTI2N2ZkNGM3O01TSVBfTGFiZWxfMWU5MmVm?=
- =?utf-8?B?NzMtMGFkMS00MGM1LWFkNTUtNDZkZTMzOTY4MDJmX1RhZz0xMCwgMCwgMSwg?=
- =?utf-8?Q?1;?=
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYRPR01MB16276:EE_|OS9PR01MB12180:EE_
-x-ms-office365-filtering-correlation-id: 2c0fcb2e-ce8e-40a7-241d-08de6ad4174b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|38070700021|1580799027;
-x-microsoft-antispam-message-info:
- =?utf-8?B?ZUgxbG5rMFFiZ0NBVXNuWXM5V3pWWUVxcTZKYjBxRy9aQVpwNC9kanhUemMz?=
- =?utf-8?B?WHNKN08yWG10Z3FoMURLb1Qzek5YR2dzcHo4Q3Ywa0ZnUUdOZFRRUENUU1hh?=
- =?utf-8?B?bXhPVFpyUHFKYVowK0RHWmhCU3hKUEFYMGFKQTdqK1hWZ2Rjb2dXRXRkRVpa?=
- =?utf-8?B?eS9zS1NUdWZEcVNxOWFIT3lxTURnV09mTDFXcWNzTVpYNHFlaHB2SDJHRWdG?=
- =?utf-8?B?RU0xWWU5VElYZ3NSVzBKRzk0d0FubEZ1Z09vV3hNTi9rY3c2WHA3ZnVxeVFK?=
- =?utf-8?B?MWR6RDhMN05xc0VmU1crcHcwZWxycHk0bzdNMEtSakZPcmZwSWsxU2tQOW1h?=
- =?utf-8?B?aFV1c2VxREpoTXRxcnBBRlRtRzI1NlRraHlZZFkyOWpvOUpOY3ZwdDBpd1Qx?=
- =?utf-8?B?RUtIbXBwU2lMaFVYMGUyV0tmYW55emxlWnRDUXBZZnRUOTZ5amROWDlTcWVs?=
- =?utf-8?B?dWl2WUhBRlR4aytPbFcyM0E0RjhOVUpPMzF6aVhKN2pWZlZHT29LSDM0SEYr?=
- =?utf-8?B?V1VGZFhJSzEwYlZWZVBqUUEvaW5OL0E1U0dxemphNUxvblAvVEV3QjdCNEty?=
- =?utf-8?B?cml4SXZiQi96aUQ2TEkrYkpqcTlNZEJ0MWVURWtCNVZsb3luS0hiOERFdGRy?=
- =?utf-8?B?SVpxVGppMWxGM3E1TW1EWThMOHdPTEs2azMyMkNlSXFoNlpaMWdqdXhLaEYr?=
- =?utf-8?B?U1ptdWdYVGxVL0s3UE5WTk5tbXlkQnFScjdiL3F3aVlOTnA2aGVhRWdIREk1?=
- =?utf-8?B?T2FOT3liN3RNaElHb0c4eXRzSjR6RE5BanhsYW5oUmtnbXZRcEdHQ0MrUTEr?=
- =?utf-8?B?TTlrRjR1emZFNDVNcVlNRFovd3VMWTkxTUx1d2FaNjJoajF1NDRBUE9LQ3J5?=
- =?utf-8?B?QThLcjhMcUJ4VEFmVW9qSFVNaDVMNEI0R1hJTEc1ZURPMGYyUHI0MityMFF3?=
- =?utf-8?B?a3hhUDd6Q3pJREVIaGh1UC90VHd6Qm9FcElLelRJblVLazh2eFV0bGlNVXkx?=
- =?utf-8?B?T1NFM2dkazRWSmpzYytyWlpITk1USldDL1ZvY3AxNU83dVlFcHAxL0ZMaUN3?=
- =?utf-8?B?Uk9IRUpieEM2WjRUem5xZFR2azNUeEpXMmlwak1QeCtNYTNxS1FSQjNlUEow?=
- =?utf-8?B?OG1rTm9IZ2hrRnBTTHJtOFBETmpxYmtCWkxCZHBWWHpia2U0T3RGbllHNFVu?=
- =?utf-8?B?c0RQdFkyUVlzR1YySkFxQXRrNGo2YWhYSjJSZXptVVFsQXR1VlpTU3B4dzBG?=
- =?utf-8?B?cUI4WXk3Z1FBcXZHVmVJTzdsK01lVS9WUkxwMkVzTHBpZGVMTy9UYmZkSmxw?=
- =?utf-8?B?dGIvaFFsdmJoZVJ4TnZrbDRId283elRET3loM0thS2NaSGMwN3puOTlwYUVT?=
- =?utf-8?B?NzRhbVBGUEkwSnpEbU43aDUrM2NUZHFNVkk3dnhac0lLcml2WEo0dWlOVlpt?=
- =?utf-8?B?S2kyTVhVTDltMnlURnlpdGpkUmxIOTQ2UUxOVk1NMTNNd2lneDRpRWp1b0pQ?=
- =?utf-8?B?a1Fnd3VuS1BrbUFjSHRoeWI2S3hHaXI3WXpadk40WTZVWFJKVUlCdWZtb3VH?=
- =?utf-8?B?ay9wNkpEODJOODBjdXh4elVmaEtwYmRJRkMrQTUrRGhIT2xrSk55UjhUMEVt?=
- =?utf-8?B?UXQvVlAzeDhHQVByZHJnUmd2RjhUSXNBME9LRDQ3c1FKd1N2b2RVMjk2bWhU?=
- =?utf-8?B?NGFBWmlZbjlpZThjcUxFVEJaTmk3U01OTHFIK1ozcWZFYnltaHEwM05ES0hl?=
- =?utf-8?B?RCt1bE4rOFp2bmtXWVFPU1FzNlNleHIzUU15bzRBSlF3T2xCdTVidFBkYTBO?=
- =?utf-8?B?Qm1ocUR5Z0tlMWpidVBCdFpWTFV2cC9Wc1B1clpaUDF4UHMzKy84NHprNExC?=
- =?utf-8?B?MkR5VW5FSjFmU0NQempSSzV6a2d2R0RKU1VrT0xHcTFQZGRXZU9LdTVPSVF2?=
- =?utf-8?B?d2Z0RTR0ZjVQeThYalJwZWtETkZ5N0pDcG9mcTNLRnB0RGdyNFlsUytONnk3?=
- =?utf-8?B?WWdoVGFVOUhHSGh6MUdpeXEzMFZLNzZlaFIyRFRkcm1sWmo1L2FiVUkyU0pj?=
- =?utf-8?B?TmlzZWpPNzZmV0hZQVZTVWUrdFVYWFJjcUNnekVrYlp1MDdsUy96RS9GVVlN?=
- =?utf-8?B?dVlWMnE2c05nWUVOeXJHSllTeVlzRUhZS0YrWEdoRUtuY0lBVEJIeGxSdHhE?=
- =?utf-8?B?YjNxMlhuOGMrV1doRXlGT1pwdXh2M3MzNHdudjViektFc1piYVIxRGN0VG00?=
- =?utf-8?B?ZmFNQUZrZVlsUkhCaGdCNUhLTmtnPT0=?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:ja;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYRPR01MB16276.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(38070700021)(1580799027);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?Q1U5YzY4OHYwbTI4d29QMFZTVmNtRzlPMWsvVTdnZ0FCdjdCOUdMZE1LUWRo?=
- =?utf-8?B?d0d2RVhyYnRjM3RtVXRWdEhEMjkranBrUG9STGtCU0duOUZsa2VZNVZOdkR0?=
- =?utf-8?B?bWdMaHhXTWI1NUIrWE5ReXg4aVdocmZpQnBoek9FUCtNdTJvTURhTGZVK08v?=
- =?utf-8?B?LzN6UXF5bGtPZ1FJakV2ZERycWdIV0JpVHRDUXBtTDNQR3c0TzRSbTdkSjJs?=
- =?utf-8?B?a0d3UU1qTVM5UEZqR2Y0N3krUDN0aWpCSk81LzhEdFVPUUNTcnF5VEJObFdE?=
- =?utf-8?B?UVk2WnJJU2V2TmoyV0RpdjZxU3NvMzNNeG93UU16eWRJQTR0OXZMYkkzMU1K?=
- =?utf-8?B?anZlbU9Ed2tMRUQ1eVpVMXdNSjRWRDh1cFlCYjlwQ256VE9pYjhseGY5V1Yx?=
- =?utf-8?B?QktNT3VWNEJUMUlxZjk2K1FGWWdhK0V3RjJJYXlBT3ZEZFRXODhHMGtPRi95?=
- =?utf-8?B?TWNFYlcxUW01ckM5TVROQmZMbDJCTG1qN2M3bmE2YXErRGsvd1RTRjBiZG90?=
- =?utf-8?B?eC9IVVkxeExGeGxtZSt4Q0tXdDl6a0pHQlg3TVB5U2FJaXpTNE5HRXVIVWg4?=
- =?utf-8?B?NjNvTFk4Vk5rY1Q1UXZ0Z015TDVBam0vaEhlK000L2REVnhmeXkzU0h0eC92?=
- =?utf-8?B?U0wyL3cvWmJ0QUpMUm5aUXlscHRDS1FtV1lsVjdZaXFMMVpnd3JMcUJNeXZB?=
- =?utf-8?B?bkU1VUFlVmxRTXZUNmkzY0JFd3dhU3BRS2VkME5PeGtFWXNhNmRPaFZTdCtV?=
- =?utf-8?B?cE5OVVpHQ09CTk9BTHdEcnF1blNaOTVORmN5bFVVU2RVdzljd1ZOOEllQzNC?=
- =?utf-8?B?YjJ1U3hWZ0hqeFlTVG9ZL2hVd2RNZFBYUTd4TWJSajZZb0R3TkgrMzdjSEtD?=
- =?utf-8?B?cTd2Qi9YL1R2ai80Z3RKS093N3MzUzYwQzZSQ1VHRWxrNU1jcUdBUHI0Rmp6?=
- =?utf-8?B?NVVSdFNHYnpaYXlLcDFVV2owUjBFT3prRktUU0U4K3l1N3p2ZmV2eVUzdnh3?=
- =?utf-8?B?VmhPUzdRUGFjQ0FLUFM2elRHNndqSkxTSG5vUm5BMVJXa3R5UzhTZzczN2RU?=
- =?utf-8?B?cUp0YjhEV2ROdTZEWXJ2LzZEWVhJWDZpcklhd09EUWVMaGlzN0I2a2FSazRS?=
- =?utf-8?B?b2F0WEhjTnRlVS9vZWUwd1l5aVBjTjZJV1dJSENaaW0yRzRFQlhwZzJ1MFd5?=
- =?utf-8?B?S3RFMTJ5QnJCWkxoNWtCelp2VEZNanc4MHp5Qy9wZTdoRk9XQllnMzlzeCsy?=
- =?utf-8?B?eHZqM1ZFZTdMLzR5YVFtT2NzNk5wek1Wa1hVdFJTR2c1MkFMMEt1QlQzQzJ4?=
- =?utf-8?B?QzZRK3N1N1N2M1NmaWxyMlU2TTVpb2tSRGg5TzJscmNkaDRNbG1LY1JuRzlO?=
- =?utf-8?B?bEtSRUNMQXFpTzR0bFFpTVptbEs0NVBBRXpxM0tZRWN5a0pQbDRNTkZqM0pB?=
- =?utf-8?B?N3M1U3dHUzhGeVNEZGhNY0VCalI0ZWpkdml5aGUzazBJaktldjVoRVNKYjUr?=
- =?utf-8?B?QVgyRlp4YnF2YXdoTmV4cUFYcmxnaisvV1EvYUNodm4zWDZJUjliWjBUem1x?=
- =?utf-8?B?SmE3djhFZmtFdGNzSXUxK2RlN1ZQS0tNbElpM3VzNEFqUnBQb3BKdTRtTXhN?=
- =?utf-8?B?dmhqSEVSUkNzNzlzUDZ2ZzltWDhWZ0RURXRqSkN5UUNyUURTRzlNdlR0a2ZL?=
- =?utf-8?B?Zll0QjVUVVVDZUh0VGY5WWx4STU5UXhDN0QzWGcvMVk3aERoMElqVHAyeStT?=
- =?utf-8?B?ZW5CL3FDQkhTdHBESEk5aytvQ2dTdkZVVGkrM1gvdDZORUNhWFJMd3ZGdE84?=
- =?utf-8?B?RGkzWFRKaWdpZkNVVmR3NjNvNW9nczN0dlg5TVFuaGZvdGhuUEVqbUNpOUp3?=
- =?utf-8?B?cndFakJmeUFBT0Myc2FDK1lReWtaTzNYa1Y4Ly9GT1h6NllJcUxvMDlrUDR4?=
- =?utf-8?B?c1VPbGhPMndieWoxallzRjJXeXZrbEF6NE04MlFEZXJxTEQwNXZUaTlsaXo3?=
- =?utf-8?B?eUdQbm1kOW93cVgxazFJY1VxL0JMdGZXOXVTRjdURWdpMFRDMW1tUEF2eC9F?=
- =?utf-8?B?V2RiNDM4WXROdFpZcStGdFhwdXZhVWxXUUxFVFhPcG5aSlE5aTJoK2cwTHR3?=
- =?utf-8?B?UTI2STJKays1NlJuVDFSNGwwWXFYRTNrc2QwSURKTjBhWnZMZFhKL3F4TFlu?=
- =?utf-8?B?NVNOVkxRMXIwQncxWktYUGd0WFJ1Ty85SVZDR2UzcTZmSFZEM0lFK2FwNDBV?=
- =?utf-8?B?SGZDb1M5bEFQS0dkNjlPdWZMRmdWRFBQL24yeWZUUCs3NnNIWnhhWCtFdGsy?=
- =?utf-8?B?NGxaL1lxMHBDWWJDVDNDb2dXRnNqSi9nSjNZdlNCNDZhYjV2ZzZDZz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0BA32D0E6;
+	Fri, 13 Feb 2026 08:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770971382; cv=none; b=JAkWpv96uSYalceiZcFkM6IaLfTLF7XH8RjwopU6LyyVAtMupShiu1MwgpcBTGn+oYSLICFZTukuQ5qISbybYXrf/3nFiEJgDntZYu6le/4GZt9SYvu52+dSi1ItUtf5yMISXS3A/rR13ynERW4wc4VaRW5gUDnX7FDtaeYz/yM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770971382; c=relaxed/simple;
+	bh=YaH/5F3iNwlx2Opbq+ZUKO6LkJvff7MT8NpfTtT4d5E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=BmwaUaJLsk0EyoikThQewIB2w4VPG5xacrirjuvsA9YO5SqotJsYKFNIFVylcEciIZOifTByWQPL9lH0YaD5f+GH05nYHw4DM5g2EQTLr8fgwvKPcxcP+XgCEdTKpm87cGgdw3o95vnW/mV1OFvnhEY7flnjm+AWouscxZS4q4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=jtmHJeME; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61D63ACs2871415;
+	Fri, 13 Feb 2026 08:29:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=NYDzRY
+	Wd7wm30LvT4KPDUsEbpAx+LuYEi5hkyFNioDU=; b=jtmHJeMExs0A+cvVLWAcgj
+	r3jW9mKO48edxz7YfcQWcz4WvCV1PyLC51gPj2n6CTra1kIWiHZleGNeQWtd3K1Y
+	RtpkInKdVCEOcoqSnV/GtCIVYgKdVeIM8VtlNbdN4shRSkyr+HyUA/B4djaNP2oy
+	qDmpFQHHPnUM+BMWk2KEic6KsTeZkd2VRQ7JVYjI9XLc83TvbYkmy6zaOFIgHNpo
+	jh9GW7ZmP/UbWI3d70/czauKuXt9Z7T+UUpxyZvfKyKWxgFPMUB7QpRfW0TXXg77
+	xEdhfkcW60yLO50IkUEg2GuMD7wXyoE+SQbd4lloEfBEPgHf72N77CYmAy2luCwQ
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c696ut65p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Feb 2026 08:29:30 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61D4IbIZ019258;
+	Fri, 13 Feb 2026 08:29:29 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4c6hxkdw0d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Feb 2026 08:29:29 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61D8TRMV49217930
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 13 Feb 2026 08:29:27 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B0D822005A;
+	Fri, 13 Feb 2026 08:29:27 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1C3C12004D;
+	Fri, 13 Feb 2026 08:29:26 +0000 (GMT)
+Received: from aboo.ibm.com (unknown [9.150.24.48])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 13 Feb 2026 08:29:25 +0000 (GMT)
+Message-ID: <7297173684f500e006a2997b92c927262221336f.camel@linux.ibm.com>
+Subject: Re: [PATCH] cpuidle: ladder: Fix state index when only one idle
+ state is registered
+From: Aboorva Devarajan <aboorvad@linux.ibm.com>
+To: Christian Loehle <christian.loehle@arm.com>, rafael@kernel.org
+Cc: daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date: Fri, 13 Feb 2026 13:59:24 +0530
+In-Reply-To: <c3d670cd-fc54-49a8-b640-fb16f9bd0487@arm.com>
+References: <20260211053552.739337-1-aboorvad@linux.ibm.com>
+	 <c3d670cd-fc54-49a8-b640-fb16f9bd0487@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYRPR01MB16276.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c0fcb2e-ce8e-40a7-241d-08de6ad4174b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2026 07:47:08.8743
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iBnVdZCQw7cPypnPMz27t8JpMFfXlwPTHIaBrY+r6RmZbwnBIW83ZpmR8ZGyTg78ohSF7jRK7LulSlyz08IFQA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS9PR01MB12180
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=KZnfcAYD c=1 sm=1 tr=0 ts=698ee0ea cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8
+ a=i_DVQUyr433w5YP_lWcA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEzMDA2MyBTYWx0ZWRfX2WNnG2+FM5b+
+ BWDO8nBU65sYO7nuc2xFef+MNIsKqAEcpDfczY8DcTBjxqTy0EIDpzDLM83iYK35cYZn3cp0TNS
+ tiIPHyYTwo3fxG8I3ejkbLr5ckpehChtY+IA3uXhBWhkL9JuVxl5234GxrGxic+JFhKFnPmw7BA
+ 7GmxqC3qFXBosXBr+auX1hbXtPVBcGi+5wE3KRfsrySwP8cWhLYS4UEypcOQm9deiu2gXdP124Y
+ xrZmVLxNMHa96cFu7QqntfOaapmJileavbdRqgEKiyb1WFG8zO527Zb+Jhq00KLkT+RKxK697r4
+ rsjn3elJ9AbTaLpb9hBuII3MRTmqTdylqw4wsO7gMMCDm3hoThVKEWqORK72NBJGvlaeP1B+bCS
+ 0TocTfnY1DXOya565AfHwl39Mo76p0Spc/3IknYmjGw4shtPVaSp7iOK+vtUGVvysIy1mPPYj48
+ AYfUKCLLz8OCDmBHbxA==
+X-Proofpoint-ORIG-GUID: ZPNxT_0Ar4pgTfLQfrKptcZ9qjI2hxnk
+X-Proofpoint-GUID: ZPNxT_0Ar4pgTfLQfrKptcZ9qjI2hxnk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-13_01,2026-02-12_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 impostorscore=0 bulkscore=0 priorityscore=1501 adultscore=0
+ clxscore=1015 suspectscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602130063
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.44 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MIME_BASE64_TEXT_BOGUS(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[fujitsu.com,reject];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[fujitsu.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42604-lists,linux-pm=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[33];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[fujitsu.com:+];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[y-goto@fujitsu.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[amd.com,kernel.org,alien8.de,intel.com,stgolabs.net,linuxfoundation.org,gmail.com,suse.cz,oss.qualcomm.com,huawei.com,vger.kernel.org,fujitsu.com,zohomail.com,lists.linux.dev,infradead.org];
-	RCVD_COUNT_FIVE(0.00)[5];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DKIM_TRACE(0.00)[ibm.com:+];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[aboorvad@linux.ibm.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[fujitsu.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6ADB7133B0E
+	TAGGED_FROM(0.00)[bounces-42605-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_SEVEN(0.00)[11]
+X-Rspamd-Queue-Id: 46DFF134108
 X-Rspamd-Action: no action
 
-SGVsbG8sIEFsaXNvbi1zYW4sDQoNCkkgd291bGQgbGlrZSB0byBjbGFyaWZ5IHlvdXIgYW5zd2Vy
-IGEgYml0IG1vcmUuDQoNCj4gT24gVGh1LCBGZWIgMTIsIDIwMjYgYXQgMDM6NDQ6MTVQTSArMDEw
-MCwgVG9tYXN6IFdvbHNraSB3cm90ZToNCj4gPiA+DQo+ID4gPkZZSSAtIEkgYW0gYWJsZSB0byBj
-b25maXJtIHRoZSBkYXggcmVnaW9ucyBhcmUgYmFjayBmb3INCj4gPiA+bm8tc29mdC1yZXNlcnZl
-ZCBjYXNlLCBhbmQgbXkgYmFzaWMgaG90cGx1ZyBmbG93IHdvcmtzIHdpdGggdjYuDQo+ID4gPg0K
-PiA+ID4tLSBBbGlzb24NCj4gPg0KPiA+IEhlbGxvIEFsaXNvbiwNCj4gPg0KPiA+IEkgd2FudGVk
-IHRvIGFzayBhYm91dCB0aGlzIHNjZW5hcmlvLg0KPiA+IElzIG15IHVuZGVyc3RhbmRpbmcgY29y
-cmVjdCB0aGF0IHRoaXMgZml4IGlzIG5lZWRlZCBmb3IgY2FzZXMgd2l0aG91dCBTb2Z0DQo+IFJl
-c2VydmUgYW5kOg0KPiA+IDEpIENYTCBtZW1vcnkgaXMgaW5zdGFsbGVkIGluIHRoZSBzZXJ2ZXIg
-KG5vIGhvdHBsdWcpIGFuZCBPUyBpcw0KPiA+IHN0YXJ0ZWQNCj4gPiAyKSBDWEwgbWVtb3J5IGlz
-IGhvdC1wbHVnZ2VkIGFmdGVyIHRoZSBPUyBzdGFydHMNCj4gPiAzKSBUZXN0cyB3aXRoIGN4bC10
-ZXN0IGRyaXZlcg0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgb3IgUUVNVQ0KDQpU
-aG91Z2ggSSBjYW4gdW5kZXJzdGFuZCB0aGF0IGNhc2VzIDIpIGFuZCAzKSBpbmNsdWRlIFFFTVUs
-IEknbSBub3Qgc3VyZSB3aHkgTGludXggZHJpdmVycyBtdXN0IGhhbmRsZSBjYXNlIDEpLg0KSW4g
-c3VjaCBhIGNhc2UsIEkgZmVlbCB0aGF0IHRoZSBwbGF0Zm9ybSB2ZW5kb3Igc2hvdWxkIG1vZGlm
-eSB0aGUgZmlybXdhcmUgdG8gZGVmaW5lIEVGSV9NRU1PUllfU1AuDQoNCkluIHRoZSBwYXN0LCBJ
-IGFjdHVhbGx5IGVuY291bnRlcmVkIGFub3RoZXIgaXNzdWUgYmV0d2VlbiBvdXIgcGxhdGZvcm0g
-ZmlybXdhcmUgYW5kIGEgTGludXggZHJpdmVyOg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGlu
-dXgtY3hsL09TOVBSMDFNQjEyNDIxQUVBOEIyN0JGOTQyQ0QwRjE4QjE5MDU3QUBPUzlQUjAxTUIx
-MjQyMS5qcG5wcmQwMS5wcm9kLm91dGxvb2suY29tLw0KSW4gdGhhdCBjYXNlLCBJIGFza2VkIG91
-ciBmaXJtd2FyZSB0ZWFtIHRvIG1vZGlmeSB0aGUgZmlybXdhcmUsIGFuZCB0aGUgaXNzdWUgd2Fz
-IHJlc29sdmVkLg0KDQpUaGVyZWZvcmUsIEkgd291bGQgbGlrZSB0byBjb25maXJtIHdoeSBjYXNl
-IDEpIG11c3QgYmUgaGFuZGxlZC4NCkhhdmUgYW55IGFjdHVhbCBtYWNoaW5lcyBhbHJlYWR5IGJl
-ZW4gcmVsZWFzZWQgd2l0aCBzdWNoIGZpcm13YXJlPw0KT3RoZXJ3aXNlLCBpcyB0aGlzIGp1c3Qg
-dG8gcHJlcGFyZSBmb3IgYSBwbGF0Zm9ybSB3aG9zZSBmaXJtd2FyZSBjYW5ub3QgYmUgZml4ZWQg
-b24gdGhlIGZpcm13YXJlIHNpZGU/DQoNClRoYW5rcywNCi0tLQ0KWWFzdW5vcmkgR290bw0KDQoN
-Cg==
+On Wed, 2026-02-11 at 15:00 +0000, Christian Loehle wrote:
+> On 2/11/26 05:35, Aboorva Devarajan wrote:
+> > On certain platforms (PowerNV systems without a power-mgt DT node),
+> > cpuidle may register only a single idle state. In cases where that
+> > single state is a polling state (state 0), the ladder governor may
+> > incorrectly treat state 1 as the first usable state and pass an
+> > out-of-bounds index. This can lead to a NULL enter callback being
+> > invoked, ultimately resulting in a system crash.
+> >=20
+> > [=C2=A0=C2=A0 13.342636] cpuidle-powernv : Only Snooze is available
+> > [=C2=A0=C2=A0 13.351854] Faulting instruction address: 0x00000000
+> > [=C2=A0=C2=A0 13.376489] NIP [0000000000000000] 0x0
+> > [=C2=A0=C2=A0 13.378351] LR=C2=A0 [c000000001e01974] cpuidle_enter_stat=
+e+0x2c4/0x668
+> >=20
+> > Fix this by determining the first non-polling state index based on
+> > the number of registered states, and by returning state 0 when only
+> > one state is registered.
+> >=20
+> > Fixes: dc2251bf98c6 ("cpuidle: Eliminate the CPUIDLE_DRIVER_STATE_START=
+ symbol")
+> > Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+>=20
+> Agreed that the current behavior is a bug, but is there really much value
+> in using a cpuidle governor with just a polling state?
+> It's dead code and trivial to bail out of in cpuidle, right?
+>=20
+
+Hi Christian,
+
+Thanks for the review.
+
+Other governors (teo, menu) already handle this single-state scenario
+correctly. Fixing ladder's first_idx calculation seemed like the most
+targeted fix, however since ladder is not widely used this is likely
+to go unnoticed, it only popped up during testing with a missing
+power-mgt device tree node.
+
+yes, adding a bail-out in the core cpuidle_select() is also trivial and
+would benefit all governors uniformly. Setting stop_tick to false keeps
+the tick running, which is correct for a single state configuration.
+
+Please let me know if you'd prefer this approach instead.
+
+---
+
+diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+index c7876e9e024f..ea082419f7db 100644
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -359,6 +359,16 @@ noinstr int cpuidle_enter_state(struct
+cpuidle_device *dev,
+ int cpuidle_select(struct cpuidle_driver *drv, struct cpuidle_device
+*dev,
+                   bool *stop_tick)
+ {
++       /*
++        * If there is only a single idle state (or none), there is
+nothing
++        * meaningful for the governor to choose. Skip the governor and
++        * always use state 0 with the tick running.
++        */
++       if (unlikely(drv->state_count <=3D 1)) {
++               *stop_tick =3D false;
++               return 0;
++       }
++
+        return cpuidle_curr_governor->select(drv, dev, stop_tick);
+ }
+
+---
+
+
+Regards,
+Aboorva
+
+
+> > ---
+> > =C2=A0drivers/cpuidle/governors/ladder.c | 24 ++++++++++++++++++++----
+> > =C2=A01 file changed, 20 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/drivers/cpuidle/governors/ladder.c b/drivers/cpuidle/gover=
+nors/ladder.c
+> > index 6617eb494a11..294a688ed0bb 100644
+> > --- a/drivers/cpuidle/governors/ladder.c
+> > +++ b/drivers/cpuidle/governors/ladder.c
+> > @@ -42,6 +42,21 @@ struct ladder_device {
+> > =C2=A0
+> > =C2=A0static DEFINE_PER_CPU(struct ladder_device, ladder_devices);
+> > =C2=A0
+> > +/**
+> > + * ladder_get_first_idx - get the first non-polling state index
+> > + * @drv: cpuidle driver
+> > + *
+> > + * Returns the index of the first non-polling state, or 0 if state 0 i=
+s not
+> > + * polling or if there's only one state available.
+> > + */
+> > +static inline int ladder_get_first_idx(struct cpuidle_driver *drv)
+> > +{
+> > +	if (drv->state_count > 1 &&
+> > +	=C2=A0=C2=A0=C2=A0 drv->states[0].flags & CPUIDLE_FLAG_POLLING)
+> > +		return 1;
+> > +	return 0;
+> > +}
+> > +
+> > =C2=A0/**
+> > =C2=A0 * ladder_do_selection - prepares private data for a state change
+> > =C2=A0 * @dev: the CPU
+> > @@ -70,16 +85,17 @@ static int ladder_select_state(struct cpuidle_drive=
+r *drv,
+> > =C2=A0	struct ladder_device *ldev =3D this_cpu_ptr(&ladder_devices);
+> > =C2=A0	struct ladder_device_state *last_state;
+> > =C2=A0	int last_idx =3D dev->last_state_idx;
+> > -	int first_idx =3D drv->states[0].flags & CPUIDLE_FLAG_POLLING ? 1 : 0=
+;
+> > +	int first_idx;
+> > =C2=A0	s64 latency_req =3D cpuidle_governor_latency_req(dev->cpu);
+> > =C2=A0	s64 last_residency;
+> > =C2=A0
+> > -	/* Special case when user has set very strict latency requirement */
+> > -	if (unlikely(latency_req =3D=3D 0)) {
+> > +	/* Special case when there's only one state or strict latency require=
+ment */
+> > +	if (unlikely(drv->state_count <=3D 1 || latency_req =3D=3D 0)) {
+> > =C2=A0		ladder_do_selection(dev, ldev, last_idx, 0);
+> > =C2=A0		return 0;
+> > =C2=A0	}
+> > =C2=A0
+> > +	first_idx =3D ladder_get_first_idx(drv);
+> > =C2=A0	last_state =3D &ldev->states[last_idx];
+> > =C2=A0
+> > =C2=A0	last_residency =3D dev->last_residency_ns - drv->states[last_idx=
+].exit_latency_ns;
+> > @@ -134,7 +150,7 @@ static int ladder_enable_device(struct cpuidle_driv=
+er *drv,
+> > =C2=A0				struct cpuidle_device *dev)
+> > =C2=A0{
+> > =C2=A0	int i;
+> > -	int first_idx =3D drv->states[0].flags & CPUIDLE_FLAG_POLLING ? 1 : 0=
+;
+> > +	int first_idx =3D ladder_get_first_idx(drv);
+> > =C2=A0	struct ladder_device *ldev =3D &per_cpu(ladder_devices, dev->cpu=
+);
+> > =C2=A0	struct ladder_device_state *lstate;
+> > =C2=A0	struct cpuidle_state *state;
 
