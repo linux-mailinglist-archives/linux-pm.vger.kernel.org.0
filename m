@@ -1,291 +1,352 @@
-Return-Path: <linux-pm+bounces-42605-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42606-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0ILIOU7hjmluFgEAu9opvQ
-	(envelope-from <linux-pm+bounces-42605-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 09:31:10 +0100
+	id KG1FKvL2jmnbGAEAu9opvQ
+	(envelope-from <linux-pm+bounces-42606-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 11:03:30 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46DFF134108
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 09:31:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F31B1134D43
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 11:03:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BF5AF3059825
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 08:29:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A6B6130191A3
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 10:03:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4FD32D0E8;
-	Fri, 13 Feb 2026 08:29:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAB5031D39F;
+	Fri, 13 Feb 2026 10:03:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jtmHJeME"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jjXzC+X4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0BA32D0E6;
-	Fri, 13 Feb 2026 08:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45B973128C0;
+	Fri, 13 Feb 2026 10:03:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770971382; cv=none; b=JAkWpv96uSYalceiZcFkM6IaLfTLF7XH8RjwopU6LyyVAtMupShiu1MwgpcBTGn+oYSLICFZTukuQ5qISbybYXrf/3nFiEJgDntZYu6le/4GZt9SYvu52+dSi1ItUtf5yMISXS3A/rR13ynERW4wc4VaRW5gUDnX7FDtaeYz/yM=
+	t=1770977007; cv=none; b=o2BV14CODBs51/jZ7GOx8uBzBUvPubLlNev+ngHcMMpAmywpHAKjp7Gqow/ijDGbbTiU9nZVJ2GHWT78gT/J6siz0PmKAj1BTf3b2xMwPBDTpxzurzA5989MbJr2XAyzL2smlEcJqKr3GcXvxYRdNxEa4c4zeifZUm9pQPcXw74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770971382; c=relaxed/simple;
-	bh=YaH/5F3iNwlx2Opbq+ZUKO6LkJvff7MT8NpfTtT4d5E=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BmwaUaJLsk0EyoikThQewIB2w4VPG5xacrirjuvsA9YO5SqotJsYKFNIFVylcEciIZOifTByWQPL9lH0YaD5f+GH05nYHw4DM5g2EQTLr8fgwvKPcxcP+XgCEdTKpm87cGgdw3o95vnW/mV1OFvnhEY7flnjm+AWouscxZS4q4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=jtmHJeME; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61D63ACs2871415;
-	Fri, 13 Feb 2026 08:29:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=NYDzRY
-	Wd7wm30LvT4KPDUsEbpAx+LuYEi5hkyFNioDU=; b=jtmHJeMExs0A+cvVLWAcgj
-	r3jW9mKO48edxz7YfcQWcz4WvCV1PyLC51gPj2n6CTra1kIWiHZleGNeQWtd3K1Y
-	RtpkInKdVCEOcoqSnV/GtCIVYgKdVeIM8VtlNbdN4shRSkyr+HyUA/B4djaNP2oy
-	qDmpFQHHPnUM+BMWk2KEic6KsTeZkd2VRQ7JVYjI9XLc83TvbYkmy6zaOFIgHNpo
-	jh9GW7ZmP/UbWI3d70/czauKuXt9Z7T+UUpxyZvfKyKWxgFPMUB7QpRfW0TXXg77
-	xEdhfkcW60yLO50IkUEg2GuMD7wXyoE+SQbd4lloEfBEPgHf72N77CYmAy2luCwQ
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c696ut65p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Feb 2026 08:29:30 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61D4IbIZ019258;
-	Fri, 13 Feb 2026 08:29:29 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4c6hxkdw0d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Feb 2026 08:29:29 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61D8TRMV49217930
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 13 Feb 2026 08:29:27 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B0D822005A;
-	Fri, 13 Feb 2026 08:29:27 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1C3C12004D;
-	Fri, 13 Feb 2026 08:29:26 +0000 (GMT)
-Received: from aboo.ibm.com (unknown [9.150.24.48])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 13 Feb 2026 08:29:25 +0000 (GMT)
-Message-ID: <7297173684f500e006a2997b92c927262221336f.camel@linux.ibm.com>
-Subject: Re: [PATCH] cpuidle: ladder: Fix state index when only one idle
- state is registered
-From: Aboorva Devarajan <aboorvad@linux.ibm.com>
-To: Christian Loehle <christian.loehle@arm.com>, rafael@kernel.org
-Cc: daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date: Fri, 13 Feb 2026 13:59:24 +0530
-In-Reply-To: <c3d670cd-fc54-49a8-b640-fb16f9bd0487@arm.com>
-References: <20260211053552.739337-1-aboorvad@linux.ibm.com>
-	 <c3d670cd-fc54-49a8-b640-fb16f9bd0487@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	s=arc-20240116; t=1770977007; c=relaxed/simple;
+	bh=yhvrpL7Kle0Q3tvVSV5470YlfHzm8tO16cLAJn7SiVo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Eu8F2kx+bSRsfzjrwDD5GuEBReJs5ahzjtdo4KvWieNyd/n2jauUz+3Do0WMBlpsddYd/GfX4OebWpMmQ0T88LXpnBFtnjUornTT9Gu0QAdGCIaKpPB36FdqAvt+bCQ0oUZ8oVcuJY39c9nZLOw/q/4XPStI0IMcDiuLkCktDYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jjXzC+X4; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770977006; x=1802513006;
+  h=date:from:to:cc:subject:message-id;
+  bh=yhvrpL7Kle0Q3tvVSV5470YlfHzm8tO16cLAJn7SiVo=;
+  b=jjXzC+X4w922uzLSn9mr86/ZnDqZTUBGQf+VsvG3z5BXkiq4bmMSkSpl
+   UJGRCU/syCXKLu0PafVcpo8pRkxQ/Mut9nFVt6gct4oOtwVrnQ7650ld/
+   lou0RwHuUkrZMoGQ6DmoSKN7j2qeffk2zS3UoF+z46QtZ2x8slqd5/OMm
+   yvK/HVy63FLFcuT8xOK20XZJINUVJo79djZ6orWwy3w2cakhDJXS52aog
+   Q/DwsQOm/MIPMVwFYouNuXbKucNYPKGjjAIyOYDyExLmP8fbEWkzQs65B
+   UeelnWrCl9WGXElywkxIaX2FINOJzuImdFzrkVQYpesVv7NS4d6G3ltce
+   A==;
+X-CSE-ConnectionGUID: HQWe3U9lQFeS2hBqSxYk3A==
+X-CSE-MsgGUID: B/zVt+LeSN2ZzLJmwVYIWw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11699"; a="71359297"
+X-IronPort-AV: E=Sophos;i="6.21,288,1763452800"; 
+   d="scan'208";a="71359297"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2026 02:03:25 -0800
+X-CSE-ConnectionGUID: quvtwC0ZS4+avrSKJtiIkA==
+X-CSE-MsgGUID: FXQzoG2JSSuwbvs0A8nwSw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,288,1763452800"; 
+   d="scan'208";a="250548349"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 13 Feb 2026 02:03:23 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vqq1B-00000000vHw-3LAt;
+	Fri, 13 Feb 2026 10:03:21 +0000
+Date: Fri, 13 Feb 2026 18:03:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 9e046413910681463c51b1a7940e1536e38a12ae
+Message-ID: <202602131801.9ut3wLJh-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=KZnfcAYD c=1 sm=1 tr=0 ts=698ee0ea cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8
- a=i_DVQUyr433w5YP_lWcA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEzMDA2MyBTYWx0ZWRfX2WNnG2+FM5b+
- BWDO8nBU65sYO7nuc2xFef+MNIsKqAEcpDfczY8DcTBjxqTy0EIDpzDLM83iYK35cYZn3cp0TNS
- tiIPHyYTwo3fxG8I3ejkbLr5ckpehChtY+IA3uXhBWhkL9JuVxl5234GxrGxic+JFhKFnPmw7BA
- 7GmxqC3qFXBosXBr+auX1hbXtPVBcGi+5wE3KRfsrySwP8cWhLYS4UEypcOQm9deiu2gXdP124Y
- xrZmVLxNMHa96cFu7QqntfOaapmJileavbdRqgEKiyb1WFG8zO527Zb+Jhq00KLkT+RKxK697r4
- rsjn3elJ9AbTaLpb9hBuII3MRTmqTdylqw4wsO7gMMCDm3hoThVKEWqORK72NBJGvlaeP1B+bCS
- 0TocTfnY1DXOya565AfHwl39Mo76p0Spc/3IknYmjGw4shtPVaSp7iOK+vtUGVvysIy1mPPYj48
- AYfUKCLLz8OCDmBHbxA==
-X-Proofpoint-ORIG-GUID: ZPNxT_0Ar4pgTfLQfrKptcZ9qjI2hxnk
-X-Proofpoint-GUID: ZPNxT_0Ar4pgTfLQfrKptcZ9qjI2hxnk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-13_01,2026-02-12_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 impostorscore=0 bulkscore=0 priorityscore=1501 adultscore=0
- clxscore=1015 suspectscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602130063
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DKIM_TRACE(0.00)[ibm.com:+];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[aboorvad@linux.ibm.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	PRECEDENCE_BULK(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42605-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_SEVEN(0.00)[11]
-X-Rspamd-Queue-Id: 46DFF134108
+	TAGGED_FROM(0.00)[bounces-42606-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_THREE(0.00)[3];
+	DKIM_TRACE(0.00)[intel.com:+]
+X-Rspamd-Queue-Id: F31B1134D43
 X-Rspamd-Action: no action
 
-On Wed, 2026-02-11 at 15:00 +0000, Christian Loehle wrote:
-> On 2/11/26 05:35, Aboorva Devarajan wrote:
-> > On certain platforms (PowerNV systems without a power-mgt DT node),
-> > cpuidle may register only a single idle state. In cases where that
-> > single state is a polling state (state 0), the ladder governor may
-> > incorrectly treat state 1 as the first usable state and pass an
-> > out-of-bounds index. This can lead to a NULL enter callback being
-> > invoked, ultimately resulting in a system crash.
-> >=20
-> > [=C2=A0=C2=A0 13.342636] cpuidle-powernv : Only Snooze is available
-> > [=C2=A0=C2=A0 13.351854] Faulting instruction address: 0x00000000
-> > [=C2=A0=C2=A0 13.376489] NIP [0000000000000000] 0x0
-> > [=C2=A0=C2=A0 13.378351] LR=C2=A0 [c000000001e01974] cpuidle_enter_stat=
-e+0x2c4/0x668
-> >=20
-> > Fix this by determining the first non-polling state index based on
-> > the number of registered states, and by returning state 0 when only
-> > one state is registered.
-> >=20
-> > Fixes: dc2251bf98c6 ("cpuidle: Eliminate the CPUIDLE_DRIVER_STATE_START=
- symbol")
-> > Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
->=20
-> Agreed that the current behavior is a bug, but is there really much value
-> in using a cpuidle governor with just a polling state?
-> It's dead code and trivial to bail out of in cpuidle, right?
->=20
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 9e046413910681463c51b1a7940e1536e38a12ae  Merge branch 'pm-powercap' into bleeding-edge
 
-Hi Christian,
+elapsed time: 1190m
 
-Thanks for the review.
+configs tested: 229
+configs skipped: 6
 
-Other governors (teo, menu) already handle this single-state scenario
-correctly. Fixing ladder's first_idx calculation seemed like the most
-targeted fix, however since ladder is not widely used this is likely
-to go unnoticed, it only popped up during testing with a missing
-power-mgt device tree node.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-yes, adding a bail-out in the core cpuidle_select() is also trivial and
-would benefit all governors uniformly. Setting stop_tick to false keeps
-the tick running, which is correct for a single state configuration.
+tested configs:
+alpha                             allnoconfig    gcc-15.2.0
+alpha                            allyesconfig    gcc-15.2.0
+alpha                               defconfig    gcc-15.2.0
+arc                              allmodconfig    clang-16
+arc                              allmodconfig    gcc-15.2.0
+arc                               allnoconfig    gcc-15.2.0
+arc                              allyesconfig    clang-22
+arc                              allyesconfig    gcc-15.2.0
+arc                                 defconfig    gcc-15.2.0
+arc                   randconfig-001-20260213    clang-22
+arc                   randconfig-002-20260213    clang-22
+arm                               allnoconfig    clang-22
+arm                               allnoconfig    gcc-15.2.0
+arm                              allyesconfig    clang-16
+arm                              allyesconfig    gcc-15.2.0
+arm                                 defconfig    gcc-15.2.0
+arm                       multi_v4t_defconfig    gcc-15.2.0
+arm                         orion5x_defconfig    clang-22
+arm                   randconfig-001-20260213    clang-22
+arm                   randconfig-002-20260213    clang-22
+arm                   randconfig-003-20260213    clang-22
+arm                   randconfig-004-20260213    clang-22
+arm                         s3c6400_defconfig    clang-22
+arm64                            allmodconfig    clang-19
+arm64                            allmodconfig    clang-22
+arm64                             allnoconfig    gcc-15.2.0
+arm64                               defconfig    gcc-15.2.0
+arm64                 randconfig-001-20260213    clang-17
+arm64                 randconfig-001-20260213    clang-20
+arm64                 randconfig-002-20260213    clang-20
+arm64                 randconfig-003-20260213    clang-20
+arm64                 randconfig-003-20260213    clang-22
+arm64                 randconfig-004-20260213    clang-20
+arm64                 randconfig-004-20260213    gcc-9.5.0
+csky                             allmodconfig    gcc-15.2.0
+csky                              allnoconfig    gcc-15.2.0
+csky                                defconfig    gcc-15.2.0
+csky                  randconfig-001-20260213    clang-20
+csky                  randconfig-001-20260213    gcc-15.2.0
+csky                  randconfig-002-20260213    clang-20
+csky                  randconfig-002-20260213    gcc-15.2.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    gcc-15.2.0
+hexagon                           allnoconfig    clang-22
+hexagon                           allnoconfig    gcc-15.2.0
+hexagon                             defconfig    gcc-15.2.0
+hexagon               randconfig-001-20260213    clang-22
+hexagon               randconfig-002-20260213    clang-22
+i386                             allmodconfig    clang-20
+i386                             allmodconfig    gcc-14
+i386                              allnoconfig    gcc-14
+i386                              allnoconfig    gcc-15.2.0
+i386                             allyesconfig    clang-20
+i386                             allyesconfig    gcc-14
+i386        buildonly-randconfig-001-20260213    clang-20
+i386        buildonly-randconfig-002-20260213    clang-20
+i386        buildonly-randconfig-003-20260213    clang-20
+i386        buildonly-randconfig-004-20260213    clang-20
+i386        buildonly-randconfig-005-20260213    clang-20
+i386        buildonly-randconfig-006-20260213    clang-20
+i386                                defconfig    gcc-15.2.0
+i386                  randconfig-001-20260213    gcc-14
+i386                  randconfig-002-20260213    gcc-14
+i386                  randconfig-003-20260213    gcc-14
+i386                  randconfig-004-20260213    gcc-14
+i386                  randconfig-005-20260213    gcc-14
+i386                  randconfig-006-20260213    gcc-14
+i386                  randconfig-007-20260213    gcc-14
+i386                  randconfig-011-20260213    gcc-14
+i386                  randconfig-012-20260213    gcc-14
+i386                  randconfig-013-20260213    gcc-14
+i386                  randconfig-014-20260213    gcc-14
+i386                  randconfig-015-20260213    gcc-14
+i386                  randconfig-016-20260213    gcc-14
+i386                  randconfig-017-20260213    gcc-14
+loongarch                        allmodconfig    clang-19
+loongarch                        allmodconfig    clang-22
+loongarch                         allnoconfig    clang-22
+loongarch                         allnoconfig    gcc-15.2.0
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20260213    clang-22
+loongarch             randconfig-002-20260213    clang-22
+m68k                             allmodconfig    gcc-15.2.0
+m68k                              allnoconfig    gcc-15.2.0
+m68k                             allyesconfig    clang-16
+m68k                             allyesconfig    gcc-15.2.0
+m68k                                defconfig    clang-19
+m68k                        stmark2_defconfig    gcc-15.2.0
+microblaze                        allnoconfig    gcc-15.2.0
+microblaze                       allyesconfig    gcc-15.2.0
+microblaze                          defconfig    clang-19
+mips                             allmodconfig    gcc-15.2.0
+mips                              allnoconfig    gcc-15.2.0
+mips                             allyesconfig    gcc-15.2.0
+mips                 decstation_r4k_defconfig    gcc-15.2.0
+nios2                            allmodconfig    clang-22
+nios2                             allnoconfig    clang-22
+nios2                             allnoconfig    gcc-11.5.0
+nios2                               defconfig    clang-19
+nios2                 randconfig-001-20260213    gcc-11.5.0
+nios2                 randconfig-002-20260213    gcc-8.5.0
+openrisc                         allmodconfig    clang-22
+openrisc                         allmodconfig    gcc-15.2.0
+openrisc                          allnoconfig    clang-22
+openrisc                          allnoconfig    gcc-15.2.0
+openrisc                            defconfig    gcc-15.2.0
+parisc                           allmodconfig    gcc-15.2.0
+parisc                            allnoconfig    clang-22
+parisc                            allnoconfig    gcc-15.2.0
+parisc                           allyesconfig    clang-19
+parisc                           allyesconfig    gcc-15.2.0
+parisc                              defconfig    gcc-15.2.0
+parisc                randconfig-001-20260213    clang-20
+parisc                randconfig-001-20260213    gcc-15.2.0
+parisc                randconfig-002-20260213    clang-20
+parisc                randconfig-002-20260213    gcc-8.5.0
+parisc64                            defconfig    clang-19
+powerpc                          allmodconfig    gcc-15.2.0
+powerpc                           allnoconfig    clang-22
+powerpc                           allnoconfig    gcc-15.2.0
+powerpc                      chrp32_defconfig    clang-22
+powerpc                      pcm030_defconfig    gcc-15.2.0
+powerpc               randconfig-001-20260213    clang-20
+powerpc               randconfig-001-20260213    gcc-14.3.0
+powerpc               randconfig-002-20260213    clang-20
+powerpc                     taishan_defconfig    clang-22
+powerpc64             randconfig-001-20260213    clang-20
+powerpc64             randconfig-001-20260213    gcc-15.2.0
+powerpc64             randconfig-002-20260213    clang-20
+powerpc64             randconfig-002-20260213    gcc-8.5.0
+riscv                            allmodconfig    clang-22
+riscv                             allnoconfig    clang-22
+riscv                             allnoconfig    gcc-15.2.0
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    gcc-15.2.0
+riscv                    nommu_k210_defconfig    gcc-15.2.0
+riscv                 randconfig-001-20260213    gcc-11.5.0
+riscv                 randconfig-002-20260213    gcc-11.5.0
+s390                             allmodconfig    clang-18
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.2.0
+s390                                defconfig    gcc-15.2.0
+s390                  randconfig-001-20260213    gcc-11.5.0
+s390                  randconfig-002-20260213    clang-22
+s390                  randconfig-002-20260213    gcc-11.5.0
+sh                               allmodconfig    gcc-15.2.0
+sh                                allnoconfig    clang-22
+sh                                allnoconfig    gcc-15.2.0
+sh                               allyesconfig    clang-19
+sh                               allyesconfig    gcc-15.2.0
+sh                         ap325rxa_defconfig    clang-22
+sh                        apsh4ad0a_defconfig    clang-22
+sh                                  defconfig    gcc-14
+sh                               j2_defconfig    clang-22
+sh                    randconfig-001-20260213    gcc-11.5.0
+sh                    randconfig-001-20260213    gcc-14.3.0
+sh                    randconfig-002-20260213    gcc-11.5.0
+sh                    randconfig-002-20260213    gcc-15.2.0
+sh                           se7750_defconfig    clang-22
+sh                           se7750_defconfig    gcc-15.2.0
+sparc                             allnoconfig    clang-22
+sparc                             allnoconfig    gcc-15.2.0
+sparc                               defconfig    gcc-15.2.0
+sparc                 randconfig-001-20260213    gcc-12.5.0
+sparc                 randconfig-001-20260213    gcc-13.4.0
+sparc                 randconfig-002-20260213    gcc-12.5.0
+sparc                 randconfig-002-20260213    gcc-13.4.0
+sparc64                          allmodconfig    clang-22
+sparc64                             defconfig    gcc-14
+sparc64               randconfig-001-20260213    gcc-12.5.0
+sparc64               randconfig-001-20260213    gcc-9.5.0
+sparc64               randconfig-002-20260213    clang-22
+sparc64               randconfig-002-20260213    gcc-12.5.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    gcc-14
+um                               allyesconfig    gcc-15.2.0
+um                                  defconfig    gcc-14
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20260213    gcc-12.5.0
+um                    randconfig-001-20260213    gcc-14
+um                    randconfig-002-20260213    clang-22
+um                    randconfig-002-20260213    gcc-12.5.0
+um                           x86_64_defconfig    gcc-14
+x86_64                           allmodconfig    clang-20
+x86_64                            allnoconfig    clang-20
+x86_64                            allnoconfig    clang-22
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20260213    gcc-14
+x86_64      buildonly-randconfig-002-20260213    gcc-14
+x86_64      buildonly-randconfig-003-20260213    gcc-14
+x86_64      buildonly-randconfig-004-20260213    gcc-14
+x86_64      buildonly-randconfig-005-20260213    gcc-14
+x86_64      buildonly-randconfig-006-20260213    gcc-14
+x86_64                              defconfig    gcc-14
+x86_64                                  kexec    clang-20
+x86_64                randconfig-001-20260213    gcc-14
+x86_64                randconfig-002-20260213    gcc-14
+x86_64                randconfig-003-20260213    gcc-14
+x86_64                randconfig-004-20260213    gcc-14
+x86_64                randconfig-005-20260213    gcc-14
+x86_64                randconfig-006-20260213    gcc-14
+x86_64                randconfig-011-20260213    gcc-12
+x86_64                randconfig-012-20260213    gcc-12
+x86_64                randconfig-013-20260213    gcc-12
+x86_64                randconfig-014-20260213    gcc-12
+x86_64                randconfig-015-20260213    gcc-12
+x86_64                randconfig-016-20260213    gcc-12
+x86_64                randconfig-071-20260213    clang-20
+x86_64                randconfig-072-20260213    clang-20
+x86_64                randconfig-073-20260213    clang-20
+x86_64                randconfig-074-20260213    clang-20
+x86_64                randconfig-075-20260213    clang-20
+x86_64                randconfig-076-20260213    clang-20
+x86_64                               rhel-9.4    clang-20
+x86_64                           rhel-9.4-bpf    gcc-14
+x86_64                          rhel-9.4-func    clang-20
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                         rhel-9.4-kunit    gcc-14
+x86_64                           rhel-9.4-ltp    gcc-14
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    clang-22
+xtensa                            allnoconfig    gcc-15.2.0
+xtensa                           allyesconfig    clang-22
+xtensa                  nommu_kc705_defconfig    gcc-15.2.0
+xtensa                randconfig-001-20260213    gcc-12.5.0
+xtensa                randconfig-001-20260213    gcc-8.5.0
+xtensa                randconfig-002-20260213    gcc-12.5.0
 
-Please let me know if you'd prefer this approach instead.
-
----
-
-diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index c7876e9e024f..ea082419f7db 100644
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -359,6 +359,16 @@ noinstr int cpuidle_enter_state(struct
-cpuidle_device *dev,
- int cpuidle_select(struct cpuidle_driver *drv, struct cpuidle_device
-*dev,
-                   bool *stop_tick)
- {
-+       /*
-+        * If there is only a single idle state (or none), there is
-nothing
-+        * meaningful for the governor to choose. Skip the governor and
-+        * always use state 0 with the tick running.
-+        */
-+       if (unlikely(drv->state_count <=3D 1)) {
-+               *stop_tick =3D false;
-+               return 0;
-+       }
-+
-        return cpuidle_curr_governor->select(drv, dev, stop_tick);
- }
-
----
-
-
-Regards,
-Aboorva
-
-
-> > ---
-> > =C2=A0drivers/cpuidle/governors/ladder.c | 24 ++++++++++++++++++++----
-> > =C2=A01 file changed, 20 insertions(+), 4 deletions(-)
-> >=20
-> > diff --git a/drivers/cpuidle/governors/ladder.c b/drivers/cpuidle/gover=
-nors/ladder.c
-> > index 6617eb494a11..294a688ed0bb 100644
-> > --- a/drivers/cpuidle/governors/ladder.c
-> > +++ b/drivers/cpuidle/governors/ladder.c
-> > @@ -42,6 +42,21 @@ struct ladder_device {
-> > =C2=A0
-> > =C2=A0static DEFINE_PER_CPU(struct ladder_device, ladder_devices);
-> > =C2=A0
-> > +/**
-> > + * ladder_get_first_idx - get the first non-polling state index
-> > + * @drv: cpuidle driver
-> > + *
-> > + * Returns the index of the first non-polling state, or 0 if state 0 i=
-s not
-> > + * polling or if there's only one state available.
-> > + */
-> > +static inline int ladder_get_first_idx(struct cpuidle_driver *drv)
-> > +{
-> > +	if (drv->state_count > 1 &&
-> > +	=C2=A0=C2=A0=C2=A0 drv->states[0].flags & CPUIDLE_FLAG_POLLING)
-> > +		return 1;
-> > +	return 0;
-> > +}
-> > +
-> > =C2=A0/**
-> > =C2=A0 * ladder_do_selection - prepares private data for a state change
-> > =C2=A0 * @dev: the CPU
-> > @@ -70,16 +85,17 @@ static int ladder_select_state(struct cpuidle_drive=
-r *drv,
-> > =C2=A0	struct ladder_device *ldev =3D this_cpu_ptr(&ladder_devices);
-> > =C2=A0	struct ladder_device_state *last_state;
-> > =C2=A0	int last_idx =3D dev->last_state_idx;
-> > -	int first_idx =3D drv->states[0].flags & CPUIDLE_FLAG_POLLING ? 1 : 0=
-;
-> > +	int first_idx;
-> > =C2=A0	s64 latency_req =3D cpuidle_governor_latency_req(dev->cpu);
-> > =C2=A0	s64 last_residency;
-> > =C2=A0
-> > -	/* Special case when user has set very strict latency requirement */
-> > -	if (unlikely(latency_req =3D=3D 0)) {
-> > +	/* Special case when there's only one state or strict latency require=
-ment */
-> > +	if (unlikely(drv->state_count <=3D 1 || latency_req =3D=3D 0)) {
-> > =C2=A0		ladder_do_selection(dev, ldev, last_idx, 0);
-> > =C2=A0		return 0;
-> > =C2=A0	}
-> > =C2=A0
-> > +	first_idx =3D ladder_get_first_idx(drv);
-> > =C2=A0	last_state =3D &ldev->states[last_idx];
-> > =C2=A0
-> > =C2=A0	last_residency =3D dev->last_residency_ns - drv->states[last_idx=
-].exit_latency_ns;
-> > @@ -134,7 +150,7 @@ static int ladder_enable_device(struct cpuidle_driv=
-er *drv,
-> > =C2=A0				struct cpuidle_device *dev)
-> > =C2=A0{
-> > =C2=A0	int i;
-> > -	int first_idx =3D drv->states[0].flags & CPUIDLE_FLAG_POLLING ? 1 : 0=
-;
-> > +	int first_idx =3D ladder_get_first_idx(drv);
-> > =C2=A0	struct ladder_device *ldev =3D &per_cpu(ladder_devices, dev->cpu=
-);
-> > =C2=A0	struct ladder_device_state *lstate;
-> > =C2=A0	struct cpuidle_state *state;
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
