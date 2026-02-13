@@ -1,199 +1,162 @@
-Return-Path: <linux-pm+bounces-42614-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42615-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eE9RD9Eqj2kPKwEAu9opvQ
-	(envelope-from <linux-pm+bounces-42614-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 14:44:49 +0100
+	id UBAgETMxj2mhLwEAu9opvQ
+	(envelope-from <linux-pm+bounces-42615-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 15:12:03 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 589A613672F
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 14:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B150136F8B
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 15:12:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8049830574B6
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 13:44:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8A55A30E45A9
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 14:04:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0ED834F46D;
-	Fri, 13 Feb 2026 13:44:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F84635F8DE;
+	Fri, 13 Feb 2026 14:04:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="opSMYtr5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBCAA14AD20;
-	Fri, 13 Feb 2026 13:44:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-qk1-f195.google.com (mail-qk1-f195.google.com [209.85.222.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03F435F8DD
+	for <linux-pm@vger.kernel.org>; Fri, 13 Feb 2026 14:04:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770990285; cv=none; b=aYOZDmjf7z3Y9o6rwwrfH/I6e2VVzC6lTAwvgJCj3jKoQpNwI2epn4i+oYtETr0Ymavj8VMdsVjyDkagsH9qB9Wlx0rzxt+sOpP4wEqTd2x2b4TloJp30spAmv0a5mx7EKDARb392nFmJiCUh7BEkwLQLqUuMXzPc5lD1DgE2ws=
+	t=1770991495; cv=none; b=Ob31kgDY1jyGm+Vfra2NPW1K6yPyx3qtj7YhY7J3n7M9RoMMKrl2p2OJaGoDckLu2gbjtTsq5RB4DAsS3ACe33ip/WkYR40Yov5XpLKZeSboA1C7JhFR20NgKQMntkiVMXDFTTyojsedcGq+AcNNW/pHz0ZCyuDllJLnZbrpVwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770990285; c=relaxed/simple;
-	bh=e1KK9/Flaa1UtwYQQSFPpDmB/yGazt0FwOkB4J8jOQ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P2LFE+lPfkPrkUi1M9yp37OjutEfOf++chMzEyKmy+q05FdyrmR/5bi4uP0URx0M7WDmZludRtFUSDcTwUwJVa4a+70KWVMG1kd7bbdtVUiWMaDGcdU8jNejI/kiGVPACF7Q8fi8KBSKK9jj2sIU16n9oLqu6FgT7yFqSTha4hE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C52E1570;
-	Fri, 13 Feb 2026 05:44:36 -0800 (PST)
-Received: from [10.57.15.246] (unknown [10.57.15.246])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 794653F63F;
-	Fri, 13 Feb 2026 05:44:41 -0800 (PST)
-Message-ID: <aa4e56dc-d74b-44dc-b628-c7573159de99@arm.com>
-Date: Fri, 13 Feb 2026 13:44:39 +0000
+	s=arc-20240116; t=1770991495; c=relaxed/simple;
+	bh=UNLPzY8JFs3m+p/4K1jQF1/vnb71y/aulIlYtpFcVHE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q1yd1eKo89MX0Xu5kpRWd97eOuYUYGaoRltmoUoQ2gS2YT0EhYecKg43neG+Xsgd0ZScQxEXDHs1jU1GFty8zxY2Bg+QaTjGz6DsduSmmxCv6+ZEl4UBZApudNqT/EORwrtmWzJPTNMgMqcYq3dTmaagSbhZQkVqtQxR4mICnxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=opSMYtr5; arc=none smtp.client-ip=209.85.222.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+Received: by mail-qk1-f195.google.com with SMTP id af79cd13be357-8cb420fbb5dso43529885a.3
+        for <linux-pm@vger.kernel.org>; Fri, 13 Feb 2026 06:04:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1770991492; x=1771596292; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=F7HcHHO+WcoSrrQ3nEIW1ykb//ECy2ZkTsyQF8ciVO4=;
+        b=opSMYtr5U9pthmrYKeiGERIP/xyFxclEAcaP1OI8KLpcfOM6szpqW1coA8vMiJOFD/
+         06n7VfmcaJMpILAbM6KOJyvEDw9bTfX4sItyI62UfhxXxji4MXJTYpuHkoqqyoHZBOpj
+         xprpqIY6aBSZCzU3h2b5HGqCqyoIkC5LU3ijglct/+++ppA0juDNakAhPO9+n5eNDvkK
+         j4EoDbcCzsOsqq99SPBdUal2kMZBoDbiDA4ot9Xi2nSZVWXnyXfp9Dm+tygZ+5TTpN0L
+         99vU+OSW4W+F1rTEVhqhSaVql7UI6e1dRNL3QT4A00qcWz9kTtUC5M0ac5CE8yMJQFdd
+         Zhow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770991492; x=1771596292;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F7HcHHO+WcoSrrQ3nEIW1ykb//ECy2ZkTsyQF8ciVO4=;
+        b=iqF8pzsxqZhMeenT2N0j2Rg/OtKppqLlnJL00owQGh39GE+7lTwpPhAAufUnnvMk6G
+         P2cg+/cg0jTavubQZPdTkWlriJ33t/Sken+4oCsqAb/1TfeW/Zw935obktwHuNYWoCmU
+         Gs2zXQjldPYDGLnlLv/EKZ3Ze74x3eDEbYghl1Nd3kNOLLtEjVwVFrd474E55GFOG5cv
+         rPPDQXkShBCwPM2vQIFsTWZa+Mt/+RO/Vivdgjonrd2jLBLrKRQxg0p6QrF8CZ4CGvBp
+         v18tht9Fwi4uee48F8HZVFUkPAKWjD78LGcnR95qGTgmHFG2b3Kl92gXQCdeHB+PA9Au
+         jjIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUPH1QfL4L/AIZVbu0sQNGbWZ0YvPengZUwU+cPjE9goxTFby73cFoaAnAlwCmNRW//2N3z9/lYgg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7SPLkLq/e9FZyR/zSRO1feYSDy3IdkXKcV/8gbXv6ZvafMKwZ
+	aGZWiPqseUUbO/BUKLb9b5BO7TYRH/nO/Rs5KIP5DLnF689awasbIW1PP0q/nnrkKLY=
+X-Gm-Gg: AZuq6aJaetARDQlvQpCN4r62QqXkfJDIkdh3/xWW0Dw4TstZKv507GI2D5ZGYnMiS6h
+	8pourFRCADa8NiUclJLXZiH86jXamzrAOxff/mxFRtLgjJ7poJ/wgSodKGgONARfSHljr1q3zgA
+	3U8n0jgIbtzRKWJAb/SsCXAvsKww7IXIhHr3+fh6dx+W7p6hz5tDONykwGKHTPnSw+0GNkElHco
+	ZvjtZd+Y2XWZMbukFGiR7sPH2L8Pn9J/0Qn+47uwU5fgWovtOlm79PppT2XVrsF6BJrmqM2Fx0L
+	rIQ42nrDHHj2q5XaydQeLJ6WRYQYpFDxTk+P2stevvW5oPpKFFfZvDHHZ7FVKrHPjsrmlTrR5Nm
+	W2nEkFibOOGK48vjQmpdlNdfQ9ZGLNhUs5rcFnNNcmb4phJzE4kFr1zQADDdcAt9i1Vujd2MYPX
+	EpKRbsnYlMiVNnXNoaeuBVydH4F6Vmnylcpcbz9YNm4pBIfq+miAVlgMichBMEqB8DpPV5kZouO
+	b7lI/O51A==
+X-Received: by 2002:a05:622a:204:b0:4f1:ac12:b01c with SMTP id d75a77b69052e-506a825a264mr22509531cf.3.1770991491488;
+        Fri, 13 Feb 2026 06:04:51 -0800 (PST)
+Received: from gourry-fedora-PF4VCD3F (pool-96-255-20-138.washdc.ftas.verizon.net. [96.255.20.138])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50684b94e9fsm60689721cf.24.2026.02.13.06.04.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Feb 2026 06:04:50 -0800 (PST)
+Date: Fri, 13 Feb 2026 09:04:47 -0500
+From: Gregory Price <gourry@gourry.net>
+To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc: linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+	nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-pm@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Yazen Ghannam <yazen.ghannam@amd.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
+	Li Ming <ming.li@zohomail.com>,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	Ying Huang <huang.ying.caritas@gmail.com>,
+	Yao Xingtao <yaoxt.fnst@fujitsu.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nathan Fontenot <nathan.fontenot@amd.com>,
+	Terry Bowman <terry.bowman@amd.com>,
+	Robert Richter <rrichter@amd.com>,
+	Benjamin Cheatham <benjamin.cheatham@amd.com>,
+	Zhijian Li <lizhijian@fujitsu.com>, Borislav Petkov <bp@alien8.de>,
+	Tomasz Wolski <tomasz.wolski@fujitsu.com>
+Subject: Re: [PATCH v6 0/9] dax/hmem, cxl: Coordinate Soft Reserved handling
+ with CXL and HMEM
+Message-ID: <aY8vf75vVQ-poVBN@gourry-fedora-PF4VCD3F>
+References: <20260210064501.157591-1-Smita.KoralahalliChannabasappa@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpuidle: ladder: Fix state index when only one idle state
- is registered
-To: Aboorva Devarajan <aboorvad@linux.ibm.com>, rafael@kernel.org
-Cc: daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260211053552.739337-1-aboorvad@linux.ibm.com>
- <c3d670cd-fc54-49a8-b640-fb16f9bd0487@arm.com>
- <7297173684f500e006a2997b92c927262221336f.camel@linux.ibm.com>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <7297173684f500e006a2997b92c927262221336f.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260210064501.157591-1-Smita.KoralahalliChannabasappa@amd.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.36 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gourry.net:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42615-lists,linux-pm=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[gourry.net];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[33];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,kernel.org,intel.com,huawei.com,amd.com,stgolabs.net,infradead.org,suse.cz,zohomail.com,oss.qualcomm.com,gmail.com,fujitsu.com,linuxfoundation.org,alien8.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gourry@gourry.net,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[gourry.net:+];
+	TAGGED_RCPT(0.00)[linux-pm];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	R_DKIM_NA(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[christian.loehle@arm.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42614-lists,linux-pm=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arm.com:mid]
-X-Rspamd-Queue-Id: 589A613672F
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 9B150136F8B
 X-Rspamd-Action: no action
 
-On 2/13/26 08:29, Aboorva Devarajan wrote:
-> On Wed, 2026-02-11 at 15:00 +0000, Christian Loehle wrote:
->> On 2/11/26 05:35, Aboorva Devarajan wrote:
->>> On certain platforms (PowerNV systems without a power-mgt DT node),
->>> cpuidle may register only a single idle state. In cases where that
->>> single state is a polling state (state 0), the ladder governor may
->>> incorrectly treat state 1 as the first usable state and pass an
->>> out-of-bounds index. This can lead to a NULL enter callback being
->>> invoked, ultimately resulting in a system crash.
->>>
->>> [   13.342636] cpuidle-powernv : Only Snooze is available
->>> [   13.351854] Faulting instruction address: 0x00000000
->>> [   13.376489] NIP [0000000000000000] 0x0
->>> [   13.378351] LR  [c000000001e01974] cpuidle_enter_state+0x2c4/0x668
->>>
->>> Fix this by determining the first non-polling state index based on
->>> the number of registered states, and by returning state 0 when only
->>> one state is registered.
->>>
->>> Fixes: dc2251bf98c6 ("cpuidle: Eliminate the CPUIDLE_DRIVER_STATE_START symbol")
->>> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
->>
->> Agreed that the current behavior is a bug, but is there really much value
->> in using a cpuidle governor with just a polling state?
->> It's dead code and trivial to bail out of in cpuidle, right?
->>
+On Tue, Feb 10, 2026 at 06:44:52AM +0000, Smita Koralahalli wrote:
+> This series aims to address long-standing conflicts between HMEM and
+> CXL when handling Soft Reserved memory ranges.
 > 
-> Hi Christian,
-> 
-> Thanks for the review.
-> 
-> Other governors (teo, menu) already handle this single-state scenario
-> correctly. Fixing ladder's first_idx calculation seemed like the most
-> targeted fix, however since ladder is not widely used this is likely
-> to go unnoticed, it only popped up during testing with a missing
-> power-mgt device tree node.
-> 
-> yes, adding a bail-out in the core cpuidle_select() is also trivial and
-> would benefit all governors uniformly. Setting stop_tick to false keeps
-> the tick running, which is correct for a single state configuration.
-> 
-> Please let me know if you'd prefer this approach instead.
-> 
-> ---
-> 
-> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> index c7876e9e024f..ea082419f7db 100644
-> --- a/drivers/cpuidle/cpuidle.c
-> +++ b/drivers/cpuidle/cpuidle.c
-> @@ -359,6 +359,16 @@ noinstr int cpuidle_enter_state(struct
-> cpuidle_device *dev,
->  int cpuidle_select(struct cpuidle_driver *drv, struct cpuidle_device
-> *dev,
->                    bool *stop_tick)
->  {
-> +       /*
-> +        * If there is only a single idle state (or none), there is
-> nothing
-> +        * meaningful for the governor to choose. Skip the governor and
-> +        * always use state 0 with the tick running.
-> +        */
-> +       if (unlikely(drv->state_count <= 1)) {
+> Reworked from Dan's patch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/patch/?id=ab70c6227ee6165a562c215d9dcb4a1c55620d5d
+>
 
-I think the unlikely isn't helping here, this just let the branch predictor
-handle this as it won't change anyway.
-
-> +               *stop_tick = false;
-> +               return 0;
-> +       }
-> +
->         return cpuidle_curr_governor->select(drv, dev, stop_tick);
->  }
-> 
-
-I prefer this, additionally of course:
-
--------8<-------
-
-diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors/menu.c
-index 64d6f7a1c776..fdfa5d7e10a6 100644
---- a/drivers/cpuidle/governors/menu.c
-+++ b/drivers/cpuidle/governors/menu.c
-@@ -271,7 +271,7 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-                data->bucket = BUCKETS - 1;
-        }
- 
--       if (unlikely(drv->state_count <= 1 || latency_req == 0) ||
-+       if (unlikely(latency_req == 0) ||
-            ((data->next_timer_ns < drv->states[1].target_residency_ns ||
-              latency_req < drv->states[1].exit_latency_ns) &&
-             !dev->states_usage[0].disable)) {
-diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
-index 81ac5fd58a1c..9b5b8c617806 100644
---- a/drivers/cpuidle/governors/teo.c
-+++ b/drivers/cpuidle/governors/teo.c
-@@ -317,12 +317,6 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-         */
-        cpu_data->sleep_length_ns = KTIME_MAX;
- 
--       /* Check if there is any choice in the first place. */
--       if (drv->state_count < 2) {
--               idx = 0;
--               goto out_tick;
--       }
--
-        if (!dev->states_usage[0].disable)
-                idx = 0;
- 
-
-
+Link is broken: bad commit reference
 
