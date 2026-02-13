@@ -1,51 +1,51 @@
-Return-Path: <linux-pm+bounces-42611-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42612-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EE9kChP5jmnbGAEAu9opvQ
-	(envelope-from <linux-pm+bounces-42611-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 11:12:35 +0100
+	id qHXGFlj5jmnbGAEAu9opvQ
+	(envelope-from <linux-pm+bounces-42612-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 11:13:44 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EE6E134EFF
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 11:12:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AB47134F23
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 11:13:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 33DC43025A72
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 10:12:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C157C304178C
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Feb 2026 10:13:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6682350A03;
-	Fri, 13 Feb 2026 10:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF39E350A39;
+	Fri, 13 Feb 2026 10:13:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r4dcKnsu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PRn9owiA"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91E9D1A08BC;
-	Fri, 13 Feb 2026 10:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8963D3375AE;
+	Fri, 13 Feb 2026 10:13:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770977535; cv=none; b=HF9CGk0RRqkjRBwAhhyHpGWSrHEdyXNSzFF5wm1u7Soy28G28mJvOFJEtvprUrWq8inD6zGnbWIieuEsGZ8mVexa/rhJm3tvapLxqG8WRBbxy/phNFnyqneryKFDXks5hqHo+kxre6EMfxnqV8yyegzDvCAylbk8T2/5ar3EMKY=
+	t=1770977618; cv=none; b=EFTnRMIdmHvNYFTF23NYhaGGoM4yYGbn8NRVg3m1mQ9p5LBOaE+ZOj2kpRAJr7/4RHz0VcuarTvmQszmDaV22m9NzCmCwte56EQjQddML6Fe6QI3wT0OYrwdw2YhydEk9kzHCHRztnQBBKBLgoZnGRmgsIg4oEgMxpwNumFq2kE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770977535; c=relaxed/simple;
-	bh=J+XvV6jIqmyrhArdkiSuYtiOfUyH7S6EIQyy0nQ3Gkk=;
+	s=arc-20240116; t=1770977618; c=relaxed/simple;
+	bh=3c+cS/RiXj9a/tEsq8JFGH5GzbvMKF6sOirprFgjT/w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QknYj+rmv2GoUwMvyoHeSfsFTum993PWFLKlzBfO/d8yGQaQOBZuNFmr6VFZbkZ4EySwaYQirvnfQHFtSoyDDxN47KOAd1isGsh5PWKTReU0oRDfD+23s988Ov4QeNggHC09+/FX675BCZBTmRNZuSWoFHwdUuO74Eav725FLQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r4dcKnsu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E392C16AAE;
-	Fri, 13 Feb 2026 10:12:10 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=dzkOV6kb2OBOtzxXcFIxV5xYrgnzg2Bxiu5X8dTydir6WIXo7TaGQvP1Twy5Qw6ZbIi2MlBmHTWbhsOrXLqqoKTjq0ylD0qQ2I6L91uduJWk3W96v3wz8svnflM0zFQ6J6DAt3uZYQdh7bdcM9AnScxQe3waCrbpM5vk3jcKPJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PRn9owiA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2DC7C116C6;
+	Fri, 13 Feb 2026 10:13:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770977535;
-	bh=J+XvV6jIqmyrhArdkiSuYtiOfUyH7S6EIQyy0nQ3Gkk=;
+	s=k20201202; t=1770977618;
+	bh=3c+cS/RiXj9a/tEsq8JFGH5GzbvMKF6sOirprFgjT/w=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=r4dcKnsus0PrXm86joHM7a3aMGWZBXA22wUHOE4zx1SXPEHSlgIxO40o9Plt1LsVU
-	 DNENGFp3ADbKm0rtQvrtQDsPzUgF9VuaQGdA8c4FLrzKnF4u55XuxGtXRndhP7h0VS
-	 TCa5ARtJBE2ixQaaY2RO8XLxZDPK2SADCTobm9bjQHxPizpn6YHHZoNvP+vV6qG7Hd
-	 niRErmC6njoMe3CW8IISN8nG+2xSOJGltHvMnC0i4THVaYlpQZSq98/Y1qWNp6ZpX3
-	 P4P26FdinIr7ZHFL9XcTq9TN9nXvxXmhWcF3Tv7JGUNbrkE473Uu0di2gquHatulCI
-	 uCv8aG68nruZA==
-Message-ID: <21472a9c-f996-484d-b1c8-1fefb12cc1dc@kernel.org>
-Date: Fri, 13 Feb 2026 11:12:08 +0100
+	b=PRn9owiA8dET1O88GwUFAFCRiKFBamqnR9AHl28sOvnkG4oKsz4ypEdvAnvqK34Zb
+	 aOQj3wPF8mNFmJUpr2VOQ8Galo43gEaWQ01Odr4wV6QCmjQKY/HIrtx/9x86kjIu9B
+	 wKjaSFv/mZU9TrnBuotiELNCUHyUp0+fLKzUJ5KS/k5CAD0cCaLBk6onVbX4afrMk4
+	 ti7nT1NMNL3sjxLfzNHyCpmIOiQ3+0C4KAHnNhmfEn4KCZsaI2i+NHR18qGw03qoPH
+	 SsA5CVqZf0532zldeKX4YU0E9rvk235XPLA6e9P7G7FfBrPPp6e9ptF3rbozRGmo7T
+	 OskmHJIsazMVg==
+Message-ID: <1c12b053-0081-464d-8f1b-3033e0b73f51@kernel.org>
+Date: Fri, 13 Feb 2026 11:13:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,8 +53,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/7] MAINTAINERS: Add entry for Samsung Exynos ACPM
- thermal driver
+Subject: Re: [PATCH v2 6/7] arm64: dts: exynos: gs101: Add thermal management
+ unit
 To: Tudor Ambarus <tudor.ambarus@linaro.org>,
  "Rafael J. Wysocki" <rafael@kernel.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
@@ -70,7 +70,7 @@ Cc: willmcvicker@google.com, jyescas@google.com, shin.son@samsung.com,
  linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-hardening@vger.kernel.org
 References: <20260119-acpm-tmu-v2-0-e02a834f04c6@linaro.org>
- <20260119-acpm-tmu-v2-5-e02a834f04c6@linaro.org>
+ <20260119-acpm-tmu-v2-6-e02a834f04c6@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -116,7 +116,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260119-acpm-tmu-v2-5-e02a834f04c6@linaro.org>
+In-Reply-To: <20260119-acpm-tmu-v2-6-e02a834f04c6@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
@@ -124,13 +124,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42611-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42612-lists,linux-pm=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_TO(0.00)[linaro.org,kernel.org,intel.com,arm.com,samsung.com,gmail.com];
@@ -144,18 +144,32 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 9EE6E134EFF
+X-Rspamd-Queue-Id: 9AB47134F23
 X-Rspamd-Action: no action
 
 On 19/01/2026 13:08, Tudor Ambarus wrote:
-> Add a MAINTAINERS entry for the Samsung Exynos ACPM thermal driver.
-> 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&little_control_temp>;
+> +					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+> +		};
+> +
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+If there is going to be resend, drop stray blank line.
+
+Otherwise looks fine, so please ping me when binding is taken to thermal
+tree.
+> +	};
+
+
 
 Best regards,
 Krzysztof
