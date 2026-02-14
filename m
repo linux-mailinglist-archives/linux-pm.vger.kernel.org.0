@@ -1,178 +1,151 @@
-Return-Path: <linux-pm+bounces-42659-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42660-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iIcmLm69kGntcgEAu9opvQ
-	(envelope-from <linux-pm+bounces-42659-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 19:22:38 +0100
+	id w/WUNJMAkWmceQEAu9opvQ
+	(envelope-from <linux-pm+bounces-42660-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 00:09:07 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 367D113CDD4
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 19:22:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A25F13DC06
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 00:09:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BE01C306683C
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 18:20:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D95A8300E70D
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 23:09:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED3282E285C;
-	Sat, 14 Feb 2026 18:20:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 173482C028C;
+	Sat, 14 Feb 2026 23:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QxIxOI/I"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jhhVMamE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C7A1DF273
-	for <linux-pm@vger.kernel.org>; Sat, 14 Feb 2026 18:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1384B16EB42;
+	Sat, 14 Feb 2026 23:09:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771093240; cv=none; b=lXPwwCeML8slcTdhaxspRsGCrt8m/9dp/WSPi/0aNnnqY/sQ2RbWWtyEtaC7AtogKEGeYSgE03ZtjlSLr9yBYSDjxi8jLdT6l8c17a9lPDkiKHFclN6dyIZxdFbvZeSz/NvCyyhKYEyOubgzZiJUoWf/ioqnxQwAA/3xNwAzA2w=
+	t=1771110544; cv=none; b=tI4Cb4/1YIzi7dqE1UoDjph9dNKcRRK82WyAC5Wn4LulJRuvA8LaAsMIWKf36UJGzj3wtBoPJadHQTJwbXTr7lTPyGOrCN+RZqGod+7KkVWYF/5z26OWw08LH3YOSNick8mCU9ztbcO5c8OII9PVPwVQSDllicJJHf9tgwjNIYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771093240; c=relaxed/simple;
-	bh=4TcBQPEAGKM05TWISFH3YhLVnNBHOq5rwTZKeWo8X1E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HXiShxCi5S2Jm5fEFy1uXvQCjhnF8t4qEExMSbAxrGQPZu9nEJ982ffl6Y8YdU/oWDS2+lMzZX+UhG/TmAhilrtajGSkmlsi7fce6t4dhzzdgwdnjaas9BmKsX86usgWp+8xjku4FY2CO5FRC9WaMc0JONU+hnPIxtHivdmtpS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QxIxOI/I; arc=none smtp.client-ip=209.85.214.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-2ab232cc803so9071985ad.3
-        for <linux-pm@vger.kernel.org>; Sat, 14 Feb 2026 10:20:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771093239; x=1771698039; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GnXmUEvVp0FKiuAf5tSWSg+X4ncehtCc9Vi8+FOLDFA=;
-        b=QxIxOI/IjjcE3tNN0PHIDZ7GryklbymZ3Y1FflrrbE6pJsS1IYPSqAWqeU8oTWSihi
-         JVH+yoG6UzXAjFJr0Y8qCmO1ALkeGznnng4IPe6xAfWRo53p5ph1IslSNy8p7gnd2Ers
-         UVKdJy1kCDzUoK1xM5Qe2E/vDV1Oo4dML3CSr2rSVIWPGR21Tx6GEbn+qiWp+1gOYbFN
-         fEIKWkyUdCSdHULDnj5tT7Obs1s4Cobq8EhIsiJ73jcorLwQ8HMVDCa1TjW2XKsDxn7F
-         x7CfM1RZz/djanfXHj7BYFb8+Fao2p99jmFsw+d/fiEL96YzFqN2j9r3vUccjKHb35Lt
-         RlXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771093239; x=1771698039;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GnXmUEvVp0FKiuAf5tSWSg+X4ncehtCc9Vi8+FOLDFA=;
-        b=pICsh+COPSfEgvkd7VsebeHH2Z6bezAgHkdbmVHMvr4x9V4XGVim2LKnNfTw86TAm+
-         xBsjHjvc7odqxdorsURekjEhhTPZcfIR8XoRiAptrRcdPf1601S4Y8Z+1W1eF+F66jsH
-         MSWXmSori/ZjmcOcf7dE1RYaEKxfZYWfHfmf6rtOaHm9stUlG/Wrz1C8FIHghVaTj44I
-         SJQEzyczHDr7vlCYnBf1bt4+GI9ICuMl4ozd9MOrQekbkPmAJFDqDcixUKidT4YyDPqm
-         cTvNRfO4819O7yAXG0am5wszgE3HtR/GAm0297WBnYbWjSFtkZP4u2KiCjHc+ncXvIfE
-         3I5w==
-X-Forwarded-Encrypted: i=1; AJvYcCUuyKR5KyCzbokOayCTiGbIUHtwWsh+IuAoznLOUFpJsaGCPlVzd6cw4uv+E5OS5UhY7cKuhsAnBQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZKi3ESgBogVSOeQ1ljAh+3yBpr8trk8vFGWSMgeu+iFzMv2it
-	u2JrC41O9oIuiL0lNLEluIOYgHzzhu3udiv/YLJBYCAZicZ8Mw6guVDV
-X-Gm-Gg: AZuq6aLWV4CmD4s2vktj/IlJ9gNHweyfBymRPYwxC/eV4zGUscDLoeKxbCBJDbzWJlr
-	xGJ6ewg98wjzwEtJcVW5ji1pIBDVlvVjJA2/vHW5fpRG3aCSXXqbQ6So6dMyxSIWlf2UTKC2uJa
-	X3RpC4rOA8Y1AvaSGxAQzUQ5YsMc/szwPihh2+FG/nbejvW3pR31k+ywqS6S9P+UrZnNvVODjRI
-	UEeuJiXmnDFMjBOZ1+UwXBpF0WfV9PAlWDg4GJVf/zJxuD6vXgeZH58b2tIgN45GJ1ImYR++IbL
-	VRbKjxLaGqN0N17gIIX37vRjzC7UOZ+seB+tdwRF8b8wRkLzha3GexV+NVEH+eFIJOBW8S1N11d
-	gkXmFV+jykfflwVAlx5ywXhMM0BdMJqFZmqGLVpba8zTVHoGxUEWAjGvCc36fnIAPQ6VzltQL82
-	S2VaTGaiE4naE/xcghXyfWAsVVfHN8rA==
-X-Received: by 2002:a17:902:ce89:b0:2a8:7814:47d0 with SMTP id d9443c01a7336-2ad1749829fmr30161265ad.22.1771093239295;
-        Sat, 14 Feb 2026 10:20:39 -0800 (PST)
-Received: from rockpi-5b ([45.112.0.78])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad1a9d5e06sm28406615ad.50.2026.02.14.10.20.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Feb 2026 10:20:38 -0800 (PST)
-From: Anand Moon <linux.amoon@gmail.com>
-To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+	s=arc-20240116; t=1771110544; c=relaxed/simple;
+	bh=SwYX7PQvtvlDrrCxP2OTN5V47sfZ7+wAANIHq40iXxg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KdmtlcyGOaf1rXVSovuLXlubS+Ixy8KPtEAv9jQ6NSFIj6m1+NFoP/FMNOpO6bogxBKl1hfNo1gPK/wbhCJdlpI3ZutfFLDzBY2ZW4kvd7JKuKoh5hRzV4gqLFHbgp2p4Nj3uDg82Kdx4PNU1OEW110oYOPSAcdF/29NpBY2+8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jhhVMamE; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771110541; x=1802646541;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SwYX7PQvtvlDrrCxP2OTN5V47sfZ7+wAANIHq40iXxg=;
+  b=jhhVMamEJT2FiiR+kOZQNLKIeu/t+d1nGq0fqIcW9b37ISmjJywr8yBd
+   CzCpwrH04umnTGPqsV2wvpPcitAyPCEEhs9+j6mFESObOjek5vVdM0DpT
+   5W53CLoVNtRGZSs5KXaufYE5dOBAYdWNdcZ6Gp8jC9X52gXpsytZD+Y25
+   ziuwTETFgWGJwQFxlD+MAHt8jQNRc/aNa6sEC3gchbP4fFt3/KGeXUyPA
+   VsY/IAuS6Ka0t+TjTPZHFIkZTXdtbSUgGZ0ccFA6+kpyYTXoLHiRpynrS
+   UmS0qMc1Wu4ksSJIN8aW8PVYLswIFS6yl7Q5vjnQwV3taxSNcvkzO88Pw
+   w==;
+X-CSE-ConnectionGUID: tScgWXqXTQWQMqvdhlCKhg==
+X-CSE-MsgGUID: Pl14cprkTWisuYE41jZD4A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11701"; a="74851992"
+X-IronPort-AV: E=Sophos;i="6.21,291,1763452800"; 
+   d="scan'208";a="74851992"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 15:09:00 -0800
+X-CSE-ConnectionGUID: 8fVLUyO7TLyDNPTcEOSluw==
+X-CSE-MsgGUID: Cf0+6/DLQAmqmtmBD8K9dQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,291,1763452800"; 
+   d="scan'208";a="250913204"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 14 Feb 2026 15:08:57 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vrOkx-00000000x4K-0iTr;
+	Sat, 14 Feb 2026 23:08:55 +0000
+Date: Sun, 15 Feb 2026 07:08:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anand Moon <linux.amoon@gmail.com>,
+	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	linux-pm@vger.kernel.org (open list:SAMSUNG THERMAL DRIVER),
-	linux-samsung-soc@vger.kernel.org (open list:SAMSUNG THERMAL DRIVER),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES),
-	linux-kernel@vger.kernel.org (open list)
-Cc: Anand Moon <linux.amoon@gmail.com>
-Subject: [PATCH v8 9/9] thermal/drivers/exynos: Fix some coding style issue
-Date: Sat, 14 Feb 2026 23:49:06 +0530
-Message-ID: <20260214181930.238981-10-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260214181930.238981-1-linux.amoon@gmail.com>
-References: <20260214181930.238981-1-linux.amoon@gmail.com>
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Anand Moon <linux.amoon@gmail.com>
+Subject: Re: [PATCH v8 7/9] thermal/drivers/exynos: Relocate
+ exynos_sensor_ops for forward declatition
+Message-ID: <202602150700.2ND4y6Yp-lkp@intel.com>
+References: <20260214181930.238981-8-linux.amoon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260214181930.238981-8-linux.amoon@gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42659-lists,linux-pm=lfdr.de];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.org,linaro.org,intel.com,arm.com,samsung.com,vger.kernel.org,lists.infradead.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linuxamoon@gmail.com,linux-pm@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-42660-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org,linaro.org,intel.com,arm.com,samsung.com,vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[lists.linux.dev,gmail.com];
+	DKIM_TRACE(0.00)[intel.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,checkpatch.pl:url]
-X-Rspamd-Queue-Id: 367D113CDD4
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:mid,intel.com:dkim,intel.com:email,01.org:url]
+X-Rspamd-Queue-Id: 1A25F13DC06
 X-Rspamd-Action: no action
 
-Fix several coding style issues reported by checkpatch.pl to improve
-code readability and maintainability:
+Hi Anand,
 
-- Remove unnecessary parentheses in sanitize_temp_error() during
-  logical comparisons.
-- Adjust indentation to align function arguments correctly.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
----
- drivers/thermal/samsung/exynos_tmu.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+[auto build test WARNING on 770aaedb461a055f79b971d538678942b6607894]
 
-diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-index 47b92c84ae98..f7f604230cfd 100644
---- a/drivers/thermal/samsung/exynos_tmu.c
-+++ b/drivers/thermal/samsung/exynos_tmu.c
-@@ -252,8 +252,8 @@ static void sanitize_temp_error(struct exynos_tmu_data *data, u32 trim_info)
- 				EXYNOS_TMU_TEMP_MASK);
- 
- 	if (!data->temp_error1 ||
--	    (data->soc_config->min_efuse_value > data->temp_error1) ||
--	    (data->temp_error1 > data->soc_config->max_efuse_value))
-+	    data->soc_config->min_efuse_value > data->temp_error1 ||
-+	    data->temp_error1 > data->soc_config->max_efuse_value)
- 		data->temp_error1 = data->soc_config->efuse_value & EXYNOS_TMU_TEMP_MASK;
- 
- 	if (!data->temp_error2)
-@@ -536,7 +536,7 @@ static void exynos5433_tmu_initialize(struct platform_device *pdev)
- 	}
- 
- 	dev_info(&pdev->dev, "Calibration type is %d-point calibration\n",
--			cal_type ?  2 : 1);
-+		 cal_type ?  2 : 1);
- }
- 
- static void exynos7_tmu_set_low_temp(struct exynos_tmu_data *data, u8 temp)
+url:    https://github.com/intel-lab-lkp/linux/commits/Anand-Moon/thermal-drivers-exynos-Refactor-clk_sec-initialization-inside-SOC-specific-case/20260215-022316
+base:   770aaedb461a055f79b971d538678942b6607894
+patch link:    https://lore.kernel.org/r/20260214181930.238981-8-linux.amoon%40gmail.com
+patch subject: [PATCH v8 7/9] thermal/drivers/exynos: Relocate exynos_sensor_ops for forward declatition
+config: sparc-randconfig-001-20260215 (https://download.01.org/0day-ci/archive/20260215/202602150700.2ND4y6Yp-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 15.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260215/202602150700.2ND4y6Yp-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602150700.2ND4y6Yp-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/thermal/samsung/exynos_tmu.c:164 struct member 'tzd' not described in 'exynos_tmu_data'
+>> Warning: drivers/thermal/samsung/exynos_tmu.c:164 struct member 'tzd' not described in 'exynos_tmu_data'
+
 -- 
-2.50.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
