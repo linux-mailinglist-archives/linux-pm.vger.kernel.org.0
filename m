@@ -1,228 +1,199 @@
-Return-Path: <linux-pm+bounces-42641-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42642-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GC07G5mgkGnkbgEAu9opvQ
-	(envelope-from <linux-pm+bounces-42641-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 17:19:37 +0100
+	id YNbqH5W6kGm8cgEAu9opvQ
+	(envelope-from <linux-pm+bounces-42642-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 19:10:29 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC34B13C746
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 17:19:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCE9913CB03
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 19:10:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D2A5C3014111
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 16:19:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 528AB301B910
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 18:10:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F264429ACFC;
-	Sat, 14 Feb 2026 16:19:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1387730DD18;
+	Sat, 14 Feb 2026 18:10:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="coAcXXGz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e4oezl4x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA17221F1F;
-	Sat, 14 Feb 2026 16:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BE62BF006
+	for <linux-pm@vger.kernel.org>; Sat, 14 Feb 2026 18:10:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771085974; cv=none; b=ZZe9ol8T06HjS9bN2rdQ41jbIDUgYB8ejoEtjj7ANw23IefJpKdrsQLdo8wlTGek48YKyotvo3ozCB9KvE/PMPMZry6zO0QDs0nfSJG6COwmqzl2kxwWGxMMqtjYDxQuLWW/Uay4SAPryQ/TXJiLZl5mO7/7uQqWTfQXgy6lE+U=
+	t=1771092621; cv=none; b=K5CoIVbgG2EHhMJGszwcfsuaXQ/qXCfoTAWV6MQwpl2cQu2bVzdJS7wAzu7he7fuNnM36CUuX+4vKn/Tp/UDdkE57+oNXW/m30OGGWlxvZQuY0d2Tt4eIchXw8NxS1S7rEUZk/p8YdAm250EaZ8bDP4RoqDMPhN9c0JfcV3aHoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771085974; c=relaxed/simple;
-	bh=x3fe8WZ+2+W4YSB2xsa8jaPz0W2DHrGr8nrRNdsdXn4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=clOUA53dZB7BP+UGcBDVn6jKFmaF/f8X6F5CRiq/9uQsJe/C+pEnDDckysdB+ToPQ36k3Z/2EQGfC4/k63WP3i6J8eagT9Sotuz8syegOIBxsfWQo5I41/o7QLxHPxs5GRC5S+aR1Gzz/pgQdxLbDVGnIp6H0Y424SQxPYDqHwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=coAcXXGz; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771085973; x=1802621973;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x3fe8WZ+2+W4YSB2xsa8jaPz0W2DHrGr8nrRNdsdXn4=;
-  b=coAcXXGzZL7Jv+Dp238ziFzVrGyn24Y/n9Kof1x+gvpt4NN9Ij5pnesj
-   0jtLjV1hGEYQmlexL6pDuZlKUFWVpK8Szrol1EgCSIL7o1oQWz7mucakZ
-   cXdaKLoWsiLiaZjO3zmdJLlwoY1OCQo8XNBlnvnYa1kylu8wDWwq0876S
-   cmRTwq39rtN1kQzEzkPKDpga/0ivTSLcRy2SjZnwp2695J/LaZx2q0WV/
-   g5oCmd9z/Qx9MyvCnUraVGLVKAGtVewujmX6WejAPtt8r5Vy4x2ymK6S9
-   ibyAKG7EBx9mruSpEGV1oqAS4r+egWh7Qda+TkpHFJZcYvVzZw734+PEk
-   Q==;
-X-CSE-ConnectionGUID: IZjkcnqUR3+XC8bGD99+Sg==
-X-CSE-MsgGUID: brZL2e+WTyq8nVrHhi2Xfw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11701"; a="72145447"
-X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
-   d="scan'208";a="72145447"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 08:19:32 -0800
-X-CSE-ConnectionGUID: 4holg2ccRC62/k0hMaPpsg==
-X-CSE-MsgGUID: Z++exEzIRkm+kUJ4J2NWWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
-   d="scan'208";a="213208808"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 08:19:31 -0800
-Date: Sat, 14 Feb 2026 17:19:28 +0100
-From: Raag Jadav <raag.jadav@intel.com>
-To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] powercap: intel_rapl: Remove incorrect CPU check
- in PMU context
-Message-ID: <aZCgkKj0DgR8nfWI@black.igk.intel.com>
-References: <20260209234310.1440722-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20260209234310.1440722-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+	s=arc-20240116; t=1771092621; c=relaxed/simple;
+	bh=6X1C0wECNTPSp6EP/HcEzSJeSFFFyaHViLXEg8EpYB8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jJSNyvTkQMjr7BtAj84cqlpz94hzbxv4zXhKwADX+1iOxNiuVyqIu4Fg7WjnMrKdUioq+rI89rPRrmralocz5MjlZ7ICfuQrSv/IFsVDadK8A0PKvEiZI11d/O5DfcXdtyet5VknHtTUieBZB2N2Y7DbSMpmPLzuTgvEcco3/7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e4oezl4x; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6594382a264so2868667a12.1
+        for <linux-pm@vger.kernel.org>; Sat, 14 Feb 2026 10:10:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771092617; x=1771697417; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mBgwHHnAe4QujYI3JUVAZlk83RlrT0NjCZwVRWPSZIU=;
+        b=e4oezl4xgeX9C9zB3AMRQw6UXQ3do5VNyag1xRW+k0Dx9siqFoPexugdQS1MMq+SDB
+         cMTNjdyqV3Gowof96U4AqnEr/cC3mhCg0RfKkyDINuffdnRAFQwhhZNbYMeVkHCUmRcG
+         E20dgM4QYuqAoJpm9cE4gevbqkx+csZeuGNsCKxJD7I4ggSEIaISh/Vy0lXy8+ehnae9
+         rdHEALQeUOR2GQnfKRMfNxl6X2IHkBG5kGeIQBrJ7TKIcjkVE9/Ae7vWg+L6Y3W3Qio3
+         l2lRUmCygBVyZWG0LWzsLhLgXhOVBlyUrr3cJl8TPH3bLkWRWZDUggfLJEiaa5cWfzQ/
+         UIpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771092617; x=1771697417;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mBgwHHnAe4QujYI3JUVAZlk83RlrT0NjCZwVRWPSZIU=;
+        b=CyAPhMxSzZ1FexCDMRUw9tF0uXFVGZsYMfSixg8qDRrAG7cE7k4ci545UhYxtU7oqd
+         32NGpZnjfcn35KlTY/3BR4s/VsjB2/6KwurCqR2jW1/IiEZoOUOk/jcFoop7ml2ggLEC
+         bGRXjCpgYOsHWolB2wGno6mHX214Xw1ocP81z4mjP90PgFpVsns8B83j9jT5tfLFxeAQ
+         YY95Uj9AFO5IrKnuJ6T7RpsNH8Jy0ihN4gMn5s4a9XutsStAhuwP1+LHmYl1mFihA+5f
+         3M0Xs6/Q1go99v0bhol3gj02mDTjtW3CwUXIhZ/dejSIJIGjlxUudHvWbTFu4raOR2VG
+         LTqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUvuCuaiXeKtcniA2Dayh+70Np20+QKj1WiIbcIKSZyudI4j3Wo6Vpz765XDOeWvL2Hd9m3S6djKA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMgIStzrTZXJ1XxGI3nbFK47gua6M4ekDYNW/Xg9q27No2Vpvb
+	dsyT3Y3inOVBYno6crAcuvJblulqyspm7UZfbxuQZ52nU0MIkRv4PFfs
+X-Gm-Gg: AZuq6aLkn8i+EjC2YsRO09MtWhvQ3w43fL9unzIlA5SVFmaEImf1HpNn9E9MdmVUBI1
+	JdyPbqnfX7Vf2QqsUvS/DMjSKft+v+c94cVx54tIgyXNYCF/w0F82WpQthKEes9C0z7kLaeh3Jf
+	yhiizvRLQkHEvzLE6Gkn3gki/PxnCmgBybCeW85IWvkaJmkPh4xS+/EczBFh//m2sI9SjnauGZt
+	kU6Ai0jG6Yw4zp8dRYB9mK0IkGHUR545TUiKsR9ntEKLApXG9ilLy5yRMtFdpU+cDLcHYkYV5CI
+	iZ0WLWasyobYE4Y4/K/XNc4/3cqWYRZ7fNZMCGQlnsAy9HyA8aYcNQJBSGiRmP2i1Ufi+ySz2ma
+	8Ya47WwCxPl1cx8RAsaQzXH+VnNS2fO4aUZdIob7mBhVSr7qNNaavO7U+sV4L0zaskNSdyln/7l
+	CBz3z7hQ/JoMIE
+X-Received: by 2002:a17:907:7ba0:b0:b8a:fd04:c789 with SMTP id a640c23a62f3a-b8fc3a358f8mr162694866b.22.1771092617220;
+        Sat, 14 Feb 2026 10:10:17 -0800 (PST)
+Received: from xeon ([188.163.112.48])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8fc735e506sm88122066b.11.2026.02.14.10.10.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Feb 2026 10:10:16 -0800 (PST)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Lee Jones <lee@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Svyatoslav Ryhel <clamor95@gmail.com>,
+	Ion Agorria <ion@agorria.com>,
+	=?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v3 0/7] mfd: Add support for Asus Transformer embedded controller
+Date: Sat, 14 Feb 2026 20:09:52 +0200
+Message-ID: <20260214180959.30714-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260209234310.1440722-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42641-lists,linux-pm=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-42642-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FREEMAIL_TO(0.00)[kernel.org,gmail.com,agorria.com,rere.qmqm.pl];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[raag.jadav@intel.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-pm@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-pm];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,gitlab.freedesktop.org:url,intel.com:email,intel.com:dkim,black.igk.intel.com:mid]
-X-Rspamd-Queue-Id: DC34B13C746
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: DCE9913CB03
 X-Rspamd-Action: no action
 
-On Mon, Feb 09, 2026 at 03:43:09PM -0800, Kuppuswamy Sathyanarayanan wrote:
-> The RAPL MSR read path incorrectly validates CPU context when called
-> from the PMU subsystem:
-> 
->     if (atomic) {
->         if (unlikely(smp_processor_id() != cpu))
->             return -EIO;
->         rdmsrq(ra->reg.msr, ra->value);
->     }
-> 
-> This check fails for package-scoped MSRs like RAPL energy counters,
-> which are readable from any CPU within the package.
-> 
-> The perf tool avoids hitting this check by validating against
-> /sys/bus/event_source/devices/power/cpumask before opening events.
-> However, turbostat does not perform this validation and may attempt
-> reads from non-lead CPUs, causing the check to fail and return zero
-> power values.
-> 
-> Since package-scoped MSRs are architecturally accessible from any CPU
-> in the package, remove the CPU matching check.
-> 
-> Also rename 'atomic' to 'pmu_ctx' to clarify this indicates PMU context
-> where rdmsrq() can be used directly instead of rdmsrl_safe_on_cpu().
-> 
-> Fixes: 748d6ba43afd ("powercap: intel_rapl: Enable MSR-based RAPL PMU support")
-> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> Tested-by: Furquim Ulisses <ulisses.furquim@intel.com>
+Add support for embedded controller used in Asus Transformers for
+managing power and input functions.
 
-This fixes a regression[1] in our test suite.
-Looks like the patch is already applied, but feel free to add my
+---
+Changes in v2:
+- converted sysfs debug exports into debugfs
+- added kernel-doc comments for exposed functions
+- fixed minor typos and inconsistencies
 
-Tested-by: Raag Jadav <raag.jadav@intel.com>
+Changes in v3:
+- dropped DockRAM commits (both schema and driver)
+- integrated DockRAM functionality directly into the controller driver
+- EC schema moved to embedded controllers folder
+- removed all cell descriptions from the schema
+- removed all compatibles from the cell drivers
+- adjusted naming conventions to better align with the ASUS Transformers
+- defined EC variant sets to provide coverage for all known devices
+---
 
-[1] https://gitlab.freedesktop.org/drm/xe/kernel/-/issues/6935
+Michał Mirosław (6):
+  mfd: Add driver for ASUS Transformer embedded controller
+  input: serio: Add driver for ASUS Transformer dock keyboard and
+    touchpad
+  input: keyboard: Add driver for ASUS Transformer dock multimedia keys
+  leds: Add driver for ASUS Transformer LEDs
+  power: supply: Add driver for ASUS Transformer battery
+  power: supply: Add charger driver for Asus Transformers
 
-> ---
->  drivers/powercap/intel_rapl_common.c |  6 +++---
->  drivers/powercap/intel_rapl_msr.c    | 12 +++++-------
->  include/linux/intel_rapl.h           |  2 +-
->  3 files changed, 9 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-> index 3ff6da3bf4e6..3705d0608a0f 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -254,7 +254,7 @@ static void rapl_init_domains(struct rapl_package *rp);
->  static int rapl_read_data_raw(struct rapl_domain *rd,
->  			      enum rapl_primitives prim,
->  			      bool xlate, u64 *data,
-> -			      bool atomic);
-> +			      bool pmu_ctx);
->  static int rapl_write_data_raw(struct rapl_domain *rd,
->  			       enum rapl_primitives prim,
->  			       unsigned long long value);
-> @@ -832,7 +832,7 @@ prim_fixups(struct rapl_domain *rd, enum rapl_primitives prim)
->   */
->  static int rapl_read_data_raw(struct rapl_domain *rd,
->  			      enum rapl_primitives prim, bool xlate, u64 *data,
-> -			      bool atomic)
-> +			      bool pmu_ctx)
->  {
->  	u64 value;
->  	enum rapl_primitives prim_fixed = prim_fixups(rd, prim);
-> @@ -854,7 +854,7 @@ static int rapl_read_data_raw(struct rapl_domain *rd,
->  
->  	ra.mask = rpi->mask;
->  
-> -	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra, atomic)) {
-> +	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra, pmu_ctx)) {
->  		pr_debug("failed to read reg 0x%llx for %s:%s\n", ra.reg.val, rd->rp->name, rd->name);
->  		return -EIO;
->  	}
-> diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-> index 9a7e150b3536..152893dca565 100644
-> --- a/drivers/powercap/intel_rapl_msr.c
-> +++ b/drivers/powercap/intel_rapl_msr.c
-> @@ -110,16 +110,14 @@ static int rapl_cpu_down_prep(unsigned int cpu)
->  	return 0;
->  }
->  
-> -static int rapl_msr_read_raw(int cpu, struct reg_action *ra, bool atomic)
-> +static int rapl_msr_read_raw(int cpu, struct reg_action *ra, bool pmu_ctx)
->  {
->  	/*
-> -	 * When called from atomic-context (eg PMU event handler)
-> -	 * perform MSR read directly using rdmsrq().
-> +	 * When called from PMU context, perform MSR read directly using
-> +	 * rdmsrq() without IPI overhead. Package-scoped MSRs are readable
-> +	 * from any CPU in the package.
->  	 */
-> -	if (atomic) {
-> -		if (unlikely(smp_processor_id() != cpu))
-> -			return -EIO;
-> -
-> +	if (pmu_ctx) {
->  		rdmsrq(ra->reg.msr, ra->value);
->  		goto out;
->  	}
-> diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
-> index f479ef5b3341..fa1f328d6712 100644
-> --- a/include/linux/intel_rapl.h
-> +++ b/include/linux/intel_rapl.h
-> @@ -152,7 +152,7 @@ struct rapl_if_priv {
->  	union rapl_reg reg_unit;
->  	union rapl_reg regs[RAPL_DOMAIN_MAX][RAPL_DOMAIN_REG_MAX];
->  	int limits[RAPL_DOMAIN_MAX];
-> -	int (*read_raw)(int id, struct reg_action *ra, bool atomic);
-> +	int (*read_raw)(int id, struct reg_action *ra, bool pmu_ctx);
->  	int (*write_raw)(int id, struct reg_action *ra);
->  	void *defaults;
->  	void *rpi;
-> -- 
-> 2.43.0
-> 
+Svyatoslav Ryhel (1):
+  dt-bindings: embedded-controller: document ASUS Transformer EC
+
+ .../asus,transformer-ec.yaml                  |  98 +++
+ drivers/input/keyboard/Kconfig                |  10 +
+ drivers/input/keyboard/Makefile               |   1 +
+ .../input/keyboard/asus-transformer-ec-keys.c | 272 +++++++
+ drivers/input/serio/Kconfig                   |  15 +
+ drivers/input/serio/Makefile                  |   1 +
+ drivers/input/serio/asus-transformer-ec-kbc.c | 147 ++++
+ drivers/leds/Kconfig                          |  11 +
+ drivers/leds/Makefile                         |   1 +
+ drivers/leds/leds-asus-transformer-ec.c       |  79 ++
+ drivers/mfd/Kconfig                           |  14 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/asus-transformer-ec.c             | 763 ++++++++++++++++++
+ drivers/power/supply/Kconfig                  |  22 +
+ drivers/power/supply/Makefile                 |   2 +
+ .../supply/asus-transformer-ec-battery.c      | 272 +++++++
+ .../supply/asus-transformer-ec-charger.c      | 193 +++++
+ include/linux/mfd/asus-transformer-ec.h       | 162 ++++
+ 18 files changed, 2064 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/embedded-controller/asus,transformer-ec.yaml
+ create mode 100644 drivers/input/keyboard/asus-transformer-ec-keys.c
+ create mode 100644 drivers/input/serio/asus-transformer-ec-kbc.c
+ create mode 100644 drivers/leds/leds-asus-transformer-ec.c
+ create mode 100644 drivers/mfd/asus-transformer-ec.c
+ create mode 100644 drivers/power/supply/asus-transformer-ec-battery.c
+ create mode 100644 drivers/power/supply/asus-transformer-ec-charger.c
+ create mode 100644 include/linux/mfd/asus-transformer-ec.h
+
+-- 
+2.51.0
+
 
