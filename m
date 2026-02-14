@@ -1,81 +1,81 @@
-Return-Path: <linux-pm+bounces-42654-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42655-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MGB8IBm9kGn5cgEAu9opvQ
-	(envelope-from <linux-pm+bounces-42654-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 19:21:13 +0100
+	id 6W9eNxe9kGn7cgEAu9opvQ
+	(envelope-from <linux-pm+bounces-42655-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 19:21:11 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 029BC13CD65
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 19:21:12 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8B0B13CD50
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 19:21:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 00DE6303A85D
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 18:20:16 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3CEB53016502
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 18:20:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4CC130F7E8;
-	Sat, 14 Feb 2026 18:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CDDC31063B;
+	Sat, 14 Feb 2026 18:20:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nak+0a3C"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H3tSl6uk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD0530BF69
-	for <linux-pm@vger.kernel.org>; Sat, 14 Feb 2026 18:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46EF52F6573
+	for <linux-pm@vger.kernel.org>; Sat, 14 Feb 2026 18:20:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771093207; cv=none; b=PcGkszqiTI0I3mUTqD4dTe/syVlMPFbXnGL0+xWgq3LOSdrLGTO+gvuSfm44ra5M6Mt9gVJNCjCRL2OFY6nOSjJYlHfrClx4gxVrZY2C9wO5B4mIqT8tIpyfp7gHtkoXS3sksgdzTTACjSnl33BTOrUChIG2p9S+UlrFeV/eBEQ=
+	t=1771093214; cv=none; b=EBvckuU2sxnH8gYKGF9kpfNOGCWnFg39oQVHl8k97wttV7jpOp8A2E88XUVdRWBeADxghqPrnxLGnmXnbnrAKyHFH36/lqLeL7MlamvTPPTOd7Q7EGXMZsjA1savqv6vr9S7RgG41AeTPLax2oAtcUWIpmBXyYEOxG3HdkR4VVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771093207; c=relaxed/simple;
-	bh=kn5V7b3COcuwYHlqKgJPX/LLOq0wc1sfglnkMH3EOts=;
+	s=arc-20240116; t=1771093214; c=relaxed/simple;
+	bh=07Gfn4DPjwR/0sRoWt/L0WS45nxocPzX2R/645HpccE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WP375GM0eOm0rls1QgjsmYhyPEy3uGZK/J9p4wTiZPvf95wAAso3zTrihcxXY5PkxP60NPng6DDF8LKbqPCMNBrFXgU5UTJf/UDdlBEQDlWxLi2JsGpMrciV43xqE8gyUdJu9mgbvgcSwRqcFd5y3xOfz0LJlS083zyPKfxk6Zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nak+0a3C; arc=none smtp.client-ip=209.85.214.196
+	 MIME-Version; b=aQ8wJPob+PB6U7rl8L0xtvZbwcdZyIECy4PX3Nlpoq6gYH58UDxCt0Xy2t5PqiAyK5y/n+yQz1EZNZzH1NKGGW32+v66CfrZ+g0RXlLFjfCq5+nedVVrVp6IrWiHCNj4H7xRxmpW0K75vq0i/Y6Mmo/F10QYHtK0qiVeANNcfUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H3tSl6uk; arc=none smtp.client-ip=209.85.214.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2a91215c158so11082635ad.0
-        for <linux-pm@vger.kernel.org>; Sat, 14 Feb 2026 10:20:06 -0800 (PST)
+Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-2a962230847so16902115ad.3
+        for <linux-pm@vger.kernel.org>; Sat, 14 Feb 2026 10:20:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771093206; x=1771698006; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771093213; x=1771698013; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=d9mMRm9Rf8IRm6thRLVnHSRFul8AYpRyy4igzBQWHAs=;
-        b=Nak+0a3CiZK611zbMOYsxjbkJXqPY+alovtFqv+4yhj0auijZqk+HAqWtWZGXxaA9D
-         KtlakTyjNEKJcQU5l52zxbxUulT478FQUtq+zMB8MxWWpPaypLgq9ru7jvHrM+4DA0Sh
-         ZvBaHdcz/vpdvj1D6xvv04tMSRAH5da6D/7atfqU3Kg3suz1nksDiByw2SYSZu2nF/EN
-         LWI1QOAhllQ7rLa80lfef4in08RyRQBUEgIsjHoh/LrOeoV//14t+dDW0x92mXvzTeT4
-         MbusSGjCNmQzq+Bjki9megfV8tExODQ8apvlR/ltJxs5wjJpQ22Bhk1EDzVdkIhAId1E
-         Ccmg==
+        bh=1D1hHSd7ku04iGe6HhlRrD0l+nMik2FyODF+cOhPL3M=;
+        b=H3tSl6ukgqmGNaV5RI/ZhI49TbQ0ElOwh3fvlA39g+fvLohj3bZkoYOyX+H/pBbuhd
+         BIt6DoekBADSbIETpTtaZkurXTe97/YuGegTBvPdu6hh5yQYhXn3OjfAGbmrT25u9Gs0
+         2awIb4aF15PJVpYSeYsuQltsTbnAssuuF1tt3AasZYRb3+o8ucvsn71T4IVdAAp0H4SH
+         PnJWbb2qy+8JES0Fnz9YuzEogjn9T+743qaJICSSIDiBYxCRiAhlS9a0QctfhPJl6HfL
+         sMGDOpVBbqyyFXB/sPG6n52tLIOoEuOZfrzK//11Orato+/gvyTNzv5Kwyh2BYZzrCT9
+         7uuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771093206; x=1771698006;
+        d=1e100.net; s=20230601; t=1771093213; x=1771698013;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=d9mMRm9Rf8IRm6thRLVnHSRFul8AYpRyy4igzBQWHAs=;
-        b=td8Iw97SHxuVBAdYoV4NR82ULac7KDsaXptW3o9Amu9v4VgItVtHm/EnQUw+7uxybj
-         uFdUJ7/e24UdRdiQV0WHPPWL8AWh94uBJAkEeWlMIHmSNdxKqqqGB/lbyGTiuv+hECSm
-         RsDA7OnA9GBNAaSpgmcs4Rp69nWVEgBF2PGa98CuE7D5rAGuXpe3jtthiSy5M7okycux
-         hLG6w/RDI4D8MopxhnvEBBkVw7LbDC/2KyfX/vQdOaQl/Kw4T8yuFnwf69oYVALL+c0Z
-         5YdM3n6oih6jRFqyQ22SJJc+e+bG40LPrz4TLEtJ0Cj7rXebKN+wqEyRf1VldztGL9pz
-         oqhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX4vcEHisp2qpNvGtjPzETKiohWS15vIgdcMo47wSbyDYz0lwPv0Q7jURT/U6+vLRWlCbsNWmeEww==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVije4cNbH8QVPM9JRfLaf1s7Gdrmfz7fMMynuFrrSARhhkOHo
-	tVHaMlRC7Y1NflSaAj0+9mKB6jOTXTBaXnW3cBivMzkh7xz1P2zE7nPj
-X-Gm-Gg: AZuq6aKpjzNykVUFsKfNtm25Wy1YxzIcZQnCnPHqz2GoP+eA7XvTEdfZM2KAoCZ9Imv
-	6faZN5E+XvQFXOFkFalGM+R7qSulvKD1ZXwhWuwSPW5BPKa6tz54Q5Q8FMkwJYbgOdnmtVscDrR
-	qEczYZexLPbtOrgvw4cuR77/mh80wO3rv7C5RCHgttCMyd27oUCOzx+ABb8VklG+ORZlTHpC7My
-	SzhA/wOHsIJi6FTBGnryAN8ZoMpr8QU6c2UAopmADDkHfIlZAOPIUIVjpbvx/DNvHilM00SAGob
-	+v7L1XbXfkUyr8OCdg3P/80rjI1dMS74YVYnexrMSRWtv3REKqNwzNkcTn38o+F/L/EBJaZsfea
-	39M6C59b7Uhaj5Yx5RC+VadLhQiXr8hgi5T8Ad67IuN0kmBYDhdE08uyLtKWXIugpSMBg/jnCUR
-	+WXI2kPt2B7iwVnFYoUoY=
-X-Received: by 2002:a17:903:1b43:b0:2a0:9fc8:a98b with SMTP id d9443c01a7336-2ab505d91ccmr68367655ad.40.1771093206154;
-        Sat, 14 Feb 2026 10:20:06 -0800 (PST)
+        bh=1D1hHSd7ku04iGe6HhlRrD0l+nMik2FyODF+cOhPL3M=;
+        b=sga1lGlYKYaPmORduwcWagJ153aHKIP7tdCeVj5tNzuU9gcjxrJfQdVAHcKIV7kvGU
+         ktM4UDMjhqYCpISQNafJKnNtfLYsWZTwHyu86BzdVmewFXzc+qzKIFjE0o79jHpCIUTa
+         i0eztbP+K3Sxu+Cre77sq4Snd+foK0Dh4+iGrW03UQOR4yzte8WElE1X7OgMKOEdYqta
+         8K7fUOuobCAYS+/HaA0CdhYk2MDButq8wduu+Wl8Utkhba0jZnGjL1Zfldy38+S/+ZQS
+         KQftClPaCugki5ClBrRz6SydYj0JRoII/0H562XA1LM9pdElv7FMetcelHMGPtY1kIAZ
+         YdKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXsDsIWXYeAvReu45IEYZb/+xTLLnmWc4DleKvw4ITqui0Av2SAXXpdD6ATA+dwxqZPmK5NFTbz+A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqE6RhLy/kFEIAsvlNE3tmxPCtigLuUfDTi+G80P7OMb8+LRQ7
+	imb5IhYfBVeQ5oyCHU8+tLYWuLvb3FRRE4QEgwzuLZ4HW4xDNPnwT6pT
+X-Gm-Gg: AZuq6aIWqX8Lr3aKtZV63NdGAcXy4ZM9sipKLFUVh0yoA4pfSd3qSqEGhr4RGGtZMwT
+	3RwUYQFm9gfmo3nOY9/8oSXgmT3OvGTummlcOaOMAPGVnNxvHSMBMUWAY7sbjVlm7PWq/M7DvOD
+	/+lIcg8r/Sg5opru2qaj1EaABBSU2qpZ5VfhPTFxU1uP+lem3PcxYKVa+G/2RTlblCz20/jUzEZ
+	MWUKqptDvnChYKO6W3NtMBEVrT6CMD9TjsdRc2kBrCzjCKeB6M2RFRV3NxR/SCl6+/gQGLSRCaZ
+	H8EHczhzdeAEnCqagQ7T4b/NafX6d+4SF2bB+WsKW9DAA6hzaBqtIGtanSP9UtSZbZ2+1ATqdHr
+	rwU2udjHfFE30PIwY/x0mMbqvg5GIF14va5EGIRI39llO6DX/DTb0HXY0fyS3rDB5XlaT9lZo3n
+	SLevJUZ3ZPKtARxrbRTG8=
+X-Received: by 2002:a17:903:1b28:b0:2aa:d39c:d68 with SMTP id d9443c01a7336-2ab50596948mr60204805ad.29.1771093212674;
+        Sat, 14 Feb 2026 10:20:12 -0800 (PST)
 Received: from rockpi-5b ([45.112.0.78])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad1a9d5e06sm28406615ad.50.2026.02.14.10.20.02
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad1a9d5e06sm28406615ad.50.2026.02.14.10.20.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Feb 2026 10:20:05 -0800 (PST)
+        Sat, 14 Feb 2026 10:20:11 -0800 (PST)
 From: Anand Moon <linux.amoon@gmail.com>
 To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
@@ -89,9 +89,9 @@ To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
 	linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES),
 	linux-kernel@vger.kernel.org (open list)
 Cc: Anand Moon <linux.amoon@gmail.com>
-Subject: [PATCH v8 4/9] thermal/drivers/exynos: Fixed the efuse min max value for exynos5422
-Date: Sat, 14 Feb 2026 23:49:01 +0530
-Message-ID: <20260214181930.238981-5-linux.amoon@gmail.com>
+Subject: [PATCH v8 5/9] thermal/drivers/exynos: Remove unused base_second mapping and references
+Date: Sat, 14 Feb 2026 23:49:02 +0530
+Message-ID: <20260214181930.238981-6-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260214181930.238981-1-linux.amoon@gmail.com>
 References: <20260214181930.238981-1-linux.amoon@gmail.com>
@@ -108,12 +108,12 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42654-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42655-lists,linux-pm=lfdr.de];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	RCPT_COUNT_TWELVE(0.00)[12];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -130,72 +130,99 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-pm];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 029BC13CD65
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D8B0B13CD50
 X-Rspamd-Action: no action
 
-As per Exynos5422 user manual e-Fuse range min~max range is 16~76.
-if e-Fuse value is out of this range, then thermal sensor may not
-sense thermal data properly. Additionally, refactors the efuse
-initialization logic in exynos_map_dt_data() by replacing nested
-if-else blocks with a switch statement for better readability
-and maintainability. Ensures correct efuse setup based on SoC type.
+The base_second field has been removed from struct exynos_tmu_data
+because it was unused. This cleanup also eliminates its mapping in
+exynos_map_dt_data() and ensures that TRIMINFO access in
+exynos4412_tmu_initialize() consistently uses the base field across
+all SoCs. This streamlines the code and optimizes memory usage.
 
 Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
 v8: None
-v7: drop the Rb Llukasz, as we dropped the nested switch to set efuse.
-v6: Add Rb Lukasz and fix typo in subject
-v5: None
-V4: None
+v7: new patch in this series,
+   Improve the commit message
+   simplify the logic to TRIMINFO for all SoC.
 ---
- drivers/thermal/samsung/exynos_tmu.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ drivers/thermal/samsung/exynos_tmu.c | 30 +++++++---------------------
+ 1 file changed, 7 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-index 5f017a78f437..3d12e95703bf 100644
+index 3d12e95703bf..146f29fadea9 100644
 --- a/drivers/thermal/samsung/exynos_tmu.c
 +++ b/drivers/thermal/samsung/exynos_tmu.c
-@@ -884,6 +884,22 @@ static int exynos_map_dt_data(struct platform_device *pdev)
- 	case SOC_ARCH_EXYNOS4412:
- 	case SOC_ARCH_EXYNOS5250:
- 	case SOC_ARCH_EXYNOS5260:
-+		data->tmu_set_low_temp = exynos4412_tmu_set_low_temp;
-+		data->tmu_set_high_temp = exynos4412_tmu_set_high_temp;
-+		data->tmu_disable_low = exynos4412_tmu_disable_low;
-+		data->tmu_disable_high = exynos4210_tmu_disable_high;
-+		data->tmu_set_crit_temp = exynos4412_tmu_set_crit_temp;
-+		data->tmu_initialize = exynos4412_tmu_initialize;
-+		data->tmu_control = exynos4210_tmu_control;
-+		data->tmu_read = exynos4412_tmu_read;
-+		data->tmu_set_emulation = exynos4412_tmu_set_emulation;
-+		data->tmu_clear_irqs = exynos4210_tmu_clear_irqs;
-+		data->gain = 8;
-+		data->reference_voltage = 16;
-+		data->efuse_value = 55;
-+		data->min_efuse_value = 0;
-+		data->max_efuse_value = 100;
-+		break;
- 	case SOC_ARCH_EXYNOS5420:
- 	case SOC_ARCH_EXYNOS5420_TRIMINFO:
- 		data->tmu_set_low_temp = exynos4412_tmu_set_low_temp;
-@@ -899,12 +915,8 @@ static int exynos_map_dt_data(struct platform_device *pdev)
- 		data->gain = 8;
- 		data->reference_voltage = 16;
- 		data->efuse_value = 55;
--		if (data->soc != SOC_ARCH_EXYNOS5420 &&
--		    data->soc != SOC_ARCH_EXYNOS5420_TRIMINFO)
--			data->min_efuse_value = 40;
--		else
--			data->min_efuse_value = 0;
--		data->max_efuse_value = 100;
-+		data->min_efuse_value = 16;
-+		data->max_efuse_value = 76;
- 		break;
- 	case SOC_ARCH_EXYNOS5433:
- 		data->tmu_set_low_temp = exynos5433_tmu_set_low_temp;
+@@ -139,12 +139,11 @@ enum soc_type {
+  * struct exynos_tmu_data : A structure to hold the private data of the TMU
+  *			    driver
+  * @base: base address of the single instance of the TMU controller.
+- * @base_second: base address of the common registers of the TMU controller.
+  * @irq: irq number of the TMU controller.
+  * @soc: id of the SOC type.
+  * @lock: lock to implement synchronization.
+  * @clk: pointer to the clock structure.
+- * @clk_sec: pointer to the clock structure for accessing the base_second.
++ * @clk_sec: pointer to the clock structure for accessing the gpu clk.
+  * @sclk: pointer to the clock structure for accessing the tmu special clk.
+  * @cal_type: calibration type for temperature
+  * @efuse_value: SoC defined fuse value
+@@ -172,7 +171,6 @@ enum soc_type {
+  */
+ struct exynos_tmu_data {
+ 	void __iomem *base;
+-	void __iomem *base_second;
+ 	int irq;
+ 	enum soc_type soc;
+ 	struct mutex lock;
+@@ -444,24 +442,17 @@ static void exynos4412_tmu_initialize(struct platform_device *pdev)
+ 	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
+ 	unsigned int trim_info, ctrl;
+ 
+-	if (data->soc == SOC_ARCH_EXYNOS3250 ||
+-	    data->soc == SOC_ARCH_EXYNOS4412 ||
+-	    data->soc == SOC_ARCH_EXYNOS5250) {
+-		if (data->soc == SOC_ARCH_EXYNOS3250) {
+-			ctrl = readl(data->base + EXYNOS_TMU_TRIMINFO_CON1);
+-			ctrl |= EXYNOS_TRIMINFO_RELOAD_ENABLE;
+-			writel(ctrl, data->base + EXYNOS_TMU_TRIMINFO_CON1);
+-		}
++	if (data->soc == SOC_ARCH_EXYNOS3250) {
++		ctrl = readl(data->base + EXYNOS_TMU_TRIMINFO_CON1);
++		ctrl |= EXYNOS_TRIMINFO_RELOAD_ENABLE;
++		writel(ctrl, data->base + EXYNOS_TMU_TRIMINFO_CON1);
++	} else {
+ 		ctrl = readl(data->base + EXYNOS_TMU_TRIMINFO_CON2);
+ 		ctrl |= EXYNOS_TRIMINFO_RELOAD_ENABLE;
+ 		writel(ctrl, data->base + EXYNOS_TMU_TRIMINFO_CON2);
+ 	}
+ 
+-	/* On exynos5420 the triminfo register is in the shared space */
+-	if (data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO)
+-		trim_info = readl(data->base_second + EXYNOS_TMU_REG_TRIMINFO);
+-	else
+-		trim_info = readl(data->base + EXYNOS_TMU_REG_TRIMINFO);
++	trim_info = readl(data->base + EXYNOS_TMU_REG_TRIMINFO);
+ 
+ 	sanitize_temp_error(data, trim_info);
+ }
+@@ -974,13 +965,6 @@ static int exynos_map_dt_data(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	data->base_second = devm_ioremap(&pdev->dev, res.start,
+-					resource_size(&res));
+-	if (!data->base_second) {
+-		dev_err(&pdev->dev, "Failed to ioremap memory\n");
+-		return -ENOMEM;
+-	}
+-
+ 	return 0;
+ }
+ 
 -- 
 2.50.1
 
