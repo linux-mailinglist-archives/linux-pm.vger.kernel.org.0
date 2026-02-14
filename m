@@ -1,73 +1,71 @@
-Return-Path: <linux-pm+bounces-42638-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42639-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MKtiA+xskGmoZQEAu9opvQ
-	(envelope-from <linux-pm+bounces-42638-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 13:39:08 +0100
+	id WaX/ET+VkGm/bQEAu9opvQ
+	(envelope-from <linux-pm+bounces-42639-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 16:31:11 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2136813BE68
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 13:39:06 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FECD13C53E
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 16:31:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 656FA3005331
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 12:39:03 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id A88873005A93
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Feb 2026 15:31:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5412E0B5C;
-	Sat, 14 Feb 2026 12:39:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46004257431;
+	Sat, 14 Feb 2026 15:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="dMT9mu22"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hZ61s5Wh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay.yourmailgateway.de (relay.yourmailgateway.de [188.68.61.103])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D6226D4CA;
-	Sat, 14 Feb 2026 12:38:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.68.61.103
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0288188735;
+	Sat, 14 Feb 2026 15:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771072742; cv=none; b=H4g8H6wKpgF2C79iNzjPuNjohk5iKP0/INardnGcX9/2/K4jTLGVoQ6UFZTPPKIz1P0XIAhny+0Du0C6UGvl79urniArY6tSHgnhoS7q6vfJxUt2WKn+uIlLIt0SeTe5/fnp0D4mAjXwwwtVFHXM+rzcJNE4BEi2WrPmw1HFKd8=
+	t=1771083068; cv=none; b=oMH+hqb7GE1sLt52BWi+k1edUiloDWRMDB5qwNUVqo4HWoRlgNX4MiBFoKXyqv/v1quyoJ5nQCoJrrkw+sScCjNtW4MhbJz6cO9MhGvm6Cm0pl5hT9PQxSUiDyn5Jvri1XRzAvl18+ZLjR8C26LWwoqs1ZUP1i4SDALWPryPmdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771072742; c=relaxed/simple;
-	bh=b7dYe84l7zv9UH8ZHnCf78uM7HPwb6jpk5ifK9Wt6oQ=;
+	s=arc-20240116; t=1771083068; c=relaxed/simple;
+	bh=vGIL3BuB/5aamhytd5Q98MRpGYl9sercOliR51UCm+E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kK5uuaW1cKjFCNA91KyRJjfwGSe1UZRsZyBYpaT+8nwod++as71CND0BjHRwTVYYOmABxW4711y7dwV045z1Yn9eHgn7jiOs5nU2Oe6/VpzoV/RvleWdo8DQsSw25TCdls0vWR/mNOuoCFYrJZK12Q1RXkGs8bcB5RYmG5mJ+/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=dMT9mu22; arc=none smtp.client-ip=188.68.61.103
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-Received: from mors-relay-8403.netcup.net (localhost [127.0.0.1])
-	by mors-relay-8403.netcup.net (Postfix) with ESMTPS id 4fCpW00R1Hz87q1;
-	Sat, 14 Feb 2026 13:38:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=leemhuis.info;
-	s=key2; t=1771072732;
-	bh=b7dYe84l7zv9UH8ZHnCf78uM7HPwb6jpk5ifK9Wt6oQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dMT9mu22w2vPUnRfc8uC3XhUjwjrtehWGPwet3un1UwxtZLt26zCg/jBijVXeHCx/
-	 kMPR3u+mMh4w7kphjimWt43Zya9rHik51vwN3eX75mjULbyQh4QUNoaotYKniDAD1G
-	 yPSDqFmEEvE+ZJsXEw72Czayc8u5daE7WRRPR+ACey7/9MySmpZUybqTkfNOjqpq4u
-	 gmYgSOVLcZWmcAhPSXiu+3YcI34wbllY3l8bJ/bpDhTLnzJJGRqcco3juYJvUBtpx4
-	 4uZ986GQc85xBxU/QYyPU0iqmMpuRaOhheFvG46Smzk+YIb47NakPIGDpwx8L/OMKu
-	 tXHRt/A8acQLw==
-Received: from policy01-mors.netcup.net (unknown [46.38.225.35])
-	by mors-relay-8403.netcup.net (Postfix) with ESMTPS id 4fCpVz6ppfz87pn;
-	Sat, 14 Feb 2026 13:38:51 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at policy01-mors.netcup.net
-X-Spam-Flag: NO
-X-Spam-Score: -2.898
-X-Spam-Level: 
-Received: from mxe9fb.netcup.net (unknown [10.243.12.53])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by policy01-mors.netcup.net (Postfix) with ESMTPS id 4fCpVy2m6zz8t3w;
-	Sat, 14 Feb 2026 13:38:50 +0100 (CET)
-Received: from [IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f] (unknown [IPv6:2a02:8108:8984:1d00:a0cf:1912:4be:477f])
-	by mxe9fb.netcup.net (Postfix) with ESMTPSA id B8FE567516;
-	Sat, 14 Feb 2026 13:38:48 +0100 (CET)
-Authentication-Results: mxe9fb;
-        spf=pass (sender IP is 2a02:8108:8984:1d00:a0cf:1912:4be:477f) smtp.mailfrom=regressions@leemhuis.info smtp.helo=[IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f]
-Received-SPF: pass (mxe9fb: connection is authenticated)
-Message-ID: <95fd3f52-c3ed-40c5-920f-11e8767f701d@leemhuis.info>
-Date: Sat, 14 Feb 2026 13:38:47 +0100
+	 In-Reply-To:Content-Type; b=HnP6neBRac00eZbKiR1FTmCzSsuEB3zSsVmd2grsnLVE60SwaBY9/LAyMqfQ8k9YCfiwhGqvKT7SNVxAdfQbuvKcbI3XZqEQslQtMQWQ2Rq6PPDFwpfdX/Pf4WGl8rHXWyfRTDql6w68D0PZB+8goIYBuWfozYkRsiKHm8bsPno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hZ61s5Wh; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771083066; x=1802619066;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vGIL3BuB/5aamhytd5Q98MRpGYl9sercOliR51UCm+E=;
+  b=hZ61s5Whbb0XvZTacLKBuSoYA8f1V9iLArJWorx7Jl53AgJJ/v7AjCQo
+   SmCFKz0omRjBGJJo5/F8dor10t+mySMpk6vnNMdGN3/b8bRnyyWn30ZRF
+   PC/+bPNuBIEJ7bssFf5XCTsnNesgjyDl6Ul/ctM8CjmSTpNVnYme9fEef
+   zk6+y5OVWx501goBAR50KM9iC0Kh9Q8450gWHQ0J9Zi9TmUNgqhC1r+g9
+   GBK0IyDVmjUR/5xfafcTK9gjSZE+wYR1G7UPBEoUXC0c2C5iJTUL5ybaF
+   V5X/eQ9eZwIhFNKtaBynm1jr8lAqmDuoe9MY9m/rxCEHci6oM7aS0TpT5
+   Q==;
+X-CSE-ConnectionGUID: 3y9Bf6foSgKKILM71qVEUQ==
+X-CSE-MsgGUID: 7/PMnCLZRFOHWs87LgtVhA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11701"; a="72286134"
+X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
+   d="scan'208";a="72286134"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 07:31:05 -0800
+X-CSE-ConnectionGUID: otnivZSvSFemPpJW7tZlGQ==
+X-CSE-MsgGUID: ZAleDi4gSgiAFh4LUd8eCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
+   d="scan'208";a="250855510"
+Received: from linux.intel.com ([10.54.29.200])
+  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 07:31:05 -0800
+Received: from [10.125.109.70] (unknown [10.125.109.70])
+	by linux.intel.com (Postfix) with ESMTP id B98B120A8401;
+	Sat, 14 Feb 2026 07:31:04 -0800 (PST)
+Message-ID: <3cf5e862-b723-492a-8a1e-044e846b62c3@linux.intel.com>
+Date: Sat, 14 Feb 2026 07:31:04 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,193 +73,123 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drm/imagination: Convert to
- dev_pm_domain_{at,de}tach_list()
-To: Marek Vasut <marek.vasut@mailbox.org>,
- Matt Coster <Matt.Coster@imgtec.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
- Frank Binns <Frank.Binns@imgtec.com>,
- Brajesh Gupta <Brajesh.Gupta@imgtec.com>,
- Alessio Belle <Alessio.Belle@imgtec.com>,
- Alexandru Dadu <Alexandru.Dadu@imgtec.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: 
- <194465eda54d1f852a9226cf691ddc5aa208e0a3.1769097977.git.geert+renesas@glider.be>
- <ffdf3982-e22c-4d01-afa6-5449ed381000@imgtec.com>
- <CAMuHMdWMh_oJFg-KtapcTDGvYWZ-hg_ZEJ2=E5Tp1apOEc8tnQ@mail.gmail.com>
- <b3b4f10e-1222-44f7-b308-db7199c67147@mailbox.org>
- <3e0def93-2f6c-4bcf-8ee5-bf607f2ca382@imgtec.com>
- <f5d3dde6-edec-42f4-93cb-459c8677245a@mailbox.org>
- <f82b7734-6ddc-4029-b38d-147e9a1de021@leemhuis.info>
- <fcf5ab75-029e-469e-8b2a-51fa5c2a2374@mailbox.org>
-From: Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Language: de-DE, en-US
-In-Reply-To: <fcf5ab75-029e-469e-8b2a-51fa5c2a2374@mailbox.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: <177107272943.314894.13716331919870478042@mxe9fb.netcup.net>
-X-NC-CID: JcW2HXIZkZa21BQHEhACCJ9qwlBdFvPy9mVCe3kMvKZanKkbGuo=
+Subject: Re: [PATCH v1 1/2] powercap: intel_rapl: Prepare read_raw interface
+ for atomic-context callers
+To: Raag Jadav <raag.jadav@intel.com>, sk.anirban@intel.com,
+ kamil.konieczny@intel.com
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251121000539.386069-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20251121000539.386069-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <aZAYHb0kO8eS0Z_5@black.igk.intel.com>
+Content-Language: en-US
+From: Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <aZAYHb0kO8eS0Z_5@black.igk.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[leemhuis.info:s=key2];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linux-m68k.org,imgtec.com,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,lists.freedesktop.org,vger.kernel.org,lists.linux.dev];
-	DMARC_NA(0.00)[leemhuis.info];
-	TAGGED_FROM(0.00)[bounces-42638-lists,linux-pm=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	DKIM_TRACE(0.00)[leemhuis.info:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imgtec.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[regressions@leemhuis.info,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 2136813BE68
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sathyanarayanan.kuppuswamy@linux.intel.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42639-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+]
+X-Rspamd-Queue-Id: 5FECD13C53E
 X-Rspamd-Action: no action
 
-On 2/13/26 23:52, Marek Vasut wrote:
-> On 2/12/26 4:56 PM, Thorsten Leemhuis wrote:
->> On 2/12/26 15:38, Marek Vasut wrote:
->>> On 2/12/26 10:00 AM, Matt Coster wrote:
->>>> On 11/02/2026 19:17, Marek Vasut wrote:
->>>>> On 1/23/26 2:50 PM, Geert Uytterhoeven wrote:
->>>>>> On Fri, 23 Jan 2026 at 14:36, Matt Coster <Matt.Coster@imgtec.com>
->>>>>> wrote:
->>>>>>> On 22/01/2026 16:08, Geert Uytterhoeven wrote:
->>>>>>>> Call the dev_pm_domain_attach_list() and
->>>>>>>> dev_pm_domain_detach_list()
->>>>>>>> helpers instead of open-coding multi PM Domain handling.
->>>>>>>>
->>>>>>>> This changes behavior slightly:
->>>>>>>>      - The new handling is also applied in case of a single PM
->>>>>>>> Domain,
->>>>>>>>      - PM Domains are now referred to by index instead of by
->>>>>>>> name, but
->>>>>>>>        "make dtbs_check" enforces the actual naming and ordering
->>>>>>>> anyway,
->>>>>>>>      - There are no longer device links created between virtual
->>>>>>>> domain
->>>>>>>>        devices, only between virtual devices and the parent device.
->>>>>>>
->>>>>>> We still need this guarantee, both at start and end of day. In the
->>>>>>> current implementation dev_pm_domain_attach_list() iterates
->>>>>>> forwards,
->>>>>>> but so does dev_pm_domain_detach_list(). Even if we changed that,
->>>>>>> I'd
->>>>>>> prefer not to rely on the implementation details when we can
->>>>>>> declare the
->>>>>>> dependencies explicitly.
->>>>>>
->>>>>> Note that on R-Car, the PM Domains are nested (see e.g.
->>>>>> r8a7795_areas[]),
->>>>>> so they are always (un)powered in the correct order.  But that may
->>>>>> not
->>>>>> be the case in the integration on other SoCs.
->>>>>>
->>>>>>> We had/have a patch (attached) kicking around internally to use the
->>>>>>> *_list() functions but keep the inter-domain links in place; it got
->>>>>>> held
->>>>>>> up by discussions as to whether we actually need those dependencies
->>>>>>> for
->>>>>>> the hardware to behave correctly. Your patch spurred me to run
->>>>>>> around
->>>>>>> the office and nag people a bit, and it seems we really do need to
->>>>>>> care
->>>>>>> about the ordering.
->>>>>>
->>>>>> OK.
->>>>>>
->>>>>>> Can you add the links back in for a V2 or I can properly send the
->>>>>>> attached patch instead, I don't mind either way.
->>>>>>
->>>>>> Please move forward with your patch, you are the expert.
->>>>>> I prefer not to be blamed for any breakage ;-)
->>>>>
->>>>> Has there been any progress on fixing this kernel crash ?
->>>>>
->>>>> There are already two proposed solutions, but no fix is upstream.
->>>>
->>>> Yes and no. Our patch to use dev_pm_domain_attach_list() has landed in
->>>> drm-misc-next as commit e19cc5ab347e3 ("drm/imagination: Use>>
->>>> dev_pm_domain_attach_list()"), but this does not fix the underlying
->>>> issue of missing synchronization in the PM core[1] is still unresolved
->>>> as far as I'm aware.
->>>
->>> OK, but the pvr driver can currently easily crash the kernel on boot if
->>> firmware is missing, so that should be fixed soon, right ?
+
+On 2/13/26 10:37 PM, Raag Jadav wrote:
+> On Thu, Nov 20, 2025 at 04:05:38PM -0800, Kuppuswamy Sathyanarayanan wrote:
+>> The current read_raw() implementation of the TPMI, MMIO and MSR
+>> interfaces does not distinguish between atomic and non-atomic callers.
 >>
->> Well, drm-misc-next afaik means that the above mentioned fix would only
->> be merged in 7.1, which is ~4 months away, which is not really "soon"
->> I'd say. Or did I misjudge this?
-> 
-> The PM domain issue here crashes the kernel, so I think this would be
-> material for drm-misc-fixes .
-
-Yeah, sounds a lot like it.
-
->>> I added the regressions list onto CC, because this seems like a problem
->>> worth tracking.
+>> rapl_msr_read_raw() uses rdmsrq_safe_on_cpu(), which can sleep and
+>> issue cross CPU calls. When MSR-based RAPL PMU support is enabled, PMU
+>> event handlers can invoke this function from atomic context where
+>> sleeping or rescheduling is not allowed. In atomic context, the caller
+>> is already executing on the target CPU, so a direct rdmsrq() is
+>> sufficient.
 >>
->> Noticed that and wondered what change caused the regression.
-> 
-> I think this one:
-> 
-> 330e76d31697 ("drm/imagination: Add power domain control")
-
-Thx; FWIW, that was merged for v6.16-rc1.
-
->> Did not
->> find a answer in a quick search on lore[1]. Because if it's a
->> regression, we maybe should just revert the culprit for now according to
->> Linus:
->> https://lore.kernel.org/lkml/CAHk-=wi86AosXs66-
->> yi54+mpQjPu0upxB8ZAfG+LsMyJmcuMSA@mail.gmail.com/
+>> To support such usage, introduce an atomic flag to the read_raw()
+>> interface to allow callers pass the context information. Modify the
+>> common RAPL code to propagate this flag, and set the flag to reflect
+>> the calling contexts.
 >>
->> [1] I guess this was the initial report from Geert?
->> https://lore.kernel.org/all/
->> CAMuHMdWapT40hV3c+CSBqFOW05aWcV1a6v_NiJYgoYi0i9_PDQ@mail.gmail.com/
-> 
-> It is.
-> 
-> I think there are other SoCs which depend on the power domain commit, so
-> revert is not so clear cut anymore.
+>> Utilize the atomic flag in rapl_msr_read_raw() to perform direct MSR
+>> read with rdmsrq() when running in atomic context, and a sanity check
+>> to ensure target CPU matches the current CPU for such use cases.
+>>
+>> The TPMI and MMIO implementations do not require special atomic
+>> handling, so the flag is ignored in those paths.
+>>
+>> This is a preparatory patch for adding MSR-based RAPL PMU support.
+> ...
+>
+>> -static int rapl_msr_read_raw(int cpu, struct reg_action *ra)
+>> +static int rapl_msr_read_raw(int cpu, struct reg_action *ra, bool atomic)
+>>   {
+>> +	/*
+>> +	 * When called from atomic-context (eg PMU event handler)
+>> +	 * perform MSR read directly using rdmsrq().
+>> +	 */
+>> +	if (atomic) {
+>> +		if (unlikely(smp_processor_id() != cpu))
+>> +			return -EIO;
+> This series breaks[1] our application[2] in cases where the reads are
+> issued from any available CPU it is scheduled on. This issue is not seen on
+> older platforms which use the original arch/x86 RAPL implementation.
+>
+> Can someone please shed some light on the change of userspace expectations?
+> Or did I miss any points in the documentation?
+>
+> [1] https://gitlab.freedesktop.org/drm/xe/kernel/-/issues/6935
+> [2] https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/master/lib/igt_power.c
 
-Well, it's a judgement call. 330e76d31697 was merged less then a year
-ago, so I'd not be surprised at all if Linus would revert it in a case
-like this. But it seems it doesn't revert clearly anymore, which
-complicates things.
+The access with non-lead CPUs is fixed by following series:
 
-> But SoCs which have hierarchical
-> power domains and which manage to probe this driver without having a
-> firmware available for the GPU will simply end with crashed kernel,
-> which is really not good.
+https://lore.kernel.org/linux-pm/CAJZ5v0gh_3y4+2qepC5Mqos+y+kBfGgeEKdmL5s6J4MBGcrQzw@mail.gmail.com/T/#mabe68b0d5c3e5571c9333ff915d38562ec7fed71
 
-Does the patch Matt mentioned fix the crash? His "this does not fix the
-underlying issue [...]" (see quote earlier) makes it sound like the
-crash or some other problem (theoretical or practical? regression or
-not?) remains. If that's the case and no quick fix in sight I guess it
-would be best if someone affected could post a revert and then we can
-ask Linus if he wants to pick it up.
+Can you please re-test with this above series?
 
-Ciao, Thorsten
+
+> Raag
+>
+>> +		rdmsrq(ra->reg.msr, ra->value);
+>> +		goto out;
+>> +	}
+>> +
+>>   	if (rdmsrq_safe_on_cpu(cpu, ra->reg.msr, &ra->value)) {
+>>   		pr_debug("failed to read msr 0x%x on cpu %d\n", ra->reg.msr, cpu);
+>>   		return -EIO;
+>>   	}
+>> +
+>> +out:
+>>   	ra->value &= ra->mask;
+>>   	return 0;
+>>   }
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
+
 
