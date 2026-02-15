@@ -1,56 +1,56 @@
-Return-Path: <linux-pm+bounces-42674-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42673-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kCbXEuYXkmmuqwEAu9opvQ
-	(envelope-from <linux-pm+bounces-42674-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 20:00:54 +0100
+	id sLNBCuIXkmmuqwEAu9opvQ
+	(envelope-from <linux-pm+bounces-42673-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 20:00:50 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6F3C13F78C
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 20:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 80ACC13F77D
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 20:00:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D9504301BC00
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3A0603015448
 	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 19:00:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF67246BCD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 780F8220F49;
 	Sun, 15 Feb 2026 19:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o1KgH7+L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LShGTUaK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54781149E17;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5473E45C0B;
 	Sun, 15 Feb 2026 19:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771182046; cv=none; b=iRn3LeuFawwBpij6xlyUaHVxA5TrUiTA3fAoQyjmagJSDbZOAF/gX/ej70buvEex8pKTPapdE9vsSgMWOI2Mze6XoufSbyAN6yvLDi96Ls+2ZdEPl7y7ZSDelMCVnmEZewJdYusODOW830FTf+o6HeuLM0VUbjVAVVYwmDazjsk=
+	t=1771182046; cv=none; b=XWefdkYSG8+zcSl1QL8Ic++7nyVzZALB/ka7YOeioDdG6SYr7lImYDeYZN0tNngAS1TqlAtn1YHcPq1gJjYBbG6K0tBztGHxQjMJi8V5JHAe04/EwSPH9Lxf9JjMfkMR5+KvV+s+BI+NI5nRFEXXIjt/PTxt/7hrmki0u5OT9Ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1771182046; c=relaxed/simple;
-	bh=dF6Y79PNFZiEWY4PL7UAYOsByXEL30pvzMVmxPOmG+M=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=O5yEtCC7+PF402DxX/LsUhTzGK3rlCte8fV6vVFkMehxz+FvK7RJpJyabJT/u3gZ+C6Orvy3nV9vAoVrYATnHljcYh0RXfmg9E4AjZR+42/vm8qH0Q1Xog9+6RDcJZh5PG4Wl9oP8zkfDA2NPsHu2Ux2gWwRbhxUC5PQi/Wo9W0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o1KgH7+L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E037DC4CEF7;
-	Sun, 15 Feb 2026 19:00:45 +0000 (UTC)
+	bh=ijCT+Mg7d3790XUMIRWeaMLVEKai5+A/PxJRt61VFl4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=t8XbF2HRR2F4huQK6QI3XLQzdVpwYLm66nJ5wYfyei9oOtvST1RXSTB3o3apwiPgViCc5hEc6h+NOZVw9ZFH8zGa4eH2yGutegngg4WgqTPtcRyxghwSZU0wCXy1QFAmI6au1RJHfGsbq8tbXyaPizpTzqs3t8/8RizuhvtAvRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LShGTUaK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0F206C19423;
+	Sun, 15 Feb 2026 19:00:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1771182046;
-	bh=dF6Y79PNFZiEWY4PL7UAYOsByXEL30pvzMVmxPOmG+M=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=o1KgH7+LhD3TEf0tPDKzs1kn7jCsso0QwavbDCyLHecAK4XCm/GNcyjjZqgKTk3ex
-	 RumMat0lb0X1jHE4nvAhMsq3PaZTM6mISazj4P0ETFPYbdrfb5EU/KYCl3PWsXOpoB
-	 DTZT4x3v6t1qjXlHZrvrsC6sUV6cW8vlqug6WueqsAdE0j7CaCTheeCsAuGcxZd9QW
-	 SjCYmkeU9ry8EF6kV91Z4PoewvDDqyG9BeWrixIPrskNEWSC0ORB6463rnk+u9YWLv
-	 PsbXiQfRf6XCPWDkZ+wZrWl2LXXkucTT58UxNyoJbo/9lZRMFfxea1NSRf3A3mDYbK
-	 2eCiYwr1CcosA==
+	bh=ijCT+Mg7d3790XUMIRWeaMLVEKai5+A/PxJRt61VFl4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=LShGTUaKXyZSjrhS6kwYIBt9hwvtSZhKlGZ3HR5nedonqog3puYIOht/6vFCjqTal
+	 plQBeXpP/93WLZBN6lsrIvrqsqhSuqp6SQgf4qRj8bi2hf1RRyEmrT5iPAQMW0KGqv
+	 W32voWw9gmpyrIbRs62TdMAElqJ9DZa+0NLjrAw3cknSmdgbEQ/V4XgNUtfPK8Xwpz
+	 B4i72hk0ZKsxsuql1hIdGObH7NMvKG6VVoCLpujon5PodgwPCBZbLM6TN3DrG/zQgo
+	 oRd4N/sGgPQYeLP6fjRp6pbo4vp4ZKnPhvlZrTZrC7d9aieSMiTjd5hB7T3X4D+IEM
+	 6m3Xjc0Rplf5Q==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7130E63F0C;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC6A4E63F0B;
 	Sun, 15 Feb 2026 19:00:45 +0000 (UTC)
 From: Kairui Song via B4 Relay <devnull+kasong.tencent.com@kernel.org>
-Subject: [PATCH v3 0/3] mm/swap: hibernate: improve hibernate performance
- with new allocator
-Date: Mon, 16 Feb 2026 03:00:24 +0800
-Message-Id: <20260216-hibernate-perf-v3-0-74e025091145@tencent.com>
+Date: Mon, 16 Feb 2026 03:00:25 +0800
+Subject: [PATCH v3 1/3] mm, swap: speed up hibernation allocation and
+ writeout
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -59,11 +59,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/33MQQ7CIBCF4asY1mLoVEp15T2Miw4d7CykDRCia
- Xp3aRMXunD5v+R9s4gUmKI472YRKHPk0Zeo9zthh87fSXJfWoCCRkEFcmCk4LtEcqLgpENj2ho
- BQYMopymQ4+cGXm+lB45pDK/Nz9W6fij9S+VKKum0JjoRNabHSyJvyaeDHR9ixTL8B6AA1kFrj
- UZ1RPMNLMvyBjRrLPjvAAAA
-X-Change-ID: 20260212-hibernate-perf-fb7783b2b252
+Message-Id: <20260216-hibernate-perf-v3-1-74e025091145@tencent.com>
+References: <20260216-hibernate-perf-v3-0-74e025091145@tencent.com>
+In-Reply-To: <20260216-hibernate-perf-v3-0-74e025091145@tencent.com>
 To: linux-mm@kvack.org
 Cc: Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
  Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
@@ -74,11 +72,11 @@ Cc: Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
  Carsten Grohmann <carstengrohmann@gmx.de>, Kairui Song <kasong@tencent.com>, 
  stable@vger.kernel.org
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771182044; l=2672;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1771182044; l=2673;
  i=kasong@tencent.com; s=kasong-sign-tencent; h=from:subject:message-id;
- bh=dF6Y79PNFZiEWY4PL7UAYOsByXEL30pvzMVmxPOmG+M=;
- b=5uoOa6dYgg4V5j9K4LZOCSYQHHvdzzvl/ZfwhWzim0Y8GqweS5RWo5Oj7ZRfTiSEws3cK37UU
- m12I+YzVF1MCrOSc0F7thaGgrMnaF+aPi3RmD6LyKbPtfzcj9ZdLYcB
+ bh=AP2Agry4RlYj89KzjPUleAMF+xnfApgEpjtkm4VqQJg=;
+ b=oWPcjSUKtm8Q5thSWVCe+iAtBfoyhjpcOXkpVbNik48lhQotclHLHkRYpDUJ3lggMApH+ajKj
+ ubJcoDilvf7DOAEJdCiVlTXLq6u98zsCp55n45Ahcmc5887iscwJsNb
 X-Developer-Key: i=kasong@tencent.com; a=ed25519;
  pk=kCdoBuwrYph+KrkJnrr7Sm1pwwhGDdZKcKrqiK8Y1mI=
 X-Endpoint-Received: by B4 Relay for kasong@tencent.com/kasong-sign-tencent
@@ -94,7 +92,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42674-lists,linux-pm=lfdr.de,kasong.tencent.com];
+	TAGGED_FROM(0.00)[bounces-42673-lists,linux-pm=lfdr.de,kasong.tencent.com];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -113,70 +111,79 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	HAS_REPLYTO(0.00)[kasong@tencent.com];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,carstengrohmann.de:email]
-X-Rspamd-Queue-Id: E6F3C13F78C
+X-Rspamd-Queue-Id: 80ACC13F77D
 X-Rspamd-Action: no action
 
-The new swap allocator didn't provide a high-performance allocation
-method for hibernate, and just left it using the easy slow path. As a
-result, hibernate performance is quite bad on some devices
+From: Kairui Song <kasong@tencent.com>
 
-Fix it by implementing hibernate support for the fast allocation path.
+Since commit 0ff67f990bd4 ("mm, swap: remove swap slot cache"),
+hibernation has been using the swap slot slow allocation path for
+simplification, which turns out might cause regression for some
+devices because the allocator now rotates clusters too often, leading to
+slower allocation and more random distribution of data.
 
-This regression seems only happen with SSD devices with poor 4k
-performance. I've tested on several different NVME and SSD setups, the
-performance diff is tiny on them, but testing on a Samsung SSD 830
-Series (SATA II, 3.0 Gbps) showed a big difference [1]:
+Fast allocation is not complex, so implement hibernation support as
+well.
 
-Test result with Samsung SSD 830 Series (SATA II, 3.0 Gbps) thanks
-to Carsten Grohmann [1]:
+Test result with Samsung SSD 830 Series (SATA II, 3.0 Gbps) shows the
+performance is several times better [1]:
 6.19:               324 seconds
 After this series:  35 seconds
 
-Test result with SAMSUNG MZ7LH480HAHQ-00005 (SATA 3.2, 6.0 Gb/s):
-Before 0ff67f990bd4: Wrote 2230700 kbytes in 4.47 seconds (499.03 MB/s)
-After 0ff67f990bd4: Wrote 2215472 kbytes in 4.44 seconds (498.98 MB/s)
-After this series: Wrote 2038748 kbytes in 4.04 seconds (504.64 MB/s)
-
-Test result with Memblaze P5910DT0384M00:
-Before 0ff67f990bd4: Wrote 2222772 kbytes in 0.84 seconds (2646.15 MB/s)
-After 0ff67f990bd4: Wrote 2224184 kbytes in 0.90 seconds (2471.31 MB/s)
-After this series: Wrote 1559088 kbytes in 0.55 seconds (2834.70 MB/s)
-
-The performance is almost the same for blazing fast SSDs, but for some
-SSDs, the performance is several times better.
-
-Patch 1 improves the hibernate performance by using the fast path, and
-patch 2 cleans up the code a bit since there are now multiple fast path
-users using similar conventions.
-
-Signed-off-by: Kairui Song <kasong@tencent.com>
-Tested-by: Carsten Grohmann <mail@carstengrohmann.de>
+Fixes: 0ff67f990bd4 ("mm, swap: remove swap slot cache")
+Reported-by: Carsten Grohmann <mail@carstengrohmann.de>
+Closes: https://lore.kernel.org/linux-mm/20260206121151.dea3633d1f0ded7bbf49c22e@linux-foundation.org/
 Link: https://lore.kernel.org/linux-mm/8b4bdcfa-ce3f-4e23-839f-31367df7c18f@gmx.de/ [1]
+Cc: stable@vger.kernel.org
+Signed-off-by: Kairui Song <kasong@tencent.com>
 ---
-Changes in v3:
-- Split the indention change to a standalone patch.
-- Update mail address and add Cc stable.
-- Link to v2: https://lore.kernel.org/r/20260215-hibernate-perf-v2-0-cf28c75b04b7@tencent.com
+ mm/swapfile.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-Changes in v2:
-- Based on mm-unstable, resend using b4's relay to fix mismathed patch content.
-- Link to v1: https://lore.kernel.org/r/20260215-hibernate-perf-v1-0-f55ee9ee67db@tencent.com
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index c6863ff7152c..32e0e7545ab8 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -1926,8 +1926,9 @@ void swap_put_entries_direct(swp_entry_t entry, int nr)
+ /* Allocate a slot for hibernation */
+ swp_entry_t swap_alloc_hibernation_slot(int type)
+ {
+-	struct swap_info_struct *si = swap_type_to_info(type);
+-	unsigned long offset;
++	struct swap_info_struct *pcp_si, *si = swap_type_to_info(type);
++	unsigned long pcp_offset, offset = SWAP_ENTRY_INVALID;
++	struct swap_cluster_info *ci;
+ 	swp_entry_t entry = {0};
+ 
+ 	if (!si)
+@@ -1937,11 +1938,21 @@ swp_entry_t swap_alloc_hibernation_slot(int type)
+ 	if (get_swap_device_info(si)) {
+ 		if (si->flags & SWP_WRITEOK) {
+ 			/*
+-			 * Grab the local lock to be compliant
+-			 * with swap table allocation.
++			 * Try the local cluster first if it matches the device. If
++			 * not, try grab a new cluster and override local cluster.
+ 			 */
+ 			local_lock(&percpu_swap_cluster.lock);
+-			offset = cluster_alloc_swap_entry(si, NULL);
++			pcp_si = this_cpu_read(percpu_swap_cluster.si[0]);
++			pcp_offset = this_cpu_read(percpu_swap_cluster.offset[0]);
++			if (pcp_si == si && pcp_offset) {
++				ci = swap_cluster_lock(si, pcp_offset);
++				if (cluster_is_usable(ci, 0))
++					offset = alloc_swap_scan_cluster(si, ci, NULL, pcp_offset);
++				else
++					swap_cluster_unlock(ci);
++			}
++			if (!offset)
++				offset = cluster_alloc_swap_entry(si, NULL);
+ 			local_unlock(&percpu_swap_cluster.lock);
+ 			if (offset)
+ 				entry = swp_entry(si->type, offset);
 
----
-Kairui Song (3):
-      mm, swap: speed up hibernation allocation and writeout
-      mm, swap: reduce indention for hibernate allocation helper
-      mm, swap: merge common convention and simplify allocation helper
-
- mm/swapfile.c | 55 +++++++++++++++++++++++++------------------------------
- 1 file changed, 25 insertions(+), 30 deletions(-)
----
-base-commit: 53f061047924205138ad9bc315885255f7cc4944
-change-id: 20260212-hibernate-perf-fb7783b2b252
-
-Best regards,
 -- 
-Kairui Song <kasong@tencent.com>
+2.52.0
 
 
 
