@@ -1,56 +1,56 @@
-Return-Path: <linux-pm+bounces-42672-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42675-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 5+o3C+EXkmmuqwEAu9opvQ
-	(envelope-from <linux-pm+bounces-42672-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 20:00:49 +0100
+	id eLhVAegXkmmuqwEAu9opvQ
+	(envelope-from <linux-pm+bounces-42675-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 20:00:56 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A9B713F776
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 20:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 97A5513F794
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 20:00:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0621B300D316
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 19:00:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1A461301DAE6
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 19:00:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7792C219A71;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E1D4212F98;
 	Sun, 15 Feb 2026 19:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yy5R6kes"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JRJX/rgq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 546CB139D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D5815ECCC;
 	Sun, 15 Feb 2026 19:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771182046; cv=none; b=bCYNTt/KK30WKylSsBqBqhfoy0i9YaFhu0KlzXrRuJge7MDoL9UUrGT9HT+7EBdj/+XG1K6nzTjBCtLqBktz+3RMQ46zHYobpF4EkRfq7IBGK/6MX5uVa6eu9kFpfsi2gqSpSW/1F2Eu3R5K2gHOzjjAXFOU+L6mrWOVEs75ipw=
+	t=1771182046; cv=none; b=LXS3Kg31/+aTQ7RSVrHGMiASasc8GAFAdjqCSS/lYsSI/t1OiMqWk1z6A7b1IPuFhN/LjATLLh0ehpdFnWp9NYxhZDiQsCT3AJzRX/dRpUQAIb4WqTaL59Kaw1pto0195wICfJK6Vclvpk2fhsoEG6BhwcKYEtdJvYB+8uYV+UY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1771182046; c=relaxed/simple;
-	bh=wTK7vBuck4Wc7Ro9R5Mj7NtxqG8AwnxBtxe5boxsbpg=;
+	bh=wYTnJaBMBsMKTzzb60ulEhgq9fyH+kQ0QpPvYbf16Uw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KB2AGm9/SlRc6sXctE1uHiRInheJSh+e0TMDBdq36xfoDnd/eoxxyJtGInXC6ZZSvkNjMsuXw4uPwtsBCu077PLVykUvcYTaauWnVXM8wLAqNnYyxuXpueimSnn4sqEuHUcS41Ed5WBWPrr3vOmyYCuUrbmH1ocUYS+KDIQkI+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yy5R6kes; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1CC65C2BC9E;
+	 In-Reply-To:To:Cc; b=SoDjGGczbk2iZb0fdYCOdRnTVS/TOtOp9iRO3fFvB7xMfwRT4/k1KoBDrDbjKh14zZG8XEkHr2GTozdpRsi0yU5cN9X4NlkJl3nmKUz4cCiaENZ3MAdYvFRBe/7RiOw6ISem0AGodFJ9QYNaD9p2eBy4kxXuUatS6itq699I/Tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JRJX/rgq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 335EFC2BCB1;
 	Sun, 15 Feb 2026 19:00:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1771182046;
-	bh=wTK7vBuck4Wc7Ro9R5Mj7NtxqG8AwnxBtxe5boxsbpg=;
+	bh=wYTnJaBMBsMKTzzb60ulEhgq9fyH+kQ0QpPvYbf16Uw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Yy5R6kesqXoXrKVqGCGp5zq3jrg/VndrjGUBKAr8JT4PCjKGWdbKMERn2zxgL2idJ
-	 yP1B81Yw5ciDuiv+2g/So47K/CKdDRWqf0ZGGFmXUEHXcrf+OzSb2gvAAt4TQeC4NP
-	 I/WbY9lXtMfGrnEYlVhcYoqECKhBxBh3IE6SDkk+BXvl2iCXIb4FawMc8kalGsddXD
-	 ClY3vsvesSt5C2yOpuhsxXlr8D55ngbl0X95ENihFBBDSHoBD9wJAqPE+W5sU0g3AE
-	 5l5LF3zTmR75OezDvm6ghrqACFv6PbduaalVm1nY+oGuOTVjmb2yQiq2AqxoBeUDFv
-	 RbnpOGQAryVqw==
+	b=JRJX/rgq6MIlxGPmiGkU7l62fhE+zV4C7kMpZKFL+TpQoL+BSrdCUMmDtrFU2S+gK
+	 m0p1RMCkGkbqZcV+pfmgh8ALLUG7g7AiyxQwp0oBZpa1UCkN624cNarRqoaEklndrB
+	 dAGF7YqjKoi/Ntm66Sx4J7OvxMXZB5anBHCGO4MBBpRU/CxXUDPiShZH1MVcpwbaA8
+	 eLLR9DNK4G1JmXs/Bg2K4KtwCftXB5tPZznMJkhiw7kQ8K8j3mjXSnMAOuN4fn0lgo
+	 wgL3DH/8xZtrLjXa34GgVP11Agtf1BV8Wi3JSi+3Oo46lz2jixOK6hfcViKtUgZod/
+	 pz8dnxaWTlUCw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CCC9E63F0D;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2103CE63F08;
 	Sun, 15 Feb 2026 19:00:46 +0000 (UTC)
 From: Kairui Song via B4 Relay <devnull+kasong.tencent.com@kernel.org>
-Date: Mon, 16 Feb 2026 03:00:26 +0800
-Subject: [PATCH v3 2/3] mm, swap: reduce indention for hibernate allocation
- helper
+Date: Mon, 16 Feb 2026 03:00:27 +0800
+Subject: [PATCH v3 3/3] mm, swap: merge common convention and simplify
+ allocation helper
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -59,7 +59,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260216-hibernate-perf-v3-2-74e025091145@tencent.com>
+Message-Id: <20260216-hibernate-perf-v3-3-74e025091145@tencent.com>
 References: <20260216-hibernate-perf-v3-0-74e025091145@tencent.com>
 In-Reply-To: <20260216-hibernate-perf-v3-0-74e025091145@tencent.com>
 To: linux-mm@kvack.org
@@ -71,11 +71,11 @@ Cc: Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
  "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>, 
  Carsten Grohmann <carstengrohmann@gmx.de>, Kairui Song <kasong@tencent.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771182044; l=2326;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1771182044; l=2624;
  i=kasong@tencent.com; s=kasong-sign-tencent; h=from:subject:message-id;
- bh=Er50BTm1CADsw8Sf6/HAwSuhm/4o2yVx7I3U3KWBPIc=;
- b=6R485nSU2o2bmlUPNO4K/iY50QRPl1rzZbPFloZdqJyaeo0dg917Z8y+N6oHRTJOmKCc6S34d
- Ve2gyLpXehHAoSL7/gdAVeYQ3DnjFmOPgzF2YvNccJWX9JFH6/o6w4w
+ bh=l6JMKyznXv7F/U7uxICNhzFyjw8qBx6KKx0n+2vekQ4=;
+ b=sKhh/YKyxlJMwOjmKcgVwcMjFOKElcHZFjBnSNbb504y4+zD57nffhL0T4FZ7GzMEpV5Yxxsh
+ yzIfZ8b685RDNlsDQpp54AYE4JVMm8yao6S3CSzFm7RT/IqRLvGfxDN
 X-Developer-Key: i=kasong@tencent.com; a=ed25519;
  pk=kCdoBuwrYph+KrkJnrr7Sm1pwwhGDdZKcKrqiK8Y1mI=
 X-Endpoint-Received: by B4 Relay for kasong@tencent.com/kasong-sign-tencent
@@ -91,7 +91,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42672-lists,linux-pm=lfdr.de,kasong.tencent.com];
+	TAGGED_FROM(0.00)[bounces-42675-lists,linux-pm=lfdr.de,kasong.tencent.com];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -110,72 +110,85 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	HAS_REPLYTO(0.00)[kasong@tencent.com];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7A9B713F776
+X-Rspamd-Queue-Id: 97A5513F794
 X-Rspamd-Action: no action
 
 From: Kairui Song <kasong@tencent.com>
 
-It doesn't have to check the device flag, as the allocator will also
-check the device flag and refuse to allocate if the device is not
-writable. This might cause a trivial waste of CPU cycles of hibernate
-allocation raced with swapoff, but that is very unlikely to happen.
-Removing the check on the common path should be more helpful.
+Almost all callers of the cluster scan helper require the: lock -> check
+usefulness/emptiness check -> allocate -> unlock routine. So merge them
+into the same helper to simplify the code.
 
 Signed-off-by: Kairui Song <kasong@tencent.com>
 ---
- mm/swapfile.c | 38 ++++++++++++++++++--------------------
- 1 file changed, 18 insertions(+), 20 deletions(-)
+ mm/swapfile.c | 30 ++++++++----------------------
+ 1 file changed, 8 insertions(+), 22 deletions(-)
 
 diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 32e0e7545ab8..0d1b17c99221 100644
+index 0d1b17c99221..68dbbbd0dd24 100644
 --- a/mm/swapfile.c
 +++ b/mm/swapfile.c
-@@ -1936,27 +1936,25 @@ swp_entry_t swap_alloc_hibernation_slot(int type)
+@@ -923,11 +923,14 @@ static unsigned int alloc_swap_scan_cluster(struct swap_info_struct *si,
+ 	bool need_reclaim, ret, usable;
  
- 	/* This is called for allocating swap entry, not cache */
- 	if (get_swap_device_info(si)) {
--		if (si->flags & SWP_WRITEOK) {
--			/*
--			 * Try the local cluster first if it matches the device. If
--			 * not, try grab a new cluster and override local cluster.
--			 */
--			local_lock(&percpu_swap_cluster.lock);
--			pcp_si = this_cpu_read(percpu_swap_cluster.si[0]);
--			pcp_offset = this_cpu_read(percpu_swap_cluster.offset[0]);
--			if (pcp_si == si && pcp_offset) {
--				ci = swap_cluster_lock(si, pcp_offset);
--				if (cluster_is_usable(ci, 0))
--					offset = alloc_swap_scan_cluster(si, ci, NULL, pcp_offset);
--				else
--					swap_cluster_unlock(ci);
--			}
--			if (!offset)
--				offset = cluster_alloc_swap_entry(si, NULL);
--			local_unlock(&percpu_swap_cluster.lock);
--			if (offset)
--				entry = swp_entry(si->type, offset);
-+		/*
-+		 * Try the local cluster first if it matches the device. If
-+		 * not, try grab a new cluster and override local cluster.
-+		 */
-+		local_lock(&percpu_swap_cluster.lock);
-+		pcp_si = this_cpu_read(percpu_swap_cluster.si[0]);
-+		pcp_offset = this_cpu_read(percpu_swap_cluster.offset[0]);
-+		if (pcp_si == si && pcp_offset) {
-+			ci = swap_cluster_lock(si, pcp_offset);
-+			if (cluster_is_usable(ci, 0))
-+				offset = alloc_swap_scan_cluster(si, ci, NULL, pcp_offset);
-+			else
-+				swap_cluster_unlock(ci);
- 		}
-+		if (!offset)
-+			offset = cluster_alloc_swap_entry(si, NULL);
-+		local_unlock(&percpu_swap_cluster.lock);
-+		if (offset)
-+			entry = swp_entry(si->type, offset);
- 		put_swap_device(si);
+ 	lockdep_assert_held(&ci->lock);
+-	VM_WARN_ON(!cluster_is_usable(ci, order));
+ 
+-	if (end < nr_pages || ci->count + nr_pages > SWAPFILE_CLUSTER)
++	if (!cluster_is_usable(ci, order) || end < nr_pages ||
++	    ci->count + nr_pages > SWAPFILE_CLUSTER)
+ 		goto out;
+ 
++	if (cluster_is_empty(ci))
++		offset = cluster_offset(si, ci);
++
+ 	for (end -= nr_pages; offset <= end; offset += nr_pages) {
+ 		need_reclaim = false;
+ 		if (!cluster_scan_range(si, ci, offset, nr_pages, &need_reclaim))
+@@ -1060,14 +1063,7 @@ static unsigned long cluster_alloc_swap_entry(struct swap_info_struct *si,
+ 			goto new_cluster;
+ 
+ 		ci = swap_cluster_lock(si, offset);
+-		/* Cluster could have been used by another order */
+-		if (cluster_is_usable(ci, order)) {
+-			if (cluster_is_empty(ci))
+-				offset = cluster_offset(si, ci);
+-			found = alloc_swap_scan_cluster(si, ci, folio, offset);
+-		} else {
+-			swap_cluster_unlock(ci);
+-		}
++		found = alloc_swap_scan_cluster(si, ci, folio, offset);
+ 		if (found)
+ 			goto done;
  	}
- fail:
+@@ -1332,14 +1328,7 @@ static bool swap_alloc_fast(struct folio *folio)
+ 		return false;
+ 
+ 	ci = swap_cluster_lock(si, offset);
+-	if (cluster_is_usable(ci, order)) {
+-		if (cluster_is_empty(ci))
+-			offset = cluster_offset(si, ci);
+-		alloc_swap_scan_cluster(si, ci, folio, offset);
+-	} else {
+-		swap_cluster_unlock(ci);
+-	}
+-
++	alloc_swap_scan_cluster(si, ci, folio, offset);
+ 	put_swap_device(si);
+ 	return folio_test_swapcache(folio);
+ }
+@@ -1945,10 +1934,7 @@ swp_entry_t swap_alloc_hibernation_slot(int type)
+ 		pcp_offset = this_cpu_read(percpu_swap_cluster.offset[0]);
+ 		if (pcp_si == si && pcp_offset) {
+ 			ci = swap_cluster_lock(si, pcp_offset);
+-			if (cluster_is_usable(ci, 0))
+-				offset = alloc_swap_scan_cluster(si, ci, NULL, pcp_offset);
+-			else
+-				swap_cluster_unlock(ci);
++			offset = alloc_swap_scan_cluster(si, ci, NULL, pcp_offset);
+ 		}
+ 		if (!offset)
+ 			offset = cluster_alloc_swap_entry(si, NULL);
 
 -- 
 2.52.0
