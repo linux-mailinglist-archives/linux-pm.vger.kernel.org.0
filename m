@@ -1,197 +1,195 @@
-Return-Path: <linux-pm+bounces-42675-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42676-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eLhVAegXkmmuqwEAu9opvQ
-	(envelope-from <linux-pm+bounces-42675-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 20:00:56 +0100
+	id INTpDZYskmmVrgEAu9opvQ
+	(envelope-from <linux-pm+bounces-42676-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 21:29:10 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97A5513F794
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 20:00:55 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEA5913FA3D
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 21:29:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1A461301DAE6
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 19:00:48 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3ADBF30059A0
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 20:29:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E1D4212F98;
-	Sun, 15 Feb 2026 19:00:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A06ED2FBE12;
+	Sun, 15 Feb 2026 20:29:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JRJX/rgq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ED3tmrop"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D5815ECCC;
-	Sun, 15 Feb 2026 19:00:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 228842F9D83;
+	Sun, 15 Feb 2026 20:29:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771182046; cv=none; b=LXS3Kg31/+aTQ7RSVrHGMiASasc8GAFAdjqCSS/lYsSI/t1OiMqWk1z6A7b1IPuFhN/LjATLLh0ehpdFnWp9NYxhZDiQsCT3AJzRX/dRpUQAIb4WqTaL59Kaw1pto0195wICfJK6Vclvpk2fhsoEG6BhwcKYEtdJvYB+8uYV+UY=
+	t=1771187346; cv=none; b=kWNCHAgyuzXjRQfImFvlX9w3D2pXZhdDqxBpJdKGF6KeDeSbMSLajFzEJToLj0x/QfuAnK/PcvC8FYiSZpegiS5ZQ5itbQBQDVBl/QZgNYiZkUlm5QCAEDCr5EgB/VwVppmwFX8R8aMQhXed159+22arpwJbSHozT3xbOF/GhyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771182046; c=relaxed/simple;
-	bh=wYTnJaBMBsMKTzzb60ulEhgq9fyH+kQ0QpPvYbf16Uw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SoDjGGczbk2iZb0fdYCOdRnTVS/TOtOp9iRO3fFvB7xMfwRT4/k1KoBDrDbjKh14zZG8XEkHr2GTozdpRsi0yU5cN9X4NlkJl3nmKUz4cCiaENZ3MAdYvFRBe/7RiOw6ISem0AGodFJ9QYNaD9p2eBy4kxXuUatS6itq699I/Tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JRJX/rgq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 335EFC2BCB1;
-	Sun, 15 Feb 2026 19:00:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771182046;
-	bh=wYTnJaBMBsMKTzzb60ulEhgq9fyH+kQ0QpPvYbf16Uw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=JRJX/rgq6MIlxGPmiGkU7l62fhE+zV4C7kMpZKFL+TpQoL+BSrdCUMmDtrFU2S+gK
-	 m0p1RMCkGkbqZcV+pfmgh8ALLUG7g7AiyxQwp0oBZpa1UCkN624cNarRqoaEklndrB
-	 dAGF7YqjKoi/Ntm66Sx4J7OvxMXZB5anBHCGO4MBBpRU/CxXUDPiShZH1MVcpwbaA8
-	 eLLR9DNK4G1JmXs/Bg2K4KtwCftXB5tPZznMJkhiw7kQ8K8j3mjXSnMAOuN4fn0lgo
-	 wgL3DH/8xZtrLjXa34GgVP11Agtf1BV8Wi3JSi+3Oo46lz2jixOK6hfcViKtUgZod/
-	 pz8dnxaWTlUCw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2103CE63F08;
-	Sun, 15 Feb 2026 19:00:46 +0000 (UTC)
-From: Kairui Song via B4 Relay <devnull+kasong.tencent.com@kernel.org>
-Date: Mon, 16 Feb 2026 03:00:27 +0800
-Subject: [PATCH v3 3/3] mm, swap: merge common convention and simplify
- allocation helper
+	s=arc-20240116; t=1771187346; c=relaxed/simple;
+	bh=hVLVSplviPu8tm98WtJ2k363b25r3G+Ovp7/xnmIpJs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BSlh2pBSeLdZ5YdtV6c54wKc9TplTcGCF9qqaUWviz38gnNXxA9luJWQEdbCYVmOcANTsees0gcKFBFQLkiB2zg2SnWU98sIC762YoqQ4AvmPciIgMiRT16fv95F3arNJoA6fGsVrSnxFnrmFjRWLMk9jcZWrImzFcuKADho7ME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ED3tmrop; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771187345; x=1802723345;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hVLVSplviPu8tm98WtJ2k363b25r3G+Ovp7/xnmIpJs=;
+  b=ED3tmropF3TbJQh8kMDoNBoz45Uv0nHxCj3m7VLOhNugjYnotxKgSzCi
+   Yf86n1aSZ3Bwdi4YAv9bWgW7bQhqFp3Tvs2+dJ38Au2w3b6CIHreFkRir
+   jfGjADfrrgID1yopiN2l57+o4IKVgrOg1tl5N2tw1OH3xHc9PHzsdaIzC
+   Kck/SdDBwJn2IpXq78whMfFDEN+XqSb5MDkmg2UaPf/cEp9b4mwxLe1h2
+   T3TO545rS7Q8yyU0gDq/iSMPEnI9nn6VXfjtyS/+3+kQ7PQE+2pJ0eL9P
+   9YBhn8uUP/MuA+PrOYKpbaNcBHJpOMp4KNf1L65KMSNDArJ3fTPd/IbYo
+   A==;
+X-CSE-ConnectionGUID: gLWbu2mrSU+EJ6JwW9Lt4A==
+X-CSE-MsgGUID: pxhA4nlJRsmMYzVzuPTh4Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11702"; a="72329949"
+X-IronPort-AV: E=Sophos;i="6.21,293,1763452800"; 
+   d="scan'208";a="72329949"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2026 12:29:04 -0800
+X-CSE-ConnectionGUID: XETOTSvKSHO+C3XiRh4rVg==
+X-CSE-MsgGUID: p/iu48HgScuRC6tyTII80w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,293,1763452800"; 
+   d="scan'208";a="213518818"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 15 Feb 2026 12:29:01 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vriji-00000000z8e-1N4C;
+	Sun, 15 Feb 2026 20:28:58 +0000
+Date: Mon, 16 Feb 2026 04:28:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Svyatoslav Ryhel <clamor95@gmail.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Ion Agorria <ion@agorria.com>,
+	=?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/7] mfd: Add driver for ASUS Transformer embedded
+ controller
+Message-ID: <202602160408.CZnIzWhv-lkp@intel.com>
+References: <20260214180959.30714-3-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260216-hibernate-perf-v3-3-74e025091145@tencent.com>
-References: <20260216-hibernate-perf-v3-0-74e025091145@tencent.com>
-In-Reply-To: <20260216-hibernate-perf-v3-0-74e025091145@tencent.com>
-To: linux-mm@kvack.org
-Cc: Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
- Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
- Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
- Carsten Grohmann <mail@carstengrohmann.de>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org, 
- "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>, 
- Carsten Grohmann <carstengrohmann@gmx.de>, Kairui Song <kasong@tencent.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771182044; l=2624;
- i=kasong@tencent.com; s=kasong-sign-tencent; h=from:subject:message-id;
- bh=l6JMKyznXv7F/U7uxICNhzFyjw8qBx6KKx0n+2vekQ4=;
- b=sKhh/YKyxlJMwOjmKcgVwcMjFOKElcHZFjBnSNbb504y4+zD57nffhL0T4FZ7GzMEpV5Yxxsh
- yzIfZ8b685RDNlsDQpp54AYE4JVMm8yao6S3CSzFm7RT/IqRLvGfxDN
-X-Developer-Key: i=kasong@tencent.com; a=ed25519;
- pk=kCdoBuwrYph+KrkJnrr7Sm1pwwhGDdZKcKrqiK8Y1mI=
-X-Endpoint-Received: by B4 Relay for kasong@tencent.com/kasong-sign-tencent
- with auth_id=562
-X-Original-From: Kairui Song <kasong@tencent.com>
-Reply-To: kasong@tencent.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260214180959.30714-3-clamor95@gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42675-lists,linux-pm=lfdr.de,kasong.tencent.com];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-42676-lists,linux-pm=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org,agorria.com,rere.qmqm.pl];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[linux-foundation.org,kernel.org,huaweicloud.com,gmail.com,redhat.com,carstengrohmann.de,vger.kernel.org,gmx.de,tencent.com];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-pm@vger.kernel.org];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	HAS_REPLYTO(0.00)[kasong@tencent.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 97A5513F794
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[git-scm.com:url,01.org:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,intel.com:mid,intel.com:dkim,intel.com:email]
+X-Rspamd-Queue-Id: CEA5913FA3D
 X-Rspamd-Action: no action
 
-From: Kairui Song <kasong@tencent.com>
+Hi Svyatoslav,
 
-Almost all callers of the cluster scan helper require the: lock -> check
-usefulness/emptiness check -> allocate -> unlock routine. So merge them
-into the same helper to simplify the code.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Kairui Song <kasong@tencent.com>
----
- mm/swapfile.c | 30 ++++++++----------------------
- 1 file changed, 8 insertions(+), 22 deletions(-)
+[auto build test WARNING on next-20260213]
+[also build test WARNING on linus/master v6.19]
+[cannot apply to dtor-input/next dtor-input/for-linus sre-power-supply/for-next robh/for-next v6.19 v6.19-rc8 v6.19-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 0d1b17c99221..68dbbbd0dd24 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -923,11 +923,14 @@ static unsigned int alloc_swap_scan_cluster(struct swap_info_struct *si,
- 	bool need_reclaim, ret, usable;
- 
- 	lockdep_assert_held(&ci->lock);
--	VM_WARN_ON(!cluster_is_usable(ci, order));
- 
--	if (end < nr_pages || ci->count + nr_pages > SWAPFILE_CLUSTER)
-+	if (!cluster_is_usable(ci, order) || end < nr_pages ||
-+	    ci->count + nr_pages > SWAPFILE_CLUSTER)
- 		goto out;
- 
-+	if (cluster_is_empty(ci))
-+		offset = cluster_offset(si, ci);
-+
- 	for (end -= nr_pages; offset <= end; offset += nr_pages) {
- 		need_reclaim = false;
- 		if (!cluster_scan_range(si, ci, offset, nr_pages, &need_reclaim))
-@@ -1060,14 +1063,7 @@ static unsigned long cluster_alloc_swap_entry(struct swap_info_struct *si,
- 			goto new_cluster;
- 
- 		ci = swap_cluster_lock(si, offset);
--		/* Cluster could have been used by another order */
--		if (cluster_is_usable(ci, order)) {
--			if (cluster_is_empty(ci))
--				offset = cluster_offset(si, ci);
--			found = alloc_swap_scan_cluster(si, ci, folio, offset);
--		} else {
--			swap_cluster_unlock(ci);
--		}
-+		found = alloc_swap_scan_cluster(si, ci, folio, offset);
- 		if (found)
- 			goto done;
- 	}
-@@ -1332,14 +1328,7 @@ static bool swap_alloc_fast(struct folio *folio)
- 		return false;
- 
- 	ci = swap_cluster_lock(si, offset);
--	if (cluster_is_usable(ci, order)) {
--		if (cluster_is_empty(ci))
--			offset = cluster_offset(si, ci);
--		alloc_swap_scan_cluster(si, ci, folio, offset);
--	} else {
--		swap_cluster_unlock(ci);
--	}
--
-+	alloc_swap_scan_cluster(si, ci, folio, offset);
- 	put_swap_device(si);
- 	return folio_test_swapcache(folio);
- }
-@@ -1945,10 +1934,7 @@ swp_entry_t swap_alloc_hibernation_slot(int type)
- 		pcp_offset = this_cpu_read(percpu_swap_cluster.offset[0]);
- 		if (pcp_si == si && pcp_offset) {
- 			ci = swap_cluster_lock(si, pcp_offset);
--			if (cluster_is_usable(ci, 0))
--				offset = alloc_swap_scan_cluster(si, ci, NULL, pcp_offset);
--			else
--				swap_cluster_unlock(ci);
-+			offset = alloc_swap_scan_cluster(si, ci, NULL, pcp_offset);
- 		}
- 		if (!offset)
- 			offset = cluster_alloc_swap_entry(si, NULL);
+url:    https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/dt-bindings-embedded-controller-document-ASUS-Transformer-EC/20260215-021406
+base:   next-20260213
+patch link:    https://lore.kernel.org/r/20260214180959.30714-3-clamor95%40gmail.com
+patch subject: [PATCH v3 2/7] mfd: Add driver for ASUS Transformer embedded controller
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260216/202602160408.CZnIzWhv-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260216/202602160408.CZnIzWhv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602160408.CZnIzWhv-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/mfd/asus-transformer-ec.c:234:40: warning: field width should have type 'int', but argument has type 'unsigned long' [-Wformat]
+           dev_dbg(&priv->self->dev, "EC read: %*ph, ret = %d%s\n",
+                                               ~~^
+   include/linux/dev_printk.h:165:31: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                        ^~~     ~~~~~~~~~~~
+   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
+   #define dev_fmt(fmt) fmt
+                        ^~~
+   include/linux/dynamic_debug.h:285:12: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                   ^~~    ~~~~~~~~~~~
+   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+                                                                    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
+           __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+                                                                          ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
+                   func(&id, ##__VA_ARGS__);                       \
+                               ^~~~~~~~~~~
+   1 warning generated.
+
+
+vim +234 drivers/mfd/asus-transformer-ec.c
+
+   227	
+   228	static int asus_ec_read(struct asus_ec_data *priv, bool in_irq)
+   229	{
+   230		int ret = i2c_smbus_read_i2c_block_data(priv->self, ASUSEC_READ_BUF,
+   231							sizeof(priv->ec_data),
+   232							priv->ec_data);
+   233	
+ > 234		dev_dbg(&priv->self->dev, "EC read: %*ph, ret = %d%s\n",
+   235			sizeof(priv->ec_data), priv->ec_data,
+   236			ret, in_irq ? "; in irq" : "");
+   237	
+   238		return ret;
+   239	}
+   240	
 
 -- 
-2.52.0
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
