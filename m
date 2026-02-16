@@ -1,56 +1,56 @@
-Return-Path: <linux-pm+bounces-42703-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42704-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oAfcIbMwk2mI2QEAu9opvQ
-	(envelope-from <linux-pm+bounces-42703-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 15:58:59 +0100
+	id AL1ZIL0wk2mI2QEAu9opvQ
+	(envelope-from <linux-pm+bounces-42704-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 15:59:09 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 087D4144E4D
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 15:58:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0874A144E5B
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 15:59:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A8CBB300CC0C
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 14:58:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 674EA3039EEA
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 14:58:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B60313272;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D2D313537;
 	Mon, 16 Feb 2026 14:58:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JZnc3x0J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bscfflmo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9F528FFE7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC72129ACC0;
 	Mon, 16 Feb 2026 14:58:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771253887; cv=none; b=j6NQ4miXcwJQCJP5QjIwCxr/rJWSUZB6YQG1kdMSE+XY16Pl8PB1RrH+OgExeNjt+cVcVoHV4lMDltg0AbwmhYxSm5YGjmIEttgSuqw9FExmHvxqM+De3WIZn5WNfApHkLUzdFvk/C1He8DiVkUdH7vSGhIbsLFMl4yJ1fukbm4=
+	t=1771253887; cv=none; b=gjxNZpXz15dXBFjjhNZqKMkXiaNWJ6NIEIPvlSXilGv7HiW8pk+9/bLZIuPIdgWUvQM3e1w8aBo5CQrfmnT6EnYy+VOYZDC2w06jSBIQt6YxaJCLAEa2iYju5RFo2DwXfHjiXTIe/4p2d3pzQR27ChbHmtl0R6YzMwqZk7SlaHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1771253887; c=relaxed/simple;
-	bh=sO7TBYofqYSM2bgeL92RYGu50mNH9qEmCpadIybs00Y=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Z2x66ljXW6ukcwCcrFPglUVr/OJs7v0mqCv0s4+LYzM2bFiYH7WTVhRWXhOH70bqhnpz1waAwQCokcUcnY1gY/Dk6LyhS1gIB7Lg02nNaiRRMtHGQy3qz5659z6Uh4BwbLK4ZSZD2ImLeC8Tc5oe7hYmV3pHwJBcU8m1bD6ZVqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JZnc3x0J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 321E6C116C6;
+	bh=ijCT+Mg7d3790XUMIRWeaMLVEKai5+A/PxJRt61VFl4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=F64yzK/M/xHL+OlVg1YzKaOEeCbj+MU5+5j/0etYxMI0O4puNdfiCcm8RASeyo1batB0DxS50wNIwi0CKjazl55O4SDOGSwUkpKVjurZdyXUtFjkwTvaSxTu2H4UyFD5XMbc7aCU+ko2GNm2BSEVT08+hlWoTTkO5IW3OT1G0vU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bscfflmo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 94F5AC19423;
 	Mon, 16 Feb 2026 14:58:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1771253887;
-	bh=sO7TBYofqYSM2bgeL92RYGu50mNH9qEmCpadIybs00Y=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=JZnc3x0JnNc+ceYmxA0Q8hIOBYkmwRQWjvhxe9xHkuPu7cxJ0AvJyyudsvWv9U7aN
-	 Gef8uu5TCBVlC75HHs7vj+HItKK3CzbqyjTzLkx8OcWPXXdkIowNIa/ZC2RtutpiiN
-	 LnGNUIkFVjOC+WbvwpMJfiYs0pqO3ev92Auw8A54Cp23izPE3GzJ6RYK6IyFsEUcyq
-	 k+xih5YhFITZxTXKNh5oC72gCBf8Mu/g9jJ0sXDhiuJ+ILXRt6qtc31EzNvWQ6rKOD
-	 MEGR1CbnRGQDv3Wjs2wVq96UxIhEIxbw79F+/SdsTBVdAGx2wwQBWlmGmiQogTLgSC
-	 Rp4Q5L25nMFmg==
+	bh=ijCT+Mg7d3790XUMIRWeaMLVEKai5+A/PxJRt61VFl4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=bscfflmoBukdJNZyPNYP0zJ95O8NpJxdXS5KVMOFS1tSazf4yN9d8BgInRxT1k7vj
+	 0GU0hgjestKOZ7Xyx2RDNObFGJRZ3ZoUYhrdu9w1qZnkSLjGSYP2twTYsmWnDpmVtS
+	 /+l9UrhxdXye2SNCyGrfJSmNDjyNzDUYZpMTMjwRADlr5+QkrmSN8J5ABJHvW3mmfD
+	 d7d3kd/FHIadjDIITNDvIGmwnk17ZQ/jTQyLH4+jFvzsQbKCQMX46CkdechMzwS4nw
+	 EWUwIpqBcfpWIHdDYLNll9Orj7AkyD+EqQfpQzT4tMOXmDs1klktA+ykYQKBZYex2y
+	 00UGdyR9cLu6g==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10722E81A28;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 832D6E81A2F;
 	Mon, 16 Feb 2026 14:58:07 +0000 (UTC)
 From: Kairui Song via B4 Relay <devnull+kasong.tencent.com@kernel.org>
-Subject: [PATCH v4 0/3] mm/swap: hibernate: improve hibernate performance
- with new allocator
-Date: Mon, 16 Feb 2026 22:58:01 +0800
-Message-Id: <20260216-hibernate-perf-v4-0-1ba9f0bf1ec9@tencent.com>
+Date: Mon, 16 Feb 2026 22:58:02 +0800
+Subject: [PATCH v4 1/3] mm, swap: speed up hibernation allocation and
+ writeout
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -59,11 +59,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/33M0QqDIBiG4VsJj+fQv8za0e5j7CDtd3kwCxXZi
- O59Fgy2BTt8P/iemQT0FgM5FTPxmGywo8tRHQqih87dkNo+NwEGNQMOdLAKvesi0gm9oUZJ2ZQ
- KFAgg+TR5NPaxgZdr7sGGOPrn5ie+rm9K/FKJU0aNEIgtYi17dY7oNLp41OOdrFiC/wBkQBtot
- BSKVUrugfITqHdAmQFZIQPBWs4r8Q0sy/ICjdPWYDABAAA=
-X-Change-ID: 20260212-hibernate-perf-fb7783b2b252
+Message-Id: <20260216-hibernate-perf-v4-1-1ba9f0bf1ec9@tencent.com>
+References: <20260216-hibernate-perf-v4-0-1ba9f0bf1ec9@tencent.com>
+In-Reply-To: <20260216-hibernate-perf-v4-0-1ba9f0bf1ec9@tencent.com>
 To: linux-mm@kvack.org
 Cc: Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
  Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
@@ -74,11 +72,11 @@ Cc: Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
  Carsten Grohmann <carstengrohmann@gmx.de>, Kairui Song <kasong@tencent.com>, 
  stable@vger.kernel.org
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771253885; l=2863;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1771253885; l=2673;
  i=kasong@tencent.com; s=kasong-sign-tencent; h=from:subject:message-id;
- bh=sO7TBYofqYSM2bgeL92RYGu50mNH9qEmCpadIybs00Y=;
- b=CpIU6uKntmcDupIJYIVmNkZrat/SPDOFtjFTIqHnuR4BpQdR82jnesJYYScaxY4crDNFtIKs+
- pzIT1VZg+Y9CEOaqZvFVJ7o4WqAzx1ovXKLIf+7wkElkcoOdiDUWyUK
+ bh=AP2Agry4RlYj89KzjPUleAMF+xnfApgEpjtkm4VqQJg=;
+ b=bYE9CeOOUGzRx+yNxVfIU5aCtzWSmeScGretFXZJqot6KApMpREnHU1VqdZoQCKDTf2OtmG22
+ hfw1sagCcsYBeIpg3RySdPKCrxkRVZmWNBmjGE/dx7rS7MzapMvhc7C
 X-Developer-Key: i=kasong@tencent.com; a=ed25519;
  pk=kCdoBuwrYph+KrkJnrr7Sm1pwwhGDdZKcKrqiK8Y1mI=
 X-Endpoint-Received: by B4 Relay for kasong@tencent.com/kasong-sign-tencent
@@ -89,12 +87,12 @@ X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42703-lists,linux-pm=lfdr.de,kasong.tencent.com];
+	TAGGED_FROM(0.00)[bounces-42704-lists,linux-pm=lfdr.de,kasong.tencent.com];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -110,77 +108,82 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	HAS_REPLYTO(0.00)[kasong@tencent.com];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,tencent.com:mid,tencent.com:email,tencent.com:replyto,carstengrohmann.de:email]
-X-Rspamd-Queue-Id: 087D4144E4D
+X-Rspamd-Queue-Id: 0874A144E5B
 X-Rspamd-Action: no action
 
-The new swap allocator didn't provide a high-performance allocation
-method for hibernate, and just left it using the easy slow path. As a
-result, hibernate performance is quite bad on some devices
+From: Kairui Song <kasong@tencent.com>
 
-Fix it by implementing hibernate support for the fast allocation path.
+Since commit 0ff67f990bd4 ("mm, swap: remove swap slot cache"),
+hibernation has been using the swap slot slow allocation path for
+simplification, which turns out might cause regression for some
+devices because the allocator now rotates clusters too often, leading to
+slower allocation and more random distribution of data.
 
-This regression seems only happen with SSD devices with poor 4k
-performance. I've tested on several different NVME and SSD setups, the
-performance diff is tiny on them, but testing on a Samsung SSD 830
-Series (SATA II, 3.0 Gbps) showed a big difference [1]:
+Fast allocation is not complex, so implement hibernation support as
+well.
 
-Test result with Samsung SSD 830 Series (SATA II, 3.0 Gbps) thanks
-to Carsten Grohmann [1]:
+Test result with Samsung SSD 830 Series (SATA II, 3.0 Gbps) shows the
+performance is several times better [1]:
 6.19:               324 seconds
 After this series:  35 seconds
 
-Test result with SAMSUNG MZ7LH480HAHQ-00005 (SATA 3.2, 6.0 Gb/s):
-Before 0ff67f990bd4: Wrote 2230700 kbytes in 4.47 seconds (499.03 MB/s)
-After 0ff67f990bd4: Wrote 2215472 kbytes in 4.44 seconds (498.98 MB/s)
-After this series: Wrote 2038748 kbytes in 4.04 seconds (504.64 MB/s)
-
-Test result with Memblaze P5910DT0384M00:
-Before 0ff67f990bd4: Wrote 2222772 kbytes in 0.84 seconds (2646.15 MB/s)
-After 0ff67f990bd4: Wrote 2224184 kbytes in 0.90 seconds (2471.31 MB/s)
-After this series: Wrote 1559088 kbytes in 0.55 seconds (2834.70 MB/s)
-
-The performance is almost the same for blazing fast SSDs, but for some
-SSDs, the performance is several times better.
-
-Patch 1 improves the hibernate performance by using the fast path, and
-patch 2 cleans up the code a bit since there are now multiple fast path
-users using similar conventions.
-
-Signed-off-by: Kairui Song <kasong@tencent.com>
-Tested-by: Carsten Grohmann <mail@carstengrohmann.de>
+Fixes: 0ff67f990bd4 ("mm, swap: remove swap slot cache")
+Reported-by: Carsten Grohmann <mail@carstengrohmann.de>
+Closes: https://lore.kernel.org/linux-mm/20260206121151.dea3633d1f0ded7bbf49c22e@linux-foundation.org/
 Link: https://lore.kernel.org/linux-mm/8b4bdcfa-ce3f-4e23-839f-31367df7c18f@gmx.de/ [1]
+Cc: stable@vger.kernel.org
+Signed-off-by: Kairui Song <kasong@tencent.com>
 ---
-Changes in v4:
-- Reduce indent and improve code comment, as suggested by [ Barry Song ]
-- Link to v3: https://lore.kernel.org/r/20260216-hibernate-perf-v3-0-74e025091145@tencent.com
+ mm/swapfile.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-Changes in v3:
-- Split the indention change to a standalone patch.
-- Update mail address and add Cc stable.
-- Link to v2: https://lore.kernel.org/r/20260215-hibernate-perf-v2-0-cf28c75b04b7@tencent.com
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index c6863ff7152c..32e0e7545ab8 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -1926,8 +1926,9 @@ void swap_put_entries_direct(swp_entry_t entry, int nr)
+ /* Allocate a slot for hibernation */
+ swp_entry_t swap_alloc_hibernation_slot(int type)
+ {
+-	struct swap_info_struct *si = swap_type_to_info(type);
+-	unsigned long offset;
++	struct swap_info_struct *pcp_si, *si = swap_type_to_info(type);
++	unsigned long pcp_offset, offset = SWAP_ENTRY_INVALID;
++	struct swap_cluster_info *ci;
+ 	swp_entry_t entry = {0};
+ 
+ 	if (!si)
+@@ -1937,11 +1938,21 @@ swp_entry_t swap_alloc_hibernation_slot(int type)
+ 	if (get_swap_device_info(si)) {
+ 		if (si->flags & SWP_WRITEOK) {
+ 			/*
+-			 * Grab the local lock to be compliant
+-			 * with swap table allocation.
++			 * Try the local cluster first if it matches the device. If
++			 * not, try grab a new cluster and override local cluster.
+ 			 */
+ 			local_lock(&percpu_swap_cluster.lock);
+-			offset = cluster_alloc_swap_entry(si, NULL);
++			pcp_si = this_cpu_read(percpu_swap_cluster.si[0]);
++			pcp_offset = this_cpu_read(percpu_swap_cluster.offset[0]);
++			if (pcp_si == si && pcp_offset) {
++				ci = swap_cluster_lock(si, pcp_offset);
++				if (cluster_is_usable(ci, 0))
++					offset = alloc_swap_scan_cluster(si, ci, NULL, pcp_offset);
++				else
++					swap_cluster_unlock(ci);
++			}
++			if (!offset)
++				offset = cluster_alloc_swap_entry(si, NULL);
+ 			local_unlock(&percpu_swap_cluster.lock);
+ 			if (offset)
+ 				entry = swp_entry(si->type, offset);
 
-Changes in v2:
-- Based on mm-unstable, resend using b4's relay to fix mismathed patch content.
-- Link to v1: https://lore.kernel.org/r/20260215-hibernate-perf-v1-0-f55ee9ee67db@tencent.com
-
----
-Kairui Song (3):
-      mm, swap: speed up hibernation allocation and writeout
-      mm, swap: reduce indention for hibernate allocation helper
-      mm, swap: merge common convention and simplify allocation helper
-
- mm/swapfile.c | 92 ++++++++++++++++++++++++++++++++++-------------------------
- 1 file changed, 53 insertions(+), 39 deletions(-)
----
-base-commit: 53f061047924205138ad9bc315885255f7cc4944
-change-id: 20260212-hibernate-perf-fb7783b2b252
-
-Best regards,
 -- 
-Kairui Song <kasong@tencent.com>
+2.52.0
 
 
 
