@@ -1,241 +1,197 @@
-Return-Path: <linux-pm+bounces-42678-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42679-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id PzUYI+RUkmlhtAEAu9opvQ
-	(envelope-from <linux-pm+bounces-42678-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 00:21:08 +0100
+	id KAqzEL+jkmmnwAEAu9opvQ
+	(envelope-from <linux-pm+bounces-42679-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 05:57:35 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7AD9140110
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 00:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A4229140E71
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 05:57:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E2231301176A
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Feb 2026 23:21:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EBBF1300D175
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 04:57:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33BE72C3254;
-	Sun, 15 Feb 2026 23:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E67852DE6F8;
+	Mon, 16 Feb 2026 04:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M1DRZ36Z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WKaTGrPy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2C123F417
-	for <linux-pm@vger.kernel.org>; Sun, 15 Feb 2026 23:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771197664; cv=pass; b=OO/wG6Np18FDhvTscKSYs16a/FrrdK8DNosR/jrCNTFWgNLOtW2/ScN1+iOa3EXsXIvPXvnZ763/omAAgELJqUJM2qZXbO1/VfGqB0gYfcDLSTKz2sM2ph/VltpHsAtaPUDlg1zGQu4cgOORZAbCqFFR5Eex/nUnaMkyNf5m+X8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771197664; c=relaxed/simple;
-	bh=7KASuP1+sNMsyCnwba2Fjk5F0eYOayk6mhtp3LX7os8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h7fCl8L3ALmPaX9B5ic6FDH6TA7oZOhDHNSVNaV0Uex/Ohr4XjmebxDdceBNo4yk5/EVNdm2c5DkrEMAEF5UTgCVUs1VkbsgZwjaiqDRQ2RfmwakZK85hm/RUXyE0maGCsrDNxgpIWi7tQC0s6V7c4PHB/bAcNPqIAHpHAlRrT0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M1DRZ36Z; arc=pass smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-896f632d206so57306636d6.0
-        for <linux-pm@vger.kernel.org>; Sun, 15 Feb 2026 15:21:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771197662; cv=none;
-        d=google.com; s=arc-20240605;
-        b=LoYm2JWtmQbDqpjUJrWLc1TBo00dFEM50SlibYGKy/m79uvfwYMzxUe4xxcqKVplmT
-         fwZg42kFGzSXvT7c8T3QpjCgmpOpOIu+VNvRk49ebtDKEWdS5pO/PU3bh9fpPx337rc5
-         zywIRWTz/vtyETz98RP3kiXYUtlIsNflyT9gQg77OA5JE50nu5L2juCLnLjZ1diygd1c
-         8DNragFzlyjOdROd/RtWJp3wXydR1qlebG/6v/3tgW1nyWiGqpAEgwKOZe1jTJ0LgNhg
-         vAiOij1mNnYp+KLvz7D6eRZVudY1T+G3LMq8OzlsZP5o7GtkTRSg01cq3+KBBRnCpdBX
-         R4RA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9dSti6qUG4k+SbmTKg26mkaMIh7kMD2KX/t/B9iBo5Y=;
-        fh=Qky+z1KGLTRifRqDu2iyEsUGUdB3kLPfuOSn2RtPX5M=;
-        b=kXd/I6uv6n1GFqZF2sXTeuDpmQwu3Tzes/UnEUYyNP0NykOQwPHuh+60xw584JMjph
-         2cJuYrISCjcCSZxbgFJjCTvmHkU/TCrFTHcQf3RGw9orrx09sB/Ovt2e5G4FXlcbC/UB
-         csbco1M5/UXj187GTBpzYBOmJ1CVHE3lu8c9zGmPwn+piOSyjmt8yyeHP4yUOoAPnkKz
-         iRYvBhYF7aeplq84eavTCJ2R1hoF5/lnUPFG5nfKsgGIGB2sS/0irjEQpSyqueVxNNf+
-         pRjEtDpo4omcGHnvVPD0O0xzbynooImDCfk3zyJUzU0SKfUQ0rKNPkJ6C70fs3vrIY6d
-         HLdw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771197662; x=1771802462; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9dSti6qUG4k+SbmTKg26mkaMIh7kMD2KX/t/B9iBo5Y=;
-        b=M1DRZ36Zg7HekwoJKuQt0ra/suKWva1nNP31OFUkok1tbG/o8L98wRawaLS9O0NyKi
-         GeqIVzCjaZiH6S+MYHRKx5vBbIcECj9TqMhMthqRxTaqdA6bDiuUFO/bf0TVsa1u9zNj
-         8L8vEQLoTl5GHsxc2Ndi37rUEh1ifgkx+AyRB3vCxjUuHJK1jta2koNj6OOKt/u349B5
-         PFUxrpp1ouF2yC8vCK4E5s0RkuapSoWJq3WprpJVWIr9zBih7UhBJdbiR+vbLEsMira3
-         k53uQz7yRpeUeFNIMPmuOW4tdb5NyWmp0E5BHYPoFL/qXqgMLoYJCZt2MxlPgOhWanWp
-         ztww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771197662; x=1771802462;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9dSti6qUG4k+SbmTKg26mkaMIh7kMD2KX/t/B9iBo5Y=;
-        b=ucuVWOgRUtYoTK6SZUjbTdqLFTVqK5Lc25fnOjq9NVsSfmi+g1xkLfHkT3dmPl/TDc
-         x8yknj7DZftS/M/XQqiZm0Xb0zV12rmmSQEvADsMHkK176jmxo+QgIpWBS/KcG9ItQ0R
-         xmgHfRpuEJWdHIuEQyPK7Er3CqFFqNqkXmW9i9y3ww+G5EAJ0NwKX/VWBUXgKF7sDZdF
-         GfrYFYWFrJsrBOFjysE40TZJAQ95t6WRsYnv/KHstHRX9bBfwyJOJUmX2lR6xTzCClbX
-         L2Dp0Fxich0kQsmGftH09/x2ZSOya6H369Kn/ZaPovKcZKcP8VSKW9qlnIuAq3DdShYR
-         SVYA==
-X-Forwarded-Encrypted: i=1; AJvYcCUZEA8/bA7DlXNUdYnaPU8Det/Nl+zArGHUSlNAIBMX0jf11cyLOP1ta3kYmGktT7l7CIPNoAyt9A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEp/KTzdAnavZkYDMNnxiLCW2Sx/sy0DMpkgMP2nOAYgQkmF9p
-	1tVR3XmbIQ05N20rETKRvM1ovjEJXxrEdo/7XruTbm5zSymQhW5jeL08sX+dxc7mkFWgyHIJmqf
-	XL1jFY8BKyggESunRIkCi7225x39SVKU=
-X-Gm-Gg: AZuq6aI27Fc4AMPg5IvkS5SsGwFCqzxa9iHu5fa8oi/q4knDr0iEmDKMnNCaSevK6il
-	bm9GIDgYStfuTM5pCGNK5WwjFz52vwdW7K0qs4HW3Spc/uDaKuhyMbiyj54zbmFIweZMnBAG+m9
-	WV6uALbye7dt27T1oGusNI06K+J/qi02tfv0AEZVivhQDHNpxR1Mk+bW/pqfWe7uS7L9+3DJA10
-	pQuVrZ4fsNl4JeOdKQBWzBmPoV/FgdQJFI7r5AjWoAynfdSI5iOzRAdp4c+vdLsdtlWmvtXokih
-	W6K8r98rPz4GlTzK
-X-Received: by 2002:ad4:5be4:0:b0:895:4d3f:b6c with SMTP id
- 6a1803df08f44-8973f2fbedemr106347506d6.17.1771197661590; Sun, 15 Feb 2026
- 15:21:01 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED84329D27D;
+	Mon, 16 Feb 2026 04:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771217847; cv=none; b=MzdOz+lh2hSLfXoAN+aPvtGpKzjw/85V01UWyrWO8vmO8bJ3KvFU6Ax3SaWDLtpy0yr+hsDk7SEV80Vt4lJU9osm00i+QXvtF4B5z7n1nUzE2zOKaPkI06IjQ6IO8RpsfI07dsY6/GX07feiQhpmh1RJaufANGaEMLg9nvFSXZU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771217847; c=relaxed/simple;
+	bh=wxPEhoCNfX5ApkUi+QjSsB5zRQFwVKuYuWOp/TBfPDc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AFqP7c6EAJ9MX1EelU55pXpmiJKFfmPNihI5ksOc6Q5gZfmsD0HEgxW8o+7PDmD2WKBn6zTo1DtKNCRuBw7RFzvYJXwtRynTcvNjn07W9FCSoIL9IN1zJoaj5XF6ZbqCvu751PnkA/UHfsBEck1oHbn3bswQjWX2P9mxktRDM6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WKaTGrPy; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771217846; x=1802753846;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wxPEhoCNfX5ApkUi+QjSsB5zRQFwVKuYuWOp/TBfPDc=;
+  b=WKaTGrPymjpedMk0a2LB9IbCtejrJdQz5QzKU4gr3a5EzGf8D0Ruf778
+   ebOuN6qAlFD1P2Z1TzTdJOSgxZvr+gBtfOFHiehIoHcuUfr1a7irg5dvm
+   j8Bl3eWtMZkzOoJsY0TdPdmrhTQIbdeXGQ1ZisaVbGjeTUQZNhIbpUKfy
+   ZxtHuPHDpPLZitX1U8nC/04iTdx3WjUqJySx/JharbovT+9CDlV6AvzzP
+   G9/YoD6t5zQptUvj1IjqoomfRIvR0QN0Aw8y8g3CdlbisCJaNg3RjWBze
+   i03sLgoHE4Yzl5DyPPczo/omGf5V/nnU5oviAbWjWPV/FslahAZ3T0EDE
+   w==;
+X-CSE-ConnectionGUID: fOFGNmZyR8WLSff8BlXEgw==
+X-CSE-MsgGUID: lgH2pbR3TJWvDd6n6ssn5Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11702"; a="74897022"
+X-IronPort-AV: E=Sophos;i="6.21,293,1763452800"; 
+   d="scan'208";a="74897022"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2026 20:57:25 -0800
+X-CSE-ConnectionGUID: yfZNHOOiQ9+WtjJzPVzoDA==
+X-CSE-MsgGUID: JDNYBeQ6RPOY8EIElNfzEQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,293,1763452800"; 
+   d="scan'208";a="218050915"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 15 Feb 2026 20:57:22 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vrqff-00000000zPU-1G59;
+	Mon, 16 Feb 2026 04:57:19 +0000
+Date: Mon, 16 Feb 2026 12:57:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Svyatoslav Ryhel <clamor95@gmail.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Ion Agorria <ion@agorria.com>,
+	=?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/7] mfd: Add driver for ASUS Transformer embedded
+ controller
+Message-ID: <202602161252.Kq5BRohK-lkp@intel.com>
+References: <20260214180959.30714-3-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260216-hibernate-perf-v3-0-74e025091145@tencent.com> <20260216-hibernate-perf-v3-2-74e025091145@tencent.com>
-In-Reply-To: <20260216-hibernate-perf-v3-2-74e025091145@tencent.com>
-From: Barry Song <21cnbao@gmail.com>
-Date: Mon, 16 Feb 2026 07:20:49 +0800
-X-Gm-Features: AaiRm51jPFCewXyj-msKubNXn_1t8hUGFcByOC4NgVnj27CFj7IIHpXYi_25B1Q
-Message-ID: <CAGsJ_4ynCA_w4Xcwu1k=2Hw3bMnURBxC2FeZEzN+uzBp+9YJcw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] mm, swap: reduce indention for hibernate
- allocation helper
-To: kasong@tencent.com
-Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>, 
-	Chris Li <chrisl@kernel.org>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, 
-	Carsten Grohmann <mail@carstengrohmann.de>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	linux-kernel@vger.kernel.org, 
-	"open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>, Carsten Grohmann <carstengrohmann@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260214180959.30714-3-clamor95@gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42678-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-42679-lists,linux-pm=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org,agorria.com,rere.qmqm.pl];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[kvack.org,linux-foundation.org,kernel.org,huaweicloud.com,gmail.com,redhat.com,carstengrohmann.de,vger.kernel.org,gmx.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[21cnbao@gmail.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid,tencent.com:email]
-X-Rspamd-Queue-Id: D7AD9140110
+	DBL_BLOCKED_OPENRESOLVER(0.00)[git-scm.com:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:mid,intel.com:dkim,intel.com:email]
+X-Rspamd-Queue-Id: A4229140E71
 X-Rspamd-Action: no action
 
-On Mon, Feb 16, 2026 at 3:00=E2=80=AFAM Kairui Song via B4 Relay
-<devnull+kasong.tencent.com@kernel.org> wrote:
->
-> From: Kairui Song <kasong@tencent.com>
->
-> It doesn't have to check the device flag, as the allocator will also
-> check the device flag and refuse to allocate if the device is not
-> writable. This might cause a trivial waste of CPU cycles of hibernate
-> allocation raced with swapoff, but that is very unlikely to happen.
-> Removing the check on the common path should be more helpful.
->
-> Signed-off-by: Kairui Song <kasong@tencent.com>
-> ---
->  mm/swapfile.c | 38 ++++++++++++++++++--------------------
->  1 file changed, 18 insertions(+), 20 deletions(-)
->
-> diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index 32e0e7545ab8..0d1b17c99221 100644
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -1936,27 +1936,25 @@ swp_entry_t swap_alloc_hibernation_slot(int type)
->
->         /* This is called for allocating swap entry, not cache */
->         if (get_swap_device_info(si)) {
+Hi Svyatoslav,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on next-20260213]
+[also build test WARNING on linus/master v6.19]
+[cannot apply to dtor-input/next dtor-input/for-linus sre-power-supply/for-next robh/for-next v6.19 v6.19-rc8 v6.19-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/dt-bindings-embedded-controller-document-ASUS-Transformer-EC/20260215-021406
+base:   next-20260213
+patch link:    https://lore.kernel.org/r/20260214180959.30714-3-clamor95%40gmail.com
+patch subject: [PATCH v3 2/7] mfd: Add driver for ASUS Transformer embedded controller
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260216/202602161252.Kq5BRohK-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260216/202602161252.Kq5BRohK-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602161252.Kq5BRohK-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/mfd/asus-transformer-ec.c:234:40: warning: field width should have type 'int', but argument has type '__size_t' (aka 'unsigned long') [-Wformat]
+     234 |         dev_dbg(&priv->self->dev, "EC read: %*ph, ret = %d%s\n",
+         |                                             ~~^
+     235 |                 sizeof(priv->ec_data), priv->ec_data,
+         |                 ~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:165:31: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                      ^~~     ~~~~~~~~~~~
+   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
+      19 | #define dev_fmt(fmt) fmt
+         |                      ^~~
+   include/linux/dynamic_debug.h:285:12: note: expanded from macro 'dynamic_dev_dbg'
+     285 |                            dev, fmt, ##__VA_ARGS__)
+         |                                 ^~~    ~~~~~~~~~~~
+   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
+     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
+     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
+     231 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   1 warning generated.
 
 
-I guess we could further reduce indentation by doing:
-if (!get_swap_device_info(si))
-    goto fail;
+vim +234 drivers/mfd/asus-transformer-ec.c
 
+   227	
+   228	static int asus_ec_read(struct asus_ec_data *priv, bool in_irq)
+   229	{
+   230		int ret = i2c_smbus_read_i2c_block_data(priv->self, ASUSEC_READ_BUF,
+   231							sizeof(priv->ec_data),
+   232							priv->ec_data);
+   233	
+ > 234		dev_dbg(&priv->self->dev, "EC read: %*ph, ret = %d%s\n",
+   235			sizeof(priv->ec_data), priv->ec_data,
+   236			ret, in_irq ? "; in irq" : "");
+   237	
+   238		return ret;
+   239	}
+   240	
 
-> -               if (si->flags & SWP_WRITEOK) {
-> -                       /*
-> -                        * Try the local cluster first if it matches the =
-device. If
-> -                        * not, try grab a new cluster and override local=
- cluster.
-> -                        */
-> -                       local_lock(&percpu_swap_cluster.lock);
-> -                       pcp_si =3D this_cpu_read(percpu_swap_cluster.si[0=
-]);
-> -                       pcp_offset =3D this_cpu_read(percpu_swap_cluster.=
-offset[0]);
-> -                       if (pcp_si =3D=3D si && pcp_offset) {
-> -                               ci =3D swap_cluster_lock(si, pcp_offset);
-> -                               if (cluster_is_usable(ci, 0))
-> -                                       offset =3D alloc_swap_scan_cluste=
-r(si, ci, NULL, pcp_offset);
-> -                               else
-> -                                       swap_cluster_unlock(ci);
-> -                       }
-> -                       if (!offset)
-> -                               offset =3D cluster_alloc_swap_entry(si, N=
-ULL);
-> -                       local_unlock(&percpu_swap_cluster.lock);
-> -                       if (offset)
-> -                               entry =3D swp_entry(si->type, offset);
-> +               /*
-> +                * Try the local cluster first if it matches the device. =
-If
-> +                * not, try grab a new cluster and override local cluster=
-.
-> +                */
-> +               local_lock(&percpu_swap_cluster.lock);
-> +               pcp_si =3D this_cpu_read(percpu_swap_cluster.si[0]);
-> +               pcp_offset =3D this_cpu_read(percpu_swap_cluster.offset[0=
-]);
-> +               if (pcp_si =3D=3D si && pcp_offset) {
-> +                       ci =3D swap_cluster_lock(si, pcp_offset);
-> +                       if (cluster_is_usable(ci, 0))
-> +                               offset =3D alloc_swap_scan_cluster(si, ci=
-, NULL, pcp_offset);
-> +                       else
-> +                               swap_cluster_unlock(ci);
->                 }
-> +               if (!offset)
-> +                       offset =3D cluster_alloc_swap_entry(si, NULL);
-> +               local_unlock(&percpu_swap_cluster.lock);
-> +               if (offset)
-> +                       entry =3D swp_entry(si->type, offset);
->                 put_swap_device(si);
->         }
->  fail:
->
-> --
-> 2.52.0
->
->
-
-Thanks
-Barry
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
