@@ -1,495 +1,235 @@
-Return-Path: <linux-pm+bounces-42691-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42692-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yLXnA9n4kmlx0gEAu9opvQ
-	(envelope-from <linux-pm+bounces-42691-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 12:00:41 +0100
+	id 2LsLMw36kmlx0gEAu9opvQ
+	(envelope-from <linux-pm+bounces-42692-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 12:05:49 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA5AB1429A0
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 12:00:40 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21AB3142A74
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 12:05:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4C14C3010DA5
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 10:59:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9BA883003E99
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 11:05:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D846F30171C;
-	Mon, 16 Feb 2026 10:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=imgtec.com header.i=@imgtec.com header.b="LEAB5QBi";
-	dkim=pass (1024-bit key) header.d=IMGTecCRM.onmicrosoft.com header.i=@IMGTecCRM.onmicrosoft.com header.b="eg5lHymo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CD2E2C028C;
+	Mon, 16 Feb 2026 11:05:46 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx08-00376f01.pphosted.com (mx08-00376f01.pphosted.com [91.207.212.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A043016E7;
-	Mon, 16 Feb 2026 10:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=91.207.212.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771239585; cv=fail; b=fEoQbIMUWhbKPA62apkGcgB5aVqrI2ZFoL0iUoFznIsx5PTRO10qx+4zxb944cjvFINDwUs3IMwtOjiSp7GvmlZ9bY4QfGN4ctF4ucZVa6QrNttJ2hyBMHYsECa2wjbnED4FsIDP8HNXaiT2NBMVylCX1raztWMtjdcfTUK8uXk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771239585; c=relaxed/simple;
-	bh=hqFjBex7YYv3wEw2bcriCJw5GWG0xU8TsTOwtl21PcM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=PYzaQcrUwfXLPeq4j/AFpBSSiCaij5PlWL55Da3JvkvbrTH5wtDOdI/h2AUfHem443j9rWmv8gFPf8RMlw7U9lIgIm2HcpFUoDL8vMFfe0vzkvPp/99Ent4kO58I8BR7yx6FVWa6q5v+t7DMpNx6P/8VqBd1oEfmHuMpexl0fcM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=imgtec.com; spf=pass smtp.mailfrom=imgtec.com; dkim=pass (2048-bit key) header.d=imgtec.com header.i=@imgtec.com header.b=LEAB5QBi; dkim=pass (1024-bit key) header.d=IMGTecCRM.onmicrosoft.com header.i=@IMGTecCRM.onmicrosoft.com header.b=eg5lHymo; arc=fail smtp.client-ip=91.207.212.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=imgtec.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=imgtec.com
-Received: from pps.filterd (m0168888.ppops.net [127.0.0.1])
-	by mx08-00376f01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61G710Uf3974293;
-	Mon, 16 Feb 2026 10:59:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=imgtec.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=dk201812; bh=c5anwuNEVUaeTXB0Pv1N4wQHp
-	0ctNarVLVf3hOgD4ws=; b=LEAB5QBiaSEus5pGWqKkstjPoLksnaWAHl0AA9Lon
-	BoEZOGKk44tTDv95Zahzr6Bx0ozJLUEkmqJI35a/F5kDYF2bThp6EQJ9kTMPpxba
-	UKbiG7XtVQsWKGjdgLvFS/KZTmr3ydcxKBeC8G981JGSjgU6j1q0NvjXuD7PqwBM
-	nYtu4/Co8zoDaPoW2f7Vv2LfqL8TgsMUO/Ca9pD2c1LWlpy3QAz+QiuijiD3dkJd
-	xGHsqW5mbXbGDR+QYu1CLjdDO5YjcO7TRTWi/IqkwioZ+hr5vvjQbbA0TKWY6RVJ
-	EZlsQSilt248GNHoo0cakxPRQ8QCqJ+fLu7Og21z0bvXw==
-Received: from cwxp265cu008.outbound.protection.outlook.com (mail-ukwestazon11020120.outbound.protection.outlook.com [52.101.195.120])
-	by mx08-00376f01.pphosted.com (PPS) with ESMTPS id 4cbcqq8k7v-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 16 Feb 2026 10:59:15 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VpH8sh6yobOS8o7Pdb7SbpscEZuVLHg4wJ3a0Bga0FjtkyBtt1ApgBApdGOqbiQXQ778T+wTBJazGkd3cETpyNbXLELrmy23PWPNMUVBghoR71zcIN6IdLqKGWHKspTatM4RLVaHFkMxx1uHTxwwQ8BL4E4IcBRZnUooOkzuqmJ/Ni1bZbCCR3ff91Iao5xXCN65gA8Sd/YcSEwrVo/DlESpS6dVSJP6yyV3QFsRlirvRLEOIqMzO8MLRNOapB2NoONLuPxUlul5+/Uu6lw8wkX8ZQsCI5iIHmH51QrXGy6jkn/Q3xlD7q8cW9JCcuSEaqsOlwrEMWh8e+bZSLgg9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c5anwuNEVUaeTXB0Pv1N4wQHp0ctNarVLVf3hOgD4ws=;
- b=cXuusqFibw9xdGhFLUC0eShBGPxIJa6X/qskv4GB8WEweIeY4qBo63bjEbCZr4tJita+ft+AiZnMMZjeeDnTgkSrazqm89yM19uNfV4L/f4nyjKMfFBUk731rvLOuGVWnGLOBLkvJPp90NecoY8tL2nOOManH+Egmj4EDBv4pN4+kwDzcME7GGVWezW2hTq8uorqJVfhLeDqpEHYh2eZlI+UkqXfCdn23nO+qUkdmTOiILvQIYx96FSKQvlOWcuOYCPkFRM9cpaHdSbsznfdXr9VLKCNXdceKnZF+eRaoSpsUuNi6yuTqp7zALp2W+rGaaKkSAkKRRLHLDbI9KG5WQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=imgtec.com; dmarc=pass action=none header.from=imgtec.com;
- dkim=pass header.d=imgtec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=IMGTecCRM.onmicrosoft.com; s=selector2-IMGTecCRM-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c5anwuNEVUaeTXB0Pv1N4wQHp0ctNarVLVf3hOgD4ws=;
- b=eg5lHymoe/iwB3IFzHHzDm53TBqmVsYYCq8gb0vupm4zqm8SGomWZCS+392bksLbsSd08rrP46cBp0zC9WJP/snn9FZtX8j4juY1mE2YsvJW57txFMAqX9P4eCeVpRnKpMbB0LgKsNbMW8q6uMEBdLmqTpPliiJJ3Xrf9ZkPn54=
-Received: from CWLP265MB3393.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:e2::14)
- by LO0P265MB6502.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2d1::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.16; Mon, 16 Feb
- 2026 10:59:12 +0000
-Received: from CWLP265MB3393.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f32f:ed34:4f98:6cd6]) by CWLP265MB3393.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f32f:ed34:4f98:6cd6%6]) with mapi id 15.20.9611.012; Mon, 16 Feb 2026
- 10:59:12 +0000
-From: Matt Coster <Matt.Coster@imgtec.com>
-To: Thorsten Leemhuis <regressions@leemhuis.info>,
-        Marek Vasut
-	<marek.vasut@mailbox.org>
-CC: Geert Uytterhoeven <geert@linux-m68k.org>,
-        Frank Binns
-	<Frank.Binns@imgtec.com>,
-        Brajesh Gupta <Brajesh.Gupta@imgtec.com>,
-        Alessio
- Belle <Alessio.Belle@imgtec.com>,
-        Alexandru Dadu <Alexandru.Dadu@imgtec.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard
-	<mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie
-	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Subject: Re: [PATCH] drm/imagination: Convert to
- dev_pm_domain_{at,de}tach_list()
-Thread-Topic: [PATCH] drm/imagination: Convert to
- dev_pm_domain_{at,de}tach_list()
-Thread-Index: AQHcnzNIVZFC/8YcoUa0GPQhI8PvNw==
-Date: Mon, 16 Feb 2026 10:59:12 +0000
-Message-ID: <9028586c-4e81-4a6d-aed6-bc1fdb7058a0@imgtec.com>
-References:
- <194465eda54d1f852a9226cf691ddc5aa208e0a3.1769097977.git.geert+renesas@glider.be>
- <ffdf3982-e22c-4d01-afa6-5449ed381000@imgtec.com>
- <CAMuHMdWMh_oJFg-KtapcTDGvYWZ-hg_ZEJ2=E5Tp1apOEc8tnQ@mail.gmail.com>
- <b3b4f10e-1222-44f7-b308-db7199c67147@mailbox.org>
- <3e0def93-2f6c-4bcf-8ee5-bf607f2ca382@imgtec.com>
- <f5d3dde6-edec-42f4-93cb-459c8677245a@mailbox.org>
- <f82b7734-6ddc-4029-b38d-147e9a1de021@leemhuis.info>
- <47f95b5b-c240-48b1-a904-2285700a9d3f@imgtec.com>
-In-Reply-To: <47f95b5b-c240-48b1-a904-2285700a9d3f@imgtec.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CWLP265MB3393:EE_|LO0P265MB6502:EE_
-x-ms-office365-filtering-correlation-id: dd2a8771-f787-4ea8-129d-08de6d4a6b35
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|376014|366016|7416014|6049299003|38070700021|4053099003;
-x-microsoft-antispam-message-info:
- =?utf-8?B?TEJ1QjJSdGpKT0l2MVBIaEN6b1o5bmZzRk1kSkJQWVNWMUdQTkw3K1MwZGZY?=
- =?utf-8?B?Y0FsZnkxK3ZmR2ZMNUZ1M1kveVRyVEMxNllHVm9JeFJ6ZUhqT1FXUXRYbjNT?=
- =?utf-8?B?cjVSbGVsZXhUZkN0MnVNaXR1djlVSmROcXJJd2s5djNsaWpFVWxrNldadTV6?=
- =?utf-8?B?VDdrRGFWaERpTS9BUmswdXYzeU5jUUR6YVloZ1o0dWdHWnBINVVQMHNLbzg1?=
- =?utf-8?B?ZHlhUXRNNHV4aGMxTHowODNOSEl2RHp4dTk4cXdnK2NjTXFBV1dlcHRJTHZF?=
- =?utf-8?B?U1hEZkM4b252WnBrQk5maDNGQzRKWjRLN0hlS0JKdEZIMUlPcVh3Szl5YTRu?=
- =?utf-8?B?TjJqWEJrc0Q4ZDZ4OFhyQnNyQmVCNmRWbEtCcDkwU05tNm1XQmloenE2T1F4?=
- =?utf-8?B?SFJNWkp3cHFxSnZvVFVHWHlXK0dyQlVzTTlyM1R5RXVaamtCQkFEaWZXbklT?=
- =?utf-8?B?aisvdmV0MFpNNWEzby9UT0VHK0J2cEN2QkU0encxWGJiaytmU0dwTzJJdUNx?=
- =?utf-8?B?WXU1VHNiNTNLTU5qNER1MUlhZ0VXT3NCVEVzc1h2aDBHSis0aHczdmR4blRp?=
- =?utf-8?B?Q0VOSDQwN2pFMWJBZ1pUY2J5WHdTV2JuY2kxcERWOXQwUmh0N0FNb2dZT244?=
- =?utf-8?B?SUhocCtvVTltRzh2TXg3cXA1Z0hrKzAzU0l2eldDb2V1U3RSRCtCWHlDbWkr?=
- =?utf-8?B?azBnUHZhdnZMOXZuSmNXT0xYMnNUNEgrRjgzY3JQdVBEdHc1L1plaE5vdUh4?=
- =?utf-8?B?T205Q0ZZVnBhcjM5NSs1OXY4Zmx4TTdRTDBodnd3RU84ZUgyZGszU1dkSS8r?=
- =?utf-8?B?Y05QUEMvaDBmYjNlTzRpdFhmVjNSMXpqNzQ5c2psbk43cDloRzlwcEIrVy8x?=
- =?utf-8?B?cGpTK1RURkFHRm1nTUIyY1JQTW8yQ29vYnIxSkNyNUtJUUFzd3JkdVlxbmRn?=
- =?utf-8?B?a08rTEdZa2VYODBSRUdsK3NGVHVIcDZMM0s2K2J3TUlCWGE5NXRSOWUzaTJC?=
- =?utf-8?B?VC9vYXpRQmJNajcwWkdGZ1JxSThFYkVsZmtiaGpBUDMzQk1WY3U2Z1JvTmF2?=
- =?utf-8?B?KzFzWVQ2SjdxalZZeVI2VjU0bXhSalVnbURrNlg0ajhYR0ViT2VJTVI2ZWVq?=
- =?utf-8?B?RERXZSsvN096aDFQalZCV1BwYmtoWGNKS3UzOFg0bzVsSzlVRVREOWx3ay9B?=
- =?utf-8?B?OWx0YzVjMVpHeDVReUdPUjJjSFNMKzRWWXRPNENhVjBIOGIvN3hBaUtWZUdI?=
- =?utf-8?B?UitWSlhsQWI4RXdTQUthckVCRWcxU1hSMU42d1ZuV1IwV3hMN2I5S1dEaFNX?=
- =?utf-8?B?Rngra1p3V1VHOFNxNTN0dW4zQWkwYTF1MEZjTGptWks5WFNsbUdkeStXdmdZ?=
- =?utf-8?B?eTZyeHNUL0Q1OUVzS2llN01mRDdEL2RBN05oMGxnaDBDaENaUEJBZHJSajlG?=
- =?utf-8?B?M3hiWW15RjMzbGFJOWxHVy9VQ3hYUlk2RHhYYnZRWG02V0cwN0pSeFNobWtD?=
- =?utf-8?B?VWhYSVM3R0xveGV3YjU2VmZnODhiT28reUhUNGprVUx4WVE5M3lIa01XZmFl?=
- =?utf-8?B?Z2V2cDNzNjJwdTBUTGw5eFYwT3pHZ3FpUm93NWtnQ3hOQ0F3WUE0c09NenVw?=
- =?utf-8?B?bzI3VnBNYVltWXZaNEY4bDVYZXc0ZVczTnlnTFNyaFVyQWhOSm53NHh5TjBR?=
- =?utf-8?B?dmcvejR6OStpa3ZTVC9PTGZZUkd1NUVzb29pRnpJMStxcmhvNmx6cWJTdGFy?=
- =?utf-8?B?K3FTaU43TEpqYjllNlErZDhQam9YWmtOYjBOdEdTZWd1T1pkL2g0cGNxck9N?=
- =?utf-8?B?ZWNsNFpEVWVMb2xRclVUSEhYczNoY3lBTlg4dkh1ZTEvbFd0ZG5KeExJc0ZB?=
- =?utf-8?B?c3FuOUpLcmF1MkY5aFJBdk9JQmVVME1BTnJKbnYxNXA1ZnZNd2g4STU3K1Mz?=
- =?utf-8?B?MEJMR0F2UWxkaC80dElWdWJJRW5tRy9WVUhtdFJrRVNSck8rQzlyTnFZV2xi?=
- =?utf-8?B?clVxQUxCSjBJY05xMlFYS2szcSt3TGloMEE4VUJvTjFMRW9MbmRzNy9sY2ho?=
- =?utf-8?B?ZGpIeGtjM3FXa3ZEbTMrWjU0UlFHUisvRCtwWk5jVlZPTkZHR1FxYlVCSzdV?=
- =?utf-8?B?M3FqWVorOWtMRk9qQXBVUDFSbkZXb0FTdUl2c2JYWnBlcGNub2dIR0hWN0dn?=
- =?utf-8?Q?HAj+hL445q3EcS6oWKhWWQtIA+V6iaIeDTzey2UrMmwr?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP265MB3393.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014)(6049299003)(38070700021)(4053099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?cHM2SnlBMi9OWVQ0Y3NxSW1GeXVxK2V5VFoxMk1DcTA2TldGQktEQTA4cFkx?=
- =?utf-8?B?YWFEeDFEczN2d0NUTExCZGdWbXN0ejhQRWh0ZjVTVVVPM2hQRW5BLzhrQ2Zp?=
- =?utf-8?B?QnVzYWR4S3Jick1Ca09YemprVFk0UW16R0VmV3FFN09xU3RKVk43SjBZTGFH?=
- =?utf-8?B?UzBadnZwYmVoVjdMV0FRNzc1TmNxZmVEektDanhJRkR1V1k3ekorajQvbGpy?=
- =?utf-8?B?WDJLY3JCSklkNjFFeVQwTVJOeE80Snc4YVd2RWVDWmV6MGRva3M2L2tKMXov?=
- =?utf-8?B?MWZOUFVVdjVweCtJKzE1eXZibjBEK1hUazIzdGI3dDFNaE5zeWZwMG5qWkZ3?=
- =?utf-8?B?S0Q3dE5vbmM0THh5Z1Y1ajFIVHlTN3A5M1E5Y3ZYYU9Ld2YwcEpjM3hiUzI5?=
- =?utf-8?B?TXBjSzR5RHVsTFRhQjh3dzJGd21UbFlqTE1FL0hXRDgxVWkwQzdMZlFpMDJZ?=
- =?utf-8?B?NWd1bEtGb3FWdXV6Wi9LQXlscUtKNWt2VGZ6NmYrblZRUHpKbjR1WVVETFNY?=
- =?utf-8?B?NWVqUDZPWElxSW9PbjdPclBKdXl1bGlYT0VJSEo3a1BjclljNlhSVUdiTmtS?=
- =?utf-8?B?cFExNGk5VnlpM09jRnpNcVJ6Mk1tNE8zOU9aL3FLQzZDelhzYjFNVEtUS3V2?=
- =?utf-8?B?SXFqU2dFbElHNzJPRUh0b1JEOCs5V2JXNE5JMUpCakpvajFRVWpJYmdsZUJO?=
- =?utf-8?B?cWpicUZnM050aWtIaXZsSnZPMWN3eU9pQTlFL1FWZjEzYldLMU1WeEViUzJJ?=
- =?utf-8?B?NWFQWHRqN0d2eXk1MW1tWk9JTlB3a2FlY01nYkx0V29wcGdtN2ZRbHZSNzkx?=
- =?utf-8?B?MGdhNnl1MVIzNHlGd094ekNRZ3FZQnY5L2ZmUDREek5RSGtnYWg3VS91azZw?=
- =?utf-8?B?MExnMFBRaVRMWFVrd1luYnVpYVRXd1JXdEQ0dUR1a2J2TlZ4ejExbkxYWm5U?=
- =?utf-8?B?cVhIQ3dsSmI3RzY3K3dwbmdBTTZHZStqU2RyN1VpdXBOL3RQVEZJYUZpd2hn?=
- =?utf-8?B?SmVCdzQxM2ptSFNERndvcnZJeHRjTnpWSmZ3UEtnQUNTOTg5Zy9oMk9WcU1p?=
- =?utf-8?B?STBCYU5tQmc1T01WaDJZVGRIVmg3ZXk1MnZ4YkZSUmNDamtrWHlqcmVZWnF3?=
- =?utf-8?B?U2VmZDFoQ2JVZVRMUCtVWVF6TmlXanRLZ1k3a0I0RTMranF3WFEwcnB2L3JQ?=
- =?utf-8?B?aDg3ek1aTStGMjBXQmRrY2h1eDRDU05vYkRkcmRxRGFheTI1TlJSQ29aWXpW?=
- =?utf-8?B?dzdXTTZNcU1NT1FjOUl5TmVaVmlDeFNmOHFaQzlqUXo4bUt1cU04cjVCeUNi?=
- =?utf-8?B?bjJkb0F1MWtGV1lLamF3QUJERTZ1L1VKa1Z5SlFoZmxhVzl4NkJBUmNRdFgv?=
- =?utf-8?B?TklVRUNZb3NhM3Q5QzdUdEhxSjNXSWdTTE8zU1NUWkgzek0zZytybVhBbzFE?=
- =?utf-8?B?QVRtQlNnaWEwdnE2L0Y2Q3hLa0phRlluU09GNFdkQTg1NXNkbEJ2MUxWb2x0?=
- =?utf-8?B?QUtQeHY3L0JISFhDNnFZTzV6cWdKS0x1SkZCdTRldEFxc0pYaTdyYzJvUzdM?=
- =?utf-8?B?dEdKZ0lQNm8xbXV3b2w1K1FFbjh1anpsclZ3RGgzaXlJdHlMZlI5dDY2elU5?=
- =?utf-8?B?SUhVMFpwRGFhbVBuU2UvVDFGNlFnK2xObnBPSjQ5ZHlIYnNtdUs3SDJNWTFv?=
- =?utf-8?B?akxGSnlDeDlVMWFJUHNwdWY3eE1ZUTZvRU9FVW1IRjV2ejR3MnVpa0NxYUox?=
- =?utf-8?B?RmI4dW1OVHZPcnZrYmVKR0N1bldkWWhpVGJ3VThhUGc2RDFQRWVMYzZ6WUFi?=
- =?utf-8?B?R1Y5ck1EMUFGeU1WdkNudURITTR0b2g4cWxFdHhWcGJjYi9XQUgzdFFLTlc5?=
- =?utf-8?B?M3d0VDlhaGdwNnU1YTN3Y3lHYWRyWkRubFNLUis3Q1FUdFF4M1R5ZXVMcmtI?=
- =?utf-8?B?WFlxMWV2dyt1bXpGbVNIT2VORmx6blpqSDF5RkY3T1V3LzhrK3BOTXpMOUZl?=
- =?utf-8?B?aDBLRjkyOXhSd1JXWVJQZUt3cUVxY2Q1K09wSEptYXhsZWRBT3E1aFVYeFJh?=
- =?utf-8?B?TWVMUmJIVmcyOTNmMEUzVVZINkxuN09OU1lpM0VWazkrVEt5TDZaRi9LTXMr?=
- =?utf-8?B?ZElxOXdnWS95WENmOXVoNmpJS09VQ1g2MGZ5d3pONXRwNVFRSVJleEoyNGpx?=
- =?utf-8?B?M1Ryc29xcWxwMWNsYXFMNlZySkI5SjBXQlQrQ0lCSGFvWDRhODRuLzR3VFFt?=
- =?utf-8?B?L1JRNEcyelRuRy9WamZleXVhVFlPa2diQW4yTnBIaEtrM2xMREs2WEVzTUR1?=
- =?utf-8?B?RG9mdmlROG5qWEp1cEFoSk1hSXJZTFFxQUthRnZoNFdLSTY5NU5EdHp0RXhR?=
- =?utf-8?Q?adCK8jbKgSU1qMg4=3D?=
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature";
-	boundary="------------VE4FfxC8FPSSFgTto23Dm4ob"
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 846C52690C0;
+	Mon, 16 Feb 2026 11:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771239946; cv=none; b=jbfBUi9XD+z7vhEL3mkiRYEXulS8DvUdIBi2sBtSEzmU435PZEDWmsEg2U254h85NnIVCzNOecKJ0gmqY28vEefyIpCIOmdGHkL0+0sDIuR1ttxM7KcnE7xAD55S6w6Z9FjFtbq92qxaSg3UQZMcR1KIGPqSaqZ6G7oJki4r+ww=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771239946; c=relaxed/simple;
+	bh=GwrN906MkGiIaKqfGH4X5luZEMbp/rIxAu7QH5EMOO4=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:From:To:Cc:
+	 References:In-Reply-To; b=J4F2mfnQSzw3lo1KWKYvOBy8b290y8S+0L4KBWBPJf868BELq4CtqAPdFDO42EhdCdkToVx+svenLEuY1odsxFX/g7EfYKHKYDcwAWYymuDT7ZP9VR/UYKZl/V52xwS6g6hlcQBHajwU+uP2OUWVnV35NvEgeDX4Q0aUftyIIlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8D9A3150C;
+	Mon, 16 Feb 2026 03:05:37 -0800 (PST)
+Received: from [10.1.34.88] (e127648.arm.com [10.1.34.88])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 446E53F632;
+	Mon, 16 Feb 2026 03:05:43 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------CZqWEMrI60OMuZ3y1ooRMeZl"
+Message-ID: <398c6f07-d964-4dc0-9fa6-bf7d89442da1@arm.com>
+Date: Mon, 16 Feb 2026 11:05:41 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: imgtec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CWLP265MB3393.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd2a8771-f787-4ea8-129d-08de6d4a6b35
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Feb 2026 10:59:12.6733
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 0d5fd8bb-e8c2-4e0a-8dd5-2c264f7140fe
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UQdtbLS4ef4d+ZKGqEA5rv/epJoQ4+OOZBTos73wp/Llz6uscJy1KVyYKW1/aEs/4LDOxGhGMlDxE+H4Sj64Lg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB6502
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDA5MiBTYWx0ZWRfX0T35f0RgeJlI
- 0e7Rs4XxOvdqJk1KAVnXOhAzWhjxAksFl2iqEXcs0jPAK2dUDD/XAS42LMbe0q6Fr+ldjstH/K1
- qgKhtEKrggbYKMo/SGRLSNOGSIbUzp37TSevDhp5FyrgMXP0k3dja3P5UbHEMIUKQnagJnFWRW9
- 2sMEgMPVqFmTUGHvgKlnE/bc1nxqsbbeH0FHPCbHl4eyY57J6EFcLMuAybBoJ5FVvKiojVMytb4
- ikEGkI855jcHlG24vUk2c0V929n+13yGETSZEcS5dSlid93FYeqAYqubBK3yd0xKQxvh+Fk9Ehl
- qgQXbnGUwEV9DbGqLCt8r5iqtiEsXONvlMQAw0y6g2pRjYMzZrpUuwTmNEaP020+XFd07xGnHWU
- WuyVUG9eNh9iH4uyHZAt1nxxabVMhnAAcr7qTGeJ2AHN1/Bt6probQJTP5caxX39avbTkn4Nh8g
- Pw5VSTSB/85RctR6TaQ==
-X-Authority-Analysis: v=2.4 cv=aepsXBot c=1 sm=1 tr=0 ts=6992f883 cx=c_pps
- a=r6flpba3aIlT3cEwwQ+y1Q==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=HzLeVaNsDn8A:10
- a=NgoYpvdbvlAA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=r_1tXGB3AAAA:8 a=pGLkceISAAAA:8
- a=b3CbU_ItAAAA:8 a=EHq_tcq5PHyuLU4A2wkA:9 a=QEXdDO2ut3YA:10
- a=hkJlc_IRnfUFjANpJ7wA:9 a=FfaGCDsud1wA:10 a=t8nPyN_e6usw4ciXM-Pk:22
- a=Rv2g8BkzVjQTVhhssdqe:22
-X-Proofpoint-GUID: P4xPuCwms3S_thxKk9BNXljrZYPRTdAA
-X-Proofpoint-ORIG-GUID: P4xPuCwms3S_thxKk9BNXljrZYPRTdAA
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpuidle: ladder: Fix state index when only one idle state
+ is registered
+From: Christian Loehle <christian.loehle@arm.com>
+To: Aboorva Devarajan <aboorvad@linux.ibm.com>, rafael@kernel.org
+Cc: daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260211053552.739337-1-aboorvad@linux.ibm.com>
+ <c3d670cd-fc54-49a8-b640-fb16f9bd0487@arm.com>
+ <7297173684f500e006a2997b92c927262221336f.camel@linux.ibm.com>
+ <aa4e56dc-d74b-44dc-b628-c7573159de99@arm.com>
+Content-Language: en-US
+In-Reply-To: <aa4e56dc-d74b-44dc-b628-c7573159de99@arm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[imgtec.com,none];
-	MIME_GOOD(-0.20)[multipart/signed,multipart/mixed,text/plain];
-	R_DKIM_ALLOW(-0.20)[imgtec.com:s=dk201812,IMGTecCRM.onmicrosoft.com:s=selector2-IMGTecCRM-onmicrosoft-com];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+X-Spamd-Result: default: False [-0.26 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MIME_BASE64_TEXT_BOGUS(1.00)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain,text/x-patch];
+	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42691-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,imgtec.com:mid,imgtec.com:dkim,imgtec.com:email,IMGTecCRM.onmicrosoft.com:dkim];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[linux-m68k.org,imgtec.com,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,lists.freedesktop.org,vger.kernel.org,lists.linux.dev];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+,1:+,2:+,3:~];
-	DKIM_TRACE(0.00)[imgtec.com:+,IMGTecCRM.onmicrosoft.com:+];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Matt.Coster@imgtec.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42692-lists,linux-pm=lfdr.de];
 	HAS_ATTACHMENT(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:+,3:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[christian.loehle@arm.com,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: AA5AB1429A0
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arm.com:mid,arm.com:email]
+X-Rspamd-Queue-Id: 21AB3142A74
 X-Rspamd-Action: no action
 
---------------VE4FfxC8FPSSFgTto23Dm4ob
-Content-Type: multipart/mixed; boundary="------------dziar7a5yYZRTekdxfTKCGEo";
- protected-headers="v1"
-Message-ID: <9028586c-4e81-4a6d-aed6-bc1fdb7058a0@imgtec.com>
-Date: Mon, 16 Feb 2026 10:59:12 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drm/imagination: Convert to
- dev_pm_domain_{at,de}tach_list()
-From: Matt Coster <matt.coster@imgtec.com>
-To: Thorsten Leemhuis <regressions@leemhuis.info>,
- Marek Vasut <marek.vasut@mailbox.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
- Frank Binns <Frank.Binns@imgtec.com>,
- Brajesh Gupta <Brajesh.Gupta@imgtec.com>,
- Alessio Belle <Alessio.Belle@imgtec.com>,
- Alexandru Dadu <Alexandru.Dadu@imgtec.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <194465eda54d1f852a9226cf691ddc5aa208e0a3.1769097977.git.geert+renesas@glider.be>
- <ffdf3982-e22c-4d01-afa6-5449ed381000@imgtec.com>
- <CAMuHMdWMh_oJFg-KtapcTDGvYWZ-hg_ZEJ2=E5Tp1apOEc8tnQ@mail.gmail.com>
- <b3b4f10e-1222-44f7-b308-db7199c67147@mailbox.org>
- <3e0def93-2f6c-4bcf-8ee5-bf607f2ca382@imgtec.com>
- <f5d3dde6-edec-42f4-93cb-459c8677245a@mailbox.org>
- <f82b7734-6ddc-4029-b38d-147e9a1de021@leemhuis.info>
- <47f95b5b-c240-48b1-a904-2285700a9d3f@imgtec.com>
-Content-Language: en-GB
-Autocrypt: addr=matt.coster@imgtec.com; keydata=
- xjMEYl2lchYJKwYBBAHaRw8BAQdAOYlooFfHTXzAQ9aGoSnT9JS9wq8xprG+KVLbkxJDF5DN
- JE1hdHQgQ29zdGVyIDxtYXR0LmNvc3RlckBpbWd0ZWMuY29tPsKWBBMWCAA+AhsDBQsJCAcC
- BhUKCQgLAgQWAgMBAh4BAheAFiEEBaQM/OcmnWHZcQChdH8KkDb5DfoFAmgHpowFCQlsaBoA
- CgkQdH8KkDb5DfqxDgEA81pbVLJDmpFyFZLRhAGig9rgoDY6l774yhTzRVm/SvkBAJLzpSlm
- wyQaQuB668TKOX9XvRLKFGjSq5kkdQcxqjkCzjgEYl2lchIKKwYBBAGXVQEFAQEHQCaVC8X5
- 7NOv2jNbeXqjP9ekY7rzy7auiEZ5PxaDWUQVAwEIB8J+BBgWCAAmAhsMFiEEBaQM/OcmnWHZ
- cQChdH8KkDb5DfoFAmgHpowFCQlsaBoACgkQdH8KkDb5DfoK+AD/Q4aN/zUvP72RRE4cNWpM
- MXeRXg+LTN+OJ24U10LltxIA/2w3kDqMC/0t1oqO8TM+c2LMWO/x2IBkG7oRZ/hVw1QI
-In-Reply-To: <47f95b5b-c240-48b1-a904-2285700a9d3f@imgtec.com>
-
---------------dziar7a5yYZRTekdxfTKCGEo
+This is a multi-part message in MIME format.
+--------------CZqWEMrI60OMuZ3y1ooRMeZl
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Apologies, sent the wrong draft. Please disregard and see [1] instead.
-
-Cheers,
-Matt
-
-[1]: https://lore.kernel.org/r/21b1fd77-252e-4fb3-aa65-1c26043c5412@imgte=
-c.com/
-
-On 16/02/2026 10:57, Matt Coster wrote:
-> On 12/02/2026 15:56, Thorsten Leemhuis wrote:
->> On 2/12/26 15:38, Marek Vasut wrote:
->>> On 2/12/26 10:00 AM, Matt Coster wrote:
->>>> On 11/02/2026 19:17, Marek Vasut wrote:
->>>>> On 1/23/26 2:50 PM, Geert Uytterhoeven wrote:
->>>>>> On Fri, 23 Jan 2026 at 14:36, Matt Coster <Matt.Coster@imgtec.com>=
-
->>>>>> wrote:
->>>>>>> On 22/01/2026 16:08, Geert Uytterhoeven wrote:
->>>>>>>> Call the dev_pm_domain_attach_list() and dev_pm_domain_detach_li=
-st()
->>>>>>>> helpers instead of open-coding multi PM Domain handling.
->>>>>>>>
->>>>>>>> This changes behavior slightly:
->>>>>>>>     - The new handling is also applied in case of a single PM Do=
-main,
->>>>>>>>     - PM Domains are now referred to by index instead of by name=
-, but
->>>>>>>>       "make dtbs_check" enforces the actual naming and ordering
->>>>>>>> anyway,
->>>>>>>>     - There are no longer device links created between virtual d=
-omain
->>>>>>>>       devices, only between virtual devices and the parent devic=
-e.
->>>>>>>
->>>>>>> We still need this guarantee, both at start and end of day. In th=
-e
->>>>>>> current implementation dev_pm_domain_attach_list() iterates forwa=
-rds,
->>>>>>> but so does dev_pm_domain_detach_list(). Even if we changed that,=
- I'd
->>>>>>> prefer not to rely on the implementation details when we can
->>>>>>> declare the
->>>>>>> dependencies explicitly.
->>>>>>
->>>>>> Note that on R-Car, the PM Domains are nested (see e.g.
->>>>>> r8a7795_areas[]),
->>>>>> so they are always (un)powered in the correct order.  But that may=
- not
->>>>>> be the case in the integration on other SoCs.
->>>>>>
->>>>>>> We had/have a patch (attached) kicking around internally to use t=
-he
->>>>>>> *_list() functions but keep the inter-domain links in place; it g=
-ot
->>>>>>> held
->>>>>>> up by discussions as to whether we actually need those dependenci=
-es
->>>>>>> for
->>>>>>> the hardware to behave correctly. Your patch spurred me to run ar=
-ound
->>>>>>> the office and nag people a bit, and it seems we really do need t=
-o
->>>>>>> care
->>>>>>> about the ordering.
->>>>>>
->>>>>> OK.
->>>>>>
->>>>>>> Can you add the links back in for a V2 or I can properly send the=
-
->>>>>>> attached patch instead, I don't mind either way.
->>>>>>
->>>>>> Please move forward with your patch, you are the expert.
->>>>>> I prefer not to be blamed for any breakage ;-)
->>>>>
->>>>> Has there been any progress on fixing this kernel crash ?
->>>>>
->>>>> There are already two proposed solutions, but no fix is upstream.
+On 2/13/26 13:44, Christian Loehle wrote:
+> On 2/13/26 08:29, Aboorva Devarajan wrote:
+>> On Wed, 2026-02-11 at 15:00 +0000, Christian Loehle wrote:
+>>> On 2/11/26 05:35, Aboorva Devarajan wrote:
+>>>> On certain platforms (PowerNV systems without a power-mgt DT node),
+>>>> cpuidle may register only a single idle state. In cases where that
+>>>> single state is a polling state (state 0), the ladder governor may
+>>>> incorrectly treat state 1 as the first usable state and pass an
+>>>> out-of-bounds index. This can lead to a NULL enter callback being
+>>>> invoked, ultimately resulting in a system crash.
 >>>>
->>>> Yes and no. Our patch to use dev_pm_domain_attach_list() has landed =
-in
->>>> drm-misc-next as commit e19cc5ab347e3 ("drm/imagination: Use
->>>> dev_pm_domain_attach_list()"), but this does not fix the underlying
->>>> issue of missing synchronization in the PM core[1] is still unresolv=
-ed
->>>> as far as I'm aware.
+>>>> [   13.342636] cpuidle-powernv : Only Snooze is available
+>>>> [   13.351854] Faulting instruction address: 0x00000000
+>>>> [   13.376489] NIP [0000000000000000] 0x0
+>>>> [   13.378351] LR  [c000000001e01974] cpuidle_enter_state+0x2c4/0x668
+>>>>
+>>>> Fix this by determining the first non-polling state index based on
+>>>> the number of registered states, and by returning state 0 when only
+>>>> one state is registered.
+>>>>
+>>>> Fixes: dc2251bf98c6 ("cpuidle: Eliminate the CPUIDLE_DRIVER_STATE_START symbol")
+>>>> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
 >>>
->>> OK, but the pvr driver can currently easily crash the kernel on boot =
-if
->>> firmware is missing, so that should be fixed soon, right ?
+>>> Agreed that the current behavior is a bug, but is there really much value
+>>> in using a cpuidle governor with just a polling state?
+>>> It's dead code and trivial to bail out of in cpuidle, right?
+>>>
 >>
->> Well, drm-misc-next afaik means that the above mentioned fix would onl=
-y
->> be merged in 7.1, which is ~4 months away, which is not really "soon"
->> I'd say. Or did I misjudge this?
->=20
-> The above isn't really a "fix" per se, it's just an enhancement. The
-> underlying crash can still happen. We could still pick it into
-> drm-misc-fixes and have it in the next -rc plus backported to stable,
-> but I'm not sure I see the value.
->=20
+>> Hi Christian,
 >>
->>> I added the regressions list onto CC, because this seems like a probl=
-em
->>> worth tracking.
+>> Thanks for the review.
 >>
->> Noticed that and wondered what change caused the regression. Did not
->> find a answer in a quick search on lore[1]. Because if it's a
->> regression, we maybe should just revert the culprit for now according =
-to
->> Linus:
->> https://lore.kernel.org/lkml/CAHk-=3Dwi86AosXs66-yi54+mpQjPu0upxB8ZAfG=
-+LsMyJmcuMSA@mail.gmail.com/=20
->=20
-> From our side at least, I don't believe this is a regression at all. We=
-
-> haven't been able to reproduce this issue on any of the platforms we
-> have available (although we did stumble on a related bugfix[2] while
-> trying).
->=20
-> My current understanding of the situation is that the fix proposed by
-> Marek in the Reneasas driver[3] works, but is not suitable since
-> pm_runtime_barrier() should be inserted by the caller, not the power
-> driver. But it seems that's not always possible (particularly when usin=
-g
-> devm), so I don't really understand where we go from here. I don't see
-> anything we're doing substantially differently (before or after the
-> commit I mentioned above) from anybody else.
->=20
-> Cheers,
-> Matt
->=20
-> [2]: TBC
-> [3]: https://lore.kernel.org/r/0e9f963b-00e0-43d1-b567-cb10b8f66df1@mai=
-lbox.org/
->=20
+>> Other governors (teo, menu) already handle this single-state scenario
+>> correctly. Fixing ladder's first_idx calculation seemed like the most
+>> targeted fix, however since ladder is not widely used this is likely
+>> to go unnoticed, it only popped up during testing with a missing
+>> power-mgt device tree node.
 >>
->> Ciao, Thorsten
+>> yes, adding a bail-out in the core cpuidle_select() is also trivial and
+>> would benefit all governors uniformly. Setting stop_tick to false keeps
+>> the tick running, which is correct for a single state configuration.
 >>
->> [1] I guess this was the initial report from Geert?
->> https://lore.kernel.org/all/CAMuHMdWapT40hV3c+CSBqFOW05aWcV1a6v_NiJYgo=
-Yi0i9_PDQ@mail.gmail.com/=20
->=20
->=20
+>> Please let me know if you'd prefer this approach instead.
+>>
+>> ---
+>>
+>> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+>> index c7876e9e024f..ea082419f7db 100644
+>> --- a/drivers/cpuidle/cpuidle.c
+>> +++ b/drivers/cpuidle/cpuidle.c
+>> @@ -359,6 +359,16 @@ noinstr int cpuidle_enter_state(struct
+>> cpuidle_device *dev,
+>>  int cpuidle_select(struct cpuidle_driver *drv, struct cpuidle_device
+>> *dev,
+>>                    bool *stop_tick)
+>>  {
+>> +       /*
+>> +        * If there is only a single idle state (or none), there is
+>> nothing
+>> +        * meaningful for the governor to choose. Skip the governor and
+>> +        * always use state 0 with the tick running.
+>> +        */
+>> +       if (unlikely(drv->state_count <= 1)) {
+> 
+> I think the unlikely isn't helping here, this just let the branch predictor
+> handle this as it won't change anyway.
+> 
+>> +               *stop_tick = false;
+>> +               return 0;
+>> +       }
+>> +
+>>         return cpuidle_curr_governor->select(drv, dev, stop_tick);
+>>  }
+>>
+> 
+> I prefer this, additionally of course:
 
+I've attached them as patches with a sign-off, feel free to pick them up as a series
+or if you provide your signoff I can do that as well.
 
---=20
-Matt Coster
-E: matt.coster@imgtec.com
+--------------CZqWEMrI60OMuZ3y1ooRMeZl
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0002-cpuidle-teo-Remove-single-state-handling.patch"
+Content-Disposition: attachment;
+ filename="0002-cpuidle-teo-Remove-single-state-handling.patch"
+Content-Transfer-Encoding: base64
 
---------------dziar7a5yYZRTekdxfTKCGEo--
+RnJvbSA1NmJhNmNiZWM5YWNhNjQ1YTUxNzQ0MjYxZWNmMDI3NjA3MmUwMDFkIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gTG9laGxlIDxjaHJpc3RpYW4ubG9l
+aGxlQGFybS5jb20+CkRhdGU6IE1vbiwgMTYgRmViIDIwMjYgMTE6MDI6NTUgKzAwMDAKU3Vi
+amVjdDogW1BBVENIIDIvMl0gY3B1aWRsZTogdGVvOiBSZW1vdmUgc2luZ2xlIHN0YXRlIGhh
+bmRsaW5nCgpjcHVpZGxlIHN5c3RlbXMgd2hlcmUgdGhlIGdvdmVybm9yIGhhcyBubyBjaG9p
+Y2UgYmVjYXVzZSB0aGVyZSdzIG9ubHkKYSBzaW5nbGUgaWRsZSBzdGF0ZSBhcmUgbm93IGhh
+bmRsZWQgYnkgY3B1aWRsZSBjb3JlIGFuZCBieXBhc3MgdGhlCmdvdmVybm9yLCBzbyByZW1v
+dmUgdGhlIHJlbGF0ZWQgaGFuZGxpbmcuCgpTaWduZWQtb2ZmLWJ5OiBDaHJpc3RpYW4gTG9l
+aGxlIDxjaHJpc3RpYW4ubG9laGxlQGFybS5jb20+Ci0tLQogZHJpdmVycy9jcHVpZGxlL2dv
+dmVybm9ycy90ZW8uYyB8IDYgLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgNiBkZWxldGlvbnMo
+LSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL2NwdWlkbGUvZ292ZXJub3JzL3Rlby5jIGIvZHJp
+dmVycy9jcHVpZGxlL2dvdmVybm9ycy90ZW8uYwppbmRleCA4MWFjNWZkNThhMWMuLjliNWI4
+YzYxNzgwNiAxMDA2NDQKLS0tIGEvZHJpdmVycy9jcHVpZGxlL2dvdmVybm9ycy90ZW8uYwor
+KysgYi9kcml2ZXJzL2NwdWlkbGUvZ292ZXJub3JzL3Rlby5jCkBAIC0zMTcsMTIgKzMxNyw2
+IEBAIHN0YXRpYyBpbnQgdGVvX3NlbGVjdChzdHJ1Y3QgY3B1aWRsZV9kcml2ZXIgKmRydiwg
+c3RydWN0IGNwdWlkbGVfZGV2aWNlICpkZXYsCiAJICovCiAJY3B1X2RhdGEtPnNsZWVwX2xl
+bmd0aF9ucyA9IEtUSU1FX01BWDsKIAotCS8qIENoZWNrIGlmIHRoZXJlIGlzIGFueSBjaG9p
+Y2UgaW4gdGhlIGZpcnN0IHBsYWNlLiAqLwotCWlmIChkcnYtPnN0YXRlX2NvdW50IDwgMikg
+ewotCQlpZHggPSAwOwotCQlnb3RvIG91dF90aWNrOwotCX0KLQogCWlmICghZGV2LT5zdGF0
+ZXNfdXNhZ2VbMF0uZGlzYWJsZSkKIAkJaWR4ID0gMDsKIAotLSAKMi4zNC4xCgo=
+--------------CZqWEMrI60OMuZ3y1ooRMeZl
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-cpuidle-menu-Remove-single-state-handling.patch"
+Content-Disposition: attachment;
+ filename="0001-cpuidle-menu-Remove-single-state-handling.patch"
+Content-Transfer-Encoding: base64
 
---------------VE4FfxC8FPSSFgTto23Dm4ob
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+RnJvbSAxMDQ2YmFjNjE4YzA1MjYyZDEzOTA3MWU1NWY0MjQ4ZDMxMjEzMTBkIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaHJpc3RpYW4gTG9laGxlIDxjaHJpc3RpYW4ubG9l
+aGxlQGFybS5jb20+CkRhdGU6IE1vbiwgMTYgRmViIDIwMjYgMTE6MDE6MDIgKzAwMDAKU3Vi
+amVjdDogW1BBVENIIDEvMl0gY3B1aWRsZTogbWVudTogUmVtb3ZlIHNpbmdsZSBzdGF0ZSBo
+YW5kbGluZwoKY3B1aWRsZSBzeXN0ZW1zIHdoZXJlIHRoZSBnb3Zlcm5vciBoYXMgbm8gY2hv
+aWNlIGJlY2F1c2UgdGhlcmUncyBvbmx5CmEgc2luZ2xlIGlkbGUgc3RhdGUgYXJlIG5vdyBo
+YW5kbGVkIGJ5IGNwdWlkbGUgY29yZSBhbmQgYnlwYXNzIHRoZQpnb3Zlcm5vciwgc28gcmVt
+b3ZlIHRoZSByZWxhdGVkIGhhbmRsaW5nLgoKU2lnbmVkLW9mZi1ieTogQ2hyaXN0aWFuIExv
+ZWhsZSA8Y2hyaXN0aWFuLmxvZWhsZUBhcm0uY29tPgotLS0KIGRyaXZlcnMvY3B1aWRsZS9n
+b3Zlcm5vcnMvbWVudS5jIHwgMiArLQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
+LCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9jcHVpZGxlL2dvdmVybm9y
+cy9tZW51LmMgYi9kcml2ZXJzL2NwdWlkbGUvZ292ZXJub3JzL21lbnUuYwppbmRleCA2NGQ2
+ZjdhMWM3NzYuLmZkZmE1ZDdlMTBhNiAxMDA2NDQKLS0tIGEvZHJpdmVycy9jcHVpZGxlL2dv
+dmVybm9ycy9tZW51LmMKKysrIGIvZHJpdmVycy9jcHVpZGxlL2dvdmVybm9ycy9tZW51LmMK
+QEAgLTI3MSw3ICsyNzEsNyBAQCBzdGF0aWMgaW50IG1lbnVfc2VsZWN0KHN0cnVjdCBjcHVp
+ZGxlX2RyaXZlciAqZHJ2LCBzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwKIAkJZGF0YS0+
+YnVja2V0ID0gQlVDS0VUUyAtIDE7CiAJfQogCi0JaWYgKHVubGlrZWx5KGRydi0+c3RhdGVf
+Y291bnQgPD0gMSB8fCBsYXRlbmN5X3JlcSA9PSAwKSB8fAorCWlmICh1bmxpa2VseShsYXRl
+bmN5X3JlcSA9PSAwKSB8fAogCSAgICAoKGRhdGEtPm5leHRfdGltZXJfbnMgPCBkcnYtPnN0
+YXRlc1sxXS50YXJnZXRfcmVzaWRlbmN5X25zIHx8CiAJICAgICAgbGF0ZW5jeV9yZXEgPCBk
+cnYtPnN0YXRlc1sxXS5leGl0X2xhdGVuY3lfbnMpICYmCiAJICAgICAhZGV2LT5zdGF0ZXNf
+dXNhZ2VbMF0uZGlzYWJsZSkpIHsKLS0gCjIuMzQuMQoK
 
------BEGIN PGP SIGNATURE-----
-
-wnsEABYIACMWIQS4qDmoJvwmKhjY+nN5vBnz2d5qsAUCaZL4gAUDAAAAAAAKCRB5vBnz2d5qsPz5
-AP0X9LD31AzyA09No8Cdqehomj3z8VnJbp4OvGG+pB22sQD/TvihkzJChewizE+/5rfwox0SDmwc
-paw2NacBpW4x5QM=
-=mYPf
------END PGP SIGNATURE-----
-
---------------VE4FfxC8FPSSFgTto23Dm4ob--
+--------------CZqWEMrI60OMuZ3y1ooRMeZl--
 
