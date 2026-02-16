@@ -1,182 +1,238 @@
-Return-Path: <linux-pm+bounces-42685-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42686-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GMZ3LB/NkmnxyAEAu9opvQ
-	(envelope-from <linux-pm+bounces-42685-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 08:54:07 +0100
+	id sAX+GVHbkmn3zAEAu9opvQ
+	(envelope-from <linux-pm+bounces-42686-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 09:54:41 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 245AA141617
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 08:54:07 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B72C4141B5E
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 09:54:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 8A5AE30022DB
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 07:54:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F0F1D30097C7
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 08:54:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 904E5261B8C;
-	Mon, 16 Feb 2026 07:54:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lEpbQrCq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5414E2798EA;
+	Mon, 16 Feb 2026 08:54:38 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D108E571
-	for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 07:54:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7A72749D5
+	for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 08:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771228443; cv=none; b=EMft51eYnekG1hqDY4a/3o6ed5WVJI4vNSHxfIy4oLQEL/kW6N+ABFHUc3shZkWW3CQoFl8Re0zm8zRiYwPB+BqgHZNcVzsCFQUGde5VZYC4PTGHdesHthg8tFPrrr82w/EOAk9/ENY1BLPeJzRG9DzIi2oiHRUuY/KIGlERazE=
+	t=1771232078; cv=none; b=uZ+hp1P+UhycjyPrfHACmLS3LJqDd9a0N29R4fkyBtvq4pUgnWVyVeivD+DfDse/Olfb+En087qn8Y+J/5ifz+L3K+3jytDoRLTyt3RHhGem5luTweDBJUp5DbI/yi5ZGpyQLxEvQqITgeLlrGYnayKCg1tbbvpyTNaJhaXx+6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771228443; c=relaxed/simple;
-	bh=2eVmDcVj1nsV90zWk49FkYNaIDozDhsASTUVe5HHkg4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CCHkA/zpei+wQF6V7ajxVpUaKk0jPKIOWoPxtnhPmyYLEi9un2XXbOcTMa+xGsPU4nljWaFuQgnjbzxyBrVM1nV/JthGM5IO07MIrwuw9oz/Big7tW9VHDmUuPjyb9o9u+cSA6khJs3xfCxJEHMHHlUjmBNLkejihc6/8gM2laQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lEpbQrCq; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1771232078; c=relaxed/simple;
+	bh=xe6iy91Dnkp2s7PGFf6JlSYAsMMbjCE4ZJ2vNs/NJvU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=og8ZdyhMbsRFReL5sOdxQV/IzAZPlELbYe8yclkH0n2kCI9jhJE67WilZsgD/628LUQdzmlbprNo6EBVSdtoxXPNsDZMcKtWKHxJYQ3wZuP3/TkglmkT2Y+R9c8KzQfE1JD1ewc3UTFVohdO80z9KESlwZupt6v9SuLqlBAPZHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2a79ded11a2so18542925ad.3
-        for <linux-pm@vger.kernel.org>; Sun, 15 Feb 2026 23:54:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771228442; x=1771833242; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=I14tbVEH2syUi6Y61oy9PC2wsHETyhymJpQijnsyHLU=;
-        b=lEpbQrCqStAEoabqIZs3cmpbcO9QjkRn4e/ISys0ML3FseyaVe7hQXv7uARRIroWSn
-         GTO3BJC+N4Pb9KdibWMLvbilp9mO7pCuxffJbnIKfoMlJh0Xa/Doadl2y5ub7+BcKn0v
-         bD2IiyoAFO8nsjMXxBy1R77isI0lBKILSsgDY4lDCGHqVl9lC1E0dE5fcAHyCuNqtXgS
-         w3K4Pxm9qfY7uapSLET8C9vc1k6mRlx6h208hzFbSlYeXJF31xY7WWRPuZVOybDqMgsE
-         ccpQT9+PhXtD2Z6fl3XOlpGcPmIvg/f2/Prr/JssngPjTInudNwCpbolwjzq2/pH0N5s
-         +Cmg==
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-566fe6a4ceeso1291360e0c.3
+        for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 00:54:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771228442; x=1771833242;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I14tbVEH2syUi6Y61oy9PC2wsHETyhymJpQijnsyHLU=;
-        b=TW/dFpjl2EbcBoJ41GwY2qBMh+tf3dkX9qrmsKRWEUTp5n/TnTTYGxUHjERKs9QmNh
-         pEpZnC9mHxBsvc3MHtYTASXC4dnprfAf56MM5W5MqjVx/mFQll4lZmsfUFLWNDAAp2YR
-         5rW8vv1xbvLQGNPq8yNPR/PtsbVivLOe93Lmqo+6h4WeQ9JuY2A2nMjx08X4UrOHDYKV
-         gjpM7QqU90RiG7NpOpCa1VWGghF6JhFkWUT0pLaOls9xum1yTLv0JO+ezDIngv/AKm+R
-         xsgR0Eyvs5EhLyXO5Lx9037aJ8L5iFhh1sja/jX74/wZB+sRVe/7TcNVLnS6HzbCNg2X
-         Uobw==
-X-Forwarded-Encrypted: i=1; AJvYcCUiw7fQXrAZTnpGX7kCQuSO2F2NG6YOYafcW0fqHLMwYyS94HYBBCY1lxf1MutpRdCVLDbfDO+NTQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzf31SBKO/wFmm/iyJ2W5UrrcaN1dO29KF+doqrMoKPRk/mlQKb
-	HdMoGsmiNoOUDAr3dzmZQSkloTUDETN33rAmtBbia7UF2Ht/d/d/R6j/H5Vty4zikgw=
-X-Gm-Gg: AZuq6aKACPNApufs3tf0RiLWAMnrfVUsQgLEYYDyfzKyyI/U+8H8xI3eclJn8p2a4UV
-	ktc8ioop/KHK9V8PpdN7tE8S2nE3r0pwapAlmA7TiE481jYvOzZT1GUqV/AAsEZOtyxIjGHiekk
-	byl/uEC5QhZ9uXGm/Ufiticb0gbVUCgD9uMFlG52Vuy1dCr8JC6mdjGM5mgz+zzuYUI2e5HtnmJ
-	WU6wWspL+sEq9fGDf6fLuyoSVE8ZmFGVHLY8/RHPDQXCToWuaCJPmYtNgPfhiKRIHtgtDV9gXVC
-	HXsACNz9Ji0kW+dqCtjXNi2kNdmsIltt3AnfLD6/D2r9kofKiwmSNtQ5txvf1vwZTJMLOksI8Kx
-	g8j2kkhR1lvmRc/gDyB4aw+Cg0o5FVaH2FQ7jz7s7rZ1JssRSuyV40K1wpzFv9A/4k3lFMCPndd
-	ruMYZFB1UW6l8vau2fsmjGI1oKl3YidQnuif9Dh5RhYwdocwQ2e+hC7hdMfklJk6HKsXdarg==
-X-Received: by 2002:a17:902:f788:b0:2a5:8c1c:744f with SMTP id d9443c01a7336-2ab505a3194mr114280125ad.40.1771228441729;
-        Sun, 15 Feb 2026 23:54:01 -0800 (PST)
-Received: from KASONG-MC4 ([101.32.222.185])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad1aafb972sm58148685ad.88.2026.02.15.23.53.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Feb 2026 23:54:01 -0800 (PST)
-Date: Mon, 16 Feb 2026 15:53:56 +0800
-From: Kairui Song <ryncsn@gmail.com>
-To: Barry Song <21cnbao@gmail.com>
-Cc: kasong@tencent.com, linux-mm@kvack.org, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, 
-	Carsten Grohmann <mail@carstengrohmann.de>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	linux-kernel@vger.kernel.org, "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>, 
-	Carsten Grohmann <carstengrohmann@gmx.de>
-Subject: Re: [PATCH v3 3/3] mm, swap: merge common convention and simplify
- allocation helper
-Message-ID: <aZLLaEXeVVB9277S@KASONG-MC4>
-References: <20260216-hibernate-perf-v3-0-74e025091145@tencent.com>
- <20260216-hibernate-perf-v3-3-74e025091145@tencent.com>
- <CAGsJ_4xpoC78KhYj_b18aVzjGcFGfXnpt7uLGvg7w1B4Y5cc2g@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1771232075; x=1771836875;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=amIuxySa6dDUHXa+BAvlMLYYKh0V6dJe17/ltsM6dbs=;
+        b=k5SE7Of/52qt7VOI4PCqD2cqzqrXUd9ydwNX7xKUVzSyNFr2O4UNyHpb7hUnZzIstR
+         7Eb759IqUIsvxe5Xn2meGRHu/ebJb44pBMXkOrmY/7NP0L4TcarDP9DP7XGJgILnJv7K
+         rQ8S3+BF+xi8GoT165RW1Lk5hqmZ8it8iS51mlkcAfyCMAnQ1UNxLOC7icgdLMlWLLdj
+         ScjAQVmu8r546oC7DpvoD+kbdjEGJeuIQlV41iC8m4SABTZoY3llm4/pNjxUlGmjq+v4
+         XRcHBYWIh1oTd8KkuGNYRQEQP7uHDJw+PBL9EYeftbUzoknfoo+bPUBTs03NdVTJgcAu
+         QtGg==
+X-Forwarded-Encrypted: i=1; AJvYcCVA0HvIDvpCz9aGsXr46/BhT2N1kb04SGcylULqhAJLmUs8+C/nVV964iWRsYY6F0m+Aw16svtGqQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiUESWg6HlD+LCFVueeIP/iXInj5axL7dUmevgy1ldyPgRH5Y4
+	SwYn1TwaGc/UxNfqIxuAIYpzizuytE9yZnBU7v4EOu7TeWEjBS4WRvSs2a4ayb82
+X-Gm-Gg: AZuq6aJuUN5aAf3s+WzssIltDpxOuPyXY/TKdnkJJOyoe+nzPH2mO3lCQ8B8JC443Kh
+	jAwZyjc0R18pALpBcAYz/64vvKfz6CCW2p3s8pkXdIwuVJlkbh1mAJnZDuUhdaAykoCBhMYoy2z
+	nMdJSQ7SMRj+C+bCzI3N7yJw0XznV43BIpYh4K3MtY+boXucvja4XTxGPgYFDme3MPYPJ1HmBP7
+	jxwh58XnJevA7TS52hbONsdLvxOpeUy6SKihvytjLBZSwmxKF5OXBrVoaGWkJj5QzzBIF3lPUr/
+	vK3OUfNKN2ne0G21qADV4SZ5H3HLAdJnC6XhPTBOa6rK9WNZ8XucnFXDRvt5N52tS5jTXFTcbBD
+	Gofz661ZsuE+Dq2rLOTqLUElJH5lQkdniumAWTEfhVWvRc6SkohKe7foPtAUAhtgnKhhja2MAFg
+	bkbXDnvGHyDztt7QxDXspFIk1W6RqhluKR5R/2sSyNmkY8MmH9X3E2mcc+V++E
+X-Received: by 2002:a05:6122:178e:b0:566:21af:5d78 with SMTP id 71dfb90a1353d-5676a923ad6mr2734083e0c.10.1771232075559;
+        Mon, 16 Feb 2026 00:54:35 -0800 (PST)
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com. [209.85.217.44])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-94afd33f622sm7858462241.10.2026.02.16.00.54.35
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Feb 2026 00:54:35 -0800 (PST)
+Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-5fdb47d6131so498217137.3
+        for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 00:54:35 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVAiJvZRrmj6l4N0clw2XDO0z/9eTa8iCjF/pAm5LEneJ9dABYIIgANjSE5lIAp+M7O6xDuwtg1dA==@vger.kernel.org
+X-Received: by 2002:a05:6102:5110:b0:5ef:bd3a:ab1f with SMTP id
+ ada2fe7eead31-5fe1afbda79mr3606828137.34.1771232075129; Mon, 16 Feb 2026
+ 00:54:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGsJ_4xpoC78KhYj_b18aVzjGcFGfXnpt7uLGvg7w1B4Y5cc2g@mail.gmail.com>
+References: <CAMuHMdWapT40hV3c+CSBqFOW05aWcV1a6v_NiJYgoYi0i9_PDQ@mail.gmail.com>
+ <0e9f963b-00e0-43d1-b567-cb10b8f66df1@mailbox.org> <CAMuHMdVOUzanEufhWqOL0nv81xCYh4YNAX_waG6y9PyUZ030tg@mail.gmail.com>
+In-Reply-To: <CAMuHMdVOUzanEufhWqOL0nv81xCYh4YNAX_waG6y9PyUZ030tg@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 16 Feb 2026 09:54:23 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU-jRhW65cxeApFbCK+XgRazPOTABcbmBC3J38pwXfzJQ@mail.gmail.com>
+X-Gm-Features: AaiRm53fj_d9e6w8NbwYy6InUSZHagi7WeBARKJlpME8J2ANfsii8ZwJtSbH60k
+Message-ID: <CAMuHMdU-jRhW65cxeApFbCK+XgRazPOTABcbmBC3J38pwXfzJQ@mail.gmail.com>
+Subject: Re: drm/imagination: genpd_runtime_suspend() crash
+To: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Frank Binns <frank.binns@imgtec.com>, Matt Coster <matt.coster@imgtec.com>, 
+	Marek Vasut <marek.vasut@mailbox.org>, DRI Development <dri-devel@lists.freedesktop.org>, 
+	Linux PM list <linux-pm@vger.kernel.org>, 
+	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42685-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[tencent.com,kvack.org,linux-foundation.org,kernel.org,huaweicloud.com,gmail.com,redhat.com,carstengrohmann.de,vger.kernel.org,gmx.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ryncsn@gmail.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,tencent.com:email]
-X-Rspamd-Queue-Id: 245AA141617
+	R_DKIM_NA(0.00)[];
+	DMARC_NA(0.00)[linux-m68k.org];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42686-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TO_DN_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux-m68k.org:email]
+X-Rspamd-Queue-Id: B72C4141B5E
 X-Rspamd-Action: no action
 
-On Mon, Feb 16, 2026 at 03:34:54PM +0800, Barry Song wrote:
-> On Mon, Feb 16, 2026 at 3:00 AM Kairui Song via B4 Relay
-> <devnull+kasong.tencent.com@kernel.org> wrote:
+Hi Ulf, Rafael,
+
+On Thu, 22 Jan 2026 at 16:35, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Sat, 3 Jan 2026 at 19:25, Marek Vasut <marek.vasut@mailbox.org> wrote:
+> > On 10/29/25 3:08 PM, Geert Uytterhoeven wrote:
+> > >       default_suspend_ok+0xb4/0x20c (P)
+> > >       genpd_runtime_suspend+0x11c/0x4e0
+> > >       __rpm_callback+0x44/0x1cc
+> > >       rpm_callback+0x6c/0x78
+> > >       rpm_suspend+0x108/0x564
+> > >       pm_runtime_work+0xb8/0xbc
+> > >       process_one_work+0x144/0x280
+> > >       worker_thread+0x2c8/0x3d0
+> > >       kthread+0x128/0x1e0
+> > >       ret_from_fork+0x10/0x20
+> > >      Code: aa1303e0 52800863 b0005661 912dc021 (f9402095)
+> > >      ---[ end trace 0000000000000000 ]---
+> > >
+> > > This driver uses manual PM Domain handling for multiple PM Domains.  In
+> > > my case, pvr_power_domains_fini() calls dev_pm_domain_detach() (twice),
+> > > which calls dev_pm_put_subsys_data(), and sets dev->power.subsys_data to
+> > > NULL when psd->refcount reaches zero.
+> > >
+> > > Later/in parallel, default_suspend_ok() calls dev_gpd_data():
+> > >
+> > >      static inline struct generic_pm_domain_data *dev_gpd_data(struct
+> > > device *dev)
+> > >      {
+> > >              return to_gpd_data(dev->power.subsys_data->domain_data);
+> > >      }
+> > >
+> > > triggering the NULL pointer dereference.  Depending on timing, it may
+> > > crash earlier or later in genpd_runtime_suspend(), or not crash at all
+> > > (initially, I saw it only with extra debug prints in the genpd subsystem).
 > >
-> > From: Kairui Song <kasong@tencent.com>
+> > I came to the same conclusion when revisiting it yesterday and today.
 > >
-> > Almost all callers of the cluster scan helper require the: lock -> check
-> > usefulness/emptiness check -> allocate -> unlock routine. So merge them
-> > into the same helper to simplify the code.
-> 
-> Previously, when !cluster_is_usable(ci, order), we only called
-> swap_cluster_unlock(). Now we do more work in this path:
-> 
-> 
-> out:
->         relocate_cluster(si, ci);
->         swap_cluster_unlock(ci);
->         if (si->flags & SWP_SOLIDSTATE) {
->                 this_cpu_write(percpu_swap_cluster.offset[order], next);
->                 this_cpu_write(percpu_swap_cluster.si[order], si);
->         } else {
->                 si->global_cluster->next[order] = next;
->         }
->         return found;
-> 
-> I assume this is what you want to do as well, but can we add
-> some explanation here?
+> > The power 3dg-{a,b} domains are in RPM_SUSPENDING state, the
+> > __rpm_callback() is running and it unlocks dev->power.lock spinlock for
+> > just long enough, that the pvr_power_domains_fini() can issue
+> > dev_pm_domain_detach() and then dev_pm_put_subsys_data() , which unsets
+> > subsys_data, which are later still used by the __rpm_callback() (really
+> > the genpd_runtime_suspend() -> suspend_ok() it calls for this domain).
+> >
+> > But, I wonder if the problem is actually in the CPG MSSR clock domain
+> > driver. The pvr_power_domains_fini() dev_pm_domain_detach() really calls
+> > cpg_mssr_detach_dev() which calls pm_clk_destroy() and that invokes the
+> > dev_pm_domain_detach() which unsets the subsys_data . The
+> > pm_clk_destroy() documentation is explicit about it unsetting the
+> > subsys_data .
+> >
+> > I wonder if what we need to do instead, is patch the CPG MSSR clock
+> > domain driver such, that it would surely NOT call pm_clk_destroy()
+> > before the domain transitioned from RPM_SUSPENDING -> RPM_SUSPENDED
+> > state and surely is done with all its __rpm_callback() invocations ?
+> >
+> > Can you please test this change and see if it fixes the problem ?
+> >
+> > The barrier should guarantee that the domain is settled and no more
+> > callbacks are still running.
+>
+> Thank you, that indeed fixes the issue!
+>
+> However, I am not so sure this barrier belongs in the .detach_dev()
+> callback.  The documentation for almost all dev_pm_domain_{at,de}tach*()
+> functions states:
+>
+>      * Callers must ensure proper synchronization of this function with power
+>      * management callbacks.
+>
+> However, I couldn't find any user that calls pm_runtime_barrier() first.
+>
+> In case of multiple PM domains, it is even more complicated, as
+> dev_pm_domain_attach_list() (and pvr_power_domains_init(), which is
+> basically an open-coded variant of the former) creates a list of virtual
+> devices, which all need synchronization.  For the devres-enabled version
+> (devm_pm_domain_attach_list()), the caller cannot take care of calling
+> pm_runtime_barrier() anyway, so it has to be handled by the PM core?
 
-Yes, that's fine. alloc_swap_scan_cluster is suppose to update the
-percpu offset cache so if the cluster is not usable, writing
-SWAP_ENTRY_INVALID to invalidate the cache might even be helpful
-for future scan. At lease not harmful, I'll add some explanation,
-comments.
+Any guidance from the PM people?
+Thanks!
 
-> 
-> Also, it would be better to add a comment that
-> alloc_swap_scan_cluster() expects ci->lock to be held on
-> entry and releases ci->lock before returning.
+> > --- a/drivers/clk/renesas/renesas-cpg-mssr.c
+> > +++ b/drivers/clk/renesas/renesas-cpg-mssr.c
+> > @@ -24,6 +24,7 @@
+> >   #include <linux/platform_device.h>
+> >   #include <linux/pm_clock.h>
+> >   #include <linux/pm_domain.h>
+> > +#include <linux/pm_runtime.h>
+> >   #include <linux/psci.h>
+> >   #include <linux/reset-controller.h>
+> >   #include <linux/slab.h>
+> > @@ -656,8 +657,10 @@ int cpg_mssr_attach_dev(struct generic_pm_domain
+> > *unused, struct device *dev)
+> >
+> >   void cpg_mssr_detach_dev(struct generic_pm_domain *unused, struct
+> > device *dev)
+> >   {
+> > -       if (!pm_clk_no_clocks(dev))
+> > +       if (!pm_clk_no_clocks(dev)) {
+> > +               pm_runtime_barrier(dev);
+> >                 pm_clk_destroy(dev);
+> > +       }
+> >   }
+> >
+> >   static void cpg_mssr_genpd_remove(void *data)
 
-Thanks for the suggestion, I even thought about renaming the helper
-to indicate it will try update the percpu offset and release the lock.
-But didn't have a better idea to naming and we also have
-alloc_swap_scan_list, leave the name untouched seems more consistent.
+Gr{oetje,eeting}s,
 
-I'll just add some comment then.
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
