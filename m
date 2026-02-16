@@ -1,260 +1,331 @@
-Return-Path: <linux-pm+bounces-42718-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42719-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oDBnIvVok2m64QEAu9opvQ
-	(envelope-from <linux-pm+bounces-42718-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 19:59:01 +0100
+	id GGxRIL9sk2kb4gEAu9opvQ
+	(envelope-from <linux-pm+bounces-42719-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 20:15:11 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id B46E114724F
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 19:59:00 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4045214734C
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 20:15:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 3CF4E3002D1A
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 18:58:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CEC3C30233DD
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 19:15:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3419F2E7BD2;
-	Mon, 16 Feb 2026 18:58:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678D82E92D2;
+	Mon, 16 Feb 2026 19:14:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SHzQK7CE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gBraj7yv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4C51E3DE5;
-	Mon, 16 Feb 2026 18:58:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771268337; cv=none; b=HjoGgrMcXz6rOB+g4mCdXaha0b5kMZ+jNz60GpGEdUF02v0JQ6SSpk4GjOIf26Tu1blAGr6YBuZsPeuxrlVVyDtF/hrnc3e82OOUvQePRpQEEr0QJniGJViIl+KdLrRzcLO6SVPJ8N4CfMb3ir/jY/5egHpX8oM6gsDEmffcXII=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771268337; c=relaxed/simple;
-	bh=Z5BBdke29xYldl/rIpaHBrv7p/C9SN1OKMaEUHWf/nk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Geo1qQUL1oBilJU2jKn+4fpwClGN/jy+i+wy7rDR4qDRY5zqvANNN2NVP3/3bTP1+KWWX/iMMkI3tB2BjSYPcVLNaFWQ9K+qyrRZdp0PCPOyNRGljXcwbNExP+yeh5g4/8dnFQhbOS3on3BbvWcjpyb6gskXCXWxyZBZhwHgOcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SHzQK7CE; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61GFK9c83669128;
-	Mon, 16 Feb 2026 18:58:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Z5BBdk
-	e29xYldl/rIpaHBrv7p/C9SN1OKMaEUHWf/nk=; b=SHzQK7CEytzV59Q0l3yA1m
-	vVmEp5KnhyYFV2wUQzhW0JSrmDwrjGIS/GFMdI1tsaBi8lfWDIOpJRJkCarEnp+V
-	edMPeNsIdKsSVgacMAvuJgTDL/7x6a4/3vX9TPKGFs83RS2h9ljcsEH5XD/bkXD7
-	NN6ObrW7NFnxDuMKDLg+/6XORsli28JOiG3DECxDjHvSIw0Gmn+/EmsvRw4uTRp+
-	vOFxzALDKwUnhJL0Qnpy3FJv3eDVlAvHScqUPdQwPjekcymugAwTqQRzNrJdH4gi
-	wRy3xkMM2WdHjbeO1Soz5c55Otf6QEdX61yC87J8uEMZMoFcBG63QOI7heGUJ8DQ
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cajcj8dj3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Feb 2026 18:58:50 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61GH997W003762;
-	Mon, 16 Feb 2026 18:58:49 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cb4cmxgag-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Feb 2026 18:58:49 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61GIwl6U53019096
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 16 Feb 2026 18:58:47 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 860292004B;
-	Mon, 16 Feb 2026 18:58:47 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 03A4A20040;
-	Mon, 16 Feb 2026 18:58:46 +0000 (GMT)
-Received: from aboo.ibm.com (unknown [9.36.7.180])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 16 Feb 2026 18:58:45 +0000 (GMT)
-Message-ID: <ef7f49b999b20bc3629b99f7ba260eee813d7fcc.camel@linux.ibm.com>
-Subject: Re: [PATCH] cpuidle: ladder: Fix state index when only one idle
- state is registered
-From: Aboorva Devarajan <aboorvad@linux.ibm.com>
-To: Christian Loehle <christian.loehle@arm.com>, rafael@kernel.org
-Cc: daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date: Tue, 17 Feb 2026 00:28:44 +0530
-In-Reply-To: <398c6f07-d964-4dc0-9fa6-bf7d89442da1@arm.com>
-References: <20260211053552.739337-1-aboorvad@linux.ibm.com>
-	 <c3d670cd-fc54-49a8-b640-fb16f9bd0487@arm.com>
-	 <7297173684f500e006a2997b92c927262221336f.camel@linux.ibm.com>
-	 <aa4e56dc-d74b-44dc-b628-c7573159de99@arm.com>
-	 <398c6f07-d964-4dc0-9fa6-bf7d89442da1@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D640B219A8A
+	for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 19:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771269296; cv=pass; b=XkK17vEkU9kgGD88lTHsDGD7MfFn2+pq4eiyWK6qrD14v8orXw69NkMKy7YDRdjucyl8oV8v/Gj45DUMombOPcYbtyk3hSw7BEzCf8MO3NHrRRuQXphWVKf28Blf1Yd5PMTMOTg7DU7v6fZWWr9D01JzSFm9n2B79MoGtR+atvA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771269296; c=relaxed/simple;
+	bh=6roQzUPN6oF3NP6XZiyAscAXoZCFMtBPdLph18EvMsQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lg9MUFAs2t7gYgbpeDufvPN6F0LYs/jkQ2YYmZYmdAjqsipiGUDFZ9+6pHxtgl/Fi8+gbaCkFt7STg2byeRvpyEjev4HQmgp16lBhaRjX7q6d4ZwTEvnymeS7awY2KQyfoIHzicSok+mTKRFYCpg0Glw7A+TOiQGLQs5eDDp7dk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gBraj7yv; arc=pass smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-48329eb96a7so18759465e9.3
+        for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 11:14:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771269292; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YcsGgNo+uX92W4pzP1jCI7Pw18qxItzxP7ZwGHoYKD1oYvl7QaelyrlbDc5eR/2ShX
+         aC5p5FCBVlhzkLyb5481fEaCiLt2uAxiaUQeTp871/mbJKQuas7HyTG9tp+FuiHNy9Mm
+         O+XXuJwVEQLhHrwOxn2iHoGpWhUfCNX11AyHvkwWtVdflmU1lz4Dxxxt1cVC0rijmmhD
+         MKAgcHRR+asJI/vYvtGDdic5/7ukM5CzDtazeRPVZZ8poi6XCqaz8eq/lt/QBPH3BQ4a
+         EBRA38URjflBYlbvoVFqpRvsxESXzatMf4FirK9+C9kwkj1YX6yTg2OzD4GF4TccpauC
+         GYgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=8HzOcCRMFSbyhDqPBsCkdLqSYse4L0GDbUboaIwjmC0=;
+        fh=OYJhfWG3z/jLZP32AMHIBcWKeFWgbF7KMnGk3tzKJbk=;
+        b=I6GsiMR7HvB0b+xnVOrz7YNPGSEYHCQGR+icwhWrXs09eHpgC/iJiG9NEH6poWgvlb
+         KxKeeCJ2wE80l3RzZxu5nGQrKEAHulk1jNE3tUJvrGcFnkHvPrjvcTNc4lOa/uJyjjMd
+         CPP3G8PNgHaTtd7NIA9HHQAzbXOdrDav8q4cgmE6RZ8WdOFCqBUcjvh/Bez7l/IKC4fJ
+         mAnYIfQhYrlDjqE27jC7U/zv/7pE4xo4P1iq3JnDCH4u71trjVxV8vo8G+Ng5aUgx6J2
+         fiY4qhhTx9k2AsHcIcSaviu/Q+DMWlhssAiF53uwhXh57GYhU+PwsJou3akEucdmJTXN
+         rG9A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771269292; x=1771874092; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8HzOcCRMFSbyhDqPBsCkdLqSYse4L0GDbUboaIwjmC0=;
+        b=gBraj7yvq+F0JdwUJQGHi4JwvgYHX8PH+X4t8HtCuAQ0MX6rh0TxmgG7XZcamn5M/7
+         pNyAMs4ysjDh3rD1Zbnw2niCR29cCHjIwUgnh0pG+0yub7kWA44vmiGZcmRqwvBRQTnE
+         kyL6bUN2OUdP0VeNwbzytm8+luO1vUgRk0sq4GPcz6ikxpB7jGHYdusz58VOTbZFJfx6
+         SM153meyBkL+zq08mPcj+KpaRd32z7XbntEgJ3NJzb/aU9u4KEIAjg+Ns4KHdeU/zUT+
+         W6PfHFSD7BiB/kbNHoHX42pXTHcUp0oau9UnwKBzjZ/LOWgXXI6b1sw09yHmm/nhSm4J
+         ikZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771269292; x=1771874092;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=8HzOcCRMFSbyhDqPBsCkdLqSYse4L0GDbUboaIwjmC0=;
+        b=SOJ/Z1SBrrL9Mm/r8NHDf6kIbQ26tcPnDM/nPSAVW+I3jhMlUyHbPS1FlzyN0jRy2b
+         Yq7ZQi1qq/pNyw8GsbBw265rpG4i7K5aBFVh2+8r/+izBiM8+iW4T2VkLcpdQAzm2vg/
+         IHo8XpUgvgAhjjvDbs/Zx79YOGnYIt7kgdVGTfvslvnmxKPA6+kx9Qo3RbU50duqjTwY
+         Jo2xdv4idKQR95JPYx+eUleG8a2NXRHEnFwbDAMZiAstpRPF9TTA1O8Bhg0ZTlIp1ocI
+         PrctXu7gFuTbmZSnXVNnB/KRM00LX6Q+ZGwJjabolrFke3l+QuCUc4sLebfn+eZqFxGl
+         dfUw==
+X-Forwarded-Encrypted: i=1; AJvYcCVPk7VG+uzVUmpRGhfYCvtRB+cBb6N3vxahDREgS7m3zAYoIYzd7SuYnmyVxz90ExkXrXjkmi2mVg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yycbjw51EbqBBG1RUg8lZpta4pt7ywZSbXq3kCjU2ej7n9SXi1d
+	n7f5XgNGRP6lSJYeY6hroYcLes3T8l5SjH25nPm353YhqnIHb7haTLvFsYgfpFdvlKA/oT/d6Y6
+	Xdmm+vbKzxGZX3hzYg4+/zqnrTJEvWeo=
+X-Gm-Gg: AZuq6aKa/MKKyAi5TVDAKby/kJuu179EGbpKIq3nu1rqdZ9RdcrAJ2bhYyUNfMpKnG1
+	jQJ/v8Arx1KP4B1Eob2npDKeLZDXj1+BuBZxkl6GvASlMU52dVaGPQOw5hYcwGJsgMFRZmRMjaL
+	2cLSVuWU9L1gV+5Plz/ilfMA4bp1OS5ZrV9gyLi1BZ/22MwTirkRPsqRGai1NEExfBCUJwLK0yq
+	nwmKwmJWFS5l66vgmnMgSIGitjquC+rcZDfxC6/VkUKQnm9lieLoBG631rd2ebaAeAuVYrNvcNB
+	HHLATLdE
+X-Received: by 2002:a05:600d:6413:20b0:483:79ad:f3b9 with SMTP id
+ 5b1f17b1804b1-48379adf60amr118355585e9.28.1771269292113; Mon, 16 Feb 2026
+ 11:14:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: pKmnIVXPhWpcM5thfTAqTcZEFsSdFhD7
-X-Authority-Analysis: v=2.4 cv=Md9hep/f c=1 sm=1 tr=0 ts=699368ea cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=e9NWw3J2MQ3JWS89RHgA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDE1OSBTYWx0ZWRfX6Qorp43hDXmf
- 3Sg+gfaEAXeRxeuyfd4iah0e6lihFC8ej1mav0V97pHfNTQpFFUUgYjeiX/LJJyAW3MvJeEXyp5
- 1iOB+FM1BrsBzfKET14kniJRAQEHBWJH+ZWCXduo7EN5RYBmKhF17U10LX/8BtNMnoit4fG0feU
- rIiXlAXvqmDTswD7bzztvltidVNJznj2OOPLiYsbhZ6Vl6FkKzy1jQFYIXZu1a1ZcMD6B1VCShi
- uPuKbobmyXpaCvOJLXZl8gtUSXOgmUb00pZfeNI4tyrVzwBMEVLmK6jyuPOkkhtou0unibm9DMr
- Om1uFJIYTTz0/IHTKzkXxD0/GZxWM+acMACNr+BUs9XaGfIOPthriol0xxn2lDSvNqC9sFPRioo
- HQRlJpJ+UNbtChGjN1luEIO4Gb1gBsTaAjR93aPhhkztnQ+saOfQ2VBZct4l1iOMbHWHNVPAB2y
- b0Ek/CRWVpVdN2il//A==
-X-Proofpoint-GUID: pKmnIVXPhWpcM5thfTAqTcZEFsSdFhD7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-16_06,2026-02-16_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 impostorscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
- priorityscore=1501 suspectscore=0 malwarescore=0 phishscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602160159
+References: <20260214180959.30714-1-clamor95@gmail.com> <20260214180959.30714-2-clamor95@gmail.com>
+ <20260216-sprung-scallop-de7b64bf528c@spud> <CAPVz0n06+uLCSfY_bYS9v7KJ-hXotye7ej-rze6-Q8_JAF7XVA@mail.gmail.com>
+ <20260216-plunder-defense-de11cf56dd3d@spud>
+In-Reply-To: <20260216-plunder-defense-de11cf56dd3d@spud>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+Date: Mon, 16 Feb 2026 21:14:40 +0200
+X-Gm-Features: AaiRm53pjJr4DTXWQu3qeK8s5InrNWpSnyhcexyGL2cJPzW4JG4-eMOhlmVuupI
+Message-ID: <CAPVz0n0-LbTUZBCaO=oN3PpPLpwAqzNo29r687pKY8NbEE9giA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/7] dt-bindings: embedded-controller: document ASUS
+ Transformer EC
+To: Conor Dooley <conor@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+	Ion Agorria <ion@agorria.com>, =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[11];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[aboorvad@linux.ibm.com,linux-pm@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-42719-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,agorria.com,rere.qmqm.pl,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42718-lists,linux-pm=lfdr.de];
-	DKIM_TRACE(0.00)[ibm.com:+]
-X-Rspamd-Queue-Id: B46E114724F
+	FREEMAIL_FROM(0.00)[gmail.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 4045214734C
 X-Rspamd-Action: no action
 
-On Mon, 2026-02-16 at 11:05 +0000, Christian Loehle wrote:
-> On 2/13/26 13:44, Christian Loehle wrote:
-> > On 2/13/26 08:29, Aboorva Devarajan wrote:
-> > > On Wed, 2026-02-11 at 15:00 +0000, Christian Loehle wrote:
-> > > > On 2/11/26 05:35, Aboorva Devarajan wrote:
-> > > > > On certain platforms (PowerNV systems without a power-mgt DT node=
-),
-> > > > > cpuidle may register only a single idle state. In cases where tha=
-t
-> > > > > single state is a polling state (state 0), the ladder governor ma=
-y
-> > > > > incorrectly treat state 1 as the first usable state and pass an
-> > > > > out-of-bounds index. This can lead to a NULL enter callback being
-> > > > > invoked, ultimately resulting in a system crash.
-> > > > >=20
-> > > > > [=C2=A0=C2=A0 13.342636] cpuidle-powernv : Only Snooze is availab=
-le
-> > > > > [=C2=A0=C2=A0 13.351854] Faulting instruction address: 0x00000000
-> > > > > [=C2=A0=C2=A0 13.376489] NIP [0000000000000000] 0x0
-> > > > > [=C2=A0=C2=A0 13.378351] LR=C2=A0 [c000000001e01974] cpuidle_ente=
-r_state+0x2c4/0x668
-> > > > >=20
-> > > > > Fix this by determining the first non-polling state index based o=
-n
-> > > > > the number of registered states, and by returning state 0 when on=
-ly
-> > > > > one state is registered.
-> > > > >=20
-> > > > > Fixes: dc2251bf98c6 ("cpuidle: Eliminate the CPUIDLE_DRIVER_STATE=
-_START symbol")
-> > > > > Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
-> > > >=20
-> > > > Agreed that the current behavior is a bug, but is there really much=
- value
-> > > > in using a cpuidle governor with just a polling state?
-> > > > It's dead code and trivial to bail out of in cpuidle, right?
-> > > >=20
-> > >=20
-> > > Hi Christian,
-> > >=20
-> > > Thanks for the review.
-> > >=20
-> > > Other governors (teo, menu) already handle this single-state scenario
-> > > correctly. Fixing ladder's first_idx calculation seemed like the most
-> > > targeted fix, however since ladder is not widely used this is likely
-> > > to go unnoticed, it only popped up during testing with a missing
-> > > power-mgt device tree node.
-> > >=20
-> > > yes, adding a bail-out in the core cpuidle_select() is also trivial a=
-nd
-> > > would benefit all governors uniformly. Setting stop_tick to false kee=
-ps
-> > > the tick running, which is correct for a single state configuration.
-> > >=20
-> > > Please let me know if you'd prefer this approach instead.
-> > >=20
-> > > ---
-> > >=20
-> > > diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> > > index c7876e9e024f..ea082419f7db 100644
-> > > --- a/drivers/cpuidle/cpuidle.c
-> > > +++ b/drivers/cpuidle/cpuidle.c
-> > > @@ -359,6 +359,16 @@ noinstr int cpuidle_enter_state(struct
-> > > cpuidle_device *dev,
-> > > =C2=A0int cpuidle_select(struct cpuidle_driver *drv, struct cpuidle_d=
-evice
-> > > *dev,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bool *stop_tick)
-> > > =C2=A0{
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * If there is only a sing=
-le idle state (or none), there is
-> > > nothing
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * meaningful for the gove=
-rnor to choose. Skip the governor and
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * always use state 0 with=
- the tick running.
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (unlikely(drv->state_count <=
-=3D 1)) {
-> >=20
-> > I think the unlikely isn't helping here, this just let the branch predi=
-ctor
-> > handle this as it won't change anyway.
-> >=20
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 *stop_tick =3D false;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 return 0;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > > +
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return cpuidle_curr_govern=
-or->select(drv, dev, stop_tick);
-> > > =C2=A0}
-> > >=20
-> >=20
-> > I prefer this, additionally of course:
->=20
-> I've attached them as patches with a sign-off, feel free to pick them up =
-as a series
-> or if you provide your signoff I can do that as well.
+=D0=BF=D0=BD, 16 =D0=BB=D1=8E=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 20:50 Cono=
+r Dooley <conor@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On Mon, Feb 16, 2026 at 08:22:38PM +0200, Svyatoslav Ryhel wrote:
+> > =D0=BF=D0=BD, 16 =D0=BB=D1=8E=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 20:04 =
+Conor Dooley <conor@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+> > >
+> > > On Sat, Feb 14, 2026 at 08:09:53PM +0200, Svyatoslav Ryhel wrote:
+> > > > Document embedded controller used in ASUS Transformer device series=
+.
+> > > >
+> > > > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> > > > ---
+> > > >  .../asus,transformer-ec.yaml                  | 98 +++++++++++++++=
+++++
+> > > >  1 file changed, 98 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/embedded-cont=
+roller/asus,transformer-ec.yaml
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/embedded-controller/=
+asus,transformer-ec.yaml b/Documentation/devicetree/bindings/embedded-contr=
+oller/asus,transformer-ec.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..670c4c2d339d
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/embedded-controller/asus,tr=
+ansformer-ec.yaml
+> > > > @@ -0,0 +1,98 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/embedded-controller/asus,transf=
+ormer-ec.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: ASUS Transformer's Embedded Controller
+> > > > +
+> > > > +description:
+> > > > +  Several Nuvoton based Embedded Controllers attached to an I2C bu=
+s,
+> > > > +  running a custom ASUS firmware, specific to the ASUS Transformer
+> > > > +  device series.
+> > > > +
+> > > > +maintainers:
+> > > > +  - Svyatoslav Ryhel <clamor95@gmail.com>
+> > > > +
+> > > > +allOf:
+> > > > +  - $ref: /schemas/power/supply/power-supply.yaml
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    oneOf:
+> > > > +      - enum:
+> > > > +          - asus,p1801-t-ec-pad
+> > > > +          - asus,sl101-ec-dock
+> > > > +          - asus,tf600t-ec-pad
+> > > > +          - asus,tf701t-ec-pad
+> > > > +
+> > > > +      - items:
+> > > > +          - enum:
+> > > > +              - asus,tf101-ec-dock
+> > > > +              - asus,tf101g-ec-dock
+> > > > +              - asus,tf201-ec-dock
+> > > > +              - asus,tf300t-ec-dock
+> > > > +              - asus,tf300tg-ec-dock
+> > > > +              - asus,tf300tl-ec-dock
+> > > > +              - asus,tf700t-ec-dock
+> > > > +          - const: asus,transformer-ec-dock
+> > > > +
+> > > > +      - items:
+> > > > +          - enum:
+> > > > +              - asus,tf201-ec-pad
+> > > > +              - asus,tf300t-ec-pad
+> > > > +              - asus,tf300tg-ec-pad
+> > > > +              - asus,tf300tl-ec-pad
+> > > > +              - asus,tf700t-ec-pad
+> > > > +          - const: asus,transformer-ec-pad
+> > >
+> > > Can you explain somewhere here what the "dock" and "pad" devices are =
+and
+> > > how they differ? For example, I am currently wondering why tf700t has=
+ both
+> > > "dock" and "pad".
+> >
+> > "pad" is used for the controller in the tablet itself in the pad
+> > "dock" is used for the controller in the mobile dock keyboard.
+> > Seems quite obvious.
+>
+> To someone intimately familiar with the devices maybe. Not to the people
+> you have to justify your patches to. Your response implies that this is
+> some sort of thing that's like a surface, but please put an explicit
+> explanation into the binding somewhere as to what each compatible is
+> for.
 
-Hi Christian,
+Ok, fair.
 
-Thanks, I've included your patches and sent them as a series:
-https://lore.kernel.org/all/20260216185005.1131593-1-aboorvad@linux.ibm.com=
-/
+>
+> > > Also, why are some of the compatibles permitted standalone? That shou=
+ld
+> > > be mentioned in your commit message too. Also, other than the sl101, =
+the
+> > > standalone ones seem to have the same match data in the mfd driver. W=
+hy
+> > > are fallbacks not made use of there?
+> > >
+> >
+> > Because standalone compatibles describe a unique hw configuration
+> > which cannot be grouped into something meaningful. asus,p1801-t-ec-pad
+> > is for EC of Tegra30/Intel based p1801-t AIO, asus,sl101-ec-dock is
+> > for EC of Tegra20 slider tablet, asus,tf600t-ec-pad is for altered EC
+> > in Win8 Tegra30 tablet, asus,tf701t-ec-pad is for Tegra114 tablet.
+> > Different generations, different form-factors.
+>
+> I don't see any reasons here that eliminate fallback compatibles.
+> +       { .compatible =3D "asus,p1801-t-ec-pad", .data =3D &asus_ec_pad_c=
+harger_data },
+> +       { .compatible =3D "asus,tf600t-ec-pad", .data =3D &asus_ec_pad_ch=
+arger_data },
+> +       { .compatible =3D "asus,tf701t-ec-pad", .data =3D &asus_ec_pad_ch=
+arger_data },
+> +       { }
+> Three of them use the same match data, so you need to explain why you've
+> made these three standalone when all the others that share a programming
+> model got a generic fallback. Fallback usage is based on programming
+> model, not based on whether the devices are a physically different, so
+> your explanation must reflect this.
+>
+> > > Since this transformer series seems to have multiple programming mode=
+ls
+> > > for "ec-pad" devices, it calls into question your use of the generic
+> > > fallback compatibles is appropriate and makes it seem like you should=
+ be
+> > > using device compatibles as a fallback.
+> >
+> > That is redundant.
+>
+> I don't understand how that is a response to what I said.
+>
 
-Regards,
-Aboorva
+in other words you propose this:
+
+properties:
+  compatible:
+    oneOf:
+      - items:
+          - enum:
+              - asus,sl101-ec-dock
+              - asus,tf101-ec-dock
+              - asus,tf101g-ec-dock
+              - asus,tf201-ec-dock
+              - asus,tf300t-ec-dock
+              - asus,tf300tg-ec-dock
+              - asus,tf300tl-ec-dock
+              - asus,tf700t-ec-dock
+          - const: asus,transformer-ec-dock
+
+      - items:
+          - enum:
+              - asus,p1801-t-ec-pad
+              - asus,tf201-ec-pad
+              - asus,tf300t-ec-pad
+              - asus,tf300tg-ec-pad
+              - asus,tf300tl-ec-pad
+              - asus,tf700t-ec-pad
+              - asus,tf600t-ec-pad
+              - asus,tf701t-ec-pad
+          - const: asus,transformer-ec-pad
+
+And in the driver add match to every single entry of enums?
+
+> > > The rest looks okay other than the filename, which doesn't match any =
+of
+> > > the compatibles that you've got here.
+> > >
+> >
+> > How should I call it then?
+>
+> Make it match a compatible, just like any other binding.
 
