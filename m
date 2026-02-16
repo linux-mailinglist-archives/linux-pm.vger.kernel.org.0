@@ -1,452 +1,411 @@
-Return-Path: <linux-pm+bounces-42693-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42694-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EK+tEJIBk2lr0wEAu9opvQ
-	(envelope-from <linux-pm+bounces-42693-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 12:37:54 +0100
+	id 6P3uAugDk2nF0wEAu9opvQ
+	(envelope-from <linux-pm+bounces-42694-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 12:47:52 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB8371430BB
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 12:37:53 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CA521431CB
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 12:47:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9DAC33013EC1
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 11:37:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1CDC5301187E
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 11:47:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B56262F1FC7;
-	Mon, 16 Feb 2026 11:37:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 652493033FF;
+	Mon, 16 Feb 2026 11:47:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ktqj8fpC"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="P/BmG+T/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from relay.yourmailgateway.de (relay.yourmailgateway.de [188.68.63.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9004199920;
-	Mon, 16 Feb 2026 11:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53EDE21FF4D;
+	Mon, 16 Feb 2026 11:47:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.68.63.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771241871; cv=none; b=lMYn7yjgDJ22NsMJCZ69apttKxi8es0E6wLdbuR+mwUwXsfYukWwBLNt+yUdmSraizEr4+J4+lQPqFF4E/nUpiICiOZdgi10wl7p7OJj4utwt08nvmEXNFFN6F13vtwg4O77/n6baHbOldVH9sL0/n1ZxkIRLN5x55ax4hROd2k=
+	t=1771242469; cv=none; b=YQ88Y7gvgvI2yFIPbym1SIaf9FYAp77Z+BOZIDzlkDOFMnzgb8RibV5ShqU1UKWMPieYvcmpPcoOpnrIqeUGjMtR1j7XbNRiYEGwrkG8gmmyVH6cyCA40ykOQS8OUvAXXkxiMG1O74r+NRN08ep4eA6pj7WrsiFQNJ/8fzjCfF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771241871; c=relaxed/simple;
-	bh=+mC60yV6zUzAhuN8asVFNKW2VWsrmar0zmaB8uPzyck=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=nMVMQbxyVANmQFwlVy/hlln6neOsoscvmosMEW5knoosD1ys4Rj3zCwQjrZ0nogWpQHjJibZdylRFf10w9wdSoj7GD0AYyu6zVSEpO3lIdImcbgAUrA4hYUxR74Xa5QDfwViljJ2HAi764gmOwmiT7zrSThs4M0wihuqYgNX6PE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ktqj8fpC; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771241870; x=1802777870;
-  h=date:from:to:cc:subject:message-id;
-  bh=+mC60yV6zUzAhuN8asVFNKW2VWsrmar0zmaB8uPzyck=;
-  b=ktqj8fpCH1j3xPwdjM+xoGT7kiueHEYsNKoPcsAcpMFIf04oKZUS+bAJ
-   VmLsjVbPJqeN1m4DaIFDyJhwNh+5kuDVFDD+IWml9RN/ydkYIUKUqpMg3
-   8QonlAH7EtEjofHYr6XmWdkOmrqeugibSDNDWZY6zi7d2jBuLR/K02hp4
-   leD4ffBeq7ffMHL83B3n0DafBXXeUjqpOGODInwfXRHmwLRsmyIpQy1Ag
-   ekgVrXCry/SUjbUd6rPdbujMUEe9cZQySG3EBjaLuJxS25tulOGPtyyx0
-   6WR/Mgy5q5GVyr/BfvHjNctJaJjNAhZcKnY8haMuv79Y4R2n9+X20fZCh
-   Q==;
-X-CSE-ConnectionGUID: TQ9V880nTUmy2dpmzGG6Kg==
-X-CSE-MsgGUID: UuTTvIyFReyucUxNAoBAaQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11702"; a="72416167"
-X-IronPort-AV: E=Sophos;i="6.21,294,1763452800"; 
-   d="scan'208";a="72416167"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2026 03:37:43 -0800
-X-CSE-ConnectionGUID: Qi9vO9llTd2AaFmVa3cRFQ==
-X-CSE-MsgGUID: lfIKhNZSTmOrkMrFezkwmQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,294,1763452800"; 
-   d="scan'208";a="212681475"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 16 Feb 2026 03:37:39 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vrwv2-00000000ze4-0rpY;
-	Mon, 16 Feb 2026 11:37:36 +0000
-Date: Mon, 16 Feb 2026 19:36:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH UNVERIFIED
- WARNING 3cf2b08de92fc53cbd5632a8d47194932da78534
-Message-ID: <202602161929.wbtohM5r-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1771242469; c=relaxed/simple;
+	bh=TWtVYJwbVjTlf+TJ5trO4TAgIlhhHEYzkkPBbvmXQnM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P2SuZT6v/pVvYqpmxjryWGFqPVlZVzODjyvqwH11Ame3CsEbMmpKFIXK81DqDk9y7/EsB4ujcPdVzK58fpmeymTP5dwLqNk8p57rfaTtzqG7UbRblHxluX2VXtfaeHNfStkDDTrCO8HJbgg6b4jqCSKIKCmrTtodHOgtd1MCm9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=P/BmG+T/; arc=none smtp.client-ip=188.68.63.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+Received: from mors-relay-2501.netcup.net (localhost [127.0.0.1])
+	by mors-relay-2501.netcup.net (Postfix) with ESMTPS id 4fF14k3FmRz68Nl;
+	Mon, 16 Feb 2026 12:38:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=leemhuis.info;
+	s=key2; t=1771241926;
+	bh=TWtVYJwbVjTlf+TJ5trO4TAgIlhhHEYzkkPBbvmXQnM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=P/BmG+T/GT4PLid6DhaeP+t5dLYoxvJ8Nwok5nM6FoTWBj9HI8RHg+fXUl0zp0klm
+	 gvw+9Ho2PW0AUsg7ptdU4UGW7KYEdSy0b6yW3GMwnlxXjBZLtu38q2T9VicnpPQA4f
+	 8MIz9NOTOB5ghRR0AL7ET3cQhJQqxFfQdwBBoCnnGQ1aYpMvLH6IP/4yRgO06zfBIK
+	 Bk0fuzPLOXnxxWKfyiQhU5theU1T6jfV7MR4gFK5cX4lljig3HtAI0O2Sl+MP/oHxT
+	 jXMSgrS1HfoxTOi4MzQ3xz7OVS1DT/69faFqvEMi7ERyLTh4wLu1erw4qAyHYzTYdX
+	 effr3R6kVpa3g==
+Received: from policy01-mors.netcup.net (unknown [46.38.225.35])
+	by mors-relay-2501.netcup.net (Postfix) with ESMTPS id 4fF14k2T59z4xbB;
+	Mon, 16 Feb 2026 12:38:46 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at policy01-mors.netcup.net
+X-Spam-Flag: NO
+X-Spam-Score: -2.901
+X-Spam-Level: 
+Received: from mxe9fb.netcup.net (unknown [10.243.12.53])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by policy01-mors.netcup.net (Postfix) with ESMTPS id 4fF14g6LlQz8tXF;
+	Mon, 16 Feb 2026 12:38:43 +0100 (CET)
+Received: from [IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f] (unknown [IPv6:2a02:8108:8984:1d00:a0cf:1912:4be:477f])
+	by mxe9fb.netcup.net (Postfix) with ESMTPSA id 98E526735E;
+	Mon, 16 Feb 2026 12:38:42 +0100 (CET)
+Authentication-Results: mxe9fb;
+        spf=pass (sender IP is 2a02:8108:8984:1d00:a0cf:1912:4be:477f) smtp.mailfrom=regressions@leemhuis.info smtp.helo=[IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f]
+Received-SPF: pass (mxe9fb: connection is authenticated)
+Message-ID: <9c1b2671-3374-4d84-ad14-07dd499bb934@leemhuis.info>
+Date: Mon, 16 Feb 2026 12:38:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm/imagination: Convert to
+ dev_pm_domain_{at,de}tach_list()
+To: Matt Coster <Matt.Coster@imgtec.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Marek Vasut <marek.vasut@mailbox.org>,
+ Frank Binns <Frank.Binns@imgtec.com>,
+ Brajesh Gupta <Brajesh.Gupta@imgtec.com>,
+ Alessio Belle <Alessio.Belle@imgtec.com>,
+ Alexandru Dadu <Alexandru.Dadu@imgtec.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: 
+ <194465eda54d1f852a9226cf691ddc5aa208e0a3.1769097977.git.geert+renesas@glider.be>
+ <ffdf3982-e22c-4d01-afa6-5449ed381000@imgtec.com>
+ <CAMuHMdWMh_oJFg-KtapcTDGvYWZ-hg_ZEJ2=E5Tp1apOEc8tnQ@mail.gmail.com>
+ <b3b4f10e-1222-44f7-b308-db7199c67147@mailbox.org>
+ <3e0def93-2f6c-4bcf-8ee5-bf607f2ca382@imgtec.com>
+ <f5d3dde6-edec-42f4-93cb-459c8677245a@mailbox.org>
+ <f82b7734-6ddc-4029-b38d-147e9a1de021@leemhuis.info>
+ <fcf5ab75-029e-469e-8b2a-51fa5c2a2374@mailbox.org>
+ <95fd3f52-c3ed-40c5-920f-11e8767f701d@leemhuis.info>
+ <CAMuHMdV-g+3kTaG6Ost4iHo1Tdi_H=qscLBkBRWuR+6DG5c=SA@mail.gmail.com>
+ <1e8e416e-e474-4288-9686-1ba2b88e4946@leemhuis.info>
+ <21b1fd77-252e-4fb3-aa65-1c26043c5412@imgtec.com>
+From: Thorsten Leemhuis <regressions@leemhuis.info>
+Content-Language: de-DE, en-US
+In-Reply-To: <21b1fd77-252e-4fb3-aa65-1c26043c5412@imgtec.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-PPP-Message-ID: <177124192325.2523793.2427380843780218947@mxe9fb.netcup.net>
+X-NC-CID: uzHQ5WUvJ493AhCLZM0rmC2igXGsPIiYg8dFR6+uXex9L+LvRrc=
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[leemhuis.info:s=key2];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-42693-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[mailbox.org,imgtec.com,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,lists.freedesktop.org,vger.kernel.org,lists.linux.dev];
+	DMARC_NA(0.00)[leemhuis.info];
+	TAGGED_FROM(0.00)[bounces-42694-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	DKIM_TRACE(0.00)[leemhuis.info:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	RCVD_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[leemhuis.info:mid,leemhuis.info:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: AB8371430BB
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[regressions@leemhuis.info,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 5CA521431CB
 X-Rspamd-Action: no action
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 3cf2b08de92fc53cbd5632a8d47194932da78534  Merge branch 'experimental/acpi-driver-conversion' into bleeding-edge
+On 2/16/26 11:58, Matt Coster wrote:
+> On 16/02/2026 10:11, Thorsten Leemhuis wrote:
+> 
+> We're currently trying to force this issue to reproduce on hardware we
+> have on hand; we'd like to see it fixed properly as much as anyone.
 
-Unverified Warning (likely false positive, kindly check if interested):
+Yeah, no worries, I never doubted that. But getting things properly fixed
+can mean "revert, fix, reapply" when it comes to regressions in Linux --
+which is something that should not be seen as something bad, as Linus said
+himself (see below)!
 
-    drivers/platform/x86/toshiba_acpi.c:3574 toshiba_acpi_probe() warn: '&dev->miscdev' from misc_register() not released on lines: 3574.
+> From our side at least, I don't believe this is a regression at all.
+In the end what matters is: some change afaics caused systems to not work
+anymore that used to be working -- that makes it a regression my the Linux
+kernels standards. And those by the same standards must be fixed, ideally
+quickly. Find a few quotes on that from Linus below that explains this
+better. 
 
-Warning ids grouped by kconfigs:
+Ciao, Thorsten
+---
 
-recent_errors
-`-- i386-randconfig-r072-20260216
-    `-- drivers-platform-x86-toshiba_acpi.c-toshiba_acpi_probe()-warn:dev-miscdev-from-misc_register()-not-released-on-lines:.
 
-elapsed time: 1298m
+On how quickly regressions should be fixed
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-configs tested: 321
-configs skipped: 24
+* From `2026-01-22 <https://lore.kernel.org/all/CAHk-=wheQNiW_WtHGO7bKkT7Uib-p+ai2JP9M+z+FYcZ6CAxYA@mail.gmail.com/>`_::
 
-tested configs:
-alpha                             allnoconfig    gcc-15.2.0
-alpha                            allyesconfig    gcc-15.2.0
-alpha                               defconfig    gcc-15.2.0
-arc                              allmodconfig    clang-16
-arc                              allmodconfig    gcc-15.2.0
-arc                               allnoconfig    gcc-15.2.0
-arc                              allyesconfig    clang-23
-arc                              allyesconfig    gcc-15.2.0
-arc                      axs103_smp_defconfig    clang-23
-arc                                 defconfig    gcc-15.2.0
-arc                     nsimosci_hs_defconfig    gcc-15.2.0
-arc                 nsimosci_hs_smp_defconfig    clang-23
-arc                   randconfig-001-20260215    clang-20
-arc                   randconfig-001-20260216    gcc-12.5.0
-arc                   randconfig-002-20260215    clang-20
-arc                   randconfig-002-20260216    gcc-12.5.0
-arc                        vdk_hs38_defconfig    gcc-15.2.0
-arc                    vdk_hs38_smp_defconfig    clang-23
-arc                    vdk_hs38_smp_defconfig    gcc-15.2.0
-arm                               allnoconfig    clang-22
-arm                               allnoconfig    gcc-15.2.0
-arm                              allyesconfig    clang-16
-arm                              allyesconfig    gcc-15.2.0
-arm                         at91_dt_defconfig    clang-23
-arm                         bcm2835_defconfig    gcc-15.2.0
-arm                     davinci_all_defconfig    clang-19
-arm                                 defconfig    gcc-15.2.0
-arm                          exynos_defconfig    clang-19
-arm                          exynos_defconfig    gcc-15.2.0
-arm                          ixp4xx_defconfig    gcc-15.2.0
-arm                         lpc32xx_defconfig    gcc-15.2.0
-arm                       omap2plus_defconfig    gcc-15.2.0
-arm                   randconfig-001-20260215    clang-20
-arm                   randconfig-001-20260216    gcc-12.5.0
-arm                   randconfig-002-20260215    clang-20
-arm                   randconfig-002-20260216    gcc-12.5.0
-arm                   randconfig-003-20260215    clang-20
-arm                   randconfig-003-20260216    gcc-12.5.0
-arm                   randconfig-004-20260215    clang-20
-arm                   randconfig-004-20260216    gcc-12.5.0
-arm                           sama5_defconfig    clang-23
-arm                       spear13xx_defconfig    gcc-15.2.0
-arm                        vexpress_defconfig    clang-19
-arm                        vexpress_defconfig    clang-23
-arm                         wpcm450_defconfig    clang-19
-arm64                            allmodconfig    clang-19
-arm64                            allmodconfig    clang-23
-arm64                             allnoconfig    gcc-15.2.0
-arm64                               defconfig    gcc-15.2.0
-arm64                 randconfig-001-20260215    gcc-13.4.0
-arm64                 randconfig-001-20260216    clang-17
-arm64                 randconfig-002-20260215    gcc-8.5.0
-arm64                 randconfig-002-20260216    clang-17
-arm64                 randconfig-003-20260215    gcc-14.3.0
-arm64                 randconfig-003-20260216    clang-17
-arm64                 randconfig-004-20260215    clang-22
-arm64                 randconfig-004-20260216    clang-17
-csky                             allmodconfig    gcc-15.2.0
-csky                              allnoconfig    gcc-15.2.0
-csky                                defconfig    gcc-15.2.0
-csky                  randconfig-001-20260215    gcc-14.3.0
-csky                  randconfig-001-20260216    clang-17
-csky                  randconfig-002-20260215    gcc-15.2.0
-csky                  randconfig-002-20260216    clang-17
-hexagon                          allmodconfig    gcc-15.2.0
-hexagon                           allnoconfig    clang-22
-hexagon                           allnoconfig    gcc-15.2.0
-hexagon                             defconfig    gcc-15.2.0
-hexagon               randconfig-001-20260215    clang-22
-hexagon               randconfig-001-20260216    clang-20
-hexagon               randconfig-002-20260215    clang-22
-hexagon               randconfig-002-20260216    clang-20
-i386                             allmodconfig    clang-20
-i386                             allmodconfig    gcc-14
-i386                              allnoconfig    gcc-14
-i386                              allnoconfig    gcc-15.2.0
-i386                             allyesconfig    clang-20
-i386                             allyesconfig    gcc-14
-i386        buildonly-randconfig-001-20260216    clang-20
-i386        buildonly-randconfig-002-20260216    clang-20
-i386        buildonly-randconfig-003-20260216    clang-20
-i386        buildonly-randconfig-004-20260216    clang-20
-i386        buildonly-randconfig-005-20260216    clang-20
-i386        buildonly-randconfig-006-20260216    clang-20
-i386                                defconfig    gcc-15.2.0
-i386                  randconfig-001-20260215    clang-20
-i386                  randconfig-001-20260216    clang-20
-i386                  randconfig-002-20260215    clang-20
-i386                  randconfig-002-20260216    clang-20
-i386                  randconfig-003-20260215    clang-20
-i386                  randconfig-003-20260216    clang-20
-i386                  randconfig-004-20260215    clang-20
-i386                  randconfig-004-20260215    gcc-14
-i386                  randconfig-004-20260216    clang-20
-i386                  randconfig-005-20260215    clang-20
-i386                  randconfig-005-20260215    gcc-14
-i386                  randconfig-005-20260216    clang-20
-i386                  randconfig-006-20260215    clang-20
-i386                  randconfig-006-20260215    gcc-14
-i386                  randconfig-006-20260216    clang-20
-i386                  randconfig-007-20260215    clang-20
-i386                  randconfig-007-20260215    gcc-14
-i386                  randconfig-007-20260216    clang-20
-i386                  randconfig-011-20260216    clang-20
-i386                  randconfig-012-20260216    clang-20
-i386                  randconfig-013-20260216    clang-20
-i386                  randconfig-013-20260216    gcc-14
-i386                  randconfig-014-20260216    clang-20
-i386                  randconfig-014-20260216    gcc-14
-i386                  randconfig-015-20260216    clang-20
-i386                  randconfig-015-20260216    gcc-14
-i386                  randconfig-016-20260216    clang-20
-i386                  randconfig-016-20260216    gcc-14
-i386                  randconfig-017-20260216    clang-20
-i386                  randconfig-017-20260216    gcc-14
-loongarch                        allmodconfig    clang-19
-loongarch                        allmodconfig    clang-23
-loongarch                         allnoconfig    clang-22
-loongarch                         allnoconfig    gcc-15.2.0
-loongarch                           defconfig    clang-19
-loongarch                loongson64_defconfig    clang-19
-loongarch             randconfig-001-20260215    clang-22
-loongarch             randconfig-001-20260216    clang-20
-loongarch             randconfig-002-20260215    gcc-13.4.0
-loongarch             randconfig-002-20260216    clang-20
-m68k                             allmodconfig    gcc-15.2.0
-m68k                              allnoconfig    gcc-15.2.0
-m68k                             allyesconfig    clang-16
-m68k                             allyesconfig    gcc-15.2.0
-m68k                         apollo_defconfig    clang-19
-m68k                                defconfig    clang-19
-m68k                                defconfig    gcc-15.2.0
-m68k                       m5208evb_defconfig    clang-19
-m68k                       m5208evb_defconfig    gcc-15.2.0
-m68k                        m5407c3_defconfig    clang-19
-microblaze                        allnoconfig    gcc-15.2.0
-microblaze                       allyesconfig    gcc-15.2.0
-microblaze                          defconfig    clang-19
-microblaze                          defconfig    gcc-15.2.0
-mips                             allmodconfig    gcc-15.2.0
-mips                              allnoconfig    gcc-15.2.0
-mips                             allyesconfig    gcc-15.2.0
-mips                          eyeq6_defconfig    clang-19
-mips                           jazz_defconfig    gcc-15.2.0
-mips                     loongson2k_defconfig    gcc-15.2.0
-mips                          malta_defconfig    clang-23
-mips                malta_qemu_32r6_defconfig    clang-19
-mips                malta_qemu_32r6_defconfig    gcc-15.2.0
-mips                      maltaaprp_defconfig    clang-23
-mips                        maltaup_defconfig    gcc-15.2.0
-mips                   sb1250_swarm_defconfig    gcc-15.2.0
-nios2                            allmodconfig    clang-23
-nios2                            allmodconfig    gcc-11.5.0
-nios2                             allnoconfig    clang-23
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    clang-19
-nios2                               defconfig    gcc-15.2.0
-nios2                 randconfig-001-20260215    gcc-8.5.0
-nios2                 randconfig-001-20260216    clang-20
-nios2                 randconfig-002-20260215    gcc-8.5.0
-nios2                 randconfig-002-20260216    clang-20
-openrisc                         allmodconfig    clang-23
-openrisc                         allmodconfig    gcc-15.2.0
-openrisc                          allnoconfig    clang-23
-openrisc                          allnoconfig    gcc-15.2.0
-openrisc                            defconfig    gcc-15.2.0
-openrisc                    or1ksim_defconfig    gcc-15.2.0
-openrisc                 simple_smp_defconfig    clang-23
-parisc                           allmodconfig    gcc-15.2.0
-parisc                            allnoconfig    clang-23
-parisc                            allnoconfig    gcc-15.2.0
-parisc                           allyesconfig    clang-19
-parisc                           allyesconfig    gcc-15.2.0
-parisc                              defconfig    gcc-15.2.0
-parisc                generic-64bit_defconfig    clang-23
-parisc                randconfig-001-20260215    clang-23
-parisc                randconfig-001-20260216    clang-23
-parisc                randconfig-002-20260215    clang-23
-parisc                randconfig-002-20260216    clang-23
-parisc64                            defconfig    clang-19
-parisc64                            defconfig    gcc-15.2.0
-powerpc                          allmodconfig    gcc-15.2.0
-powerpc                           allnoconfig    clang-23
-powerpc                           allnoconfig    gcc-15.2.0
-powerpc                      arches_defconfig    clang-19
-powerpc                      arches_defconfig    gcc-15.2.0
-powerpc                       eiger_defconfig    clang-19
-powerpc                       eiger_defconfig    clang-23
-powerpc                     mpc512x_defconfig    clang-23
-powerpc                 mpc8315_rdb_defconfig    clang-19
-powerpc                    mvme5100_defconfig    gcc-15.2.0
-powerpc                     powernv_defconfig    clang-23
-powerpc               randconfig-001-20260215    clang-23
-powerpc               randconfig-001-20260216    clang-23
-powerpc               randconfig-002-20260215    clang-23
-powerpc               randconfig-002-20260216    clang-23
-powerpc                     skiroot_defconfig    clang-23
-powerpc                     tqm8540_defconfig    gcc-15.2.0
-powerpc                      tqm8xx_defconfig    clang-19
-powerpc64             randconfig-001-20260215    clang-23
-powerpc64             randconfig-001-20260216    clang-23
-powerpc64             randconfig-002-20260215    clang-23
-powerpc64             randconfig-002-20260216    clang-23
-riscv                            allmodconfig    clang-22
-riscv                            allmodconfig    clang-23
-riscv                             allnoconfig    clang-23
-riscv                             allnoconfig    gcc-15.2.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-23
-riscv                               defconfig    gcc-15.2.0
-riscv                    nommu_virt_defconfig    clang-23
-riscv                 randconfig-001-20260215    gcc-13.4.0
-riscv                 randconfig-001-20260216    clang-23
-riscv                 randconfig-002-20260215    gcc-13.4.0
-riscv                 randconfig-002-20260216    clang-23
-s390                             allmodconfig    clang-18
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-22
-s390                              allnoconfig    clang-23
-s390                             allyesconfig    gcc-15.2.0
-s390                                defconfig    clang-23
-s390                                defconfig    gcc-15.2.0
-s390                  randconfig-001-20260215    gcc-13.4.0
-s390                  randconfig-001-20260216    clang-23
-s390                  randconfig-002-20260215    gcc-13.4.0
-s390                  randconfig-002-20260216    clang-23
-sh                               allmodconfig    gcc-15.2.0
-sh                                allnoconfig    clang-23
-sh                                allnoconfig    gcc-15.2.0
-sh                               allyesconfig    clang-19
-sh                               allyesconfig    gcc-15.2.0
-sh                                  defconfig    gcc-14
-sh                                  defconfig    gcc-15.2.0
-sh                ecovec24-romimage_defconfig    clang-19
-sh                               j2_defconfig    gcc-15.2.0
-sh                          polaris_defconfig    gcc-15.2.0
-sh                    randconfig-001-20260215    gcc-13.4.0
-sh                    randconfig-001-20260216    clang-23
-sh                    randconfig-002-20260215    gcc-13.4.0
-sh                    randconfig-002-20260216    clang-23
-sh                          rsk7264_defconfig    clang-19
-sh                           se7751_defconfig    gcc-15.2.0
-sh                           sh2007_defconfig    gcc-15.2.0
-sparc                             allnoconfig    clang-23
-sparc                             allnoconfig    gcc-15.2.0
-sparc                               defconfig    gcc-15.2.0
-sparc                 randconfig-001-20260215    gcc-15.2.0
-sparc                 randconfig-001-20260215    gcc-9.5.0
-sparc                 randconfig-001-20260216    gcc-9.5.0
-sparc                 randconfig-002-20260215    gcc-8.5.0
-sparc                 randconfig-002-20260215    gcc-9.5.0
-sparc                 randconfig-002-20260216    gcc-9.5.0
-sparc                       sparc64_defconfig    clang-23
-sparc64                          allmodconfig    clang-23
-sparc64                             defconfig    clang-20
-sparc64                             defconfig    gcc-14
-sparc64               randconfig-001-20260215    gcc-9.5.0
-sparc64               randconfig-001-20260216    gcc-9.5.0
-sparc64               randconfig-002-20260215    clang-22
-sparc64               randconfig-002-20260215    gcc-9.5.0
-sparc64               randconfig-002-20260216    gcc-9.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                                allnoconfig    clang-23
-um                               allyesconfig    gcc-15.2.0
-um                                  defconfig    clang-22
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20260215    clang-23
-um                    randconfig-001-20260215    gcc-9.5.0
-um                    randconfig-001-20260216    gcc-9.5.0
-um                    randconfig-002-20260215    gcc-14
-um                    randconfig-002-20260215    gcc-9.5.0
-um                    randconfig-002-20260216    gcc-9.5.0
-um                           x86_64_defconfig    clang-23
-um                           x86_64_defconfig    gcc-14
-x86_64                           allmodconfig    clang-20
-x86_64                            allnoconfig    clang-20
-x86_64                            allnoconfig    clang-23
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20260216    gcc-13
-x86_64      buildonly-randconfig-002-20260216    gcc-13
-x86_64      buildonly-randconfig-003-20260216    gcc-13
-x86_64      buildonly-randconfig-004-20260216    gcc-13
-x86_64      buildonly-randconfig-005-20260216    gcc-13
-x86_64      buildonly-randconfig-006-20260216    gcc-13
-x86_64                              defconfig    gcc-14
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20260216    clang-20
-x86_64                randconfig-002-20260216    clang-20
-x86_64                randconfig-003-20260216    clang-20
-x86_64                randconfig-004-20260216    clang-20
-x86_64                randconfig-005-20260216    clang-20
-x86_64                randconfig-006-20260216    clang-20
-x86_64                randconfig-011-20260216    clang-20
-x86_64                randconfig-012-20260216    clang-20
-x86_64                randconfig-013-20260216    clang-20
-x86_64                randconfig-014-20260216    clang-20
-x86_64                randconfig-015-20260216    clang-20
-x86_64                randconfig-016-20260216    clang-20
-x86_64                randconfig-071-20260216    clang-20
-x86_64                randconfig-072-20260216    clang-20
-x86_64                randconfig-073-20260216    clang-20
-x86_64                randconfig-074-20260216    clang-20
-x86_64                randconfig-075-20260216    clang-20
-x86_64                randconfig-076-20260216    clang-20
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-14
-x86_64                          rhel-9.4-func    clang-20
-x86_64                    rhel-9.4-kselftests    clang-20
-x86_64                         rhel-9.4-kunit    gcc-14
-x86_64                           rhel-9.4-ltp    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    clang-23
-xtensa                            allnoconfig    gcc-15.2.0
-xtensa                  audio_kc705_defconfig    gcc-15.2.0
-xtensa                randconfig-001-20260215    gcc-12.5.0
-xtensa                randconfig-001-20260215    gcc-9.5.0
-xtensa                randconfig-001-20260216    gcc-9.5.0
-xtensa                randconfig-002-20260215    gcc-9.5.0
-xtensa                randconfig-002-20260216    gcc-9.5.0
+    But a user complaining should basically result in an immediate fix -
+    possibly a "revert and rethink".
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  With a later clarification on `2026-01-28 <https://lore.kernel.org/all/CAHk-%3Dwi86AosXs66-yi54%2BmpQjPu0upxB8ZAfG%2BLsMyJmcuMSA@mail.gmail.com/>`_::
+
+    It's also worth noting that "immediate" obviously doesn't mean "right
+    this *second* when the problem has been reported".
+
+    But if it's a regression with a known commit that caused it, I think
+    the rule of thumb should generally be "within a week", preferably
+    before the next rc.
+
+* From `2023-04-21 <https://lore.kernel.org/all/CAHk-=wgD98pmSK3ZyHk_d9kZ2bhgN6DuNZMAJaV0WTtbkf=RDw@mail.gmail.com/>`_::
+
+    Known-broken commits either
+     (a) get a timely fix that doesn't have other questions
+    or
+     (b) get reverted
+
+* From `2021-09-20(2) <https://lore.kernel.org/all/CAHk-=wgOvmtRw1TNbMC1rn5YqyTKyn0hz+sc4k0DGNn++u9aYw@mail.gmail.com/>`_::
+
+    [...] review shouldn't hold up reported regressions of existing code. That's
+    just basic _testing_ - either the fix should be applied, or - if the fix is
+    too invasive or too ugly - the problematic source of the regression should
+    be reverted.
+
+    Review should be about new code, it shouldn't be holding up "there's a
+    bug report, here's the obvious fix".
+
+* From `2023-05-08 <https://lore.kernel.org/all/CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com/>`_::
+
+    If something doesn't even build, it should damn well be fixed ASAP.
+
+
+On how fixing regressions with reverts can help prevent maintainer burnout
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* From `2026-01-28 <https://lore.kernel.org/all/CAHk-%3Dwi86AosXs66-yi54%2BmpQjPu0upxB8ZAfG%2BLsMyJmcuMSA@mail.gmail.com/>`_::
+
+    > So how can I/we make "immediate fixes" happen more often without
+    > contributing to maintainer burnout?
+
+    [...] the "revert and rethink" model [...] often a good idea in general
+    unless there's just an obvious fix for an obvious bug [...]
+
+    Exactly so that maintainers don't get stressed out over having a pending
+    problem report that people keep pestering them about.
+
+    I think people are sometimes a bit too bought into whatever changes
+    they made, and reverting is seen as "too drastic", but I think it's
+    often the quick and easy solution for when there isn't some obvious
+    response to a regression report.
+
+
+On why the "no regressions" rule exists
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* From `2026-01-22 <https://lore.kernel.org/all/CAHk-=wheQNiW_WtHGO7bKkT7Uib-p+ai2JP9M+z+FYcZ6CAxYA@mail.gmail.com/>`_::
+
+    But the basic rule is: be so good about backwards compatibility that
+    users never have to worry about upgrading. They should absolutely feel
+    confident that any kernel-reported problem will either be solved, or
+    have an easy solution that is appropriate for *them* (ie a
+    non-technical user shouldn't be expected to be able to do a lot).
+
+    Because the last thing we want is people holding back from trying new
+    kernels.
+
+* From `2024-05-28 <https://lore.kernel.org/all/CAHk-=wgtb7y-bEh7tPDvDWru7ZKQ8-KMjZ53Tsk37zsPPdwXbA@mail.gmail.com/>`_::
+
+    I introduced that "no regressions" rule something like two decades
+    ago, because people need to be able to update their kernel without
+    fear of something they relied on suddenly stopping to work.
+
+* From `2018-08-03 <https://lore.kernel.org/all/CA+55aFwWZX=CXmWDTkDGb36kf12XmTehmQjbiMPCqCRG2hi9kw@mail.gmail.com/>`_::
+
+    The whole point of "we do not regress" is so that people can upgrade
+    the kernel and never have to worry about it.
+
+    [...]
+
+    Because the only thing that matters IS THE USER.
+
+* From `2017-10-26(1) <https://lore.kernel.org/lkml/CA+55aFxW7NMAMvYhkvz1UPbUTUJewRt6Yb51QAx5RtrWOwjebg@mail.gmail.com/>`_::
+
+    If the kernel used to work for you, the rule is that it continues to work
+    for you.
+
+    [...]
+
+    People should basically always feel like they can update their kernel
+    and simply not have to worry about it.
+
+    I refuse to introduce "you can only update the kernel if you also
+    update that other program" kind of limitations. If the kernel used to
+    work for you, the rule is that it continues to work for you.
+
+
+On exceptions to the "no regressions" rule
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* From `2026-01-22 <https://lore.kernel.org/all/CAHk-=wheQNiW_WtHGO7bKkT7Uib-p+ai2JP9M+z+FYcZ6CAxYA@mail.gmail.com/>`_::
+
+    There are _very_ few exceptions to that rule, the main one being "the
+    problem was a fundamental huge and gaping security issue and we *had* to
+    make that change, and we couldn't even make your limited use-case just
+    continue to work".
+
+    The other exception is "the problem was reported years after it was
+    introduced, and now most people rely on the new behavior".
+
+    [...]
+
+    Now, if it's one or two users and you can just get them to recompile,
+    that's one thing. Niche hardware and odd use-cases can sometimes be
+    solved that way, and regressions can sometimes be fixed by handholding
+    every single reporter if the reporter is willing and able to change
+    his or her workflow.
+
+* From `2023-04-20 <https://lore.kernel.org/all/CAHk-=wis_qQy4oDNynNKi5b7Qhosmxtoj1jxo5wmB6SRUwQUBQ@mail.gmail.com/>`_::
+
+    And yes, I do consider "regression in an earlier release" to be a
+    regression that needs fixing.
+
+    There's obviously a time limit: if that "regression in an earlier
+    release" was a year or more ago, and just took forever for people to
+    notice, and it had semantic changes that now mean that fixing the
+    regression could cause a _new_ regression, then that can cause me to
+    go "Oh, now the new semantics are what we have to live with".
+
+* From `2021-09-20(3) <https://lore.kernel.org/all/CAHk-=wi7DB2SJ-wngVvsJ7Ak2cM556Q8437sOXo4EJt2BWPdEg@mail.gmail.com/>`_::
+
+    Yes, we have situations where even regressions don't matter - like
+    major security issues that simply cannot be fixed other ways, because
+    the regression _was_ the security hole.
+
+* From `2017-10-26(2) <https://lore.kernel.org/lkml/CA+55aFxW7NMAMvYhkvz1UPbUTUJewRt6Yb51QAx5RtrWOwjebg@mail.gmail.com/>`_::
+
+    There have been exceptions, but they are few and far between, and they
+    generally have some major and fundamental reasons for having happened,
+    that were basically entirely unavoidable, and people _tried_hard_ to
+    avoid them. Maybe we can't practically support the hardware any more
+    after it is decades old and nobody uses it with modern kernels any
+    more. Maybe there's a serious security issue with how we did things,
+    and people actually depended on that fundamentally broken model. Maybe
+    there was some fundamental other breakage that just _had_ to have a
+    flag day for very core and fundamental reasons.
+
+
+On accepting when a regression occurred
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* From `2026-01-22 <https://lore.kernel.org/all/CAHk-=wheQNiW_WtHGO7bKkT7Uib-p+ai2JP9M+z+FYcZ6CAxYA@mail.gmail.com/>`_::
+
+    But starting to argue about users reporting breaking changes is
+    basically the final line for me. I have a couple of people that I have
+    in my spam block-list and refuse to have anything to do with, and they
+    have generally been about exactly that.
+
+    Note how it's not about making mistakes and _causing_ the regression.
+    That's normal. That's development. But then arguing about it is a
+    no-no.
+
+* From `2024-06-23 <https://lore.kernel.org/all/CAHk-=wi_KMO_rJ6OCr8mAWBRg-irziM=T9wxGC+J1VVoQb39gw@mail.gmail.com/>`_::
+
+    We don't introduce regressions and then blame others.
+
+    There's a very clear rule in kernel development: things that break
+    other things ARE NOT FIXES.
+
+    EVER.
+
+    They get reverted, or the thing they broke gets fixed.
+
+* From `2021-06-05 <https://lore.kernel.org/all/CAHk-=wiUVqHN76YUwhkjZzwTdjMMJf_zN4+u7vEJjmEGh3recw@mail.gmail.com/>`_::
+
+    THERE ARE NO VALID ARGUMENTS FOR REGRESSIONS.
+
+    Honestly, security people need to understand that "not working" is not
+    a success case of security. It's a failure case.
+
+    Yes, "not working" may be secure. But security in that case is *pointless*.
+
+* From `2017-10-26(5) <https://lore.kernel.org/lkml/CA+55aFwiiQYJ+YoLKCXjN_beDVfu38mg=Ggg5LFOcqHE8Qi7Zw@mail.gmail.com/>`_::
+
+    [...] when regressions *do* occur, we admit to them and fix them, instead of
+    blaming user space.
+
+    The fact that you have apparently been denying the regression now for
+    three weeks means that I will revert, and I will stop pulling apparmor
+    requests until the people involved understand how kernel development
+    is done.
+
+
+On back-and-forth
+~~~~~~~~~~~~~~~~~
+
+* From `2024-05-28 <https://lore.kernel.org/all/CAHk-=wgtb7y-bEh7tPDvDWru7ZKQ8-KMjZ53Tsk37zsPPdwXbA@mail.gmail.com/>`_::
+
+    The "no regressions" rule is that we do not introduce NEW bugs.
+
+    It *literally* came about because we had an endless dance of "fix two
+    bugs, introduce one new one", and that then resulted in a system that
+    you cannot TRUST.
+
+* From `2021-09-20(1) <https://lore.kernel.org/all/CAHk-=wi7DB2SJ-wngVvsJ7Ak2cM556Q8437sOXo4EJt2BWPdEg@mail.gmail.com/>`_::
+
+
+    And the thing that makes regressions special is that back when I
+    wasn't so strict about these things, we'd end up in endless "seesaw
+    situations" where somebody would fix something, it would break
+    something else, then that something else would break, and it would
+    never actually converge on anything reliable at all.
+
+* From `2015-08-13 <https://lore.kernel.org/all/CA+55aFxk8-BsiKwr_S-c+4G6wihKPQVMLE34H9wOZpeua6W9+Q@mail.gmail.com/>`_::
+
+    The strict policy of no regressions actually originally started mainly wrt
+    suspend/resume issues, where the "fix one machine, break another" kind of
+    back-and-forth caused endless problems, and meant that we didn't actually
+    necessarily make any forward progress, just moving a problem around.
+
+
+On regressions caused by bugfixes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* From `2018-08-03 <https://lore.kernel.org/all/CA+55aFwWZX=CXmWDTkDGb36kf12XmTehmQjbiMPCqCRG2hi9kw@mail.gmail.com/>`_::
+
+    > Kernel had a bug which has been fixed
+
+    That is *ENTIRELY* immaterial.
+
+    Guys, whether something was buggy or not DOES NOT MATTER.
+
+    [...]
+
+    It's basically saying "I took something that worked, and I broke it,
+    but now it's better". Do you not see how f*cking insane that statement
+    is?
 
