@@ -1,82 +1,82 @@
-Return-Path: <linux-pm+bounces-42713-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42715-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4NltMiFnk2mR4QEAu9opvQ
-	(envelope-from <linux-pm+bounces-42713-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 19:51:13 +0100
+	id QOUODRBnk2mR4QEAu9opvQ
+	(envelope-from <linux-pm+bounces-42715-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 19:50:56 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 373911471AB
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 19:51:13 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5B16147186
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 19:50:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 13CE63047BFE
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 18:50:30 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C923230292F8
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 18:50:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96CB02E973A;
-	Mon, 16 Feb 2026 18:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD1A32E9EDA;
+	Mon, 16 Feb 2026 18:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="FXG/7Q5G"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ThrHEnSD"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 494B62D7DD5;
-	Mon, 16 Feb 2026 18:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EDD52E7F25;
+	Mon, 16 Feb 2026 18:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771267827; cv=none; b=a0s6R1iA7oP+ex4Fmr3oqBPkExB7v0BgM9gn7HE6kPSM07f36hvDOLKOtRu+utAbfJOiphLxDQSrGQzh0SZMlI1N5+OjKdNZDtk1H+gxuFgNU/rzUwyXbQSTscEl7nnGA1Rbi7PEXucI+RDn2nxmB2P4bInFt4V/i+uT2OCiG7Y=
+	t=1771267829; cv=none; b=KhFq2Y3fr8vYss/LzCB7JvPcCHAgCwLdcF2p3dzt7GKO+L0wW76CyoJco8Xp+6yygXvegTiqwEv9zyf0sYLqHfIdQH79pmytZSLc3denpoFw3N1qKgkWzeVthBiUkrRhJJ34sP4A+CzA6xzTiDp42ecJoX2z/cwM/OBO52up8j8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771267827; c=relaxed/simple;
-	bh=Q2kZc9eB7owlBPAnDEiNF7+eQmQ3CgKvg44VdYwO/WE=;
+	s=arc-20240116; t=1771267829; c=relaxed/simple;
+	bh=Sc2dXiAJT/OILgjmrc3sKwHesOwNC8EtU+wzAqoAZAM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hWbVRXVIN3um2RZ5CzWQ01gSGmqIN9qlUfudejj12GRoXR7j8tcudqqtG4ehnJWBW3KylPdhoIZHnRr53qxmYXdAqzuk5RqUJVwzHmsYQDey0qvFXLAahHwuwzlmG64KH90kvL3ogRMC7zTCN/AHrToOVfLY9xynD6JI2Pdirqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=FXG/7Q5G; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=AKD9cImzxdrI+4N91plspCmtWTTn0uqkwCmCsioLFK+nGWO2pi/6NI8Ke9ghf2MMiD444QxcIh5xowRjcM/k5/FhNuyt4yrCcaEmCW4+mMbyZy+o8G2ycetZA36xrnZgQTnXppCXSPtLHP7N6wotFxr8aIwyu2+wLOg8QJDOSoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ThrHEnSD; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61GF3Dh73499605;
-	Mon, 16 Feb 2026 18:50:15 GMT
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61GEAraK3665841;
+	Mon, 16 Feb 2026 18:50:17 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=OOh6GxGAE/WLQciiY
-	14zMdGuTpXN5iQKKKURhB1ofsY=; b=FXG/7Q5GfhWMvE3g1zNbuq8WfQit+iNW2
-	sKqjUtRNZOv7x0ShFTrXnai/Gls8BCFdh0sCr2gtSGBVMFdbcULPc8oRgvhT+ISH
-	jfV4/A+F7va1XPJ5lAKfmrn6mYpiOdMonT5n5wY/rBq8jSvusHaMn3fCBYpv4UAX
-	VKkfMoJwoYoY5fTHXvO2tPmXU/dOrIWTd5VBr/1kWlOCHREu3Aa+2Tzaw73BwU8D
-	1x+k3vhlca97EvCBcLLgnN2awT9Luimq5P1pH3WKRHinkqSlCRUrbrL+My3a2tvD
-	+MpvnSEN2h+NkTACIewOQk5DLGgprD4IOmQcPQvD5CRGUXc233o0Q==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4caj640d7s-1
+	:mime-version:references:subject:to; s=pp1; bh=6ROujHPnS2BiHwuvF
+	XlBPmdEyb0ri/ara6lyT6CkQSU=; b=ThrHEnSDzSoPASDiIXICqhEusrFm8/Hwx
+	330bAAbrpJsvSSu1PPGO8Lsj80VBuEWmqjTDxSDMZlgC4JMDnkHEZuXs8+EdnHw1
+	k1TicZZbaJeoSmwXE850QI7+t6ggZyb13sJjN9QJnsUvICpVvdG4yGRHm2GzDnE7
+	plx2m+Li8x8XYjTVTyCTGlVeLI2CTrvi63ulpzRT0QOvXb1V2xbVUusIY8o+B/2D
+	cnL+rgLEz3ChP2iEIlma9vH+JZdfjMXpuSprTYM+EY80jH23Rl5cgtCfb3wUTBXr
+	byN1FPJndPJAG92pvGRNJj2a3gkLF4zkUzo1LOAEgpOWfedvcTnwg==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4caj640d7w-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Feb 2026 18:50:14 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61GGjG84004197;
-	Mon, 16 Feb 2026 18:50:14 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cb4cmxfjq-1
+	Mon, 16 Feb 2026 18:50:17 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61GI6fIJ002862;
+	Mon, 16 Feb 2026 18:50:16 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cb5kj69w6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Feb 2026 18:50:13 +0000
+	Mon, 16 Feb 2026 18:50:16 +0000
 Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61GIoCUc44040580
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61GIoE7V28836498
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 16 Feb 2026 18:50:12 GMT
+	Mon, 16 Feb 2026 18:50:14 GMT
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EF5762004E;
-	Mon, 16 Feb 2026 18:50:11 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 98F2520043;
+	Mon, 16 Feb 2026 18:50:14 +0000 (GMT)
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AD25020040;
-	Mon, 16 Feb 2026 18:50:09 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 8BDF120040;
+	Mon, 16 Feb 2026 18:50:12 +0000 (GMT)
 Received: from aboo.ibm.com.com (unknown [9.36.7.180])
 	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 16 Feb 2026 18:50:09 +0000 (GMT)
+	Mon, 16 Feb 2026 18:50:12 +0000 (GMT)
 From: Aboorva Devarajan <aboorvad@linux.ibm.com>
 To: rafael@kernel.org, christian.loehle@arm.com, daniel.lezcano@linaro.org
 Cc: aboorvad@linux.ibm.com, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/4] cpuidle: Skip governor when only one idle state is available
-Date: Tue, 17 Feb 2026 00:20:02 +0530
-Message-ID: <20260216185005.1131593-2-aboorvad@linux.ibm.com>
+Subject: [PATCH v2 2/4] cpuidle: haltpoll: Remove single state handling
+Date: Tue, 17 Feb 2026 00:20:03 +0530
+Message-ID: <20260216185005.1131593-3-aboorvad@linux.ibm.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260216185005.1131593-1-aboorvad@linux.ibm.com>
 References: <20260216185005.1131593-1-aboorvad@linux.ibm.com>
@@ -88,20 +88,20 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: cgjSCwj_JlpQ_F2rxlQ_Uu3i7FrMgG5D
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDE1OSBTYWx0ZWRfX/B8qU2BL2fTM
- Om0WQO+BHNAaz0TwglnBiF8yRGHaa+qfo/uGrEvbuaMMl+ClCBOVtw7qIdDDmtvgJsCMWt/a2iG
- n9zzA+CAkJHyGBOBiHcdId2ftjAL4rFjKIQRDFbUzFuNWErwp4yn4mxxnRuoJ7NBIsLjgfqhVMG
- nmQQPbogC7cyAt3nMJOHBOqCC/DeWFvTmypy0fmX178Smzq17RMICIFxha3jAhBM/jBxg9QG6ME
- WVYIEDbBIReGLHiok+ZbVYB6gsoelWt9PoPuOQlg8H/jCa0rdXpYmcfblqrsx0rJEIPpNfImHEj
- DV8ZoogX/WDSq5UFdFCXlsr2HUZ7T98HmHi2yyS7rV3GDcoSvEZ+gFiyJE9j05eDwT8JgeV81oB
- dMYyzplTaaCysqy/kChVsiqeA2zvZAi359fIXTmb8AVoU5dAD27RYz6X+wljmqd/htfQWvjBukw
- JfhF6xWjGUs44jKoGkA==
-X-Proofpoint-GUID: cgjSCwj_JlpQ_F2rxlQ_Uu3i7FrMgG5D
-X-Authority-Analysis: v=2.4 cv=U+mfzOru c=1 sm=1 tr=0 ts=699366e6 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+X-Proofpoint-ORIG-GUID: 8S5HVXF4hYMcPbpLCAP6NAioI2H2bkPn
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDE1OSBTYWx0ZWRfX1DpsWIS8PHG8
+ GW3EKUbZhwmTlH3xupFRXrnGs2FD+CseYXqX45pL0IWNHJ3piOQTfE5lvh+n1NQ/PqBtkMb7Iq4
+ NYOjqPik1sAPXpeUQSTRkI90Ehrdoqn1L1bE8k7oDG6Qo4iE0zbHC0rJ4kcOd3O4rhO2nEVI+4a
+ o1mlC8UrRVeIpBQO95hA/Z8+yo0L3JkRYatRJFkr6wEekTShf8WpWaUKMPbe7LUoDQlnE086yu5
+ 9430xiKU1Z+9zIFCfRIEoRiHnP7WFmSvkuDq00HmMMCgoAReu3hYDFDRG32+PM6eGmdUNQilmCj
+ j6/5htPf/JWfbnZy7OGzQAXyc1YB7ycnXkVPmdQgv+Z178MtkJOIqkuN8x/p6J7D0x3FueHuXfH
+ Yo7PzSzE+hbo15VV017RFmx3m0Ceam4Oiw9BbQRRH7oZTi+ODfMwqO9M/qr9F6thBVOTqDilNnE
+ 3qx003lumrjOfqpCq9w==
+X-Proofpoint-GUID: 8S5HVXF4hYMcPbpLCAP6NAioI2H2bkPn
+X-Authority-Analysis: v=2.4 cv=U+mfzOru c=1 sm=1 tr=0 ts=699366e9 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
  a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8 a=YIsf0ydp8jgAjUZD7Z8A:9
+ a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8 a=S8W45NxqTDoTMVILZQQA:9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-02-16_06,2026-02-16_04,2025-10-01_01
@@ -118,11 +118,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42713-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42715-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	TO_DN_NONE(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -131,58 +131,37 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[aboorvad@linux.ibm.com,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.ibm.com:mid];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
 	DKIM_TRACE(0.00)[ibm.com:+];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_COUNT_SEVEN(0.00)[11]
-X-Rspamd-Queue-Id: 373911471AB
+X-Rspamd-Queue-Id: A5B16147186
 X-Rspamd-Action: no action
 
-On certain platforms (PowerNV systems without a power-mgt DT node),
-cpuidle may register only a single idle state. In cases where that
-single state is a polling state (state 0), the ladder governor may
-incorrectly treat state 1 as the first usable state and pass an
-out-of-bounds index. This can lead to a NULL enter callback being
-invoked, ultimately resulting in a system crash.
+cpuidle systems where the governor has no choice because there's only
+a single idle state are now handled by cpuidle core and bypass the
+governor, so remove the related handling.
 
-[   13.342636] cpuidle-powernv : Only Snooze is available
-[   13.351854] Faulting instruction address: 0x00000000
-[   13.376489] NIP [0000000000000000] 0x0
-[   13.378351] LR  [c000000001e01974] cpuidle_enter_state+0x2c4/0x668
-
-Fix this by adding a bail-out in cpuidle_select() that returns state 0
-directly when state_count <= 1, bypassing the governor and keeping the
-tick running.
-
-Fixes: dc2251bf98c6 ("cpuidle: Eliminate the CPUIDLE_DRIVER_STATE_START symbol")
 Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
 ---
- drivers/cpuidle/cpuidle.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/cpuidle/governors/haltpoll.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index c7876e9e024f..65fbb8e807b9 100644
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -359,6 +359,16 @@ noinstr int cpuidle_enter_state(struct cpuidle_device *dev,
- int cpuidle_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
- 		   bool *stop_tick)
+diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
+index 663b7f164d20..ed3952df8526 100644
+--- a/drivers/cpuidle/governors/haltpoll.c
++++ b/drivers/cpuidle/governors/haltpoll.c
+@@ -52,7 +52,7 @@ static int haltpoll_select(struct cpuidle_driver *drv,
  {
-+	/*
-+	 * If there is only a single idle state (or none), there is nothing
-+	 * meaningful for the governor to choose. Skip the governor and
-+	 * always use state 0 with the tick running.
-+	 */
-+	if (drv->state_count <= 1) {
-+		*stop_tick = false;
-+		return 0;
-+	}
-+
- 	return cpuidle_curr_governor->select(drv, dev, stop_tick);
- }
+ 	s64 latency_req = cpuidle_governor_latency_req(dev->cpu);
  
+-	if (!drv->state_count || latency_req == 0) {
++	if (latency_req == 0) {
+ 		*stop_tick = false;
+ 		return 0;
+ 	}
 -- 
 2.52.0
 
