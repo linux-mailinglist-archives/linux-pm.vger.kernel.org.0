@@ -1,73 +1,105 @@
-Return-Path: <linux-pm+bounces-42694-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42695-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6P3uAugDk2nF0wEAu9opvQ
-	(envelope-from <linux-pm+bounces-42694-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 12:47:52 +0100
+	id iJNbEG0Gk2nF0wEAu9opvQ
+	(envelope-from <linux-pm+bounces-42695-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 12:58:37 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CA521431CB
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 12:47:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D909514330D
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 12:58:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1CDC5301187E
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 11:47:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 770873016916
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 11:58:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 652493033FF;
-	Mon, 16 Feb 2026 11:47:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C5B308F23;
+	Mon, 16 Feb 2026 11:58:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="P/BmG+T/"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="N+4CbngY";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="gPZ9G7Fi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay.yourmailgateway.de (relay.yourmailgateway.de [188.68.63.98])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53EDE21FF4D;
-	Mon, 16 Feb 2026 11:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.68.63.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5303081D6
+	for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 11:58:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771242469; cv=none; b=YQ88Y7gvgvI2yFIPbym1SIaf9FYAp77Z+BOZIDzlkDOFMnzgb8RibV5ShqU1UKWMPieYvcmpPcoOpnrIqeUGjMtR1j7XbNRiYEGwrkG8gmmyVH6cyCA40ykOQS8OUvAXXkxiMG1O74r+NRN08ep4eA6pj7WrsiFQNJ/8fzjCfF8=
+	t=1771243107; cv=none; b=jx9D93V56/QmDuR8UlxjeXl+kNVI0dK+CdiFPVa34rl1EQUTEFPz7tFvGBVsJHVdCxui2d0InoUCpWcUSLQL5e5LmLgnBdvOPwmOTfUWXTpSyxUpw/n0selvRJqvqVFsgkISg09uKKZxNnG7SkDFN6COWfazszbyOtljo8cvO2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771242469; c=relaxed/simple;
-	bh=TWtVYJwbVjTlf+TJ5trO4TAgIlhhHEYzkkPBbvmXQnM=;
+	s=arc-20240116; t=1771243107; c=relaxed/simple;
+	bh=2OooSvG2whJSKkJTdjoPy7tsSXo0UE5qO+6648XFTYY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P2SuZT6v/pVvYqpmxjryWGFqPVlZVzODjyvqwH11Ame3CsEbMmpKFIXK81DqDk9y7/EsB4ujcPdVzK58fpmeymTP5dwLqNk8p57rfaTtzqG7UbRblHxluX2VXtfaeHNfStkDDTrCO8HJbgg6b4jqCSKIKCmrTtodHOgtd1MCm9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=P/BmG+T/; arc=none smtp.client-ip=188.68.63.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-Received: from mors-relay-2501.netcup.net (localhost [127.0.0.1])
-	by mors-relay-2501.netcup.net (Postfix) with ESMTPS id 4fF14k3FmRz68Nl;
-	Mon, 16 Feb 2026 12:38:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=leemhuis.info;
-	s=key2; t=1771241926;
-	bh=TWtVYJwbVjTlf+TJ5trO4TAgIlhhHEYzkkPBbvmXQnM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=P/BmG+T/GT4PLid6DhaeP+t5dLYoxvJ8Nwok5nM6FoTWBj9HI8RHg+fXUl0zp0klm
-	 gvw+9Ho2PW0AUsg7ptdU4UGW7KYEdSy0b6yW3GMwnlxXjBZLtu38q2T9VicnpPQA4f
-	 8MIz9NOTOB5ghRR0AL7ET3cQhJQqxFfQdwBBoCnnGQ1aYpMvLH6IP/4yRgO06zfBIK
-	 Bk0fuzPLOXnxxWKfyiQhU5theU1T6jfV7MR4gFK5cX4lljig3HtAI0O2Sl+MP/oHxT
-	 jXMSgrS1HfoxTOi4MzQ3xz7OVS1DT/69faFqvEMi7ERyLTh4wLu1erw4qAyHYzTYdX
-	 effr3R6kVpa3g==
-Received: from policy01-mors.netcup.net (unknown [46.38.225.35])
-	by mors-relay-2501.netcup.net (Postfix) with ESMTPS id 4fF14k2T59z4xbB;
-	Mon, 16 Feb 2026 12:38:46 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at policy01-mors.netcup.net
-X-Spam-Flag: NO
-X-Spam-Score: -2.901
-X-Spam-Level: 
-Received: from mxe9fb.netcup.net (unknown [10.243.12.53])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by policy01-mors.netcup.net (Postfix) with ESMTPS id 4fF14g6LlQz8tXF;
-	Mon, 16 Feb 2026 12:38:43 +0100 (CET)
-Received: from [IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f] (unknown [IPv6:2a02:8108:8984:1d00:a0cf:1912:4be:477f])
-	by mxe9fb.netcup.net (Postfix) with ESMTPSA id 98E526735E;
-	Mon, 16 Feb 2026 12:38:42 +0100 (CET)
-Authentication-Results: mxe9fb;
-        spf=pass (sender IP is 2a02:8108:8984:1d00:a0cf:1912:4be:477f) smtp.mailfrom=regressions@leemhuis.info smtp.helo=[IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f]
-Received-SPF: pass (mxe9fb: connection is authenticated)
-Message-ID: <9c1b2671-3374-4d84-ad14-07dd499bb934@leemhuis.info>
-Date: Mon, 16 Feb 2026 12:38:41 +0100
+	 In-Reply-To:Content-Type; b=CWa1LrZ11tgm8x9Bzm23ZXv7PMx7crjbm7LH45kw1G91kn00QKe5PQczdlq7Eby5fYE4z6DqOfJo2l+MTkG8CQ1m4HU4RjpROphKEGzSWVB0B+BhemAqZbYySX1eLuEfML7whf34iNhbmOtpHGMWQcVTr9ThYn0/ojWzoQ/lW6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=N+4CbngY; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=gPZ9G7Fi; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61GBHM4L3123820
+	for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 11:58:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Zi/BecWdHdYC4B4fsf+bAG0aGUqnDmYPyCY0bfoOq8U=; b=N+4CbngYHHA3XlVK
+	ODgsg96iYBsO0hDps5dKFyfHSUHNZVVHMepyQmjFIWzPcU63fZaLB4gvY8kKcPyo
+	YNMlY0Q3qGxEc54xuMxnUTjkE/FHKPE1TeqOiKlWf+m9Ur3qb2pZjpD37mZkPj7c
+	k9ZkLRwdoIilCDvEf1XwlH6bOUmSyi7tkgjwlilQxlWxa+iPXnYk4NiwvWPP8DCW
+	p0hddbCGmDkdyVEnWIL/MHxHmpMloQX11UPt5UpkUS0z5v0lyko2pUzsZuBvl/zp
+	gYWBshQwqWDUIANMHn75gtPEm1BxoVGlIU/d7Ovx87UJ0VU9y8uvO4DyZEuhba+H
+	TlDraw==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cahtcma3a-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 11:58:24 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8cb50fb0abdso176383985a.1
+        for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 03:58:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1771243103; x=1771847903; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zi/BecWdHdYC4B4fsf+bAG0aGUqnDmYPyCY0bfoOq8U=;
+        b=gPZ9G7FiF10QcDH1ZuJQjrXc1ZsnYZNvWNVzcb4QSAzifYvto1MchpUX1TbDUvNxE3
+         rpvZj6oR/3gEt3ichj4XUyo5LggeOa2szCa+c8pERU8atVQU5ELsDg+EoEt7XQj3D9/W
+         KLqXyUfidfGCE856tE6l30h178cnMMW/ydcD7Bl70S6FPm1rDsIZDB3imeTGRpKy5FWJ
+         +qIObozfrOAzUpxhGIrm4zhGWQbl+jZ+bunXxB/LsXmvm8v7UeHUNHeKa80eHw+sIJpE
+         spyAvjSl5rih3K7FgPzZiY05zEzmE2a3GNVYne7gwZXuju2ALZoB9adiHUX2rFs0KC8J
+         55+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771243103; x=1771847903;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zi/BecWdHdYC4B4fsf+bAG0aGUqnDmYPyCY0bfoOq8U=;
+        b=To/uQj7bIM7jP5NE1g4nsOmA91Aa3JBo+T1516B1gd3he4FR3qSPVtBGt5Gd5525i1
+         /jq3nQiDjqmcb37ceFKAHFDZc3BkYtT0B85vAOPP/dtD4TYFLBWPgYVU9w+xWJ/9+VdP
+         1MXpTPeTsi6rs0rlhA9T027BCgma3DrEi9/QXw+0kWpnii6aNXe/TRDgndA4+sjqPsrd
+         eXDNgjf9TylpnxRA3Ee2xDCygpRzsbtuC2nt6LlfbVWUe9eBmN0gWL9x8djSGIWPi+tC
+         6Nn0gp8cyilYlPv6fimCSvp6eM7xJ9zNE18tguGvv/A1ESjzLkLnzOvfAV1Wy9XNitaT
+         LqYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVP79EB5rOTr6IQX4Shar1IuSfWd5SpvZpKyxIFbyut9OnGbvr5f+FBL0mF1R3xoApVqB6cW6b+Yg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeN8Hps/dLAQk9rEQmj1Bra8ZT2kH4ulJ4kisWiepIppk1IIQd
+	JAxuiYTIT+9TQYuZNTKDO5Sep/fcb4CoJpQUgYptqPbBgjyu+Xf6wonxUxUrNV9jLyW6ZPd88U5
+	C/FyidDjoKRKio2//Ryf6uj/Amlu6d9wN6t/Zganvq7YKd1ghl0ZPlNjhyRmLyA==
+X-Gm-Gg: AZuq6aJ61oPshnfupiw4OsM9Fage9K3MOcdSvDe6UZtTnmKDoeCuLmpwDa3hSnJnRKL
+	EsBNIrUZIN/OekdmSC/vs+aBGzArodpoH3UJr60MFtfkvXeFdixcwO2I10zPQ7XssfoTZTurz3P
+	lmIvgYxQArojzqMEZn1t3u9hSDJSdMFM9GtrEII5lZ+l1oZzqokJtV2sZLyEHLM0XThkZUrSgtT
+	2B9umevp8br0p6930Ym94DNUOsXJwQLNIK/8tct324mlVhyOvf7xFkq3XsL1KCjpzuYrbHe/xDu
+	VKtdmcOiSZH5iQW9yOnGRh6Rkrel5y78U2usRZaup5az7IxVP7fB1YNm6Dmr2oKABIuZpyi/lU+
+	PCCtQZBuS90u/SboCXvUTr3LdMuV/VtiMwCciGXEdZsKZOAzHcehqLrlrpQEyvI/8bwUgo+toIy
+	3TsyA=
+X-Received: by 2002:a05:620a:7006:b0:8c7:1b40:d096 with SMTP id af79cd13be357-8cb408e956dmr1044830085a.9.1771243103479;
+        Mon, 16 Feb 2026 03:58:23 -0800 (PST)
+X-Received: by 2002:a05:620a:7006:b0:8c7:1b40:d096 with SMTP id af79cd13be357-8cb408e956dmr1044828285a.9.1771243102986;
+        Mon, 16 Feb 2026 03:58:22 -0800 (PST)
+Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8fc766554bsm250799166b.46.2026.02.16.03.58.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Feb 2026 03:58:21 -0800 (PST)
+Message-ID: <83ae42ae-233d-49b2-a4e9-43ad879cbe39@oss.qualcomm.com>
+Date: Mon, 16 Feb 2026 12:58:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,337 +107,138 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drm/imagination: Convert to
- dev_pm_domain_{at,de}tach_list()
-To: Matt Coster <Matt.Coster@imgtec.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Marek Vasut <marek.vasut@mailbox.org>,
- Frank Binns <Frank.Binns@imgtec.com>,
- Brajesh Gupta <Brajesh.Gupta@imgtec.com>,
- Alessio Belle <Alessio.Belle@imgtec.com>,
- Alexandru Dadu <Alexandru.Dadu@imgtec.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: 
- <194465eda54d1f852a9226cf691ddc5aa208e0a3.1769097977.git.geert+renesas@glider.be>
- <ffdf3982-e22c-4d01-afa6-5449ed381000@imgtec.com>
- <CAMuHMdWMh_oJFg-KtapcTDGvYWZ-hg_ZEJ2=E5Tp1apOEc8tnQ@mail.gmail.com>
- <b3b4f10e-1222-44f7-b308-db7199c67147@mailbox.org>
- <3e0def93-2f6c-4bcf-8ee5-bf607f2ca382@imgtec.com>
- <f5d3dde6-edec-42f4-93cb-459c8677245a@mailbox.org>
- <f82b7734-6ddc-4029-b38d-147e9a1de021@leemhuis.info>
- <fcf5ab75-029e-469e-8b2a-51fa5c2a2374@mailbox.org>
- <95fd3f52-c3ed-40c5-920f-11e8767f701d@leemhuis.info>
- <CAMuHMdV-g+3kTaG6Ost4iHo1Tdi_H=qscLBkBRWuR+6DG5c=SA@mail.gmail.com>
- <1e8e416e-e474-4288-9686-1ba2b88e4946@leemhuis.info>
- <21b1fd77-252e-4fb3-aa65-1c26043c5412@imgtec.com>
-From: Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Language: de-DE, en-US
-In-Reply-To: <21b1fd77-252e-4fb3-aa65-1c26043c5412@imgtec.com>
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: pm660: add thermal monitor
+To: Richard Acayan <mailingradian@gmail.com>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        Stephen Boyd <sboyd@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20260210021819.12673-1-mailingradian@gmail.com>
+ <20260210021819.12673-4-mailingradian@gmail.com>
+ <e72ede03-94cb-45c3-95e7-63dff0ca3888@oss.qualcomm.com>
+ <aYvNX718diaXDsBy@rdacayan>
+ <f1fc24ad-054f-4731-b982-4c579abf46c1@oss.qualcomm.com>
+ <aY4br1BX9InqWUd6@rdacayan>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <aY4br1BX9InqWUd6@rdacayan>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-PPP-Message-ID: <177124192325.2523793.2427380843780218947@mxe9fb.netcup.net>
-X-NC-CID: uzHQ5WUvJ493AhCLZM0rmC2igXGsPIiYg8dFR6+uXex9L+LvRrc=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDEwMCBTYWx0ZWRfX4nFHd6ayEECM
+ +xS4YO+qxN9eGlyWTY1z/wfrlZ5VGrWtEw+TgyuVifl1u1EvT2QQpkCwgTVplVmB9/7wVf90nxj
+ 14IVSfEKf+mbynKow0MHPzbNN9AOYfxZDaf6LAGUWrWZQnChVGuoRbFlX9hNCuau3n+7mtqH7Jz
+ QdjAPy+BRXsE+BbOI/UwN6Abgeq6SNUXgpvj3/O70tjyOlEnLXiEuYXMvodyfmxmVsqz91U4DFH
+ W9d+eMF2U+W64q8PP3Ux64pqscU6rtyoaIAoJ8Si55c0Jjp6mJ8rET/uMa+CG0Dh+5MkCFqKLKr
+ lxG/sHFSklN2+EHNcS3+1yYcUSx7Djjfa8s9QZvFQ6CwkbDtHUtAqDh6+XQYOPcr6G1Gbd3RhCV
+ t/X6hmvnQDGZd0kVd13Z83F1czccqqCw1W/V+7dUpbDM96QilxKHy6rCflL+FFnnHM4VZv6DHG+
+ lQx0eMgXc/7Ioth/0Yw==
+X-Proofpoint-ORIG-GUID: v3NUQSzIokuNDMErJBFpwTn8WjDt9j3A
+X-Authority-Analysis: v=2.4 cv=DJOCIiNb c=1 sm=1 tr=0 ts=69930660 cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
+ a=VwQbUJbxAAAA:8 a=-X_Uy8J1N6Iodyj9KHAA:9 a=QEXdDO2ut3YA:10
+ a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-GUID: v3NUQSzIokuNDMErJBFpwTn8WjDt9j3A
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-16_04,2026-02-16_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ impostorscore=0 malwarescore=0 phishscore=0 bulkscore=0 spamscore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602160100
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[leemhuis.info:s=key2];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[mailbox.org,imgtec.com,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,lists.freedesktop.org,vger.kernel.org,lists.linux.dev];
-	DMARC_NA(0.00)[leemhuis.info];
-	TAGGED_FROM(0.00)[bounces-42694-lists,linux-pm=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[17];
+	TAGGED_FROM(0.00)[bounces-42695-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,linaro.org,intel.com,arm.com,vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[18];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	DKIM_TRACE(0.00)[leemhuis.info:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.0:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:dkim,0.0.13.72:email,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[leemhuis.info:mid,leemhuis.info:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[regressions@leemhuis.info,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 5CA521431CB
+X-Rspamd-Queue-Id: D909514330D
 X-Rspamd-Action: no action
 
-On 2/16/26 11:58, Matt Coster wrote:
-> On 16/02/2026 10:11, Thorsten Leemhuis wrote:
+On 2/12/26 7:27 PM, Richard Acayan wrote:
+> On Thu, Feb 12, 2026 at 01:15:04PM +0100, Konrad Dybcio wrote:
+>> On 2/11/26 1:29 AM, Richard Acayan wrote:
+>>> On Tue, Feb 10, 2026 at 10:59:20AM +0100, Konrad Dybcio wrote:
+>>>> On 2/10/26 3:18 AM, Richard Acayan wrote:
+>>> (snip)
+>>>>> +		pm660_adc_tm: adc-tm@3400 {
+>>>>> +			compatible = "qcom,spmi-adc-tm-hc";
+>>>>> +			reg = <0x3400>;
+>>>>> +			interrupts = <0x0 0x34 0x0 IRQ_TYPE_EDGE_RISING>;
+>>>>> +			#thermal-sensor-cells = <1>;
+>>>>> +			#address-cells = <1>;
+>>>>> +			#size-cells = <0>;
+>>>>> +			status = "disabled";
+>>>>
+>>>> Can we enable it by default?
+>>>
+>>> No, the thermal monitor fails to probe if it doesn't have any channels:
+>>>
+>>> 	[   17.728926] qcom-spmi-adc-tm5 c440000.spmi:pmic@0:adc-tm@3400: error -EINVAL: get dt data failed
+>>> 	[   17.728945] qcom-spmi-adc-tm5 c440000.spmi:pmic@0:adc-tm@3400: probe with driver qcom-spmi-adc-tm5 failed with error -22
+>>>
+>>> Triggered by https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/thermal/qcom/qcom-spmi-adc-tm5.c?h=next-20260209#n945
+>>
+>> You can define the following ones in the common dt:
+>>
+>> REF_GND
 > 
-> We're currently trying to force this issue to reproduce on hardware we
-> have on hand; we'd like to see it fixed properly as much as anyone.
-
-Yeah, no worries, I never doubted that. But getting things properly fixed
-can mean "revert, fix, reapply" when it comes to regressions in Linux --
-which is something that should not be seen as something bad, as Linus said
-himself (see below)!
-
-> From our side at least, I don't believe this is a regression at all.
-In the end what matters is: some change afaics caused systems to not work
-anymore that used to be working -- that makes it a regression my the Linux
-kernels standards. And those by the same standards must be fixed, ideally
-quickly. Find a few quotes on that from Linus below that explains this
-better. 
-
-Ciao, Thorsten
----
-
-
-On how quickly regressions should be fixed
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* From `2026-01-22 <https://lore.kernel.org/all/CAHk-=wheQNiW_WtHGO7bKkT7Uib-p+ai2JP9M+z+FYcZ6CAxYA@mail.gmail.com/>`_::
-
-    But a user complaining should basically result in an immediate fix -
-    possibly a "revert and rethink".
-
-  With a later clarification on `2026-01-28 <https://lore.kernel.org/all/CAHk-%3Dwi86AosXs66-yi54%2BmpQjPu0upxB8ZAfG%2BLsMyJmcuMSA@mail.gmail.com/>`_::
-
-    It's also worth noting that "immediate" obviously doesn't mean "right
-    this *second* when the problem has been reported".
-
-    But if it's a regression with a known commit that caused it, I think
-    the rule of thumb should generally be "within a week", preferably
-    before the next rc.
-
-* From `2023-04-21 <https://lore.kernel.org/all/CAHk-=wgD98pmSK3ZyHk_d9kZ2bhgN6DuNZMAJaV0WTtbkf=RDw@mail.gmail.com/>`_::
-
-    Known-broken commits either
-     (a) get a timely fix that doesn't have other questions
-    or
-     (b) get reverted
-
-* From `2021-09-20(2) <https://lore.kernel.org/all/CAHk-=wgOvmtRw1TNbMC1rn5YqyTKyn0hz+sc4k0DGNn++u9aYw@mail.gmail.com/>`_::
-
-    [...] review shouldn't hold up reported regressions of existing code. That's
-    just basic _testing_ - either the fix should be applied, or - if the fix is
-    too invasive or too ugly - the problematic source of the regression should
-    be reverted.
-
-    Review should be about new code, it shouldn't be holding up "there's a
-    bug report, here's the obvious fix".
-
-* From `2023-05-08 <https://lore.kernel.org/all/CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com/>`_::
-
-    If something doesn't even build, it should damn well be fixed ASAP.
-
-
-On how fixing regressions with reverts can help prevent maintainer burnout
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* From `2026-01-28 <https://lore.kernel.org/all/CAHk-%3Dwi86AosXs66-yi54%2BmpQjPu0upxB8ZAfG%2BLsMyJmcuMSA@mail.gmail.com/>`_::
-
-    > So how can I/we make "immediate fixes" happen more often without
-    > contributing to maintainer burnout?
-
-    [...] the "revert and rethink" model [...] often a good idea in general
-    unless there's just an obvious fix for an obvious bug [...]
-
-    Exactly so that maintainers don't get stressed out over having a pending
-    problem report that people keep pestering them about.
-
-    I think people are sometimes a bit too bought into whatever changes
-    they made, and reverting is seen as "too drastic", but I think it's
-    often the quick and easy solution for when there isn't some obvious
-    response to a regression report.
-
-
-On why the "no regressions" rule exists
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* From `2026-01-22 <https://lore.kernel.org/all/CAHk-=wheQNiW_WtHGO7bKkT7Uib-p+ai2JP9M+z+FYcZ6CAxYA@mail.gmail.com/>`_::
-
-    But the basic rule is: be so good about backwards compatibility that
-    users never have to worry about upgrading. They should absolutely feel
-    confident that any kernel-reported problem will either be solved, or
-    have an easy solution that is appropriate for *them* (ie a
-    non-technical user shouldn't be expected to be able to do a lot).
-
-    Because the last thing we want is people holding back from trying new
-    kernels.
-
-* From `2024-05-28 <https://lore.kernel.org/all/CAHk-=wgtb7y-bEh7tPDvDWru7ZKQ8-KMjZ53Tsk37zsPPdwXbA@mail.gmail.com/>`_::
-
-    I introduced that "no regressions" rule something like two decades
-    ago, because people need to be able to update their kernel without
-    fear of something they relied on suddenly stopping to work.
-
-* From `2018-08-03 <https://lore.kernel.org/all/CA+55aFwWZX=CXmWDTkDGb36kf12XmTehmQjbiMPCqCRG2hi9kw@mail.gmail.com/>`_::
-
-    The whole point of "we do not regress" is so that people can upgrade
-    the kernel and never have to worry about it.
-
-    [...]
-
-    Because the only thing that matters IS THE USER.
-
-* From `2017-10-26(1) <https://lore.kernel.org/lkml/CA+55aFxW7NMAMvYhkvz1UPbUTUJewRt6Yb51QAx5RtrWOwjebg@mail.gmail.com/>`_::
-
-    If the kernel used to work for you, the rule is that it continues to work
-    for you.
-
-    [...]
-
-    People should basically always feel like they can update their kernel
-    and simply not have to worry about it.
-
-    I refuse to introduce "you can only update the kernel if you also
-    update that other program" kind of limitations. If the kernel used to
-    work for you, the rule is that it continues to work for you.
-
-
-On exceptions to the "no regressions" rule
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* From `2026-01-22 <https://lore.kernel.org/all/CAHk-=wheQNiW_WtHGO7bKkT7Uib-p+ai2JP9M+z+FYcZ6CAxYA@mail.gmail.com/>`_::
-
-    There are _very_ few exceptions to that rule, the main one being "the
-    problem was a fundamental huge and gaping security issue and we *had* to
-    make that change, and we couldn't even make your limited use-case just
-    continue to work".
-
-    The other exception is "the problem was reported years after it was
-    introduced, and now most people rely on the new behavior".
-
-    [...]
-
-    Now, if it's one or two users and you can just get them to recompile,
-    that's one thing. Niche hardware and odd use-cases can sometimes be
-    solved that way, and regressions can sometimes be fixed by handholding
-    every single reporter if the reporter is willing and able to change
-    his or her workflow.
-
-* From `2023-04-20 <https://lore.kernel.org/all/CAHk-=wis_qQy4oDNynNKi5b7Qhosmxtoj1jxo5wmB6SRUwQUBQ@mail.gmail.com/>`_::
-
-    And yes, I do consider "regression in an earlier release" to be a
-    regression that needs fixing.
-
-    There's obviously a time limit: if that "regression in an earlier
-    release" was a year or more ago, and just took forever for people to
-    notice, and it had semantic changes that now mean that fixing the
-    regression could cause a _new_ regression, then that can cause me to
-    go "Oh, now the new semantics are what we have to live with".
-
-* From `2021-09-20(3) <https://lore.kernel.org/all/CAHk-=wi7DB2SJ-wngVvsJ7Ak2cM556Q8437sOXo4EJt2BWPdEg@mail.gmail.com/>`_::
-
-    Yes, we have situations where even regressions don't matter - like
-    major security issues that simply cannot be fixed other ways, because
-    the regression _was_ the security hole.
-
-* From `2017-10-26(2) <https://lore.kernel.org/lkml/CA+55aFxW7NMAMvYhkvz1UPbUTUJewRt6Yb51QAx5RtrWOwjebg@mail.gmail.com/>`_::
-
-    There have been exceptions, but they are few and far between, and they
-    generally have some major and fundamental reasons for having happened,
-    that were basically entirely unavoidable, and people _tried_hard_ to
-    avoid them. Maybe we can't practically support the hardware any more
-    after it is decades old and nobody uses it with modern kernels any
-    more. Maybe there's a serious security issue with how we did things,
-    and people actually depended on that fundamentally broken model. Maybe
-    there was some fundamental other breakage that just _had_ to have a
-    flag day for very core and fundamental reasons.
-
-
-On accepting when a regression occurred
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* From `2026-01-22 <https://lore.kernel.org/all/CAHk-=wheQNiW_WtHGO7bKkT7Uib-p+ai2JP9M+z+FYcZ6CAxYA@mail.gmail.com/>`_::
-
-    But starting to argue about users reporting breaking changes is
-    basically the final line for me. I have a couple of people that I have
-    in my spam block-list and refuse to have anything to do with, and they
-    have generally been about exactly that.
-
-    Note how it's not about making mistakes and _causing_ the regression.
-    That's normal. That's development. But then arguing about it is a
-    no-no.
-
-* From `2024-06-23 <https://lore.kernel.org/all/CAHk-=wi_KMO_rJ6OCr8mAWBRg-irziM=T9wxGC+J1VVoQb39gw@mail.gmail.com/>`_::
-
-    We don't introduce regressions and then blame others.
-
-    There's a very clear rule in kernel development: things that break
-    other things ARE NOT FIXES.
-
-    EVER.
-
-    They get reverted, or the thing they broke gets fixed.
-
-* From `2021-06-05 <https://lore.kernel.org/all/CAHk-=wiUVqHN76YUwhkjZzwTdjMMJf_zN4+u7vEJjmEGh3recw@mail.gmail.com/>`_::
-
-    THERE ARE NO VALID ARGUMENTS FOR REGRESSIONS.
-
-    Honestly, security people need to understand that "not working" is not
-    a success case of security. It's a failure case.
-
-    Yes, "not working" may be secure. But security in that case is *pointless*.
-
-* From `2017-10-26(5) <https://lore.kernel.org/lkml/CA+55aFwiiQYJ+YoLKCXjN_beDVfu38mg=Ggg5LFOcqHE8Qi7Zw@mail.gmail.com/>`_::
-
-    [...] when regressions *do* occur, we admit to them and fix them, instead of
-    blaming user space.
-
-    The fact that you have apparently been denying the regression now for
-    three weeks means that I will revert, and I will stop pulling apparmor
-    requests until the people involved understand how kernel development
-    is done.
-
-
-On back-and-forth
-~~~~~~~~~~~~~~~~~
-
-* From `2024-05-28 <https://lore.kernel.org/all/CAHk-=wgtb7y-bEh7tPDvDWru7ZKQ8-KMjZ53Tsk37zsPPdwXbA@mail.gmail.com/>`_::
-
-    The "no regressions" rule is that we do not introduce NEW bugs.
-
-    It *literally* came about because we had an endless dance of "fix two
-    bugs, introduce one new one", and that then resulted in a system that
-    you cannot TRUST.
-
-* From `2021-09-20(1) <https://lore.kernel.org/all/CAHk-=wi7DB2SJ-wngVvsJ7Ak2cM556Q8437sOXo4EJt2BWPdEg@mail.gmail.com/>`_::
-
-
-    And the thing that makes regressions special is that back when I
-    wasn't so strict about these things, we'd end up in endless "seesaw
-    situations" where somebody would fix something, it would break
-    something else, then that something else would break, and it would
-    never actually converge on anything reliable at all.
-
-* From `2015-08-13 <https://lore.kernel.org/all/CA+55aFxk8-BsiKwr_S-c+4G6wihKPQVMLE34H9wOZpeua6W9+Q@mail.gmail.com/>`_::
-
-    The strict policy of no regressions actually originally started mainly wrt
-    suspend/resume issues, where the "fix one machine, break another" kind of
-    back-and-forth caused endless problems, and meant that we didn't actually
-    necessarily make any forward progress, just moving a problem around.
-
-
-On regressions caused by bugfixes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* From `2018-08-03 <https://lore.kernel.org/all/CA+55aFwWZX=CXmWDTkDGb36kf12XmTehmQjbiMPCqCRG2hi9kw@mail.gmail.com/>`_::
-
-    > Kernel had a bug which has been fixed
-
-    That is *ENTIRELY* immaterial.
-
-    Guys, whether something was buggy or not DOES NOT MATTER.
-
-    [...]
-
-    It's basically saying "I took something that worked, and I broke it,
-    but now it's better". Do you not see how f*cking insane that statement
-    is?
+> Is there any (likely passive, if any) cooling device that should be
+> activated when this goes above or below a certain reading?
+
+I don't think so
+
+> 
+>> 1.25VREF
+>> VREF_VADC
+>> VPH_PWR
+>> VCOIN
+>> DIE_TEMP
+> 
+> Maybe this temperature can be included, but I don't see any other
+> PMIC devicetree that has this channel ready-to-go.
+
+This channel is internally connected and handled by temp_alarm, I think
+describing it via the ADC just lets one peek into the raw values
+
+Konrad
+
+> 
+>> ANA_IN
 
