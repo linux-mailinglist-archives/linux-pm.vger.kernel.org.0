@@ -1,189 +1,186 @@
-Return-Path: <linux-pm+bounces-42702-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42703-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SOOfDIwvk2ke2QEAu9opvQ
-	(envelope-from <linux-pm+bounces-42702-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 15:54:04 +0100
+	id oAfcIbMwk2mI2QEAu9opvQ
+	(envelope-from <linux-pm+bounces-42703-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 15:58:59 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4361B144DA8
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 15:54:03 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 087D4144E4D
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 15:58:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4B4A23002913
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 14:53:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A8CBB300CC0C
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Feb 2026 14:58:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092C6313526;
-	Mon, 16 Feb 2026 14:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B60313272;
+	Mon, 16 Feb 2026 14:58:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MOfAdO3i";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="JqRI4ML1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JZnc3x0J"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7EB3128C6
-	for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 14:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9F528FFE7;
+	Mon, 16 Feb 2026 14:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771253620; cv=none; b=m8ZAzi9ndd+ygBaLwVk17MvIbQsytY2zWZxawKP8apQQM8u1XXHS3aJitzFiLJzq0GctYw8BgSBA4FfDRr6FNeX+AyW/Hu1Os/quMh3DC9oekavZOJIcj7TkcAoEN/Zi5J0u0rWl+6kMByYpPsWAFnFPP3kfgiWYoH1pLIoMXYU=
+	t=1771253887; cv=none; b=j6NQ4miXcwJQCJP5QjIwCxr/rJWSUZB6YQG1kdMSE+XY16Pl8PB1RrH+OgExeNjt+cVcVoHV4lMDltg0AbwmhYxSm5YGjmIEttgSuqw9FExmHvxqM+De3WIZn5WNfApHkLUzdFvk/C1He8DiVkUdH7vSGhIbsLFMl4yJ1fukbm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771253620; c=relaxed/simple;
-	bh=2rxaVjGu4XpdOg33udkiiQxYeZq0jcqJlk+U72irDE8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lLiFw5Ym7tcchxjqpUiikU2eoam0AB7wzD6bJW2sMFoZK1JZ/b2kRAJYcqY2/tFZfyndkc/2EgSiA2XrLHTDOMhsuS/Um92TB1KplFy0CmtCbZxxwdlQeEZ0meS0i0DO7jGWaCUIyWkUhjCE88AabaLJU8X+Z4pTHjHbHc8aOPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MOfAdO3i; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=JqRI4ML1; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61G8fwQj2802092
-	for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 14:53:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	kovETaFhNl90oBKEgZpok7n0YsCTyTL0lxrKHwRVzWQ=; b=MOfAdO3iTzIx2mDH
-	NIv5rt8qhAwITi7+7nzuLhpcXzEfJRSOYTRlOPe2zQU0+TiAeAcAva7eZb7qhtD+
-	RDf/UXiNvxhvYUl7DjnvDGjrdwhVIlJVqRxlEJZ/yx3YfklozdNyFUydUqL2xayK
-	qqGh/0Z+Cf0klQ3y/UGJ18uWG9X9ri9F0yd3zGFtxal4SBa5yjbNr2vpQWwy2fyy
-	XutEly/1f0Eg9MRrHfvkPItVCbbiTCe5P3J8/f8Q8GX8hKmPE+9SYoauFJp7StWi
-	aDhdPQQUUZXY3w9wQsqLRSnv+r6hJynLq9oSHfj05pt8byl3QXQ8vFK64RBkwkXT
-	42ORqA==
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cbyxugw6q-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 14:53:38 +0000 (GMT)
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-8954b9b5da7so22423936d6.2
-        for <linux-pm@vger.kernel.org>; Mon, 16 Feb 2026 06:53:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1771253618; x=1771858418; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kovETaFhNl90oBKEgZpok7n0YsCTyTL0lxrKHwRVzWQ=;
-        b=JqRI4ML1KaCDRE6kObv7RiNqq187QTfOye26MBuUrZlHtBC8KCD1/dGx2aMpSPEz3y
-         2OVUjeW5Uq1bynctwJzoK7yw/HNcKfWqWTib+fHrsHltNdrSw9kic/C8F1Qh+skVCCMv
-         ux0C8J0pfszIkuTPq605ZB/jyS7OWyXM6m6DB0mHKCLL2x6Lnt9OgW5EwWJPVftpuDup
-         SF2i+IyFDelmIr3Tk3TM5+xFJHQBzY5vMygH8I5rQVyNHxlWvi6gPZQ9FRWDyDp2rcuL
-         X3iwohJC2Vf/16Yc9wVXeOEXbejw1DaMq2quWsmODNUNh5KgsURwtVLW9WliTZ+3axpc
-         jGbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771253618; x=1771858418;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kovETaFhNl90oBKEgZpok7n0YsCTyTL0lxrKHwRVzWQ=;
-        b=rgaDLkPamrFLxSwnODDpJvRb2143hT4EFjEklahMpPbWMJLprFaoRvejfUzxZIm/sn
-         lYSxm36HaNCefbudJICpLnU1d+SB8aT+5lXuz+xQ3IeCRs6H531M6azImSWhY1tM+7jL
-         JK+SCvdjjWoeK7X9p9SEiQqx5xf0DVcHOk/LnMfa1Qwv3xs5N4SptQBVLtjXorqCRjTv
-         FwH+VLUj7VzZyoqE9LgcjzU0vHzQzSw2xbHpxXFJ3Zc+5Ey6kAB6BVqN204D92jd7QeT
-         MQ+Lxn/vtNs5HpVAza03KgVFfvt4PVQualO2l6GaMli8/kZ7NDX9kp5YOufXcCzRB8jL
-         GjSA==
-X-Forwarded-Encrypted: i=1; AJvYcCU1K0RxaprBdakw9U7kdyvsFqC0E2TGolFqLJqfdUMYhaIccKOMa6z6yIUok+rAWERiz6DhcdnEWQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTHcyK0vyaekJETyheNnf8fAgWJV/9tEtoMj1HwG6z0GWndoMO
-	FkOpMJS7iUi2+VqAaWKphD0zdtdB1+gcoYsLBsJfZ57so84l9ucJzV47hvmbmGHSUisDuZ5Pdg3
-	ysN+dJ7dRuK2T+XL0Wi+rDf8RNEpHpqIgkalM+7hDunUf+r8g5/sjMLwJuInnJA==
-X-Gm-Gg: AZuq6aJVlOFDAnZjn6DzRCJcLKVlcHpokJERvLmuc44UMiVGFcL66BqrqSCwncB9vNH
-	lrrAsXQXdhdbmDQqZxZhTKEHcHNt4fX6ewW37S8+9DR2zbA87hs9k4RiB3PydGap6CALNV2lRzr
-	rX/FbdrXKKJ0dV7Seyked6UPS2ouETYS4/C708LqjByh1z01H73bGDjrtfQCZFmj5TLqw2SMymW
-	yUS68nUou7cDt8RoKwhqrXtQFkoyR9oD8TMdutjvaTz3kNrttQT7qRmqEs8DytYaD5je/14oNE+
-	m8t+Nq6j2PvQoiertftJATu35xSItyAPUDvA8wMRzjh5gV+VO1ZbLHr6Okyc1f0UY4J5M3EqkLx
-	+zUL/lPRNefWYdnQByiTwi5UHkl7/TKi/zladG/In8B7r8UzirAAL+H2weHY/uLipcWhXGmwe8t
-	GWDWk=
-X-Received: by 2002:a05:6214:8004:b0:895:4afd:5dea with SMTP id 6a1803df08f44-89734625af4mr114524706d6.0.1771253618255;
-        Mon, 16 Feb 2026 06:53:38 -0800 (PST)
-X-Received: by 2002:a05:6214:8004:b0:895:4afd:5dea with SMTP id 6a1803df08f44-89734625af4mr114524436d6.0.1771253617732;
-        Mon, 16 Feb 2026 06:53:37 -0800 (PST)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8fc766579asm259615066b.54.2026.02.16.06.53.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Feb 2026 06:53:37 -0800 (PST)
-Message-ID: <ba6a9ce1-6ef0-4921-83dc-751b037d0e7f@oss.qualcomm.com>
-Date: Mon, 16 Feb 2026 15:53:34 +0100
+	s=arc-20240116; t=1771253887; c=relaxed/simple;
+	bh=sO7TBYofqYSM2bgeL92RYGu50mNH9qEmCpadIybs00Y=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Z2x66ljXW6ukcwCcrFPglUVr/OJs7v0mqCv0s4+LYzM2bFiYH7WTVhRWXhOH70bqhnpz1waAwQCokcUcnY1gY/Dk6LyhS1gIB7Lg02nNaiRRMtHGQy3qz5659z6Uh4BwbLK4ZSZD2ImLeC8Tc5oe7hYmV3pHwJBcU8m1bD6ZVqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JZnc3x0J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 321E6C116C6;
+	Mon, 16 Feb 2026 14:58:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771253887;
+	bh=sO7TBYofqYSM2bgeL92RYGu50mNH9qEmCpadIybs00Y=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=JZnc3x0JnNc+ceYmxA0Q8hIOBYkmwRQWjvhxe9xHkuPu7cxJ0AvJyyudsvWv9U7aN
+	 Gef8uu5TCBVlC75HHs7vj+HItKK3CzbqyjTzLkx8OcWPXXdkIowNIa/ZC2RtutpiiN
+	 LnGNUIkFVjOC+WbvwpMJfiYs0pqO3ev92Auw8A54Cp23izPE3GzJ6RYK6IyFsEUcyq
+	 k+xih5YhFITZxTXKNh5oC72gCBf8Mu/g9jJ0sXDhiuJ+ILXRt6qtc31EzNvWQ6rKOD
+	 MEGR1CbnRGQDv3Wjs2wVq96UxIhEIxbw79F+/SdsTBVdAGx2wwQBWlmGmiQogTLgSC
+	 Rp4Q5L25nMFmg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10722E81A28;
+	Mon, 16 Feb 2026 14:58:07 +0000 (UTC)
+From: Kairui Song via B4 Relay <devnull+kasong.tencent.com@kernel.org>
+Subject: [PATCH v4 0/3] mm/swap: hibernate: improve hibernate performance
+ with new allocator
+Date: Mon, 16 Feb 2026 22:58:01 +0800
+Message-Id: <20260216-hibernate-perf-v4-0-1ba9f0bf1ec9@tencent.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] pmdomain: qcom: rpmhpd: Add Eliza RPMh Power Domains
-To: Abel Vesa <abel.vesa@oss.qualcomm.com>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20260216-eliza-pmdomain-v1-0-c51260a47d6d@oss.qualcomm.com>
- <20260216-eliza-pmdomain-v1-2-c51260a47d6d@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20260216-eliza-pmdomain-v1-2-c51260a47d6d@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: 2P-IeFKvx-XtZ-0j9lUx7-XhF4KtSxHN
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDEyNyBTYWx0ZWRfX0LDrfERcs4Nd
- dmx387GhcPltfBtF3938jsyyMzctdRfRayMqYs7eQuyljzWhqUX63BUbRuCYUKlKecWUeWCJvNP
- vIbw3SWCha1McaMaT8iraxy09JlQbmEpBgQI3bg4p2zwtvTOblj0VqqPkjsmPrcxLOpdRV9l4mm
- 8b8PKNHRKr9qVQuVEkkGXlKfmCjtfBI/TRgEcNBmb/1eB4+XN8MyacTwx2D7ccQ8zCxQosrPvP+
- 3b+yWxvHusOiuslPoRQfP9vEyANQDs3HE0pGmFx5wXOnRlK5aJ7Et+SIoyz9sp2CvnxjUhLfA5i
- BOn5jfsESaBXahkTx5/PDuwkbxpygyqiDPXmQfzj5NRXsKE6aLgXNBp3osYMiGbeUWyLdtpBKGv
- lT0znO/N1NLnA18G/o4mYJLi0iF6JdRRy5+bXw0043hvRj/q/nlKW8RBdcOB/Mmybr8eXWMLbCH
- vTbmvkC46NdkKyyQQiA==
-X-Authority-Analysis: v=2.4 cv=BpuQAIX5 c=1 sm=1 tr=0 ts=69932f72 cx=c_pps
- a=UgVkIMxJMSkC9lv97toC5g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
- a=EUspDBNiAAAA:8 a=T3cQ91Bvcxg1os4lQNMA:9 a=QEXdDO2ut3YA:10
- a=1HOtulTD9v-eNWfpl4qZ:22
-X-Proofpoint-ORIG-GUID: 2P-IeFKvx-XtZ-0j9lUx7-XhF4KtSxHN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-16_04,2026-02-16_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 priorityscore=1501 adultscore=0 clxscore=1015 phishscore=0
- lowpriorityscore=0 suspectscore=0 spamscore=0 malwarescore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602160127
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/33M0QqDIBiG4VsJj+fQv8za0e5j7CDtd3kwCxXZi
+ O59Fgy2BTt8P/iemQT0FgM5FTPxmGywo8tRHQqih87dkNo+NwEGNQMOdLAKvesi0gm9oUZJ2ZQ
+ KFAgg+TR5NPaxgZdr7sGGOPrn5ie+rm9K/FKJU0aNEIgtYi17dY7oNLp41OOdrFiC/wBkQBtot
+ BSKVUrugfITqHdAmQFZIQPBWs4r8Q0sy/ICjdPWYDABAAA=
+X-Change-ID: 20260212-hibernate-perf-fb7783b2b252
+To: linux-mm@kvack.org
+Cc: Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+ Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
+ Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
+ Carsten Grohmann <mail@carstengrohmann.de>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org, 
+ "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>, 
+ Carsten Grohmann <carstengrohmann@gmx.de>, Kairui Song <kasong@tencent.com>, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1771253885; l=2863;
+ i=kasong@tencent.com; s=kasong-sign-tencent; h=from:subject:message-id;
+ bh=sO7TBYofqYSM2bgeL92RYGu50mNH9qEmCpadIybs00Y=;
+ b=CpIU6uKntmcDupIJYIVmNkZrat/SPDOFtjFTIqHnuR4BpQdR82jnesJYYScaxY4crDNFtIKs+
+ pzIT1VZg+Y9CEOaqZvFVJ7o4WqAzx1ovXKLIf+7wkElkcoOdiDUWyUK
+X-Developer-Key: i=kasong@tencent.com; a=ed25519;
+ pk=kCdoBuwrYph+KrkJnrr7Sm1pwwhGDdZKcKrqiK8Y1mI=
+X-Endpoint-Received: by B4 Relay for kasong@tencent.com/kasong-sign-tencent
+ with auth_id=562
+X-Original-From: Kairui Song <kasong@tencent.com>
+Reply-To: kasong@tencent.com
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	TAGGED_FROM(0.00)[bounces-42703-lists,linux-pm=lfdr.de,kasong.tencent.com];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42702-lists,linux-pm=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,oss.qualcomm.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,qualcomm.com:email,qualcomm.com:dkim];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 4361B144DA8
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[linux-foundation.org,kernel.org,huaweicloud.com,gmail.com,redhat.com,carstengrohmann.de,vger.kernel.org,gmx.de,tencent.com];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-pm@vger.kernel.org];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	HAS_REPLYTO(0.00)[kasong@tencent.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,tencent.com:mid,tencent.com:email,tencent.com:replyto,carstengrohmann.de:email]
+X-Rspamd-Queue-Id: 087D4144E4D
 X-Rspamd-Action: no action
 
-On 2/16/26 3:23 PM, Abel Vesa wrote:
-> Add RPMh Power Domains support for the Eliza platform.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
-> ---
+The new swap allocator didn't provide a high-performance allocation
+method for hibernate, and just left it using the easy slow path. As a
+result, hibernate performance is quite bad on some devices
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Fix it by implementing hibernate support for the fast allocation path.
 
-Konrad
+This regression seems only happen with SSD devices with poor 4k
+performance. I've tested on several different NVME and SSD setups, the
+performance diff is tiny on them, but testing on a Samsung SSD 830
+Series (SATA II, 3.0 Gbps) showed a big difference [1]:
+
+Test result with Samsung SSD 830 Series (SATA II, 3.0 Gbps) thanks
+to Carsten Grohmann [1]:
+6.19:               324 seconds
+After this series:  35 seconds
+
+Test result with SAMSUNG MZ7LH480HAHQ-00005 (SATA 3.2, 6.0 Gb/s):
+Before 0ff67f990bd4: Wrote 2230700 kbytes in 4.47 seconds (499.03 MB/s)
+After 0ff67f990bd4: Wrote 2215472 kbytes in 4.44 seconds (498.98 MB/s)
+After this series: Wrote 2038748 kbytes in 4.04 seconds (504.64 MB/s)
+
+Test result with Memblaze P5910DT0384M00:
+Before 0ff67f990bd4: Wrote 2222772 kbytes in 0.84 seconds (2646.15 MB/s)
+After 0ff67f990bd4: Wrote 2224184 kbytes in 0.90 seconds (2471.31 MB/s)
+After this series: Wrote 1559088 kbytes in 0.55 seconds (2834.70 MB/s)
+
+The performance is almost the same for blazing fast SSDs, but for some
+SSDs, the performance is several times better.
+
+Patch 1 improves the hibernate performance by using the fast path, and
+patch 2 cleans up the code a bit since there are now multiple fast path
+users using similar conventions.
+
+Signed-off-by: Kairui Song <kasong@tencent.com>
+Tested-by: Carsten Grohmann <mail@carstengrohmann.de>
+Link: https://lore.kernel.org/linux-mm/8b4bdcfa-ce3f-4e23-839f-31367df7c18f@gmx.de/ [1]
+---
+Changes in v4:
+- Reduce indent and improve code comment, as suggested by [ Barry Song ]
+- Link to v3: https://lore.kernel.org/r/20260216-hibernate-perf-v3-0-74e025091145@tencent.com
+
+Changes in v3:
+- Split the indention change to a standalone patch.
+- Update mail address and add Cc stable.
+- Link to v2: https://lore.kernel.org/r/20260215-hibernate-perf-v2-0-cf28c75b04b7@tencent.com
+
+Changes in v2:
+- Based on mm-unstable, resend using b4's relay to fix mismathed patch content.
+- Link to v1: https://lore.kernel.org/r/20260215-hibernate-perf-v1-0-f55ee9ee67db@tencent.com
+
+---
+Kairui Song (3):
+      mm, swap: speed up hibernation allocation and writeout
+      mm, swap: reduce indention for hibernate allocation helper
+      mm, swap: merge common convention and simplify allocation helper
+
+ mm/swapfile.c | 92 ++++++++++++++++++++++++++++++++++-------------------------
+ 1 file changed, 53 insertions(+), 39 deletions(-)
+---
+base-commit: 53f061047924205138ad9bc315885255f7cc4944
+change-id: 20260212-hibernate-perf-fb7783b2b252
+
+Best regards,
+-- 
+Kairui Song <kasong@tencent.com>
+
+
 
