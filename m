@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-42774-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42775-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aGQABqK8lGm4HQIAu9opvQ
-	(envelope-from <linux-pm+bounces-42774-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:18 +0100
+	id qO3gOK+8lGm4HQIAu9opvQ
+	(envelope-from <linux-pm+bounces-42775-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:31 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F51E14F7B3
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6408214F7E7
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4F65930490C9
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 19:07:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3B2A730557EF
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 19:08:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10FA37472A;
-	Tue, 17 Feb 2026 19:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B35C37419A;
+	Tue, 17 Feb 2026 19:08:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="twggVKBv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gVlzx3pj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE377372B44
-	for <linux-pm@vger.kernel.org>; Tue, 17 Feb 2026 19:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD3C336F402
+	for <linux-pm@vger.kernel.org>; Tue, 17 Feb 2026 19:07:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771355277; cv=none; b=adyCeoJ2m6JYr238UI5BAgv4ArmhRx+5WVPTvK9lbTUtUR59/XemPKLMeOm4Qqqaf/AsZsv0cJBVbBAptg7t11zq8h4LAXdrTHK+6vSHmwEOFKwf4xGC/HxzzwSv4IpimEbwbbVPKYXfZSEAVw1+wqrO0f4U5iz3OFgeldhcz3w=
+	t=1771355279; cv=none; b=YmS9dmkprPN5/a3Ui9fL70FlPdajtqj5CycbFLMltuCTKs4b/HGtjgVCILtt7RAEvyXt2YY3cZZ/Fnn2ZjBZLHlAniT5bHBM3QhFIVT9UydYX5IwtwQcQ8k/f+d5Hk/2EqVhiEMgZZjmTu54HlmDzOC8pVo1focf5Br98lShrGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771355277; c=relaxed/simple;
-	bh=CRCXroUSuLo0OR6959rltuB75+mVVzNsDkf6Q/EZu2U=;
+	s=arc-20240116; t=1771355279; c=relaxed/simple;
+	bh=i+jFcBqVsD6dnIsv9GQIYIyIkKbxkLswYZ5TaL1RpJI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AWtV9fntgMpqOFXulCrc6kRWIe1ZEJfbQ4wLmsA81sHzcOQSX9pmoSlI6kLJfYzmciZNmB9iVAkkRLX0Bykx5RF5FwUcnIj5CoKTkopv8Aci+GIhp4+Y3rafUwMIV552paxouVWfySZ1q1lMvO9A5gCSQIqlUg00YzSyihSbdiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=twggVKBv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34E71C4CEF7;
-	Tue, 17 Feb 2026 19:07:55 +0000 (UTC)
+	 MIME-Version; b=T9XS3lQFzSn7C4ZX+GXDJnCNWlVAv3JJiQFVdePdOR6iSns3tAMJyw8TVORQNZiZ+JPava3y9sJegR5GGiuvuHcNtw/7TNQLcovcbCbQuweZ5afdSrmWhipUUjnZ7vZ8+UYUnCQ6WBoU+lEAuNjkdvuQgklVhmUHE6Oc+9gg4AY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gVlzx3pj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20B0FC4CEF7;
+	Tue, 17 Feb 2026 19:07:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771355277;
-	bh=CRCXroUSuLo0OR6959rltuB75+mVVzNsDkf6Q/EZu2U=;
+	s=k20201202; t=1771355279;
+	bh=i+jFcBqVsD6dnIsv9GQIYIyIkKbxkLswYZ5TaL1RpJI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=twggVKBvBW/Rw772Aj89nrXWoCXf6LEspinSS1CCaH2Uhq8udJ+PL/O4feR9ROxCW
-	 tQ3co6GbdenkOcElIo9Y1ReZ/VRaoZLFhKdeyBbBkxySARSdDCrfkgCDscBK9zEfsC
-	 NCmPKdJtJ2tM2llAd1m2K9NKomz3rXhJwZdxkntMlIntApRmCc07yw+4Q/sTNkWCPC
-	 5mOM+hQUey5SBmrHgsTtHyqSrXuyAMb7HvLP0yNaK7mA1IOzlNKeDLjQ13HJzSL/nl
-	 jsMU2HM323rb7JjrREvm5TFWEqxn1Z/7U+x2VgelqfqJqe14sZgd33gmIFrUgt6aRv
-	 D5/7DeFJRUOiA==
+	b=gVlzx3pj87c4aA/1l3nHR0FTjBkqYrcfagCkPqhX7YUV7lGaYO9LPQLKg3BFmbmm3
+	 +jp17MlLd6FsNUBFUN8JjxTrSUZ16b+5yq8Sn1MUfhS6Q0jyddWTPWYG4+VUpLnv9/
+	 cepsVwj4XpgpQv2IOspZ4eOTVb9eW+EvelpIFFecZ3zzFo+7rxsU1FXnT6HxuWdBH7
+	 oKdTSXMLkuB0JRJKCd6qxfOMu3jjLPo5+Db0M0zeoIf0vva4PQ/gkCR0Qsz81Pt3WO
+	 1wYWY/cxoOfZIIas2tuaxuqE0/jnkJjQ8yS2YDeUa4kRT1kaCO8NxiztcK8B0NIRR9
+	 xFo/r7l/2qW/Q==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Len Brown <len.brown@intel.com>
-Subject: [PATCH 06/23] tools/power turbostat.8: Document the "--force" option
-Date: Tue, 17 Feb 2026 13:03:57 -0600
-Message-ID: <785953cf6e63aa5a9fcdfa9577b1411e0281c4bc.1771354332.git.len.brown@intel.com>
+Subject: [PATCH 07/23] tools/power turbostat: Rename "LLCkRPS" column to "LLCMRPS"
+Date: Tue, 17 Feb 2026 13:03:58 -0600
+Message-ID: <041e975937123ee22a7925e468ab73b8a8991767.1771354332.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <16cc8f249c702b7cbb4c2c2be7cd8f4fdd5d1d0c.1771354332.git.len.brown@intel.com>
 References: <16cc8f249c702b7cbb4c2c2be7cd8f4fdd5d1d0c.1771354332.git.len.brown@intel.com>
@@ -78,7 +78,7 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	RCVD_COUNT_THREE(0.00)[4];
 	RCPT_COUNT_TWO(0.00)[2];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42774-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42775-lists,linux-pm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	HAS_REPLYTO(0.00)[lenb@kernel.org];
@@ -91,68 +91,157 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-pm];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	REPLYTO_EQ_FROM(0.00)[]
-X-Rspamd-Queue-Id: 6F51E14F7B3
+X-Rspamd-Queue-Id: 6408214F7E7
 X-Rspamd-Action: no action
 
 From: Len Brown <len.brown@intel.com>
 
-Starting in turbostat v2025.01.14, turbostat refused to run
-on unsupported hardware, pointing to "RUN THE LATEST VERSION"
-on turbostat(8).
+The purpose of the LLC References per Second LLC column
+is to qualify the significance of the LLC%hit column.
 
-At that time, turbostat supported and advertised the "--force"
-parameter to run anyway (with unsupported results).
+If RPS is high, then the hit rate matters.
+If RPS is low, then the hit rate is not significant.
 
-Also document "--force" on turbostat.8.
+Remove unnecessary and distracting precision in the RPS column
+by dividing my a million rather than by a thousand.
 
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.8 | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ tools/power/x86/turbostat/turbostat.8 |  2 +-
+ tools/power/x86/turbostat/turbostat.c | 30 +++++++++++++--------------
+ 2 files changed, 16 insertions(+), 16 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.8 b/tools/power/x86/turbostat/turbostat.8
-index 1551fcdbfd8a..cb3fd8576146 100644
+index cb3fd8576146..44a416a728b3 100644
 --- a/tools/power/x86/turbostat/turbostat.8
 +++ b/tools/power/x86/turbostat/turbostat.8
-@@ -111,6 +111,8 @@ The column name "all" can be used to enable all disabled-by-default built-in cou
+@@ -161,7 +161,7 @@ The system configuration dump (if --quiet is not used) is followed by statistics
  .PP
- \fB--no-perf\fP Disable all the uses of the perf API.
+ \fBSMI\fP The number of System Management Interrupts  serviced CPU during the measurement interval.  While this counter is actually per-CPU, SMI are triggered on all processors, so the number should be the same for all CPUs.
  .PP
-+\fB--force\fPForce turbostat to run on an unsupported platform (minimal defaults).
-+.PP
- \fB--interval seconds\fP overrides the default 5.0 second measurement interval.
+-\fBLLCkRPS\fP Last Level Cache Thousands of References Per Second.  For CPUs with an L3 LLC, this is the number of references that CPU made to the L3 (and the number of misses that CPU made to it's L2).  For CPUs with an L2 LLC, this is the number of references to the L2 (and the number of misses to the CPU's L1).  The system summary row shows the sum for all CPUs.  In both cases, the value displayed is the actual value divided by 1000 in the interest of usually fitting into 8 columns.
++\fBLLCMRPS\fP Last Level Cache Millions of References Per Second.  For CPUs with an L3 LLC, this is the number of references that CPU made to the L3 (and the number of misses that CPU made to it's L2).  For CPUs with an L2 LLC, this is the number of references to the L2 (and the number of misses to the CPU's L1).  The system summary row shows the sum for all CPUs.  In both cases, the value displayed is the actual value divided by 1,000,000.  If this value is large, then the LLC%hit column is significant.  If this value is small, then the LLC%hit column is not significant.
  .PP
- \fB--num_iterations num\fP number of the measurement iterations.
-@@ -165,9 +167,9 @@ The system configuration dump (if --quiet is not used) is followed by statistics
+ \fBLLC%hit\fP Last Level Cache Hit Rate %.  Hit Rate Percent = 100.0 * (References - Misses)/References.  The system summary row shows the weighted average for all CPUs (100.0 * (Sum_References - Sum_Misses)/Sum_References).
  .PP
- \fBC1, C2, C3...\fP The number times Linux requested the C1, C2, C3 idle state during the measurement interval.  The system summary line shows the sum for all CPUs.  These are C-state names as exported in /sys/devices/system/cpu/cpu*/cpuidle/state*/name.  While their names are generic, their attributes are processor specific. They the system description section of output shows what MWAIT sub-states they are mapped to on each system.  These counters are in the "cpuidle" group, which is disabled, by default.
- .PP
--\fBC1+, C2+, C3+...\fP The idle governor idle state misprediction statistics. Inidcates the number times Linux requested the C1, C2, C3 idle state during the measurement interval, but should have requested a deeper idle state (if it exists and enabled). These statistics come from the /sys/devices/system/cpu/cpu*/cpuidle/state*/below file.  These counters are in the "cpuidle" group, which is disabled, by default.
-+\fBC1+, C2+, C3+...\fP The idle governor idle state misprediction statistics. Indicates the number times Linux requested the C1, C2, C3 idle state during the measurement interval, but should have requested a deeper idle state (if it exists and enabled). These statistics come from the /sys/devices/system/cpu/cpu*/cpuidle/state*/below file.  These counters are in the "cpuidle" group, which is disabled, by default.
- .PP
--\fBC1-, C2-, C3-...\fP The idle governor idle state misprediction statistics. Inidcates the number times Linux requested the C1, C2, C3 idle state during the measurement interval, but should have requested a shallower idle state (if it exists and enabled). These statistics come from the /sys/devices/system/cpu/cpu*/cpuidle/state*/above file.  These counters are in the "cpuidle" group, which is disabled, by default.
-+\fBC1-, C2-, C3-...\fP The idle governor idle state misprediction statistics. Indicates the number times Linux requested the C1, C2, C3 idle state during the measurement interval, but should have requested a shallower idle state (if it exists and enabled). These statistics come from the /sys/devices/system/cpu/cpu*/cpuidle/state*/above file.  These counters are in the "cpuidle" group, which is disabled, by default.
- .PP
- \fBC1%, C2%, C3%\fP The residency percentage that Linux requested C1, C2, C3....  The system summary is the average of all CPUs in the system.  Note that these are software, reflecting what was requested.  The hardware counters reflect what was actually achieved.  These counters are in the "pct_idle" group, which is enabled by default.
- .PP
-@@ -197,7 +199,7 @@ The system configuration dump (if --quiet is not used) is followed by statistics
- .PP
- \fBGFX%C0\fP Percentage of time that at least one GFX compute engine is busy.
- .PP
--\fBCPUGFX%\fP Percentage of time that at least one CPU is busy at the same time as at least one Graphics compute enginer is busy.
-+\fBCPUGFX%\fP Percentage of time that at least one CPU is busy at the same time as at least one Graphics compute engine is busy.
- .PP
- \fBPkg%pc2, Pkg%pc3, Pkg%pc6, Pkg%pc7\fP percentage residency in hardware package idle states.  These numbers are from hardware residency counters.
- .PP
-@@ -559,6 +561,8 @@ If the upstream version isn't new enough, the development tree can be found here
- If the development tree doesn't work, please contact the author via chat,
- or via email with the word "turbostat" on the Subject line.
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 4dd4b0f3e6d4..2dfc110ae483 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -210,7 +210,7 @@ struct msr_counter bic[] = {
+ 	{ 0x0, "NMI", NULL, 0, 0, 0, NULL, 0 },
+ 	{ 0x0, "CPU%c1e", NULL, 0, 0, 0, NULL, 0 },
+ 	{ 0x0, "pct_idle", NULL, 0, 0, 0, NULL, 0 },
+-	{ 0x0, "LLCkRPS", NULL, 0, 0, 0, NULL, 0 },
++	{ 0x0, "LLCMRPS", NULL, 0, 0, 0, NULL, 0 },
+ 	{ 0x0, "LLC%hit", NULL, 0, 0, 0, NULL, 0 },
+ };
  
-+An old turbostat binary may run on unknown hardware by using "--force",
-+but results are unsupported.
- .SH FILES
- .ta
- .nf
+@@ -281,7 +281,7 @@ enum bic_names {
+ 	BIC_NMI,
+ 	BIC_CPU_c1e,
+ 	BIC_pct_idle,
+-	BIC_LLC_RPS,
++	BIC_LLC_MRPS,
+ 	BIC_LLC_HIT,
+ 	MAX_BIC
+ };
+@@ -424,7 +424,7 @@ static void bic_groups_init(void)
+ 	SET_BIC(BIC_pct_idle, &bic_group_idle);
+ 
+ 	BIC_INIT(&bic_group_cache);
+-	SET_BIC(BIC_LLC_RPS, &bic_group_cache);
++	SET_BIC(BIC_LLC_MRPS, &bic_group_cache);
+ 	SET_BIC(BIC_LLC_HIT, &bic_group_cache);
+ 
+ 	BIC_INIT(&bic_group_other);
+@@ -2440,7 +2440,7 @@ static void bic_disable_msr_access(void)
+ static void bic_disable_perf_access(void)
+ {
+ 	CLR_BIC(BIC_IPC, &bic_enabled);
+-	CLR_BIC(BIC_LLC_RPS, &bic_enabled);
++	CLR_BIC(BIC_LLC_MRPS, &bic_enabled);
+ 	CLR_BIC(BIC_LLC_HIT, &bic_enabled);
+ }
+ 
+@@ -2814,8 +2814,8 @@ void print_header(char *delim)
+ 	if (DO_BIC(BIC_SMI))
+ 		outp += sprintf(outp, "%sSMI", (printed++ ? delim : ""));
+ 
+-	if (DO_BIC(BIC_LLC_RPS))
+-		outp += sprintf(outp, "%sLLCkRPS", (printed++ ? delim : ""));
++	if (DO_BIC(BIC_LLC_MRPS))
++		outp += sprintf(outp, "%sLLCMRPS", (printed++ ? delim : ""));
+ 
+ 	if (DO_BIC(BIC_LLC_HIT))
+ 		outp += sprintf(outp, "%sLLC%%hit", (printed++ ? delim : ""));
+@@ -3306,9 +3306,9 @@ int format_counters(PER_THREAD_PARAMS)
+ 		outp += sprintf(outp, "%s%d", (printed++ ? delim : ""), t->smi_count);
+ 
+ 	/* LLC Stats */
+-	if (DO_BIC(BIC_LLC_RPS) || DO_BIC(BIC_LLC_HIT)) {
+-		if (DO_BIC(BIC_LLC_RPS))
+-			outp += sprintf(outp, "%s%.0f", (printed++ ? delim : ""), t->llc.references / interval_float / 1000);
++	if (DO_BIC(BIC_LLC_MRPS) || DO_BIC(BIC_LLC_HIT)) {
++		if (DO_BIC(BIC_LLC_MRPS))
++			outp += sprintf(outp, "%s%.0f", (printed++ ? delim : ""), t->llc.references / interval_float / 1000000);
+ 
+ 		if (DO_BIC(BIC_LLC_HIT))
+ 			outp += sprintf(outp, fmt8, (printed++ ? delim : ""), pct((t->llc.references - t->llc.misses), t->llc.references));
+@@ -3855,7 +3855,7 @@ int delta_thread(struct thread_data *new, struct thread_data *old, struct core_d
+ 	if (DO_BIC(BIC_SMI))
+ 		old->smi_count = new->smi_count - old->smi_count;
+ 
+-	if (DO_BIC(BIC_LLC_RPS))
++	if (DO_BIC(BIC_LLC_MRPS))
+ 		old->llc.references = new->llc.references - old->llc.references;
+ 
+ 	if (DO_BIC(BIC_LLC_HIT))
+@@ -5067,7 +5067,7 @@ int get_counters(PER_THREAD_PARAMS)
+ 
+ 	get_smi_aperf_mperf(cpu, t);
+ 
+-	if (DO_BIC(BIC_LLC_RPS) || DO_BIC(BIC_LLC_HIT))
++	if (DO_BIC(BIC_LLC_MRPS) || DO_BIC(BIC_LLC_HIT))
+ 		get_perf_llc_stats(cpu, &t->llc);
+ 
+ 	if (DO_BIC(BIC_IPC))
+@@ -8344,7 +8344,7 @@ void linux_perf_init(void)
+ 		if (fd_instr_count_percpu == NULL)
+ 			err(-1, "calloc fd_instr_count_percpu");
+ 	}
+-	if (BIC_IS_ENABLED(BIC_LLC_RPS)) {
++	if (BIC_IS_ENABLED(BIC_LLC_MRPS)) {
+ 		fd_llc_percpu = calloc(topo.max_cpu_num + 1, sizeof(int));
+ 		if (fd_llc_percpu == NULL)
+ 			err(-1, "calloc fd_llc_percpu");
+@@ -9066,7 +9066,7 @@ void perf_llc_init(void)
+ 
+ 	if (no_perf)
+ 		return;
+-	if (!(BIC_IS_ENABLED(BIC_LLC_RPS) && BIC_IS_ENABLED(BIC_LLC_HIT)))
++	if (!(BIC_IS_ENABLED(BIC_LLC_MRPS) && BIC_IS_ENABLED(BIC_LLC_HIT)))
+ 		return;
+ 
+ 	for (cpu = 0; cpu <= topo.max_cpu_num; ++cpu) {
+@@ -9089,7 +9089,7 @@ void perf_llc_init(void)
+ 			return;
+ 		}
+ 	}
+-	BIC_PRESENT(BIC_LLC_RPS);
++	BIC_PRESENT(BIC_LLC_MRPS);
+ 	BIC_PRESENT(BIC_LLC_HIT);
+ }
+ 
+@@ -9518,7 +9518,7 @@ void check_perf_access(void)
+ 		if (!has_perf_instr_count_access())
+ 			no_perf = 1;
+ 
+-	if (BIC_IS_ENABLED(BIC_LLC_RPS) || BIC_IS_ENABLED(BIC_LLC_HIT))
++	if (BIC_IS_ENABLED(BIC_LLC_MRPS) || BIC_IS_ENABLED(BIC_LLC_HIT))
+ 		if (!has_perf_llc_access())
+ 			no_perf = 1;
+ 
 -- 
 2.45.2
 
