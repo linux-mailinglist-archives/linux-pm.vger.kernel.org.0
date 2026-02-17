@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-42778-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42779-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2PIeFre8lGm4HQIAu9opvQ
-	(envelope-from <linux-pm+bounces-42778-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:39 +0100
+	id 4B97IJ68lGm4HQIAu9opvQ
+	(envelope-from <linux-pm+bounces-42779-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:14 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D64EB14F7F5
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:38 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAE5614F79D
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C32F2303CC17
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 19:08:04 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 0E2C430080B1
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 19:08:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1066374733;
-	Tue, 17 Feb 2026 19:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6DBB37419C;
+	Tue, 17 Feb 2026 19:08:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="apJQ6AGL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kKZf7nW6"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD8637472F
-	for <linux-pm@vger.kernel.org>; Tue, 17 Feb 2026 19:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8471E285406
+	for <linux-pm@vger.kernel.org>; Tue, 17 Feb 2026 19:08:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771355284; cv=none; b=KnwjVIl7L1pfrQHuleRaXjNGX5+UCMP7++wOVJ4D5BSjB4rUOFxkx0bW5HFy/VoUWMRT9whi069DoJC9WTQdzv90hZByCrEPWZ4w14JLKhEXSbswhKwvU0Bm9K/iM84FZseO0PqbDRiNzHuVG+IyX/K9jWK5PCkXp2l5B9WbaT4=
+	t=1771355285; cv=none; b=u8tFr0cBfQvjaeRKIe6OF4LWbNi8tRRXTu/GxNWDI+/Vib/otMsoh16sNC1wNgDPWENvbNVb2wV89A1vN5Ubz/ukXJptxIus6hyAz7ywbmoHK0nVl5YlYyr9uq/ZntHvFkwI6x9HxVdgKtVyTNps7INMcJXu6Blna84qXQ9v/q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771355284; c=relaxed/simple;
-	bh=bm+i4T31rJAkxDOzlUzwfK0OE0e8MxAa2IfgQQcMNNU=;
+	s=arc-20240116; t=1771355285; c=relaxed/simple;
+	bh=iizFB0qbOj6KZSPpo1/NuJVtTDZKl/J1vXYhGBFf/K8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rKhghKW4ydo16rz/HxKVT91MTn3bbwr6Y5q2EZi22KVK27jjOqCEC5GZY0edEngJobpizgjCfqVoUrQzrDJMc4AMC/ntqkF6OiYu7X9LcW0Pabc9GvOybfeoviAwq91kn/1a6O+fTf+Ok6TRPWnqCma/xDvPD43tJKwnQwc7StU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=apJQ6AGL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E02C4CEF7;
-	Tue, 17 Feb 2026 19:08:02 +0000 (UTC)
+	 MIME-Version; b=VRjXerle92lsTLP6dzlaEdpILVm3u3gD5Uaczr81NSzhCQnhoCt16VGZxkBt8hKwnPvEsUx3VIknSX0v9Rfoq4CWu0/EouGgGFFHdIrHgwbNe8HiJLdqZfmLx4W+/emPbzWQHETG3z142vGvQv9dTXPSvPyTtUeo8WYdKTcR2Kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kKZf7nW6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77A48C19421;
+	Tue, 17 Feb 2026 19:08:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771355284;
-	bh=bm+i4T31rJAkxDOzlUzwfK0OE0e8MxAa2IfgQQcMNNU=;
+	s=k20201202; t=1771355285;
+	bh=iizFB0qbOj6KZSPpo1/NuJVtTDZKl/J1vXYhGBFf/K8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=apJQ6AGLWCASESIDsowmL4jmNZ2GF8hbXOlxgVuPM/Wl6hhu0eS4oMF8gL9UIj9Xo
-	 tHZ83CVH9FxP5VKI98yoe4ZSyoaR7tK+ELJQ1nR/mLWIHWDIp0xV5xj5a4NI6zSNqj
-	 zM0ko6wfpoQIdd7Kg/QJXI4wSzPvJM5zDDtY1TjPHUUTSE0BHU8UsAhjNI+muOubnv
-	 wbFfFhwcz+ZLS1rmNMxiDZHEG2Bp7FE4EPPIVQOjw/MapbE+/G0LwzrvnLqQRN5eY7
-	 PkSk1SMFGUKoUt9VU9QNdOgZ91tle+fcdmPFNgTZGyxLSwV01132FsLxDtSXCMordU
-	 5JU/QBCJ2+PoA==
+	b=kKZf7nW62Kna83rppdTybKOt9gLX6Z0Dp5vu84E4DpH+7TncivEAF/ranACP7gzOc
+	 CNX7zFcRcsfIUNsyfvK7iaXMi7DW+m18Ao/af4ZxQ2di+qwBKn8xrlNbfXfiRJEQ5O
+	 q7WyGuM14Y22dEs64czIPodCezJuLUjONKfcgUEHBnCEke7HN6cbsrn5DN7gIf287u
+	 88SHFV+484SpqiKBFfW0+ebHLeK5zOFLoA0RriAD1sNYf2zPsMrVB6BJ4Fb9uXjVUg
+	 pQE2N136G5rKJ4/5o5HFuDcFo38Vtb7j1ivCZnOHFgKk3fla86kUfr3sC8yv1l0i8o
+	 jx9Sx16M0Cctg==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Len Brown <len.brown@intel.com>
-Subject: [PATCH 10/23] tools/power turbostat: Add L2 cache statistics
-Date: Tue, 17 Feb 2026 13:04:01 -0600
-Message-ID: <dd23bfe4c317a9b5cbb4edfd36e5b8df12e84b8d.1771354332.git.len.brown@intel.com>
+Subject: [PATCH 11/23] tools/power turbostat: Cleanup internal use of "base_cpu"
+Date: Tue, 17 Feb 2026 13:04:02 -0600
+Message-ID: <54ca69f33cf1b67dd3dc9555fb9d82c83ee3ba89.1771354332.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <16cc8f249c702b7cbb4c2c2be7cd8f4fdd5d1d0c.1771354332.git.len.brown@intel.com>
 References: <16cc8f249c702b7cbb4c2c2be7cd8f4fdd5d1d0c.1771354332.git.len.brown@intel.com>
@@ -67,7 +67,7 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -78,7 +78,7 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	RCVD_COUNT_THREE(0.00)[4];
 	RCPT_COUNT_TWO(0.00)[2];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42778-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42779-lists,linux-pm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	HAS_REPLYTO(0.00)[lenb@kernel.org];
@@ -86,815 +86,663 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[lenb@kernel.org,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:mid,intel.com:email];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:mid,intel.com:email];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	REPLYTO_EQ_FROM(0.00)[]
-X-Rspamd-Queue-Id: D64EB14F7F5
+X-Rspamd-Queue-Id: EAE5614F79D
 X-Rspamd-Action: no action
 
 From: Len Brown <len.brown@intel.com>
 
-version 2026.02.04
+Disambiguate the uses "base_cpu":
 
-Add support for L2 cache statistics: L2MRPS and L2%hit
-L2 statistics join the LLC in the "cache" counter group.
+master_cpu: lowest permitted cpu#, read global MSRs here
+package_data.first_cpu: lowest permitted cpu# in that package
+core_data.first_cpu: lowest permitted cpu# in the core
+current_cpu: where I'm running now
 
-While the underlying LLC perf kernel support was architectural,
-L2 perf counters are model-specific:
-
-Support Intel Xeon -- Sapphire Rapids and newer.
-Support Intel Atom -- Gracemont and newer.
-Support Intel Hybrid -- Alder Lake and newer.
-
-Example:
-
-alder-lake-n$ sudo turbostat --quiet --show CPU,Busy%,cache my_workload
-CPU	Busy%	LLCMRPS	LLC%hit	L2MRPS	L2%hit
--	49.82	1210	85.02	2909	31.63
-0	99.14	322	88.89	767	32.38
-1	0.91	1	32.47	1	18.86
-2	0.20	0	40.78	0	23.34
-3	99.17	295	81.79	706	31.89
-4	0.68	1	58.71	1	15.61
-5	99.16	299	85.65	726	31.32
-6	0.08	0	45.35	0	31.71
-7	99.21	293	83.63	707	30.92
-
-where "my_workload" is a wrapper for a yogini workload
-that has 4 fully-busy threads with 2MB working set each.
-
-Note that analogous to the system summary for multiple LLC systems,
-the system summary row for the L2 is the aggregate of all CPUS in the
-system -- there is no per-cache roll-up.
+No functional change.
 
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.8 |   6 +-
- tools/power/x86/turbostat/turbostat.c | 450 +++++++++++++++++++++++---
- 2 files changed, 405 insertions(+), 51 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 200 +++++++++++++-------------
+ 1 file changed, 100 insertions(+), 100 deletions(-)
 
-diff --git a/tools/power/x86/turbostat/turbostat.8 b/tools/power/x86/turbostat/turbostat.8
-index 44a416a728b3..b4ef04200219 100644
---- a/tools/power/x86/turbostat/turbostat.8
-+++ b/tools/power/x86/turbostat/turbostat.8
-@@ -163,7 +163,11 @@ The system configuration dump (if --quiet is not used) is followed by statistics
- .PP
- \fBLLCMRPS\fP Last Level Cache Millions of References Per Second.  For CPUs with an L3 LLC, this is the number of references that CPU made to the L3 (and the number of misses that CPU made to it's L2).  For CPUs with an L2 LLC, this is the number of references to the L2 (and the number of misses to the CPU's L1).  The system summary row shows the sum for all CPUs.  In both cases, the value displayed is the actual value divided by 1,000,000.  If this value is large, then the LLC%hit column is significant.  If this value is small, then the LLC%hit column is not significant.
- .PP
--\fBLLC%hit\fP Last Level Cache Hit Rate %.  Hit Rate Percent = 100.0 * (References - Misses)/References.  The system summary row shows the weighted average for all CPUs (100.0 * (Sum_References - Sum_Misses)/Sum_References).
-+\fBLLC%hit\fP Last Level Cache Hit Rate %.  Hit Rate Percent = 100.0 * Hits/References.  The system summary row shows the weighted average for all CPUs (100.0 * Sum_Hits/Sum_References).
-+.PP
-+\fBL2MRPS\fP Level-2 Cache Millions of References Per Second.  For CPUs with an L2 LLC, this is the same as LLC references.  The system summary row shows the sum for all CPUs.  In both cases, the value displayed is the actual value divided by 1,000,000.  If this value is large, then the L2%hit column is significant.  If this value is small, then the L2%hit column is not significant.
-+.PP
-+\fBL2%hit\fP Level-2 Cache Hit Rate %.  Hit Rate Percent = 100.0 * Hits/References.  The system summary row shows the weighted average for all CPUs (100.0 * (Sum_Hits)/Sum_References).
- .PP
- \fBC1, C2, C3...\fP The number times Linux requested the C1, C2, C3 idle state during the measurement interval.  The system summary line shows the sum for all CPUs.  These are C-state names as exported in /sys/devices/system/cpu/cpu*/cpuidle/state*/name.  While their names are generic, their attributes are processor specific. They the system description section of output shows what MWAIT sub-states they are mapped to on each system.  These counters are in the "cpuidle" group, which is disabled, by default.
- .PP
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index c622b55c330c..0b52363d5e7c 100644
+index 0b52363d5e7c..2c603990c0d3 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -212,6 +212,8 @@ struct msr_counter bic[] = {
- 	{ 0x0, "pct_idle", NULL, 0, 0, 0, NULL, 0 },
- 	{ 0x0, "LLCMRPS", NULL, 0, 0, 0, NULL, 0 },
- 	{ 0x0, "LLC%hit", NULL, 0, 0, 0, NULL, 0 },
-+	{ 0x0, "L2MRPS", NULL, 0, 0, 0, NULL, 0 },
-+	{ 0x0, "L2%hit", NULL, 0, 0, 0, NULL, 0 },
- };
+@@ -534,7 +534,7 @@ double rapl_dram_energy_units, rapl_energy_units, rapl_psys_energy_units;
+ double rapl_joule_counter_range;
+ unsigned int crystal_hz;
+ unsigned long long tsc_hz;
+-int base_cpu;
++int master_cpu;
+ unsigned int has_hwp;		/* IA32_PM_ENABLE, IA32_HWP_CAPABILITIES */
+ 			/* IA32_HWP_REQUEST, IA32_HWP_STATUS */
+ unsigned int has_hwp_notify;	/* IA32_HWP_INTERRUPT */
+@@ -626,7 +626,7 @@ double slm_bclk(void)
+ 	unsigned int i;
+ 	double freq;
  
- /* n.b. bic_names must match the order in bic[], above */
-@@ -283,6 +285,8 @@ enum bic_names {
- 	BIC_pct_idle,
- 	BIC_LLC_MRPS,
- 	BIC_LLC_HIT,
-+	BIC_L2_MRPS,
-+	BIC_L2_HIT,
- 	MAX_BIC
- };
+-	if (get_msr(base_cpu, MSR_FSB_FREQ, &msr))
++	if (get_msr(master_cpu, MSR_FSB_FREQ, &msr))
+ 		fprintf(outf, "SLM BCLK: unknown\n");
  
-@@ -294,12 +298,10 @@ void print_bic_set(char *s, cpu_set_t *set)
+ 	i = msr & 0xf;
+@@ -2136,7 +2136,7 @@ struct thread_data {
+ } *thread_even, *thread_odd;
  
- 	printf("%s:", s);
+ struct core_data {
+-	int base_cpu;
++	int first_cpu;
+ 	unsigned long long c3;
+ 	unsigned long long c6;
+ 	unsigned long long c7;
+@@ -2151,7 +2151,7 @@ struct core_data {
+ } *core_even, *core_odd;
  
--	for (i = 0; i <= MAX_BIC; ++i) {
-+	for (i = 0; i < MAX_BIC; ++i) {
+ struct pkg_data {
+-	int base_cpu;
++	int first_cpu;
+ 	unsigned long long pc2;
+ 	unsigned long long pc3;
+ 	unsigned long long pc6;
+@@ -2486,12 +2486,12 @@ int for_all_cpus(int (func) (struct thread_data *, struct core_data *, struct pk
  
--		if (CPU_ISSET(i, set)) {
--			assert(i < MAX_BIC);
-+		if (CPU_ISSET(i, set))
- 			printf(" %s", bic[i].name);
--		}
- 	}
- 	putchar('\n');
- }
-@@ -426,6 +428,8 @@ static void bic_groups_init(void)
- 	BIC_INIT(&bic_group_cache);
- 	SET_BIC(BIC_LLC_MRPS, &bic_group_cache);
- 	SET_BIC(BIC_LLC_HIT, &bic_group_cache);
-+	SET_BIC(BIC_L2_MRPS, &bic_group_cache);
-+	SET_BIC(BIC_L2_HIT, &bic_group_cache);
- 
- 	BIC_INIT(&bic_group_other);
- 	SET_BIC(BIC_IRQ, &bic_group_other);
-@@ -482,6 +486,7 @@ FILE *outf;
- int *fd_percpu;
- int *fd_instr_count_percpu;
- int *fd_llc_percpu;
-+int *fd_l2_percpu;
- struct timeval interval_tv = { 5, 0 };
- struct timespec interval_ts = { 5, 0 };
- 
-@@ -1249,6 +1254,84 @@ static const struct platform_data turbostat_pdata[] = {
- 	{ 0, NULL },
- };
- 
-+struct {
-+	unsigned int uniform;
-+	unsigned int pcore;
-+	unsigned int ecore;
-+	unsigned int lcore;
-+} perf_pmu_types;
-+
-+/*
-+ * Events are enumerated in https://github.com/intel/perfmon
-+ * and tools/perf/pmu-events/arch/x86/.../cache.json
-+ */
-+struct perf_l2_events {
-+	unsigned long long refs;	/* L2_REQUEST.ALL */
-+	unsigned long long hits;	/* L2_REQUEST.HIT */
-+};
-+
-+struct perf_model_support {
-+	unsigned int vfm;
-+	struct perf_l2_events first;
-+	struct perf_l2_events second;
-+	struct perf_l2_events third;
-+} *perf_model_support;
-+
-+/* Perf Cache Events */
-+#define	PCE(ext_umask, umask)	(((unsigned long long) ext_umask) << 40 | umask << 8 | 0x24)
-+
-+/*
-+ * Enumerate up to three perf CPU PMU's in a system.
-+ * The first, second, and third columns are populated without skipping, describing
-+ * pcore, ecore, lcore PMUs, in order, if present.  (The associated PMU "type" field is
-+ * read from sysfs in all cases.)  Eg.
-+ *
-+ * non-hybrid:
-+ *	GNR: pcore, {}, {}
-+ *	ADL-N: ecore, {}, {}
-+ * hybrid:
-+ *	MTL: pcore, ecore, {}%
-+ *	ARL-H: pcore, ecore, lcore
-+ *	LNL: ecore, ecore%%, {}
-+ *
-+ * % MTL physical lcore share architecture and PMU with ecore, and are thus not enumerated separately.
-+ * %% LNL physical lcore is enumerated by perf as ecore
-+ */
-+static struct perf_model_support turbostat_perf_model_support[] = {
-+	{ INTEL_SAPPHIRERAPIDS_X, { PCE(0x00, 0xFF), PCE(0x00, 0xDF)}, {}, {} },
-+	{ INTEL_EMERALDRAPIDS_X, { PCE(0x00, 0xFF), PCE(0x00, 0xDF)}, {}, {} },
-+	{ INTEL_GRANITERAPIDS_X, { PCE(0x00, 0xFF), PCE(0x00, 0xDF)}, {}, {} },
-+	{ INTEL_GRANITERAPIDS_D, { PCE(0x00, 0xFF), PCE(0x00, 0xDF)}, {}, {} },
-+	{ INTEL_DIAMONDRAPIDS_X, { PCE(0x00, 0xFF), PCE(0x00, 0x5F)}, {}, {} },
-+
-+	{ INTEL_ATOM_GRACEMONT, { PCE(0x00, 0x00), PCE(0x00, 0x02)}, {}, {} },	/* ADL-N */
-+	{ INTEL_ATOM_CRESTMONT_X, { PCE(0x00, 0x00), PCE(0x00, 0x02)}, {}, {} },	/* SRF */
-+	{ INTEL_ATOM_CRESTMONT, { PCE(0x00, 0x00), PCE(0x00, 0x02)}, {}, {} },	/* GRR */
-+	{ INTEL_ATOM_DARKMONT_X, { PCE(0x01, 0xFF), PCE(0x01, 0xBF)}, {}, {} },	/* CWF */
-+
-+	{ INTEL_ALDERLAKE, { PCE(0x00, 0xFF), PCE(0x00, 0xDF)}, { PCE(0x00, 0x00), PCE(0x00, 0x02)}, {} },
-+	{ INTEL_ALDERLAKE, { PCE(0x00, 0xFF), PCE(0x00, 0xDF)}, { PCE(0x00, 0x00), PCE(0x00, 0x02)}, {} },
-+	{ INTEL_ALDERLAKE_L, { PCE(0x00, 0xFF), PCE(0x00, 0xDF)}, { PCE(0x00, 0x00), PCE(0x00, 0x02)}, {} },
-+	{ INTEL_RAPTORLAKE, { PCE(0x00, 0xFF), PCE(0x00, 0xDF)}, { PCE(0x00, 0x00), PCE(0x00, 0x02)}, {} },
-+	{ INTEL_RAPTORLAKE_P, { PCE(0x00, 0xFF), PCE(0x00, 0xDF)}, { PCE(0x00, 0x00), PCE(0x00, 0x02)}, {} },
-+	{ INTEL_RAPTORLAKE_S, { PCE(0x00, 0xFF), PCE(0x00, 0xDF)}, { PCE(0x00, 0x00), PCE(0x00, 0x02)}, {} },
-+	{ INTEL_METEORLAKE_L, { PCE(0x00, 0xFF), PCE(0x00, 0xDF)}, { PCE(0x00, 0x00), PCE(0x00, 0x02)}, {} },
-+	{ INTEL_METEORLAKE, { PCE(0x00, 0xFF), PCE(0x00, 0xDF)}, { PCE(0x00, 0x00), PCE(0x00, 0x02)}, {} },
-+	{ INTEL_ARROWLAKE_U, { PCE(0x00, 0xFF), PCE(0x00, 0xDF)}, { PCE(0x00, 0x00), PCE(0x00, 0x02)}, {} },
-+
-+	{ INTEL_LUNARLAKE_M, { PCE(0x00, 0xFF), PCE(0x00, 0x5F)}, { PCE(0x00, 0x07), PCE(0x00, 0x02)}, {} },
-+	{ INTEL_ARROWLAKE_H, { PCE(0x00, 0xFF), PCE(0x00, 0x5F)}, { PCE(0x00, 0x07), PCE(0x00, 0x02)}, { PCE(0x00, 0x00), PCE(0x00, 0x02)} },
-+	{ INTEL_ARROWLAKE, { PCE(0x00, 0xFF), PCE(0x00, 0x5F)}, { PCE(0x00, 0x07), PCE(0x00, 0x02)}, {} },
-+
-+	{ INTEL_PANTHERLAKE_L, { PCE(0x00, 0xFF), PCE(0x00, 0x5F)}, { PCE(0x01, 0xFF), PCE(0x01, 0xBF)}, {} },
-+	{ INTEL_WILDCATLAKE_L, { PCE(0x00, 0xFF), PCE(0x00, 0x5F)}, { PCE(0x01, 0xFF), PCE(0x01, 0xBF)}, {} },
-+
-+	{ INTEL_NOVALAKE, { PCE(0x00, 0xFF), PCE(0x00, 0x5F)}, { PCE(0x01, 0xFF), PCE(0x01, 0xBF)}, {} },
-+	{ INTEL_NOVALAKE_L, { PCE(0x00, 0xFF), PCE(0x00, 0x5F)}, { PCE(0x01, 0xFF), PCE(0x01, 0xBF)}, {} },
-+
-+	{ 0, {}, {}, {} }
-+};
-+
- static const struct platform_features *platform;
- 
- void probe_platform_features(unsigned int family, unsigned int model)
-@@ -1292,6 +1375,21 @@ void probe_platform_features(unsigned int family, unsigned int model)
- 	exit(1);
- }
- 
-+void init_perf_model_support(unsigned int family, unsigned int model)
-+{
-+	int i;
-+
-+	if (!genuine_intel)
-+		return;
-+
-+	for (i = 0; turbostat_perf_model_support[i].vfm; i++) {
-+		if (VFM_FAMILY(turbostat_perf_model_support[i].vfm) == family && VFM_MODEL(turbostat_perf_model_support[i].vfm) == model) {
-+			perf_model_support = &turbostat_perf_model_support[i];
-+			return;
-+		}
-+	}
-+}
-+
- /* Model specific support End */
- 
- #define	TJMAX_DEFAULT	100
-@@ -1308,6 +1406,7 @@ char *progname;
- 
- #define CPU_SUBSET_MAXCPUS	8192	/* need to use before probe... */
- cpu_set_t *cpu_present_set, *cpu_possible_set, *cpu_effective_set, *cpu_allowed_set, *cpu_affinity_set, *cpu_subset;
-+cpu_set_t *perf_pcore_set, *perf_ecore_set, *perf_lcore_set;
- size_t cpu_present_setsize, cpu_possible_setsize, cpu_effective_setsize, cpu_allowed_setsize, cpu_affinity_setsize, cpu_subset_size;
- #define MAX_ADDED_THREAD_COUNTERS 24
- #define MAX_ADDED_CORE_COUNTERS 8
-@@ -2008,6 +2107,10 @@ struct llc_stats {
- 	unsigned long long references;
- 	unsigned long long misses;
- };
-+struct l2_stats {
-+	unsigned long long references;
-+	unsigned long long hits;
-+};
- struct thread_data {
- 	struct timeval tv_begin;
- 	struct timeval tv_end;
-@@ -2021,6 +2124,7 @@ struct thread_data {
- 	unsigned long long nmi_count;
- 	unsigned int smi_count;
- 	struct llc_stats llc;
-+	struct l2_stats l2;
- 	unsigned int cpu_id;
- 	unsigned int apic_id;
- 	unsigned int x2apic_id;
-@@ -2442,6 +2546,8 @@ static void bic_disable_perf_access(void)
- 	CLR_BIC(BIC_IPC, &bic_enabled);
- 	CLR_BIC(BIC_LLC_MRPS, &bic_enabled);
- 	CLR_BIC(BIC_LLC_HIT, &bic_enabled);
-+	CLR_BIC(BIC_L2_MRPS, &bic_enabled);
-+	CLR_BIC(BIC_L2_HIT, &bic_enabled);
- }
- 
- static long perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu, int group_fd, unsigned long flags)
-@@ -2820,6 +2926,12 @@ void print_header(char *delim)
- 	if (DO_BIC(BIC_LLC_HIT))
- 		outp += sprintf(outp, "%sLLC%%hit", (printed++ ? delim : ""));
- 
-+	if (DO_BIC(BIC_L2_MRPS))
-+		outp += sprintf(outp, "%sL2MRPS", (printed++ ? delim : ""));
-+
-+	if (DO_BIC(BIC_L2_HIT))
-+		outp += sprintf(outp, "%sL2%%hit", (printed++ ? delim : ""));
-+
- 	for (mp = sys.tp; mp; mp = mp->next)
- 		outp += print_name(mp->width, &printed, delim, mp->name, mp->type, mp->format);
- 
-@@ -3057,6 +3169,10 @@ int dump_counters(PER_THREAD_PARAMS)
- 		outp += sprintf(outp, "LLC miss: %lld", t->llc.misses);
- 		outp += sprintf(outp, "LLC Hit%%: %.2f", pct((t->llc.references - t->llc.misses), t->llc.references));
- 
-+		outp += sprintf(outp, "L2 refs: %lld", t->l2.references);
-+		outp += sprintf(outp, "L2 hits: %lld", t->l2.hits);
-+		outp += sprintf(outp, "L2 Hit%%: %.2f", pct(t->l2.hits, t->l2.references));
-+
- 		for (i = 0, mp = sys.tp; mp; i++, mp = mp->next) {
- 			outp += sprintf(outp, "tADDED [%d] %8s msr0x%x: %08llX %s\n", i, mp->name, mp->msr_num, t->counter[i], mp->sp->path);
- 		}
-@@ -3158,6 +3274,26 @@ void get_perf_llc_stats(int cpu, struct llc_stats *llc)
- 		warn("%s: failed to read perf_data (req %zu act %zu)", __func__, expected_read_size, actual_read_size);
- }
- 
-+void get_perf_l2_stats(int cpu, struct l2_stats *l2)
-+{
-+	struct read_format {
-+		unsigned long long num_read;
-+		struct l2_stats l2;
-+	} r;
-+	const ssize_t expected_read_size = sizeof(r);
-+	ssize_t actual_read_size;
-+
-+	actual_read_size = read(fd_l2_percpu[cpu], &r, expected_read_size);
-+
-+	if (actual_read_size == -1)
-+		err(-1, "%s(cpu%d,) %d,,%ld", __func__, cpu, fd_l2_percpu[cpu], expected_read_size);
-+
-+	l2->references = r.l2.references;
-+	l2->hits = r.l2.hits;
-+	if (actual_read_size != expected_read_size)
-+		warn("%s: cpu%d: failed to read(%d) perf_data (req %zu act %zu)", __func__, cpu, fd_l2_percpu[cpu], expected_read_size, actual_read_size);
-+}
-+
- /*
-  * column formatting convention & formats
-  */
-@@ -3306,13 +3442,18 @@ int format_counters(PER_THREAD_PARAMS)
- 		outp += sprintf(outp, "%s%d", (printed++ ? delim : ""), t->smi_count);
- 
- 	/* LLC Stats */
--	if (DO_BIC(BIC_LLC_MRPS) || DO_BIC(BIC_LLC_HIT)) {
--		if (DO_BIC(BIC_LLC_MRPS))
--			outp += sprintf(outp, "%s%.0f", (printed++ ? delim : ""), t->llc.references / interval_float / 1000000);
-+	if (DO_BIC(BIC_LLC_MRPS))
-+		outp += sprintf(outp, "%s%.0f", (printed++ ? delim : ""), t->llc.references / interval_float / 1000000);
- 
--		if (DO_BIC(BIC_LLC_HIT))
--			outp += sprintf(outp, fmt8, (printed++ ? delim : ""), pct((t->llc.references - t->llc.misses), t->llc.references));
--	}
-+	if (DO_BIC(BIC_LLC_HIT))
-+		outp += sprintf(outp, fmt8, (printed++ ? delim : ""), pct((t->llc.references - t->llc.misses), t->llc.references));
-+
-+	/* L2 Stats */
-+	if (DO_BIC(BIC_L2_MRPS))
-+		outp += sprintf(outp, "%s%.0f", (printed++ ? delim : ""), t->l2.references / interval_float / 1000000);
-+
-+	if (DO_BIC(BIC_L2_HIT))
-+		outp += sprintf(outp, fmt8, (printed++ ? delim : ""), pct(t->l2.hits, t->l2.references));
- 
- 	/* Added Thread Counters */
- 	for (i = 0, mp = sys.tp; mp; i++, mp = mp->next) {
-@@ -3855,12 +3996,18 @@ int delta_thread(struct thread_data *new, struct thread_data *old, struct core_d
- 	if (DO_BIC(BIC_SMI))
- 		old->smi_count = new->smi_count - old->smi_count;
- 
--	if (DO_BIC(BIC_LLC_MRPS))
-+	if (DO_BIC(BIC_LLC_MRPS) || DO_BIC(BIC_LLC_HIT))
- 		old->llc.references = new->llc.references - old->llc.references;
- 
- 	if (DO_BIC(BIC_LLC_HIT))
- 		old->llc.misses = new->llc.misses - old->llc.misses;
- 
-+	if (DO_BIC(BIC_L2_MRPS) || DO_BIC(BIC_L2_HIT))
-+		old->l2.references = new->l2.references - old->l2.references;
-+
-+	if (DO_BIC(BIC_L2_HIT))
-+		old->l2.hits = new->l2.hits - old->l2.hits;
-+
- 	for (i = 0, mp = sys.tp; mp; i++, mp = mp->next) {
- 		if (mp->format == FORMAT_RAW || mp->format == FORMAT_AVERAGE)
- 			old->counter[i] = new->counter[i];
-@@ -3941,6 +4088,9 @@ void clear_counters(PER_THREAD_PARAMS)
- 	t->llc.references = 0;
- 	t->llc.misses = 0;
- 
-+	t->l2.references = 0;
-+	t->l2.hits = 0;
-+
- 	c->c3 = 0;
- 	c->c6 = 0;
- 	c->c7 = 0;
-@@ -3949,9 +4099,6 @@ void clear_counters(PER_THREAD_PARAMS)
- 	rapl_counter_clear(&c->core_energy);
- 	c->core_throt_cnt = 0;
- 
--	t->llc.references = 0;
--	t->llc.misses = 0;
--
- 	p->pkg_wtd_core_c0 = 0;
- 	p->pkg_any_core_c0 = 0;
- 	p->pkg_any_gfxe_c0 = 0;
-@@ -4052,6 +4199,9 @@ int sum_counters(PER_THREAD_PARAMS)
- 	average.threads.llc.references += t->llc.references;
- 	average.threads.llc.misses += t->llc.misses;
- 
-+	average.threads.l2.references += t->l2.references;
-+	average.threads.l2.hits += t->l2.hits;
-+
- 	for (i = 0, mp = sys.tp; mp; i++, mp = mp->next) {
- 		if (mp->format == FORMAT_RAW)
- 			continue;
-@@ -5070,6 +5220,9 @@ int get_counters(PER_THREAD_PARAMS)
- 	if (DO_BIC(BIC_LLC_MRPS) || DO_BIC(BIC_LLC_HIT))
- 		get_perf_llc_stats(cpu, &t->llc);
- 
-+	if (DO_BIC(BIC_L2_MRPS) || DO_BIC(BIC_L2_HIT))
-+		get_perf_l2_stats(cpu, &t->l2);
-+
- 	if (DO_BIC(BIC_IPC))
- 		if (read(get_instr_count_fd(cpu), &t->instr_count, sizeof(long long)) != sizeof(long long))
- 			return -4;
-@@ -5685,6 +5838,26 @@ void free_fd_llc_percpu(void)
- 
- 	free(fd_llc_percpu);
- 	fd_llc_percpu = NULL;
-+
-+	BIC_NOT_PRESENT(BIC_LLC_MRPS);
-+	BIC_NOT_PRESENT(BIC_LLC_HIT);
-+}
-+
-+void free_fd_l2_percpu(void)
-+{
-+	if (!fd_l2_percpu)
-+		return;
-+
-+	for (int i = 0; i < topo.max_cpu_num + 1; ++i) {
-+		if (fd_l2_percpu[i] != 0)
-+			close(fd_l2_percpu[i]);
-+	}
-+
-+	free(fd_l2_percpu);
-+	fd_l2_percpu = NULL;
-+
-+	BIC_NOT_PRESENT(BIC_L2_MRPS);
-+	BIC_NOT_PRESENT(BIC_L2_HIT);
- }
- 
- void free_fd_cstate(void)
-@@ -5789,6 +5962,21 @@ void free_all_buffers(void)
- 	cpu_affinity_set = NULL;
- 	cpu_affinity_setsize = 0;
- 
-+	if (perf_pcore_set) {
-+		CPU_FREE(perf_pcore_set);
-+		perf_pcore_set = NULL;
-+	}
-+
-+	if (perf_ecore_set) {
-+		CPU_FREE(perf_ecore_set);
-+		perf_ecore_set = NULL;
-+	}
-+
-+	if (perf_lcore_set) {
-+		CPU_FREE(perf_lcore_set);
-+		perf_lcore_set = NULL;
-+	}
-+
- 	free(thread_even);
- 	free(core_even);
- 	free(package_even);
-@@ -5812,6 +6000,7 @@ void free_all_buffers(void)
- 	free_fd_percpu();
- 	free_fd_instr_count_percpu();
- 	free_fd_llc_percpu();
-+	free_fd_l2_percpu();
- 	free_fd_msr();
- 	free_fd_rapl_percpu();
- 	free_fd_cstate();
-@@ -6159,6 +6348,7 @@ void msr_perf_init(void);
- void rapl_perf_init(void);
- void cstate_perf_init(void);
- void perf_llc_init(void);
-+void perf_l2_init(void);
- void added_perf_counters_init(void);
- void pmt_init(void);
- 
-@@ -6171,6 +6361,7 @@ void re_initialize(void)
- 	rapl_perf_init();
- 	cstate_perf_init();
- 	perf_llc_init();
-+	perf_l2_init();
- 	added_perf_counters_init();
- 	pmt_init();
- 	fprintf(outf, "turbostat: re-initialized with num_cpus %d, allowed_cpus %d\n", topo.num_cpus, topo.allowed_cpus);
-@@ -8333,25 +8524,126 @@ int add_rapl_perf_counter(int cpu, struct rapl_counter_info_t *rci, const struct
- 	return ret;
- }
- 
-+char cpuset_buf[1024];
-+int initialize_cpu_set_from_sysfs(cpu_set_t *cpu_set, char *sysfs_path, char *sysfs_file)
-+{
-+	FILE *fp;
-+	char path[128];
-+
-+	if (snprintf(path, 128, "%s/%s", sysfs_path, sysfs_file) > 128)
-+		err(-1, "%s %s", sysfs_path, sysfs_file);
-+
-+	fp = fopen(path, "r");
-+	if (!fp) {
-+		warn("open %s", path);
-+		return -1;
-+	}
-+	if (fread(cpuset_buf, sizeof(char), 1024, fp) == 0) {
-+		warn("read %s", sysfs_path);
-+		goto err;
-+	}
-+	if (parse_cpu_str(cpuset_buf, cpu_set, cpu_possible_setsize)) {
-+		warnx("%s: cpu str malformat %s\n", sysfs_path, cpu_effective_str);
-+		goto err;
-+	}
-+	return 0;
-+
-+err:
-+	fclose(fp);
-+	return -1;
-+}
-+
-+void print_cpu_set(char *s, cpu_set_t *set)
-+{
-+	int i;
-+
-+	assert(MAX_BIC < CPU_SETSIZE);
-+
-+	printf("%s:", s);
-+
-+	for (i = 0; i <= topo.max_cpu_num; ++i)
-+		if (CPU_ISSET(i, set))
-+			printf(" %d", i);
-+	putchar('\n');
-+}
-+
-+void linux_perf_init_hybrid_cpus(void)
-+{
-+	char *perf_cpu_pcore_path = "/sys/devices/cpu_core";
-+	char *perf_cpu_ecore_path = "/sys/devices/cpu_atom";
-+	char *perf_cpu_lcore_path = "/sys/devices/cpu_lowpower";
-+	char path[128];
-+
-+	if (!access(perf_cpu_pcore_path, F_OK)) {
-+		perf_pcore_set = CPU_ALLOC((topo.max_cpu_num + 1));
-+		if (perf_pcore_set == NULL)
-+			err(3, "CPU_ALLOC");
-+		CPU_ZERO_S(cpu_possible_setsize, perf_pcore_set);
-+		initialize_cpu_set_from_sysfs(perf_pcore_set, perf_cpu_pcore_path, "cpus");
-+		if (debug)
-+			print_cpu_set("perf pcores", perf_pcore_set);
-+		sprintf(path, "%s/%s", perf_cpu_pcore_path, "type");
-+		perf_pmu_types.pcore = snapshot_sysfs_counter(path);
-+	}
-+
-+	if (!access(perf_cpu_ecore_path, F_OK)) {
-+		perf_ecore_set = CPU_ALLOC((topo.max_cpu_num + 1));
-+		if (perf_ecore_set == NULL)
-+			err(3, "CPU_ALLOC");
-+		CPU_ZERO_S(cpu_possible_setsize, perf_ecore_set);
-+		initialize_cpu_set_from_sysfs(perf_ecore_set, perf_cpu_ecore_path, "cpus");
-+		if (debug)
-+			print_cpu_set("perf ecores", perf_ecore_set);
-+		sprintf(path, "%s/%s", perf_cpu_ecore_path, "type");
-+		perf_pmu_types.ecore = snapshot_sysfs_counter(path);
-+	}
-+
-+	if (!access(perf_cpu_lcore_path, F_OK)) {
-+		perf_lcore_set = CPU_ALLOC((topo.max_cpu_num + 1));
-+		if (perf_lcore_set == NULL)
-+			err(3, "CPU_ALLOC");
-+		CPU_ZERO_S(cpu_possible_setsize, perf_lcore_set);
-+		initialize_cpu_set_from_sysfs(perf_lcore_set, perf_cpu_lcore_path, "cpus");
-+		if (debug)
-+			print_cpu_set("perf lcores", perf_lcore_set);
-+		sprintf(path, "%s/%s", perf_cpu_lcore_path, "type");
-+		perf_pmu_types.lcore = snapshot_sysfs_counter(path);
-+	}
-+}
-+
- /*
-- * Linux-perf manages the HW instructions-retired counter
-- * by enabling when requested, and hiding rollover
-+ * Linux-perf related initialization
-  */
- void linux_perf_init(void)
+ int is_cpu_first_thread_in_core(struct thread_data *t, struct core_data *c)
  {
-+	char path[128];
-+	char *perf_cpu_path = "/sys/devices/cpu";
-+
- 	if (access("/proc/sys/kernel/perf_event_paranoid", F_OK))
+-	return ((int)t->cpu_id == c->base_cpu || c->base_cpu < 0);
++	return ((int)t->cpu_id == c->first_cpu || c->first_cpu < 0);
+ }
+ 
+ int is_cpu_first_core_in_package(struct thread_data *t, struct pkg_data *p)
+ {
+-	return ((int)t->cpu_id == p->base_cpu || p->base_cpu < 0);
++	return ((int)t->cpu_id == p->first_cpu || p->first_cpu < 0);
+ }
+ 
+ int is_cpu_first_thread_in_package(struct thread_data *t, struct core_data *c, struct pkg_data *p)
+@@ -5455,7 +5455,7 @@ void probe_cst_limit(void)
+ 		return;
+ 	}
+ 
+-	get_msr(base_cpu, MSR_PKG_CST_CONFIG_CONTROL, &msr);
++	get_msr(master_cpu, MSR_PKG_CST_CONFIG_CONTROL, &msr);
+ 	pkg_cstate_limit = pkg_cstate_limits[msr & 0xF];
+ }
+ 
+@@ -5467,9 +5467,9 @@ static void dump_platform_info(void)
+ 	if (!platform->has_nhm_msrs || no_msr)
  		return;
  
-+	if (!access(perf_cpu_path, F_OK)) {
-+		sprintf(path, "%s/%s", perf_cpu_path, "type");
-+		perf_pmu_types.uniform = snapshot_sysfs_counter(path);
-+	} else {
-+		linux_perf_init_hybrid_cpus();
-+	}
-+
- 	if (BIC_IS_ENABLED(BIC_IPC) && cpuid_has_aperf_mperf) {
- 		fd_instr_count_percpu = calloc(topo.max_cpu_num + 1, sizeof(int));
- 		if (fd_instr_count_percpu == NULL)
- 			err(-1, "calloc fd_instr_count_percpu");
- 	}
--	if (BIC_IS_ENABLED(BIC_LLC_MRPS)) {
-+	if (BIC_IS_ENABLED(BIC_LLC_MRPS) || BIC_IS_ENABLED(BIC_LLC_HIT)) {
- 		fd_llc_percpu = calloc(topo.max_cpu_num + 1, sizeof(int));
- 		if (fd_llc_percpu == NULL)
- 			err(-1, "calloc fd_llc_percpu");
- 	}
-+	if (BIC_IS_ENABLED(BIC_L2_MRPS) || BIC_IS_ENABLED(BIC_L2_HIT)) {
-+		fd_l2_percpu = calloc(topo.max_cpu_num + 1, sizeof(int));
-+		if (fd_l2_percpu == NULL)
-+			err(-1, "calloc fd_l2_percpu");
-+	}
- }
+-	get_msr(base_cpu, MSR_PLATFORM_INFO, &msr);
++	get_msr(master_cpu, MSR_PLATFORM_INFO, &msr);
  
- void rapl_perf_init(void)
-@@ -8783,6 +9075,7 @@ void probe_pstates(void)
- 	for_all_cpus(print_epb, ODD_COUNTERS);
- 	for_all_cpus(print_perf_limit, ODD_COUNTERS);
- }
-+
- void dump_word_chars(unsigned int word)
- {
- 	int i;
-@@ -8790,6 +9083,7 @@ void dump_word_chars(unsigned int word)
- 	for (i = 0; i < 4; ++i)
- 		fprintf(outf, "%c", (word >> (i * 8)) & 0xFF);
- }
-+
- void dump_cpuid_hypervisor(void)
- {
- 	unsigned int ebx = 0;
-@@ -8875,6 +9169,7 @@ void process_cpuid()
- 		dump_cpuid_hypervisor();
+-	fprintf(outf, "cpu%d: MSR_PLATFORM_INFO: 0x%08llx\n", base_cpu, msr);
++	fprintf(outf, "cpu%d: MSR_PLATFORM_INFO: 0x%08llx\n", master_cpu, msr);
  
- 	probe_platform_features(family, model);
-+	init_perf_model_support(family, model);
- 
- 	if (!(edx_flags & (1 << 5)))
- 		errx(1, "CPUID: no MSR");
-@@ -9041,7 +9336,8 @@ void probe_pm_features(void)
- 		decode_misc_feature_control();
- }
- 
--/* perf_llc_probe
-+/*
-+ * has_perf_llc_access()
-  *
-  * return 1 on success, else 0
-  */
-@@ -9070,22 +9366,22 @@ void perf_llc_init(void)
- 
- 	if (no_perf)
- 		return;
--	if (!(BIC_IS_ENABLED(BIC_LLC_MRPS) && BIC_IS_ENABLED(BIC_LLC_HIT)))
-+	if (!(BIC_IS_ENABLED(BIC_LLC_MRPS) || BIC_IS_ENABLED(BIC_LLC_HIT)))
+ 	ratio = (msr >> 40) & 0xFF;
+ 	fprintf(outf, "%d * %.1f = %.1f MHz max efficiency frequency\n", ratio, bclk, ratio * bclk);
+@@ -5485,8 +5485,8 @@ static void dump_power_ctl(void)
+ 	if (!platform->has_nhm_msrs || no_msr)
  		return;
  
-+	assert(fd_llc_percpu != 0);
-+
- 	for (cpu = 0; cpu <= topo.max_cpu_num; ++cpu) {
+-	get_msr(base_cpu, MSR_IA32_POWER_CTL, &msr);
+-	fprintf(outf, "cpu%d: MSR_IA32_POWER_CTL: 0x%08llx (C1E auto-promotion: %sabled)\n", base_cpu, msr, msr & 0x2 ? "EN" : "DIS");
++	get_msr(master_cpu, MSR_IA32_POWER_CTL, &msr);
++	fprintf(outf, "cpu%d: MSR_IA32_POWER_CTL: 0x%08llx (C1E auto-promotion: %sabled)\n", master_cpu, msr, msr & 0x2 ? "EN" : "DIS");
  
- 		if (cpu_is_not_allowed(cpu))
- 			continue;
+ 	/* C-state Pre-wake Disable (CSTATE_PREWAKE_DISABLE) */
+ 	if (platform->has_cst_prewake_bit)
+@@ -5500,9 +5500,9 @@ static void dump_turbo_ratio_limit2(void)
+ 	unsigned long long msr;
+ 	unsigned int ratio;
  
--		assert(fd_llc_percpu != 0);
- 		fd_llc_percpu[cpu] = open_perf_counter(cpu, PERF_TYPE_HARDWARE, PERF_COUNT_HW_CACHE_REFERENCES, -1, PERF_FORMAT_GROUP);
- 		if (fd_llc_percpu[cpu] == -1) {
- 			warnx("%s: perf REFS: failed to open counter on cpu%d", __func__, cpu);
- 			free_fd_llc_percpu();
- 			return;
- 		}
--		assert(fd_llc_percpu != 0);
- 		retval = open_perf_counter(cpu, PERF_TYPE_HARDWARE, PERF_COUNT_HW_CACHE_MISSES, fd_llc_percpu[cpu], PERF_FORMAT_GROUP);
- 		if (retval == -1) {
- 			warnx("%s: perf MISS: failed to open counter on cpu%d", __func__, cpu);
-@@ -9097,6 +9393,86 @@ void perf_llc_init(void)
- 	BIC_PRESENT(BIC_LLC_HIT);
- }
+-	get_msr(base_cpu, MSR_TURBO_RATIO_LIMIT2, &msr);
++	get_msr(master_cpu, MSR_TURBO_RATIO_LIMIT2, &msr);
  
-+void perf_l2_init(void)
-+{
-+	int cpu;
-+	int retval;
-+
-+	if (no_perf)
-+		return;
-+	if (!(BIC_IS_ENABLED(BIC_L2_MRPS) || BIC_IS_ENABLED(BIC_L2_HIT)))
-+		return;
-+	if (perf_model_support == NULL)
-+		return;
-+
-+	assert(fd_l2_percpu != 0);
-+
-+	for (cpu = 0; cpu <= topo.max_cpu_num; ++cpu) {
-+
-+		if (cpu_is_not_allowed(cpu))
-+			continue;
-+
-+		if (!is_hybrid) {
-+			fd_l2_percpu[cpu] = open_perf_counter(cpu, perf_pmu_types.uniform, perf_model_support->first.refs, -1, PERF_FORMAT_GROUP);
-+			if (fd_l2_percpu[cpu] == -1) {
-+				err(-1, "%s(cpu%d, 0x%x, 0x%llx) REFS", __func__, cpu, perf_pmu_types.uniform, perf_model_support->first.refs);
-+				free_fd_l2_percpu();
-+				return;
-+			}
-+			retval = open_perf_counter(cpu, perf_pmu_types.uniform, perf_model_support->first.hits, fd_l2_percpu[cpu], PERF_FORMAT_GROUP);
-+			if (retval == -1) {
-+				err(-1, "%s(cpu%d, 0x%x, 0x%llx) HITS", __func__, cpu, perf_pmu_types.uniform, perf_model_support->first.hits);
-+				free_fd_l2_percpu();
-+				return;
-+			}
-+			continue;
-+		}
-+		if (perf_pcore_set && CPU_ISSET_S(cpu, cpu_possible_setsize, perf_pcore_set)) {
-+			fd_l2_percpu[cpu] = open_perf_counter(cpu, perf_pmu_types.pcore, perf_model_support->first.refs, -1, PERF_FORMAT_GROUP);
-+			if (fd_l2_percpu[cpu] == -1) {
-+				err(-1, "%s(cpu%d, 0x%x, 0x%llx) REFS", __func__, cpu, perf_pmu_types.pcore, perf_model_support->first.refs);
-+				free_fd_l2_percpu();
-+				return;
-+			}
-+			retval = open_perf_counter(cpu, perf_pmu_types.pcore, perf_model_support->first.hits, fd_l2_percpu[cpu], PERF_FORMAT_GROUP);
-+			if (retval == -1) {
-+				err(-1, "%s(cpu%d, 0x%x, 0x%llx) HITS", __func__, cpu, perf_pmu_types.pcore, perf_model_support->first.hits);
-+				free_fd_l2_percpu();
-+				return;
-+			}
-+		} else if (perf_ecore_set && CPU_ISSET_S(cpu, cpu_possible_setsize, perf_ecore_set)) {
-+			fd_l2_percpu[cpu] = open_perf_counter(cpu, perf_pmu_types.ecore, perf_model_support->second.refs, -1, PERF_FORMAT_GROUP);
-+			if (fd_l2_percpu[cpu] == -1) {
-+				err(-1, "%s(cpu%d, 0x%x, 0x%llx) REFS", __func__, cpu, perf_pmu_types.pcore, perf_model_support->second.refs);
-+				free_fd_l2_percpu();
-+				return;
-+			}
-+			retval = open_perf_counter(cpu, perf_pmu_types.ecore, perf_model_support->second.hits, fd_l2_percpu[cpu], PERF_FORMAT_GROUP);
-+			if (retval == -1) {
-+				err(-1, "%s(cpu%d, 0x%x, 0x%llx) HITS", __func__, cpu, perf_pmu_types.pcore, perf_model_support->second.hits);
-+				free_fd_l2_percpu();
-+				return;
-+			}
-+		} else if (perf_lcore_set && CPU_ISSET_S(cpu, cpu_possible_setsize, perf_lcore_set)) {
-+			fd_l2_percpu[cpu] = open_perf_counter(cpu, perf_pmu_types.lcore, perf_model_support->third.refs, -1, PERF_FORMAT_GROUP);
-+			if (fd_l2_percpu[cpu] == -1) {
-+				err(-1, "%s(cpu%d, 0x%x, 0x%llx) REFS", __func__, cpu, perf_pmu_types.pcore, perf_model_support->third.refs);
-+				free_fd_l2_percpu();
-+				return;
-+			}
-+			retval = open_perf_counter(cpu, perf_pmu_types.lcore, perf_model_support->third.hits, fd_l2_percpu[cpu], PERF_FORMAT_GROUP);
-+			if (retval == -1) {
-+				err(-1, "%s(cpu%d, 0x%x, 0x%llx) HITS", __func__, cpu, perf_pmu_types.pcore, perf_model_support->third.hits);
-+				free_fd_l2_percpu();
-+				return;
-+			}
-+		} else
-+			err(-1, "%s: cpu%d: type %d", __func__, cpu, cpus[cpu].type);
-+	}
-+	BIC_PRESENT(BIC_L2_MRPS);
-+	BIC_PRESENT(BIC_L2_HIT);
-+}
-+
- /*
-  * in /dev/cpu/ return success for names that are numbers
-  * ie. filter out ".", "..", "microcode".
-@@ -9109,33 +9485,6 @@ int dir_filter(const struct dirent *dirp)
- 		return 0;
- }
+-	fprintf(outf, "cpu%d: MSR_TURBO_RATIO_LIMIT2: 0x%08llx\n", base_cpu, msr);
++	fprintf(outf, "cpu%d: MSR_TURBO_RATIO_LIMIT2: 0x%08llx\n", master_cpu, msr);
  
--char *possible_file = "/sys/devices/system/cpu/possible";
--char possible_buf[1024];
--
--int initialize_cpu_possible_set(void)
--{
--	FILE *fp;
--
--	fp = fopen(possible_file, "r");
--	if (!fp) {
--		warn("open %s", possible_file);
--		return -1;
--	}
--	if (fread(possible_buf, sizeof(char), 1024, fp) == 0) {
--		warn("read %s", possible_file);
--		goto err;
--	}
--	if (parse_cpu_str(possible_buf, cpu_possible_set, cpu_possible_setsize)) {
--		warnx("%s: cpu str malformat %s\n", possible_file, cpu_effective_str);
--		goto err;
--	}
--	return 0;
--
--err:
--	fclose(fp);
--	return -1;
--}
--
- void topology_probe(bool startup)
- {
- 	int i;
-@@ -9175,7 +9524,7 @@ void topology_probe(bool startup)
- 		err(3, "CPU_ALLOC");
- 	cpu_possible_setsize = CPU_ALLOC_SIZE((topo.max_cpu_num + 1));
- 	CPU_ZERO_S(cpu_possible_setsize, cpu_possible_set);
--	initialize_cpu_possible_set();
-+	initialize_cpu_set_from_sysfs(cpu_possible_set, "/sys/devices/system/cpu", "possible");
+ 	ratio = (msr >> 8) & 0xFF;
+ 	if (ratio)
+@@ -5519,9 +5519,9 @@ static void dump_turbo_ratio_limit1(void)
+ 	unsigned long long msr;
+ 	unsigned int ratio;
+ 
+-	get_msr(base_cpu, MSR_TURBO_RATIO_LIMIT1, &msr);
++	get_msr(master_cpu, MSR_TURBO_RATIO_LIMIT1, &msr);
+ 
+-	fprintf(outf, "cpu%d: MSR_TURBO_RATIO_LIMIT1: 0x%08llx\n", base_cpu, msr);
++	fprintf(outf, "cpu%d: MSR_TURBO_RATIO_LIMIT1: 0x%08llx\n", master_cpu, msr);
+ 
+ 	ratio = (msr >> 56) & 0xFF;
+ 	if (ratio)
+@@ -5562,13 +5562,13 @@ static void dump_turbo_ratio_limits(int trl_msr_offset)
+ 	unsigned long long msr, core_counts;
+ 	int shift;
+ 
+-	get_msr(base_cpu, trl_msr_offset, &msr);
++	get_msr(master_cpu, trl_msr_offset, &msr);
+ 	fprintf(outf, "cpu%d: MSR_%sTURBO_RATIO_LIMIT: 0x%08llx\n",
+-		base_cpu, trl_msr_offset == MSR_SECONDARY_TURBO_RATIO_LIMIT ? "SECONDARY_" : "", msr);
++		master_cpu, trl_msr_offset == MSR_SECONDARY_TURBO_RATIO_LIMIT ? "SECONDARY_" : "", msr);
+ 
+ 	if (platform->trl_msrs & TRL_CORECOUNT) {
+-		get_msr(base_cpu, MSR_TURBO_RATIO_LIMIT1, &core_counts);
+-		fprintf(outf, "cpu%d: MSR_TURBO_RATIO_LIMIT1: 0x%08llx\n", base_cpu, core_counts);
++		get_msr(master_cpu, MSR_TURBO_RATIO_LIMIT1, &core_counts);
++		fprintf(outf, "cpu%d: MSR_TURBO_RATIO_LIMIT1: 0x%08llx\n", master_cpu, core_counts);
+ 	} else {
+ 		core_counts = 0x0807060504030201;
+ 	}
+@@ -5590,8 +5590,8 @@ static void dump_atom_turbo_ratio_limits(void)
+ 	unsigned long long msr;
+ 	unsigned int ratio;
+ 
+-	get_msr(base_cpu, MSR_ATOM_CORE_RATIOS, &msr);
+-	fprintf(outf, "cpu%d: MSR_ATOM_CORE_RATIOS: 0x%08llx\n", base_cpu, msr & 0xFFFFFFFF);
++	get_msr(master_cpu, MSR_ATOM_CORE_RATIOS, &msr);
++	fprintf(outf, "cpu%d: MSR_ATOM_CORE_RATIOS: 0x%08llx\n", master_cpu, msr & 0xFFFFFFFF);
+ 
+ 	ratio = (msr >> 0) & 0x3F;
+ 	if (ratio)
+@@ -5605,8 +5605,8 @@ static void dump_atom_turbo_ratio_limits(void)
+ 	if (ratio)
+ 		fprintf(outf, "%d * %.1f = %.1f MHz base frequency\n", ratio, bclk, ratio * bclk);
+ 
+-	get_msr(base_cpu, MSR_ATOM_CORE_TURBO_RATIOS, &msr);
+-	fprintf(outf, "cpu%d: MSR_ATOM_CORE_TURBO_RATIOS: 0x%08llx\n", base_cpu, msr & 0xFFFFFFFF);
++	get_msr(master_cpu, MSR_ATOM_CORE_TURBO_RATIOS, &msr);
++	fprintf(outf, "cpu%d: MSR_ATOM_CORE_TURBO_RATIOS: 0x%08llx\n", master_cpu, msr & 0xFFFFFFFF);
+ 
+ 	ratio = (msr >> 24) & 0x3F;
+ 	if (ratio)
+@@ -5635,9 +5635,9 @@ static void dump_knl_turbo_ratio_limits(void)
+ 	unsigned int cores[buckets_no];
+ 	unsigned int ratio[buckets_no];
+ 
+-	get_msr(base_cpu, MSR_TURBO_RATIO_LIMIT, &msr);
++	get_msr(master_cpu, MSR_TURBO_RATIO_LIMIT, &msr);
+ 
+-	fprintf(outf, "cpu%d: MSR_TURBO_RATIO_LIMIT: 0x%08llx\n", base_cpu, msr);
++	fprintf(outf, "cpu%d: MSR_TURBO_RATIO_LIMIT: 0x%08llx\n", master_cpu, msr);
  
  	/*
- 	 * Allocate and initialize cpu_effective_set
-@@ -10078,6 +10427,7 @@ void turbostat_init()
- 	rapl_perf_init();
- 	cstate_perf_init();
- 	perf_llc_init();
-+	perf_l2_init();
- 	added_perf_counters_init();
- 	pmt_init();
+ 	 * Turbo encoding in KNL is as follows:
+@@ -5687,9 +5687,9 @@ static void dump_cst_cfg(void)
+ 	if (!platform->has_nhm_msrs || no_msr)
+ 		return;
  
-@@ -10183,7 +10533,7 @@ int get_and_dump_counters(void)
+-	get_msr(base_cpu, MSR_PKG_CST_CONFIG_CONTROL, &msr);
++	get_msr(master_cpu, MSR_PKG_CST_CONFIG_CONTROL, &msr);
  
- void print_version()
+-	fprintf(outf, "cpu%d: MSR_PKG_CST_CONFIG_CONTROL: 0x%08llx", base_cpu, msr);
++	fprintf(outf, "cpu%d: MSR_PKG_CST_CONFIG_CONTROL: 0x%08llx", master_cpu, msr);
+ 
+ 	fprintf(outf, " (%s%s%s%s%slocked, pkg-cstate-limit=%d (%s)",
+ 		(msr & SNB_C3_AUTO_UNDEMOTE) ? "UNdemote-C3, " : "",
+@@ -5712,12 +5712,12 @@ static void dump_config_tdp(void)
  {
--	fprintf(outf, "turbostat version 2025.12.05 - Len Brown <lenb@kernel.org>\n");
-+	fprintf(outf, "turbostat version 2026.02.04 - Len Brown <lenb@kernel.org>\n");
+ 	unsigned long long msr;
+ 
+-	get_msr(base_cpu, MSR_CONFIG_TDP_NOMINAL, &msr);
+-	fprintf(outf, "cpu%d: MSR_CONFIG_TDP_NOMINAL: 0x%08llx", base_cpu, msr);
++	get_msr(master_cpu, MSR_CONFIG_TDP_NOMINAL, &msr);
++	fprintf(outf, "cpu%d: MSR_CONFIG_TDP_NOMINAL: 0x%08llx", master_cpu, msr);
+ 	fprintf(outf, " (base_ratio=%d)\n", (unsigned int)msr & 0xFF);
+ 
+-	get_msr(base_cpu, MSR_CONFIG_TDP_LEVEL_1, &msr);
+-	fprintf(outf, "cpu%d: MSR_CONFIG_TDP_LEVEL_1: 0x%08llx (", base_cpu, msr);
++	get_msr(master_cpu, MSR_CONFIG_TDP_LEVEL_1, &msr);
++	fprintf(outf, "cpu%d: MSR_CONFIG_TDP_LEVEL_1: 0x%08llx (", master_cpu, msr);
+ 	if (msr) {
+ 		fprintf(outf, "PKG_MIN_PWR_LVL1=%d ", (unsigned int)(msr >> 48) & 0x7FFF);
+ 		fprintf(outf, "PKG_MAX_PWR_LVL1=%d ", (unsigned int)(msr >> 32) & 0x7FFF);
+@@ -5726,8 +5726,8 @@ static void dump_config_tdp(void)
+ 	}
+ 	fprintf(outf, ")\n");
+ 
+-	get_msr(base_cpu, MSR_CONFIG_TDP_LEVEL_2, &msr);
+-	fprintf(outf, "cpu%d: MSR_CONFIG_TDP_LEVEL_2: 0x%08llx (", base_cpu, msr);
++	get_msr(master_cpu, MSR_CONFIG_TDP_LEVEL_2, &msr);
++	fprintf(outf, "cpu%d: MSR_CONFIG_TDP_LEVEL_2: 0x%08llx (", master_cpu, msr);
+ 	if (msr) {
+ 		fprintf(outf, "PKG_MIN_PWR_LVL2=%d ", (unsigned int)(msr >> 48) & 0x7FFF);
+ 		fprintf(outf, "PKG_MAX_PWR_LVL2=%d ", (unsigned int)(msr >> 32) & 0x7FFF);
+@@ -5736,15 +5736,15 @@ static void dump_config_tdp(void)
+ 	}
+ 	fprintf(outf, ")\n");
+ 
+-	get_msr(base_cpu, MSR_CONFIG_TDP_CONTROL, &msr);
+-	fprintf(outf, "cpu%d: MSR_CONFIG_TDP_CONTROL: 0x%08llx (", base_cpu, msr);
++	get_msr(master_cpu, MSR_CONFIG_TDP_CONTROL, &msr);
++	fprintf(outf, "cpu%d: MSR_CONFIG_TDP_CONTROL: 0x%08llx (", master_cpu, msr);
+ 	if ((msr) & 0x3)
+ 		fprintf(outf, "TDP_LEVEL=%d ", (unsigned int)(msr) & 0x3);
+ 	fprintf(outf, " lock=%d", (unsigned int)(msr >> 31) & 1);
+ 	fprintf(outf, ")\n");
+ 
+-	get_msr(base_cpu, MSR_TURBO_ACTIVATION_RATIO, &msr);
+-	fprintf(outf, "cpu%d: MSR_TURBO_ACTIVATION_RATIO: 0x%08llx (", base_cpu, msr);
++	get_msr(master_cpu, MSR_TURBO_ACTIVATION_RATIO, &msr);
++	fprintf(outf, "cpu%d: MSR_TURBO_ACTIVATION_RATIO: 0x%08llx (", master_cpu, msr);
+ 	fprintf(outf, "MAX_NON_TURBO_RATIO=%d", (unsigned int)(msr) & 0xFF);
+ 	fprintf(outf, " lock=%d", (unsigned int)(msr >> 31) & 1);
+ 	fprintf(outf, ")\n");
+@@ -5760,38 +5760,38 @@ void print_irtl(void)
+ 		return;
+ 
+ 	if (platform->supported_cstates & PC3) {
+-		get_msr(base_cpu, MSR_PKGC3_IRTL, &msr);
+-		fprintf(outf, "cpu%d: MSR_PKGC3_IRTL: 0x%08llx (", base_cpu, msr);
++		get_msr(master_cpu, MSR_PKGC3_IRTL, &msr);
++		fprintf(outf, "cpu%d: MSR_PKGC3_IRTL: 0x%08llx (", master_cpu, msr);
+ 		fprintf(outf, "%svalid, %lld ns)\n", msr & (1 << 15) ? "" : "NOT", (msr & 0x3FF) * irtl_time_units[(msr >> 10) & 0x3]);
+ 	}
+ 
+ 	if (platform->supported_cstates & PC6) {
+-		get_msr(base_cpu, MSR_PKGC6_IRTL, &msr);
+-		fprintf(outf, "cpu%d: MSR_PKGC6_IRTL: 0x%08llx (", base_cpu, msr);
++		get_msr(master_cpu, MSR_PKGC6_IRTL, &msr);
++		fprintf(outf, "cpu%d: MSR_PKGC6_IRTL: 0x%08llx (", master_cpu, msr);
+ 		fprintf(outf, "%svalid, %lld ns)\n", msr & (1 << 15) ? "" : "NOT", (msr & 0x3FF) * irtl_time_units[(msr >> 10) & 0x3]);
+ 	}
+ 
+ 	if (platform->supported_cstates & PC7) {
+-		get_msr(base_cpu, MSR_PKGC7_IRTL, &msr);
+-		fprintf(outf, "cpu%d: MSR_PKGC7_IRTL: 0x%08llx (", base_cpu, msr);
++		get_msr(master_cpu, MSR_PKGC7_IRTL, &msr);
++		fprintf(outf, "cpu%d: MSR_PKGC7_IRTL: 0x%08llx (", master_cpu, msr);
+ 		fprintf(outf, "%svalid, %lld ns)\n", msr & (1 << 15) ? "" : "NOT", (msr & 0x3FF) * irtl_time_units[(msr >> 10) & 0x3]);
+ 	}
+ 
+ 	if (platform->supported_cstates & PC8) {
+-		get_msr(base_cpu, MSR_PKGC8_IRTL, &msr);
+-		fprintf(outf, "cpu%d: MSR_PKGC8_IRTL: 0x%08llx (", base_cpu, msr);
++		get_msr(master_cpu, MSR_PKGC8_IRTL, &msr);
++		fprintf(outf, "cpu%d: MSR_PKGC8_IRTL: 0x%08llx (", master_cpu, msr);
+ 		fprintf(outf, "%svalid, %lld ns)\n", msr & (1 << 15) ? "" : "NOT", (msr & 0x3FF) * irtl_time_units[(msr >> 10) & 0x3]);
+ 	}
+ 
+ 	if (platform->supported_cstates & PC9) {
+-		get_msr(base_cpu, MSR_PKGC9_IRTL, &msr);
+-		fprintf(outf, "cpu%d: MSR_PKGC9_IRTL: 0x%08llx (", base_cpu, msr);
++		get_msr(master_cpu, MSR_PKGC9_IRTL, &msr);
++		fprintf(outf, "cpu%d: MSR_PKGC9_IRTL: 0x%08llx (", master_cpu, msr);
+ 		fprintf(outf, "%svalid, %lld ns)\n", msr & (1 << 15) ? "" : "NOT", (msr & 0x3FF) * irtl_time_units[(msr >> 10) & 0x3]);
+ 	}
+ 
+ 	if (platform->supported_cstates & PC10) {
+-		get_msr(base_cpu, MSR_PKGC10_IRTL, &msr);
+-		fprintf(outf, "cpu%d: MSR_PKGC10_IRTL: 0x%08llx (", base_cpu, msr);
++		get_msr(master_cpu, MSR_PKGC10_IRTL, &msr);
++		fprintf(outf, "cpu%d: MSR_PKGC10_IRTL: 0x%08llx (", master_cpu, msr);
+ 		fprintf(outf, "%svalid, %lld ns)\n", msr & (1 << 15) ? "" : "NOT", (msr & 0x3FF) * irtl_time_units[(msr >> 10) & 0x3]);
+ 	}
+ }
+@@ -6370,14 +6370,14 @@ void re_initialize(void)
+ void set_max_cpu_num(void)
+ {
+ 	FILE *filep;
+-	int base_cpu;
++	int current_cpu;
+ 	unsigned long dummy;
+ 	char pathname[64];
+ 
+-	base_cpu = sched_getcpu();
+-	if (base_cpu < 0)
++	current_cpu = sched_getcpu();
++	if (current_cpu < 0)
+ 		err(1, "cannot find calling cpu ID");
+-	sprintf(pathname, "/sys/devices/system/cpu/cpu%d/topology/thread_siblings", base_cpu);
++	sprintf(pathname, "/sys/devices/system/cpu/cpu%d/topology/thread_siblings", current_cpu);
+ 
+ 	filep = fopen_or_die(pathname, "r");
+ 	topo.max_cpu_num = 0;
+@@ -6940,7 +6940,7 @@ int probe_dev_msr(void)
+ 	struct stat sb;
+ 	char pathname[32];
+ 
+-	sprintf(pathname, "/dev/msr%d", base_cpu);
++	sprintf(pathname, "/dev/msr%d", master_cpu);
+ 	return !stat(pathname, &sb);
  }
  
- #define COMMAND_LINE_SIZE 2048
+@@ -6949,7 +6949,7 @@ int probe_dev_cpu_msr(void)
+ 	struct stat sb;
+ 	char pathname[32];
+ 
+-	sprintf(pathname, "/dev/cpu/%d/msr", base_cpu);
++	sprintf(pathname, "/dev/cpu/%d/msr", master_cpu);
+ 	return !stat(pathname, &sb);
+ }
+ 
+@@ -7026,7 +7026,7 @@ void check_msr_permission(void)
+ 	failed += check_for_cap_sys_rawio();
+ 
+ 	/* test file permissions */
+-	sprintf(pathname, use_android_msr_path ? "/dev/msr%d" : "/dev/cpu/%d/msr", base_cpu);
++	sprintf(pathname, use_android_msr_path ? "/dev/msr%d" : "/dev/cpu/%d/msr", master_cpu);
+ 	if (euidaccess(pathname, R_OK)) {
+ 		failed++;
+ 	}
+@@ -7055,7 +7055,7 @@ void probe_bclk(void)
+ 	else
+ 		return;
+ 
+-	get_msr(base_cpu, MSR_PLATFORM_INFO, &msr);
++	get_msr(master_cpu, MSR_PLATFORM_INFO, &msr);
+ 	base_ratio = (msr >> 8) & 0xFF;
+ 
+ 	base_hz = base_ratio * bclk * 1000000;
+@@ -7402,7 +7402,7 @@ static void dump_sysfs_cstate_config(void)
+ 
+ 	for (state = 0; state < 10; ++state) {
+ 
+-		sprintf(path, "/sys/devices/system/cpu/cpu%d/cpuidle/state%d/name", base_cpu, state);
++		sprintf(path, "/sys/devices/system/cpu/cpu%d/cpuidle/state%d/name", master_cpu, state);
+ 		input = fopen(path, "r");
+ 		if (input == NULL)
+ 			continue;
+@@ -7418,14 +7418,14 @@ static void dump_sysfs_cstate_config(void)
+ 
+ 		remove_underbar(name_buf);
+ 
+-		sprintf(path, "/sys/devices/system/cpu/cpu%d/cpuidle/state%d/desc", base_cpu, state);
++		sprintf(path, "/sys/devices/system/cpu/cpu%d/cpuidle/state%d/desc", master_cpu, state);
+ 		input = fopen(path, "r");
+ 		if (input == NULL)
+ 			continue;
+ 		if (!fgets(desc, sizeof(desc), input))
+ 			err(1, "%s: failed to read file", path);
+ 
+-		fprintf(outf, "cpu%d: %s: %s", base_cpu, name_buf, desc);
++		fprintf(outf, "cpu%d: %s: %s", master_cpu, name_buf, desc);
+ 		fclose(input);
+ 	}
+ }
+@@ -7438,7 +7438,7 @@ static void dump_sysfs_pstate_config(void)
+ 	FILE *input;
+ 	int turbo;
+ 
+-	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_driver", base_cpu);
++	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_driver", master_cpu);
+ 	input = fopen(path, "r");
+ 	if (input == NULL) {
+ 		fprintf(outf, "NSFOD %s\n", path);
+@@ -7448,7 +7448,7 @@ static void dump_sysfs_pstate_config(void)
+ 		err(1, "%s: failed to read file", path);
+ 	fclose(input);
+ 
+-	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_governor", base_cpu);
++	sprintf(path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_governor", master_cpu);
+ 	input = fopen(path, "r");
+ 	if (input == NULL) {
+ 		fprintf(outf, "NSFOD %s\n", path);
+@@ -7458,8 +7458,8 @@ static void dump_sysfs_pstate_config(void)
+ 		err(1, "%s: failed to read file", path);
+ 	fclose(input);
+ 
+-	fprintf(outf, "cpu%d: cpufreq driver: %s", base_cpu, driver_buf);
+-	fprintf(outf, "cpu%d: cpufreq governor: %s", base_cpu, governor_buf);
++	fprintf(outf, "cpu%d: cpufreq driver: %s", master_cpu, driver_buf);
++	fprintf(outf, "cpu%d: cpufreq governor: %s", master_cpu, governor_buf);
+ 
+ 	sprintf(path, "/sys/devices/system/cpu/cpufreq/boost");
+ 	input = fopen(path, "r");
+@@ -7721,7 +7721,7 @@ double get_tdp_intel(void)
+ 	unsigned long long msr;
+ 
+ 	if (valid_rapl_msrs & RAPL_PKG_POWER_INFO)
+-		if (!get_msr(base_cpu, MSR_PKG_POWER_INFO, &msr))
++		if (!get_msr(master_cpu, MSR_PKG_POWER_INFO, &msr))
+ 			return ((msr >> 0) & RAPL_POWER_GRANULARITY) * rapl_power_units;
+ 	return get_quirk_tdp();
+ }
+@@ -7760,7 +7760,7 @@ void rapl_probe_intel(void)
+ 		CLR_BIC(BIC_RAM__, &bic_enabled);
+ 
+ 	/* units on package 0, verify later other packages match */
+-	if (get_msr(base_cpu, MSR_RAPL_POWER_UNIT, &msr))
++	if (get_msr(master_cpu, MSR_RAPL_POWER_UNIT, &msr))
+ 		return;
+ 
+ 	rapl_power_units = 1.0 / (1 << (msr & 0xF));
+@@ -7808,7 +7808,7 @@ void rapl_probe_amd(void)
+ 	if (!valid_rapl_msrs || no_msr)
+ 		return;
+ 
+-	if (get_msr(base_cpu, MSR_RAPL_PWR_UNIT, &msr))
++	if (get_msr(master_cpu, MSR_RAPL_PWR_UNIT, &msr))
+ 		return;
+ 
+ 	rapl_time_units = ldexp(1.0, -(msr >> 16 & 0xf));
+@@ -8119,7 +8119,7 @@ void probe_rapl_msrs(void)
+ 	if (offset < 0)
+ 		return;
+ 
+-	ret = get_msr(base_cpu, offset, &msr_value);
++	ret = get_msr(master_cpu, offset, &msr_value);
+ 	if (ret) {
+ 		if (debug)
+ 			fprintf(outf, "Can not read RAPL_PKG_ENERGY MSR(0x%llx)\n", (unsigned long long)offset);
+@@ -8204,7 +8204,7 @@ int set_temperature_target(PER_THREAD_PARAMS)
+ 	if (!platform->has_nhm_msrs || no_msr)
+ 		goto guess;
+ 
+-	if (get_msr(base_cpu, MSR_IA32_TEMPERATURE_TARGET, &msr))
++	if (get_msr(master_cpu, MSR_IA32_TEMPERATURE_TARGET, &msr))
+ 		goto guess;
+ 
+ 	tcc_default = (msr >> 16) & 0xFF;
+@@ -8213,7 +8213,7 @@ int set_temperature_target(PER_THREAD_PARAMS)
+ 		int bits = platform->tcc_offset_bits;
+ 		unsigned long long enabled = 0;
+ 
+-		if (bits && !get_msr(base_cpu, MSR_PLATFORM_INFO, &enabled))
++		if (bits && !get_msr(master_cpu, MSR_PLATFORM_INFO, &enabled))
+ 			enabled = (enabled >> 30) & 1;
+ 
+ 		if (bits && enabled) {
+@@ -8351,9 +8351,9 @@ void decode_feature_control_msr(void)
+ 	if (quiet)
+ 		return;
+ 
+-	if (!get_msr(base_cpu, MSR_IA32_FEAT_CTL, &msr))
++	if (!get_msr(master_cpu, MSR_IA32_FEAT_CTL, &msr))
+ 		fprintf(outf, "cpu%d: MSR_IA32_FEATURE_CONTROL: 0x%08llx (%sLocked %s)\n",
+-			base_cpu, msr, msr & FEAT_CTL_LOCKED ? "" : "UN-", msr & (1 << 18) ? "SGX" : "");
++			master_cpu, msr, msr & FEAT_CTL_LOCKED ? "" : "UN-", msr & (1 << 18) ? "SGX" : "");
+ }
+ 
+ void decode_misc_enable_msr(void)
+@@ -8366,9 +8366,9 @@ void decode_misc_enable_msr(void)
+ 	if (!genuine_intel)
+ 		return;
+ 
+-	if (!get_msr(base_cpu, MSR_IA32_MISC_ENABLE, &msr))
++	if (!get_msr(master_cpu, MSR_IA32_MISC_ENABLE, &msr))
+ 		fprintf(outf, "cpu%d: MSR_IA32_MISC_ENABLE: 0x%08llx (%sTCC %sEIST %sMWAIT %sPREFETCH %sTURBO)\n",
+-			base_cpu, msr,
++			master_cpu, msr,
+ 			msr & MSR_IA32_MISC_ENABLE_TM1 ? "" : "No-",
+ 			msr & MSR_IA32_MISC_ENABLE_ENHANCED_SPEEDSTEP ? "" : "No-",
+ 			msr & MSR_IA32_MISC_ENABLE_MWAIT ? "" : "No-",
+@@ -8385,10 +8385,10 @@ void decode_misc_feature_control(void)
+ 	if (!platform->has_msr_misc_feature_control)
+ 		return;
+ 
+-	if (!get_msr(base_cpu, MSR_MISC_FEATURE_CONTROL, &msr))
++	if (!get_msr(master_cpu, MSR_MISC_FEATURE_CONTROL, &msr))
+ 		fprintf(outf,
+ 			"cpu%d: MSR_MISC_FEATURE_CONTROL: 0x%08llx (%sL2-Prefetch %sL2-Prefetch-pair %sL1-Prefetch %sL1-IP-Prefetch)\n",
+-			base_cpu, msr, msr & (0 << 0) ? "No-" : "", msr & (1 << 0) ? "No-" : "",
++			master_cpu, msr, msr & (0 << 0) ? "No-" : "", msr & (1 << 0) ? "No-" : "",
+ 			msr & (2 << 0) ? "No-" : "", msr & (3 << 0) ? "No-" : "");
+ }
+ 
+@@ -8409,9 +8409,9 @@ void decode_misc_pwr_mgmt_msr(void)
+ 	if (!platform->has_msr_misc_pwr_mgmt)
+ 		return;
+ 
+-	if (!get_msr(base_cpu, MSR_MISC_PWR_MGMT, &msr))
++	if (!get_msr(master_cpu, MSR_MISC_PWR_MGMT, &msr))
+ 		fprintf(outf, "cpu%d: MSR_MISC_PWR_MGMT: 0x%08llx (%sable-EIST_Coordination %sable-EPB %sable-OOB)\n",
+-			base_cpu, msr, msr & (1 << 0) ? "DIS" : "EN", msr & (1 << 1) ? "EN" : "DIS", msr & (1 << 8) ? "EN" : "DIS");
++			master_cpu, msr, msr & (1 << 0) ? "DIS" : "EN", msr & (1 << 1) ? "EN" : "DIS", msr & (1 << 8) ? "EN" : "DIS");
+ }
+ 
+ /*
+@@ -8430,13 +8430,13 @@ void decode_c6_demotion_policy_msr(void)
+ 	if (!platform->has_msr_c6_demotion_policy_config)
+ 		return;
+ 
+-	if (!get_msr(base_cpu, MSR_CC6_DEMOTION_POLICY_CONFIG, &msr))
++	if (!get_msr(master_cpu, MSR_CC6_DEMOTION_POLICY_CONFIG, &msr))
+ 		fprintf(outf, "cpu%d: MSR_CC6_DEMOTION_POLICY_CONFIG: 0x%08llx (%sable-CC6-Demotion)\n",
+-			base_cpu, msr, msr & (1 << 0) ? "EN" : "DIS");
++			master_cpu, msr, msr & (1 << 0) ? "EN" : "DIS");
+ 
+-	if (!get_msr(base_cpu, MSR_MC6_DEMOTION_POLICY_CONFIG, &msr))
++	if (!get_msr(master_cpu, MSR_MC6_DEMOTION_POLICY_CONFIG, &msr))
+ 		fprintf(outf, "cpu%d: MSR_MC6_DEMOTION_POLICY_CONFIG: 0x%08llx (%sable-MC6-Demotion)\n",
+-			base_cpu, msr, msr & (1 << 0) ? "EN" : "DIS");
++			master_cpu, msr, msr & (1 << 0) ? "EN" : "DIS");
+ }
+ 
+ void print_dev_latency(void)
+@@ -8471,7 +8471,7 @@ static int has_perf_instr_count_access(void)
+ 	if (no_perf)
+ 		return 0;
+ 
+-	fd = open_perf_counter(base_cpu, PERF_TYPE_HARDWARE, PERF_COUNT_HW_INSTRUCTIONS, -1, 0);
++	fd = open_perf_counter(master_cpu, PERF_TYPE_HARDWARE, PERF_COUNT_HW_INSTRUCTIONS, -1, 0);
+ 	if (fd != -1)
+ 		close(fd);
+ 
+@@ -8701,7 +8701,7 @@ void rapl_perf_init(void)
+ 
+ 			domain_visited[next_domain] = 1;
+ 
+-			if ((cai->flags & RAPL_COUNTER_FLAG_PLATFORM_COUNTER) && (cpu != base_cpu))
++			if ((cai->flags & RAPL_COUNTER_FLAG_PLATFORM_COUNTER) && (cpu != master_cpu))
+ 				continue;
+ 
+ 			struct rapl_counter_info_t *rci = &rapl_counter_info_perdomain[next_domain];
+@@ -9348,7 +9348,7 @@ int has_perf_llc_access(void)
+ 	if (no_perf)
+ 		return 0;
+ 
+-	fd = open_perf_counter(base_cpu, PERF_TYPE_HARDWARE, PERF_COUNT_HW_CACHE_REFERENCES, -1, PERF_FORMAT_GROUP);
++	fd = open_perf_counter(master_cpu, PERF_TYPE_HARDWARE, PERF_COUNT_HW_CACHE_REFERENCES, -1, PERF_FORMAT_GROUP);
+ 	if (fd != -1)
+ 		close(fd);
+ 
+@@ -9710,7 +9710,7 @@ void allocate_counters(struct thread_data **t, struct core_data **c, struct pkg_
+ 
+ 	for (i = 0; i < num_cores; i++) {
+ 		(*c)[i].core_id = -1;
+-		(*c)[i].base_cpu = -1;
++		(*c)[i].first_cpu = -1;
+ 	}
+ 
+ 	*p = calloc(topo.num_packages, sizeof(struct pkg_data));
+@@ -9719,7 +9719,7 @@ void allocate_counters(struct thread_data **t, struct core_data **c, struct pkg_
+ 
+ 	for (i = 0; i < topo.num_packages; i++) {
+ 		(*p)[i].package_id = i;
+-		(*p)[i].base_cpu = -1;
++		(*p)[i].first_cpu = -1;
+ 	}
+ 
+ 	return;
+@@ -9753,10 +9753,10 @@ void init_counter(struct thread_data *thread_base, struct core_data *core_base,
+ 	t->cpu_id = cpu_id;
+ 	if (!cpu_is_not_allowed(cpu_id)) {
+ 
+-		if (c->base_cpu < 0)
+-			c->base_cpu = t->cpu_id;
+-		if (pkg_base[pkg_id].base_cpu < 0)
+-			pkg_base[pkg_id].base_cpu = t->cpu_id;
++		if (c->first_cpu < 0)
++			c->first_cpu = t->cpu_id;
++		if (pkg_base[pkg_id].first_cpu < 0)
++			pkg_base[pkg_id].first_cpu = t->cpu_id;
+ 	}
+ 
+ 	c->core_id = core_id;
+@@ -9803,9 +9803,9 @@ void allocate_irq_buffers(void)
+ int update_topo(PER_THREAD_PARAMS)
+ {
+ 	topo.allowed_cpus++;
+-	if ((int)t->cpu_id == c->base_cpu)
++	if ((int)t->cpu_id == c->first_cpu)
+ 		topo.allowed_cores++;
+-	if ((int)t->cpu_id == p->base_cpu)
++	if ((int)t->cpu_id == p->first_cpu)
+ 		topo.allowed_packages++;
+ 
+ 	return 0;
+@@ -9831,16 +9831,16 @@ void setup_all_buffers(bool startup)
+ 	topology_update();
+ }
+ 
+-void set_base_cpu(void)
++void set_master_cpu(void)
+ {
+ 	int i;
+ 
+ 	for (i = 0; i < topo.max_cpu_num + 1; ++i) {
+ 		if (cpu_is_not_allowed(i))
+ 			continue;
+-		base_cpu = i;
++		master_cpu = i;
+ 		if (debug > 1)
+-			fprintf(outf, "base_cpu = %d\n", base_cpu);
++			fprintf(outf, "master_cpu = %d\n", master_cpu);
+ 		return;
+ 	}
+ 	err(-ENODEV, "No valid cpus found");
+@@ -10416,7 +10416,7 @@ void pmt_init(void)
+ void turbostat_init()
+ {
+ 	setup_all_buffers(true);
+-	set_base_cpu();
++	set_master_cpu();
+ 	check_msr_access();
+ 	check_perf_access();
+ 	process_cpuid();
+@@ -10434,7 +10434,7 @@ void turbostat_init()
+ 	for_all_cpus(get_cpu_type, ODD_COUNTERS);
+ 	for_all_cpus(get_cpu_type, EVEN_COUNTERS);
+ 
+-	if (BIC_IS_ENABLED(BIC_IPC) && has_aperf_access && get_instr_count_fd(base_cpu) != -1)
++	if (BIC_IS_ENABLED(BIC_IPC) && has_aperf_access && get_instr_count_fd(master_cpu) != -1)
+ 		BIC_PRESENT(BIC_IPC);
+ 
+ 	/*
+@@ -11251,7 +11251,7 @@ void probe_cpuidle_residency(void)
+ 
+ 	for (state = 10; state >= 0; --state) {
+ 
+-		sprintf(path, "/sys/devices/system/cpu/cpu%d/cpuidle/state%d/name", base_cpu, state);
++		sprintf(path, "/sys/devices/system/cpu/cpu%d/cpuidle/state%d/name", master_cpu, state);
+ 		input = fopen(path, "r");
+ 		if (input == NULL)
+ 			continue;
+@@ -11300,7 +11300,7 @@ void probe_cpuidle_counts(void)
+ 
+ 	for (state = 10; state >= 0; --state) {
+ 
+-		sprintf(path, "/sys/devices/system/cpu/cpu%d/cpuidle/state%d/name", base_cpu, state);
++		sprintf(path, "/sys/devices/system/cpu/cpu%d/cpuidle/state%d/name", master_cpu, state);
+ 		input = fopen(path, "r");
+ 		if (input == NULL)
+ 			continue;
 -- 
 2.45.2
 
