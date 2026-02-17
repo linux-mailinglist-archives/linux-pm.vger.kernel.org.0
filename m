@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-42781-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42782-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8C//HL28lGm4HQIAu9opvQ
-	(envelope-from <linux-pm+bounces-42781-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:45 +0100
+	id sE+TDb+8lGm4HQIAu9opvQ
+	(envelope-from <linux-pm+bounces-42782-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:47 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21B0014F803
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D5FB014F80A
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1FFE530584B1
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6A744305B463
 	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 19:08:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E660337473A;
-	Tue, 17 Feb 2026 19:08:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE64374748;
+	Tue, 17 Feb 2026 19:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P9U9rAs4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G80qo92Y"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44C6374733
-	for <linux-pm@vger.kernel.org>; Tue, 17 Feb 2026 19:08:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A480285406
+	for <linux-pm@vger.kernel.org>; Tue, 17 Feb 2026 19:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771355287; cv=none; b=my1y91jaR8odgtHchHdtZTCa92ysx1FXvkx+xqV+TI6XnYfKbkLufsrQlK+DMo2eapWq0u65UkvVdZJoWzWELDBvFfeR+hVWbHf6Jlk3ZusHSZyiNkh0HmJgQ/VueVfkmmaZSIP32gP9he9Ko7PirQyRsLHteQj3bAVip6NVS3M=
+	t=1771355289; cv=none; b=T0w1d8wWwvKto5sj6DFN88UOdBxRucKrDWNiGdB8hlMknVqGF9tpA+wV5GSzMnvnpk5HVGFpuYd9FRL9s7Zs3iNwPmEr2KDeictep6FWXhm4mV0FxZmRx6139tLTb6dB6muNYkFMqrzhPqF2rnC1xx2YmzH0rvSJmgtWspkvOQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771355287; c=relaxed/simple;
-	bh=UcELr7GAWyjBnZTALHn16ODRFfu90B9T24hqVisMNHE=;
+	s=arc-20240116; t=1771355289; c=relaxed/simple;
+	bh=+xenMrbKijC0L4IW21nuvkXbHmDMQV8J7827kCBb1yc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BpmXwOe03j9HdGCDlTlPHRtdJjZEPLe32omecaQvbEcQOSuzEGfi8iB3IeSgd9cgLnlXeu2C3S6Ms/s/KwR6P5825zP6deuNw4aVPiFypUyl93iW++YWKYM9ehqqdqP485Q3NoMYp9KkiVn+8Dbbmn84MxkHPz8u7RCWLTvtWcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P9U9rAs4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F03BBC4CEF7;
-	Tue, 17 Feb 2026 19:08:06 +0000 (UTC)
+	 MIME-Version; b=Bu+S3J77lirtYlAATtBvf9JEU7I+WzLeKeh3sG0wTSJqhTZDbGnKvN9GKFC6w6bScF01PTKJ+CwjWQh7XWkecerFiGC+oBUP7EzfkaDtJlUmz1TWAVjNIq+zbxuuejGzmA8w5OG9pm8aqwNPoqY3TMwdi3ocCkxszdqWDBIpRX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G80qo92Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ACB6C4CEF7;
+	Tue, 17 Feb 2026 19:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771355287;
-	bh=UcELr7GAWyjBnZTALHn16ODRFfu90B9T24hqVisMNHE=;
+	s=k20201202; t=1771355289;
+	bh=+xenMrbKijC0L4IW21nuvkXbHmDMQV8J7827kCBb1yc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=P9U9rAs4XPEP8T5LmTyJ1A1yMW7EeTH/6Tc4yTLhWiCfsRUW7G+qMuJgP3xHJbYTc
-	 CydGHHxCsRovBezCiTD3nuY5H4AVvEx+pPWpKilpfThdIcWv9aAZe30/yAN3ilwo/z
-	 SKoM5f8jrRypz1dP6dAdkFhnYN6J03JCZ7tUfnH6RG1mp0dX7W6vMbRl7J3mDv6fYW
-	 m8owtzLiGBAN1uNSHlbf/HkbpXoDo1wz5kGDMz88plsS38NjtM0FiOuiU9Jsp7om6r
-	 6wmqkaAVbF+HiU5kYfX+03KafFGI1XmNzyZm7z0Jvfi8LPzDg3nMkXTYP6rEFMdC2l
-	 YjbLmaIk3au0w==
+	b=G80qo92YW/8B2e+1GhXcc+lDGehuFX7TihsXI0HzVCRjiDUrssoXA8buL7i/b/GMZ
+	 XibnUdRdBWb7xrwnpRx6BAnfx462MqfIrYQfQ2IGrW+KGjvUqzr1RqdlmB4Q0FU3N2
+	 eLfg6bmZx3ji9UaX4rWjRmvzUzNMGfZNcF+KCU95oOb39uu4anWUFwWHJOtxTzGyA3
+	 ozPavPbyA1ITBRPhOjp5EkNvPeZC7rZ8jxiS20dbDm1vaRHZO5VGWz/1hbPpkPOR54
+	 NflT+BYdD2S1AsQKDH0KDSOVU+9PNoB1zFtag9kUujLAq8wgh1nkzS1NqCSNbhZDX9
+	 aDBln4UnQUFFw==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Len Brown <len.brown@intel.com>
-Subject: [PATCH 13/23] tools/power turbostat: Rename physical_core_id to core_id
-Date: Tue, 17 Feb 2026 13:04:04 -0600
-Message-ID: <5e160646f4dbca7cf9cc09abc31a22931e362b8a.1771354332.git.len.brown@intel.com>
+Subject: [PATCH 14/23] tools/power turbostat: Delete core_data.core_id
+Date: Tue, 17 Feb 2026 13:04:05 -0600
+Message-ID: <439632cf95d369ea05841d45d48fbd1d5968d268.1771354332.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <16cc8f249c702b7cbb4c2c2be7cd8f4fdd5d1d0c.1771354332.git.len.brown@intel.com>
 References: <16cc8f249c702b7cbb4c2c2be7cd8f4fdd5d1d0c.1771354332.git.len.brown@intel.com>
@@ -78,7 +78,7 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	RCVD_COUNT_THREE(0.00)[4];
 	RCPT_COUNT_TWO(0.00)[2];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42781-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42782-lists,linux-pm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	HAS_REPLYTO(0.00)[lenb@kernel.org];
@@ -91,117 +91,81 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-pm];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	REPLYTO_EQ_FROM(0.00)[]
-X-Rspamd-Queue-Id: 21B0014F803
+X-Rspamd-Queue-Id: D5FB014F80A
 X-Rspamd-Action: no action
 
 From: Len Brown <len.brown@intel.com>
 
-The Linux Kernel topology sysfs is flawed.
-core_id is not globally unique, but is per-package.
-
-Turbostat works around this when it needs to, with
-
-        rapl_core_id = cpus[cpu].core_id;
-        rapl_core_id += cpus[cpu].package_id * nr_cores_per_package
-
-Otherwise, turbostat handles core_id as subservient to each package.
-
-As there is only one core_id namespace, rename
-physical_core_id to simply be core_id.
+Delete redundant core_data.core_id.
+Use cpus[].core_id as the single copy of the truth.
 
 No functional change.
 
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 74d9f9e21e94..9f93efafbf94 100644
+index 9f93efafbf94..af6338460320 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2394,13 +2394,13 @@ struct platform_counters {
- } platform_counters_odd, platform_counters_even;
- 
- struct cpu_topology {
-+	int core_id;
- 	int package_id;
- 	int die_id;
- 	int l3_id;
- 	int logical_cpu_id;
- 	int physical_node_id;
- 	int logical_node_id;	/* 0-based count within the package */
--	int physical_core_id;
- 	int thread_id;
- 	int type;
- 	cpu_set_t *put_ids;	/* Processing Unit/Thread IDs */
-@@ -2658,7 +2658,7 @@ unsigned int cpu_to_domain(const struct perf_counter_info *pc, int cpu)
- 		return cpu;
- 
- 	case SCOPE_CORE:
--		return cpus[cpu].physical_core_id;
-+		return cpus[cpu].core_id;
- 
- 	case SCOPE_PACKAGE:
- 		return cpus[cpu].package_id;
-@@ -5180,7 +5180,7 @@ static inline int get_rapl_domain_id(int cpu)
- 		return cpus[cpu].package_id;
- 
- 	/* Compute the system-wide unique core-id for @cpu */
--	rapl_core_id = cpus[cpu].physical_core_id;
-+	rapl_core_id = cpus[cpu].core_id;
- 	rapl_core_id += cpus[cpu].package_id * nr_cores_per_package;
- 
- 	return rapl_core_id;
-@@ -6216,7 +6216,7 @@ int get_thread_siblings(struct cpu_topology *thiscpu)
- 			if ((map >> shift) & 0x1) {
- 				so = shift + offset;
- 				sib_core = get_core_id(so);
--				if (sib_core == thiscpu->physical_core_id) {
-+				if (sib_core == thiscpu->core_id) {
- 					CPU_SET_S(so, size, thiscpu->put_ids);
- 					if ((so != cpu) && (cpus[so].thread_id < 0))
- 						cpus[so].thread_id = thread_id++;
-@@ -8948,7 +8948,7 @@ void cstate_perf_init_(bool soft_c1)
- 			if (cpu_is_not_allowed(cpu))
- 				continue;
- 
--			const int core_id = cpus[cpu].physical_core_id;
-+			const int core_id = cpus[cpu].core_id;
- 			const int pkg_id = cpus[cpu].package_id;
- 
- 			assert(core_id < cores_visited_elems);
-@@ -9629,9 +9629,9 @@ void topology_probe(bool startup)
- 			topo.max_node_num = cpus[i].physical_node_id;
- 
- 		/* get core information */
--		cpus[i].physical_core_id = get_core_id(i);
--		if (cpus[i].physical_core_id > max_core_id)
--			max_core_id = cpus[i].physical_core_id;
-+		cpus[i].core_id = get_core_id(i);
-+		if (cpus[i].core_id > max_core_id)
-+			max_core_id = cpus[i].core_id;
- 
- 		/* get thread information */
- 		siblings = get_thread_siblings(&cpus[i]);
-@@ -9683,7 +9683,7 @@ void topology_probe(bool startup)
- 		fprintf(outf,
- 			"cpu %d pkg %d die %d l3 %d node %d lnode %d core %d thread %d\n",
- 			i, cpus[i].package_id, cpus[i].die_id, cpus[i].l3_id,
--			cpus[i].physical_node_id, cpus[i].logical_node_id, cpus[i].physical_core_id, cpus[i].thread_id);
-+			cpus[i].physical_node_id, cpus[i].logical_node_id, cpus[i].core_id, cpus[i].thread_id);
+@@ -2143,7 +2143,6 @@ struct core_data {
+ 	unsigned long long mc6_us;	/* duplicate as per-core for now, even though per module */
+ 	unsigned int core_temp_c;
+ 	struct rapl_counter core_energy;	/* MSR_CORE_ENERGY_STAT */
+-	unsigned int core_id;
+ 	unsigned long long core_throt_cnt;
+ 	unsigned long long counter[MAX_ADDED_CORE_COUNTERS];
+ 	unsigned long long perf_counter[MAX_ADDED_CORE_COUNTERS];
+@@ -3178,7 +3177,7 @@ int dump_counters(PER_THREAD_PARAMS)
  	}
  
+ 	if (c && is_cpu_first_thread_in_core(t, c)) {
+-		outp += sprintf(outp, "core: %d\n", c->core_id);
++		outp += sprintf(outp, "core: %d\n", cpus[t->cpu_id].core_id);
+ 		outp += sprintf(outp, "c3: %016llX\n", c->c3);
+ 		outp += sprintf(outp, "c6: %016llX\n", c->c6);
+ 		outp += sprintf(outp, "c7: %016llX\n", c->c7);
+@@ -3387,7 +3386,7 @@ int format_counters(PER_THREAD_PARAMS)
+ 		}
+ 		if (DO_BIC(BIC_Core)) {
+ 			if (c)
+-				outp += sprintf(outp, "%s%d", (printed++ ? delim : ""), c->core_id);
++				outp += sprintf(outp, "%s%d", (printed++ ? delim : ""), cpus[t->cpu_id].core_id);
+ 			else
+ 				outp += sprintf(outp, "%s-", (printed++ ? delim : ""));
+ 		}
+@@ -5284,7 +5283,7 @@ int get_counters(PER_THREAD_PARAMS)
+ 		return -10;
+ 
+ 	for (i = 0, pp = sys.pmt_cp; pp; i++, pp = pp->next)
+-		c->pmt_counter[i] = pmt_read_counter(pp, c->core_id);
++		c->pmt_counter[i] = pmt_read_counter(pp, cpus[t->cpu_id].core_id);
+ 
+ 	/* collect package counters only for 1st core in package */
+ 	if (!is_cpu_first_core_in_package(t, p))
+@@ -9705,10 +9704,8 @@ void allocate_counters(struct thread_data **t, struct core_data **c, struct pkg_
+ 	if (*c == NULL)
+ 		goto error;
+ 
+-	for (i = 0; i < num_cores; i++) {
+-		(*c)[i].core_id = -1;
++	for (i = 0; i < num_cores; i++)
+ 		(*c)[i].first_cpu = -1;
+-	}
+ 
+ 	*p = calloc(topo.num_packages, sizeof(struct pkg_data));
+ 	if (*p == NULL)
+@@ -9753,8 +9750,6 @@ void init_counter(struct thread_data *thread_base, struct core_data *core_base,
+ 		if (pkg_base[pkg_id].first_cpu < 0)
+ 			pkg_base[pkg_id].first_cpu = t->cpu_id;
+ 	}
+-
+-	c->core_id = core_id;
  }
-@@ -9731,7 +9731,7 @@ void init_counter(struct thread_data *thread_base, struct core_data *core_base,
- {
- 	int pkg_id = cpus[cpu_id].package_id;
- 	int node_id = cpus[cpu_id].logical_node_id;
--	int core_id = cpus[cpu_id].physical_core_id;
-+	int core_id = cpus[cpu_id].core_id;
- 	int thread_id = cpus[cpu_id].thread_id;
- 	struct thread_data *t;
- 	struct core_data *c;
+ 
+ int initialize_counters(int cpu_id)
 -- 
 2.45.2
 
