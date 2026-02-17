@@ -1,51 +1,51 @@
-Return-Path: <linux-pm+bounces-42734-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42735-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uGD5JJZRlGkUCgIAu9opvQ
-	(envelope-from <linux-pm+bounces-42734-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 12:31:34 +0100
+	id SPsAEQVSlGlFCgIAu9opvQ
+	(envelope-from <linux-pm+bounces-42735-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 12:33:25 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE7F414B648
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 12:31:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9957614B695
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 12:33:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CD53D301017B
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 11:31:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E6C353036EE2
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 11:32:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02341333750;
-	Tue, 17 Feb 2026 11:31:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A185E330324;
+	Tue, 17 Feb 2026 11:32:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dcd75SSJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u2ruo2Jd"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF348263C9F;
-	Tue, 17 Feb 2026 11:31:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF9828640F;
+	Tue, 17 Feb 2026 11:32:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771327868; cv=none; b=W4I7obamRQWvjRqM5jloX2Eg71JMv23Asun4LlRZIT1dOFpD2FBoENjWgcrrFq2LwYQd10Btp45WIRZ87AZZQz92pk5XGI04iLPD8WcJX7Ko5GQ1ZXKBtFKcNulOwjBbnTFl91mMparsdROHpPgQczEiXChAjdjjv+yOYBaROjY=
+	t=1771327951; cv=none; b=ZVjQ6sqWlXwcTIUn7U4GqFEPFVCWDVyNvVTV6LPsKr4rjxTWaB5xlEI3Amjact+G3gqM63fDFg/YjuO8GX77XQZbhfBQwGsIVTWclMCvo7LJVD2U/7Z2QoZ+JB5LfGlhAka6LR1NzmWLWXdC6NMF34yT6fEF6NpykagaEWJjecs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771327868; c=relaxed/simple;
-	bh=WehI0hiluxKI2cyEJUs/TpABynFE7fxyWvNATvSnCb0=;
+	s=arc-20240116; t=1771327951; c=relaxed/simple;
+	bh=P3OsmKbJawEhi3OXvofQa81VseCumNhItOTZirw03UM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OWHsbYbx9OXy/YnBgBiiYNncIFE+iY8jFUOLjuln6lHHpn6TXvS5kOfBWfdMxugnNlDcxNulo/ZDOjCEjD0YL6GSEsi/WJYyBliEUtFkXCHawQ31uOpPN0j62f00gn6LeoTiV9Fvpdd6NY7fakcBU+tw9kyxiF8NqaxLAkMtPHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dcd75SSJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C252C4CEF7;
-	Tue, 17 Feb 2026 11:31:05 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=U5mv5RIGId3465qMLw0tzL7TM6F9XSXDheYqCzSJsTJQE/6iIuYGfL4OrLm2CJp6uaJIvvsmjMVudQDfzfxHfxtvujY8yCCRPM2dx95ikX7guX3mIt1YaEnFKnmHfCEtv7tPQ5eH+x2l83WFcYRiXUtL+4Oe8TN5WTQGh/wGaVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u2ruo2Jd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8EDC19423;
+	Tue, 17 Feb 2026 11:32:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771327868;
-	bh=WehI0hiluxKI2cyEJUs/TpABynFE7fxyWvNATvSnCb0=;
+	s=k20201202; t=1771327951;
+	bh=P3OsmKbJawEhi3OXvofQa81VseCumNhItOTZirw03UM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dcd75SSJv4+Txm2cDHs9JegFaVCP59JgsRuM1LoGFE08uuFs+GrbNxQAdU7LC7B58
-	 hMeBvLI2y3ZhUtTaEXKmxgJW02/3DFT1SiWc5Cpliy9fynbJMw9U51mSKCcZCyzRyw
-	 dUMKABbWvnZXZ1tptvj1QQZTKuJoLAIkvgF7naVou4D5TAwn9PgZNzNCp9U0IH2r1Q
-	 l3nMLk1j01YdvenrBcfLEQ53+m080MijjM6EqWSqYLqXSoHhLlLzR6DLPv2goG37eE
-	 awfR52GX/PdtcblXdK80NxwpYU0fr6C3zROIfiHgL2K2jPPWAJRo6+ntDEZGjkY0hl
-	 fSe4K9GT2zDew==
-Message-ID: <73949a79-7262-47ea-8bc7-87e10f75065c@kernel.org>
-Date: Tue, 17 Feb 2026 12:31:03 +0100
+	b=u2ruo2JdEaiFxjFmaHJbr8to6bz8ANqzR8DJCM6Ogm/HsJCQKH+mR11/m/cYhnBKZ
+	 1DZjmCZS3UyO3jiXN8sYP+BE0pmRhFo1sCD3Ozt1pMyZQBTKMuFf5VJaI4JGtRcFQ5
+	 OhEBhp9w2rFvE+4gqKr00ZAbodDR3wCSL0MGF7DT54xjgVkmY6oV/0IeRD5+zJSwDL
+	 fNamuOfz62PygGqydxToUH5xQ1y730PzkhayNzXr6mh+cn7cTaC0TuaxHRVBBIg/VX
+	 tpYwRv72+hlc/TBg/zuQ/MAKSV0KpS/RflmI/N/YqYLxiE8h0eDSQnc/BtrVOGm5fN
+	 e5t/uXI6U0m7Q==
+Message-ID: <1519143e-4fc3-490d-ab8d-e65edd2c4eec@kernel.org>
+Date: Tue, 17 Feb 2026 12:32:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -55,7 +55,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 1/7] dt-bindings: embedded-controller: document ASUS
  Transformer EC
-To: Conor Dooley <conor@kernel.org>, Svyatoslav Ryhel <clamor95@gmail.com>
+To: Svyatoslav Ryhel <clamor95@gmail.com>, Conor Dooley <conor@kernel.org>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
  Dmitry Torokhov <dmitry.torokhov@gmail.com>, Lee Jones <lee@kernel.org>,
@@ -71,6 +71,7 @@ References: <20260214180959.30714-1-clamor95@gmail.com>
  <20260216-plunder-defense-de11cf56dd3d@spud>
  <CAPVz0n0-LbTUZBCaO=oN3PpPLpwAqzNo29r687pKY8NbEE9giA@mail.gmail.com>
  <20260217-vowed-botany-b1c47c7e40b8@spud>
+ <55C30023-4175-48F2-BCB0-12EC23C48F01@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -116,25 +117,25 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260217-vowed-botany-b1c47c7e40b8@spud>
+In-Reply-To: <55C30023-4175-48F2-BCB0-12EC23C48F01@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42734-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42735-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,gmail.com];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_CC(0.00)[kernel.org,gmail.com,agorria.com,rere.qmqm.pl,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -145,155 +146,80 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: EE7F414B648
+X-Rspamd-Queue-Id: 9957614B695
 X-Rspamd-Action: no action
 
-On 17/02/2026 12:05, Conor Dooley wrote:
-> On Mon, Feb 16, 2026 at 09:14:40PM +0200, Svyatoslav Ryhel wrote:
->> пн, 16 лют. 2026 р. о 20:50 Conor Dooley <conor@kernel.org> пише:
+On 17/02/2026 12:23, Svyatoslav Ryhel wrote:
+>>> in other words you propose this:
 >>>
->>> On Mon, Feb 16, 2026 at 08:22:38PM +0200, Svyatoslav Ryhel wrote:
->>>> пн, 16 лют. 2026 р. о 20:04 Conor Dooley <conor@kernel.org> пише:
->>>>>
->>>>> On Sat, Feb 14, 2026 at 08:09:53PM +0200, Svyatoslav Ryhel wrote:
->>>>>> Document embedded controller used in ASUS Transformer device series.
->>>>>>
->>>>>> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
->>>>>> ---
->>>>>>  .../asus,transformer-ec.yaml                  | 98 +++++++++++++++++++
->>>>>>  1 file changed, 98 insertions(+)
->>>>>>  create mode 100644 Documentation/devicetree/bindings/embedded-controller/asus,transformer-ec.yaml
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/embedded-controller/asus,transformer-ec.yaml b/Documentation/devicetree/bindings/embedded-controller/asus,transformer-ec.yaml
->>>>>> new file mode 100644
->>>>>> index 000000000000..670c4c2d339d
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/devicetree/bindings/embedded-controller/asus,transformer-ec.yaml
->>>>>> @@ -0,0 +1,98 @@
->>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>>>> +%YAML 1.2
->>>>>> +---
->>>>>> +$id: http://devicetree.org/schemas/embedded-controller/asus,transformer-ec.yaml#
->>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>> +
->>>>>> +title: ASUS Transformer's Embedded Controller
->>>>>> +
->>>>>> +description:
->>>>>> +  Several Nuvoton based Embedded Controllers attached to an I2C bus,
->>>>>> +  running a custom ASUS firmware, specific to the ASUS Transformer
->>>>>> +  device series.
->>>>>> +
->>>>>> +maintainers:
->>>>>> +  - Svyatoslav Ryhel <clamor95@gmail.com>
->>>>>> +
->>>>>> +allOf:
->>>>>> +  - $ref: /schemas/power/supply/power-supply.yaml
->>>>>> +
->>>>>> +properties:
->>>>>> +  compatible:
->>>>>> +    oneOf:
->>>>>> +      - enum:
->>>>>> +          - asus,p1801-t-ec-pad
->>>>>> +          - asus,sl101-ec-dock
->>>>>> +          - asus,tf600t-ec-pad
->>>>>> +          - asus,tf701t-ec-pad
->>>>>> +
->>>>>> +      - items:
->>>>>> +          - enum:
->>>>>> +              - asus,tf101-ec-dock
->>>>>> +              - asus,tf101g-ec-dock
->>>>>> +              - asus,tf201-ec-dock
->>>>>> +              - asus,tf300t-ec-dock
->>>>>> +              - asus,tf300tg-ec-dock
->>>>>> +              - asus,tf300tl-ec-dock
->>>>>> +              - asus,tf700t-ec-dock
->>>>>> +          - const: asus,transformer-ec-dock
->>>>>> +
->>>>>> +      - items:
->>>>>> +          - enum:
->>>>>> +              - asus,tf201-ec-pad
->>>>>> +              - asus,tf300t-ec-pad
->>>>>> +              - asus,tf300tg-ec-pad
->>>>>> +              - asus,tf300tl-ec-pad
->>>>>> +              - asus,tf700t-ec-pad
->>>>>> +          - const: asus,transformer-ec-pad
+>>> properties:
+>>>   compatible:
+>>>     oneOf:
+>>>       - items:
+>>>           - enum:
+>>>               - asus,sl101-ec-dock
+>>>               - asus,tf101-ec-dock
+>>>               - asus,tf101g-ec-dock
+>>>               - asus,tf201-ec-dock
+>>>               - asus,tf300t-ec-dock
+>>>               - asus,tf300tg-ec-dock
+>>>               - asus,tf300tl-ec-dock
+>>>               - asus,tf700t-ec-dock
+>>>           - const: asus,transformer-ec-dock
+>>>
+>>>       - items:
+>>>           - enum:
+>>>               - asus,p1801-t-ec-pad
+>>>               - asus,tf201-ec-pad
+>>>               - asus,tf300t-ec-pad
+>>>               - asus,tf300tg-ec-pad
+>>>               - asus,tf300tl-ec-pad
+>>>               - asus,tf700t-ec-pad
+>>>               - asus,tf600t-ec-pad
+>>>               - asus,tf701t-ec-pad
+>>>           - const: asus,transformer-ec-pad
+>>>
+>>> And in the driver add match to every single entry of enums?
+>>
+>> No, I was talking about removing the generic compatibles entirely, since
+>> they are not suitably generic to cover all devices at the point of
+>> addition. So like:
+>>
 > 
->>>>> Also, why are some of the compatibles permitted standalone? That should
->>>>> be mentioned in your commit message too. Also, other than the sl101, the
->>>>> standalone ones seem to have the same match data in the mfd driver. Why
->>>>> are fallbacks not made use of there?
->>>>>
->>>>
->>>> Because standalone compatibles describe a unique hw configuration
->>>> which cannot be grouped into something meaningful. asus,p1801-t-ec-pad
->>>> is for EC of Tegra30/Intel based p1801-t AIO, asus,sl101-ec-dock is
->>>> for EC of Tegra20 slider tablet, asus,tf600t-ec-pad is for altered EC
->>>> in Win8 Tegra30 tablet, asus,tf701t-ec-pad is for Tegra114 tablet.
->>>> Different generations, different form-factors.
->>>
->>> I don't see any reasons here that eliminate fallback compatibles.
->>> +       { .compatible = "asus,p1801-t-ec-pad", .data = &asus_ec_pad_charger_data },
->>> +       { .compatible = "asus,tf600t-ec-pad", .data = &asus_ec_pad_charger_data },
->>> +       { .compatible = "asus,tf701t-ec-pad", .data = &asus_ec_pad_charger_data },
->>> +       { }
->>> Three of them use the same match data, so you need to explain why you've
->>> made these three standalone when all the others that share a programming
->>> model got a generic fallback. Fallback usage is based on programming
->>> model, not based on whether the devices are a physically different, so
->>> your explanation must reflect this.
->>>
->>>>> Since this transformer series seems to have multiple programming models
->>>>> for "ec-pad" devices, it calls into question your use of the generic
->>>>> fallback compatibles is appropriate and makes it seem like you should be
->>>>> using device compatibles as a fallback.
->>>>
->>>> That is redundant.
->>>
->>> I don't understand how that is a response to what I said.
->>>
->>
->> in other words you propose this:
->>
->> properties:
->>   compatible:
->>     oneOf:
->>       - items:
->>           - enum:
->>               - asus,sl101-ec-dock
->>               - asus,tf101-ec-dock
->>               - asus,tf101g-ec-dock
->>               - asus,tf201-ec-dock
->>               - asus,tf300t-ec-dock
->>               - asus,tf300tg-ec-dock
->>               - asus,tf300tl-ec-dock
->>               - asus,tf700t-ec-dock
->>           - const: asus,transformer-ec-dock
->>
->>       - items:
->>           - enum:
->>               - asus,p1801-t-ec-pad
->>               - asus,tf201-ec-pad
->>               - asus,tf300t-ec-pad
->>               - asus,tf300tg-ec-pad
->>               - asus,tf300tl-ec-pad
->>               - asus,tf700t-ec-pad
->>               - asus,tf600t-ec-pad
->>               - asus,tf701t-ec-pad
->>           - const: asus,transformer-ec-pad
->>
->> And in the driver add match to every single entry of enums?
+> Actually, they all can be grouped under asus,transformer-ec fallback if that is needed, both pad and dock EC have the same core functions just different set of cells. And then in the driver each compatible will get a dedicated matching data. Will this work?
+
+Then what does the generic compatible express if it is not used by the SW.
+
+Wrap your emails to mailing list style.
+
 > 
-> No, I was talking about removing the generic compatibles entirely, since
-> they are not suitably generic to cover all devices at the point of
-> addition. So like:
+> properties:
+>   compatible:
+>       - items:
+>           - enum:
+>               - asus,p1801-t-ec-pad
+>               - asus,sl101-ec-dock
+>               - asus,tf101-ec-dock
+>               - asus,tf101g-ec-dock
+>               - asus,tf201-ec-dock
+>               - asus,tf201-ec-pad
+>               - asus,tf300t-ec-dock
+>               - asus,tf300t-ec-pad
+>               - asus,tf300tg-ec-dock
+>               - asus,tf300tg-ec-pad
+>               - asus,tf300tl-ec-dock
+>               - asus,tf300tl-ec-pad
+>               - asus,tf700t-ec-dock
+>               - asus,tf700t-ec-pad
+>               - asus,tf600t-ec-pad
+>               - asus,tf701t-ec-pad
+>           - const: asus,transformer-ec
+> 
+> And them schema name will match the genetic compatible.
 
-Yep. Generic compatible has hardly a meaning if you already know it is
-not generic enough - some devices are not compatible with it.
-
-Each SoC/platform which pushed to these generic compatible, hit a wall
-after some months/years. Apple is a nice example now.
+Then what does the generic compatible express?
 
 
 Best regards,
