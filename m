@@ -1,310 +1,165 @@
-Return-Path: <linux-pm+bounces-42791-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42792-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EJBcDam8lGm4HQIAu9opvQ
-	(envelope-from <linux-pm+bounces-42791-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:25 +0100
+	id SH70Et69lGnHHQIAu9opvQ
+	(envelope-from <linux-pm+bounces-42792-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:13:34 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E96C14F7E0
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:08:25 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74CB914F8C7
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 20:13:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 80D22300DEC8
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 19:08:24 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 7727D3008CAB
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 19:13:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29AE5374741;
-	Tue, 17 Feb 2026 19:08:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F4E9376471;
+	Tue, 17 Feb 2026 19:13:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FMH8cyOa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t02wlwAq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0737F37473C
-	for <linux-pm@vger.kernel.org>; Tue, 17 Feb 2026 19:08:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05BF14A62B
+	for <linux-pm@vger.kernel.org>; Tue, 17 Feb 2026 19:13:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771355304; cv=none; b=bD7wrqr1NzVaTM3K+XnGT2vaTqH+GI1petVi2tZG2quOKr1IKlevs43UGb/blA9yJldFvFFhekXdkSx9378o+Y9vqxfxguLgOKyTUixFHxPSMZ/e1NYPlOX+bSwfOD4hKUiIkAjqrBFyeTO0bWvdYsv+2w/Xjc1rTC60epnMFYk=
+	t=1771355607; cv=none; b=Uw4XFyZ+Sde/33SyYzHbybAJumqHO4o9FafM8aIC1y4+2uF7IybviZWwPcLHplZhpxJ4d+PWu08LpR2JOvcBaronh6HGIpTDrIKJiAnkvhIqD0de/khEFgHm6xBzJtWeTmrqitck4FJvzAB6k3xzZHmrVUhkl5IhS7RDSXPlTWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771355304; c=relaxed/simple;
-	bh=1ItHiRJR3f7mYo3zeEKTdF+k65aAGNuamImi9gBYVPE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UET6FDbvEMFri9EDp1M+RxSxTIt44tvwgEgnk3x3detDhX0mWTnYAydgHMmoj9iNl1XQoZw/mAR0j3l6/jSIHgCREcR7OIJcB5+90HVu4roOEBhcvkM8b8dUVbWNq0MIfHdi5sgSU3GMe3HI3v10O8uipcKDJnywp9ev81wsEC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FMH8cyOa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E19F0C2BC9E;
-	Tue, 17 Feb 2026 19:08:22 +0000 (UTC)
+	s=arc-20240116; t=1771355607; c=relaxed/simple;
+	bh=kpmtc1+t2EIomUM5NOng2NkTHO8yNMvLFRdhc/LFOR0=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=jarfjomz6Tr3wu3nhZOPSXQdMNmfAvXG72KjHFdqerijmb7Qgr9IiLdsAqilbxsIkFFPnRkSilHMLLk6HTmb2bvGwPPg1EzWelHeP4LUHesTBK/ApIkg7tUd43JMFLaHIRq1cFMgc17KboLCS3ddbJrqTaeHBkqDNN+4yQB83g4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t02wlwAq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2C25C4CEF7
+	for <linux-pm@vger.kernel.org>; Tue, 17 Feb 2026 19:13:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771355303;
-	bh=1ItHiRJR3f7mYo3zeEKTdF+k65aAGNuamImi9gBYVPE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=FMH8cyOa1RP+uI0hkCDWRUVCJ47YSilCy6zyCzngf6aOhzYwtc/4DuXGmbSR4VWw4
-	 DydOCHxru7e2rqyOdf9xArsBa8khE35o8EfsjpJA4XpRIRa0qImVTfmRBt0G3MWxg4
-	 gSgrIZ+xwv1JkknDB0Gs/iCZl83NvPeQpRE2JLY18CIXMqkmy55PTPuAVRsuWWhASA
-	 S6oZxUIynktxEAQwG/zMBev4tyF+JKQOY3VrhCyriIF752D72//coiUCMk4/nlNzHr
-	 8YSQcguoF3CSOcFjeapScb6mbqJD/d13LfGJlGZNgAP6e/w6UJhsTEA9PyePoyRGQG
-	 yjo+XKvJP1uLw==
-From: Len Brown <lenb@kernel.org>
-To: linux-pm@vger.kernel.org
-Cc: Len Brown <len.brown@intel.com>
-Subject: [PATCH 23/23] tools/power turbostat: version 2026.02.14
-Date: Tue, 17 Feb 2026 13:04:14 -0600
-Message-ID: <51496091dd37b405e6e399a9638da3f1da3f4c64.1771354333.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <16cc8f249c702b7cbb4c2c2be7cd8f4fdd5d1d0c.1771354332.git.len.brown@intel.com>
-References: <16cc8f249c702b7cbb4c2c2be7cd8f4fdd5d1d0c.1771354332.git.len.brown@intel.com>
+	s=k20201202; t=1771355606;
+	bh=kpmtc1+t2EIomUM5NOng2NkTHO8yNMvLFRdhc/LFOR0=;
+	h=From:Date:Subject:To:Cc:From;
+	b=t02wlwAq9hQ/vit0uZHbXgmqCssane02jG+eUXNZ0JQqBBsezMZs4W6UkZoBkWUTP
+	 2CXUm53zb+fKCmsM8eGcvRs0iH1KRFu1noWnfbDqLxorRK82Qr5VhYCHtSfLmz0Q5V
+	 A1yhDdBXNy9cTukny6/tetPRFI1+FrmdiRGlK5jmKICTatmjcAINoEUGHo1zUtC121
+	 kTgxCyPKZTZwpjrv6Ulv9kwOWhbDDySiZ6A8PlOWGBv1U5AvL6bhD26xU+Q41cHNmB
+	 AqruBeh5yLZFbNETrE9kYORe7T0r9PEoSDK/HARCGUByiWQyluYkbAR3aapMjzYYZV
+	 iBJCCKp1d1TIQ==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-65a3fdeb7d9so6589754a12.0
+        for <linux-pm@vger.kernel.org>; Tue, 17 Feb 2026 11:13:26 -0800 (PST)
+X-Gm-Message-State: AOJu0Yyav1lJYQtQmyPf+TRITG936aTgtMpJrqjtH4W3bKothFhD9h6d
+	8GD8ULbCVJHRIZ8qLF/ehkiOJRnVkVJWajX4dU8zPcoN2t7/mjXfZPl/eUfpVBbuXme1JKhO4f6
+	nMOxiTMjJwBfiD09Tq+x8zVnWrtHtzmE=
+X-Received: by 2002:a17:907:9627:b0:b73:572d:3b07 with SMTP id
+ a640c23a62f3a-b8fb4390643mr816675566b.28.1771355605677; Tue, 17 Feb 2026
+ 11:13:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Reply-To: Len Brown <lenb@kernel.org>
-Organization: Intel Open Source Technology Center
-Content-Transfer-Encoding: 8bit
+From: Len Brown <lenb@kernel.org>
+Date: Tue, 17 Feb 2026 13:13:12 -0600
+X-Gmail-Original-Message-ID: <CAJvTdKkX_A4++yaM54so4+Y0Pz87c362ggAbPo8C27r7gw+NHg@mail.gmail.com>
+X-Gm-Features: AaiRm51DM62HXgkfZWfZ0Ttm1BSGjpkw5Tf4pbAMAcyKoIs8VbwilYe01dNyLLI
+Message-ID: <CAJvTdKkX_A4++yaM54so4+Y0Pz87c362ggAbPo8C27r7gw+NHg@mail.gmail.com>
+Subject: [GIT PULL] turbostat v2026.02.14
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM list <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42792-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWO(0.00)[2];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42791-lists,linux-pm=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	HAS_REPLYTO(0.00)[lenb@kernel.org];
+	TO_DN_ALL(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[lenb@kernel.org,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,intel.com:mid,intel.com:email];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	REPLYTO_EQ_FROM(0.00)[]
-X-Rspamd-Queue-Id: 1E96C14F7E0
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 74CB914F8C7
 X-Rspamd-Action: no action
 
-From: Len Brown <len.brown@intel.com>
+Hi Linus,
+
+Please pull these turbostat-2026.02.14 patches.
+
+thanks!
+Len Brown, Intel Open Source Technology Center
+
+The following changes since commit 7f98ab9da046865d57c102fd3ca9669a29845f67:
+
+  Merge tag 'for-6.19-rc4-tag' of
+git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux (2026-01-05
+14:10:48 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git
+tags/turbostat-2026.02.14
+
+for you to fetch changes up to 51496091dd37b405e6e399a9638da3f1da3f4c64:
+
+  tools/power turbostat: version 2026.02.14 (2026-02-13 14:08:33 -0600)
+
+----------------------------------------------------------------
+turbostat-2026.02.14
 
 Since release 2025.12.02:
 
-Add L2 statistics columns for recent Intel processors:
-	L2MRPS = L2 Cache M-References Per Second
-	L2%hit = L2 Cache Hit %
+    Add L2 statistics columns for recent Intel processors:
+        L2MRPS = L2 Cache M-References Per Second
+        L2%hit = L2 Cache Hit %
 
-Sort work and output by cpu# rather than core#
+    Sort work and output by cpu# rather than core#
 
-This commit:
-	Version number and white space (indent -l160)
-	No functional change.
+    Minor features and fixes.
+----------------------------------------------------------------
+Kaushlendra Kumar (1):
+      tools/power turbostat: Use strtoul() for iteration parsing
 
-Signed-off-by: Len Brown <len.brown@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 57 ++++++++++-----------------
- 1 file changed, 21 insertions(+), 36 deletions(-)
+Len Brown (22):
+      tools/power turbostat: AMD: msr offset 0x611 read failed:
+Input/output error
+      tools/power turbostat: Dump CPUID(1) consistently with CPUID(6)
+      tools/power turbostat: Dump CPUID.1.ECX[31] (Hypervisor)
+      tools/power turbostat: Dump hypervisor name
+      tools/power turbostat: Harden against unexpected values
+      tools/power turbostat.8: Document the "--force" option
+      tools/power turbostat: Rename "LLCkRPS" column to "LLCMRPS"
+      tools/power turbostat: Allow more use of is_hybrid flag
+      tools/power turbostat: Remove redundant newlines from err(3) strings
+      tools/power turbostat: Add L2 cache statistics
+      tools/power turbostat: Cleanup internal use of "base_cpu"
+      tools/power turbostat: Cleanup package_id
+      tools/power turbostat: Rename physical_core_id to core_id
+      tools/power turbostat: Delete core_data.core_id
+      tools/power turbostat: Allocate average counters dynamically
+      tools/power turbostat: Unify even/odd/average counter referencing
+      tools/power turbostat: Simplify global core_id calculation
+      tools/power turbostat: Enhance HT enumeration
+      tools/power turbostat: Expunge logical_cpu_id
+      tools/power turbostat: Favor cpu# over core#
+      tools/power turbostat: Fix and document --header_iterations
+      tools/power turbostat: version 2026.02.14
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 1ce175841583..1aace9b3269e 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -3,7 +3,7 @@
-  * turbostat -- show CPU frequency and C-state residency
-  * on modern Intel and AMD processors.
-  *
-- * Copyright (c) 2025 Intel Corporation.
-+ * Copyright (c) 2010 - 2026 Intel Corporation
-  * Len Brown <len.brown@intel.com>
-  */
- 
-@@ -2735,8 +2735,7 @@ void help(void)
- 		"		sets the Thermal Control Circuit temperature in\n"
- 		"		  degrees Celsius\n"
- 		"  -h, --help\n"
--		"		print this help message\n"
--		"  -v, --version\n\t\tprint version information\n\nFor more help, run \"man turbostat\"\n");
-+		"		print this help message\n  -v, --version\n\t\tprint version information\n\nFor more help, run \"man turbostat\"\n");
- }
- 
- /*
-@@ -3671,11 +3670,9 @@ int format_counters(PER_THREAD_PARAMS)
- 	if (DO_BIC(BIC_RAM_J))
- 		outp += sprintf(outp, fmt8, (printed++ ? delim : ""), rapl_counter_get_value(&p->energy_dram, RAPL_UNIT_JOULES, interval_float));
- 	if (DO_BIC(BIC_PKG__))
--		outp +=
--		    sprintf(outp, fmt8, (printed++ ? delim : ""), rapl_counter_get_value(&p->rapl_pkg_perf_status, RAPL_UNIT_WATTS, interval_float));
-+		outp += sprintf(outp, fmt8, (printed++ ? delim : ""), rapl_counter_get_value(&p->rapl_pkg_perf_status, RAPL_UNIT_WATTS, interval_float));
- 	if (DO_BIC(BIC_RAM__))
--		outp +=
--		    sprintf(outp, fmt8, (printed++ ? delim : ""), rapl_counter_get_value(&p->rapl_dram_perf_status, RAPL_UNIT_WATTS, interval_float));
-+		outp += sprintf(outp, fmt8, (printed++ ? delim : ""), rapl_counter_get_value(&p->rapl_dram_perf_status, RAPL_UNIT_WATTS, interval_float));
- 	/* UncMHz */
- 	if (DO_BIC(BIC_UNCORE_MHZ))
- 		outp += sprintf(outp, "%s%d", (printed++ ? delim : ""), p->uncore_mhz);
-@@ -3725,11 +3722,9 @@ int format_counters(PER_THREAD_PARAMS)
- 	}
- 
- 	if (DO_BIC(BIC_SysWatt) && (t == average.threads))
--		outp += sprintf(outp, fmt8, (printed++ ? delim : ""),
--				rapl_counter_get_value(&pplat_cnt->energy_psys, RAPL_UNIT_WATTS, interval_float));
-+		outp += sprintf(outp, fmt8, (printed++ ? delim : ""), rapl_counter_get_value(&pplat_cnt->energy_psys, RAPL_UNIT_WATTS, interval_float));
- 	if (DO_BIC(BIC_Sys_J) && (t == average.threads))
--		outp += sprintf(outp, fmt8, (printed++ ? delim : ""),
--				rapl_counter_get_value(&pplat_cnt->energy_psys, RAPL_UNIT_JOULES, interval_float));
-+		outp += sprintf(outp, fmt8, (printed++ ? delim : ""), rapl_counter_get_value(&pplat_cnt->energy_psys, RAPL_UNIT_JOULES, interval_float));
- 
- done:
- 	if (*(outp - 1) != '\n')
-@@ -3942,7 +3937,7 @@ int delta_thread(struct thread_data *new, struct thread_data *old, struct core_d
- 	/* check for TSC < 1 Mcycles over interval */
- 	if (old->tsc < (1000 * 1000))
- 		errx(-3, "Insanely slow TSC rate, TSC stops in idle?\n"
--		     "You can disable all c-states by booting with \"idle=poll\"\n" "or just the deep ones with \"processor.max_cstate=1\"");
-+		     "You can disable all c-states by booting with \"idle=poll\"\nor just the deep ones with \"processor.max_cstate=1\"");
- 
- 	old->c1 = new->c1 - old->c1;
- 
-@@ -5546,8 +5541,7 @@ static void dump_turbo_ratio_limits(int trl_msr_offset)
- 	int shift;
- 
- 	get_msr(master_cpu, trl_msr_offset, &msr);
--	fprintf(outf, "cpu%d: MSR_%sTURBO_RATIO_LIMIT: 0x%08llx\n",
--		master_cpu, trl_msr_offset == MSR_SECONDARY_TURBO_RATIO_LIMIT ? "SECONDARY_" : "", msr);
-+	fprintf(outf, "cpu%d: MSR_%sTURBO_RATIO_LIMIT: 0x%08llx\n", master_cpu, trl_msr_offset == MSR_SECONDARY_TURBO_RATIO_LIMIT ? "SECONDARY_" : "", msr);
- 
- 	if (platform->trl_msrs & TRL_CORECOUNT) {
- 		get_msr(master_cpu, MSR_TURBO_RATIO_LIMIT1, &core_counts);
-@@ -8019,8 +8013,7 @@ int print_rapl(PER_THREAD_PARAMS)
- 			return -1;
- 	}
- 
--	fprintf(outf, "cpu%d: %s: 0x%08llx (%f Watts, %f Joules, %f sec.)\n", cpu, msr_name, msr,
--		rapl_power_units, rapl_energy_units, rapl_time_units);
-+	fprintf(outf, "cpu%d: %s: 0x%08llx (%f Watts, %f Joules, %f sec.)\n", cpu, msr_name, msr, rapl_power_units, rapl_energy_units, rapl_time_units);
- 
- 	if (valid_rapl_msrs & RAPL_PKG_POWER_INFO) {
- 
-@@ -8052,8 +8045,7 @@ int print_rapl(PER_THREAD_PARAMS)
- 			return -9;
- 
- 		fprintf(outf, "cpu%d: MSR_VR_CURRENT_CONFIG: 0x%08llx\n", cpu, msr);
--		fprintf(outf, "cpu%d: PKG Limit #4: %f Watts (%slocked)\n",
--			cpu, ((msr >> 0) & 0x1FFF) * rapl_power_units, (msr >> 31) & 1 ? "" : "UN");
-+		fprintf(outf, "cpu%d: PKG Limit #4: %f Watts (%slocked)\n", cpu, ((msr >> 0) & 0x1FFF) * rapl_power_units, (msr >> 31) & 1 ? "" : "UN");
- 	}
- 
- 	if (valid_rapl_msrs & RAPL_DRAM_POWER_INFO) {
-@@ -8390,8 +8382,7 @@ void decode_misc_feature_control(void)
- 	if (!get_msr(master_cpu, MSR_MISC_FEATURE_CONTROL, &msr))
- 		fprintf(outf,
- 			"cpu%d: MSR_MISC_FEATURE_CONTROL: 0x%08llx (%sL2-Prefetch %sL2-Prefetch-pair %sL1-Prefetch %sL1-IP-Prefetch)\n",
--			master_cpu, msr, msr & (0 << 0) ? "No-" : "", msr & (1 << 0) ? "No-" : "",
--			msr & (2 << 0) ? "No-" : "", msr & (3 << 0) ? "No-" : "");
-+			master_cpu, msr, msr & (0 << 0) ? "No-" : "", msr & (1 << 0) ? "No-" : "", msr & (2 << 0) ? "No-" : "", msr & (3 << 0) ? "No-" : "");
- }
- 
- /*
-@@ -8433,12 +8424,10 @@ void decode_c6_demotion_policy_msr(void)
- 		return;
- 
- 	if (!get_msr(master_cpu, MSR_CC6_DEMOTION_POLICY_CONFIG, &msr))
--		fprintf(outf, "cpu%d: MSR_CC6_DEMOTION_POLICY_CONFIG: 0x%08llx (%sable-CC6-Demotion)\n",
--			master_cpu, msr, msr & (1 << 0) ? "EN" : "DIS");
-+		fprintf(outf, "cpu%d: MSR_CC6_DEMOTION_POLICY_CONFIG: 0x%08llx (%sable-CC6-Demotion)\n", master_cpu, msr, msr & (1 << 0) ? "EN" : "DIS");
- 
- 	if (!get_msr(master_cpu, MSR_MC6_DEMOTION_POLICY_CONFIG, &msr))
--		fprintf(outf, "cpu%d: MSR_MC6_DEMOTION_POLICY_CONFIG: 0x%08llx (%sable-MC6-Demotion)\n",
--			master_cpu, msr, msr & (1 << 0) ? "EN" : "DIS");
-+		fprintf(outf, "cpu%d: MSR_MC6_DEMOTION_POLICY_CONFIG: 0x%08llx (%sable-MC6-Demotion)\n", master_cpu, msr, msr & (1 << 0) ? "EN" : "DIS");
- }
- 
- void print_dev_latency(void)
-@@ -8756,8 +8745,7 @@ void rapl_perf_init(void)
- /* Assumes msr_counter_info is populated */
- static int has_amperf_access(void)
- {
--	return cpuid_has_aperf_mperf && msr_counter_arch_infos[MSR_ARCH_INFO_APERF_INDEX].present &&
--	    msr_counter_arch_infos[MSR_ARCH_INFO_MPERF_INDEX].present;
-+	return cpuid_has_aperf_mperf && msr_counter_arch_infos[MSR_ARCH_INFO_APERF_INDEX].present && msr_counter_arch_infos[MSR_ARCH_INFO_MPERF_INDEX].present;
- }
- 
- int *get_cstate_perf_group_fd(struct cstate_counter_info_t *cci, const char *group_name)
-@@ -8968,8 +8956,7 @@ void cstate_perf_init_(bool soft_c1)
- 			if (!per_core && pkg_visited[pkg_id])
- 				continue;
- 
--			const bool counter_needed = BIC_IS_ENABLED(cai->bic_number) ||
--			    (soft_c1 && (cai->flags & CSTATE_COUNTER_FLAG_SOFT_C1_DEPENDENCY));
-+			const bool counter_needed = BIC_IS_ENABLED(cai->bic_number) || (soft_c1 && (cai->flags & CSTATE_COUNTER_FLAG_SOFT_C1_DEPENDENCY));
- 			const bool counter_supported = (platform->supported_cstates & cai->feature_mask);
- 
- 			if (counter_needed && counter_supported) {
-@@ -9259,8 +9246,7 @@ void process_cpuid()
- 			if (crystal_hz) {
- 				tsc_hz = (unsigned long long)crystal_hz *ebx_tsc / eax_crystal;
- 				if (!quiet)
--					fprintf(outf, "TSC: %lld MHz (%d Hz * %d / %d / 1000000)\n",
--						tsc_hz / 1000000, crystal_hz, ebx_tsc, eax_crystal);
-+					fprintf(outf, "TSC: %lld MHz (%d Hz * %d / %d / 1000000)\n", tsc_hz / 1000000, crystal_hz, ebx_tsc, eax_crystal);
- 			}
- 		}
- 	}
-@@ -9645,7 +9631,7 @@ void topology_probe(bool startup)
- 		if (cpus[i].ht_id == 0)
- 			topo.num_cores++;
- 	}
--	topo.max_core_id = max_core_id;			/* within a package */
-+	topo.max_core_id = max_core_id;	/* within a package */
- 	topo.max_package_id = max_package_id;
- 	topo.num_cores = (max_core_id + 1) * topo.num_packages;	/* per system */
- 
-@@ -9712,6 +9698,7 @@ void allocate_counters_1(struct counters *counters)
- error:
- 	err(1, "calloc counters_1");
- }
-+
- void allocate_counters(struct counters *counters)
- {
- 	int i;
-@@ -10368,8 +10355,7 @@ void pmt_init(void)
- 
- 	if (BIC_IS_ENABLED(BIC_Diec6)) {
- 		pmt_add_counter(PMT_MTL_DC6_GUID, PMT_MTL_DC6_SEQ, "Die%c6", PMT_TYPE_XTAL_TIME,
--				PMT_COUNTER_MTL_DC6_LSB, PMT_COUNTER_MTL_DC6_MSB, PMT_COUNTER_MTL_DC6_OFFSET,
--				SCOPE_PACKAGE, FORMAT_DELTA, 0, PMT_OPEN_TRY);
-+				PMT_COUNTER_MTL_DC6_LSB, PMT_COUNTER_MTL_DC6_MSB, PMT_COUNTER_MTL_DC6_OFFSET, SCOPE_PACKAGE, FORMAT_DELTA, 0, PMT_OPEN_TRY);
- 	}
- 
- 	if (BIC_IS_ENABLED(BIC_CPU_c1e)) {
-@@ -10547,7 +10533,7 @@ int get_and_dump_counters(void)
- 
- void print_version()
- {
--	fprintf(outf, "turbostat version 2026.02.04 - Len Brown <lenb@kernel.org>\n");
-+	fprintf(outf, "turbostat version 2026.02.14 - Len Brown <lenb@kernel.org>\n");
- }
- 
- #define COMMAND_LINE_SIZE 2048
-@@ -11169,8 +11155,7 @@ void parse_add_command_pmt(char *add_command)
- 	}
- 
- 	if (direct_path && has_guid) {
--		printf("%s: path and guid+seq parameters are mutually exclusive\n"
--		       "notice: passed guid=0x%x and path=%s\n", __func__, guid, direct_path);
-+		printf("%s: path and guid+seq parameters are mutually exclusive\nnotice: passed guid=0x%x and path=%s\n", __func__, guid, direct_path);
- 		exit(1);
- 	}
- 
--- 
-2.45.2
-
+ tools/power/x86/turbostat/turbostat.8 |   20 +-
+ tools/power/x86/turbostat/turbostat.c | 1455 +++++++++++++++++++++------------
+ 2 files changed, 936 insertions(+), 539 deletions(-)
 
