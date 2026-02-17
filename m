@@ -1,166 +1,172 @@
-Return-Path: <linux-pm+bounces-42758-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42761-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WCAIAhCBlGniFAIAu9opvQ
-	(envelope-from <linux-pm+bounces-42758-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 15:54:08 +0100
+	id 4M71LeKDlGlBFQIAu9opvQ
+	(envelope-from <linux-pm+bounces-42761-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 16:06:10 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 109C814D51D
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 15:54:06 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 516E814D630
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 16:06:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id AA2F53004CAE
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 14:54:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F2DD73044647
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 15:05:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6867636B07F;
-	Tue, 17 Feb 2026 14:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D26936CDE9;
+	Tue, 17 Feb 2026 15:05:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JYmxjIRi"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="tBM20F6v"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459BF35502F
-	for <linux-pm@vger.kernel.org>; Tue, 17 Feb 2026 14:54:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4091E36CE03;
+	Tue, 17 Feb 2026 15:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771340042; cv=none; b=AGYAQIym1rDcULd0FxOMk+m6heUN1/eiudQTwcDVQeIrY7E/jms+ApURXq3Ir8nAN+7Geuk1XX/1MpcXq8JZfbcRi0ctqLd8Ag4C1s0YCDqsY6RiJCqtmk4AqBbEL340ZSL6Rg4RNAZuDkp7A+mIRqYGGm+lPnnbqjvH7tWxaO8=
+	t=1771340711; cv=none; b=Xo5f6GLXXUNjT+ht3J/kr3pp1BhxmRruIsC5pRsA47EXGcWXEoeCIp4HIFYG6qbPd52cgjzRdX6oppU3fgD/vNNrt5ROZtiCcMGZB5SYoyFQjW1ol/EEqb2XQkMp2Tv5m3rDDladd1MF6K1yMJHKrmiNESoqJv9qFO1pt8OZziI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771340042; c=relaxed/simple;
-	bh=rVTcdXtGhlQQuPkN3nuK5cTVcDB6cpF5dip9SaKu9/w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a9AGrZf2rdjImiM0FrR9K7XYL8eDbAx/SCcmbR4N6C3K2/SWo1Rrm07dfHOfaFtwOaNBC3yR6VAkyST/dMLSCnX68JrDv5sAz6FfDb5sZKcvvvfLbCtGa/mkNM1BLVLIuJ7E42JkzyiCii/LmdGs+L1YUZcTTjucxJUgKJCbSPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JYmxjIRi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF135C2BC9E
-	for <linux-pm@vger.kernel.org>; Tue, 17 Feb 2026 14:54:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771340042;
-	bh=rVTcdXtGhlQQuPkN3nuK5cTVcDB6cpF5dip9SaKu9/w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=JYmxjIRiWQYoaOlSYudb6nz6UwS8rHe/s4UDvmzTbN8fnF1urkOsyNUIHODiHDS2y
-	 pqaqa9zOpBSenftVv5OmFpr2LwHRwWjniHhPzidd8aiOKjI07iBS1kziBhran3qTJW
-	 lnG5hIdxtHq1eDcYw3b0qX3hGHj/XnTGGc61Lunnzzwaypdbt0mR2lIMZy+oWoVZxl
-	 0af3E30NyoWJ6DzKPMbXgzHbo2i8PcpRox+hfDV3unltLWa3iq9QH/yZP2XZQE5Qms
-	 xATjtcvZd6is8kY3dwdSYbUqujuGt50HG/7ICL3xIRzFo5qdLuazsux27F7eq504o1
-	 cT9yrua7WJDkA==
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-45f126d47b8so2737969b6e.2
-        for <linux-pm@vger.kernel.org>; Tue, 17 Feb 2026 06:54:01 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWmPf5h7VruW+t8jqQKLY/bP1ZbElkGzplPqUIEnid3+ONQRyYNZrrXAXVbKUpk0ePoz83FEcGe9Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZg/Eiy5KS3AEh5PsXzxzWaRKi7M8UAvrieWkTLSJSO2VQkljH
-	kIBS06j+fPWhimGmD1JdVF06z8fsaYW2Ky8k3rfoBWO33s8Q3edzh+y0/GGCTHrdE2RrojDHuLf
-	BxBufTuLD2hIcVSbm/uxWzkZQOZUhH2E=
-X-Received: by 2002:a05:6808:1a25:b0:450:ca65:ef60 with SMTP id
- 5614622812f47-463b40dac1emr5369347b6e.39.1771340041080; Tue, 17 Feb 2026
- 06:54:01 -0800 (PST)
+	s=arc-20240116; t=1771340711; c=relaxed/simple;
+	bh=Uj3A+uw54BzyCfx95n4zmoy30oYwLQtauz/Cs7N3a38=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IZEBSl48HST6FXuiv2xy/Rwgkkn4+5ncc2jPgG56eHlizY9RQKdwkchI2h5N//7NHkHcVR5gDYXwhTcTGe/qMhSAiqgfPB7UuN480D0vwwisjbLu68CSCXxAWHrMySswKOxxCrx7A32ShhJOvvTh9gY9MnWV/uQubPxCy0qDFBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=tBM20F6v; arc=none smtp.client-ip=80.241.56.161
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4fFjcM01nbz9t7D;
+	Tue, 17 Feb 2026 16:05:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1771340707;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IELzt1btZWNz2sWorU6uElBs2/8ePm1rr87gY2eyhpk=;
+	b=tBM20F6vy+PwjgtJyif1W55HpRRImexlGgIc9ppk+sPnju2au9UcbE7ER1nQLLxzjWcJc8
+	sqqPueTUNw6bpS73HFvfl3wHMcG510MErYAQAyuqfMlEf2t5tBDZhhP/lgKRVutI+jzI77
+	sJIFezk2JpQafxvKpcoS2qA7dAVLgaBnq/eKZwpi7BYJRRGuASA63InjRuMYW4X+8x69Cw
+	SJR+cA0qpwLd72ORRweULnHiL7VJdAZjpl9uFVCeVLJ2MIXq9ZfSSp9wcKCEB7M5KzekH1
+	VQNL3cgAxgUnu10FkF4H4IrRsxmV9rBZmuiNLtLLaiRZwxqHs4s7yugRdBZUtw==
+Message-ID: <01531a0e-b7e8-43b4-98c8-016fbbea6081@mailbox.org>
+Date: Tue, 17 Feb 2026 15:54:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260216185005.1131593-1-aboorvad@linux.ibm.com>
- <20260216185005.1131593-2-aboorvad@linux.ibm.com> <042f57b8-b027-4dee-ac8c-6c6efc34d427@arm.com>
-In-Reply-To: <042f57b8-b027-4dee-ac8c-6c6efc34d427@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 17 Feb 2026 15:53:50 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gVVzBx7fGf9rVS=NavvHL4ZCCvFSGnycn3U6jb+owOCw@mail.gmail.com>
-X-Gm-Features: AaiRm52CtmkbPAgR248r1IYiXisrcdmPNCj569TpfiJE_bw0qU3GImE9p86jrtA
-Message-ID: <CAJZ5v0gVVzBx7fGf9rVS=NavvHL4ZCCvFSGnycn3U6jb+owOCw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] cpuidle: Skip governor when only one idle state is available
-To: Christian Loehle <christian.loehle@arm.com>, Aboorva Devarajan <aboorvad@linux.ibm.com>
-Cc: daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] drm/imagination: Convert to
+ dev_pm_domain_{at,de}tach_list()
+To: Thorsten Leemhuis <regressions@leemhuis.info>,
+ Matt Coster <Matt.Coster@imgtec.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Frank Binns <Frank.Binns@imgtec.com>,
+ Brajesh Gupta <Brajesh.Gupta@imgtec.com>,
+ Alessio Belle <Alessio.Belle@imgtec.com>,
+ Alexandru Dadu <Alexandru.Dadu@imgtec.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <194465eda54d1f852a9226cf691ddc5aa208e0a3.1769097977.git.geert+renesas@glider.be>
+ <ffdf3982-e22c-4d01-afa6-5449ed381000@imgtec.com>
+ <CAMuHMdWMh_oJFg-KtapcTDGvYWZ-hg_ZEJ2=E5Tp1apOEc8tnQ@mail.gmail.com>
+ <b3b4f10e-1222-44f7-b308-db7199c67147@mailbox.org>
+ <3e0def93-2f6c-4bcf-8ee5-bf607f2ca382@imgtec.com>
+ <f5d3dde6-edec-42f4-93cb-459c8677245a@mailbox.org>
+ <f82b7734-6ddc-4029-b38d-147e9a1de021@leemhuis.info>
+ <fcf5ab75-029e-469e-8b2a-51fa5c2a2374@mailbox.org>
+ <95fd3f52-c3ed-40c5-920f-11e8767f701d@leemhuis.info>
+ <CAMuHMdV-g+3kTaG6Ost4iHo1Tdi_H=qscLBkBRWuR+6DG5c=SA@mail.gmail.com>
+ <1e8e416e-e474-4288-9686-1ba2b88e4946@leemhuis.info>
+ <21b1fd77-252e-4fb3-aa65-1c26043c5412@imgtec.com>
+ <9c1b2671-3374-4d84-ad14-07dd499bb934@leemhuis.info>
+ <86e23062-e439-41f3-9750-d87fa5b85447@imgtec.com>
+ <973ca923-3654-46be-a9b8-8d38cd7d4a59@leemhuis.info>
+Content-Language: en-US
+From: Marek Vasut <marek.vasut@mailbox.org>
+In-Reply-To: <973ca923-3654-46be-a9b8-8d38cd7d4a59@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-ID: 608b86c2272fd929af8
+X-MBO-RS-META: hjp3nb4da91yuydp1zpcadnfoofodi57
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[mailbox.org,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[mailbox.org:s=mail20150812];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42758-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42761-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[imgtec.com,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,lists.freedesktop.org,vger.kernel.org,lists.linux.dev];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[marek.vasut@mailbox.org,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[mailbox.org:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 109C814D51D
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mailbox.org:mid,mailbox.org:dkim]
+X-Rspamd-Queue-Id: 516E814D630
 X-Rspamd-Action: no action
 
-On Tue, Feb 17, 2026 at 3:36=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
->
-> On 2/16/26 18:50, Aboorva Devarajan wrote:
-> > On certain platforms (PowerNV systems without a power-mgt DT node),
-> > cpuidle may register only a single idle state. In cases where that
-> > single state is a polling state (state 0), the ladder governor may
-> > incorrectly treat state 1 as the first usable state and pass an
-> > out-of-bounds index. This can lead to a NULL enter callback being
-> > invoked, ultimately resulting in a system crash.
-> >
-> > [   13.342636] cpuidle-powernv : Only Snooze is available
-> > [   13.351854] Faulting instruction address: 0x00000000
-> > [   13.376489] NIP [0000000000000000] 0x0
-> > [   13.378351] LR  [c000000001e01974] cpuidle_enter_state+0x2c4/0x668
-> >
-> > Fix this by adding a bail-out in cpuidle_select() that returns state 0
-> > directly when state_count <=3D 1, bypassing the governor and keeping th=
-e
-> > tick running.
-> >
-> > Fixes: dc2251bf98c6 ("cpuidle: Eliminate the CPUIDLE_DRIVER_STATE_START=
- symbol")
-> > Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
->
-> Reviewed-by: Christian Loehle <christian.loehle@arm.com>
->
-> > ---
-> >  drivers/cpuidle/cpuidle.c | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> > index c7876e9e024f..65fbb8e807b9 100644
-> > --- a/drivers/cpuidle/cpuidle.c
-> > +++ b/drivers/cpuidle/cpuidle.c
-> > @@ -359,6 +359,16 @@ noinstr int cpuidle_enter_state(struct cpuidle_dev=
-ice *dev,
-> >  int cpuidle_select(struct cpuidle_driver *drv, struct cpuidle_device *=
-dev,
-> >                  bool *stop_tick)
-> >  {
-> > +     /*
-> > +      * If there is only a single idle state (or none), there is nothi=
-ng
-> > +      * meaningful for the governor to choose. Skip the governor and
-> > +      * always use state 0 with the tick running.
-> > +      */
-> > +     if (drv->state_count <=3D 1) {
-> > +             *stop_tick =3D false;
-> > +             return 0;
-> > +     }
-> > +
-> >       return cpuidle_curr_governor->select(drv, dev, stop_tick);
-> >  }
-> >
+On 2/16/26 6:28 PM, Thorsten Leemhuis wrote:
+> On 2/16/26 14:37, Matt Coster wrote:
+>> On 16/02/2026 11:38, Thorsten Leemhuis wrote:
+>>> On 2/16/26 11:58, Matt Coster wrote:
+>>>> On 16/02/2026 10:11, Thorsten Leemhuis wrote:
+>>>>
+>>>> We're currently trying to force this issue to reproduce on hardware we
+>>>> have on hand; we'd like to see it fixed properly as much as anyone.
+>>>
+>>> Yeah, no worries, I never doubted that. But getting things properly fixed
+>>> can mean "revert, fix, reapply" when it comes to regressions in Linux --
+>>> which is something that should not be seen as something bad, as Linus said
+>>> himself (see below)!
+>>>
+>>>>  From our side at least, I don't believe this is a regression at all.
+>>> In the end what matters is: some change afaics caused systems to not work
+>>> anymore that used to be working -- that makes it a regression my the Linux
+>>> kernels standards. And those by the same standards must be fixed, ideally
+>>> quickly. Find a few quotes on that from Linus below that explains this
+>>> better.
+>> I feel like I should reiterate that the commit we're talking about
+>> reverting is fundamental to support for one of the only two platforms
+>> currently supported.
+> 
+> That might or might not be relevant, see the "back and forth" section
+> from the Linus quotes.
+> 
+>> And that the changes to add "support" (just
+>> bindings and DT) for the affected Renesas platforms came several months
+>> *after* this.
+> 
+> Ohh? That might change things then. I relied on the info from Geert and
+> Marek – and would be glad if you guys could sort this out, as you are
+> the experts here (and I already got myself way deeper involved then I
+> wanted to).
 
-I've queued up the series for 7.0-rc1 because it is mostly
-straightforward, but I've modified the second patch to drop the
-redundant latency_req variable and I had to rebase the last one.
-
-Thanks!
+I already replied to Matt on this part -- I don't think the kernel crash 
+is related to any specific platform. That the R-Car platform triggers it 
+only means, that the crash is real and should be fixed.
 
