@@ -1,172 +1,198 @@
-Return-Path: <linux-pm+bounces-42761-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42762-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4M71LeKDlGlBFQIAu9opvQ
-	(envelope-from <linux-pm+bounces-42761-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 16:06:10 +0100
+	id CAE/F2mOlGn6FQIAu9opvQ
+	(envelope-from <linux-pm+bounces-42762-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 16:51:05 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 516E814D630
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 16:06:10 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4572614DB63
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 16:51:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F2DD73044647
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 15:05:17 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id ADB2B300DEF0
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Feb 2026 15:51:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D26936CDE9;
-	Tue, 17 Feb 2026 15:05:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0FF36CE0E;
+	Tue, 17 Feb 2026 15:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="tBM20F6v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MNw6hdMT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4091E36CE03;
-	Tue, 17 Feb 2026 15:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69D736C581;
+	Tue, 17 Feb 2026 15:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771340711; cv=none; b=Xo5f6GLXXUNjT+ht3J/kr3pp1BhxmRruIsC5pRsA47EXGcWXEoeCIp4HIFYG6qbPd52cgjzRdX6oppU3fgD/vNNrt5ROZtiCcMGZB5SYoyFQjW1ol/EEqb2XQkMp2Tv5m3rDDladd1MF6K1yMJHKrmiNESoqJv9qFO1pt8OZziI=
+	t=1771343460; cv=none; b=AprBNymwSdDQ9qTeldNRF4bKuV931ZROgI5hZ2+ddC/2F5mYdcgsQCryw7RrW/3D74gnrZMpIjCVkX1kJ6DBOrKn2en6Fm/GCLE6qAyfVkPqnKwTEhH6P9iwt+IOSI8MSRndgEog+C9cfwobJkpx/wzzlUQOFWBtdjDEo3ONJRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771340711; c=relaxed/simple;
-	bh=Uj3A+uw54BzyCfx95n4zmoy30oYwLQtauz/Cs7N3a38=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IZEBSl48HST6FXuiv2xy/Rwgkkn4+5ncc2jPgG56eHlizY9RQKdwkchI2h5N//7NHkHcVR5gDYXwhTcTGe/qMhSAiqgfPB7UuN480D0vwwisjbLu68CSCXxAWHrMySswKOxxCrx7A32ShhJOvvTh9gY9MnWV/uQubPxCy0qDFBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=tBM20F6v; arc=none smtp.client-ip=80.241.56.161
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4fFjcM01nbz9t7D;
-	Tue, 17 Feb 2026 16:05:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1771340707;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IELzt1btZWNz2sWorU6uElBs2/8ePm1rr87gY2eyhpk=;
-	b=tBM20F6vy+PwjgtJyif1W55HpRRImexlGgIc9ppk+sPnju2au9UcbE7ER1nQLLxzjWcJc8
-	sqqPueTUNw6bpS73HFvfl3wHMcG510MErYAQAyuqfMlEf2t5tBDZhhP/lgKRVutI+jzI77
-	sJIFezk2JpQafxvKpcoS2qA7dAVLgaBnq/eKZwpi7BYJRRGuASA63InjRuMYW4X+8x69Cw
-	SJR+cA0qpwLd72ORRweULnHiL7VJdAZjpl9uFVCeVLJ2MIXq9ZfSSp9wcKCEB7M5KzekH1
-	VQNL3cgAxgUnu10FkF4H4IrRsxmV9rBZmuiNLtLLaiRZwxqHs4s7yugRdBZUtw==
-Message-ID: <01531a0e-b7e8-43b4-98c8-016fbbea6081@mailbox.org>
-Date: Tue, 17 Feb 2026 15:54:23 +0100
+	s=arc-20240116; t=1771343460; c=relaxed/simple;
+	bh=F3tr3dTMqJx3SD92fKDrGHKnROwGZ6bJ78jeAepD7a4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ejh9EoALS2prHLwkHifzDq0Q5GNqY5OXTAYrhQbZgQB6zrR42gmwii/IP0AVNj3eKIhbdmz2e0klMFNaq683dmutODDv93BX9urwjimZb0PMiWsFCphtfRXK4TmTDsLumgNgnNLkAO4f4pbW/W1wbpH0LPiGESPZGbdyVuz3OOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MNw6hdMT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84071C4CEF7;
+	Tue, 17 Feb 2026 15:50:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771343460;
+	bh=F3tr3dTMqJx3SD92fKDrGHKnROwGZ6bJ78jeAepD7a4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MNw6hdMTPCx7nqnz+wvSOwxVvNZ0I/reKjeODpt36xYllBHz1Rh+MlQhUAz0HzUtA
+	 m5rSpqP1FNE1yBLk3SRm1RhvmDF3wHln9KJO3y4YxVgajtf72Ogl+dHANCqKy0VU3R
+	 O2h42mALLS/iDwxKS6KYIIt+OncvDeRY0IyK2Lz7ODueiYx6NvsSEoi49UkYo5xggX
+	 94Sm+1a79cVVqV+5bRpVdgbfQU6bO0n0b7Jd7YV9vRPLcQTvbKQ0R7xozwS1UsLO4l
+	 h0PTRTUhuos5CSJqQVm7MW+lJqvedInn/xifPZAo1qyOjlDpHPZ/sMQ6sbkGxHefpp
+	 bmq+P0cIoNCxQ==
+Date: Tue, 17 Feb 2026 15:50:55 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Ion Agorria <ion@agorria.com>,
+	=?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 1/7] dt-bindings: embedded-controller: document ASUS
+ Transformer EC
+Message-ID: <20260217-tableful-arbitrate-169030e4fb11@spud>
+References: <20260216-sprung-scallop-de7b64bf528c@spud>
+ <CAPVz0n06+uLCSfY_bYS9v7KJ-hXotye7ej-rze6-Q8_JAF7XVA@mail.gmail.com>
+ <20260216-plunder-defense-de11cf56dd3d@spud>
+ <CAPVz0n0-LbTUZBCaO=oN3PpPLpwAqzNo29r687pKY8NbEE9giA@mail.gmail.com>
+ <20260217-vowed-botany-b1c47c7e40b8@spud>
+ <55C30023-4175-48F2-BCB0-12EC23C48F01@gmail.com>
+ <1519143e-4fc3-490d-ab8d-e65edd2c4eec@kernel.org>
+ <81844CC9-5355-4B1D-AEBD-6DD67FB8C81B@gmail.com>
+ <20260217-dig-husked-8a59b6a19aee@spud>
+ <CAPVz0n0u7uhL8_FQFiuB7DrnL++ecbaEKEoV7N2PgTVRBVECkw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] drm/imagination: Convert to
- dev_pm_domain_{at,de}tach_list()
-To: Thorsten Leemhuis <regressions@leemhuis.info>,
- Matt Coster <Matt.Coster@imgtec.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Frank Binns <Frank.Binns@imgtec.com>,
- Brajesh Gupta <Brajesh.Gupta@imgtec.com>,
- Alessio Belle <Alessio.Belle@imgtec.com>,
- Alexandru Dadu <Alexandru.Dadu@imgtec.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <194465eda54d1f852a9226cf691ddc5aa208e0a3.1769097977.git.geert+renesas@glider.be>
- <ffdf3982-e22c-4d01-afa6-5449ed381000@imgtec.com>
- <CAMuHMdWMh_oJFg-KtapcTDGvYWZ-hg_ZEJ2=E5Tp1apOEc8tnQ@mail.gmail.com>
- <b3b4f10e-1222-44f7-b308-db7199c67147@mailbox.org>
- <3e0def93-2f6c-4bcf-8ee5-bf607f2ca382@imgtec.com>
- <f5d3dde6-edec-42f4-93cb-459c8677245a@mailbox.org>
- <f82b7734-6ddc-4029-b38d-147e9a1de021@leemhuis.info>
- <fcf5ab75-029e-469e-8b2a-51fa5c2a2374@mailbox.org>
- <95fd3f52-c3ed-40c5-920f-11e8767f701d@leemhuis.info>
- <CAMuHMdV-g+3kTaG6Ost4iHo1Tdi_H=qscLBkBRWuR+6DG5c=SA@mail.gmail.com>
- <1e8e416e-e474-4288-9686-1ba2b88e4946@leemhuis.info>
- <21b1fd77-252e-4fb3-aa65-1c26043c5412@imgtec.com>
- <9c1b2671-3374-4d84-ad14-07dd499bb934@leemhuis.info>
- <86e23062-e439-41f3-9750-d87fa5b85447@imgtec.com>
- <973ca923-3654-46be-a9b8-8d38cd7d4a59@leemhuis.info>
-Content-Language: en-US
-From: Marek Vasut <marek.vasut@mailbox.org>
-In-Reply-To: <973ca923-3654-46be-a9b8-8d38cd7d4a59@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-ID: 608b86c2272fd929af8
-X-MBO-RS-META: hjp3nb4da91yuydp1zpcadnfoofodi57
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="CFX4Gs6NaZQ9iQTz"
+Content-Disposition: inline
+In-Reply-To: <CAPVz0n0u7uhL8_FQFiuB7DrnL++ecbaEKEoV7N2PgTVRBVECkw@mail.gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-2.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[mailbox.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[mailbox.org:s=mail20150812];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42761-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[imgtec.com,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch,lists.freedesktop.org,vger.kernel.org,lists.linux.dev];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[marek.vasut@mailbox.org,linux-pm@vger.kernel.org];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-42762-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[mailbox.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mailbox.org:mid,mailbox.org:dkim]
-X-Rspamd-Queue-Id: 516E814D630
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,agorria.com,rere.qmqm.pl,vger.kernel.org];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4572614DB63
 X-Rspamd-Action: no action
 
-On 2/16/26 6:28 PM, Thorsten Leemhuis wrote:
-> On 2/16/26 14:37, Matt Coster wrote:
->> On 16/02/2026 11:38, Thorsten Leemhuis wrote:
->>> On 2/16/26 11:58, Matt Coster wrote:
->>>> On 16/02/2026 10:11, Thorsten Leemhuis wrote:
->>>>
->>>> We're currently trying to force this issue to reproduce on hardware we
->>>> have on hand; we'd like to see it fixed properly as much as anyone.
->>>
->>> Yeah, no worries, I never doubted that. But getting things properly fixed
->>> can mean "revert, fix, reapply" when it comes to regressions in Linux --
->>> which is something that should not be seen as something bad, as Linus said
->>> himself (see below)!
->>>
->>>>  From our side at least, I don't believe this is a regression at all.
->>> In the end what matters is: some change afaics caused systems to not work
->>> anymore that used to be working -- that makes it a regression my the Linux
->>> kernels standards. And those by the same standards must be fixed, ideally
->>> quickly. Find a few quotes on that from Linus below that explains this
->>> better.
->> I feel like I should reiterate that the commit we're talking about
->> reverting is fundamental to support for one of the only two platforms
->> currently supported.
-> 
-> That might or might not be relevant, see the "back and forth" section
-> from the Linus quotes.
-> 
->> And that the changes to add "support" (just
->> bindings and DT) for the affected Renesas platforms came several months
->> *after* this.
-> 
-> Ohh? That might change things then. I relied on the info from Geert and
-> Marek – and would be glad if you guys could sort this out, as you are
-> the experts here (and I already got myself way deeper involved then I
-> wanted to).
 
-I already replied to Matt on this part -- I don't think the kernel crash 
-is related to any specific platform. That the R-Car platform triggers it 
-only means, that the crash is real and should be fixed.
+--CFX4Gs6NaZQ9iQTz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Feb 17, 2026 at 04:29:59PM +0200, Svyatoslav Ryhel wrote:
+> =D0=B2=D1=82, 17 =D0=BB=D1=8E=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 16:03 Co=
+nor Dooley <conor@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+> > On Tue, Feb 17, 2026 at 01:34:01PM +0200, Svyatoslav Ryhel wrote:
+> > > 17 =D0=BB=D1=8E=D1=82=D0=BE=D0=B3=D0=BE 2026=E2=80=AF=D1=80. 13:32:26=
+ GMT+02:00, Krzysztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+
+> > > >> properties:
+> > > >>   compatible:
+> > > >>       - items:
+> > > >>           - enum:
+> > > >>               - asus,p1801-t-ec-pad
+> > > >>               - asus,sl101-ec-dock
+> > > >>               - asus,tf101-ec-dock
+> > > >>               - asus,tf101g-ec-dock
+> > > >>               - asus,tf201-ec-dock
+> > > >>               - asus,tf201-ec-pad
+> > > >>               - asus,tf300t-ec-dock
+> > > >>               - asus,tf300t-ec-pad
+> > > >>               - asus,tf300tg-ec-dock
+> > > >>               - asus,tf300tg-ec-pad
+> > > >>               - asus,tf300tl-ec-dock
+> > > >>               - asus,tf300tl-ec-pad
+> > > >>               - asus,tf700t-ec-dock
+> > > >>               - asus,tf700t-ec-pad
+> > > >>               - asus,tf600t-ec-pad
+> > > >>               - asus,tf701t-ec-pad
+> > > >>           - const: asus,transformer-ec
+> > > >>
+> > > >> And them schema name will match the genetic compatible.
+> > > >
+> > > >Then what does the generic compatible express?
+> > > >
+> > >
+> > > Then enum it is
+> >
+> >
+> > Why would you do that, instead of what I posted earlier in the thread?
+> > If you send a flat enum with all devices listed, I'm gonna just be there
+> > telling you to consolidate into one device-specific fallback compatible
+> > per programming model.
+>=20
+> There is no one device-specific fallback compatible! Schema describes
+> HARDWARE not drivers no? I will not use random device compatible from
+> the list as a fallback compatible for a different random unrelated
+> device, that is plain wrong.
+
+Which is why I am not mentioning drivers at all, and instead talking about
+programming models. Fallback compatibles represent similarities in
+programming model, even if the laptop that these devices are contained
+in are different, so whatever device compatible you pick might be random
+(but going chronologically is usually my recommendation) but it won't be
+unrelated.
+
+> Discuss this with Krzysztof and come up with something meaningful please.
+
+If you don't consider my reviews to be meaningful, you're welcome to
+carry a Nacked-by: Conor Dooley <conor.dooley@microchip.com> with a link
+to this discussion instead.
+
+Thanks,
+Conor.
+
+--CFX4Gs6NaZQ9iQTz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaZSOXwAKCRB4tDGHoIJi
+0lKEAQCMn1RQWiz2XuWSwPyIQrFeNcdgS1xJdgNETKYUnIvdvAD/a48ii+2SjLok
+p8k8vgDRIULg8VXMLV8Zc8SI2pGg9QA=
+=w/4u
+-----END PGP SIGNATURE-----
+
+--CFX4Gs6NaZQ9iQTz--
 
