@@ -1,237 +1,255 @@
-Return-Path: <linux-pm+bounces-42844-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42848-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AK+7F20qlmkRbwIAu9opvQ
-	(envelope-from <linux-pm+bounces-42844-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 22:09:01 +0100
+	id uBbbMj82lmkkcQIAu9opvQ
+	(envelope-from <linux-pm+bounces-42848-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 22:59:27 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81690159C83
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 22:09:00 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9E8E15A7B9
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 22:59:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 15058300381D
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 21:08:58 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 14080300B1BE
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 21:59:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF03B349B19;
-	Wed, 18 Feb 2026 21:08:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE665335094;
+	Wed, 18 Feb 2026 21:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b2qWTE1B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fA/WbAIH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCADE348875;
-	Wed, 18 Feb 2026 21:08:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8A7330B26;
+	Wed, 18 Feb 2026 21:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771448936; cv=none; b=aH4nxSWW+uAuBPg7BWfkGpQpu3ZLw0MyeWSUi5Km9d72sXohnfiLbtH6MSK1rxrfmL1CeeJhBsMWtQKu2X6IwTTR5/0DcwLXpwvZucMlJLSF5AHYjvOk8lDXf4VeCTxGq55NttARhMolsmJTIF0h7ocUkmk7cpdTgTjuCC6c3gY=
+	t=1771451963; cv=none; b=RLNvXCdR33HN/1UKuAuN6Egq4vAM/eLyYp+JLqMhzHULhlnf9sxbjoXajubCtCTXq7uU+3t9FhvH5iyP6X+Av88lR62fgbehSHGkDOaU12bJwq/+rEiX0uPXzReKJXzuTAYYflXKBDX7pYbuN9xjY18rbX/VZ6Wy6zqOrIRQqNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771448936; c=relaxed/simple;
-	bh=hmvBfECGVQuxo2gOjjdBGi2aazSb9iYtIqm3ldnhGCo=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=BNNJuofAexugzAcbXdQU2e9eX/A8i7EAYDvZFpxQFiqlhqbnRm/Yj6fekpsxONGm+Vbgup/JJn4eT5HXedq3oLsA/YHjdykm8d9NdZGxjE+2682UYU7Nv0DzT7Q3HjWZBfabzpV78jk1gUfdnRH5fswh7DQWCERdcFcEGzW7gHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b2qWTE1B; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771448935; x=1802984935;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=hmvBfECGVQuxo2gOjjdBGi2aazSb9iYtIqm3ldnhGCo=;
-  b=b2qWTE1B6k3Nn++pdlwn0UMm3Aeif1TwkOiBVom+YO5tlFkgsHtL0cSB
-   GI+2/NlMr7NHNhbIaFUOqJoLRJ5V6zFL+eMAY6j79D43NJk5uFFzG8t34
-   AyJXUcppSHe4quVoSG2MAbzBRpr2S9bgMIY10pAu6BNsNdpYjjKt7EIjp
-   SmG312Yx6wUFmazz4vkv94uoIiT6zMnsLhAPlGjPL8CKpxJMY+Whr6OZq
-   HeHl4bZ8EbMq6USBYo5/ryKLWR3IsRw42xdDZZz9M0qroAgYhUw7GTlIC
-   Py5mwwot7Ikdr8n5wPDkcApJjkhxT1fWDmLAh6QkcdP8BrJ1de9NZH3ZU
-   Q==;
-X-CSE-ConnectionGUID: 0TMUT8WjQ12WfXetGyiinA==
-X-CSE-MsgGUID: /VzUCB+CSYWZG+ziVQkf2A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11705"; a="71735365"
-X-IronPort-AV: E=Sophos;i="6.21,299,1763452800"; 
-   d="scan'208";a="71735365"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 13:08:54 -0800
-X-CSE-ConnectionGUID: hKIk//GmS9OwkK9ckpvQaA==
-X-CSE-MsgGUID: bxglEp/zTVetrhSjqA/fOw==
-X-ExtLoop1: 1
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.54])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 13:08:51 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 18 Feb 2026 23:08:48 +0200 (EET)
-To: "Ionut Nechita (Sunlight Linux)" <sunlightlinux@gmail.com>
-cc: Bjorn Helgaas <bhelgaas@google.com>, 
-    "Rafael J . Wysocki" <rafael@kernel.org>, 
-    Daniel Lezcano <daniel.lezcano@linaro.org>, 
-    Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-    Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org, 
-    linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    Ionut Nechita <ionut_n2001@yahoo.com>
-Subject: Re: [RFC PATCH 3/3] PCI: Update bandwidth control and thermal cooling
- for Gen 7 (128 GT/s)
-In-Reply-To: <20260217080102.206581-8-sunlightlinux@gmail.com>
-Message-ID: <6aac361d-7e6a-8857-9aa3-f127d96dd272@linux.intel.com>
-References: <20260217080102.206581-2-sunlightlinux@gmail.com> <20260217080102.206581-8-sunlightlinux@gmail.com>
+	s=arc-20240116; t=1771451963; c=relaxed/simple;
+	bh=TN/mvnq4+/WSb/ePlH/UChrJy7IeIXksiBl2R5d8uos=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=O1x/Pi+3cMtOdW15vijxzO5HyQXQfTQW3xYIXxKjKjsFo7Zuyq6zXRKePbgHh17bQDXcyKDIDWomSVe30l1oNsfIuJ6BN6+WsZgG/4o/XimX4FjiMUfpAb4HtOYSx8VLZfPvJVfPVjbxaRCXaDNKV4W1x45kYgBxHrcYeMXXp9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fA/WbAIH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3BAA1C116D0;
+	Wed, 18 Feb 2026 21:59:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771451963;
+	bh=TN/mvnq4+/WSb/ePlH/UChrJy7IeIXksiBl2R5d8uos=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=fA/WbAIHvfni0zEoowhzwNdnUjnLFGvFZIr4HbkhLhuD20CNx/sSwjoEKy/2LrLPU
+	 AK73LYhQukKwO55Xi1vIimT0L9T/l70Krtx8kIyiL9yW3D4oIY82zlBXkXP4lQZwZ4
+	 9atmvWt8suFj5gXKQDxO1eIAxPCNb6DidESTEM92XSrtdB+Xow1NA9/VRMxoJz21oj
+	 o1o6JfaS4jFyk7SBDCGG97vw6Bq+PSbTJaEhIGv/qXJf3vXaXNWHGdOktw/++x2vrR
+	 s6p14W3JT6nmTGcugd8/T1FjplamkQNA9Zf4RMFFrsygzkTwvMNvGW37Hn6wJm2tKn
+	 4QCkYyeqWLvAg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2549FE9A047;
+	Wed, 18 Feb 2026 21:59:23 +0000 (UTC)
+From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
+Subject: [PATCH v7 0/6] Introduce MAX77759 charger driver
+Date: Wed, 18 Feb 2026 21:59:08 +0000
+Message-Id: <20260218-max77759-charger-v7-0-e8d907ce69c5@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1588266121-1771448928=:1022"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAC02lmkC/23QQW7DIBAF0KtErEsFAzNAV71H1QUYcJCaUOHKS
+ hX57sVRq6Sylx/EG+Zf2ZRaSRN7OVxZS3OZSj33YJ4ObDj685h4iT0zEIBSCuQnfzHGoOP9uo2
+ pcYsQCCgSSc/6s8+WcrncyLf3no9l+qrt+zZhluvpLwZqi82SC04Bkg42m4z6dax1/EjPQz2xV
+ ZvhLoC0OwJ0AQKgc1Z4srQR1IMAZkdQXUCdiHTGwTvYCPpPINE/sSPodQunQenBxhTlRsC7AGK
+ vB+xCQKEcKkMe80agB0HqHYHWHuwgXIje6PC/yWVZfgDOhRFO+wEAAA==
+X-Change-ID: 20251105-max77759-charger-852b626d661a
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Badhri Jagan Sridharan <badhri@google.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>, Mark Brown <broonie@kernel.org>, 
+ Matti Vaittinen <mazziesaccount@gmail.com>, 
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>, 
+ Amit Sunil Dhamne <amitsd@google.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1771451962; l=5921;
+ i=amitsd@google.com; s=20241031; h=from:subject:message-id;
+ bh=TN/mvnq4+/WSb/ePlH/UChrJy7IeIXksiBl2R5d8uos=;
+ b=EZAtrGQYncnl+kfu0WnW0wIhMLOGKATlGjIL0kW5M1Z95qM99t+1By0oKEKj+t1WLgYKD3mA+
+ LL1hUkr0ZnpBhwr8Nz9f2kVFeq0hWFu4/090gmAT54QwNWtRsGgxS39
+X-Developer-Key: i=amitsd@google.com; a=ed25519;
+ pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
+X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
+ auth_id=262
+X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
+Reply-To: amitsd@google.com
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	CTYPE_MIXED_BOGUS(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	FREEMAIL_CC(0.00)[google.com,kernel.org,linaro.org,intel.com,arm.com,wunner.de,vger.kernel.org,yahoo.com];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-42844-lists,linux-pm=lfdr.de];
-	MIME_TRACE(0.00)[0:+,1:+];
+	TAGGED_FROM(0.00)[bounces-42848-lists,linux-pm=lfdr.de,amitsd.google.com];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[kernel.org,linaro.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,gmail.com,linux-foundation.org];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ilpo.jarvinen@linux.intel.com,linux-pm@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.intel.com:mid]
-X-Rspamd-Queue-Id: 81690159C83
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-0.998];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	HAS_REPLYTO(0.00)[amitsd@google.com]
+X-Rspamd-Queue-Id: A9E8E15A7B9
 X-Rspamd-Action: no action
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+MAX77759 PMIC is used in Pixel 6 and 6 Pro (Oriole/Raven) boards.
+One of the functions of the MAX77759 PMIC is a battery charger. This
+patchset introduces a driver for this function. One of the unique
+features of this charger driver is that it works with a USB input where
+the Type-C controller is TCPCI based.
 
---8323328-1588266121-1771448928=:1022
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Changes to the board files will follow soon once this patchset is reviewed.
 
-On Tue, 17 Feb 2026, Ionut Nechita (Sunlight Linux) wrote:
+For reference to the MAX77759 MFD based patchset (present in upstream):
+https://lore.kernel.org/all/20250509-max77759-mfd-v10-0-962ac15ee3ef@linaro.org/
 
-The subject should start with
+Dependency list for patches (directionality indicates depends on):
+[6] -> [5] -> [4] & [3]
 
-PCI/bwctrl:
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+---
+Changes in v7:
+- Add register relock for protected registers in fail path. (André Draszik)
+- Switch to usage of scoped_guard instead of guard. (LKP test bot)
+- Link to v6: https://lore.kernel.org/r/20260214-max77759-charger-v6-0-28c09bda74b4@google.com
 
-=2E..and you then don't need to repeat bandwidth control anymore.
+Changes in v6:
+-  Linear Range usage (André Draszik):
+  - Dedicate individual arrays for inlim, chgcc & chg_cv_prm to simplify
+    code.
+  - Use numerical values instead of macros for linear_range array init.
+  - Remove macros defining current and voltage limits due to above.
+  - Didn't use Reviewed-by tag for Patch 3 due to the above.
+  - Add new linear_ranges api to leverage it for obtaining selector
+    values.
+  - Improve voltage and current getters and setters functions by leveraging
+    existing and new linear_ranges API.
+- IRQ related changes (André Draszik)
+  - Dedicated names for individual irqs.
+  - Refactor irq handlers.
+  - Ratelimit prints
+- Retry mechanism (André Draszik):
+  - Initialize error retry counter to 0 when psy work is scheduled on a
+    new notifier event.
+  - Protect the counter using a lock.
+  - Add appropriate prints.
+- Link to v5: https://lore.kernel.org/r/20260203-max77759-charger-v5-0-b50395376a5f@google.com
 
-> From: Ionut Nechita <ionut_n2001@yahoo.com>
->=20
-> Update PCIe subsystem components to support 128 GT/s link speed:
->=20
->   - bwctrl: Extend pcie_valid_speed() range to PCIE_SPEED_128_0GT,
->     add PCIE_SPEED_128_0GT to speed conversion table, widen
->     supported_speeds variables from u8 to u16
->   - portdrv: Switch hweight8() to hweight16() for supported_speeds
->     to match the widened type
->   - pcie_cooling: Add static_assert for PCIE_SPEED_128_0GT enum
->     contiguity check
->=20
-> Signed-off-by: Ionut Nechita <ionut_n2001@yahoo.com>
-> ---
->  drivers/pci/pcie/bwctrl.c      | 7 ++++---
->  drivers/pci/pcie/portdrv.c     | 2 +-
->  drivers/thermal/pcie_cooling.c | 1 +
->  3 files changed, 6 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/pci/pcie/bwctrl.c b/drivers/pci/pcie/bwctrl.c
-> index 36f939f23d34e..b9125b40cb860 100644
-> --- a/drivers/pci/pcie/bwctrl.c
-> +++ b/drivers/pci/pcie/bwctrl.c
-> @@ -50,7 +50,7 @@ static DECLARE_RWSEM(pcie_bwctrl_setspeed_rwsem);
-> =20
->  static bool pcie_valid_speed(enum pci_bus_speed speed)
->  {
-> -=09return (speed >=3D PCIE_SPEED_2_5GT) && (speed <=3D PCIE_SPEED_64_0GT=
-);
-> +=09return (speed >=3D PCIE_SPEED_2_5GT) && (speed <=3D PCIE_SPEED_128_0G=
-T);
->  }
-> =20
->  static u16 pci_bus_speed2lnkctl2(enum pci_bus_speed speed)
-> @@ -62,6 +62,7 @@ static u16 pci_bus_speed2lnkctl2(enum pci_bus_speed spe=
-ed)
->  =09=09[PCIE_SPEED_16_0GT] =3D PCI_EXP_LNKCTL2_TLS_16_0GT,
->  =09=09[PCIE_SPEED_32_0GT] =3D PCI_EXP_LNKCTL2_TLS_32_0GT,
->  =09=09[PCIE_SPEED_64_0GT] =3D PCI_EXP_LNKCTL2_TLS_64_0GT,
-> +=09=09[PCIE_SPEED_128_0GT] =3D PCI_EXP_LNKCTL2_TLS_128_0GT,
->  =09};
-> =20
->  =09if (WARN_ON_ONCE(!pcie_valid_speed(speed)))
-> @@ -70,7 +71,7 @@ static u16 pci_bus_speed2lnkctl2(enum pci_bus_speed spe=
-ed)
->  =09return speed_conv[speed];
->  }
-> =20
-> -static inline u16 pcie_supported_speeds2target_speed(u8 supported_speeds=
-)
-> +static inline u16 pcie_supported_speeds2target_speed(u16 supported_speed=
-s)
->  {
->  =09return __fls(supported_speeds);
->  }
-> @@ -88,7 +89,7 @@ static inline u16 pcie_supported_speeds2target_speed(u8=
- supported_speeds)
->  static u16 pcie_bwctrl_select_speed(struct pci_dev *port, enum pci_bus_s=
-peed speed_req)
->  {
->  =09struct pci_bus *bus =3D port->subordinate;
-> -=09u8 desired_speeds, supported_speeds;
-> +=09u16 desired_speeds, supported_speeds;
->  =09struct pci_dev *dev;
-> =20
->  =09desired_speeds =3D GENMASK(pci_bus_speed2lnkctl2(speed_req),
-> diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-> index 38a41ccf79b9a..5ee8795107f26 100644
-> --- a/drivers/pci/pcie/portdrv.c
-> +++ b/drivers/pci/pcie/portdrv.c
-> @@ -274,7 +274,7 @@ static int get_port_device_capability(struct pci_dev =
-*dev)
-> =20
->  =09=09pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &linkcap);
->  =09=09if (linkcap & PCI_EXP_LNKCAP_LBNC &&
-> -=09=09    hweight8(dev->supported_speeds) > 1)
-> +=09=09    hweight16(dev->supported_speeds) > 1)
->  =09=09=09services |=3D PCIE_PORT_SERVICE_BWCTRL;
->  =09}
-> =20
-> diff --git a/drivers/thermal/pcie_cooling.c b/drivers/thermal/pcie_coolin=
-g.c
-> index a876d64f15827..9a2e39398674b 100644
-> --- a/drivers/thermal/pcie_cooling.c
-> +++ b/drivers/thermal/pcie_cooling.c
-> @@ -75,6 +75,7 @@ static_assert(PCIE_SPEED_5_0GT + 1 =3D=3D PCIE_SPEED_8_=
-0GT);
->  static_assert(PCIE_SPEED_8_0GT + 1 =3D=3D PCIE_SPEED_16_0GT);
->  static_assert(PCIE_SPEED_16_0GT + 1 =3D=3D PCIE_SPEED_32_0GT);
->  static_assert(PCIE_SPEED_32_0GT + 1 =3D=3D PCIE_SPEED_64_0GT);
-> +static_assert(PCIE_SPEED_64_0GT + 1 =3D=3D PCIE_SPEED_128_0GT);
-> =20
->  MODULE_AUTHOR("Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>");
->  MODULE_DESCRIPTION("PCIe cooling driver");
+Changes in v5:
+- Use linear_range library instead of reinventing it. (André Draszik)
+  - This requires a selector_max value so modified mfd/max77759.h to
+    include it for CHGCC and CHG_ILIM.
+  - Removed "reviewed-by" for Patch 3 (mfd) due to above
+- Use asnyc probe type. (André Draszik)
+- Retry mechanism for psy_work. (André Draszik)
+- Minor nits (André Draszik):
+  - Use named initializers for instantiating structs.
+  - Use static qualifier for `psy_name` variable.
+  - Refactor if-else ladder to remove else handling if return in prior
+    "if" loop.
+  - Remove redundant `unlikely`.
+- Link to v4: https://lore.kernel.org/r/20260121-max77759-charger-v4-0-694234c8ded1@google.com
 
-Once you start to use the new capability, you'll also need to check if the=
-=20
-GENMASK()s related to speed vector are still okay (both bwctrl and core=20
-do it). There might also be fls() or something like that that which no=20
-longer holds with the 0x7 reserved hole in the speeds but I didn't check.
+Changes in v4:
+- Removed a stray tabspace in mfd/max77759.h. (André Draszik)
+- Fixed the following issues in Patch 4/5 (André Draszik):
+  - Re-order Kconfig entry
+  - Refactored to not use global variable
+  - Use of clamp() to clamp values instead of duplicating logic
+  - Return IRQ_NONE for unhandled irqs or error conditions
+  - Remove debug messages in irq handler
+  - Refactor code to use dev_err_probe in *_init_irqhandler()
+  - Remove unneeded irq_flags
+  - Check return values of regmap ops
+  - Other nits like newlines, not using greedy init, using print stmnts
+- Link to v3: https://lore.kernel.org/r/20251227-max77759-charger-v3-0-54e664f5ca92@google.com
 
---=20
- i.
+Changes in v3:
+- Had incorrectly folded the charger sub-device with the pmic parent.
+  Corrected it. (Krzysztof Kozlowski)
+- Link to v2: https://lore.kernel.org/r/20251218-max77759-charger-v2-0-2b259980a686@google.com
 
---8323328-1588266121-1771448928=:1022--
+Changes in v2:
+- Fold charger binding in maxim,max77759-charger.yaml to its parent
+  node. (Krzysztof Kozlowski)
+- Renamed regulator supplier & consumer. (Krzysztof Kozlowski & Heikki
+  Krogerus)
+- Removed explicit setting of irq trigger types in max77759 driver.
+  (André Draszik & Krzysztof Kozlowski)
+- Complete bit definitions for IRQ registers. (André Draszik)
+- Consolidate all bit definitions for charger IP in mfd/max77759.h.
+  (André Draszik)
+- Modify the handling of charger IRQs such that regmap IRQ chip handles
+  masking, de-mux and acking of interrupts. (André Draszik)
+- Remove unused macro definitions relating to Charger modes in tcpci
+  maxim driver (André Draszik)
+- Add dependency on Regulator class in Kconfig definition for max77759
+  chg. (Kernel Test Robot)
+- Link to v1: https://lore.kernel.org/r/20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com
+
+---
+Amit Sunil Dhamne (6):
+      dt-bindings: mfd: maxim,max77759: reference power-supply schema and add regulator property
+      dt-bindings: usb: maxim,max33359: Add supply property for vbus
+      mfd: max77759: add register bitmasks and modify irq configs for charger
+      lib/linear_ranges: Add linear_range_get_selector_high_array
+      power: supply: max77759: add charger driver
+      usb: typec: tcpm/tcpci_maxim: deprecate WAR for setting charger mode
+
+ .../devicetree/bindings/mfd/maxim,max77759.yaml    |  16 +-
+ .../devicetree/bindings/usb/maxim,max33359.yaml    |   4 +
+ MAINTAINERS                                        |   6 +
+ drivers/mfd/max77759.c                             |  91 ++-
+ drivers/power/supply/Kconfig                       |  11 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/max77759_charger.c            | 774 +++++++++++++++++++++
+ drivers/usb/typec/tcpm/tcpci_maxim.h               |   1 +
+ drivers/usb/typec/tcpm/tcpci_maxim_core.c          |  54 +-
+ include/linux/linear_range.h                       |   3 +
+ include/linux/mfd/max77759.h                       | 176 ++++-
+ lib/linear_ranges.c                                |  36 +
+ 12 files changed, 1114 insertions(+), 59 deletions(-)
+---
+base-commit: 8dfce8991b95d8625d0a1d2896e42f93b9d7f68d
+change-id: 20251105-max77759-charger-852b626d661a
+
+Best regards,
+-- 
+Amit Sunil Dhamne <amitsd@google.com>
+
+
 
