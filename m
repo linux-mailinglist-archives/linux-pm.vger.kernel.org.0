@@ -1,56 +1,56 @@
-Return-Path: <linux-pm+bounces-42825-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42827-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MLoHMYcClmnQYAIAu9opvQ
-	(envelope-from <linux-pm+bounces-42825-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 19:18:47 +0100
+	id WFKTIYsClmnQYAIAu9opvQ
+	(envelope-from <linux-pm+bounces-42827-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 19:18:51 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13DBF158A5B
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 19:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BDC8158A62
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 19:18:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9476B301E3CC
+	by sea.lore.kernel.org (Postfix) with ESMTP id D4BD23021E92
 	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 18:16:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE35A345CB0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B48CB346A01;
 	Wed, 18 Feb 2026 18:16:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RpK+O2+Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HQ8wRE/R"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87FBF2FFDDE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8812130AABC;
 	Wed, 18 Feb 2026 18:16:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771438581; cv=none; b=TNur021NT4ShFdEW85K7jaYxmiNVFVjRsMWXACtMVzdKeo1NmvtCOzC2S5Lr9p4rj24SS0+rd0UXtgNWfPpa0WxYM1ALUbblQnLBgPbwG098LhT4cKYSbJMVSvNnaoqv6+yBsaLtWtXy41arGJe/CT9Jk7jeD30Prs+hXnRv8zw=
+	t=1771438581; cv=none; b=Z1NoDQSnDbC+GyoBd6UDfOV37RDk4mfz/iXmUOMRxjgQymB3KH43thAzVjaybxRCNJzzOuRJA4Xt86/B+h+IaAALm7J13HGxwjTvwA++1HkrkbRQIZdWyWssPVSPtxOrvfeVK705tjb/ZhVplOIrk16MeAPqOdSWCZNq6bNQWtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1771438581; c=relaxed/simple;
-	bh=Gcm4qVHExOEVMXPGeceeOhHrV8lE0lvyc/lJzKXr9KE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Wgl3W/NbGPqMYNy2SDVZqcAvb/qMT9Xh2/TQTjyKfGDGN6U/fI8/egJRjWJSCw+0QNoIX8C4+quUnipnJtl1nqDCRcTTW2lqBWwfI7Y5HE8VRCjx0DSr6j8ihEHNNsXyaOEeW8rEkmVBsGg14DTR7jwboAbDMzCmvAe62y+0KPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RpK+O2+Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 12AD2C116D0;
+	bh=a05snlq6Y0wUIyGYFKz6Aof2Ecgn10TWqXHZr/LmJdY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=WkhCECHEm253U4BkwtwthYy1fyUvxjGzgvzCE/babTX4zv6v03pnHuBrgf1vdL4eTG3hF7JuD8FIX386rgX2mbOiQtMacJgVnPVcDsDH2T5stroLHF69m9kqJXGdg5pUiXqVORPbFd83BcGnVOYx18T7vuDiyh9nwmXjV6s/pfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HQ8wRE/R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 32E9FC19423;
 	Wed, 18 Feb 2026 18:16:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1771438581;
-	bh=Gcm4qVHExOEVMXPGeceeOhHrV8lE0lvyc/lJzKXr9KE=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=RpK+O2+Qn2qOKH1w4vmhjOsXCxQCJHceEFZnmwD2f2L9a8OQqG+3SwTMSbTC6bIIO
-	 5LqzOD6LYA+9ZF11X6FQXNiuxYJtNt7v+E3gjdzFv+qDAhgJLtPGmp4sxrXrN3dtRR
-	 VBk+Q2V751++EArb0cesvnsVOAdKHn6FBfgfwc1LT5gkdmsvqi8Tc2E5Qrqje/AIt5
-	 0QHkJndq9+oLTD60ngwa/0D9iexgHXgXy8vM5sp2HODsbZbs/b0mh1KBbZHoCoGKcZ
-	 DyhufY+8aWLbj2Rf0ofGF0d0J3xrcel4l7yDoAMeOH+276c7gyrNlt9jDeegf2QXdc
-	 eWt++79XgL+PQ==
+	bh=a05snlq6Y0wUIyGYFKz6Aof2Ecgn10TWqXHZr/LmJdY=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=HQ8wRE/RY7DBOnZ4s5mPPRQ5bsbEfPXEZZ54USKtr9Rv30O5X91c7Q5SCCrdPAcq3
+	 w0bL5VOnL8uPYQ4OA5taFgWxcAHkPZ4YkI6ztS7vQVoZ50HLXhFVoy597l73l2S+Hb
+	 gwgtU97LDPODGPIzME6AtDJGvsEXWsb3RR6u0ptP+kIwkVn9M+tX+XlKEDRR+WxCZC
+	 FEga0uSlip/ozYFtcTjFQSRXU/4nJz95ZJCioopaZIAYR6obzCyCF5PCazjo/3KZ0d
+	 k3XiKKniy8Hv5yRuQ+bXJBtQpvdh+bGfuSh50M7ooaX/zpK93z6E0nYsRT4kfG1ZSo
+	 2nvrK55j50MyQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06AA3E9A03E;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D32FE9A047;
 	Wed, 18 Feb 2026 18:16:21 +0000 (UTC)
 From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Subject: [PATCH v2 0/3] arm64: qcom: sm8550: add DDR, LLCC & L3 CPU
- bandwidth scaling
-Date: Wed, 18 Feb 2026 12:16:17 -0600
-Message-Id: <20260218-sm8550-ddr-bw-scaling-v2-0-43a2b6d47e70@gmail.com>
+Date: Wed, 18 Feb 2026 12:16:18 -0600
+Subject: [PATCH v2 1/3] dt-bindings: interconnect: OSM L3: Document sm8550
+ OSM L3 compatible
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -59,11 +59,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WNSw6CMBRFt0Le2GdK+TtyH4ZBf8BLaEtaUzWEv
- VvZgMNzcj87RBPIRLgVOwSTKJJ3GfilALUINxsknRk44y3jrMNo+6ZhqHVA+cKoxEpuRlk2vO5
- 5N+UI5O4WzETvc/cxZl4oPn34nDep/Nl/i6nE7IZWVVM1CFXL+2wFrVflLYzHcXwB0XFx0boAA
- AA=
-X-Change-ID: 20260207-sm8550-ddr-bw-scaling-b1524827f207
+Message-Id: <20260218-sm8550-ddr-bw-scaling-v2-1-43a2b6d47e70@gmail.com>
+References: <20260218-sm8550-ddr-bw-scaling-v2-0-43a2b6d47e70@gmail.com>
+In-Reply-To: <20260218-sm8550-ddr-bw-scaling-v2-0-43a2b6d47e70@gmail.com>
 To: Bjorn Andersson <andersson@kernel.org>, 
  Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -73,11 +71,11 @@ Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
  Aaron Kling <webgeek1234@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771438580; l=1135;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1771438580; l=897;
  i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=Gcm4qVHExOEVMXPGeceeOhHrV8lE0lvyc/lJzKXr9KE=;
- b=C0HAxvfbORFTufxT5rgl1D1byfeP3nL2nahiROonuwq8HhU+DsdwxGWAjHXR4Kuq4Qy14BCit
- uP03bwJo/RWA13hOEmn4myjiZaCKehyv0DUCM1m0+CLrIPh4pH5Djsb
+ bh=QL4QtlV1mkUECwvUyM6TwRVGqKLGQYeQGpH9Y7qGjM4=;
+ b=MPZfDr/vlSXG8c8OTZEeBIXBCkRI2FikGcYjpKZttCkgoRZKuTJvHcMR3TxO6VYE541zP1+Sf
+ 1WvZfT1x9X8BYvMHwqTXPxTKA87bD1fieyQE4o0JFog/aEpNqvd2kPK
 X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
  pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
 X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
@@ -95,7 +93,7 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42825-lists,linux-pm=lfdr.de,webgeek1234.gmail.com];
+	TAGGED_FROM(0.00)[bounces-42827-lists,linux-pm=lfdr.de,webgeek1234.gmail.com];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -116,38 +114,33 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	HAS_REPLYTO(0.00)[webgeek1234@gmail.com];
 	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 13DBF158A5B
+X-Rspamd-Queue-Id: 1BDC8158A62
 X-Rspamd-Action: no action
 
-Add the OSM L3 controller node then add the necessary interconnect
-properties with the appropriate OPP table for each CPU cluster to
-allow the DDR, LLCC & L3 CPU bandwidth to scale along the CPU
-cluster operating point.
+From: Aaron Kling <webgeek1234@gmail.com>
+
+Document the OSM L3 found in the Qualcomm SM8550 platform.
 
 Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
 ---
-Changes in v2:
-- Squash first two patches
-- Update opp tables in last patch to match how the downstream driver
-  parses those tables
-- Link to v1: https://lore.kernel.org/r/20260207-sm8550-ddr-bw-scaling-v1-0-d96c3f39ac4b@gmail.com
+ Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
----
-Aaron Kling (3):
-      dt-bindings: interconnect: OSM L3: Document sm8550 OSM L3 compatible
-      arm64: dts: qcom: sm8550: add OSM L3 node and cpu interconnect nodes
-      arm64: dts: qcom: sm8550: add cpu OPP table with DDR, LLCC & L3 bandwidths
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+index 4b9b98fbe8f22258c209e8337bb4517e5f5888e8..3cbe2c3701f77d5d70082092043f2b2ccbd64905 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+@@ -34,6 +34,7 @@ properties:
+               - qcom,sm6375-cpucp-l3
+               - qcom,sm8250-epss-l3
+               - qcom,sm8350-epss-l3
++              - qcom,sm8550-epss-l3
+               - qcom,sm8650-epss-l3
+           - const: qcom,epss-l3
+       - items:
 
- .../bindings/interconnect/qcom,osm-l3.yaml         |   1 +
- arch/arm64/boot/dts/qcom/sm8550.dtsi               | 367 +++++++++++++++++++++
- 2 files changed, 368 insertions(+)
----
-base-commit: 9845cf73f7db6094c0d8419d6adb848028f4a921
-change-id: 20260207-sm8550-ddr-bw-scaling-b1524827f207
-
-Best regards,
 -- 
-Aaron Kling <webgeek1234@gmail.com>
+2.52.0
 
 
 
