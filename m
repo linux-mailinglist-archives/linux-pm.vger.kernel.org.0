@@ -1,68 +1,68 @@
-Return-Path: <linux-pm+bounces-42815-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42816-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ZIw7H9PglWk4VwIAu9opvQ
-	(envelope-from <linux-pm+bounces-42815-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 16:54:59 +0100
+	id cI38LTDjlWmrVwIAu9opvQ
+	(envelope-from <linux-pm+bounces-42816-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 17:05:04 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CD4315782B
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 16:54:58 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F2C015796B
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 17:05:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id DA17C3006458
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 15:54:57 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5BD6430055A9
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 16:05:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3215C34321B;
-	Wed, 18 Feb 2026 15:54:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2356332549B;
+	Wed, 18 Feb 2026 16:05:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ub9SIhN5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fZng8OTW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBA7342503;
-	Wed, 18 Feb 2026 15:54:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7C527FD40;
+	Wed, 18 Feb 2026 16:04:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771430096; cv=none; b=uC1DDBJkNR/pXJJR+E5Pf8SQOFZQ/UoMtR64WLBalox+dRf9/nFTLyUu5aw7aHdnDi1s54xWbD0MNI6fHBXEUPRpsiaxQWsLhSrsqXBwv8azG+qxflgT7M4Zz1mtZ7l+kmMaSwUdm7hk2TsTk9SxpLDUUk/r0QeHUUACbESkBZA=
+	t=1771430701; cv=none; b=sE/HHAAoEq7CoWbnXgyEbJLW4ak2olu5cZJ1CRSlvGjnC9ArTOiZZKUKdCnaCf7C9CkhETSUN/TVpNXdWh2k3otPSTXqeVs51WTAewiFujOZOE9kAvtIOdtLgKPvkkl3I9gr+7iXuPe7dyY/aWL2lwBeUR1lOYuSBd2WaE0X/ZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771430096; c=relaxed/simple;
-	bh=kTv3K3ud2hLhI5t3kyCmZBewgwlDVTPQUj5rUJN56eU=;
+	s=arc-20240116; t=1771430701; c=relaxed/simple;
+	bh=jfnbMnFqB31FkL8fUDzsdjgyqkLz50CEZHl1Q8y2fck=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EEZDKqJdUgEZUmulovTVDuBajFgYhgKN45DkapjEVJTho0Hvjf1T8cjY9IKbL1RuoBlkzSv4cZcYpqww+8ImGLnsBj3yVSHsLhtPpY3BkpeaO+pyDXJo0rRwzQUOeDT5REI/XqeZ06K2SsOvhHeFd0NPnC7D3WnkrhIny/FgcjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ub9SIhN5; arc=none smtp.client-ip=198.175.65.14
+	 In-Reply-To:Content-Type; b=VffEWwkXHLuS2ggezRaDJzvOewI5RZSCX2Q7FcWMVs47LVMB8vCUPGWZQjmFa0cfsDG2+DgZx/RcSx90l7tG0LJtTXGMaS+ceQNvVgzRx+Eybaa9zpjJUXSCViMjo1MltcNHexHQth1YDvyLFOwKIuSw4MuJBGYHkAMnSrTvG7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fZng8OTW; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771430095; x=1802966095;
+  t=1771430700; x=1802966700;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=kTv3K3ud2hLhI5t3kyCmZBewgwlDVTPQUj5rUJN56eU=;
-  b=Ub9SIhN5deUsNbQY5qLbHJLGhStuHfTFInaOmevelw29XHfn7dTKlBiE
-   LQ8rJYTjZcYRV8MEVFf7t0R3SCgYCx4Se4Bah2JVrBRE2F2IVWEdXYLST
-   QViImn6XIxD03LYwaedcQ7aAEuSt6tptVtAN6YfN3CgamJ6ql5azikecS
-   i2ooQTx8xtk01CW0pLwJNdfsRvYEhclBDuMXwI4a1EZhz5ZltjhJMHxu1
-   rPI1xGJJH8zllZJnE19MGcCEPppcLgtIa40JzEGR0N/vgdi7DjqLbm/O7
-   CGDjj6J22qDxKitFl8/GfY1P7U2Ol7cwMpawVvd2rJfCeyUX5snAcv0HP
+  bh=jfnbMnFqB31FkL8fUDzsdjgyqkLz50CEZHl1Q8y2fck=;
+  b=fZng8OTWyfZYLDdHpLVbaZ8Q3cW1uEZ+xx5OuIpEzhYaIIVkJV1uF0of
+   zbZOJpEVXZEPu9Z7nABFNZp4z/MkTpdmsdt/Rp4EXoAYo0Di+IXssmYMW
+   3HpFr1oIGKCrifxPJg4YckXwPiXvHyniuQhIMkyrBF4H9EWD2iG5Yr2Sk
+   tx/6KWvS56Q69lZk9FU+8dGqzqNXlrrdE2YaFVyt3La0fJd0Op9VJ22wh
+   DY92hCZRlYMI+sMPuFrE6g5XhSarzBi4/7amCpy3Zw5JvKk08bGIwSiwd
+   1AqzRTQbPqTkhctkVlO81u5DOcwkMhIeRQlmvp4daOghjmU3zH4IloxkR
    Q==;
-X-CSE-ConnectionGUID: McjdlSYlRxWvRXMxhAG9EA==
-X-CSE-MsgGUID: cZOCraYeTuW4JbXPCKZZTw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11705"; a="76343955"
+X-CSE-ConnectionGUID: tuTv7uSGSW+5JGOT9T/6hw==
+X-CSE-MsgGUID: lt//4F1STpaZqYeHfPBzwg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11705"; a="83132752"
 X-IronPort-AV: E=Sophos;i="6.21,298,1763452800"; 
-   d="scan'208";a="76343955"
+   d="scan'208";a="83132752"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 07:54:54 -0800
-X-CSE-ConnectionGUID: 9CQtLE12Rja5b/SwPKnC+g==
-X-CSE-MsgGUID: dbkJ0sNaRkWA4L+dD2eDpQ==
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 08:04:59 -0800
+X-CSE-ConnectionGUID: /fb4gbLnS6e0K8xWnPiYcw==
+X-CSE-MsgGUID: yThti8vYRei3egf6s2kSNg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,298,1763452800"; 
-   d="scan'208";a="212312601"
+   d="scan'208";a="212313339"
 Received: from aduenasd-mobl5.amr.corp.intel.com (HELO [10.125.109.212]) ([10.125.109.212])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 07:54:51 -0800
-Message-ID: <d2f6eb24-e320-4a90-9af3-dd637fa5ab7b@intel.com>
-Date: Wed, 18 Feb 2026 08:54:50 -0700
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 08:04:56 -0800
+Message-ID: <7c551ba8-2d0e-4df4-a698-19cad4b78977@intel.com>
+Date: Wed, 18 Feb 2026 09:04:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -70,8 +70,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 4/9] dax/cxl, hmem: Initialize hmem early and defer
- dax_cxl binding
+Subject: Re: [PATCH v6 5/9] dax: Track all dax_region allocations under a
+ global resource tree
 To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
  linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
  nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
@@ -95,10 +95,10 @@ Cc: Ard Biesheuvel <ardb@kernel.org>,
  Zhijian Li <lizhijian@fujitsu.com>, Borislav Petkov <bp@alien8.de>,
  Tomasz Wolski <tomasz.wolski@fujitsu.com>
 References: <20260210064501.157591-1-Smita.KoralahalliChannabasappa@amd.com>
- <20260210064501.157591-5-Smita.KoralahalliChannabasappa@amd.com>
+ <20260210064501.157591-6-Smita.KoralahalliChannabasappa@amd.com>
 Content-Language: en-US
 From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20260210064501.157591-5-Smita.KoralahalliChannabasappa@amd.com>
+In-Reply-To: <20260210064501.157591-6-Smita.KoralahalliChannabasappa@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
@@ -106,12 +106,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42815-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42816-lists,linux-pm=lfdr.de];
 	RCPT_COUNT_TWELVE(0.00)[32];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -126,95 +126,91 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-pm];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:mid,intel.com:dkim,intel.com:email,amd.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0CD4315782B
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,amd.com:email,intel.com:mid,intel.com:dkim,intel.com:email]
+X-Rspamd-Queue-Id: 2F2C015796B
 X-Rspamd-Action: no action
 
 
 
 On 2/9/26 11:44 PM, Smita Koralahalli wrote:
-> From: Dan Williams <dan.j.williams@intel.com>
+> Introduce a global "DAX Regions" resource root and register each
+> dax_region->res under it via request_resource(). Release the resource on
+> dax_region teardown.
 > 
-> Move hmem/ earlier in the dax Makefile so that hmem_init() runs before
-> dax_cxl.
+> By enforcing a single global namespace for dax_region allocations, this
+> ensures only one of dax_hmem or dax_cxl can successfully register a
+> dax_region for a given range.
 > 
-> In addition, defer registration of the dax_cxl driver to a workqueue
-> instead of using module_cxl_driver(). This ensures that dax_hmem has
-> an opportunity to initialize and register its deferred callback and make
-> ownership decisions before dax_cxl begins probing and claiming Soft
-> Reserved ranges.
-> 
-> Mark the dax_cxl driver as PROBE_PREFER_ASYNCHRONOUS so its probe runs
-> out of line from other synchronous probing avoiding ordering
-> dependencies while coordinating ownership decisions with dax_hmem.
-> 
+> Co-developed-by: Dan Williams <dan.j.williams@intel.com>
 > Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 > Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 
 Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 
 > ---
->  drivers/dax/Makefile |  3 +--
->  drivers/dax/cxl.c    | 27 ++++++++++++++++++++++++++-
->  2 files changed, 27 insertions(+), 3 deletions(-)
+>  drivers/dax/bus.c | 23 ++++++++++++++++++++---
+>  1 file changed, 20 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/dax/Makefile b/drivers/dax/Makefile
-> index 5ed5c39857c8..70e996bf1526 100644
-> --- a/drivers/dax/Makefile
-> +++ b/drivers/dax/Makefile
-> @@ -1,4 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +obj-y += hmem/
->  obj-$(CONFIG_DAX) += dax.o
->  obj-$(CONFIG_DEV_DAX) += device_dax.o
->  obj-$(CONFIG_DEV_DAX_KMEM) += kmem.o
-> @@ -10,5 +11,3 @@ dax-y += bus.o
->  device_dax-y := device.o
->  dax_pmem-y := pmem.o
->  dax_cxl-y := cxl.o
-> -
-> -obj-y += hmem/
-> diff --git a/drivers/dax/cxl.c b/drivers/dax/cxl.c
-> index 13cd94d32ff7..a2136adfa186 100644
-> --- a/drivers/dax/cxl.c
-> +++ b/drivers/dax/cxl.c
-> @@ -38,10 +38,35 @@ static struct cxl_driver cxl_dax_region_driver = {
->  	.id = CXL_DEVICE_DAX_REGION,
->  	.drv = {
->  		.suppress_bind_attrs = true,
-> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
->  	},
->  };
+> diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
+> index fde29e0ad68b..5f387feb95f0 100644
+> --- a/drivers/dax/bus.c
+> +++ b/drivers/dax/bus.c
+> @@ -10,6 +10,7 @@
+>  #include "dax-private.h"
+>  #include "bus.h"
 >  
-> -module_cxl_driver(cxl_dax_region_driver);
-> +static void cxl_dax_region_driver_register(struct work_struct *work)
-> +{
-> +	cxl_driver_register(&cxl_dax_region_driver);
-> +}
+> +static struct resource dax_regions = DEFINE_RES_MEM_NAMED(0, -1, "DAX Regions");
+>  static DEFINE_MUTEX(dax_bus_lock);
+>  
+>  /*
+> @@ -625,6 +626,8 @@ static void dax_region_unregister(void *region)
+>  {
+>  	struct dax_region *dax_region = region;
+>  
+> +	scoped_guard(rwsem_write, &dax_region_rwsem)
+> +		release_resource(&dax_region->res);
+>  	sysfs_remove_groups(&dax_region->dev->kobj,
+>  			dax_region_attribute_groups);
+>  	dax_region_put(dax_region);
+> @@ -635,6 +638,7 @@ struct dax_region *alloc_dax_region(struct device *parent, int region_id,
+>  		unsigned long flags)
+>  {
+>  	struct dax_region *dax_region;
+> +	int rc;
+>  
+>  	/*
+>  	 * The DAX core assumes that it can store its private data in
+> @@ -667,14 +671,27 @@ struct dax_region *alloc_dax_region(struct device *parent, int region_id,
+>  		.flags = IORESOURCE_MEM | flags,
+>  	};
+>  
+> -	if (sysfs_create_groups(&parent->kobj, dax_region_attribute_groups)) {
+> -		kfree(dax_region);
+> -		return NULL;
+> +	scoped_guard(rwsem_write, &dax_region_rwsem)
+> +		rc = request_resource(&dax_regions, &dax_region->res);
+> +	if (rc) {
+> +		dev_dbg(parent, "dax_region resource conflict for %pR\n",
+> +			&dax_region->res);
+> +		goto err_res;
+>  	}
+>  
+> +	if (sysfs_create_groups(&parent->kobj, dax_region_attribute_groups))
+> +		goto err_sysfs;
 > +
-> +static DECLARE_WORK(cxl_dax_region_driver_work, cxl_dax_region_driver_register);
+>  	if (devm_add_action_or_reset(parent, dax_region_unregister, dax_region))
+>  		return NULL;
+>  	return dax_region;
 > +
-> +static int __init cxl_dax_region_init(void)
-> +{
-> +	/*
-> +	 * Need to resolve a race with dax_hmem wanting to drive regions
-> +	 * instead of CXL
-> +	 */
-> +	queue_work(system_long_wq, &cxl_dax_region_driver_work);
-> +	return 0;
-> +}
-> +module_init(cxl_dax_region_init);
-> +
-> +static void __exit cxl_dax_region_exit(void)
-> +{
-> +	flush_work(&cxl_dax_region_driver_work);
-> +	cxl_driver_unregister(&cxl_dax_region_driver);
-> +}
-> +module_exit(cxl_dax_region_exit);
-> +
->  MODULE_ALIAS_CXL(CXL_DEVICE_DAX_REGION);
->  MODULE_DESCRIPTION("CXL DAX: direct access to CXL regions");
->  MODULE_LICENSE("GPL");
+> +err_sysfs:
+> +	scoped_guard(rwsem_write, &dax_region_rwsem)
+> +		release_resource(&dax_region->res);
+> +err_res:
+> +	kfree(dax_region);
+> +	return NULL;
+>  }
+>  EXPORT_SYMBOL_GPL(alloc_dax_region);
+>  
 
 
