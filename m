@@ -1,402 +1,230 @@
-Return-Path: <linux-pm+bounces-42806-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42807-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oK6+EJN0lWnDRgIAu9opvQ
-	(envelope-from <linux-pm+bounces-42806-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 09:13:07 +0100
+	id yETdLox1lWlCRwIAu9opvQ
+	(envelope-from <linux-pm+bounces-42807-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 09:17:16 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECD54153E7D
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 09:13:06 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3220C153EE6
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 09:17:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3D0903032DC3
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 08:12:56 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id BFCB7301C6D9
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 08:17:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7CB3161B3;
-	Wed, 18 Feb 2026 08:12:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 234593126A1;
+	Wed, 18 Feb 2026 08:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="bQcCVZVL";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ZZJKswC7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nTx7qOme"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0120318135
-	for <linux-pm@vger.kernel.org>; Wed, 18 Feb 2026 08:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A487F308F05
+	for <linux-pm@vger.kernel.org>; Wed, 18 Feb 2026 08:17:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771402375; cv=none; b=tqGW0uh7XpUENrl6p1psMS03aeKYQTB4TOiYpGsh8UnGBQSiGv9/Ck7cOnlOhxjxNx/YlgFmKcYYTxAdIEhiqXsBA2P4QOI6aC1zPRA8HVvAPon/jswoCGiR1V8jA50jxgQoTjnXQkW7oMgqkIpthmDveZ9s+7bNheXGPrwWQEA=
+	t=1771402632; cv=none; b=pmPfzSbg6l0JQ175795rxCEZMa7Wy3O7ruRrI6dgx4+TkQQOxYAEUHHX9h9whIzyhfY1LbLIFBynRuKmKalT8IbkdHq0G6HTEOPDCk8DKfW1exHwkhrUoCABALKaWAiFFLdjB/I2xDitrjoTmyaeRNp0cwoAFAo33o3cRZj5Ibs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771402375; c=relaxed/simple;
-	bh=YyvIpWrTFLi6XlA78epLgR4oDc+qO1nmiVhSzx9chWw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TRAFuHRjbVY9/cJ7yIKlVmTOV8X1gWApL81izsZEtPDsOU1CRC4A0UDNdA8dV3ljq/tMwtGfiBkB6Mnt3w7bU3Pfxu9P+vhR5b/yodLZzU00XkRizLnHQhJ0lribdVYPApUL46uvnqiJD4u1wmH/I1Zkc4f/eJCskMarDXoXZi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=bQcCVZVL; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ZZJKswC7; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61HKXp3d3695372
-	for <linux-pm@vger.kernel.org>; Wed, 18 Feb 2026 08:12:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	fygRWP8pcLbQ34jhJxnxGK22lbC+YAxbQQyhOVa/yJs=; b=bQcCVZVLa3xhQUCe
-	cX0vsq84LQfdwfq8BWnjE3XhMCpMDjPCWIOEONVNqGX2vVug6wBSVClvAbUMd5da
-	uSHUvUm5DVOASlwu1gKUfrb9uxuYYhmOsTQvFdK28gz85sbnaUTqhLfp+TcZedbF
-	g15TAoGBcfLoz1d6MAPBle88GHbGywPQ6WJU8MOrOUWJPRxcpM9h4sDDBX6Xja4r
-	dfb9FxTRu7u/0n4hVBGFzyNQorReOtAL2Z/37ep9vGdsosL60mTd5sqymb4xF9NX
-	BIP/F013UK1n4yF+SDsGUCCfVQm752UdSg/VH3LMT58pFb6nUCJeC8RNaQPV1gNZ
-	nU8oCg==
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ccyfb1j7s-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 18 Feb 2026 08:12:52 +0000 (GMT)
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2a863be8508so56634225ad.2
-        for <linux-pm@vger.kernel.org>; Wed, 18 Feb 2026 00:12:52 -0800 (PST)
+	s=arc-20240116; t=1771402632; c=relaxed/simple;
+	bh=9moeBSWAnG3dtSIbdW4ZnD0x20PyiAy3DOWv8ETJgx0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qrJaSA02COdny5mHB+EdbCwvfriFMK86MKH81DAazNZ0FVjRW7cHNaqnCC/vGuasBbq08w+jvq+gDkhyC7/mWv+hjg8MEnf+F36jDIcVvh4+A5zAuXazmremCL8q9x1SGpCTZD7pIbD1r8eolsQ52w+u/LvDNMfUFH0V7puc3tI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nTx7qOme; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-59b672f8ec4so4803748e87.1
+        for <linux-pm@vger.kernel.org>; Wed, 18 Feb 2026 00:17:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1771402371; x=1772007171; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fygRWP8pcLbQ34jhJxnxGK22lbC+YAxbQQyhOVa/yJs=;
-        b=ZZJKswC7DSpjI8+ZGf0HA6wxBSNL971o+UCsbsSRssiw2W7IvZPxEaNPhPbRDG4O4h
-         0Hhw3WwGO0csX9DqDx5QyQEyiFiQBfyWg31NBrHmC8A7/OLNS4390PTKnILrFeVd7Nu+
-         DPZkf7H2RT7r9b/r8KvcvQe4Gigl4vluBUT/kbWwI+9qP92Se3oc5T8W9YsrsyI1AKwz
-         dunpcSt4eaPWy9NFsUV2EYyrN6Us6w9ny2iRV20cR8O7UXal3Q+jCEls8E6RsZjOHisR
-         voDPFOhFZnZex9bU1sTXMJQWCP2+pjMXpbS/mtf7IUvSF6VSQg/JZIbhnak1zzIamsWp
-         0DAg==
+        d=gmail.com; s=20230601; t=1771402629; x=1772007429; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5r0xdr1WGpCeGTUqLANRfTri1dCqx5zok5lpbzySRko=;
+        b=nTx7qOmeum236BXFrq/lI95npYcbZdRkmrsYpw6z44rQeeD2T//+MtGlF4miv5w2A3
+         973XqBQSOtxZaws0YxAmu+XEEJNfeGXkBlZFU5Z+lKYprZhMNfCc/i0gIofqZCTjnUn/
+         vVKH4KurYSpHbro3gpWg8JEiIu6tPOrKkEyhgu0fVuyXnNMQTtY8kYWz6F7X002VpCx0
+         VI0Gq1zYb0an31wBKti3j8ihdTIBaDKT6QjtbmQjIBr8z4GPRYyxbPS6qdw/kdbxdOWb
+         Xmwf48ZWRjNGLbJS23hhX4iX20jPRH8xdAg3+1VlzLeqSvVxnb/78oDeP5vADrvsirma
+         BKzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771402371; x=1772007171;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fygRWP8pcLbQ34jhJxnxGK22lbC+YAxbQQyhOVa/yJs=;
-        b=MVd/3wFU7eJyGspSqIviu+RgFEmVAM0yXgLJaOjupa2ARlsHaoEGDIcIEThb8HFBxY
-         BX2coub+1ZAX19MrUlIwu3943mgSEZca0Fg1BiQ+eJ/77DKywwSpwo5ypeyBie8i9n5C
-         6hMkdPFv7rX0L2XfFYCbmGRhKBLlFrZfakbHduSpHwUaYjtkDm5FntJBqO2O6fK5v8Tm
-         hVl+T83lAafz422Phc3dXqGYGEWjEWCoAouCh5JHBhbd/l65WKfbSSOW9sJ7X42ymtpR
-         YHqNws5W6LUmg3W5zlJLBsIvO69f3N55qjIWrUUHnXJPVZiNqhEJn4GAhsbmJiqjtVjV
-         dIpw==
-X-Gm-Message-State: AOJu0YxqxXjMvat/I88qsL+Ls5Fl3YP+AOUhk8nMbU7Q89TYsW5hodpc
-	5QiJQjlmoL84EhuAZvYgkigEIvSWTupL1H+ucR+3vf3gOkC/k6XaDKIK43zFIKPxpV2l+rL0YCY
-	agVfcstdhU/C6msyYkdyDONHxGjzMC+drwzqf+g4GEX0x1akhB+S86WwiwOckqQ==
-X-Gm-Gg: AZuq6aJitGrVjBM7HInO0WTuzrwZFcDfoAaH0NO7dRUqe7o1SJMn6mvPpTFNGLHIq4L
-	sfn8SHmrxX4kuSakO+F6rPdRw6RmC/46MO9xKBC8nj7sRdDNUJZYs+tfyHKZQxT8IcbSA8dWfXy
-	sE+6ceFYdrzukoAQMFIoRyqTrzeKk/4sKP86hBVnlgV684Lc2EBnORjLHA1Yw4WbchZ0kplA5Qz
-	pVt5RNi6L9Qj7xEEp/InfwLzuEbWlM9K2Om/d+7e0UX2aIc8ITXQX1TN/RR86edlC+XtgXmo/sW
-	IEjBABeGf80fgoPngL3H2JtMSoFyPbgWBt9aK6sQveDXN1N9rf/mN7rwsZtmqWt4xW1iEA0eTi/
-	GHpVFmIwVpGCjUc+gAY++fWi32m4q2blLoMF1hr7kergoRLNn9NGCUWgB
-X-Received: by 2002:a17:903:2b10:b0:2a9:5b48:2b57 with SMTP id d9443c01a7336-2ad1754a10cmr133301945ad.45.1771402371312;
-        Wed, 18 Feb 2026 00:12:51 -0800 (PST)
-X-Received: by 2002:a17:903:2b10:b0:2a9:5b48:2b57 with SMTP id d9443c01a7336-2ad1754a10cmr133301625ad.45.1771402370825;
-        Wed, 18 Feb 2026 00:12:50 -0800 (PST)
-Received: from hu-krichai-hyd.qualcomm.com ([202.46.23.25])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad1a9d624esm118123685ad.49.2026.02.18.00.12.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Feb 2026 00:12:50 -0800 (PST)
-From: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-Date: Wed, 18 Feb 2026 13:42:25 +0530
-Subject: [PATCH v7 3/3] PCI: Add support for PCIe WAKE# interrupt
+        d=1e100.net; s=20230601; t=1771402629; x=1772007429;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5r0xdr1WGpCeGTUqLANRfTri1dCqx5zok5lpbzySRko=;
+        b=k5VnD41ejbeUK6mYMVLg4XfLCYBXOHCrbv6ZB389fZ50ToITU/Zs5pd+RZ7bML9rtB
+         SqHIIrZoz7rvLs86KXGMqZD6PtS2S68UGIzut40W0ick6nrojaFhKoznD7MDYPbXAl9H
+         +XeRDYsnCO87eqeBVs3JwHuv/0puWIj/Wgbt/AaIYq9aCnWw9PcF1FgoEUTZbHKgH0Yj
+         bptngHLOchuuhHw1bJmtRH5Ql3L73gYg9t3jskiy8qZ/egMaa43m+wXFW/+HFajNhun5
+         LId+VyPsTje2d0tm7FK0JAq2haIuJj/VtAD2PnG+LEeRU/GSu/UYCf+j3ZFe+UTZZNgb
+         wtcw==
+X-Forwarded-Encrypted: i=1; AJvYcCXDkBbgDip3weGWTu6OonqjHnvY3UE/J4V+41LNDcsWbEidNNF4r0e7CKFTgZtFhkVdHt8pH9WmdA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHjDD2OSTIiFB9RmuLTlySxoPRpg4fd6tHYOA4QaKCvnETvCHQ
+	X0xvY0CvVOAIsqjSUQBr0X77jEk5h+baYx92OST70sWdEN9uYpHG2H8l
+X-Gm-Gg: AZuq6aJBup0jVMwDn1VcOw9FDRpZVK3QkftpbSpkSCPWe6/WebgZOtXwCwZzQWF+FOo
+	RUcYViaEx21uBC3hMbYTawe4fgznUZTgwYBeDc73qtkDvWo31dnHR0NLrmbZPeisgyA+pgbXLlb
+	GMsECA8akrMjRmx4OL/uxnN78uuAKrdduBuQnK/V4+TDizI2wgUUKYnvbPl4fPXhVJDJYQcp2GJ
+	UapeooQR/aK+Lm1hl8udS0nq8sHasoHdKdQWypsBSOnSxfLbshV5VlzTP2DluWBBqDkmfCP1itJ
+	7i6Z8or9ovCEnqVXI46aNPmjV57rMY8RZwjgoIcInPMrI+g21WlcGi6PnCNS/ilL0gKobmTRxKz
+	a45HHM4UvQyizfZUSxxN7OWmjTalNhENU9kf/VdIKRUMsG4z/zCJKXN7rWq3zNFwF1MEpa9d1aW
+	THfBZv/v7/bb+sCo8bQe5btefCui2hAqsSf31h9iDcOXsPIRJ3qHIoNF03OeMbg9STvNxs9gkRV
+	4eJ8+YCogSCVT+HHz4=
+X-Received: by 2002:a05:6512:1150:b0:59e:6c24:3f91 with SMTP id 2adb3069b0e04-59f83bbcd19mr369556e87.34.1771402628519;
+        Wed, 18 Feb 2026 00:17:08 -0800 (PST)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e5f56867fsm4391846e87.24.2026.02.18.00.17.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Feb 2026 00:17:07 -0800 (PST)
+Message-ID: <66dab64b-ca3e-4ae0-81d6-0500899757e5@gmail.com>
+Date: Wed, 18 Feb 2026 10:17:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260218-wakeirq_support-v7-3-0d4689830207@oss.qualcomm.com>
-References: <20260218-wakeirq_support-v7-0-0d4689830207@oss.qualcomm.com>
-In-Reply-To: <20260218-wakeirq_support-v7-0-0d4689830207@oss.qualcomm.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
-        Pavel Machek <pavel@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Danilo Krummrich <dakr@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij <linusw@kernel.org>,
-        Bartosz Golaszewski <brgl@kernel.org>,
-        Linus Walleij <linusw@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
-        quic_vbadigan@quicinc.com, quic_mrana@quicinc.com, sherry.sun@nxp.com,
-        driver-core@lists.linux.dev,
-        Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771402347; l=7967;
- i=krishna.chundru@oss.qualcomm.com; s=20230907; h=from:subject:message-id;
- bh=YyvIpWrTFLi6XlA78epLgR4oDc+qO1nmiVhSzx9chWw=;
- b=T9yc43Z0e8+NjXJSIlHu3tdFO6HaY32cKsWHdKZZ2VqhHBCDBrlY90crKCb6DxcOXTnxOfSLF
- 9SUKBwO4bV5D1Zrj1R2rRIXSVgYARNPyuZm3lMN/9oxEZq/mzzo65Bk
-X-Developer-Key: i=krishna.chundru@oss.qualcomm.com; a=ed25519;
- pk=10CL2pdAKFyzyOHbfSWHCD0X0my7CXxj8gJScmn1FAg=
-X-Proofpoint-GUID: trUucx4lFiLxP4Viiw2TBL1Nhdp0pXhg
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE4MDA3MSBTYWx0ZWRfXyW7/mEg2ECCu
- L2u2kFJKZehRMJJtB0DnrJz8OvMVKiZnOpeXW3LqcDnVKYU5pYYh1FJQLlWLmqp6NkdN92+qpMo
- svoDl6402HdQUebQhgVdqd73lxk49WrMBwKYGKkcHd9NyrJaJ87pA1xDpV/YIZyeBcLoQ4KNsyE
- ybbgWfAtutDiXpUMSHWhvGrH48GlHxpNFeIUT3SsfuNPKBRgBhnahKi7F3bj8UQpNqQ34L0LHV/
- ntO0yepezvPd7/gnSOZHy2/YcQzVm/T85PJRJJTO4H2gQ/bZUOI2rWj3XJIbdTYhPleMo0KhZqw
- ZBSS55QYEt6jyLayjtKjHeanN6feTZZgSe0YiCuSKffetjY679eNc7euRSt7Q+hd472tmjhMsZN
- kMykphLpaIYL7Zk60fpUDUezo/w0rLEM+bhPYYWdniefjI0Yc7BKYZ16qFxTnmKaCjTeTS0qxj+
- TNxpMYsyrcwJlpKqj3w==
-X-Authority-Analysis: v=2.4 cv=JNo2csKb c=1 sm=1 tr=0 ts=69957484 cx=c_pps
- a=JL+w9abYAAE89/QcEU+0QA==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
- a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=NEAV23lmAAAA:8 a=KKAkSRfTAAAA:8
- a=ttF918e8ocTVMR-R1j4A:9 a=QEXdDO2ut3YA:10 a=324X-CrmTo6CU4MGRt3R:22
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-ORIG-GUID: trUucx4lFiLxP4Viiw2TBL1Nhdp0pXhg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-17_04,2026-02-16_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 malwarescore=0 priorityscore=1501 impostorscore=0 suspectscore=0
- spamscore=0 clxscore=1015 bulkscore=0 phishscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602180071
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/6] lib/linear_ranges: Add
+ linear_range_get_selector_high_array
+To: Amit Sunil Dhamne <amitsd@google.com>, Sebastian Reichel
+ <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Mark Brown <broonie@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+References: <20260214-max77759-charger-v6-0-28c09bda74b4@google.com>
+ <20260214-max77759-charger-v6-4-28c09bda74b4@google.com>
+ <5d889f66-7697-4a39-beed-33ace693a1ef@gmail.com>
+ <b1df24fd-bbb6-4991-be52-dc1ef694db25@google.com>
+Content-Language: en-US, en-AU, en-GB, en-BW
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <b1df24fd-bbb6-4991-be52-dc1ef694db25@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krishna.chundru@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-42807-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42806-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mazziesaccount@gmail.com,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+]
-X-Rspamd-Queue-Id: ECD54153E7D
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 3220C153EE6
 X-Rspamd-Action: no action
 
-According to the PCI Express specification (PCIe r7.0, Section 5.3.3.2),
-two link wakeup mechanisms are defined: Beacon and WAKE#. Beacon is a
-hardware-only mechanism and is invisible to software (PCIe r7.0,
-Section 4.2.7.8.1). This change adds support for the WAKE# mechanism in
-the PCI core.
+On 18/02/2026 03:45, Amit Sunil Dhamne wrote:
+> 
+> On 2/16/26 5:58 AM, Matti Vaittinen wrote:
+>> On 14/02/2026 05:12, Amit Sunil Dhamne via B4 Relay wrote:
+>>> From: Amit Sunil Dhamne <amitsd@google.com>
 
-According to the PCIe specification, multiple WAKE# signals can exist in
-a system or each component in the hierarchy could share a single WAKE#
-signal. In configurations involving a PCIe switch, each downstream port
-(DSP) of the switch may be connected to a separate WAKE# line, allowing
-each endpoint to signal WAKE# independently. From figure 5.4 in sec
-5.3.3.2, WAKE# can also be terminated at the switch itself. To support
-this, the WAKE# should be described in the device tree node of the
-endpoint/bridge. If all endpoints share a single WAKE# line, then each
-endpoint node should describe the same WAKE# signal or a single WAKE# in
-the Root Port node.
+// snip
 
-In pci_device_add(), PCI framework will search for the WAKE# in device
-node, If not found, it searches in its upstream port only if upstream port
-is Root Port. Once found, register for the wake IRQ in shared mode, as the
-WAKE# may be shared among multiple endpoints.
+>>> --- a/lib/linear_ranges.c
+>>> +++ b/lib/linear_ranges.c
+>>> @@ -241,6 +241,42 @@ int linear_range_get_selector_high(const struct 
+>>> linear_range *r,
+>>>   }
+>>>   EXPORT_SYMBOL_GPL(linear_range_get_selector_high);
+>>>   +/**
+>>> + * linear_range_get_selector_high_array - return linear range 
+>>> selector for value
+>>> + * @r:        pointer to array of linear ranges where selector is 
+>>> looked from
+>>> + * @ranges:    amount of ranges to scan from array
+>>> + * @val:    value for which the selector is searched
+>>> + * @selector:    address where found selector value is updated
+>>> + * @found:    flag to indicate that given value was in the range
+>>> + *
+>>> + * Scan array of ranges for selector for which range value matches 
+>>> given
+>>> + * input value. Value is matching if it is equal or higher than 
+>>> given value
+>>> + * If given value is found to be in a range scanning is stopped and 
+>>> @found is
+>>> + * set true. If a range with values greater than given value is found
+>>> + * but the range min is being greater than given value, then the 
+>>> range's
+>>> + * lowest selector is updated to @selector and scanning is stopped.
+>>
+>> Is there a reason why the scanning is stopped here? What ensures that 
+>> the rest of the ranges wouldn't contain a better match?
+>>
+>> The logic is now different from the 
+>> linear_range_get_selector_low_array(), and I would like to understand 
+>> why? It'd be nice if these APIs were 'symmetric' to avoid confusion. 
+>> Hence, I would like to know rationale behind making them different.
+> 
+> 
+> The rationale for this being asymmetric is to find the tightest upper 
+> bound for `value` < minimum value across the linear range array.
+> 
+> To better illustrate this with an example. I have 2 entries in the 
+> linear range array [ [4, 8], [11, 15] ]. Let's assume I pass a value of 
+> "2".
+> 
+> Based on my current approach, the call to get_selector_high() would 
+> successfully return with `found`=false and a selector value 
+> corresponding to "4".
+> 
+> However, if I continued to search, I would end up the selector 
+> corresponding to "11". A selector corresponding to "4" is much closer/ 
+> tighter than "2".
+> 
+> For values higher than the highest value in any range, this would keep 
+> iterating and end up returning an -EINVAL.
+> 
+> For in range values this would work as expected.
+> 
+> This implementation assumes that the linear ranges are provided in 
+> sorted order, an assumption that I believe already underlies the 
+> existing *_low_array() logic.
 
-When a device asserts WAKE#, PM core will wakeup the system, resume the
-device and its parent(s) in the hierarchy, which will cause the restoration
-of power and refclk to the device.
+Ah. I think ... I didn't think. :)
 
-WAKE# is added in dts schema and merged based on below links.
+It definitely makes sense to stop scanning if the range_min already was 
+greater than the given target value. Thanks for the patience and for 
+adding this missing piece :)
 
-Link: https://lore.kernel.org/all/20250515090517.3506772-1-krishna.chundru@oss.qualcomm.com/
-Link: https://github.com/devicetree-org/dt-schema/pull/170
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
+
 ---
- drivers/pci/of.c     | 55 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- drivers/pci/pci.c    |  9 +++++++++
- drivers/pci/pci.h    |  8 ++++++++
- drivers/pci/probe.c  |  2 ++
- drivers/pci/remove.c |  1 +
- include/linux/pci.h  |  2 ++
- 6 files changed, 77 insertions(+)
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-index 9bb5f258759be3f1e23496f083353600a4ef6743..23248900253faafaf9509d87c531b454fca41798 100644
---- a/drivers/pci/of.c
-+++ b/drivers/pci/of.c
-@@ -7,6 +7,7 @@
- #define pr_fmt(fmt)	"PCI: OF: " fmt
- 
- #include <linux/cleanup.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/irqdomain.h>
- #include <linux/kernel.h>
- #include <linux/pci.h>
-@@ -15,6 +16,7 @@
- #include <linux/of_address.h>
- #include <linux/of_pci.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_wakeirq.h>
- #include "pci.h"
- 
- #ifdef CONFIG_PCI
-@@ -586,6 +588,59 @@ int of_irq_parse_and_map_pci(const struct pci_dev *dev, u8 slot, u8 pin)
- 	return irq_create_of_mapping(&oirq);
- }
- EXPORT_SYMBOL_GPL(of_irq_parse_and_map_pci);
-+
-+static void pci_configure_wake_irq(struct pci_dev *pdev, struct gpio_desc *wake)
-+{
-+	int ret, wake_irq;
-+
-+	wake_irq = gpiod_to_irq(wake);
-+	if (wake_irq < 0) {
-+		pci_err(pdev, "Failed to get wake irq: %d\n", wake_irq);
-+		return;
-+	}
-+
-+	device_init_wakeup(&pdev->dev, true);
-+
-+	ret = dev_pm_set_dedicated_shared_wake_irq(&pdev->dev, wake_irq,
-+						   IRQ_TYPE_EDGE_FALLING);
-+	if (ret < 0) {
-+		pci_err(pdev, "Failed to set wake IRQ: %d\n", ret);
-+		device_init_wakeup(&pdev->dev, false);
-+	}
-+}
-+
-+void pci_configure_of_wake_gpio(struct pci_dev *dev)
-+{
-+	struct device_node *dn = pci_device_to_OF_node(dev);
-+	struct pci_dev *upstream;
-+	struct gpio_desc *gpio;
-+
-+	if (!dn)
-+		return;
-+
-+	gpio = fwnode_gpiod_get(of_fwnode_handle(dn), "wake",
-+				GPIOD_IN | GPIOD_FLAGS_BIT_NONEXCLUSIVE, NULL);
-+	if (IS_ERR(gpio)) {
-+		/*
-+		 * In case the entire topology shares a single WAKE# signal, look for it
-+		 * in the upstream bridge node. But if it is not Root Port, then skip it.
-+		 */
-+		upstream = pci_upstream_bridge(dev);
-+		if (upstream && pci_is_root_bus(upstream->bus) && upstream->wake)
-+			pci_configure_wake_irq(dev, upstream->wake);
-+	} else {
-+		dev->wake = gpio;
-+		pci_configure_wake_irq(dev, gpio);
-+	}
-+}
-+
-+void pci_remove_of_wake_gpio(struct pci_dev *dev)
-+{
-+	dev_pm_clear_wake_irq(&dev->dev);
-+	device_init_wakeup(&dev->dev, false);
-+	gpiod_put(dev->wake);
-+	dev->wake = NULL;
-+}
- #endif	/* CONFIG_OF_IRQ */
- 
- static int pci_parse_request_of_pci_ranges(struct device *dev,
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index f3244630bfd05b15d52f866d80a015ed21f98f49..225cb861b3425700fc0d9d4805f5d9efcaab6f56 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -1123,6 +1123,15 @@ static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
- 	return acpi_pci_bridge_d3(dev);
- }
- 
-+void platform_pci_configure_wake(struct pci_dev *dev)
-+{
-+	return pci_configure_of_wake_gpio(dev);
-+}
-+
-+void platform_pci_remove_wake(struct pci_dev *dev)
-+{
-+	return pci_remove_of_wake_gpio(dev);
-+}
- /**
-  * pci_update_current_state - Read power state of given device and cache it
-  * @dev: PCI device to handle.
-diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-index 13d998fbacce6698514d92500dfea03cc562cdc2..22709573e41caf0ed45b20ee7ded5963f55aa9fe 100644
---- a/drivers/pci/pci.h
-+++ b/drivers/pci/pci.h
-@@ -282,6 +282,8 @@ void pci_msix_init(struct pci_dev *dev);
- bool pci_bridge_d3_possible(struct pci_dev *dev);
- void pci_bridge_d3_update(struct pci_dev *dev);
- int pci_bridge_wait_for_secondary_bus(struct pci_dev *dev, char *reset_type);
-+void platform_pci_configure_wake(struct pci_dev *dev);
-+void platform_pci_remove_wake(struct pci_dev *dev);
- 
- static inline bool pci_bus_rrs_vendor_id(u32 l)
- {
-@@ -1195,6 +1197,9 @@ void pci_release_of_node(struct pci_dev *dev);
- void pci_set_bus_of_node(struct pci_bus *bus);
- void pci_release_bus_of_node(struct pci_bus *bus);
- 
-+void pci_configure_of_wake_gpio(struct pci_dev *dev);
-+void pci_remove_of_wake_gpio(struct pci_dev *dev);
-+
- int devm_of_pci_bridge_init(struct device *dev, struct pci_host_bridge *bridge);
- bool of_pci_supply_present(struct device_node *np);
- int of_pci_get_equalization_presets(struct device *dev,
-@@ -1240,6 +1245,9 @@ static inline int devm_of_pci_bridge_init(struct device *dev, struct pci_host_br
- 	return 0;
- }
- 
-+static inline void pci_configure_of_wake_gpio(struct pci_dev *dev) { }
-+static inline void pci_remove_of_wake_gpio(struct pci_dev *dev) { }
-+
- static inline bool of_pci_supply_present(struct device_node *np)
- {
- 	return false;
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index 2975974f35e88b5025701d2b721df8386419de8d..7f5132c0c8de36a6ec2775468a3d4e5156a046d0 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -2771,6 +2771,8 @@ void pci_device_add(struct pci_dev *dev, struct pci_bus *bus)
- 	/* Establish pdev->tsm for newly added (e.g. new SR-IOV VFs) */
- 	pci_tsm_init(dev);
- 
-+	platform_pci_configure_wake(dev);
-+
- 	pci_npem_create(dev);
- 
- 	pci_doe_sysfs_init(dev);
-diff --git a/drivers/pci/remove.c b/drivers/pci/remove.c
-index e9d519993853f92f1810d3eff9f44ca7e3e1abd9..d781b41e57c4444077075690cec926a9fe15334f 100644
---- a/drivers/pci/remove.c
-+++ b/drivers/pci/remove.c
-@@ -35,6 +35,7 @@ static void pci_destroy_dev(struct pci_dev *dev)
- 	if (pci_dev_test_and_set_removed(dev))
- 		return;
- 
-+	platform_pci_remove_wake(dev);
- 	pci_doe_sysfs_teardown(dev);
- 	pci_npem_remove(dev);
- 
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 1c270f1d512301de4d462fe7e5097c32af5c6f8d..d1e08df8a8deaa87780589f23242767fdcdba541 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -586,6 +586,8 @@ struct pci_dev {
- 	/* These methods index pci_reset_fn_methods[] */
- 	u8 reset_methods[PCI_NUM_RESET_METHODS]; /* In priority order */
- 
-+	struct gpio_desc *wake; /* Holds WAKE# gpio */
-+
- #ifdef CONFIG_PCIE_TPH
- 	u16		tph_cap;	/* TPH capability offset */
- 	u8		tph_mode;	/* TPH mode */
-
--- 
-2.34.1
-
+~~ When things go utterly wrong vim users can always type :help! ~~
 
