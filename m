@@ -1,221 +1,156 @@
-Return-Path: <linux-pm+bounces-42841-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42842-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OP6fH3wglmn9agIAu9opvQ
-	(envelope-from <linux-pm+bounces-42841-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 21:26:36 +0100
+	id 4NoiO04olmnxbQIAu9opvQ
+	(envelope-from <linux-pm+bounces-42842-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 21:59:58 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B21D01596A7
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 21:26:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57B08159B12
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 21:59:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A20DD301BEDA
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 20:26:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 90B2B302769D
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 20:59:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87A393446DE;
-	Wed, 18 Feb 2026 20:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3441F3491C7;
+	Wed, 18 Feb 2026 20:59:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JkWhgHet"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bDC1pNki"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94BA12DF6F6;
-	Wed, 18 Feb 2026 20:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1652B2FD1B1
+	for <linux-pm@vger.kernel.org>; Wed, 18 Feb 2026 20:59:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771446392; cv=none; b=t0PsCtcM/2FVMq9z/3BjiOFPnys8EBVdjzKqz+I/LvbJgCRESQlRW7TGkQDT/3XP60RH85sUawKOm+IeIlO1cJf6kyWW6eHj2PWZCkEMpwmKnNbf2/57RbP3o4JS1ji+Iqs7VkMfj/WDSnrLYPj8WKGeDji0+SYSU4PiH+XmcLE=
+	t=1771448394; cv=none; b=t0p8KhGrnHQxHPKyA4z3Ngkhvjoo1CSgUq8N/tdCIijjzQUbPdoYzkUkcQpq3MLHwJDTG+eZu4sQB0QLrwDNWeB72jhscD3X6z4+kr9Lz8gVVJHvFNabYmAm3YrE1aC5RUOInWCV9qJV9IkHKlyeKiy/Z97lVKiPrHcDEqreh1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771446392; c=relaxed/simple;
-	bh=qx+Rzwjaxjl4ViOm2l2iTVOdx+of/wMm9LViGuEEgs8=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=qrliVSNKek3HwPL0fLF7y5toII4VJrBHQ0zpetFjXUVEyu6K/nSvzypx2pIQW4FMoSugUoNjkof/0tKb/Ckx7d4bV3Ce1vlaDWh3znlKltIk8T63vMFF/LKraev10317C/Xe0gmcgl10uW4Ot1sYAfCxujtAD4BK+TwVn8VrYfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JkWhgHet; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771446391; x=1802982391;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=qx+Rzwjaxjl4ViOm2l2iTVOdx+of/wMm9LViGuEEgs8=;
-  b=JkWhgHetMq4Rbeo11WQOCRKCVrCWga8jQMw+L9qKn2kK/eNsXOHCqLjI
-   XuEhpu3CFC2sba5cjIGLqJwm4Di1AN29od3YPJl7WkQMJVqpvIAvXO5Is
-   EBlIjqWr0D0oIULlPVbHqtB2ODtdNdMzCQDJSvVr7fDDu4/NT5YXcKT7J
-   Fc7Dy4ZshVYAvqwlJgmucIYV5WWUaOSHIXsZVqRAeKlTF6HmFMDU8LHeo
-   KvECM26X2/OAuY0qlLkqJw4ncL2t+gPulT8tPnNTr1JwoytiXsry89O4L
-   4MmzPtJCDmg6qWV7fjUrCdpKroxPKQ2SHZ7j7FSw1xE15SghPv3RL+wSv
-   g==;
-X-CSE-ConnectionGUID: ChoV4rtrQ9Sd1Zp6QF3jZQ==
-X-CSE-MsgGUID: k5vlg02dRRW+CNds5KOw/A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11705"; a="83635828"
-X-IronPort-AV: E=Sophos;i="6.21,298,1763452800"; 
-   d="scan'208";a="83635828"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 12:26:30 -0800
-X-CSE-ConnectionGUID: fxShg+DKSRO9IcXS9QoP7A==
-X-CSE-MsgGUID: qWN9Eh7STWaOZTCENukxbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,298,1763452800"; 
-   d="scan'208";a="213044833"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.54])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 12:26:26 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 18 Feb 2026 22:26:23 +0200 (EET)
-To: "Ionut Nechita (Sunlight Linux)" <sunlightlinux@gmail.com>
-cc: Bjorn Helgaas <bhelgaas@google.com>, 
-    "Rafael J . Wysocki" <rafael@kernel.org>, 
-    Daniel Lezcano <daniel.lezcano@linaro.org>, 
-    Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-    Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org, 
-    linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    Ionut Nechita <ionut_n2001@yahoo.com>
-Subject: Re: [RFC PATCH 1/3] PCI: Add PCIe Gen 7 (128 GT/s) register and
- speed definitions
-In-Reply-To: <20260217080102.206581-4-sunlightlinux@gmail.com>
-Message-ID: <36867a01-cc7a-6fed-bcf4-ec84263ea7c4@linux.intel.com>
-References: <20260217080102.206581-2-sunlightlinux@gmail.com> <20260217080102.206581-4-sunlightlinux@gmail.com>
+	s=arc-20240116; t=1771448394; c=relaxed/simple;
+	bh=5jFBPD09VTvwsEdg7NJd45cTwB2QJsheRb1Y+ZMJEyA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Z25Z+gS/r3JTNZtKx1tgFpMR0AZAzTAGk/et7TLG4bzGVSd3gu/1Teszcj41YrBNTCdhLxiYNmkKtOpQ+RQzFr013wNqMu5DaHjig+WDtkLgpa+1vCbKT9Iq9znyqmhd50jhmsBdyup+6eAlo/DnTZRB+0GrwPsIj3LWU20qhQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bDC1pNki; arc=none smtp.client-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2b86ce04c5cso435851eec.1
+        for <linux-pm@vger.kernel.org>; Wed, 18 Feb 2026 12:59:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771448392; x=1772053192; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XKuBFMt8ULBcfdl9ibe5021rITt9RW4fW9s6+VsDwAA=;
+        b=bDC1pNkiBdEajz1+S3pDqCKYhlhYYZ1XyYENPoWlWE3tMHcHFKm8dPt28vfEcdSOMk
+         wHWrTj86eiorORLGYDAaElaEulqJ7c5sou/B94dC7QDFI9PODM8vRfinN4HnHoZf9LlD
+         XyN+3x/q4SlLA3sE5Xjv/ZK12yX5Pms5yBPkMUb10Hwbsdci0EiN6ut3QB2fVSm8gKlY
+         B0T1tZtuN6hzJcK9m6EFO88v23iIkTsJxfHAS9rT5lirvWvNNqqr3y+JM+hfMxyMU1ub
+         ousEbWNPZ4vazqJQJLaL6RDGSUNMnFyEVEG6AhcRjKfSvAWBNQ44rKjm7g5rQKsdf4Nk
+         59Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771448392; x=1772053192;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XKuBFMt8ULBcfdl9ibe5021rITt9RW4fW9s6+VsDwAA=;
+        b=gtF00MdS5hcp5yq54MJvlT0iJGG13rcleDExEz2XN4m5p5Ea2+3rLCY3ucedpte1fi
+         BaGzhG1b9qhQ9iXE33d0Cjv/t7l3yIgHmdoN0CJDm89loJoBAuHEvKzU+BCPPNr7Wp43
+         7/ut2yqBLdlh84FbjtisU7TM82896WXiGReYB4AbNnKspDlCZUFHBX2erSw8bHxDqURL
+         q7+nR39AjrGyIlLZwlXoD4+TLNWna9Ur/n0FGCTCNrMEE9oPGHByGh0QCeMme37CAalH
+         cM01rVr91zWMVFnciItzCisHA5meKmNW0xelAIQa2zOrWTX5VsWXBOCuISetLfvZ/IyM
+         /0tA==
+X-Forwarded-Encrypted: i=1; AJvYcCXsuhVPBlc2v2Z07b3UR45uCn0Z2R7L5tpq1C993e6GIyqlV2trL81OKoype0yEpx2+M6XpNwTkcw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXMRsspj+pjn8rUHscEFUgrTaAsPh0ultstg23kbztbOgC3L6s
+	QRkYJvHLuuq7bzfuRHQasqmwGqPV9KatBiqyOY31vQWpNH8C9qCaVZDR
+X-Gm-Gg: AZuq6aId8FaDzvio5bFSuiUoYnLIYJk15VF6uAgsJqriZkLYqOHLhgPnj2pfEIIsteB
+	JG06eqD+Pn5x+pmZvjbGg1xVLblCOpAot1K5gBQM0NVYIke2//PihXGRsP1i5dfTqbddCTJxDLi
+	l4UFa2l1BOHXmKywnaChYlsWGWQGhZG7Z4BA4hGMgZeyCin8xUNxjpKyMiGPVKr1YxyCVyuI7U3
+	CUQVKFn6C9WSGllVeMfR3ReXOjboEWnNpTh2e6/E5jRVznQ7YEzkurJ41yMV2IdB1D4mxDC+WaV
+	A3PKNIwOoVxGJOP6ucStSRapzMUUjfqB/8GICEVD2ITCABzVEqV2HL/jKEpxBOPFO6pctOSoAC6
+	l1SfiRha9Ut9HwvdRHX2fQ9BesUISoDLY77Q390XTlim3jT6UJv7M01Mzk7dOY+XjjRJtCDLYXL
+	IuRPdZLW8I8fzYjAci4nHIaE24vAaxNVib7b2MutA3Qwzbveqb/8Ll/BySHYO2vIKk
+X-Received: by 2002:a05:7300:a945:b0:2ba:a0c6:ef5d with SMTP id 5a478bee46e88-2babc44e5a7mr8820356eec.21.1771448392113;
+        Wed, 18 Feb 2026 12:59:52 -0800 (PST)
+Received: from google.com ([2a00:79e0:2ebe:8:265b:f5ad:9e03:677e])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12742cadb25sm25057723c88.10.2026.02.18.12.59.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Feb 2026 12:59:51 -0800 (PST)
+Date: Wed, 18 Feb 2026 12:59:49 -0800
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Sebastian Reichel <sre@kernel.org>
+Cc: Linus Walleij <linusw@kernel.org>, 
+	Bartosz Golaszewski <brgl@kernel.org>, Xichao Zhao <zhao.xichao@vivo.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org
+Subject: [PATCH] power: supply: sbs-manager: normalize return value of
+ gpio_get
+Message-ID: <aZYoL2MnTYU5FuQh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[google.com,kernel.org,linaro.org,intel.com,arm.com,wunner.de,vger.kernel.org,yahoo.com];
-	TAGGED_FROM(0.00)[bounces-42841-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-42842-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ilpo.jarvinen@linux.intel.com,linux-pm@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dmitrytorokhov@gmail.com,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: B21D01596A7
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 57B08159B12
 X-Rspamd-Action: no action
 
-On Tue, 17 Feb 2026, Ionut Nechita (Sunlight Linux) wrote:
+The GPIO get callback is expected to return 0 or 1 (or a negative error
+code). Ensure that the value returned by sbsm_gpio_get_value() is
+normalized to the [0, 1] range.
 
-> From: Ionut Nechita <ionut_n2001@yahoo.com>
-> 
-> Add register definitions for PCIe Gen 7 128 GT/s link speed:
-> 
->   - PCI_EXP_LNKCAP_SLS_128_0GB (encoding 0x7)
->   - PCI_EXP_LNKCAP2_SLS_128_0GB (bit 6 in Supported Link Speeds Vector)
->   - PCI_EXP_LNKCTL2_TLS_128_0GT (Target Link Speed 0x7)
->   - PCIE_SPEED_128_0GT enum value (0x1a)
-> 
-> Widen pci_dev.supported_speeds from u8 to u16 to accommodate the
-> expanded Supported Link Speeds Vector which now uses bits 1-7.
-> 
-> PCIe Gen 7 doubles the data rate to 128 GT/s using PAM4 signaling
-> with mandatory Flit mode encoding (1:1, no overhead), providing
-> up to 256 GB/s unidirectional (512 GB/s bi-directional) bandwidth
-> on an x16 link.
-> 
-> Note: Based on the PCIe 7.0 specification announced by PCI-SIG in
-> 2022, targeted for member release in 2025. No hardware exists yet
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ drivers/power/supply/sbs-manager.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-2022?
+diff --git a/drivers/power/supply/sbs-manager.c b/drivers/power/supply/sbs-manager.c
+index 6fe526222f7f..343ad4ab4082 100644
+--- a/drivers/power/supply/sbs-manager.c
++++ b/drivers/power/supply/sbs-manager.c
+@@ -199,7 +199,7 @@ static int sbsm_gpio_get_value(struct gpio_chip *gc, unsigned int off)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	return ret & BIT(off);
++	return !!(ret & BIT(off));
+ }
+ 
+ /*
+-- 
+2.53.0.335.g19a08e0c02-goog
 
-Please provide more precise spec reference(s) with section numbers (as per 
-the usual custom).
-
-> to validate these definitions.
-> 
-> Signed-off-by: Ionut Nechita <ionut_n2001@yahoo.com>
-> ---
->  include/linux/pci.h           | 3 ++-
->  include/uapi/linux/pci_regs.h | 3 +++
->  2 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index b5cc0c2b99065..21dd6ea5beb6d 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -303,6 +303,7 @@ enum pci_bus_speed {
->  	PCIE_SPEED_16_0GT		= 0x17,
->  	PCIE_SPEED_32_0GT		= 0x18,
->  	PCIE_SPEED_64_0GT		= 0x19,
-> +	PCIE_SPEED_128_0GT		= 0x1a,
->  	PCI_SPEED_UNKNOWN		= 0xff,
->  };
->  
-> @@ -558,7 +559,7 @@ struct pci_dev {
->  	struct pci_tsm *tsm;		/* TSM operation state */
->  #endif
->  	u16		acs_cap;	/* ACS Capability offset */
-> -	u8		supported_speeds; /* Supported Link Speeds Vector */
-> +	u16		supported_speeds; /* Supported Link Speeds Vector */
->  	phys_addr_t	rom;		/* Physical address if not from BAR */
->  	size_t		romlen;		/* Length if not from BAR */
->  	/*
-> diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
-> index 3add74ae25948..fa00c6ca9f382 100644
-> --- a/include/uapi/linux/pci_regs.h
-> +++ b/include/uapi/linux/pci_regs.h
-> @@ -545,6 +545,7 @@
->  #define  PCI_EXP_LNKCAP_SLS_16_0GB 0x00000004 /* LNKCAP2 SLS Vector bit 3 */
->  #define  PCI_EXP_LNKCAP_SLS_32_0GB 0x00000005 /* LNKCAP2 SLS Vector bit 4 */
->  #define  PCI_EXP_LNKCAP_SLS_64_0GB 0x00000006 /* LNKCAP2 SLS Vector bit 5 */
-> +#define  PCI_EXP_LNKCAP_SLS_128_0GB 0x00000007 /* LNKCAP2 SLS Vector bit 6 */
-
-Eh, did you make this up? This is not at all what is in the PCIe 7.0 spec!
-
->  #define  PCI_EXP_LNKCAP_MLW	0x000003f0 /* Maximum Link Width */
->  #define  PCI_EXP_LNKCAP_ASPMS	0x00000c00 /* ASPM Support */
->  #define  PCI_EXP_LNKCAP_ASPM_L0S 0x00000400 /* ASPM L0s Support */
-> @@ -693,6 +694,7 @@
->  #define  PCI_EXP_LNKCAP2_SLS_16_0GB	0x00000010 /* Supported Speed 16GT/s */
->  #define  PCI_EXP_LNKCAP2_SLS_32_0GB	0x00000020 /* Supported Speed 32GT/s */
->  #define  PCI_EXP_LNKCAP2_SLS_64_0GB	0x00000040 /* Supported Speed 64GT/s */
-> +#define  PCI_EXP_LNKCAP2_SLS_128_0GB	0x00000080 /* Supported Speed 128GT/s */
-
-This is simplifying this too much, the spec says "128 GT/s or higher".
-
-The actual speeds are in the new 128 GT/s Capability and should be 
-read from there.
-
->  #define  PCI_EXP_LNKCAP2_CROSSLINK	0x00000100 /* Crosslink supported */
->  #define PCI_EXP_LNKCTL2		0x30	/* Link Control 2 */
->  #define  PCI_EXP_LNKCTL2_TLS		0x000f
-> @@ -702,6 +704,7 @@
->  #define  PCI_EXP_LNKCTL2_TLS_16_0GT	0x0004 /* Supported Speed 16GT/s */
->  #define  PCI_EXP_LNKCTL2_TLS_32_0GT	0x0005 /* Supported Speed 32GT/s */
->  #define  PCI_EXP_LNKCTL2_TLS_64_0GT	0x0006 /* Supported Speed 64GT/s */
-> +#define  PCI_EXP_LNKCTL2_TLS_128_0GT	0x0007 /* Supported Speed 128GT/s */
-
-This is wrong as well.
-
-This entire change (the whole series) is not going to be as 
-straightforward as you assumed.
-
->  #define  PCI_EXP_LNKCTL2_ENTER_COMP	0x0010 /* Enter Compliance */
->  #define  PCI_EXP_LNKCTL2_TX_MARGIN	0x0380 /* Transmit Margin */
->  #define  PCI_EXP_LNKCTL2_HASD		0x0020 /* HW Autonomous Speed Disable */
 
 -- 
- i.
-
+Dmitry
 
