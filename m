@@ -1,542 +1,214 @@
-Return-Path: <linux-pm+bounces-42812-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42813-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qzcWGr+clWkESwIAu9opvQ
-	(envelope-from <linux-pm+bounces-42812-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 12:04:31 +0100
+	id uIiyDJCelWk4SwIAu9opvQ
+	(envelope-from <linux-pm+bounces-42813-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 12:12:16 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABEF6155C6E
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 12:04:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5D28155CFB
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 12:12:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DA4CD300A393
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 11:04:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8AF9530193B5
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Feb 2026 11:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3619A305045;
-	Wed, 18 Feb 2026 11:04:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e253DugB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CFAF30497C;
+	Wed, 18 Feb 2026 11:12:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4772FE567
-	for <linux-pm@vger.kernel.org>; Wed, 18 Feb 2026 11:04:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5637B2FF677
+	for <linux-pm@vger.kernel.org>; Wed, 18 Feb 2026 11:12:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771412668; cv=none; b=SM+0tcaF9/huuD6LIiKTTUAfazjY5X14eYbTXMjTraximkFIc5x06hpt9zVteP6Hauk9WKaeimrrLyAhuMf+AKVZjAdhCLoQDaCVPtEF37dvGu1TeYWaJrLv3c704CyyRlw3scVouYZB4Kv0wJEgbioIhZK+VDQ/vcN91gEqUyg=
+	t=1771413132; cv=none; b=mnicv+rteQfIsgIRg2c7KCQjA1C5f6lHtKvJmAb3MEeI5FMx5r11n3QLIYfSo7zyj9SPPXNMDIbV9dZztMi/XpsVKU9hcVHpTf6imH9vQxxvcXXkB8/EQJPqYcjGja83eaz2EvAnlqtV2y9LdIlKDIthVWvqbKCFETUJzw/pZ+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771412668; c=relaxed/simple;
-	bh=5VnWZTXyFDazagkCSCC3TMyBBNtU4cm3h/HSudoB1AI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pWnkZ/VamLcLLJm8WrQ3+Xo7ABS0CktIviMlIBzWhxEPjsR7i7m3qVievEJGRtN4irW9YUPVJbfI4DBcJ62flhOE++0PSoqfKJDv6g69zBJoXpZUtENf4ldGc8ClksxSjgN9pQ7KVzP91A9+Z6WWT8RZ065sN2ExQ0JEhyWiBPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e253DugB; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1771413132; c=relaxed/simple;
+	bh=EVRae9qMHeq9BCtv/qf3jwFb6lOOcGA+J4dBoAHt028=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZT4VX1WJFoZSchWaR7SDyLBr19/C4+mDnDyq2TufHEdkLKxgA58bPvPuC266gblnTXT/QtVx5swenIzbrP6z++36nu+VIFYabPaNCQ6+k6HD4CcIBoc7yIQsKj9cREm5uTElt3WzPuoXWKt8DNlefDampvksPvt7JLAPhYlKWa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43767807da6so3757287f8f.2
-        for <linux-pm@vger.kernel.org>; Wed, 18 Feb 2026 03:04:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771412664; x=1772017464; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wGTNJ210AsARI4ZD14nsycGl1kgt7uuJ79e/H8Vr1rM=;
-        b=e253DugBxCjbBY43h5ZQzbNbQcGmBv+/lp/f51dolSrRbG4dpbIAsfHqfxbTRyhGpZ
-         iJF96EZbLEDkM2ASa3EjzaXE7NJ4Eudy7hgDYwJf3E4dER/rDOREABkaL6ltNkclu959
-         riceaGSX8KBXHbywPqssl5lHUkRsViVCTm3ZNgInsVWWrcUeKwPWGw95lpWHC6B/3GlR
-         iX4t6HRti4m6/em3AXYE5dIBFhL4e2iih/a4J/KXFTA7s31+u9kNGgo8OudRaR8Rccse
-         fBZ8fRj8RxOpGuaCAGm7kSGZFkmcH1fC+KSDABM4bbJNojWEy0CPXG77mrB3vcn/JnB9
-         DmHw==
+Received: by mail-vs1-f52.google.com with SMTP id ada2fe7eead31-5fa26e497feso1543625137.3
+        for <linux-pm@vger.kernel.org>; Wed, 18 Feb 2026 03:12:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771412664; x=1772017464;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wGTNJ210AsARI4ZD14nsycGl1kgt7uuJ79e/H8Vr1rM=;
-        b=dpkXUdNxy1xHmLjzzcEfhH0Lo1pRzc1kYqJLzWvVNUppb4y/Lkh/PDKQRDPDQijy8F
-         qSr5uwSn5ogq1NxJ1U0L7g8Vr53aIfcprO+U5NMB9YXj+mj4kH5uiuijbl0wLWPuDlv2
-         YLRl9boJfa71BfSR8csAPFJC3Bdt2Ea/0CIBnJB9Q+OL1GaVpvqdiGVQEtnki+UqU8Dc
-         Xai4kq97BAsg1ziJdiIHjpM68Hi+7j60jtS76TMcQVezOJPW/CcJmht9QTwccbyZkyME
-         gZgbOr82PIkRhiEFd6sNwynckJN8g2bDc9z2diPc6ReaVkG479qsjPO0HXqej65Furwt
-         k8OA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAdqSjG4F5Rfq31O9+ec/bfgJIB3zk/KnltCK8bDEzvCEiwPc0Q1e69XwWvXWz6bOYoROcb9DHAg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcZj5aQ8laq4pjQ1HAXHLqFZYFRSaxmX0ksS1vI4AUVSO737c9
-	1oifFlzD7w5Kfo5zenBgRM9nNSWN07V/PChPYOrOh7owJmjrYNBs7NL8YeU33FN4qqE=
-X-Gm-Gg: AZuq6aKwRWMbc5YHga+KBi3/exk/goqIS12CW9l++/lk2zqKae8kdewF0tDmZWzuPJw
-	7AtQRh89evCuPnEYtJoDMmtiVjZ9OOSuunABIjhOryM5sGXm6meHMawDyOJnR4itbJku1Y2+Dan
-	1HWavb5pBoUsji2R8YOOo36aZ04e2UPX1fP6QZlrMUdd/8Plv5vg6UpqnKRHybYfKOKZPUnwY41
-	Ty+dXoVPkV+S/halQKtut0MRnD3FGT/nyHOXuO3swYJkCtKHGsJscL1v+ZG05g7mKtZ34WLbH8R
-	eohqnIZDaCy8fAtVrjeQRYoalrUdK/1FBvDpSv6bYK/ED+A9qJStf++Pp1uIdibHDRe+IYVSDeT
-	OVH80ioapV+f47qfE9r/1nrCIVIA19eZCVjK050Wj+rFRUEHsDXeSKgrWSN7xd2i11iTVUHJcnd
-	XIWsw2R3c5OosOxqXVxor/tFwgI9YtZtc2wbEdPVc1v7fOEw==
-X-Received: by 2002:a05:600c:8011:b0:483:7980:4687 with SMTP id 5b1f17b1804b1-48398ad6e2bmr24556715e9.17.1771412664161;
-        Wed, 18 Feb 2026 03:04:24 -0800 (PST)
-Received: from debian.local ([2a0a:ef40:e94:5d01:a218:5589:9f9c:4f52])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4835dd0deeasm539209745e9.12.2026.02.18.03.04.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Feb 2026 03:04:23 -0800 (PST)
-Date: Wed, 18 Feb 2026 11:04:22 +0000
-From: Chris Bainbridge <chris.bainbridge@gmail.com>
-To: linux-kernel@vger.kernel.org
-Cc: kvm@vger.kernel.org, x86@kernel.org, linux-pm@vger.kernel.org,
-	amd-gfx@lists.freedesktop.org, pbonzini@redhat.com,
-	seanjc@google.com, tglx@linutronix.de
-Subject: [BUG] Oops following "Invalid wait context" in pvclock_gtod_notify
-Message-ID: <aZWctruDVn8aMZBG@debian.local>
+        d=1e100.net; s=20230601; t=1771413129; x=1772017929;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qVLsxu170PB1z35uEMY8OwYn2VFsOBgEYVbP/16mc98=;
+        b=dLsCgX/LsJVs/m5RJrJmiyQz+JU5vWcoSDXlw5yoWBJLMdv2OPZOhIGNFzoY/guelB
+         4VBGWg/Go5LIYz+Ej41QbAauWMdlEDduTXNtT4QTfD0/rKB3coIqDOlqXY8w2NJYEpjT
+         vLFpn0VpOecERD3B9KwgL1tiuGcleSr6LjMxpH2RYXscXJ/GClHBz1kn6XTpAasRZm1b
+         S+gLLNaAp7J9Ez9pk92fqvrRaAHUZBmfXU6KMfO48Wddx3p37QcRY+b92p0lnfA8POlP
+         oql7bN4RDvKkQ8A4Z4tCPUufMT6Foo9aAJ2NrMZXKBk47LbTi22ju68Ec7hG7p86g4ts
+         1AJA==
+X-Forwarded-Encrypted: i=1; AJvYcCXASEsDIQEsJABTSJnTcmDxQDnvaBB2RS9/G4XDFtxhU//MMgyWSeB6q2ueN7edwajfRD69JbvkyA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz89anfYnxa+ThPvmiBVrH2BILg3vL1rSaQCdH+1unZbFBzyJDf
+	+kDPLjORey4kiRxzIUKV7aPOsXCaLgFMrYuCMzQLw5YF4RbyQPNwIZP9gcNWgFgY
+X-Gm-Gg: AZuq6aJBX3qOElym7R0WunDxMcngvRXmMYZrtRFzJyWeTXbjJqGE1R6LAYG2GtbF7h+
+	A09mr9MIfgICrJ6h9+QTo5Q6EWk/dqg6YHFScHidapx2nYSWHG62IR0uVsqimmOvTjBaRGTTF0Q
+	8ZppxfV2CYkaQP5wI0NqehxGW6dDMUInD8MEX1Brnj3VDNU1IipAt6C5pfttG1Ftnys4l8+ukpc
+	v9Yl9P0VEzEgzlY0B7mg4QgKf88FpkzUl36vYbBZwHAFwvdiAE549+u/GzxBd3VuibmeciK2JFB
+	gcKlNfRjYblVt3qnO3Mq0cVIhc7Hyu/KMe3VO9UXrwY7hmf93gUB8oyQ3ydGWTMUB1x+jXxMWzN
+	n8Weg0oPzmhV/LIR2y7L7Q0arSmGN5XTHvg6keKy1s/BdLZiMoOdL9N9zZQmzcHzXirCn/68/FX
+	Y3abkzxp1PeCCUd2pFJh3yt4E9ehjmkcHk5osRCpAUbv8npGCao0LxQnmGevBhPBqeQA5eFeTwm
+	PI=
+X-Received: by 2002:a05:6102:a4f:b0:5ef:a666:5654 with SMTP id ada2fe7eead31-5fe7fd82ba1mr464096137.34.1771413129177;
+        Wed, 18 Feb 2026 03:12:09 -0800 (PST)
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-94afd1d85d9sm10045548241.7.2026.02.18.03.12.08
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Feb 2026 03:12:08 -0800 (PST)
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-5673804da95so1985329e0c.0
+        for <linux-pm@vger.kernel.org>; Wed, 18 Feb 2026 03:12:08 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV178TQwKqUHrATe6h5snrZReuFu08v71F1gIhvEwqioWeobxFd8Oe6f6IXFzWzgN73F4fUqq78Lg==@vger.kernel.org
+X-Received: by 2002:a05:6122:221e:b0:566:23dd:19b9 with SMTP id
+ 71dfb90a1353d-568bf50eee7mr565791e0c.3.1771413128203; Wed, 18 Feb 2026
+ 03:12:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+References: <CAMuHMdWapT40hV3c+CSBqFOW05aWcV1a6v_NiJYgoYi0i9_PDQ@mail.gmail.com>
+ <6854ea2b-b316-4711-b849-038d532f00c1@imgtec.com> <CAMuHMdUdYidx7u2FOFUmiijp-YeYaQQw_Lrj_E-BoUubuxxR_A@mail.gmail.com>
+ <0256cf2b-ac62-437c-a6ee-7768e56a35fb@imgtec.com>
+In-Reply-To: <0256cf2b-ac62-437c-a6ee-7768e56a35fb@imgtec.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 18 Feb 2026 12:11:56 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUFS7zyvro7h_XvKrKAsK06m4WB+2nD_iYbMLYEVkxn0g@mail.gmail.com>
+X-Gm-Features: AaiRm51vN2U_vJPwapu806O-QDmm3RJwGxx5l1KqCSVNurX9AILsymzNQI7z9fY
+Message-ID: <CAMuHMdUFS7zyvro7h_XvKrKAsK06m4WB+2nD_iYbMLYEVkxn0g@mail.gmail.com>
+Subject: Re: drm/imagination: genpd_runtime_suspend() crash
+To: Matt Coster <Matt.Coster@imgtec.com>
+Cc: Frank Binns <Frank.Binns@imgtec.com>, Alessio Belle <Alessio.Belle@imgtec.com>, 
+	Alexandru Dadu <Alexandru.Dadu@imgtec.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Marek Vasut <marek.vasut+renesas@mailbox.org>, 
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.04 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42812-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42813-lists,linux-pm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[linux-m68k.org];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chrisbainbridge@gmail.com,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	FREEMAIL_FROM(0.00)[gmail.com]
-X-Rspamd-Queue-Id: ABEF6155C6E
+	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,renesas];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux-m68k.org:email,imgtec.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: A5D28155CFB
 X-Rspamd-Action: no action
 
-Hi,
+Hi Matt,
 
-I just saw the following crash shortly after resume on AMD HP Pavilion
-Aero Laptop 13. The laptop resumed, I typed 2 characters, and it hung.
+On Wed, 18 Feb 2026 at 12:00, Matt Coster <Matt.Coster@imgtec.com> wrote:
+> On 31/10/2025 08:43, Geert Uytterhoeven wrote:
+> > On Thu, 30 Oct 2025 at 13:18, Matt Coster <Matt.Coster@imgtec.com> wrote:
+> >> On 29/10/2025 14:08, Geert Uytterhoeven wrote:
+> >>> While playing with the PowerVR driver on various R-Car SoCs, I ran into
+> >>> a crash/race condition on Gray Hawk Single (R-Car V4M).  After adding
+> >>> the GPU device node to DTS, the driver fails to probe due to lack of
+> >>> suitable firmware, as expected:
+> >>
+> >> Thanks for the detailed report! I'll make time to look into this. Do you
+> >> encounter a similar issue on other R-Car platforms, or is this exclusive
+> >> to the V4M?
+> >
+> > Yes, I managed to trigger it on Salvator-X with R-Car M3-W, too.
+> > Reproduction steps at:
+> > https://lore.kernel.org/linux-renesas-soc/CAMuHMdWyKeQq31GEK+-y4BoaZFcCxJNac63S7NoocMj1cYKniw@mail.gmail.com
+> >
+> > renesas-drivers-2025-10-28 is available at
+> > https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/tag/?h=renesas-drivers-2025-10-28-v6.18-rc3
+> > My aarch64-linux-gnu-gcc is gcc version 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04)
+>
+> I've managed to get some time with a Gray Hawk board today, but I'm
+> struggling to reproduce the original issue. Can you share the DTS node
+> you've constructed for the GPU? The patch below contains what I put
+> together based on the previous gen3 DTS changes and the V4M TRM.
 
-The issue appears to be a recursive Oops:
+Your DTS node looks fine to me.
 
-Lockdep first detects an Invalid wait context in pvclock_gtod_notify
-during a timer interrupt update.
+> That said, it's not all clear sailing. I hit this error way before the
+> original reported error could occur:
+>
+>   renesas-cpg-mssr e6150000.clock-controller: Cannot get module clock 0: -2
+>
+> This is emitted when attempting to dev_pm_domain_attach_by_name() for
+> the first domain (A33DGA), and is reproducible on the tag mentioned
+> above, as well as the master branch in renesas-drivers and drm-misc-next
+> (as of this morning).
 
-While printk attempts to report this locking violation, a General
-Protection Fault occurs in lib/vsprintf.c:string due to what KASAN
-identifies as a wild-memory-access (non-canonical address
-0xe000123080000000).
+The R-Car V4M clock driver does not have the GPU clocks yet
+(we haven't added them yet, as we couldn't test the GPU).
+The whitespace-damaged patch below should add the clocks.
 
-It appears that the pointer to the lock name passed to printk is
-corrupted or pointing to uninitialized memory during the resume
-sequence.
+Note that to reproduce you do need the extra pr_info() calls added in
+https://lore.kernel.org/linux-renesas-soc/CAMuHMdWyKeQq31GEK+-y4BoaZFcCxJNac63S7NoocMj1cYKniw@mail.gmail.com
+And any R-Car board with IMG GPU should do, just make sure the GPU
+node is enabled in the board DTS (it is still disabled, due to the crash).
 
-I haven't seen this particular issue before in several years of using
-this laptop, so I suspect it may be an intermittent regression.
+Thanks for looking into this!
 
-Kernel Version: 6.19.0-09985-gaaeb3769f82e (Tainted: [Not tainted])
-Hardware: HP Pavilion Aero Laptop 13-be0xxx (AMD Ryzen)
+--- a/drivers/clk/renesas/r8a779h0-cpg-mssr.c
++++ b/drivers/clk/renesas/r8a779h0-cpg-mssr.c
+@@ -158,6 +158,8 @@ static const struct cpg_core_clk
+r8a779h0_core_clks[] __initconst = {
+        DEF_DIV6P1("csi",       R8A779H0_CLK_CSI,       CLK_PLL5_DIV4,
+ CPG_CSICKCR),
+        DEF_FIXED("dsiref",     R8A779H0_CLK_DSIREF,    CLK_PLL5_DIV4,  48, 1),
+        DEF_DIV6P1("dsiext",    R8A779H0_CLK_DSIEXT,    CLK_PLL5_DIV4,
+ CPG_DSIEXTCKCR),
++       // FIXME programmable divider in FRQCRB
++       DEF_FIXED("zg",         R8A779H0_CLK_ZG,        CLK_PLL4_DIV2,  2, 1),
+        DEF_DIV6P1("mso",       R8A779H0_CLK_MSO,       CLK_PLL5_DIV4,
+ CPG_MSOCKCR),
 
+        DEF_GEN4_SDH("sd0h",    R8A779H0_CLK_SD0H,      CLK_SDSRC,
+    CPG_SD0CKCR),
+@@ -171,6 +173,7 @@ static const struct cpg_core_clk
+r8a779h0_core_clks[] __initconst = {
+ };
 
-<6>[207132.447702] ACPI: EC: interrupt blocked
-<6>[240547.393406] ACPI: EC: interrupt unblocked
-<6>[240547.528470] amdgpu 0000:03:00.0: [drm] PCIE GART of 1024M enabled.
-<6>[240547.528481] amdgpu 0000:03:00.0: [drm] PTB located at 0x000000F41FC0=
-0000
-<6>[240547.528545] amdgpu 0000:03:00.0: SMU is resuming...
-<6>[240547.528930] amdgpu 0000:03:00.0: dpm has been disabled
-<6>[240547.530414] amdgpu 0000:03:00.0: SMU is resumed successfully!
-<6>[240547.607233] nvme nvme0: 8/0/0 default/read/poll queues
-<6>[240547.638821] [drm] DM_MST: Differing MST start on aconnector: 0000000=
-0f24b38f1 [id: 116]
-<6>[240547.640280] amdgpu 0000:03:00.0: ring gfx uses VM inv eng 0 on hub 0
-<6>[240547.640285] amdgpu 0000:03:00.0: ring comp_1.0.0 uses VM inv eng 1 o=
-n hub 0
-<6>[240547.640287] amdgpu 0000:03:00.0: ring comp_1.1.0 uses VM inv eng 4 o=
-n hub 0
-<6>[240547.640289] amdgpu 0000:03:00.0: ring comp_1.2.0 uses VM inv eng 5 o=
-n hub 0
-<6>[240547.640291] amdgpu 0000:03:00.0: ring comp_1.3.0 uses VM inv eng 6 o=
-n hub 0
-<6>[240547.640293] amdgpu 0000:03:00.0: ring comp_1.0.1 uses VM inv eng 7 o=
-n hub 0
-<6>[240547.640295] amdgpu 0000:03:00.0: ring comp_1.1.1 uses VM inv eng 8 o=
-n hub 0
-<6>[240547.640298] amdgpu 0000:03:00.0: ring comp_1.2.1 uses VM inv eng 9 o=
-n hub 0
-<6>[240547.640300] amdgpu 0000:03:00.0: ring comp_1.3.1 uses VM inv eng 10 =
-on hub 0
-<6>[240547.640302] amdgpu 0000:03:00.0: ring kiq_0.2.1.0 uses VM inv eng 11=
- on hub 0
-<6>[240547.640304] amdgpu 0000:03:00.0: ring sdma0 uses VM inv eng 0 on hub=
- 8
-<6>[240547.640306] amdgpu 0000:03:00.0: ring vcn_dec uses VM inv eng 1 on h=
-ub 8
-<6>[240547.640308] amdgpu 0000:03:00.0: ring vcn_enc0 uses VM inv eng 4 on =
-hub 8
-Panic#2 Part7
-<6>[240547.640310] amdgpu 0000:03:00.0: ring vcn_enc1 uses VM inv eng 5 on =
-hub 8
-<6>[240547.640312] amdgpu 0000:03:00.0: ring jpeg_dec uses VM inv eng 6 on =
-hub 8
-<6>[240547.777611] usb 1-1.3.2.4: reset high-speed USB device number 36 usi=
-ng xhci_hcd
-<6>[240548.168643] OOM killer enabled.
-<6>[240548.168648] Restarting tasks: Starting
-<6>[240548.170996] Restarting tasks: Done
-<6>[240548.171015] efivarfs: resyncing variable state
-<6>[240548.183456] efivarfs: finished resyncing variable state
-<5>[240548.183523] random: crng reseeded on system resumption
-<6>[240548.319075] PM: suspend exit
-<6>[240549.054362] iwlwifi 0000:01:00.0: WFPM_UMAC_PD_NOTIFICATION: 0x20
-<6>[240549.054440] iwlwifi 0000:01:00.0: WFPM_LMAC2_PD_NOTIFICATION: 0x1f
-<6>[240549.054511] iwlwifi 0000:01:00.0: WFPM_AUTH_KEY_0: 0x90
-<6>[240549.054578] iwlwifi 0000:01:00.0: CNVI_SCU_SEQ_DATA_DW9: 0x0
-<6>[240552.869040] wlp1s0: authenticate with d6:92:5e:eb:ee:15 (local addre=
-ss=3Dc8:15:4e:63:1d:e8)
-<6>[240552.870295] wlp1s0: send auth to d6:92:5e:eb:ee:15 (try 1/3)
-<6>[240552.934184] wlp1s0: authenticate with d6:92:5e:eb:ee:15 (local addre=
-ss=3Dc8:15:4e:63:1d:e8)
-<6>[240552.934199] wlp1s0: send auth to d6:92:5e:eb:ee:15 (try 1/3)
-<6>[240552.939205] wlp1s0: authenticated
-<6>[240552.940960] wlp1s0: associate with d6:92:5e:eb:ee:15 (try 1/3)
-<6>[240552.949911] wlp1s0: RX AssocResp from d6:92:5e:eb:ee:15 (capab=3D0x1=
-011 status=3D0 aid=3D10)
-<6>[240552.965155] wlp1s0: associated
-<7>[240553.020321] wlp1s0: Limiting TX power to 23 (23 - 0) dBm as advertis=
-ed by d6:92:5e:eb:ee:15
-<4>[240561.824922]
-<4>[240561.824933] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-<4>[240561.824936] [ BUG: Invalid wait context ]
-Oops#1 Part5
-<4>[240561.824939] 6.19.0-09985-gaaeb3769f82e #414 Not tainted
-<4>[240561.824943] -----------------------------
-<4>[240561.824945] swapper/14/0 is trying to lock:
-<4>[240561.824948] ffffffffc5512948 (
-<4>[240561.824962] Oops: general protection fault, probably for non-canonic=
-al address 0xe000123080000000: 0000 [#1] SMP KASAN
-<1>[240561.824968] KASAN: maybe wild-memory-access in range [0x0000b1840000=
-0000-0x0000b18400000007]
-<4>[240561.824974] CPU: 14 UID: 0 PID: 0 Comm: swapper/14 Not tainted 6.19.=
-0-09985-gaaeb3769f82e #414 PREEMPT(lazy)
-<4>[240561.824979] Hardware name: HP HP Pavilion Aero Laptop 13-be0xxx/8916=
-, BIOS F.17 12/18/2024
-<4>[240561.824982] RIP: 0010:string (lib/vsprintf.c:655 lib/vsprintf.c:737)
-<4>[240561.824989] Code: c0 0f 85 6a 02 00 00 44 88 2b 48 83 c3 01 83 c6 01=
- 4c 39 fd 74 2e 48 89 ef 48 83 c5 01 48 89 f8 48 89 fa 48 c1 e8 03 83 e2 07=
- <0f> b6 04 08 38 d0 7f 08 84 c0 0f 85 11 02 00 00 44 0f b6 6d ff 45
-All code
-=3D=3D=3D=3D=3D=3D=3D=3D
-   0:	c0 0f 85             	rorb   $0x85,(%rdi)
-   3:	6a 02                	push   $0x2
-   5:	00 00                	add    %al,(%rax)
-   7:	44 88 2b             	mov    %r13b,(%rbx)
-   a:	48 83 c3 01          	add    $0x1,%rbx
-   e:	83 c6 01             	add    $0x1,%esi
-  11:	4c 39 fd             	cmp    %r15,%rbp
-  14:	74 2e                	je     0x44
-  16:	48 89 ef             	mov    %rbp,%rdi
-  19:	48 83 c5 01          	add    $0x1,%rbp
-  1d:	48 89 f8             	mov    %rdi,%rax
-  20:	48 89 fa             	mov    %rdi,%rdx
-  23:	48 c1 e8 03          	shr    $0x3,%rax
-  27:	83 e2 07             	and    $0x7,%edx
-  2a:*	0f b6 04 08          	movzbl (%rax,%rcx,1),%eax		<-- trapping instru=
-ction
-  2e:	38 d0                	cmp    %dl,%al
-  30:	7f 08                	jg     0x3a
-  32:	84 c0                	test   %al,%al
-  34:	0f 85 11 02 00 00    	jne    0x24b
-  3a:	44 0f b6 6d ff       	movzbl -0x1(%rbp),%r13d
-  3f:	45                   	rex.RB
+ static const struct mssr_mod_clk r8a779h0_mod_clks[] __initconst = {
++       DEF_MOD("3dge",           0,    R8A779H0_CLK_ZG),
+        DEF_MOD("isp0",          16,    R8A779H0_CLK_S0D2_VIO),
+        DEF_MOD("avb0:rgmii0",  211,    R8A779H0_CLK_S0D8_HSC),
+        DEF_MOD("avb1:rgmii1",  212,    R8A779H0_CLK_S0D8_HSC),
 
-Code starting with the faulting instruction
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-   0:	0f b6 04 08          	movzbl (%rax,%rcx,1),%eax
-   4:	38 d0                	cmp    %dl,%al
-   6:	7f 08                	jg     0x10
-   8:	84 c0                	test   %al,%al
-   a:	0f 85 11 02 00 00    	jne    0x221
-  10:	44 0f b6 6d ff       	movzbl -0x1(%rbp),%r13d
-  15:	45                   	rex.RB
-<4>[240561.824994] RSP: 0018:ffffc90000628360 EFLAGS: 00010046
-<4>[240561.824998] RAX: 0000163080000000 RBX: ffffc9000062865a RCX: dffffc0=
-000000000
-<4>[240561.825001] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000b18=
-400000000
-<4>[240561.825004] RBP: 0000b18400000001 R08: ffffffffffff0a00 R09: ffffc90=
-000628618
-<4>[240561.825007] R10: 0000000000000405 R11: 0000000000000000 R12: ffffc90=
-000628660
-<4>[240561.825009] R13: 0000000000000405 R14: 1ffff920000c506f R15: 0000b18=
-4ffffffff
-<4>[240561.825012] FS:  0000000000000000(0000) GS:ffff88840118b000(0000) kn=
-lGS:0000000000000000
-<4>[240561.825015] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4>[240561.825018] CR2: 00007f45967ea000 CR3: 0000000330491000 CR4: 0000000=
-000750ef0
-<4>[240561.825021] PKRU: 55555554
-Oops#1 Part4
-<4>[240561.825024] Call Trace:
-<4>[240561.825027]  <IRQ>
-<4>[240561.825031]  ? _prb_read_valid (kernel/printk/printk_ringbuffer.c:22=
-03 (discriminator 1))
-<4>[240561.825036]  ? ip6_addr_string_sa (lib/vsprintf.c:733)
-<4>[240561.825042]  ? prb_next_reserve_seq (kernel/printk/printk_ringbuffer=
-=2Ec:2166)
-<4>[240561.825046]  vsnprintf (lib/vsprintf.c:2887)
-<4>[240561.825053]  ? pointer (lib/vsprintf.c:2865)
-<4>[240561.825057]  ? prb_final_commit (kernel/printk/printk_ringbuffer.c:2=
-241)
-<4>[240561.825061]  ? prb_read_valid (kernel/printk/printk_ringbuffer.c:224=
-1)
-<4>[240561.825065]  vprintk_store (kernel/printk/printk.c:2307 (discriminat=
-or 1))
-<4>[240561.825072]  ? printk_sprint (kernel/printk/printk.c:2272)
-<4>[240561.825075]  ? desc_read (./arch/x86/include/asm/atomic64_64.h:20 ./=
-include/linux/atomic/atomic-arch-fallback.h:2629 ./include/linux/atomic/ato=
-mic-long.h:79 ./include/linux/atomic/atomic-instrumented.h:3224 kernel/prin=
-tk/printk_ringbuffer.c:552)
-<4>[240561.825080]  ? desc_read_finalized_seq (kernel/printk/printk_ringbuf=
-fer.c:1938)
-<4>[240561.825084]  ? desc_read (./arch/x86/include/asm/atomic64_64.h:20 ./=
-include/linux/atomic/atomic-arch-fallback.h:2629 ./include/linux/atomic/ato=
-mic-long.h:79 ./include/linux/atomic/atomic-instrumented.h:3224 kernel/prin=
-tk/printk_ringbuffer.c:552)
-<4>[240561.825088]  ? panic_on_this_cpu (./arch/x86/include/asm/atomic.h:23=
- ./include/linux/atomic/atomic-arch-fallback.h:457 ./include/linux/atomic/a=
-tomic-instrumented.h:33 kernel/panic.c:488)
-<4>[240561.825093]  ? _prb_read_valid (kernel/printk/printk_ringbuffer.c:22=
-03 (discriminator 1))
-<4>[240561.825096]  ? rcu_is_watching (./include/linux/context_tracking.h:1=
-28 (discriminator 1) kernel/rcu/tree.c:752 (discriminator 1))
-<4>[240561.825102]  vprintk_emit (kernel/printk/printk.c:2457)
-<4>[240561.825107]  ? wake_up_klogd_work_func (kernel/printk/printk.c:2426)
-<4>[240561.825112]  ? do_raw_spin_unlock (./arch/x86/include/asm/atomic.h:2=
-3 ./include/linux/atomic/atomic-arch-fallback.h:457 ./include/linux/atomic/=
-atomic-instrumented.h:33 ./include/asm-generic/qspinlock.h:57 kernel/lockin=
-g/spinlock_debug.c:101 kernel/locking/spinlock_debug.c:141)
-<4>[240561.825117]  ? _raw_spin_unlock_irqrestore (./include/linux/spinlock=
-_api_smp.h:179 (discriminator 3) kernel/locking/spinlock.c:194 (discriminat=
-or 3))
-<4>[240561.825123]  _printk (kernel/printk/printk.c:2499)
-<4>[240561.825128]  ? __em_nl_get_pd_table.cold (kernel/printk/printk.c:249=
-9)
-<4>[240561.825134]  ? console_unlock (kernel/printk/printk.c:3392 (discrimi=
-nator 1) kernel/printk/printk.c:3413 (discriminator 1))
-<4>[240561.825139]  __print_lock_name.cold (kernel/locking/lockdep.c:728)
-<4>[240561.825153]  print_lock_name (kernel/locking/lockdep.c:745)
-<4>[240561.825158]  print_lock.cold (kernel/locking/lockdep.c:783)
-<4>[240561.825162]  __lock_acquire (kernel/locking/lockdep.c:4822 kernel/lo=
-cking/lockdep.c:4902 kernel/locking/lockdep.c:5187)
-<4>[240561.825170]  lock_acquire (kernel/locking/lockdep.c:470 kernel/locki=
-ng/lockdep.c:5870 kernel/locking/lockdep.c:5825)
-<4>[240561.825174]  ? notifier_call_chain (kernel/notifier.c:87)
-<4>[240561.825181] pvclock_gtod_notify (./include/linux/seqlock.h:432 ./inc=
-lude/linux/seqlock.h:479 ./include/linux/seqlock.h:504 arch/x86/kvm/x86.c:2=
-370 arch/x86/kvm/x86.c:9967) kvm
-<4>[240561.825254]  ? notifier_call_chain (kernel/notifier.c:87)
-<4>[240561.825258]  notifier_call_chain (kernel/notifier.c:87)
-<4>[240561.825263]  timekeeping_update_from_shadow.constprop.0 (kernel/time=
-/timekeeping.c:736)
-Oops#1 Part3
-<4>[240561.825268]  __timekeeping_advance.constprop.0 (kernel/time/timekeep=
-ing.c:2379)
-<4>[240561.825272]  ? __rwlock_init (kernel/locking/spinlock_debug.c:114)
-<4>[240561.825276]  ? do_settimeofday64 (kernel/time/timekeeping.c:2321)
-<4>[240561.825280]  ? lock_release (kernel/locking/lockdep.c:470 (discrimin=
-ator 4) kernel/locking/lockdep.c:5891 (discriminator 4) kernel/locking/lock=
-dep.c:5875 (discriminator 4))
-<4>[240561.825285]  update_wall_time (kernel/time/timekeeping.c:2385 kernel=
-/time/timekeeping.c:2395)
-<4>[240561.825290]  tick_nohz_handler (kernel/time/tick-sched.c:253 kernel/=
-time/tick-sched.c:312)
-<4>[240561.825294]  ? tick_do_update_jiffies64 (kernel/time/tick-sched.c:30=
-7)
-<4>[240561.825298]  ? __hrtimer_run_queues (./arch/x86/include/asm/jump_lab=
-el.h:37 ./include/trace/events/timer.h:259 kernel/time/hrtimer.c:1782 kerne=
-l/time/hrtimer.c:1849)
-<4>[240561.825302]  ? lock_release (kernel/locking/lockdep.c:470 (discrimin=
-ator 4) kernel/locking/lockdep.c:5891 (discriminator 4) kernel/locking/lock=
-dep.c:5875 (discriminator 4))
-<4>[240561.825306]  ? tick_do_update_jiffies64 (kernel/time/tick-sched.c:30=
-7)
-<4>[240561.825310]  __hrtimer_run_queues (kernel/time/hrtimer.c:1785 kernel=
-/time/hrtimer.c:1849)
-<4>[240561.825315]  ? hrtimer_reprogram (kernel/time/hrtimer.c:1819)
-<4>[240561.825319]  ? ktime_get_update_offsets_now (kernel/time/timekeeping=
-=2Ec:381 kernel/time/timekeeping.c:404 kernel/time/timekeeping.c:2573)
-<4>[240561.825325]  hrtimer_interrupt (kernel/time/hrtimer.c:1914)
-<4>[240561.825329]  ? lock_release (kernel/locking/lockdep.c:470 (discrimin=
-ator 4) kernel/locking/lockdep.c:5891 (discriminator 4) kernel/locking/lock=
-dep.c:5875 (discriminator 4))
-<4>[240561.825334]  ? tick_nohz_stop_idle (./include/linux/seqlock.h:453 ./=
-include/linux/seqlock.h:525 kernel/time/tick-sched.c:771)
-<4>[240561.825338]  __sysvec_apic_timer_interrupt (./arch/x86/include/asm/j=
-ump_label.h:37 ./arch/x86/include/asm/trace/irq_vectors.h:40 arch/x86/kerne=
-l/apic/apic.c:1063)
-<4>[240561.825343]  sysvec_apic_timer_interrupt (arch/x86/kernel/apic/apic.=
-c:1056 (discriminator 35) arch/x86/kernel/apic/apic.c:1056 (discriminator 3=
-5))
-<4>[240561.825348]  </IRQ>
-<4>[240561.825350]  <TASK>
-<4>[240561.825353]  asm_sysvec_apic_timer_interrupt (./arch/x86/include/asm=
-/idtentry.h:569)
-<4>[240561.825357] RIP: 0010:cpuidle_enter_state (drivers/cpuidle/cpuidle.c=
-:294)
-<4>[240561.825361] Code: 73 04 bf ff ff ff ff 49 89 c6 e8 80 85 6b ff 31 ff=
- e8 f9 da cb fd 45 84 ff 0f 85 a3 01 00 00 e8 cb 33 fd fd fb 0f 1f 44 00 00=
- <45> 85 ed 0f 88 6e 01 00 00 4d 63 fd 49 83 ff 0a 0f 83 c5 02 00 00
-All code
-=3D=3D=3D=3D=3D=3D=3D=3D
-   0:	73 04                	jae    0x6
-   2:	bf ff ff ff ff       	mov    $0xffffffff,%edi
-   7:	49 89 c6             	mov    %rax,%r14
-   a:	e8 80 85 6b ff       	call   0xffffffffff6b858f
-   f:	31 ff                	xor    %edi,%edi
-  11:	e8 f9 da cb fd       	call   0xfffffffffdcbdb0f
-  16:	45 84 ff             	test   %r15b,%r15b
-  19:	0f 85 a3 01 00 00    	jne    0x1c2
-  1f:	e8 cb 33 fd fd       	call   0xfffffffffdfd33ef
-  24:	fb                   	sti
-  25:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
-  2a:*	45 85 ed             	test   %r13d,%r13d		<-- trapping instruction
-  2d:	0f 88 6e 01 00 00    	js     0x1a1
-  33:	4d 63 fd             	movslq %r13d,%r15
-  36:	49 83 ff 0a          	cmp    $0xa,%r15
-  3a:	0f 83 c5 02 00 00    	jae    0x305
+Gr{oetje,eeting}s,
 
-Code starting with the faulting instruction
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-   0:	45 85 ed             	test   %r13d,%r13d
-   3:	0f 88 6e 01 00 00    	js     0x177
-   9:	4d 63 fd             	movslq %r13d,%r15
-   c:	49 83 ff 0a          	cmp    $0xa,%r15
-  10:	0f 83 c5 02 00 00    	jae    0x2db
-<4>[240561.825364] RSP: 0018:ffffc9000032fd80 EFLAGS: 00000206
-<4>[240561.825367] RAX: 0000000029e5cd35 RBX: ffff888122255000 RCX: 0000000=
-000000000
-<4>[240561.825370] RDX: 0000000000000000 RSI: ffffffff8b234809 RDI: fffffff=
-f8acb7b40
-<4>[240561.825373] RBP: ffffffff8bd34de0 R08: 0000000000000001 R09: 0000000=
-000000000
-Oops#1 Part2
-<4>[240561.825375] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000=
-000000002
-<4>[240561.825378] R13: 0000000000000002 R14: 0000daca2a1ea9c7 R15: 0000000=
-000000000
-<4>[240561.825384]  ? mark_tsc_async_resets (arch/x86/kernel/tsc_sync.c:52)
-<4>[240561.825388]  cpuidle_enter (drivers/cpuidle/cpuidle.c:393 (discrimin=
-ator 2))
-<4>[240561.825393]  do_idle (kernel/sched/idle.c:241 kernel/sched/idle.c:33=
-2)
-<4>[240561.825398]  ? arch_cpu_idle_exit+0x30/0x30
-<4>[240561.825402]  ? do_idle (./arch/x86/include/asm/bitops.h:202 ./arch/x=
-86/include/asm/bitops.h:232 ./include/asm-generic/bitops/instrumented-non-a=
-tomic.h:142 ./include/linux/thread_info.h:133 ./include/linux/sched.h:2063 =
-=2E/include/linux/livepatch.h:186 kernel/sched/idle.c:362)
-<4>[240561.825407]  cpu_startup_entry (kernel/sched/idle.c:429)
-<4>[240561.825411]  start_secondary (arch/x86/kernel/smpboot.c:200 (discrim=
-inator 10) arch/x86/kernel/smpboot.c:280 (discriminator 10))
-<4>[240561.825415]  ? set_cpu_sibling_map (arch/x86/kernel/smpboot.c:230)
-<4>[240561.825419]  common_startup_64 (arch/x86/kernel/head_64.S:419)
-<4>[240561.825427]  </TASK>
-<4>[240561.825429] Modules linked in: snd_seq_dummy snd_hrtimer snd_seq xt_=
-conntrack nft_chain_nat xt_MASQUERADE nf_nat nf_conntrack_netlink nf_conntr=
-ack nf_defrag_ipv6 nf_defrag_ipv4 xfrm_user xfrm_algo xt_addrtype nft_compa=
-t x_tables nf_tables br_netfilter bridge stp llc ccm overlay qrtr rfcomm cm=
-ac algif_hash algif_skcipher af_alg bnep binfmt_misc ext4 mbcache jbd2 nls_=
-ascii nls_cp437 vfat fat snd_hda_codec_generic snd_acp3x_pdm_dma snd_soc_dm=
-ic snd_acp3x_rn intel_rapl_msr snd_soc_core snd_compress amd_atl snd_hda_co=
-dec_hdmi iwlmvm intel_rapl_common mac80211 libarc4 snd_pci_acp6x btusb btrt=
-l snd_hda_intel kvm_amd uvcvideo videobuf2_vmalloc snd_hda_codec snd_usb_au=
-dio videobuf2_memops btintel kvm snd_pci_acp5x uvc snd_usbmidi_lib snd_inte=
-l_dspcfg btbcm irqbypass videobuf2_v4l2 snd_hwdep iwlwifi snd_rawmidi btmtk=
- videodev snd_rn_pci_acp3x snd_hda_core snd_seq_device videobuf2_common rap=
-l bluetooth snd_acp_config cfg80211 mc snd_pcm snd_soc_acpi ecdh_generic pc=
-spkr wmi_bmof ecc sg ee1004 snd_timer k10temp snd_pci_acp3x snd
-Oops#1 Part1
-<4>[240561.825538]  ac battery ccp rfkill soundcore joydev button amd_pmc a=
-cpi_tad evdev msr parport_pc ppdev lp parport nvme_fabrics fuse efi_pstore =
-configfs nfnetlink efivarfs autofs4 btrfs xor libblake2b raid6_pq dm_crypt =
-dm_mod r8153_ecm sd_mod cdc_ether usbnet hid_microsoft ff_memless hid_cmedi=
-a uas r8152 mii usb_storage libphy scsi_mod mdio_bus usbhid scsi_common amd=
-gpu drm_client_lib i2c_algo_bit drm_ttm_helper ttm drm_exec drm_suballoc_he=
-lper drm_buddy drm_panel_backlight_quirks gpu_sched amdxcp hid_multitouch d=
-rm_display_helper hid_generic ucsi_acpi video typec_ucsi drm_kms_helper sp5=
-100_tco xhci_pci watchdog i2c_hid_acpi roles cec xhci_hcd ghash_clmulni_int=
-el nvme i2c_piix4 i2c_hid amd_sfh typec serio_raw rc_core thunderbolt usbco=
-re i2c_smbus hid crc16 nvme_core fan usb_common wmi drm aesni_intel
-<4>[240561.825632] ---[ end trace 0000000000000000 ]---
-<4>[240562.127793] RIP: 0010:string (lib/vsprintf.c:655 lib/vsprintf.c:737)
-<4>[240562.127799] Code: c0 0f 85 6a 02 00 00 44 88 2b 48 83 c3 01 83 c6 01=
- 4c 39 fd 74 2e 48 89 ef 48 83 c5 01 48 89 f8 48 89 fa 48 c1 e8 03 83 e2 07=
- <0f> b6 04 08 38 d0 7f 08 84 c0 0f 85 11 02 00 00 44 0f b6 6d ff 45
-All code
-=3D=3D=3D=3D=3D=3D=3D=3D
-   0:	c0 0f 85             	rorb   $0x85,(%rdi)
-   3:	6a 02                	push   $0x2
-   5:	00 00                	add    %al,(%rax)
-   7:	44 88 2b             	mov    %r13b,(%rbx)
-   a:	48 83 c3 01          	add    $0x1,%rbx
-   e:	83 c6 01             	add    $0x1,%esi
-  11:	4c 39 fd             	cmp    %r15,%rbp
-  14:	74 2e                	je     0x44
-  16:	48 89 ef             	mov    %rbp,%rdi
-  19:	48 83 c5 01          	add    $0x1,%rbp
-  1d:	48 89 f8             	mov    %rdi,%rax
-  20:	48 89 fa             	mov    %rdi,%rdx
-  23:	48 c1 e8 03          	shr    $0x3,%rax
-  27:	83 e2 07             	and    $0x7,%edx
-  2a:*	0f b6 04 08          	movzbl (%rax,%rcx,1),%eax		<-- trapping instru=
-ction
-  2e:	38 d0                	cmp    %dl,%al
-  30:	7f 08                	jg     0x3a
-  32:	84 c0                	test   %al,%al
-  34:	0f 85 11 02 00 00    	jne    0x24b
-  3a:	44 0f b6 6d ff       	movzbl -0x1(%rbp),%r13d
-  3f:	45                   	rex.RB
+                        Geert
 
-Code starting with the faulting instruction
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-   0:	0f b6 04 08          	movzbl (%rax,%rcx,1),%eax
-   4:	38 d0                	cmp    %dl,%al
-   6:	7f 08                	jg     0x10
-   8:	84 c0                	test   %al,%al
-   a:	0f 85 11 02 00 00    	jne    0x221
-  10:	44 0f b6 6d ff       	movzbl -0x1(%rbp),%r13d
-  15:	45                   	rex.RB
-<4>[240562.127803] RSP: 0018:ffffc90000628360 EFLAGS: 00010046
-<4>[240562.127808] RAX: 0000163080000000 RBX: ffffc9000062865a RCX: dffffc0=
-000000000
-<4>[240562.127812] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000b18=
-400000000
-<4>[240562.127815] RBP: 0000b18400000001 R08: ffffffffffff0a00 R09: ffffc90=
-000628618
-<4>[240562.127818] R10: 0000000000000405 R11: 0000000000000000 R12: ffffc90=
-000628660
-<4>[240562.127821] R13: 0000000000000405 R14: 1ffff920000c506f R15: 0000b18=
-4ffffffff
-<4>[240562.127825] FS:  0000000000000000(0000) GS:ffff88840118b000(0000) kn=
-lGS:0000000000000000
-<4>[240562.127828] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4>[240562.127832] CR2: 00007f45967ea000 CR3: 0000000330491000 CR4: 0000000=
-000750ef0
-<4>[240562.127835] PKRU: 55555554
-<0>[240562.127839] Kernel panic - not syncing: Fatal exception in interrupt
-<0>[240563.374597] Shutting down cpus with NMI
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
