@@ -1,272 +1,309 @@
-Return-Path: <linux-pm+bounces-42932-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42933-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QGQPBo89mGkWDwMAu9opvQ
-	(envelope-from <linux-pm+bounces-42932-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 11:55:11 +0100
+	id CB7FLZdBmGneDwMAu9opvQ
+	(envelope-from <linux-pm+bounces-42933-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 12:12:23 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD839167106
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 11:55:10 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 279981672C1
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 12:12:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 35E95308AB30
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 10:51:25 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E72F230041D3
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 11:12:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D97D33F38D;
-	Fri, 20 Feb 2026 10:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C39EF341AB6;
+	Fri, 20 Feb 2026 11:12:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="BueSl0t8";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="TOAoSrj1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cXsPrSCS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D0D33F362
-	for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 10:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B3E34166B
+	for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 11:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771584683; cv=none; b=aXfQMOUgrBqE1550/qLdNHFf+iKW9BTfRqM6PeJC9aLX2zvhPyCMXjCq87vQJtoLDl82Xby86uQuUmzie4Vy/lJYeUKhr1tkmxDEZcxXVaesSo1P25alkMoX9juuRV6jUn9nQEYppZmD6xMx0k0bZKLWHC6ZhPdbg2bsEg2q6GY=
+	t=1771585939; cv=none; b=m5XSr7EC752WA6GyWp2TAcgWmIcNKsGEh8Fqrb9llVR8E0mHPsEQyCnLdRap6ESqJ/qrv0VUdkfpRFqT1nyupXlg8kFuTEzusjW7nrMFXP3UgL+GopXP4NkyWujuskac4vknxu2eJurNNX5LDapNHoERFiu2zP/N6xVUYs6VqUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771584683; c=relaxed/simple;
-	bh=ks6OJSw/UwvvF2/JUxSnt1Tii4VaTCXNdvHN7i3pd2A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oe6cVRGUKR1nqGR3rmmF+M0skz4pbxu6lKX2YKvk3BANXPKCmso9s5gN4wUC9MQ2Uw+0/FRrLetlXOJm61C2A3dXCAHF7lqi0jX1AZ6YxV7ct6HqcRKhZCAdaPOZigNY7O8rE01aEvVNFLe2KJVHJOOvqLzEWOCvXlUC+eQTEz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=BueSl0t8; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=TOAoSrj1; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61KA3wnO2218909
-	for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 10:51:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	n8sjIgXFVYbyhkWb9bMVXULx3YRL8NxHkkz55sJrEfA=; b=BueSl0t8sjkgfsHn
-	wC7Y86DW8R4z7S7OJvfXyn63FWvSwGwK7Aw5kaTXqbRl5sKFXMyMsSQjnbxCWTmj
-	rUjY/rIZsGmuO7o1wqw3c4Tg7ZdTlD9bfxLX1mjDVt6igrJywqilZSzEBkveonSZ
-	pPGjO7qbXLMqS3ugXsM8Khq5iBz5CQ6XxJQnIGdnU1nbG6tJhSlTxlDWeAL4k8xn
-	2uPaXcgiHZxRGsBDjeLKnQ47M6LICWxs9vjuiUFFutKhAvUvfaqE1MhwjaQ0Sv5w
-	Yer1MYHRQdgD8QSJCOA57odnydXR4D9mIlw82J1ENBp7hW+JGkMAvt0ehRHAFrT0
-	MVO47A==
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cenhgr3nc-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 10:51:20 +0000 (GMT)
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8cb50dfd542so186022985a.0
-        for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 02:51:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1771584680; x=1772189480; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n8sjIgXFVYbyhkWb9bMVXULx3YRL8NxHkkz55sJrEfA=;
-        b=TOAoSrj1pNkW7zgtDRYPw94vSxGl0hqBTtX6EvM23ImSfc9jflEHE49s0yAvsnyeVf
-         xOJjXJNEX/+g/UGB2pRQvfoCQQr833HuLzGW3kznQ9dfMC2o+WY+O7nENcCZOzLRsHsf
-         iOc2OeDgfCv42QJjcAZufB3piORJ8iF855qphpPvnbK6V95GBqQIz0ctFMMK/8yAGDnf
-         NJeNnE5/MZweEa+JeUzxfpdTb7LNtV5jX5f5+VD+HMCQ5EWv2PfoJ2l4pSJmzM4MS1Am
-         dfwmHXvC9KDSa1chIGbJxslEnh6yW/txijue8KCXqZvyoFhNUr6a1OnRad1DZG3QTCvT
-         q6Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771584680; x=1772189480;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n8sjIgXFVYbyhkWb9bMVXULx3YRL8NxHkkz55sJrEfA=;
-        b=t6f9+qQMhBTW5MBv5VUnllyjlYm0c90srkbopoGs9AMT6PlIerNKaxcIQ1yHUdCRN4
-         C4opeqMmf3A+zV8j9NYXEi75YiJA60MAySpkzxy8mCUwDwDr1wW2TYAPJG7M8F6Yhz0G
-         u3AE4Heg0NSIXpfcVdvQZyoV3I0SeBSVuCuhumtbEdXMGGc4lfabWTadcnEi3KbVsTdr
-         eJr8W4LgZVSRWaJcs6Jya7Fbw3OcQO2i5LxYQWgKx5wBkVbUE0K+hK8bfQNGJVsIGvtY
-         OZ98vXGgM35GwsENRCChQy5GUE5x1xF9m3LkeWtn/pCEL4KUNV7HDV+C47yKnNaivFqq
-         wiYA==
-X-Forwarded-Encrypted: i=1; AJvYcCV58tr8tfe6+nbW3la2bwS+knsahZ4LgRB8RrsDpPo0K1dyFKnbgwn+mzjtVreN8a9BiTcv3H3hIA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXdAHRzHws7tMNTVIYDt4D+XHRW4CRoQzyCbp9t/dW/t2mR3hC
-	jUDhsKlSNTk7OVTrNvLzX0WfN+wfIPl6kaMx53ynOZqQKTiLjEm9SRjZaSp15TGwFLoxoaTl4cL
-	tCkMaw0+eTbs6jKGLaQavi/Il+SB3u3IzQReAEABFma6LKzSMsc/XOyTuHXEKVw==
-X-Gm-Gg: AZuq6aLkPYe9kBOLvJoEWQoEKbKNx93H6tZUdUQ3HAFOFOdsu/cJSF1EAnimOA67GiU
-	VOa9fPFV0ynjvMGR5VL5IIGAFWVIU29FF9FcJdiZygQVyN2AArNGHfSLw+vaW+n862BOt+X3p52
-	zzQW2begRlb33Lcc7QyGBTAgsf8hLc3egksNQrhnc1mssP0UlT5oCgFVlYSKjiJ9I7R+aL9TliU
-	Qgh7PTs7cFKkD9kuQXnUnTLJBxRnNdcWXThfkuZW/QUI80nfGVReAtpA0hK9i4WJCNxbP/3Phnn
-	15bVvGoCo24EO+GK1j5pq2Puwt7ilXymt6TfwsEdSb2EI/Hf5TTcnAO02tAaq+UEKUrwFd2HRyk
-	rOl7hI+lHTJXO4VXGQJUzVPws3C5ILuw5d7PEX74uYDvjdqTA22vOUvjxE2JACPdXM+9nbSsJYx
-	GtIw0=
-X-Received: by 2002:a05:620a:7006:b0:8c7:1b40:d096 with SMTP id af79cd13be357-8cb408e956dmr2404929885a.9.1771584679739;
-        Fri, 20 Feb 2026 02:51:19 -0800 (PST)
-X-Received: by 2002:a05:620a:7006:b0:8c7:1b40:d096 with SMTP id af79cd13be357-8cb408e956dmr2404925985a.9.1771584679248;
-        Fri, 20 Feb 2026 02:51:19 -0800 (PST)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8fc7665345sm664435366b.53.2026.02.20.02.51.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Feb 2026 02:51:18 -0800 (PST)
-Message-ID: <a422e087-a91c-4bb2-9d95-e1cefc9a91bf@oss.qualcomm.com>
-Date: Fri, 20 Feb 2026 11:51:15 +0100
+	s=arc-20240116; t=1771585939; c=relaxed/simple;
+	bh=UvwZLtEoPKg5BTYgid4rQNZNKSe7V9Bt5U1rD4Eofh4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oi9kgF2msKw6bdtIAYXOAqSNkfL8iD/iEEc8/XXjw42OOkYSk3GkS+rSMlk50xz5qmimE6LP/FeXkut3S0Dr1sT8hFuBCqOgIlt4UDpXXSUbHXbYohgf9+jgXhSXKMabwGFvc1rDa33LHoXC0Q5IU+alxPFZXhgNya6v1x4KWtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cXsPrSCS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 421B5C2BC87
+	for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 11:12:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771585939;
+	bh=UvwZLtEoPKg5BTYgid4rQNZNKSe7V9Bt5U1rD4Eofh4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=cXsPrSCSXxJWvFjkKtEPS3Fw3oj2L/qXe/ZS+Tnb1DhdsNLB+hig2Pxl1kuvuDYVc
+	 jlF9q0WqMceMCmNIL6PiuviBAsRUyNve4bH6+SIv2Ucq+u2z5FicPjRz3qKeZbltqE
+	 pNUaPyitlEq02vr5xy2eHMkEP5IxMB+wz9H5LNxTjyd/Oh0VNtCfn5i+Xj0iErh9vK
+	 9mW8wRB0jio+0H9Ek/pxljWiT56FlfTdXvv3+JV55ZgJy/t0ji0sx3p+61yNiBfs6E
+	 db/18KCtVOMV7TT/Aedrk5lErDd5w9rAE9TZCkikkw+A5l7t6v1+dXPUcqGV2F/0U8
+	 QSQ4dPvLNBPUA==
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7d196a2334fso1563700a34.1
+        for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 03:12:19 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUqihbBbtDmV/uyx0RYiA+0miXWpXl6XOX/Eyz3IoHyBII0RRkEIIEdCQFjExFLgxnrlrpMqiwX/Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyoY4kf8O/e6nlhmfdnya9UoyFv1f2Qgtuek8PjfpkPyw3J2RNV
+	iLBCL2QaAG1TT+uD35QLFmqLSoiNNo66dZLCQk0o56lDwRsmskGxHeM/qB03d704UYfnBGhTIue
+	nLttMwTdJ48kOBvbZ04ep37Eh97pxnTI=
+X-Received: by 2002:a05:6830:81c6:b0:7cf:cc66:6df7 with SMTP id
+ 46e09a7af769-7d516a484c5mr3008272a34.9.1771585938234; Fri, 20 Feb 2026
+ 03:12:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/5] arm64: dts: qcom: sm7225-fairphone-fp4: Add
- battery temperature node
-To: Luca Weiss <luca.weiss@fairphone.com>,
-        Jonathan Cameron
- <jic23@kernel.org>,
-        David Lechner <dlechner@baylibre.com>,
-        =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Hans de Goede <hansg@kernel.org>, Jens Reidel <adrian@mainlining.org>,
-        Casey Connolly <casey.connolly@linaro.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20260220-bat-temp-adc-v2-0-fe34ed4ea851@fairphone.com>
- <20260220-bat-temp-adc-v2-5-fe34ed4ea851@fairphone.com>
- <85ce1f2c-f5cf-4e97-9611-4aed03f69cd7@oss.qualcomm.com>
- <DGJQ4WLIML3H.GAO7T4L3MCJM@fairphone.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <DGJQ4WLIML3H.GAO7T4L3MCJM@fairphone.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=TJVIilla c=1 sm=1 tr=0 ts=69983ca8 cx=c_pps
- a=qKBjSQ1v91RyAK45QCPf5w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
- a=6H0WHjuAAAAA:8 a=ftgFGzw_iv9xBS2N3wAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=NFOGd7dJGGMPyQGDc5-O:22 a=Soq9LBFxuPC4vsCAQt-j:22
-X-Proofpoint-ORIG-GUID: K3eiXflpcChjUSn29zSJInMbFl_jpCPd
-X-Proofpoint-GUID: K3eiXflpcChjUSn29zSJInMbFl_jpCPd
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIwMDA5NCBTYWx0ZWRfX+OXrhlDAqc3a
- wV8rcxEB7srwnrj2udNdr/4ggwX8Xl+7yGTWvKAPlRCjmXMzwHM4HgG6CqZ6kQx0lm2IXbBsym2
- mdEuj5Gs7IdIR/CLmfRIHl8r3psuPhkOJl3QtIZ93pRnLy6jOQP/jy7bHoGkdlau9yegGYhcJrK
- Z2rwmn4YdZvFxY57NVgN4TN0V0jFuCitJB6Igfyp9loelqeeCJflXNiMMN3aD5gk3UUtGtyr26j
- bWScBOZx0dcq06MsegJ4a+z1Mq7HMnUbxSu/hjiNXAXTqPASNeNlkmRlHkZsyr3RegIh9K5gKR0
- eJsVQZONeg6iUZ5NsbVhUBe/0VyK4N7if552WhnWsYgGguOcKdtrux+6T93+urdRh1K/4y5ozud
- xaOqeOam30wv+Tq6btzPi81ZiShP8n6wAr+BB59lSX/octn94Dfyl2h/Bt6/LtILaru3NbZPCrj
- qyBUGtYZ7adSI6KHLlw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-20_01,2026-02-20_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 impostorscore=0 priorityscore=1501 lowpriorityscore=0
- clxscore=1015 bulkscore=0 phishscore=0 suspectscore=0 adultscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
- definitions=main-2602200094
+References: <1953482.tdWV9SEqCh@rafael.j.wysocki> <3409058.44csPzL39Z@rafael.j.wysocki>
+ <f9d8789f-40ac-462c-9745-8aafbffc11d4@arm.com>
+In-Reply-To: <f9d8789f-40ac-462c-9745-8aafbffc11d4@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 20 Feb 2026 12:12:06 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hjDAe37qRrVDZ__NGr=XZp5RUot=B9XXE6SXGhvpyODw@mail.gmail.com>
+X-Gm-Features: AaiRm52_6tab5oGkZT1mDTfX_wVeKBnXrG9AVMev3n-QU9wsCbYWZ846S0ZRZdk
+Message-ID: <CAJZ5v0hjDAe37qRrVDZ__NGr=XZp5RUot=B9XXE6SXGhvpyODw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] cpuidle: governors: teo: Rearrange stopped tick handling
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Doug Smythies <dsmythies@telus.net>, 
+	Aboorva Devarajan <aboorvad@linux.ibm.com>, 
+	"Ionut Nechita (Sunlight Linux)" <sunlightlinux@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[25];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42932-lists,linux-pm=lfdr.de];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,telus.net,linux.ibm.com,gmail.com];
+	TO_DN_ALL(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[fairphone.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-42933-lists,linux-pm=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: AD839167106
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,intel.com:email]
+X-Rspamd-Queue-Id: 279981672C1
 X-Rspamd-Action: no action
 
-On 2/20/26 11:40 AM, Luca Weiss wrote:
-> On Fri Feb 20, 2026 at 11:00 AM CET, Konrad Dybcio wrote:
->> On 2/20/26 10:19 AM, Luca Weiss wrote:
->>> Add a generic-adc-thermal node to convert the voltage read by the
->>> battery temperature ADC into degree Celsius using the provided lookup
->>> table.
->>>
->>> This will later be used as input for the fuel gauge node (QGauge on the
->>> PM7250B).
->>>
->>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>> ---
->>>  arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 83 +++++++++++++++++++++++
->>>  1 file changed, 83 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
->>> index b697051a0aaa..7857003099a6 100644
->>> --- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
->>> +++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
->>> @@ -108,6 +108,89 @@ rear_cam_sensor: thermal-sensor-rear-cam {
->>>  		io-channel-names = "sensor-channel";
->>>  	};
->>>  
->>> +	bat_therm_sensor: thermal-sensor-bat-therm {
->>
->> nit: this should be a little higher
-> 
-> meh, it's surprisingly easy to miss this sorting stuff. Will fix in v3.
-> 
->>
->>> +		compatible = "generic-adc-thermal";
->>> +		#thermal-sensor-cells = <0>;
->>> +		#io-channel-cells = <0>;
->>> +		io-channels = <&pm7250b_adc ADC5_BAT_THERM_30K_PU>;
->>> +		io-channel-names = "sensor-channel";
->>> +		/*
->>> +		 * Voltage to temperature table for 10kΩ (B=3435K) NTC with a
->>> +		 * 1.875V reference and 30kΩ pull-up.
->>> +		 */
->>
->> I think this looks good. Is this data going to be correct for all/most
->> devices (i.e. is there a single battery sku)?
-> 
-> Yes, from my info there's just a single battery SKU, so that makes it
-> easy here.
-> 
-> For Fairphone 3 there's two battery SKUs:
-> 
-> * (Fuji) F3AC with NTC 100kOhm B=4100, ID resistor 10kOhm
-> * (Kayo) F3AC1 with NTC 100kOhm B=4050, ID resistor 49.9kOhm
-> 
-> In reality, one can probably ignore the difference between the LUT for
-> either B value since it only differs by a marginal amount, but
-> conceptually I'm not sure how this should really be resolved.
-> 
-> We could have both battery definitions in the dtb, and then the charging
-> driver could determine the battery that's actually present in the
-> system (based on the BATT_ID measurement), but given the design here
-> now, I'm not sure how this temperature lookup table would be propagated
-> to the rest of the system...
+On Fri, Feb 20, 2026 at 11:16=E2=80=AFAM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 2/18/26 18:37, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > This change is based on the observation that it is not in fact necessar=
+y
+> > to select a deep idle state every time the scheduler tick has been
+> > stopped before the idle state selection takes place.  Namely, if the
+> > time till the closest timer (that is not the tick) is short enough,
+> > a shallow idle state can be selected because the timer will kick the
+> > CPU out of that state, so the damage from a possible overly optimistic
+> > selection will be limited.
+> >
+> > Update the teo governor in accordance with the above in analogy with
+> > the previous analogous menu governor update.
+> >
+> > Among other things, this will cause the teo governor to call
+> > tick_nohz_get_sleep_length() every time when the tick has been
+> > stopped already and only change the original idle state selection
+> > if the time till the closest timer is beyond SAFE_TIMER_RANGE_NS
+> > which is way more straightforward than the current code flow.
+> >
+> > Of course, this effectively throws away some of the recent teo governor
+> > changes, but the resulting simplification is worth it in my view.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/cpuidle/governors/teo.c |   80 ++++++++++++++++---------------=
+---------
+> >  1 file changed, 33 insertions(+), 47 deletions(-)
+> >
+> > --- a/drivers/cpuidle/governors/teo.c
+> > +++ b/drivers/cpuidle/governors/teo.c
+> > @@ -413,50 +413,13 @@ static int teo_select(struct cpuidle_dri
+> >        * better choice.
+> >        */
+> >       if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
+> > -             int min_idx =3D idx0;
+> > -
+> > -             if (tick_nohz_tick_stopped()) {
+> > -                     /*
+> > -                      * Look for the shallowest idle state below the c=
+urrent
+> > -                      * candidate one whose target residency is at lea=
+st
+> > -                      * equal to the tick period length.
+> > -                      */
+> > -                     while (min_idx < idx &&
+> > -                            drv->states[min_idx].target_residency_ns <=
+ TICK_NSEC)
+> > -                             min_idx++;
+> > -
+> > -                     /*
+> > -                      * Avoid selecting a state with a lower index, bu=
+t with
+> > -                      * the same target residency as the current candi=
+date
+> > -                      * one.
+> > -                      */
+> > -                     if (drv->states[min_idx].target_residency_ns =3D=
+=3D
+> > -                                     drv->states[idx].target_residency=
+_ns)
+> > -                             goto constraint;
+> > -             }
+> > -
+> > -             /*
+> > -              * If the minimum state index is greater than or equal to=
+ the
+> > -              * index of the state with the maximum intercepts metric =
+and
+> > -              * the corresponding state is enabled, there is no need t=
+o look
+> > -              * at the deeper states.
+> > -              */
+> > -             if (min_idx >=3D intercept_max_idx &&
+> > -                 !dev->states_usage[min_idx].disable) {
+> > -                     idx =3D min_idx;
+> > -                     goto constraint;
+> > -             }
+> > -
+> >               /*
+> >                * Look for the deepest enabled idle state, at most as de=
+ep as
+> >                * the one with the maximum intercepts metric, whose targ=
+et
+> >                * residency had not been greater than the idle duration =
+in over
+> >                * a half of the relevant cases in the past.
+> > -              *
+> > -              * Take the possible duration limitation present if the t=
+ick
+> > -              * has been stopped already into account.
+> >                */
+> > -             for (i =3D idx - 1, intercept_sum =3D 0; i >=3D min_idx; =
+i--) {
+> > +             for (i =3D idx - 1, intercept_sum =3D 0; i >=3D idx0; i--=
+) {
+> >                       intercept_sum +=3D cpu_data->state_bins[i].interc=
+epts;
+> >
+> >                       if (dev->states_usage[i].disable)
+> > @@ -469,7 +432,6 @@ static int teo_select(struct cpuidle_dri
+> >               }
+> >       }
+> >
+> > -constraint:
+> >       /*
+> >        * If there is a latency constraint, it may be necessary to selec=
+t an
+> >        * idle state shallower than the current candidate one.
+> > @@ -478,13 +440,13 @@ constraint:
+> >               idx =3D constraint_idx;
+> >
+> >       /*
+> > -      * If either the candidate state is state 0 or its target residen=
+cy is
+> > -      * low enough, there is basically nothing more to do, but if the =
+sleep
+> > -      * length is not updated, the subsequent wakeup will be counted a=
+s an
+> > -      * "intercept" which may be problematic in the cases when timer w=
+akeups
+> > -      * are dominant.  Namely, it may effectively prevent deeper idle =
+states
+> > -      * from being selected at one point even if no imminent timers ar=
+e
+> > -      * scheduled.
+> > +      * If the tick has not been stopped and either the candidate stat=
+e is
+> > +      * state 0 or its target residency is low enough, there is basica=
+lly
+> > +      * nothing more to do, but if the sleep length is not updated, th=
+e
+> > +      * subsequent wakeup will be counted as an "intercept".  That may=
+ be
+> > +      * problematic in the cases when timer wakeups are dominant becau=
+se it
+> > +      * may effectively prevent deeper idle states from being selected=
+ at one
+> > +      * point even if no imminent timers are scheduled.
+> >        *
+> >        * However, frequent timers in the RESIDENCY_THRESHOLD_NS range o=
+n one
+> >        * CPU are unlikely (user space has a default 50 us slack value f=
+or
+> > @@ -500,7 +462,8 @@ constraint:
+> >        * shallow idle states regardless of the wakeup type, so the slee=
+p
+> >        * length need not be known in that case.
+> >        */
+> > -     if ((!idx || drv->states[idx].target_residency_ns < RESIDENCY_THR=
+ESHOLD_NS) &&
+> > +     if (!tick_nohz_tick_stopped() && (!idx ||
+> > +          drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_N=
+S) &&
+> >           (2 * cpu_data->short_idles >=3D cpu_data->total ||
+> >            latency_req < LATENCY_THRESHOLD_NS))
+> >               goto out_tick;
+> > @@ -508,6 +471,29 @@ constraint:
+> >       duration_ns =3D tick_nohz_get_sleep_length(&delta_tick);
+> >       cpu_data->sleep_length_ns =3D duration_ns;
+> >
+> > +     /*
+> > +      * If the tick has been stopped and the closest timer is too far =
+away,
+> > +      * update the selection to prevent the CPU from getting stuck in =
+a
+> > +      * shallow idle state for too long.
+> > +      */
+> > +     if (tick_nohz_tick_stopped() && duration_ns > SAFE_TIMER_RANGE_NS=
+ &&
+> > +         drv->states[idx].target_residency_ns < TICK_NSEC) {
+> > +             /*
+> > +              * Look for the deepest enabled idle state with target
+> > +              * residency within duration_ns.
+> > +              */
+> > +             for (i =3D drv->state_count - 1; i > idx; i--) {
+>
+> s/drv->state_count - 1/constraint_idx/
+> to respect the latency_req here?
 
-The path of least resistance (pun intended) would probably be to make
-generic-adc-thermal consume an ID channel and accept a number of LUTs..
+Good point, yes.
 
-That sounds sensible since most battery ID mechanisms are probably also
-ADC-based and one would hope (tm) that the values output by these ADC channels
-would then be distinct enough for the driver to have an easy time confidently
-selecting one of the options (or a fallback)
-
-That said, this is just my guesstimates and perhaps the IIO folks could comment
-on that
-
-Konrad
+> > +                     if (dev->states_usage[i].disable)
+> > +                             continue;
+> > +
+> > +                     if (drv->states[i].target_residency_ns <=3D durat=
+ion_ns) {
+> > +                             idx =3D i;
+> > +                             break;
+> > +                     }
+> > +             }
+> > +             return idx;
+> > +     }
+> > +
+> >       if (!idx)
+> >               goto out_tick;
 
