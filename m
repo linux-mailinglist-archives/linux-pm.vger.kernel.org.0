@@ -1,472 +1,871 @@
-Return-Path: <linux-pm+bounces-42957-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42960-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IOb+CYjLmGltMgMAu9opvQ
-	(envelope-from <linux-pm+bounces-42957-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 22:00:56 +0100
+	id eMZuNCLmmGkYOAMAu9opvQ
+	(envelope-from <linux-pm+bounces-42960-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 23:54:26 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B2FA16AD47
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 22:00:55 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F91916B557
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 23:54:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8B0B93038AEC
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 21:00:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 450D43017251
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 22:54:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 819F62D1911;
-	Fri, 20 Feb 2026 21:00:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E654C30F927;
+	Fri, 20 Feb 2026 22:54:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="W3HhVIDx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DV5oojA+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010006.outbound.protection.outlook.com [52.101.61.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C351627470;
-	Fri, 20 Feb 2026 21:00:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.6
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771621251; cv=fail; b=mmOWaQhKtkjkpXZVXRRoHT12gnxMZv9xZMFXqE2MLOKVZvYcHKbejA/BWqBs8ITWo/7TfPv/BCKpp1SLIdmp4KMkOZydzzpo1Mst+A8zx7hWit2RawYlFRqLxGo9ulZIlx+YMJ63Ec9Zq36l5ixIfSMzMO8TDfW26NWjFqYHZYc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771621251; c=relaxed/simple;
-	bh=j4cLYuoFqMCRXvQ6TTKrhCvd/3muqD0vliVdX54xcUw=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=L3mEVtAVIl+q6sCQEfj59pR3NJ6I9XJL4Lk+YqLR7Om0w2XGrWyZvkBM7PPIxnLfTlJFNEoOKxeRq4t/CipXg+5uv6ru6UE9Ai7glWHhj6Q7gzCK/lPaZH0UWhqL85ewf1uKjujC7JlHRvc5kFiMX+OxozUe484o2KJckbHQ16g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=W3HhVIDx; arc=fail smtp.client-ip=52.101.61.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Y7/m9zwjWN6k6kAETMN73Cap/xpgrFOABqn1zBkagvFPdgaBpMuuI8S0v4EdAviyhjYDeloh3cIR56e584KC1XWXsUHQjsPhDi4yysrCn1wsDPhfl6aM0Vao0we5u+UF/gxXJfiwDAbLSRLkoo+AxA+oItqb4kkU4YLPeiHKDjzGSMEkSP5OfIeWZrFBiByW4ESlUz/40uaBrS+avelTV043gzovFFP1dWUHwkEtc8hmLedng0ghPkCutB1tgORINfGZLAstfgdv1KdCqiAI8JMlfgyOnvlOmp2NDYu/7MKzcWEVcNU+wpC1XnZoJ0A5C+oOXNSys0aLw8yFqsLaCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yXMTlWTxXVO39c6YPTZL9FDgRvhkNCq31qCNiJLEnn8=;
- b=iLCKEO5qJKympofdmSHy6XrLke2H4moGHJUi5RVDObVe701JnW3AhOaFEwzo0+MVFaDdwGNH1ZJ5nEOAcWQyfuAw24etXF+apgckK/6/t0WjlnXgjrElX1lKZ4JeLjaFYeUb3CQihp/31FzQiJzBetfLkZVUYoBNqkGKmyg1HetR0yqM4z7YBi6oKvJz+FbofOnOXsQcwINbEn2cIN62R5y84SSnfPwCQMbdfH/rh5ZVaEAvpOKW2vxzV2CoK+lda+F2viO4xLVEyHoRXdWLocAyvERhjtxHlUqGXlVkST+yBu7z5QLQSNY5BM9C9irVVV16n/gaIl/9KyFvlEwsAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yXMTlWTxXVO39c6YPTZL9FDgRvhkNCq31qCNiJLEnn8=;
- b=W3HhVIDxNoZO4WroZZ/9vXyD8iKigkOhWX1At9mhdHCgA5tD2WgDBXB87/v+43QtplKnbGlbFKQMql2W3ZyA2z5TgysTsSSU8hh9JqM7qMAy2eQP4/IaSiCNA1pBvIELqUYlOpK6x7YI7yrntFf5Rh8GdiQ4xYUmhgA/dutM4zo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from LV8PR12MB9714.namprd12.prod.outlook.com (2603:10b6:408:2a0::5)
- by SN7PR12MB7021.namprd12.prod.outlook.com (2603:10b6:806:262::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.16; Fri, 20 Feb
- 2026 21:00:45 +0000
-Received: from LV8PR12MB9714.namprd12.prod.outlook.com
- ([fe80::8c9f:3a5b:974b:99c6]) by LV8PR12MB9714.namprd12.prod.outlook.com
- ([fe80::8c9f:3a5b:974b:99c6%6]) with mapi id 15.20.9632.015; Fri, 20 Feb 2026
- 21:00:45 +0000
-Message-ID: <789bb5f3-888e-43b6-ba17-66e0e1edfa48@amd.com>
-Date: Fri, 20 Feb 2026 13:00:41 -0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/9] dax/hmem, cxl: Coordinate Soft Reserved handling
- with CXL and HMEM
-To: Alison Schofield <alison.schofield@intel.com>
-Cc: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
- linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
- nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
- linux-pm@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
- Dan Williams <dan.j.williams@intel.com>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Yazen Ghannam <yazen.ghannam@amd.com>, Dave Jiang <dave.jiang@intel.com>,
- Davidlohr Bueso <dave@stgolabs.net>, Matthew Wilcox <willy@infradead.org>,
- Jan Kara <jack@suse.cz>, "Rafael J . Wysocki" <rafael@kernel.org>,
- Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
- Li Ming <ming.li@zohomail.com>, Jeff Johnson
- <jeff.johnson@oss.qualcomm.com>, Ying Huang <huang.ying.caritas@gmail.com>,
- Yao Xingtao <yaoxt.fnst@fujitsu.com>, Peter Zijlstra <peterz@infradead.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Nathan Fontenot <nathan.fontenot@amd.com>,
- Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
- Benjamin Cheatham <benjamin.cheatham@amd.com>,
- Zhijian Li <lizhijian@fujitsu.com>, Borislav Petkov <bp@alien8.de>,
- Tomasz Wolski <tomasz.wolski@fujitsu.com>
-References: <20260210064501.157591-1-Smita.KoralahalliChannabasappa@amd.com>
- <aYuEIRabA954iSfR@aschofie-mobl2.lan>
- <d06fb76f-3fb3-4422-a8b1-51ea0c5e48f5@amd.com>
- <aY11TGmQvzuSKxyO@aschofie-mobl2.lan>
-Content-Language: en-US
-From: "Koralahalli Channabasappa, Smita" <skoralah@amd.com>
-In-Reply-To: <aY11TGmQvzuSKxyO@aschofie-mobl2.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR21CA0003.namprd21.prod.outlook.com
- (2603:10b6:a03:114::13) To LV8PR12MB9714.namprd12.prod.outlook.com
- (2603:10b6:408:2a0::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE3315624B
+	for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 22:54:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771628062; cv=none; b=EoEaU1sFooSaQRlYH1/dpku0o4oLR/JheLwA0UQcvyU6Sp5fKdr0nsNGUyBw0u7fSMycqi518yrE9+Ja0G+8EW0YrqsZAtCuDxTWA1vheQm1aGyO0jhOP17KDS+nh61FTPFyTm1+42ZSGwobmPjan+9FmqD38RTLdpMFofNHCSA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771628062; c=relaxed/simple;
+	bh=CErc1Cc+3h2ZneEzfwDGZEbOO+w6VY+iLEp30+TKX/c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TEeqYF7qbknazIRKZC87s52UUsxwP1ZmAvpNO+5gEYaYaJgh0Cf+nGssx99Qu7AXqyDOZyWbuNClQ0gpEwjUULJs2RRKWh9PPc2X98gJx3GyFFstzuhPD4UKJZnIqK6XYslwcH4LQIgSALl64m4N1ySFcNSPLiOG3esvoufd2OE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DV5oojA+; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8cb5c9ba82bso396277585a.2
+        for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 14:54:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771628060; x=1772232860; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4ysaqx8k04M5ZyWb6NfqEX6Ito7kZyTdQoQ1l4hgF4A=;
+        b=DV5oojA+FwMZo9PFnTBVgWY9O0Ih1V78jQVSkGIATqtyCcuzrD525KL2hNAWuJx9EQ
+         AqGUMdqIMb7VQoMgK42m8oLkjWiydPGvonkTWxVJTZABk2WZptFrvQMsX1S/Z+XuHPK6
+         4WS0ka3K6p8slTpLPqTH8M9Kl7MSoDc7UnSGL2VvrbMej8BxT7aRWU5S+Hhckef1462l
+         aHVoSYpg0FmjVHQ5z5pOhc5qUgjScJ8ERpl2W4VaCyQ2wavnyP72RQhJx51nWml+GgaK
+         L8j3xP+MwEgIkY53TeuogPgG2kjfVcwl/bdTU4RAdI9f06bUn7Jltwkr/v4TMf9a5BSd
+         C5qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771628060; x=1772232860;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=4ysaqx8k04M5ZyWb6NfqEX6Ito7kZyTdQoQ1l4hgF4A=;
+        b=FOA298fhaWRjfnmQ0Yfv+6lMFrqyWU5g1tLe7WqngRDZGgHyVKylW0CJ6r4q20iM9z
+         sqC4D98SFPC4WDl+4ndgSOARBQraWa8CZoV6JodHtkjnCE25W45i7tuTvF+T2g6y2SKo
+         YERcGCDfVrwvVzyT+gBeqqqEiwZzjfEi0sQsF2B50Vm4z7E4CsMajw247u6BkMIot28R
+         GzB3vjqvdk+4QW7ICr9yhPFuo17CurQjElD7uOyN2HR5WptBfp4NIJ682t0H+1DTOf6x
+         8oQLt3h8vtyGiDTklS6lKjUTkV1WzqwlD9XFMINRkeQxfp9yZTykJh5T6Etsm3lqbXwP
+         kB/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUJP3PH0mOI33UqB81RJx+ORPI2LOU4ANNbTZkqKmrOCh7OwOEKR1TbvZ+m2C4hHRXuguiDkbF6FQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1WTJRgUi0roCBQtZaqAAYk9KohUJ4up/MnxCwf9IIEsM2IimG
+	q0Ib/TSmnDliX67V8SZJp34YxF8YsMeAQy9FLnNPTjXirkx2OoUT2ooUHC2tyYgCjfM=
+X-Gm-Gg: AZuq6aLLLa+5tYoJh5VP0vy2op5T+HGaUnVPEuxt5K5QKa1iL66jFZ4G9uisHRerrep
+	YlYbfcEhP+vfwdsdqpvoJO5qo/63u+jpA+Y+vYZGtB7HvuNKU361Op6tO+Y5zIrL/0EcOn1HMIy
+	qKFpgcSBf30y2scHW+gf2n/sfzTX+iaVxekKIdwPwkOwpmhhb/Ttj69IVoG1g5z+fYZj4hz/06O
+	JQqENtRYrA3HjLriBQlQZjb+FB1K6JQLFatrubSh1wTl0+4nZzBbfoEqaoQGeANAMTxPlYunGi5
+	1SN8neMQ2Wox/nrP13Xm7v7MlxjNMDqCPQ+n21PvjWggU3W+pe5yhqgyeB3eUX4Q99+ydRfnMlK
+	OBE9l77t4UYbKXFHWUGjLfzDJ7/Sf0uzuaDfbRUixqg1Beh7buCec8LXjofywQnAfmkKhpzvI9m
+	ykr36NC/TvlLtj/T6OhAqCBQZg7V4M0ofMg/3j5CGd9te6
+X-Received: by 2002:a05:6820:188a:b0:66e:10ca:fcd5 with SMTP id 006d021491bc7-679c424cbe9mr582827eaf.12.1771621540600;
+        Fri, 20 Feb 2026 13:05:40 -0800 (PST)
+Received: from localhost ([2a03:2880:10ff:8::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-679c56ec56dsm363029eaf.12.2026.02.20.13.05.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Feb 2026 13:05:40 -0800 (PST)
+From: Nhat Pham <nphamcs@gmail.com>
+To: kasong@tencent.com
+Cc: Liam.Howlett@oracle.com,
+	akpm@linux-foundation.org,
+	apopple@nvidia.com,
+	axelrasmussen@google.com,
+	baohua@kernel.org,
+	baolin.wang@linux.alibaba.com,
+	bhe@redhat.com,
+	byungchul@sk.com,
+	cgroups@vger.kernel.org,
+	chengming.zhou@linux.dev,
+	chrisl@kernel.org,
+	corbet@lwn.net,
+	david@kernel.org,
+	dev.jain@arm.com,
+	gourry@gourry.net,
+	hannes@cmpxchg.org,
+	hughd@google.com,
+	jannh@google.com,
+	joshua.hahnjy@gmail.com,
+	lance.yang@linux.dev,
+	lenb@kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-pm@vger.kernel.org,
+	lorenzo.stoakes@oracle.com,
+	matthew.brost@intel.com,
+	mhocko@suse.com,
+	muchun.song@linux.dev,
+	npache@redhat.com,
+	nphamcs@gmail.com,
+	pavel@kernel.org,
+	peterx@redhat.com,
+	peterz@infradead.org,
+	pfalcato@suse.de,
+	rafael@kernel.org,
+	rakie.kim@sk.com,
+	roman.gushchin@linux.dev,
+	rppt@kernel.org,
+	ryan.roberts@arm.com,
+	shakeel.butt@linux.dev,
+	shikemeng@huaweicloud.com,
+	surenb@google.com,
+	tglx@kernel.org,
+	vbabka@suse.cz,
+	weixugc@google.com,
+	ying.huang@linux.alibaba.com,
+	yosry.ahmed@linux.dev,
+	yuanchu@google.com,
+	zhengqi.arch@bytedance.com,
+	ziy@nvidia.com,
+	kernel-team@meta.com,
+	riel@surriel.com
+Subject: [PATCH] vswap: fix poor batching behavior of vswap free path
+Date: Fri, 20 Feb 2026 13:05:39 -0800
+Message-ID: <20260220210539.989603-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <CAMgjq7AQNGK-a=AOgvn4-V+zGO21QMbMTVbrYSW_R2oDSLoC+A@mail.gmail.com>
+References: <CAMgjq7AQNGK-a=AOgvn4-V+zGO21QMbMTVbrYSW_R2oDSLoC+A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9714:EE_|SN7PR12MB7021:EE_
-X-MS-Office365-Filtering-Correlation-Id: 19322284-e2bf-4ea7-2763-08de70c31dea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?a0YwVjJKd3VZVnZiSUhmcTkrMEExU3JQNTRuVmFDV2ZsSktLOERyb2l5SDVV?=
- =?utf-8?B?R0tTRHRtZUJqMHJ2WGVSeGF6ZlNYS2M5OFg1MU4xWGc5cjkrcmtKaFd4Z0xX?=
- =?utf-8?B?TTJDamNySEhyZE0zZi9xbXQ3alloZjZ1ak4vQytsRmE1LzVTOC9RdmFRNW52?=
- =?utf-8?B?U3VaZGdTNUFrb1lrSU1oWWo2TzNyVWZMV0thNlYrdHg2WG02OVFkZFU1L3cr?=
- =?utf-8?B?OHVyM3FvZXA3a0l4eHFsaGZDTEpCZDNvSnZ1QkNOY1ZtVUNQMXVoa3FscHVG?=
- =?utf-8?B?cWNGQllXaW9vaDhvNE95WStia1lURURBMFFmQnk2KzBzcW5SanZXYXhQWDh0?=
- =?utf-8?B?SXVpdGVwY1FaNEhiNmV3L0ZMV21JZWxpK0pkVUZYbVgwcjJnT24vV1k3NW05?=
- =?utf-8?B?ZGhFSkVvS0VFL1dsblJObG90bkN2Tkk1bFA0VXo0ZHBRRWlXZjdicmMwTzZE?=
- =?utf-8?B?YzI4QkJRMjdSaW5xbW8vQ0t1ZUwwbVJtQTNUSldBdTJ0bzVCM0hXbEs2WHdn?=
- =?utf-8?B?UkJseklqQ3dzZnE2RzBBTHdXem1rMHY5WWJJdFBaOEJQS28yRHFwemNEZFFE?=
- =?utf-8?B?WE45a1ZEL01ISnNFSmR2NEZPcExpNzVNSVd6QVEyOW50RTlMNVVXR2FsSXN2?=
- =?utf-8?B?RU9CMzBWL3J6T29hT3o3L0U5K05QQ3liMFVQcHNuTGg0ekdZT1NwTEJvcy9y?=
- =?utf-8?B?bmZGblVOYnkrQlQySUlFZGlhK0N4dVZTSVJ0UmNaZDl6SGpDUHQ0S29oTWQy?=
- =?utf-8?B?VTJRYXFvTWZhWUUyRVFhZGtNU2QzRjJMUjBRMHptay90RnZoMzhnVENoTkM1?=
- =?utf-8?B?YWV6c2tiWTltcFQvZWZkTm9KUnpFMnkzNW5yREdQbk9JTmFYYU45Mng5M2Vh?=
- =?utf-8?B?bEVQd2t2T2hHSTlsY1BFc3kyekdmaDZYM0VTWUJRZG1yR25kOWxiZWZyUDFQ?=
- =?utf-8?B?c212aFRWUFM1WU5tdk9IVnh1SDhIcjRDeG5NODk1MUtLWnVPYVFvNDJKVmFE?=
- =?utf-8?B?cVhUQVJldHpYU2JLREMvWGRkZEg1OEZKK1MwcXlLYVAwNnV2Tjg5aEVoa0J1?=
- =?utf-8?B?OFFUMXdlTFU1SHdQbElOQWF0THd1K2lkS3MzYys3NUZPNkNOMjAzdlYxQmFp?=
- =?utf-8?B?eTNFelZ1KzNaMXgvZUFiaUJ6UlFsNGFWVVB3WTZrUDB5Q2wreERGUlFkdGpI?=
- =?utf-8?B?QnV4TXNQRHc2QmRrOFRWSytjMitiSXV3Ty9RTEJCWi9qQ24yS2xOMGd2YWRE?=
- =?utf-8?B?eW43bllzemRicE5CV2xtK2pUa1poWGZnWEsxQlZYRW1JMHQrRkF3OUVmc2JY?=
- =?utf-8?B?ZUJRcGQ5RVAwU2ZpQ0Y4RmlnSEk3blBUeG05c2VrQ2lvbWNBcWxKcUxwNTQz?=
- =?utf-8?B?Rm96Z1dmWm8rdytSWjBvRld2MGNiQnhJNTd6SXUxY1V2MWhZN1RxRXpwL215?=
- =?utf-8?B?U2VKSkIwZHdpQ1BPN3JuUnJndzBOeVNuNmdvU0ZGc1NTc3U2eFQyOHVpUTc0?=
- =?utf-8?B?RWNTUS9GdnhXQkF5ZlFPanBjMnVDQ2tCelFydHNwT2JRYi9zdmNtZTNtbDJY?=
- =?utf-8?B?a3lSWEM0TTRLS05IV0hoZXBWb2NlNVRnNWEzUEQwSjVrYkd1M2Vyb2FUaTI3?=
- =?utf-8?B?NW9qWlRmQnFmWXU4MWhTNEErOEJaQk16UzBVeDBVZjBZaTg2WWpNR3lBb29a?=
- =?utf-8?B?RkU1RGtuU3V5cXZqVmVkcG03NGFtUStFK21NeXJQRnVIZ2lnd2JIZlczRjhr?=
- =?utf-8?B?MnpDeHVYdXFUK1YxZXZtR05FL0ZJR0N6N0JZYkR1VWM3cmJ0YjB0MnFqQS9C?=
- =?utf-8?B?TXlyY09jVm8zMytyMWp3MHh3cnFzVWw1SUtDQUh0bUZzQzl4TzViaHdKRDJ0?=
- =?utf-8?B?K1BIeDhVRVdvbmk0OW4vYXRrTlAwU3h4RFBSWlo2WFhvMklUUlJiYTYxTlhR?=
- =?utf-8?B?ZHExalJkWjExOEdEN1NWQU5ReHNpaEphMzh4S1NvS2dKQm1tMjBHMGpWNGtO?=
- =?utf-8?B?QVM3RzQ2Wm93VVlZQTJ4aXM1eG9NdkpMdUR6MzNwM3lLYWRmTzVvU2xPZCtN?=
- =?utf-8?B?c0ZFSUZYY3NiTHNVLy9ta20wMURVK0xPTmMxbVJ3L25CcTFrOHl5aDkzV1Fk?=
- =?utf-8?Q?cGNpSU/RbEQzU693xAMM+3jBS?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9714.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZjVxajhmTGxQcGs2VzF0dzN0WFp0UWo3blU4UzFzZzNwZ2hkUHNSSzQrOE5Z?=
- =?utf-8?B?NjdVMFFCOUNkQk84aVNWeFNuQ2JKZEk1N0MwaXVYMGNOLzNid1lkVnh1OWxW?=
- =?utf-8?B?QS8vNjE4VVB1OXRPM2grcUluampGSmtvaitkcjM1c0p1Y3E3QnAyRExHaFpE?=
- =?utf-8?B?bjVrOGJVbEtTUURPbFFlSnNadTZJZTcwQTNBU256TEZKbXNrbjFzMXdhTE9I?=
- =?utf-8?B?VGpJR3dYQ2tCV1dtM1VlNTdsaEdhSVgyL21qZ3RDSmxEOFVXa21wUUhweUxF?=
- =?utf-8?B?RnNNU3huSGpHNUoyUzk1WE93TC9vSXRrS3RPNmFodHBxQkR4cGRIc3pNM25Y?=
- =?utf-8?B?WFAxV0s5ZjRhWHV3R2tWeUxheDJiNisyb01xNG8wNkNNd0YzcitpNk54RGpu?=
- =?utf-8?B?QzlOVFpQazVVMnY3TTFmODQreUpOWGFUVnVaNlFKbmZQV29hQkZ0SW00RFhi?=
- =?utf-8?B?UC9pQktxbmhBMCtjNTM0WEFRMEVXRmdHMkwyVXNuNkpHMDNOS29qM3ZtSW5L?=
- =?utf-8?B?THlwbnlNSHpmNHpLQXpoRnFReVhwc05sTEUzZmp0dCt2VGFpZnJjK0dGN3N3?=
- =?utf-8?B?RVpiOVZGa0tPcTlRT2lhWnFzanBXZGU0d1M1RUVDZFZ0ME1GUG1FTDhTZU5S?=
- =?utf-8?B?bVloMEZOYkFvVzkyekJ3UktzM1NXWnBsdWRvK0RzYWl2MmJvRVYyQnlOazdT?=
- =?utf-8?B?dkVjdkF6MlpuNVQ0MmRkbjhOVG9pVW9wTjQwc2NTR0xjc2FPS2FhQkw3T3JZ?=
- =?utf-8?B?eHd2NDNOeU9paUJhNGdJbkFaYzRLY0dtK1UzN21lSFl1UWVzWGVLUkhaaWN4?=
- =?utf-8?B?alVQVEswQ2RjaVdtZ3NnQmJrczdWWHhSTU1hcG15R0VXT2pRODFOQUNXUjlR?=
- =?utf-8?B?QnBRQVJoS1BPL0VOcDhPc1hWNWpqSzhRQU94TDgzYnBWRTBjZzJ1SWZicXpZ?=
- =?utf-8?B?ZnFobklwYVdpK0Q4MWI1RGNUOFlFR3RDdlViZ3BCY0hGZ1ptYVA4RVJtU2FK?=
- =?utf-8?B?cXA3MDZPZk9JMFNLMGNKL0xUajlmS2xrMHREMGdlbzRvOHZGamoreHZUZzh1?=
- =?utf-8?B?ZGRHQ2loNGtEdUtLTy9RQzh5Q0p4Yjgzc001MW1aa093azBOb0JLbm1kOUVs?=
- =?utf-8?B?bk40WVpTMFgvVzh2N0dscUlHcDZVM0I5ekV6OTBQa2FOVE1IaldwMklBU0NM?=
- =?utf-8?B?YkxaQk9kNzArejZjUUxyeHRFZlZKYm16WStEWENlSjhPdmo1K0tJOTd4Q1lB?=
- =?utf-8?B?MTNHVW9lM0QyTDhhZU1GSy80c3gveUo5clZPemk4bW9lQTdQTXJjcWVTaTFT?=
- =?utf-8?B?OG1OV3RBZ3RndzJaK2pnMnFhY1RBdHJaVWt0TldERFl4dmc0d28zTXc1akp2?=
- =?utf-8?B?cERDRmk5ak5IVDV5dG1UektQWHFoUEdWenk0WnM0L1dUQldPNmZ3WlVrZVYx?=
- =?utf-8?B?VnZIcXZzVkdzUU14dXhLaFE5SldCZGd2RlNhWVBrSmxNTi94UXoza3FOMmpy?=
- =?utf-8?B?MS9XZjZ2NzFNUFBIckJqOVo0ZzRyYkUwbGJBZ1JTRXRtN1lkaVdDZkUyQlJE?=
- =?utf-8?B?Skw5K09obFRFT3pmNlNwQzM3d3dnY0Y5dE9VSTBQcHdIbkhSQjlNTkE1Nkx0?=
- =?utf-8?B?WTFOL1FibE12ZmpFbWs4ckREVTM3ZlBCMWhTMUVoTXNoajFBVTZZcVFtaFFr?=
- =?utf-8?B?bnYwREJ6MmNxT1Jqc01YempGeVNvQ3BmU3VxYmlsZjNVQk82b1RBUDg3Y1p6?=
- =?utf-8?B?VE11ek9Kb0lCVk5kSTR1L1lPUkh1dTVoZng5OUwwMXY4RDE0aDFmdXdrVHhj?=
- =?utf-8?B?djQvSXBWZllvVDJlbVlPMzBrNyt6S0RQaW9jTjZQS2tDUEN6cW43S1B5YitL?=
- =?utf-8?B?ZjJYS2d5ZlQrc0llbVdwbTBoRlVCdEhwTjQyekI4dEhoeFcvb2JwV2FhZ2VV?=
- =?utf-8?B?dStENGlicUgrbUFYV0RWOUtRN2hUeTZ2Tm5YbmIwUkRjZmpqMVdlMHBpR3lM?=
- =?utf-8?B?QU5rVHFCNTZ6dm9oY3FFZVExMHphYXRJWEpWUjZZTjlDR2d3c2pPdjVQTUhj?=
- =?utf-8?B?S3FtM1ZUZDVPSEhkTGJrTTFoWHdoZk5kV1VONXJjOCsrNTRBenlqV3h1clhU?=
- =?utf-8?B?Yms4Q3FRWkppUmdTZDBhSDRoeUlLalNwQUp6RVpsQWkvOTdOaGFZWjMwSE4r?=
- =?utf-8?B?ZHZhTTNhMEpDR1ZMdksycXAyRFFVUVVYU3lZVjh4cXRFdFVqWWE1cU5MallM?=
- =?utf-8?B?UlNMZS9CNnVFdXcyNjBGTWROQnlxL0l1RnMxZW5LR2txL2taZ0J1VCtobS9w?=
- =?utf-8?B?MG1tUS9NSUNXVzJ2Qms0OWN5dGFvVzMrU1IwVGRlWXlUUzJnaWRtZz09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19322284-e2bf-4ea7-2763-08de70c31dea
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9714.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2026 21:00:45.7563
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6fdnfCtBzWtedEpRa94QpkTs9RE+0w1wKTBm/OSzJzU5Zn0RerpDwN3jjdQjam9fB6NLFMYhGIFE0hqhGr+m6w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7021
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[33];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42957-lists,linux-pm=lfdr.de];
-	FREEMAIL_CC(0.00)[amd.com,vger.kernel.org,lists.linux.dev,kernel.org,intel.com,huawei.com,stgolabs.net,infradead.org,suse.cz,zohomail.com,oss.qualcomm.com,gmail.com,fujitsu.com,linuxfoundation.org,alien8.de];
-	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FREEMAIL_CC(0.00)[oracle.com,linux-foundation.org,nvidia.com,google.com,kernel.org,linux.alibaba.com,redhat.com,sk.com,vger.kernel.org,linux.dev,lwn.net,arm.com,gourry.net,cmpxchg.org,gmail.com,kvack.org,intel.com,suse.com,infradead.org,suse.de,huaweicloud.com,suse.cz,bytedance.com,meta.com,surriel.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42960-lists,linux-pm=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[nphamcs@gmail.com,linux-pm@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[skoralah@amd.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[amd.com:+];
-	NEURAL_HAM(-0.00)[-0.999];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_NONE(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_GT_50(0.00)[54];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-pm];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,amd.com:mid,amd.com:dkim]
-X-Rspamd-Queue-Id: 7B2FA16AD47
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4F91916B557
 X-Rspamd-Action: no action
 
-On 2/11/2026 10:38 PM, Alison Schofield wrote:
-> On Tue, Feb 10, 2026 at 11:49:04AM -0800, Koralahalli Channabasappa, Smita wrote:
->> Hi Alison,
->>
->> On 2/10/2026 11:16 AM, Alison Schofield wrote:
->>> On Tue, Feb 10, 2026 at 06:44:52AM +0000, Smita Koralahalli wrote:
->>>> This series aims to address long-standing conflicts between HMEM and
->>>> CXL when handling Soft Reserved memory ranges.
->>>>
->>>> Reworked from Dan's patch:
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/patch/?id=ab70c6227ee6165a562c215d9dcb4a1c55620d5d
->>>>
->>>> Previous work:
->>>> https://lore.kernel.org/all/20250715180407.47426-1-Smita.KoralahalliChannabasappa@amd.com/
->>>>
->>>> Link to v5:
->>>> https://lore.kernel.org/all/20260122045543.218194-1-Smita.KoralahalliChannabasappa@amd.com
->>>>
->>>> The series is based on branch "for-7.0/cxl-init" and base-commit is
->>>> base-commit: bc62f5b308cbdedf29132fe96e9d591e526527e1
->>>>
->>>> [1] After offlining the memory I can tear down the regions and recreate
->>>> them back. dax_cxl creates dax devices and onlines memory.
->>>> 850000000-284fffffff : CXL Window 0
->>>>     850000000-284fffffff : region0
->>>>       850000000-284fffffff : dax0.0
->>>>         850000000-284fffffff : System RAM (kmem)
->>>>
->>>> [2] With CONFIG_CXL_REGION disabled, all the resources are handled by
->>>> HMEM. Soft Reserved range shows up in /proc/iomem, no regions come up
->>>> and dax devices are created from HMEM.
->>>> 850000000-284fffffff : CXL Window 0
->>>>     850000000-284fffffff : Soft Reserved
->>>>       850000000-284fffffff : dax0.0
->>>>         850000000-284fffffff : System RAM (kmem)
->>>>
->>>> [3] Region assembly failure works same as [2].
->>>>
->>>> [4] REGISTER path:
->>>> When CXL_BUS = y (with CXL_ACPI, CXL_PCI, CXL_PORT, CXL_MEM = y),
->>>> the dax_cxl driver is probed and completes initialization before dax_hmem
->>>> probes. This scenario was tested with CXL = y, DAX_CXL = m and
->>>> DAX_HMEM = m. To validate the REGISTER path, I forced REGISTER even in
->>>> cases where SR completely overlaps the CXL region as I did not have access
->>>> to a system where the CXL region range is smaller than the SR range.
->>>>
->>>> 850000000-284fffffff : Soft Reserved
->>>>     850000000-284fffffff : CXL Window 0
->>>>       850000000-280fffffff : region0
->>>>         850000000-284fffffff : dax0.0
->>>>           850000000-284fffffff : System RAM (kmem)
->>>>
->>>> "path":"\/platform\/ACPI0017:00\/root0\/decoder0.0\/region0\/dax_region0",
->>>> "id":0,
->>>> "size":"128.00 GiB (137.44 GB)",
->>>> "align":2097152
->>>>
->>>> [   35.961707] cxl-dax: cxl_dax_region_init()
->>>> [   35.961713] cxl-dax: registering driver.
->>>> [   35.961715] cxl-dax: dax_hmem work flushed.
->>>> [   35.961754] alloc_dev_dax_range:  dax0.0: alloc range[0]:
->>>> 0x000000850000000:0x000000284fffffff
->>>> [   35.976622] hmem: hmem_platform probe started.
->>>> [   35.980821] cxl_bus_probe: cxl_dax_region dax_region0: probe: 0
->>>> [   36.819566] hmem_platform hmem_platform.0: Soft Reserved not fully
->>>> contained in CXL; using HMEM
->>>> [   36.819569] hmem_register_device: hmem_platform hmem_platform.0:
->>>> registering CXL range: [mem 0x850000000-0x284fffffff flags 0x80000200]
->>>> [   36.934156] alloc_dax_region: hmem hmem.6: dax_region resource conflict
->>>> for [mem 0x850000000-0x284fffffff]
->>>> [   36.989310] hmem hmem.6: probe with driver hmem failed with error -12
->>>>
->>>> [5] When CXL_BUS = m (with CXL_ACPI, CXL_PCI, CXL_PORT, CXL_MEM = m),
->>>> DAX_CXL = m and DAX_HMEM = y the results are as expected. To validate the
->>>> REGISTER path, I forced REGISTER even in cases where SR completely
->>>> overlaps the CXL region as I did not have access to a system where the
->>>> CXL region range is smaller than the SR range.
->>>>
->>>> 850000000-284fffffff : Soft Reserved
->>>>     850000000-284fffffff : CXL Window 0
->>>>       850000000-280fffffff : region0
->>>>         850000000-284fffffff : dax6.0
->>>>           850000000-284fffffff : System RAM (kmem)
->>>>
->>>> "path":"\/platform\/hmem.6",
->>>> "id":6,
->>>> "size":"128.00 GiB (137.44 GB)",
->>>> "align":2097152
->>>>
->>>> [   30.897665] devm_cxl_add_dax_region: cxl_region region0: region0:
->>>> register dax_region0
->>>> [   30.921015] hmem: hmem_platform probe started.
->>>> [   31.017946] hmem_platform hmem_platform.0: Soft Reserved not fully
->>>> contained in CXL; using HMEM
->>>> [   31.056310] alloc_dev_dax_range:  dax6.0: alloc range[0]:
->>>> 0x0000000850000000:0x000000284fffffff
->>>> [   34.781516] cxl-dax: cxl_dax_region_init()
->>>> [   34.781522] cxl-dax: registering driver.
->>>> [   34.781523] cxl-dax: dax_hmem work flushed.
->>>> [   34.781549] alloc_dax_region: cxl_dax_region dax_region0: dax_region
->>>> resource conflict for [mem 0x850000000-0x284fffffff]
->>>> [   34.781552] cxl_bus_probe: cxl_dax_region dax_region0: probe: -12
->>>> [   34.781554] cxl_dax_region dax_region0: probe with driver cxl_dax_region
->>>> failed with error -12
->>>>
->>>> v6 updates:
->>>> - Patch 1-3 no changes.
->>>> - New Patches 4-5.
->>>> - (void *)res -> res.
->>>> - cxl_region_contains_soft_reserve -> region_contains_soft_reserve.
->>>> - New file include/cxl/cxl.h
->>>> - Introduced singleton workqueue.
->>>> - hmem to queue the work and cxl to flush.
->>>> - cxl_contains_soft_reserve() -> soft_reserve_has_cxl_match().
->>>> - Included descriptions for dax_cxl_mode.
->>>> - kzalloc -> kmalloc in add_soft_reserve_into_iomem()
->>>> - dax_cxl_mode is exported to CXL.
->>>> - Introduced hmem_register_cxl_device() for walking only CXL
->>>> intersected SR ranges the second time.
->>>
->>> During v5 review of this patch:
->>>
->>> [PATCH v5 6/7] dax/hmem, cxl: Defer and resolve ownership of Soft Reserved memory ranges
->>>
->>> there was discussion around handling region teardown. It's not mentioned
->>> in the changelog, and the teardown is completely removed from the patch.
->>>
->>> The discussion seemed to be leaning towards not tearing down 'all', but
->>> it's not clear to me that we decided not to tear down anything - which
->>> this update now does.
->>>
->>> And, as you may be guessing, I'm seeing disabled regions with DAX children
->>> and figuring out what can be done with them.
->>>
->>> Can you explain the new approach so I can test against that intention?
->>>
->>> FYI - I am able to confirm the dax regions are back for no-soft-reserved
->>> case, and my basic hotplug flow works with v6.
->>>
->>> -- Alison
->>
->> Hi Alison,
->>
->> Thanks for the test and confirming the no-soft-reserved and hotplug cases
->> work.
->>
->> You're right that cxl_region_teardown_all() was removed in v6. I should have
->> called this out more clearly in the changelog. Here's what I learnt from v5
->> review. Correct me if I misunderstood.
->>
->> During v5 review, regarding dropping teardown (comments from Dan):
->>
->> "If we go with the alloc_dax_region() observation in my other mail it means
->> that the HPA space will already be claimed and cxl_dax_region_probe() will
->> fail. If we can get to that point of "all HMEM registered, and all CXL
->> regions failing to attach their
->> cxl_dax_region devices" that is a good stopping point. Then can decide if a
->> follow-on patch is needed to cleanup that state (cxl_region_teardown_all())
->> , or if it can just idle that way in the messy state and wait for userspace
->> to cleanup if it wants."
->>
->> https://lore.kernel.org/all/697aad9546542_30951007c@dwillia2-mobl4.notmuch/
->>
->> Also:
->>
->> "In other words, I thought total teardown would be simpler, but as the
->> feedback keeps coming in, I think that brings a different set of complexity.
->> So just inject failures for dax_cxl to trip over and then we can go further
->> later to effect total teardown if that proves to not be enough."
->>
->> https://lore.kernel.org/all/697a9d46b147e_309510027@dwillia2-mobl4.notmuch/
->>
->> The v6 approach replaces teardown with the alloc_dax_region() resource
->> exclusion in patch 5. When HMEM wins the ownership decision (REGISTER path),
->> it successfully claims the dax_region resource range first. When dax_cxl
->> later tries to probe, its alloc_dax_region() call hits a resource conflict
->> and fails, leaving the cxl_dax_region device in a disabled state.
->>
->> (There is a separate ordering issue when CXL is built-in and HMEM is a
->> module, where dax_cxl may claim the dax_region first as observed in
->> experiments [4] and [5], but that is an independent topic and might not be
->> relevant here.)
->>
->> So the disabled regions with DAX children you are seeing on the CXL side are
->> likely expected as Dan mentioned - they show that CXL tried to claim the
->> range but HMEM got there first. Though the cxl region remains committed, no
->> dax_region gets created for it because the HPA space is already taken.
-> 
-> Hi Smita,
-> 
-> The disable regions I'm seeing are the remnants of failed region assemblies
-> where HMEM rightfully took over. So the take over is good, but the expected
-> view shown way above and repasted below is not what I'm seeing. Case [3]
-> is not the same as Case [2], but have a region btw the SR and DAX.
-> 
-> 
->>>> [2] With CONFIG_CXL_REGION disabled, all the resources are handled by
->>>> HMEM. Soft Reserved range shows up in /proc/iomem, no regions come up
->>>> and dax devices are created from HMEM.
->>>> 850000000-284fffffff : CXL Window 0
->>>>     850000000-284fffffff : Soft Reserved
->>>>       850000000-284fffffff : dax0.0
->>>>         850000000-284fffffff : System RAM (kmem)
->>>>
->>>> [3] Region assembly failure works same as [2].
->>>>
-> 
-> I posted a patch[1] that I think gets us to what is expected.
-> FWIW I do agree with abandoning the teardown all approach. In this
-> patch I still don't suggest tearing down the region. It can stay for
-> 'forensics', but I do think we should make /proc/iomem accurately
-> reflect the memory topology.
-> 
-> [1] https://lore.kernel.org/linux-cxl/20260212062250.1219043-1-alison.schofield@intel.com/
-> 
-> -- Alison
+Kairui, could you apply this patch on top of the vswap series and run it
+on your test suite? It runs fairly well on my system (I actually rerun
+the benchmark on a different host to double check as well), but I'd love
+to get some data from your ends as well.
 
-Sorry I missed this message. I will go through it.
+If there are serious discrepancies, could you also include your build
+config etc.? There might be differences in our setups, but since I
+managed to reproduce the free time regression on my first try I figured
+I should just fix it first :)
 
-I think the reason I wasn't seeing regions in /proc/iomem during my 
-testing is that I was using both of your test patches together, the fake 
-failure in cxl_region_sort_targets() and the cleanup patch that calls 
-devm_release_action()->unregister_region() on attach_target() failure in 
-cxl_add_to_region(). The second patch removes the region on assembly 
-failure, which is why the iomem tree had no region in my case.
+---------------
 
-You are right, just with faking failure in cxl_region_sort_targets() the 
-region will exist in iomem tree.
+Fix two issues that make the swap free path inefficient:
 
-Thanks
-Smita
+1. At the PTE zapping step, we are unnecessarily resolving the backends,
+   and fall back to batch size of 1, even though virtual swap
+   infrastructure now already supports freeing of mixed backend ranges
+   (as long the PTEs contain virtually contiguous swap slots).
+2. Optimize vswap_free() by batching consecutive free operations, and
+   avoid releasing locks unnecessarily (most notably, when we release
+   non-disk-swap backends).
 
-> 
->>
->> Thanks
->> Smita
->>
+Per a report from Kairui Song ([1]), I have run the following benchmark:
+
+free -m
+               total        used        free      shared  buff/cache   available
+Mem:           31596        5094       11667          19       15302       26502
+Swap:          65535          33       65502
+
+Running the usemem benchmark with n = 1, 56G for 5 times, and average
+out the result:
+
+Baseline (6.19):
+
+real: mean: 190.93s, stdev: 5.09s
+user: mean: 46.62s, stdev: 0.27s
+sys: mean: 128.51s, stdev: 5.17s
+throughput: mean: 382093 KB/s, stdev: 11173.6 KB/s
+free time: mean: 7916690.2 usecs, stdev: 88923.0 usecs
+
+VSS without this patch:
+real: mean: 194.59s, stdev: 7.61s
+user: mean: 46.71s, stdev: 0.46s
+sys: mean: 131.97s, stdev: 7.93s
+throughput: mean: 379236.4 KB/s, stdev: 15912.26 KB/s
+free time: mean: 10115572.2 usecs, stdev: 108318.35 usecs
+
+VSS with this patch:
+real: mean: 187.66s, stdev: 5.67s
+user: mean: 46.5s, stdev: 0.16s
+sys: mean: 125.3s, stdev: 5.58s
+throughput: mean: 387506.4 KB/s, stdev: 12556.56 KB/s
+free time: mean: 7029733.8 usecs, stdev: 124661.34 usecs
+
+[1]: https://lore.kernel.org/linux-mm/CAMgjq7AQNGK-a=AOgvn4-V+zGO21QMbMTVbrYSW_R2oDSLoC+A@mail.gmail.com/
+
+Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+---
+ include/linux/memcontrol.h |   6 +
+ mm/internal.h              |  18 ++-
+ mm/madvise.c               |   2 +-
+ mm/memcontrol.c            |   2 +-
+ mm/memory.c                |   8 +-
+ mm/vswap.c                 | 294 ++++++++++++++++++-------------------
+ 6 files changed, 165 insertions(+), 165 deletions(-)
+
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 0651865a4564f..0f7f5489e1675 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -827,6 +827,7 @@ static inline unsigned short mem_cgroup_id(struct mem_cgroup *memcg)
+ 	return memcg->id.id;
+ }
+ struct mem_cgroup *mem_cgroup_from_id(unsigned short id);
++void mem_cgroup_id_put_many(struct mem_cgroup *memcg, unsigned int n);
+ 
+ #ifdef CONFIG_SHRINKER_DEBUG
+ static inline unsigned long mem_cgroup_ino(struct mem_cgroup *memcg)
+@@ -1289,6 +1290,11 @@ static inline struct mem_cgroup *mem_cgroup_from_id(unsigned short id)
+ 	return NULL;
+ }
+ 
++static inline void mem_cgroup_id_put_many(struct mem_cgroup *memcg,
++					  unsigned int n)
++{
++}
++
+ #ifdef CONFIG_SHRINKER_DEBUG
+ static inline unsigned long mem_cgroup_ino(struct mem_cgroup *memcg)
+ {
+diff --git a/mm/internal.h b/mm/internal.h
+index cfe97501e4885..df991f601702c 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -327,8 +327,6 @@ static inline swp_entry_t swap_nth(swp_entry_t entry, long n)
+ 	return (swp_entry_t) { entry.val + n };
+ }
+ 
+-swp_entry_t swap_move(swp_entry_t entry, long delta);
+-
+ /**
+  * pte_move_swp_offset - Move the swap entry offset field of a swap pte
+  *	 forward or backward by delta
+@@ -342,7 +340,7 @@ swp_entry_t swap_move(swp_entry_t entry, long delta);
+ static inline pte_t pte_move_swp_offset(pte_t pte, long delta)
+ {
+ 	softleaf_t entry = softleaf_from_pte(pte);
+-	pte_t new = swp_entry_to_pte(swap_move(entry, delta));
++	pte_t new = swp_entry_to_pte(swap_nth(entry, delta));
+ 
+ 	if (pte_swp_soft_dirty(pte))
+ 		new = pte_swp_mksoft_dirty(new);
+@@ -372,6 +370,7 @@ static inline pte_t pte_next_swp_offset(pte_t pte)
+  * @start_ptep: Page table pointer for the first entry.
+  * @max_nr: The maximum number of table entries to consider.
+  * @pte: Page table entry for the first entry.
++ * @free_batch: Whether the batch will be passed to free_swap_and_cache_nr().
+  *
+  * Detect a batch of contiguous swap entries: consecutive (non-present) PTEs
+  * containing swap entries all with consecutive offsets and targeting the same
+@@ -382,13 +381,15 @@ static inline pte_t pte_next_swp_offset(pte_t pte)
+  *
+  * Return: the number of table entries in the batch.
+  */
+-static inline int swap_pte_batch(pte_t *start_ptep, int max_nr, pte_t pte)
++static inline int swap_pte_batch(pte_t *start_ptep, int max_nr, pte_t pte,
++				 bool free_batch)
+ {
+ 	pte_t expected_pte = pte_next_swp_offset(pte);
+ 	const pte_t *end_ptep = start_ptep + max_nr;
+ 	const softleaf_t entry = softleaf_from_pte(pte);
+ 	pte_t *ptep = start_ptep + 1;
+ 	unsigned short cgroup_id;
++	int nr;
+ 
+ 	VM_WARN_ON(max_nr < 1);
+ 	VM_WARN_ON(!softleaf_is_swap(entry));
+@@ -408,7 +409,14 @@ static inline int swap_pte_batch(pte_t *start_ptep, int max_nr, pte_t pte)
+ 		ptep++;
+ 	}
+ 
+-	return ptep - start_ptep;
++	nr = ptep - start_ptep;
++	/*
++	 * free_swap_and_cache_nr can handle mixed backends, as long as virtual
++	 * swap entries backing these PTEs are contiguous.
++	 */
++	if (!free_batch && !vswap_can_swapin_thp(entry, nr))
++		return 1;
++	return nr;
+ }
+ #endif /* CONFIG_MMU */
+ 
+diff --git a/mm/madvise.c b/mm/madvise.c
+index b617b1be0f535..441da03c5d2b9 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -692,7 +692,7 @@ static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+ 
+ 			if (softleaf_is_swap(entry)) {
+ 				max_nr = (end - addr) / PAGE_SIZE;
+-				nr = swap_pte_batch(pte, max_nr, ptent);
++				nr = swap_pte_batch(pte, max_nr, ptent, true);
+ 				nr_swap -= nr;
+ 				free_swap_and_cache_nr(entry, nr);
+ 				clear_not_present_full_ptes(mm, addr, pte, nr, tlb->fullmm);
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 50be8066bebec..bfa25eaffa12a 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -3597,7 +3597,7 @@ void __maybe_unused mem_cgroup_id_get_many(struct mem_cgroup *memcg,
+ 	refcount_add(n, &memcg->id.ref);
+ }
+ 
+-static void mem_cgroup_id_put_many(struct mem_cgroup *memcg, unsigned int n)
++void mem_cgroup_id_put_many(struct mem_cgroup *memcg, unsigned int n)
+ {
+ 	if (refcount_sub_and_test(n, &memcg->id.ref)) {
+ 		mem_cgroup_id_remove(memcg);
+diff --git a/mm/memory.c b/mm/memory.c
+index a16bf84ebaaf9..59645ad238e22 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1742,7 +1742,7 @@ static inline int zap_nonpresent_ptes(struct mmu_gather *tlb,
+ 		if (!should_zap_cows(details))
+ 			return 1;
+ 
+-		nr = swap_pte_batch(pte, max_nr, ptent);
++		nr = swap_pte_batch(pte, max_nr, ptent, true);
+ 		rss[MM_SWAPENTS] -= nr;
+ 		free_swap_and_cache_nr(entry, nr);
+ 	} else if (softleaf_is_migration(entry)) {
+@@ -4491,7 +4491,7 @@ static bool can_swapin_thp(struct vm_fault *vmf, pte_t *ptep, int nr_pages)
+ 	if (!pte_same(pte, pte_move_swp_offset(vmf->orig_pte, -idx)))
+ 		return false;
+ 	entry = softleaf_from_pte(pte);
+-	if (swap_pte_batch(ptep, nr_pages, pte) != nr_pages)
++	if (swap_pte_batch(ptep, nr_pages, pte, false) != nr_pages)
+ 		return false;
+ 
+ 	/*
+@@ -4877,7 +4877,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 		pte_t folio_pte = ptep_get(folio_ptep);
+ 
+ 		if (!pte_same(folio_pte, pte_move_swp_offset(vmf->orig_pte, -idx)) ||
+-		    swap_pte_batch(folio_ptep, nr, folio_pte) != nr)
++		    swap_pte_batch(folio_ptep, nr, folio_pte, false) != nr)
+ 			goto out_nomap;
+ 
+ 		page_idx = idx;
+@@ -4906,7 +4906,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 		folio_ptep = vmf->pte - idx;
+ 		folio_pte = ptep_get(folio_ptep);
+ 		if (!pte_same(folio_pte, pte_move_swp_offset(vmf->orig_pte, -idx)) ||
+-		    swap_pte_batch(folio_ptep, nr, folio_pte) != nr)
++		    swap_pte_batch(folio_ptep, nr, folio_pte, false) != nr)
+ 			goto check_folio;
+ 
+ 		page_idx = idx;
+diff --git a/mm/vswap.c b/mm/vswap.c
+index 2a071d5ae173c..047c6476ef23c 100644
+--- a/mm/vswap.c
++++ b/mm/vswap.c
+@@ -481,18 +481,18 @@ static void vswap_cluster_free(struct vswap_cluster *cluster)
+ 	kvfree_rcu(cluster, rcu);
+ }
+ 
+-static inline void release_vswap_slot(struct vswap_cluster *cluster,
+-		unsigned long index)
++static inline void release_vswap_slot_nr(struct vswap_cluster *cluster,
++		unsigned long index, int nr)
+ {
+ 	unsigned long slot_index = VSWAP_IDX_WITHIN_CLUSTER_VAL(index);
+ 
+ 	VM_WARN_ON(!spin_is_locked(&cluster->lock));
+-	cluster->count--;
++	cluster->count -= nr;
+ 
+-	bitmap_clear(cluster->bitmap, slot_index, 1);
++	bitmap_clear(cluster->bitmap, slot_index, nr);
+ 
+ 	/* we only free uncached empty clusters */
+-	if (refcount_dec_and_test(&cluster->refcnt))
++	if (refcount_sub_and_test(nr, &cluster->refcnt))
+ 		vswap_cluster_free(cluster);
+ 	else if (cluster->full && cluster_is_alloc_candidate(cluster)) {
+ 		cluster->full = false;
+@@ -505,7 +505,7 @@ static inline void release_vswap_slot(struct vswap_cluster *cluster,
+ 		}
+ 	}
+ 
+-	atomic_dec(&vswap_used);
++	atomic_sub(nr, &vswap_used);
+ }
+ 
+ /*
+@@ -527,23 +527,29 @@ void vswap_rmap_set(struct swap_cluster_info *ci, swp_slot_t slot,
+ }
+ 
+ /*
+- * Caller needs to handle races with other operations themselves.
++ * release_backing - release the backend storage for a given range of virtual
++ * swap slots.
++ *
++ * Entered with the cluster locked, but might drop the lock in between.
++ * This is because several operations, such as releasing physical swap slots
++ * (i.e swap_slot_free_nr()) require the cluster to be unlocked to avoid
++ * deadlocks.
+  *
+- * Specifically, this function is safe to be called in contexts where the swap
+- * entry has been added to the swap cache and the associated folio is locked.
+- * We cannot race with other accessors, and the swap entry is guaranteed to be
+- * valid the whole time (since swap cache implies one refcount).
++ * This is safe, because:
++ *
++ * 1. The swap entry to be freed has refcnt (swap count and swapcache pin)
++ *    down to 0, so no one can change its internal state
+  *
+- * We cannot assume that the backends will be of the same type,
+- * contiguous, etc. We might have a large folio coalesced from subpages with
+- * mixed backend, which is only rectified when it is reclaimed.
++ * 2. The swap entry to be freed still holds a refcnt to the cluster, keeping
++ *    the cluster itself valid.
++ *
++ * We will exit the function with the cluster re-locked.
+  */
+- static void release_backing(swp_entry_t entry, int nr)
++static void release_backing(struct vswap_cluster *cluster, swp_entry_t entry,
++		int nr)
+ {
+-	struct vswap_cluster *cluster = NULL;
+ 	struct swp_desc *desc;
+ 	unsigned long flush_nr, phys_swap_start = 0, phys_swap_end = 0;
+-	unsigned long phys_swap_released = 0;
+ 	unsigned int phys_swap_type = 0;
+ 	bool need_flushing_phys_swap = false;
+ 	swp_slot_t flush_slot;
+@@ -551,9 +557,8 @@ void vswap_rmap_set(struct swap_cluster_info *ci, swp_slot_t slot,
+ 
+ 	VM_WARN_ON(!entry.val);
+ 
+-	rcu_read_lock();
+ 	for (i = 0; i < nr; i++) {
+-		desc = vswap_iter(&cluster, entry.val + i);
++		desc = __vswap_iter(cluster, entry.val + i);
+ 		VM_WARN_ON(!desc);
+ 
+ 		/*
+@@ -573,7 +578,6 @@ void vswap_rmap_set(struct swap_cluster_info *ci, swp_slot_t slot,
+ 		if (desc->type == VSWAP_ZSWAP && desc->zswap_entry) {
+ 			zswap_entry_free(desc->zswap_entry);
+ 		} else if (desc->type == VSWAP_SWAPFILE) {
+-			phys_swap_released++;
+ 			if (!phys_swap_start) {
+ 				/* start a new contiguous range of phys swap */
+ 				phys_swap_start = swp_slot_offset(desc->slot);
+@@ -589,56 +593,49 @@ void vswap_rmap_set(struct swap_cluster_info *ci, swp_slot_t slot,
+ 
+ 		if (need_flushing_phys_swap) {
+ 			spin_unlock(&cluster->lock);
+-			cluster = NULL;
+ 			swap_slot_free_nr(flush_slot, flush_nr);
++			mem_cgroup_uncharge_swap(entry, flush_nr);
++			spin_lock(&cluster->lock);
+ 			need_flushing_phys_swap = false;
+ 		}
+ 	}
+-	if (cluster)
+-		spin_unlock(&cluster->lock);
+-	rcu_read_unlock();
+ 
+ 	/* Flush any remaining physical swap range */
+ 	if (phys_swap_start) {
+ 		flush_slot = swp_slot(phys_swap_type, phys_swap_start);
+ 		flush_nr = phys_swap_end - phys_swap_start;
++		spin_unlock(&cluster->lock);
+ 		swap_slot_free_nr(flush_slot, flush_nr);
++		mem_cgroup_uncharge_swap(entry, flush_nr);
++		spin_lock(&cluster->lock);
+ 	}
++}
+ 
+-	if (phys_swap_released)
+-		mem_cgroup_uncharge_swap(entry, phys_swap_released);
+- }
++static void __vswap_swap_cgroup_clear(struct vswap_cluster *cluster,
++		swp_entry_t entry, unsigned int nr_ents);
+ 
+ /*
+- * Entered with the cluster locked, but might unlock the cluster.
+- * This is because several operations, such as releasing physical swap slots
+- * (i.e swap_slot_free_nr()) require the cluster to be unlocked to avoid
+- * deadlocks.
+- *
+- * This is safe, because:
+- *
+- * 1. The swap entry to be freed has refcnt (swap count and swapcache pin)
+- *    down to 0, so no one can change its internal state
+- *
+- * 2. The swap entry to be freed still holds a refcnt to the cluster, keeping
+- *    the cluster itself valid.
+- *
+- * We will exit the function with the cluster re-locked.
++ * Entered with the cluster locked. We will exit the function with the cluster
++ * still locked.
+  */
+-static void vswap_free(struct vswap_cluster *cluster, struct swp_desc *desc,
+-	swp_entry_t entry)
++static void vswap_free_nr(struct vswap_cluster *cluster, swp_entry_t entry,
++		int nr)
+ {
+-	/* Clear shadow if present */
+-	if (xa_is_value(desc->shadow))
+-		desc->shadow = NULL;
+-	spin_unlock(&cluster->lock);
++	struct swp_desc *desc;
++	int i;
+ 
+-	release_backing(entry, 1);
+-	mem_cgroup_clear_swap(entry, 1);
++	for (i = 0; i < nr; i++) {
++		desc = __vswap_iter(cluster, entry.val + i);
++		/* Clear shadow if present */
++		if (xa_is_value(desc->shadow))
++			desc->shadow = NULL;
++	}
+ 
+-	/* erase forward mapping and release the virtual slot for reallocation */
+-	spin_lock(&cluster->lock);
+-	release_vswap_slot(cluster, entry.val);
++	release_backing(cluster, entry, nr);
++	__vswap_swap_cgroup_clear(cluster, entry, nr);
++
++	/* erase forward mapping and release the virtual slots for reallocation */
++	release_vswap_slot_nr(cluster, entry.val, nr);
+ }
+ 
+ /**
+@@ -820,18 +817,32 @@ static bool vswap_free_nr_any_cache_only(swp_entry_t entry, int nr)
+ 	struct vswap_cluster *cluster = NULL;
+ 	struct swp_desc *desc;
+ 	bool ret = false;
+-	int i;
++	swp_entry_t free_start;
++	int i, free_nr = 0;
+ 
++	free_start.val = 0;
+ 	rcu_read_lock();
+ 	for (i = 0; i < nr; i++) {
++		/* flush pending free batch at cluster boundary */
++		if (free_nr && !VSWAP_IDX_WITHIN_CLUSTER_VAL(entry.val)) {
++			vswap_free_nr(cluster, free_start, free_nr);
++			free_nr = 0;
++		}
+ 		desc = vswap_iter(&cluster, entry.val);
+ 		VM_WARN_ON(!desc);
+ 		ret |= (desc->swap_count == 1 && desc->in_swapcache);
+ 		desc->swap_count--;
+-		if (!desc->swap_count && !desc->in_swapcache)
+-			vswap_free(cluster, desc, entry);
++		if (!desc->swap_count && !desc->in_swapcache) {
++			if (!free_nr++)
++				free_start = entry;
++		} else if (free_nr) {
++			vswap_free_nr(cluster, free_start, free_nr);
++			free_nr = 0;
++		}
+ 		entry.val++;
+ 	}
++	if (free_nr)
++		vswap_free_nr(cluster, free_start, free_nr);
+ 	if (cluster)
+ 		spin_unlock(&cluster->lock);
+ 	rcu_read_unlock();
+@@ -954,19 +965,33 @@ void swapcache_clear(swp_entry_t entry, int nr)
+ {
+ 	struct vswap_cluster *cluster = NULL;
+ 	struct swp_desc *desc;
+-	int i;
++	swp_entry_t free_start;
++	int i, free_nr = 0;
+ 
+ 	if (!nr)
+ 		return;
+ 
++	free_start.val = 0;
+ 	rcu_read_lock();
+ 	for (i = 0; i < nr; i++) {
++		/* flush pending free batch at cluster boundary */
++		if (free_nr && !VSWAP_IDX_WITHIN_CLUSTER_VAL(entry.val)) {
++			vswap_free_nr(cluster, free_start, free_nr);
++			free_nr = 0;
++		}
+ 		desc = vswap_iter(&cluster, entry.val);
+ 		desc->in_swapcache = false;
+-		if (!desc->swap_count)
+-			vswap_free(cluster, desc, entry);
++		if (!desc->swap_count) {
++			if (!free_nr++)
++				free_start = entry;
++		} else if (free_nr) {
++			vswap_free_nr(cluster, free_start, free_nr);
++			free_nr = 0;
++		}
+ 		entry.val++;
+ 	}
++	if (free_nr)
++		vswap_free_nr(cluster, free_start, free_nr);
+ 	if (cluster)
+ 		spin_unlock(&cluster->lock);
+ 	rcu_read_unlock();
+@@ -1107,11 +1132,13 @@ void vswap_store_folio(swp_entry_t entry, struct folio *folio)
+ 	VM_BUG_ON(!folio_test_locked(folio));
+ 	VM_BUG_ON(folio->swap.val != entry.val);
+ 
+-	release_backing(entry, nr);
+-
+ 	rcu_read_lock();
++	desc = vswap_iter(&cluster, entry.val);
++	VM_WARN_ON(!desc);
++	release_backing(cluster, entry, nr);
++
+ 	for (i = 0; i < nr; i++) {
+-		desc = vswap_iter(&cluster, entry.val + i);
++		desc = __vswap_iter(cluster, entry.val + i);
+ 		VM_WARN_ON(!desc);
+ 		desc->type = VSWAP_FOLIO;
+ 		desc->swap_cache = folio;
+@@ -1136,11 +1163,13 @@ void swap_zeromap_folio_set(struct folio *folio)
+ 	VM_BUG_ON(!folio_test_locked(folio));
+ 	VM_BUG_ON(!entry.val);
+ 
+-	release_backing(entry, nr);
+-
+ 	rcu_read_lock();
++	desc = vswap_iter(&cluster, entry.val);
++	VM_WARN_ON(!desc);
++	release_backing(cluster, entry, nr);
++
+ 	for (i = 0; i < nr; i++) {
+-		desc = vswap_iter(&cluster, entry.val + i);
++		desc = __vswap_iter(cluster, entry.val + i);
+ 		VM_WARN_ON(!desc);
+ 		desc->type = VSWAP_ZERO;
+ 	}
+@@ -1261,89 +1290,6 @@ bool vswap_can_swapin_thp(swp_entry_t entry, int nr)
+ 		(type == VSWAP_ZERO || type == VSWAP_SWAPFILE);
+ }
+ 
+-/**
+- * swap_move - increment the swap slot by delta, checking the backing state and
+- *             return 0 if the backing state does not match (i.e wrong backing
+- *             state type, or wrong offset on the backing stores).
+- * @entry: the original virtual swap slot.
+- * @delta: the offset to increment the original slot.
+- *
+- * Note that this function is racy unless we can pin the backing state of these
+- * swap slots down with swapcache_prepare().
+- *
+- * Caller should only rely on this function as a best-effort hint otherwise,
+- * and should double-check after ensuring the whole range is pinned down.
+- *
+- * Return: the incremented virtual swap slot if the backing state matches, or
+- *         0 if the backing state does not match.
+- */
+-swp_entry_t swap_move(swp_entry_t entry, long delta)
+-{
+-	struct vswap_cluster *cluster = NULL;
+-	struct swp_desc *desc, *next_desc;
+-	swp_entry_t next_entry;
+-	struct folio *folio = NULL, *next_folio = NULL;
+-	enum swap_type type, next_type;
+-	swp_slot_t slot = {0}, next_slot = {0};
+-
+-	next_entry.val = entry.val + delta;
+-
+-	rcu_read_lock();
+-
+-	/* Look up first descriptor and get its type and backing store */
+-	desc = vswap_iter(&cluster, entry.val);
+-	if (!desc) {
+-		rcu_read_unlock();
+-		return (swp_entry_t){0};
+-	}
+-
+-	type = desc->type;
+-	if (type == VSWAP_ZSWAP) {
+-		/* zswap not supported for move */
+-		spin_unlock(&cluster->lock);
+-		rcu_read_unlock();
+-		return (swp_entry_t){0};
+-	}
+-	if (type == VSWAP_FOLIO)
+-		folio = desc->swap_cache;
+-	else if (type == VSWAP_SWAPFILE)
+-		slot = desc->slot;
+-
+-	/* Look up second descriptor and get its type and backing store */
+-	next_desc = vswap_iter(&cluster, next_entry.val);
+-	if (!next_desc) {
+-		rcu_read_unlock();
+-		return (swp_entry_t){0};
+-	}
+-
+-	next_type = next_desc->type;
+-	if (next_type == VSWAP_FOLIO)
+-		next_folio = next_desc->swap_cache;
+-	else if (next_type == VSWAP_SWAPFILE)
+-		next_slot = next_desc->slot;
+-
+-	if (cluster)
+-		spin_unlock(&cluster->lock);
+-
+-	rcu_read_unlock();
+-
+-	/* Check if types match */
+-	if (next_type != type)
+-		return (swp_entry_t){0};
+-
+-	/* Check backing state consistency */
+-	if (type == VSWAP_SWAPFILE &&
+-			(swp_slot_type(next_slot) != swp_slot_type(slot) ||
+-				swp_slot_offset(next_slot) !=
+-							swp_slot_offset(slot) + delta))
+-		return (swp_entry_t){0};
+-
+-	if (type == VSWAP_FOLIO && next_folio != folio)
+-		return (swp_entry_t){0};
+-
+-	return next_entry;
+-}
+-
+ /*
+  * Return the count of contiguous swap entries that share the same
+  * VSWAP_ZERO status as the starting entry. If is_zeromap is not NULL,
+@@ -1863,11 +1809,10 @@ void zswap_entry_store(swp_entry_t swpentry, struct zswap_entry *entry)
+ 	struct vswap_cluster *cluster = NULL;
+ 	struct swp_desc *desc;
+ 
+-	release_backing(swpentry, 1);
+-
+ 	rcu_read_lock();
+ 	desc = vswap_iter(&cluster, swpentry.val);
+ 	VM_WARN_ON(!desc);
++	release_backing(cluster, swpentry, 1);
+ 	desc->zswap_entry = entry;
+ 	desc->type = VSWAP_ZSWAP;
+ 	spin_unlock(&cluster->lock);
+@@ -1914,17 +1859,22 @@ bool zswap_empty(swp_entry_t swpentry)
+ #endif /* CONFIG_ZSWAP */
+ 
+ #ifdef CONFIG_MEMCG
+-static unsigned short vswap_cgroup_record(swp_entry_t entry,
+-				unsigned short memcgid, unsigned int nr_ents)
++/*
++ * __vswap_cgroup_record - record mem_cgroup for a set of swap entries
++ *
++ * Entered with the cluster locked. We will exit the function with the cluster
++ * still locked.
++ */
++static unsigned short __vswap_cgroup_record(struct vswap_cluster *cluster,
++				swp_entry_t entry, unsigned short memcgid,
++				unsigned int nr_ents)
+ {
+-	struct vswap_cluster *cluster = NULL;
+ 	struct swp_desc *desc;
+ 	unsigned short oldid, iter = 0;
+ 	int i;
+ 
+-	rcu_read_lock();
+ 	for (i = 0; i < nr_ents; i++) {
+-		desc = vswap_iter(&cluster, entry.val + i);
++		desc = __vswap_iter(cluster, entry.val + i);
+ 		VM_WARN_ON(!desc);
+ 		oldid = desc->memcgid;
+ 		desc->memcgid = memcgid;
+@@ -1932,6 +1882,37 @@ static unsigned short vswap_cgroup_record(swp_entry_t entry,
+ 			iter = oldid;
+ 		VM_WARN_ON(iter != oldid);
+ 	}
++
++	return oldid;
++}
++
++/*
++ * Clear swap cgroup for a range of swap entries.
++ * Entered with the cluster locked. Caller must be under rcu_read_lock().
++ */
++static void __vswap_swap_cgroup_clear(struct vswap_cluster *cluster,
++				      swp_entry_t entry, unsigned int nr_ents)
++{
++	unsigned short id;
++	struct mem_cgroup *memcg;
++
++	id = __vswap_cgroup_record(cluster, entry, 0, nr_ents);
++	memcg = mem_cgroup_from_id(id);
++	if (memcg)
++		mem_cgroup_id_put_many(memcg, nr_ents);
++}
++
++static unsigned short vswap_cgroup_record(swp_entry_t entry,
++				unsigned short memcgid, unsigned int nr_ents)
++{
++	struct vswap_cluster *cluster = NULL;
++	struct swp_desc *desc;
++	unsigned short oldid;
++
++	rcu_read_lock();
++	desc = vswap_iter(&cluster, entry.val);
++	VM_WARN_ON(!desc);
++	oldid = __vswap_cgroup_record(cluster, entry, memcgid, nr_ents);
+ 	spin_unlock(&cluster->lock);
+ 	rcu_read_unlock();
+ 
+@@ -1999,6 +1980,11 @@ unsigned short lookup_swap_cgroup_id(swp_entry_t entry)
+ 	rcu_read_unlock();
+ 	return ret;
+ }
++#else /* !CONFIG_MEMCG */
++static void __vswap_swap_cgroup_clear(struct vswap_cluster *cluster,
++				      swp_entry_t entry, unsigned int nr_ents)
++{
++}
+ #endif /* CONFIG_MEMCG */
+ 
+ int vswap_init(void)
+-- 
+2.47.3
 
 
