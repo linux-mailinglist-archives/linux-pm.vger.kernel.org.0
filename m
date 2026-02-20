@@ -1,172 +1,171 @@
-Return-Path: <linux-pm+bounces-42938-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42939-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4DXXF49bmGkNGwMAu9opvQ
-	(envelope-from <linux-pm+bounces-42938-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 14:03:11 +0100
+	id CNroG4xlmGmJHgMAu9opvQ
+	(envelope-from <linux-pm+bounces-42939-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 14:45:48 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0677D167A7C
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 14:03:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0EF5167FF4
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 14:45:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 8F7B73002F59
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 13:03:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CF36C3025916
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 13:43:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF34344DA4;
-	Fri, 20 Feb 2026 13:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A50A7348465;
+	Fri, 20 Feb 2026 13:43:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gb+DpROl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K8mwEc1C"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58261330311
-	for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 13:03:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD7C347BB9;
+	Fri, 20 Feb 2026 13:43:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771592585; cv=none; b=LxWUG6nMD3qmMSWlbQhTBa6yEAztIIx4SgWmXfQVBsENpCyXs3tH9kE+uHMf+HMxiPymftJ1EfSO0DmZOe8/7hMVcY7sKeudbqgFLR4D7O8U5mQofReKwLhaBxOaWdcJqxJsoiQLYYAOCGqBCdldRacdIs+s4EzmMI/2H0McBbQ=
+	t=1771594991; cv=none; b=Pfb5CNnRsxptLqiMzjiOSN5PBie61bhJHMdAY1Gk+C3A7KbAHF5zPREW/N1pHLl9Z4P665zcPkAje8FVAPPL1hPfuIIVULJv5p+etyftJFa1gQfZ6KsqKXRXS4cEi9qOxL0NR+p1LMxSiO5L7M0vP+rL1CVHwnl+Y7CvUeX8Zag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771592585; c=relaxed/simple;
-	bh=HjuLriyl95R3RDRBJMEQKF6Xmlqo8rbRe+5cEh2v1y4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r+0SlcIhfcS3m1Z5IcB2Pf5rDcRj0hwOzgJZD28VZB3VVG51TA9Fj+e8nAJbU6wjIVuFcuPmCyRAX3Fg1Hheg5OHuGGaK9heGua3WhjXcyDy/+cAOxYQ19lSy79u0BIt4uBiYXmkDoy/oTGQiZHRXTRVi8rZDRyv1y+t0OuZb0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gb+DpROl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E13AAC116C6
-	for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 13:03:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771592584;
-	bh=HjuLriyl95R3RDRBJMEQKF6Xmlqo8rbRe+5cEh2v1y4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gb+DpROlT8pPAMPxXkI5ZlvN5HK2ntRndd+J0Fj73eOBT0EPJPrKW+/g+vfG3xJf8
-	 bbsK8/OOpV4Yn71FXqwFePexkQhLQNH4zwJwhqpltX8qTfzIwmRfq4I1n3FkahZcnL
-	 W2CHlsiz8vUUaocKOJHPWTP9lQNhmGe42Oon/h8m/BS+JuGYmC3sF4ferHLrMQLLLi
-	 wbhGn3p4BpCDKa/ysGTWl16aO+XkpKKSCeibqOCTcGwDbP65z2A0Mq3+J/FDh0m7GX
-	 y/6AWePT3IYIxioB9g0LK1xtDOR8XcFPCHL3Nc5d+N8ZIdfGJ3ycJ/5NC9bZMoRfA1
-	 bmstkVSiQQ6rw==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-40f1ffba6a0so1208117fac.0
-        for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 05:03:04 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUz0l2MyJ0mDuoDvOerhxasYENh+EP85nT1ixvkGw2H9WaUJ6Rjuo1gIqEWcm2R5/n50ZYT5HPAHA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNGeZVvecjKFHUGiveeZvi2jfvIA4V7/TsKdeZHyzuEOK0kCcq
-	+NeAfmH85FjVhDW3zMLdLwCPkhwLodFYWRrN2rFNxSCO+ezXjQyhfGWD6tPDRT0K4fspYTu1Ki9
-	xoYOU4aqE50ExwdBrKEyIUaWqBEHNYsI=
-X-Received: by 2002:a05:6870:fbaa:b0:40c:10d6:7768 with SMTP id
- 586e51a60fabf-415291d9302mr4993844fac.54.1771592583798; Fri, 20 Feb 2026
- 05:03:03 -0800 (PST)
+	s=arc-20240116; t=1771594991; c=relaxed/simple;
+	bh=J/CnWjz0/XEWMkvW599pnkojtxcOQdayQ/SGTMGqFmE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nbFnaQ4++9VRgSuQ0TQERFwBi3TrNZbB+sfHyXZg8+msV+I6wJVSratJODj6Ml8zsDSx1nnA4aNJynrT5oRQ2k4tQuP2MAHhi+3qXR0dWvIquA36KbVjZaR1KYZSv456cLq/BykNMrGYS+IzNAw8/OC/XJAqux1O5E9W6AtWuRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K8mwEc1C; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771594990; x=1803130990;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J/CnWjz0/XEWMkvW599pnkojtxcOQdayQ/SGTMGqFmE=;
+  b=K8mwEc1CepglGtnHdqd3tYQnouZra5ZClO+dtXm+6yuJ0AhWV1ycX5KB
+   /S/7yr/wBC0wMvUTHspgU3D1urnOgKY/aYJ3OROId54gORsOW1tXHb0IW
+   bApHk33SP/ZJL6EGRXcvJ0vAg3OXY0wG4BfUnCkt+eKhjj96sMx7WJ6YY
+   5yv/RdQ47gEsf90aLHm/RE1mAhDBm/K1eXLbj0rJWaZSzKryGJztDNlNQ
+   +90NBpypac9Ac+4UOV1eFK7bjEGitDcpyMxxexlaTdcX0MGCvb4rq/dvZ
+   wLiDZT7hWzz0ZzFh2F5EeqvFYGOpQVhiHlzy+bhb350vkDKVAgqCaKbpA
+   g==;
+X-CSE-ConnectionGUID: mGDzl+8iQQCUUX38jdFOeQ==
+X-CSE-MsgGUID: Rv+nk2dMQYa2DcsXCf5U1A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11707"; a="95306368"
+X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
+   d="scan'208";a="95306368"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 05:43:09 -0800
+X-CSE-ConnectionGUID: 01Gs0n/1RLC3lsYNqVo0lQ==
+X-CSE-MsgGUID: PCNeRVOUQ3e/9I+1NA/6FQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
+   d="scan'208";a="219855760"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.245.25])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 05:43:04 -0800
+Date: Fri, 20 Feb 2026 15:43:01 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Luca Weiss <luca.weiss@fairphone.com>
+Cc: Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Laxman Dewangan <ldewangan@nvidia.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Hans de Goede <hansg@kernel.org>,
+	Jens Reidel <adrian@mainlining.org>,
+	Casey Connolly <casey.connolly@linaro.org>,
+	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] thermal/drivers/generic-adc: Allow probe without
+ TZ registration
+Message-ID: <aZhk5Qn0vJmtxbtG@smile.fi.intel.com>
+References: <20260220-bat-temp-adc-v2-0-fe34ed4ea851@fairphone.com>
+ <20260220-bat-temp-adc-v2-3-fe34ed4ea851@fairphone.com>
+ <aZg8ZqckhGbvkdel@smile.fi.intel.com>
+ <DGJR7OIPI2ZS.ZTJ1IJWB3Z61@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2804546.mvXUDI8C0e@rafael.j.wysocki> <2244365.irdbgypaU6@rafael.j.wysocki>
- <20260208155902.437740-1-ionut.nechita@windriver.com>
-In-Reply-To: <20260208155902.437740-1-ionut.nechita@windriver.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 20 Feb 2026 14:02:52 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hVwtDw9h=XGxvDZpWi9_EaTmTaqnpSkFrwjGrVhUe24Q@mail.gmail.com>
-X-Gm-Features: AaiRm502SxSdFzglRFCQOgK2Xb7kFp5XByqHjUi8sFWDylj4NnWHaP4Jvv0N1To
-Message-ID: <CAJZ5v0hVwtDw9h=XGxvDZpWi9_EaTmTaqnpSkFrwjGrVhUe24Q@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] cpuidle: governors: menu: Special-case nohz_full CPUs
-To: "Ionut Nechita (Wind River)" <ionut.nechita@windriver.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Frederic Weisbecker <frederic@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Christian Loehle <christian.loehle@arm.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Ionut Nechita <ionut_n2001@yahoo.com>, 
-	Ionut Nechita <sunlightlinux@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DGJR7OIPI2ZS.ZTJ1IJWB3Z61@fairphone.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,infradead.org,arm.com,linaro.org,yahoo.com,gmail.com];
-	TO_DN_ALL(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42938-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42939-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	RCPT_COUNT_TWELVE(0.00)[25];
 	RCVD_TLS_LAST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_FIVE(0.00)[5];
+	HAS_ORG_HEADER(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@intel.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 0677D167A7C
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,smile.fi.intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D0EF5167FF4
 X-Rspamd-Action: no action
 
-Hi,
+On Fri, Feb 20, 2026 at 12:31:36PM +0100, Luca Weiss wrote:
+> On Fri Feb 20, 2026 at 11:50 AM CET, Andy Shevchenko wrote:
+> > On Fri, Feb 20, 2026 at 10:19:07AM +0100, Luca Weiss wrote:
 
-On Sun, Feb 8, 2026 at 5:00=E2=80=AFPM Ionut Nechita (Wind River)
-<ionut.nechita@windriver.com> wrote:
->
-> Hi Rafael,
->
-> I have a question regarding this patch: is it planned for upstream
-> integration, or is there a newer/improved version in the works?
+...
 
-Not really.
+> >> Since the driver is now also registering as an IIO device[0], allow the
+> >> probe to continue without the thermal zone.
+> >
+> > Isn't it dangerous?
 
-It is too risky to be made at this point because of some systems'
-dependency on the current behavior.
+> Why?
 
-> I'm asking because I've been working on a related optimization in the
-> same code path. My patch [1] takes a different approach to the same
-> problem area -- instead of skipping the override entirely for nohz_full
-> CPUs, it changes:
->
->     predicted_ns =3D data->next_timer_ns;
->
-> to:
->
->     predicted_ns =3D min(predicted_ns, data->next_timer_ns);
+Just asking to see if haven't missed anything potentially dangerous for HW
+at run-time.
 
-This is risky if the next timer is distant because it may cause the
-CPU to get stuck in a shallow idle state effectively till the next
-timer.  That in turn may prevent the processor as a whole from
-entering a package idle state etc.
+> The idea is that generic-adc-thermal is the middleman to convert
+> from one IIO input to one IIO output, and is purely informational, so
+> that user space can get some temperature value to display somewhere.
+> 
+> How thermal management will be hooked up in the future to charger
+> drivers is a bit out of scope here I'd say. There's not even any cooling
+> support in the power supply core anymore, that was ripped out a while
+> ago if I'm not mistaken.
 
-> The idea is to prevent selecting excessively deep C-states when the
-> prediction is short but the next timer is distant, which on platforms
-> like Sapphire Rapids with high exit latencies (150us+) can cause
-> significant latency spikes.
+Okay, so there is no possibility to get some thermal issues on running
+legacy HW (that relies on thermal to be present). If it's the case, no
+worries then.
 
-Well, this essentially is a tradeoff between latency and power.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> I notice that our patches touch the same block but address slightly
-> different aspects:
->
-> - Your patch: prevents the override from firing on nohz_full CPUs
->   where tick_stopped is always true, avoiding systematically
->   discarding the prediction.
-> - My patch: when the override does fire, uses min() instead of
->   unconditional replacement to preserve information from the
->   prediction.
->
-> These two fixes could potentially be complementary. However, my patch
-> is still under investigation due to limited hardware availability for
-> collecting more data across different platforms.
->
-> I'd appreciate your thoughts on whether these approaches could be
-> combined, or if your patch already addresses the use cases I'm seeing.
 
-Actually, I don't think that any of them are suitable.
-
-Please see this series:
-
-https://lore.kernel.org/linux-pm/1953482.tdWV9SEqCh@rafael.j.wysocki/
-
-which takes a somewhat different direction.
 
