@@ -1,246 +1,210 @@
-Return-Path: <linux-pm+bounces-42927-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42928-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +HJMG6U6mGkQDgMAu9opvQ
-	(envelope-from <linux-pm+bounces-42927-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 11:42:45 +0100
+	id aJ8JMEA6mGmFDQMAu9opvQ
+	(envelope-from <linux-pm+bounces-42928-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 11:41:04 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E2E9166F12
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 11:42:45 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36BA7166E7C
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 11:41:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 79480304565F
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 10:35:18 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 313203027DA0
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 10:41:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F73433DEF9;
-	Fri, 20 Feb 2026 10:35:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA2D33E377;
+	Fri, 20 Feb 2026 10:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1IXVmEbR"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="Cx5MsgJk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B11DC33DEE9
-	for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 10:35:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A58C33DEE9
+	for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 10:41:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771583717; cv=none; b=ka3jalpU/l4WWruudHoSPYeuI2cjWCUz1PieQSRik7Za7vrfYexhookteNdn1pAkmcyGRH7R6JzEitqO+150XoR10FHukmTyPqJyZ6poVTJ2H7Ze7FfpW/l+SI4Vh6ersY/La1FKQmPF2DT55CZsYzptAaot53VoOhmIpojZ7wI=
+	t=1771584061; cv=none; b=ORDSsfEL8/DImFUalEOzBhATWYvfn2m17JxdZMOpiUI54jO7iWVlde1pnz1sA67WEdYjgsxHFPkWCL6GoCM7XF3FQO3ogGiUuhs7J4EwPW5FRgVmKmtVezOR716IIwttbe00Llxpp5c4k1q/myp/dH+s8bbNoiN6ZF/GTc9ffoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771583717; c=relaxed/simple;
-	bh=+0veVdhvJiXHWfU3srloHvG6XN01ATLsuTVbT5o95C4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PqNkhy7uRd2ir92IX/IHQTcn4Xn3/iZMoh/ZDPYMtGtHATgQ8mE9C+JNHCcxco8H8hjOaGjbKEhGbg29tpNERHH5EQs0h309HYQHuEoznS31d3jMjnlWTPVtyNi4cX17g8RTrlKSav6qRyuFslvTVpG6UFsogXYEVAj7A9hizOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1IXVmEbR; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-483786a09b1so17124955e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 02:35:15 -0800 (PST)
+	s=arc-20240116; t=1771584061; c=relaxed/simple;
+	bh=lCfjiFCpKJoa+6uB16bTXpWJQyvUj3mvFlbxKEOoSYE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=Tp1ZyTXSw/i1YgeObuhzIiSWRkEVXBjKkD+NkF1ANMe83zS9BmSFuU/ecF5LLNNhAgOK3C90h96gZFMLP8hWH/Qz2jCeLpTODZ8YEpvMtvWBEWdg2kBuQ4Vhjf2Z/kRUQolVHXkYg1jUv2fASvF7SPQ2e8+ffmgoO15HV+dCS7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=Cx5MsgJk; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b8850aa5b56so354228466b.2
+        for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 02:41:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771583714; x=1772188514; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SuBBZbTgNeFNGP2KTDBOL9VXYwpq19RWtpTtqUl4jLA=;
-        b=1IXVmEbR3x/gwrILo+4+FcRcD/u6auiA1qN6OHuF2E4HiKwOiUZV/WZYg7nR01wBRC
-         uDc6mN3J7GSC90Cjq/Pl/PdqeVANNljGGVlRQ93GXbKdeP4BAL2CYdSf2odeAiSP926f
-         8VvMYgO17j0x4H1kkJt4pw3YR0mvMPf25DbJxkP+1Fy4uPdK2x7u+CnvTohxPUtIcJJ2
-         lRq08/yfv6iagcLUZRNAR/c3bd/e0bOGQuLoTAVq328hLV4823aO7H0mvGVAAqO9Bf4u
-         pyqYEnbThNivwRIBXpA1eOALuzFWBp/BM6GVy1T4rlAt4NjsZDt3y7QY3qBN4fNLaBLR
-         EdjQ==
+        d=fairphone.com; s=fair; t=1771584058; x=1772188858; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o4tgaqGFqrzVKKPOb+iFZ3JERZen8Ej1v/LIDxYhK+0=;
+        b=Cx5MsgJkG9oj7APqKUjH43BrcK93sBkvrR9uvqcW3+WgQxYIby7Z70/GQmH/9sMPTB
+         iTFvlnLZUsfREVfIT8h9JEn6ageY55GZFmOSxcGM5gQVDgvZ34b36TuowJfG9vX9O5Th
+         EW9fx1ICNQfmxW94+axh4GugWhJTNY3YcAKmjfRfsokim005XjhelAP3uBdEAD0eGpRo
+         AEAyVVAQW3/TrSGMrt0zQRSkVRrqLeHWs2+XtTHmgUoG3bKEEJi1X1En0Lo3mZenj6lZ
+         XxUABx770Ns1ng8jGfWFnHL0O/Gyan1LIgouu1BMaBxikef9eopFUuQysP3OwuWzM7Bb
+         yxFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771583714; x=1772188514;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SuBBZbTgNeFNGP2KTDBOL9VXYwpq19RWtpTtqUl4jLA=;
-        b=tC8XHuBaM0TU2MzNvfullCdasFTFuymNTx/6PNEwRefzcjO4XPG9j5twP7EZJB9SfZ
-         aSi+v5XqvqlK5gFHC/Nxmhit3LQr//vruHXgU9kXLPXUy6iIL8b+/S3PbjCsh/dxcEp0
-         b0vEp9iEQdjvxrm2jowyooHzSd2EnnhFHu65/ZUYjZ7+SrrdYRDpHHMtajjb1VyjnEwe
-         eDfNmP3OiZ01jyyDa2mXGyXimQI0asGNZtAZ3doExVo+POLGCScvrH5W3/XUUC52fPyi
-         nJ/1r6MBL/nzxByEnd0efgJQ4CVc0Q/471z+y+WeSa4ByG8phsXqO5U4mKh31DYfv6aX
-         XX7A==
-X-Forwarded-Encrypted: i=1; AJvYcCUAqzOAg8R2KkMqXJhS5qA75FpcOWpKYXIpp8Evb1XSX/0RuvzhE4sE5cePG3pg/uzx6G8iNzONWg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZQZwor19ByLut9NJd72tSCnS1uFxoWkShLLBgNTl68irFcTLn
-	IwNf7CTiWYzNT6NtuaCTmqv0fZm3Yqk2bzOO7TBiJQYtBqeztru1yGhNHc65/Ztp5monNmMHu8m
-	7rdCvImHhapM1YLm9fw==
-X-Received: from wmbdr17.prod.google.com ([2002:a05:600c:6091:b0:480:4a03:7b73])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:8b26:b0:465:a51d:d4 with SMTP id 5b1f17b1804b1-48398a47222mr123364405e9.6.1771583713704;
- Fri, 20 Feb 2026 02:35:13 -0800 (PST)
-Date: Fri, 20 Feb 2026 10:35:12 +0000
-In-Reply-To: <20260220-unique-ref-v15-1-893ed86b06cc@kernel.org>
+        d=1e100.net; s=20230601; t=1771584058; x=1772188858;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o4tgaqGFqrzVKKPOb+iFZ3JERZen8Ej1v/LIDxYhK+0=;
+        b=oVavs0lU/akukhR5Psswy6OaKpDq4bN/F+ILJMTK8j+Bm/4j0eUfRNhnI55SMDLnoU
+         cUYdgjFzHPnIjG4F9lYo6ahF8m+A63I1bApyYnlJgMjmNT4a7KVI9fnA3ox7jHwsoTtL
+         TeDBzdHGQmOubOwDNMUwN5lJQVJcB9DIrJnkwTPaPhSaCVtyTz37zo808vuMVAYk+lnf
+         T4xvvuyhr8aeTotoWOOI9cj0wRna1i4chmBUiwLzFrjEZP7I2H48HnftlPrxa6NqW3ei
+         FcNZcTJPDNjvVWssQOOMaTqE/PM11etxGOf1jQx4fpB416wBEZJEb/ImxXklyFFqtP8d
+         xMLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXQQBFQKxShrskC2qwW5M7X2BFuCpMFh99g6+Qx3bCk1tj6J1HasqSDkjZJ3YptQB0MKEJGoMjLYg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOYhtc70v1bdeGx2+g+SO83e4j4nyxsyMpqsoSmUEqTq+Pl+sA
+	dqBK59uH5R9KgVln6c8q7rDADOVnQpIw/G3BgL/DGRq7YzNPg561d/8DgyTlmlcn7ik=
+X-Gm-Gg: AZuq6aJJMtK2O4wuEOY8R9/3140nyARtYypyFLvP1A0PWfl6CdqGLVL1GLoX4p6gmoZ
+	nZtGqwd7g2PTyYLTctuATMTODkhBCyzkUfXIk6Oukp6vws+J32pK/Q4nBBQS/iDDo/pQK3OpW1r
+	rd5hkijXkMLoUFnvVAM69GLUgCShymBO6ELpmLgZUtLq0Gdug5xFO8Fh4Yb8jBlNrldKmVsbBte
+	9xNLfVt0roaHWmllGlCExgcHT6ZIfcbn8BtBxufelhVthdECsAqE4/ozn9tPh9ajqCl6by5AjW+
+	DIngk6K4AHefc5B2uytJFJeAjqTSYVHYil/q7DY96e2g3FAin2O7T/z0bFqX/s+XehVhPMob4ap
+	BPguSDZyUsClDEEQC9ZIErXAvHiFvLnwQNBPx5hg/VDRgMtvqBEGhkc2oLHe+DT/MyQZ/t5wvy/
+	06QPxOoW9Icmy0GsxiehZ/5cVTKDc/1VQ6Iryrr3yp5e7FZF2z+yV6UhcilCLlByeQ9eSH
+X-Received: by 2002:a17:907:98d:b0:b90:3436:9f71 with SMTP id a640c23a62f3a-b90731fef13mr72589166b.47.1771584058260;
+        Fri, 20 Feb 2026 02:40:58 -0800 (PST)
+Received: from localhost (144-178-202-139.static.ef-service.nl. [144.178.202.139])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8fc7385e60sm661232566b.19.2026.02.20.02.40.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Feb 2026 02:40:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260220-unique-ref-v15-0-893ed86b06cc@kernel.org> <20260220-unique-ref-v15-1-893ed86b06cc@kernel.org>
-Message-ID: <aZg44EmMWKK-z5KP@google.com>
-Subject: Re: [PATCH v15 1/9] rust: types: Add Ownable/Owned types
-From: Alice Ryhl <aliceryhl@google.com>
-To: Andreas Hindborg <a.hindborg@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dave Ertman <david.m.ertman@intel.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, 
-	Serge Hallyn <sergeh@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Igor Korotin <igor.korotin.linux@gmail.com>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	"Krzysztof =?utf-8?Q?Wilczy=C5=84ski?=" <kwilczynski@kernel.org>, Boqun Feng <boqun@kernel.org>, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-block@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-pm@vger.kernel.org, 
-	linux-pci@vger.kernel.org, Asahi Lina <lina+kernel@asahilina.net>, 
-	Oliver Mangold <oliver.mangold@pm.me>
-Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 20 Feb 2026 11:40:57 +0100
+Message-Id: <DGJQ4WLIML3H.GAO7T4L3MCJM@fairphone.com>
+Subject: Re: [PATCH v2 5/5] arm64: dts: qcom: sm7225-fairphone-fp4: Add
+ battery temperature node
+From: "Luca Weiss" <luca.weiss@fairphone.com>
+To: "Konrad Dybcio" <konrad.dybcio@oss.qualcomm.com>, "Luca Weiss"
+ <luca.weiss@fairphone.com>, "Jonathan Cameron" <jic23@kernel.org>, "David
+ Lechner" <dlechner@baylibre.com>, =?utf-8?q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, "Andy Shevchenko" <andy@kernel.org>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+ "Zhang Rui" <rui.zhang@intel.com>, "Lukasz Luba" <lukasz.luba@arm.com>,
+ "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
+ <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Laxman
+ Dewangan" <ldewangan@nvidia.com>, "Bjorn Andersson" <andersson@kernel.org>,
+ "Konrad Dybcio" <konradybcio@kernel.org>, "Hans de Goede"
+ <hansg@kernel.org>, "Jens Reidel" <adrian@mainlining.org>, "Casey Connolly"
+ <casey.connolly@linaro.org>
+Cc: <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
+ <linux-arm-msm@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+ <devicetree@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260220-bat-temp-adc-v2-0-fe34ed4ea851@fairphone.com>
+ <20260220-bat-temp-adc-v2-5-fe34ed4ea851@fairphone.com>
+ <85ce1f2c-f5cf-4e97-9611-4aed03f69cd7@oss.qualcomm.com>
+In-Reply-To: <85ce1f2c-f5cf-4e97-9611-4aed03f69cd7@oss.qualcomm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [9.34 / 15.00];
-	URIBL_BLACK(7.50)[types.rs:url];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[fairphone.com,quarantine];
 	MV_CASE(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[fairphone.com:s=fair];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	BAD_REP_POLICIES(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42927-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	R_DKIM_ALLOW(0.00)[google.com:s=20230601];
-	GREYLIST(0.00)[pass,body];
+	TAGGED_FROM(0.00)[bounces-42928-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[26];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[40];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[kernel.org,garyguo.net,protonmail.com,umich.edu,linuxfoundation.org,intel.com,paul-moore.com,gmail.com,ffwll.ch,zeniv.linux.org.uk,suse.cz,collabora.com,oracle.com,ti.com,google.com,vger.kernel.org,lists.freedesktop.org,kvack.org,asahilina.net,pm.me];
-	DKIM_TRACE(0.00)[google.com:+];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.756];
+	DKIM_TRACE(0.00)[fairphone.com:+];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[aliceryhl@google.com,linux-pm@vger.kernel.org];
-	DMARC_POLICY_ALLOW(0.00)[google.com,reject];
-	TAGGED_RCPT(0.00)[linux-pm,kernel];
-	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	FROM_NEQ_ENVFROM(0.00)[luca.weiss@fairphone.com,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	R_SPF_ALLOW(0.00)[+ip6:2600:3c0a:e001:db::/64:c];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[types.rs:url,asahilina.net:email,collabora.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,garyguo.net:email,pm.me:email]
-X-Rspamd-Queue-Id: 0E2E9166F12
-X-Rspamd-Action: add header
-X-Spam: Yes
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,fairphone.com:mid,fairphone.com:dkim,fairphone.com:email]
+X-Rspamd-Queue-Id: 36BA7166E7C
+X-Rspamd-Action: no action
 
-On Fri, Feb 20, 2026 at 10:51:10AM +0100, Andreas Hindborg wrote:
-> From: Asahi Lina <lina+kernel@asahilina.net>
-> 
-> By analogy to `AlwaysRefCounted` and `ARef`, an `Ownable` type is a
-> (typically C FFI) type that *may* be owned by Rust, but need not be. Unlike
-> `AlwaysRefCounted`, this mechanism expects the reference to be unique
-> within Rust, and does not allow cloning.
-> 
-> Conceptually, this is similar to a `KBox<T>`, except that it delegates
-> resource management to the `T` instead of using a generic allocator.
-> 
-> [ om:
->   - Split code into separate file and `pub use` it from types.rs.
->   - Make from_raw() and into_raw() public.
->   - Remove OwnableMut, and make DerefMut dependent on Unpin instead.
->   - Usage example/doctest for Ownable/Owned.
->   - Fixes to documentation and commit message.
-> ]
-> 
-> Link: https://lore.kernel.org/all/20250202-rust-page-v1-1-e3170d7fe55e@asahilina.net/
-> Signed-off-by: Asahi Lina <lina+kernel@asahilina.net>
-> Co-developed-by: Oliver Mangold <oliver.mangold@pm.me>
-> Signed-off-by: Oliver Mangold <oliver.mangold@pm.me>
-> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
-> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
-> [ Andreas: Updated documentation, examples, and formatting ]
-> Reviewed-by: Gary Guo <gary@garyguo.net>
-> Co-developed-by: Andreas Hindborg <a.hindborg@kernel.org>
-> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+On Fri Feb 20, 2026 at 11:00 AM CET, Konrad Dybcio wrote:
+> On 2/20/26 10:19 AM, Luca Weiss wrote:
+>> Add a generic-adc-thermal node to convert the voltage read by the
+>> battery temperature ADC into degree Celsius using the provided lookup
+>> table.
+>>=20
+>> This will later be used as input for the fuel gauge node (QGauge on the
+>> PM7250B).
+>>=20
+>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+>> ---
+>>  arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 83 ++++++++++++++++=
++++++++
+>>  1 file changed, 83 insertions(+)
+>>=20
+>> diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/ar=
+m64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+>> index b697051a0aaa..7857003099a6 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+>> @@ -108,6 +108,89 @@ rear_cam_sensor: thermal-sensor-rear-cam {
+>>  		io-channel-names =3D "sensor-channel";
+>>  	};
+>> =20
+>> +	bat_therm_sensor: thermal-sensor-bat-therm {
+>
+> nit: this should be a little higher
 
-> +///         let result = NonNull::new(KBox::into_raw(result))
-> +///             .expect("Raw pointer to newly allocation KBox is null, this should never happen.");
+meh, it's surprisingly easy to miss this sorting stuff. Will fix in v3.
 
-KBox should probably have an into_raw_nonnull().
+>
+>> +		compatible =3D "generic-adc-thermal";
+>> +		#thermal-sensor-cells =3D <0>;
+>> +		#io-channel-cells =3D <0>;
+>> +		io-channels =3D <&pm7250b_adc ADC5_BAT_THERM_30K_PU>;
+>> +		io-channel-names =3D "sensor-channel";
+>> +		/*
+>> +		 * Voltage to temperature table for 10k=CE=A9 (B=3D3435K) NTC with a
+>> +		 * 1.875V reference and 30k=CE=A9 pull-up.
+>> +		 */
+>
+> I think this looks good. Is this data going to be correct for all/most
+> devices (i.e. is there a single battery sku)?
 
-> +///    let foo = Foo::new().expect("Failed to allocate a Foo. This shouldn't happen");
-> +///    assert!(*FOO_ALLOC_COUNT.lock() == 1);
+Yes, from my info there's just a single battery SKU, so that makes it
+easy here.
 
-Use ? here.
+For Fairphone 3 there's two battery SKUs:
 
-> +/// }
-> +/// // `foo` is out of scope now, so we expect no live allocations.
-> +/// assert!(*FOO_ALLOC_COUNT.lock() == 0);
-> +/// ```
-> +pub unsafe trait Ownable {
-> +    /// Releases the object.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// Callers must ensure that:
-> +    /// - `this` points to a valid `Self`.
-> +    /// - `*this` is no longer used after this call.
-> +    unsafe fn release(this: NonNull<Self>);
+* (Fuji) F3AC with NTC 100kOhm B=3D4100, ID resistor 10kOhm
+* (Kayo) F3AC1 with NTC 100kOhm B=3D4050, ID resistor 49.9kOhm
 
-Honestly, not using it after this call may be too strong. I can imagine
-wanting a value where I have both an ARef<_> and Owned<_> reference to
-something similar to the existing Arc<_>/ListArc<_> pattern, and in that
-case the value may in fact be accessed after this call if you still have
-an ARef<_>.
+In reality, one can probably ignore the difference between the LUT for
+either B value since it only differs by a marginal amount, but
+conceptually I'm not sure how this should really be resolved.
 
-If you modify Owned<_> invariants and Owned::from_raw() safety
-requirements along the lines of what I say below, then this could just
-say that the caller must have permission to call this function. The
-concrete implementer can specify what that means more directly, but here
-all it means is that a prior call to Owned::from_raw() promised to give
-you permission to call it.
+We could have both battery definitions in the dtb, and then the charging
+driver could determine the battery that's actually present in the
+system (based on the BATT_ID measurement), but given the design here
+now, I'm not sure how this temperature lookup table would be propagated
+to the rest of the system...
 
-> +/// A mutable reference to an owned `T`.
-> +///
-> +/// The [`Ownable`] is automatically freed or released when an instance of [`Owned`] is
-> +/// dropped.
-> +///
-> +/// # Invariants
-> +///
-> +/// - The [`Owned<T>`] has exclusive access to the instance of `T`.
-> +/// - The instance of `T` will stay alive at least as long as the [`Owned<T>`] is alive.
-> +pub struct Owned<T: Ownable> {
-> +    ptr: NonNull<T>,
-> +}
-
-I think some more direct and less fuzzy invariants would be:
-
-- This `Owned<T>` holds permissions to call `T::release()` on the value once.
-- Until `T::release()` is called, this `Owned<T>` may perform mutable access on the `T`.
-- The `T` value is pinned.
-
-> +    /// Get a pinned mutable reference to the data owned by this `Owned<T>`.
-> +    pub fn as_pin_mut(&mut self) -> Pin<&mut T> {
-> +        // SAFETY: The type invariants guarantee that the object is valid, and that we can safely
-> +        // return a mutable reference to it.
-> +        let unpinned = unsafe { self.ptr.as_mut() };
-> +
-> +        // SAFETY: We never hand out unpinned mutable references to the data in
-> +        // `Self`, unless the contained type is `Unpin`.
-> +        unsafe { Pin::new_unchecked(unpinned) }
-
-I'd prefer if "pinned" was a type invariant, rather than make an
-argument about what kind of APIs exist.
-
-> +impl<T: Ownable + Unpin> DerefMut for Owned<T> {
-> +    fn deref_mut(&mut self) -> &mut Self::Target {
-> +        // SAFETY: The type invariants guarantee that the object is valid, and that we can safely
-> +        // return a mutable reference to it.
-> +        unsafe { self.ptr.as_mut() }
-
-Surely this safety comment should say something about pinning.
-
-Alice
+Regards
+Luca
 
