@@ -1,251 +1,246 @@
-Return-Path: <linux-pm+bounces-42926-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42927-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WApwFK80mGn/CgMAu9opvQ
-	(envelope-from <linux-pm+bounces-42926-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 11:17:19 +0100
+	id +HJMG6U6mGkQDgMAu9opvQ
+	(envelope-from <linux-pm+bounces-42927-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 11:42:45 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9E54166BDE
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 11:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E2E9166F12
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 11:42:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5BCCC3014C16
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 10:16:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 79480304565F
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 10:35:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFDBD33C18B;
-	Fri, 20 Feb 2026 10:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F73433DEF9;
+	Fri, 20 Feb 2026 10:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1IXVmEbR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2D4531A56C;
-	Fri, 20 Feb 2026 10:16:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B11DC33DEE9
+	for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 10:35:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771582586; cv=none; b=Uq4a4N7M5rkyego6guiNRkA37nvKctN5oOxiDviMdebmY5sQxEAUh6G9rHa1VZ3jZVSxMLW1ngyEh6wDYavYKW1/ZHbGGywGGRqkN5r8CWx2Pj1gPs3OZapt2MoCaBNMcuTzXNUC+M4vSk43+Jx4K5WkzYmanMgQ70cRqVKI7o0=
+	t=1771583717; cv=none; b=ka3jalpU/l4WWruudHoSPYeuI2cjWCUz1PieQSRik7Za7vrfYexhookteNdn1pAkmcyGRH7R6JzEitqO+150XoR10FHukmTyPqJyZ6poVTJ2H7Ze7FfpW/l+SI4Vh6ersY/La1FKQmPF2DT55CZsYzptAaot53VoOhmIpojZ7wI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771582586; c=relaxed/simple;
-	bh=J8ZUwIGlqxidV/Auflv1r38bbUMoLlG++hYcnb7TotQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QTvQYZl9u0U+JNx18nWwXuPRie9ylT2yDnj7/OXwkYOaGo2bYUWS2hd9EtlbyZjPJrKi9vnC8/d43prQA+uURiaU9kmmCbdoPQWorxdZf0b+AWBlQ1Bnj7s3S1uvSViMtdxKiEAQgLTLzRVo6MeYDa0weD9b00ImXQ2Mxig18x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F08F497;
-	Fri, 20 Feb 2026 02:16:17 -0800 (PST)
-Received: from [10.1.35.17] (e127648.arm.com [10.1.35.17])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B90A43F62B;
-	Fri, 20 Feb 2026 02:16:22 -0800 (PST)
-Message-ID: <f9d8789f-40ac-462c-9745-8aafbffc11d4@arm.com>
-Date: Fri, 20 Feb 2026 10:16:20 +0000
+	s=arc-20240116; t=1771583717; c=relaxed/simple;
+	bh=+0veVdhvJiXHWfU3srloHvG6XN01ATLsuTVbT5o95C4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=PqNkhy7uRd2ir92IX/IHQTcn4Xn3/iZMoh/ZDPYMtGtHATgQ8mE9C+JNHCcxco8H8hjOaGjbKEhGbg29tpNERHH5EQs0h309HYQHuEoznS31d3jMjnlWTPVtyNi4cX17g8RTrlKSav6qRyuFslvTVpG6UFsogXYEVAj7A9hizOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1IXVmEbR; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-483786a09b1so17124955e9.3
+        for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 02:35:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771583714; x=1772188514; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SuBBZbTgNeFNGP2KTDBOL9VXYwpq19RWtpTtqUl4jLA=;
+        b=1IXVmEbR3x/gwrILo+4+FcRcD/u6auiA1qN6OHuF2E4HiKwOiUZV/WZYg7nR01wBRC
+         uDc6mN3J7GSC90Cjq/Pl/PdqeVANNljGGVlRQ93GXbKdeP4BAL2CYdSf2odeAiSP926f
+         8VvMYgO17j0x4H1kkJt4pw3YR0mvMPf25DbJxkP+1Fy4uPdK2x7u+CnvTohxPUtIcJJ2
+         lRq08/yfv6iagcLUZRNAR/c3bd/e0bOGQuLoTAVq328hLV4823aO7H0mvGVAAqO9Bf4u
+         pyqYEnbThNivwRIBXpA1eOALuzFWBp/BM6GVy1T4rlAt4NjsZDt3y7QY3qBN4fNLaBLR
+         EdjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771583714; x=1772188514;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SuBBZbTgNeFNGP2KTDBOL9VXYwpq19RWtpTtqUl4jLA=;
+        b=tC8XHuBaM0TU2MzNvfullCdasFTFuymNTx/6PNEwRefzcjO4XPG9j5twP7EZJB9SfZ
+         aSi+v5XqvqlK5gFHC/Nxmhit3LQr//vruHXgU9kXLPXUy6iIL8b+/S3PbjCsh/dxcEp0
+         b0vEp9iEQdjvxrm2jowyooHzSd2EnnhFHu65/ZUYjZ7+SrrdYRDpHHMtajjb1VyjnEwe
+         eDfNmP3OiZ01jyyDa2mXGyXimQI0asGNZtAZ3doExVo+POLGCScvrH5W3/XUUC52fPyi
+         nJ/1r6MBL/nzxByEnd0efgJQ4CVc0Q/471z+y+WeSa4ByG8phsXqO5U4mKh31DYfv6aX
+         XX7A==
+X-Forwarded-Encrypted: i=1; AJvYcCUAqzOAg8R2KkMqXJhS5qA75FpcOWpKYXIpp8Evb1XSX/0RuvzhE4sE5cePG3pg/uzx6G8iNzONWg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZQZwor19ByLut9NJd72tSCnS1uFxoWkShLLBgNTl68irFcTLn
+	IwNf7CTiWYzNT6NtuaCTmqv0fZm3Yqk2bzOO7TBiJQYtBqeztru1yGhNHc65/Ztp5monNmMHu8m
+	7rdCvImHhapM1YLm9fw==
+X-Received: from wmbdr17.prod.google.com ([2002:a05:600c:6091:b0:480:4a03:7b73])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:8b26:b0:465:a51d:d4 with SMTP id 5b1f17b1804b1-48398a47222mr123364405e9.6.1771583713704;
+ Fri, 20 Feb 2026 02:35:13 -0800 (PST)
+Date: Fri, 20 Feb 2026 10:35:12 +0000
+In-Reply-To: <20260220-unique-ref-v15-1-893ed86b06cc@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/2] cpuidle: governors: teo: Rearrange stopped tick
- handling
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Doug Smythies <dsmythies@telus.net>,
- Aboorva Devarajan <aboorvad@linux.ibm.com>,
- "Ionut Nechita (Sunlight Linux)" <sunlightlinux@gmail.com>
-References: <1953482.tdWV9SEqCh@rafael.j.wysocki>
- <3409058.44csPzL39Z@rafael.j.wysocki>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <3409058.44csPzL39Z@rafael.j.wysocki>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20260220-unique-ref-v15-0-893ed86b06cc@kernel.org> <20260220-unique-ref-v15-1-893ed86b06cc@kernel.org>
+Message-ID: <aZg44EmMWKK-z5KP@google.com>
+Subject: Re: [PATCH v15 1/9] rust: types: Add Ownable/Owned types
+From: Alice Ryhl <aliceryhl@google.com>
+To: Andreas Hindborg <a.hindborg@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dave Ertman <david.m.ertman@intel.com>, 
+	Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	Serge Hallyn <sergeh@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Igor Korotin <igor.korotin.linux@gmail.com>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	"Krzysztof =?utf-8?Q?Wilczy=C5=84ski?=" <kwilczynski@kernel.org>, Boqun Feng <boqun@kernel.org>, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-block@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-pm@vger.kernel.org, 
+	linux-pci@vger.kernel.org, Asahi Lina <lina+kernel@asahilina.net>, 
+	Oliver Mangold <oliver.mangold@pm.me>
+Content-Type: text/plain; charset="utf-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.36 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+X-Spamd-Result: default: False [9.34 / 15.00];
+	URIBL_BLACK(7.50)[types.rs:url];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MV_CASE(0.50)[];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
+	BAD_REP_POLICIES(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,telus.net,linux.ibm.com,gmail.com];
-	TAGGED_FROM(0.00)[bounces-42926-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42927-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	R_DKIM_ALLOW(0.00)[google.com:s=20230601];
+	GREYLIST(0.00)[pass,body];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_ALL(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[40];
 	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[christian.loehle@arm.com,linux-pm@vger.kernel.org];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.979];
+	FREEMAIL_CC(0.00)[kernel.org,garyguo.net,protonmail.com,umich.edu,linuxfoundation.org,intel.com,paul-moore.com,gmail.com,ffwll.ch,zeniv.linux.org.uk,suse.cz,collabora.com,oracle.com,ti.com,google.com,vger.kernel.org,lists.freedesktop.org,kvack.org,asahilina.net,pm.me];
+	DKIM_TRACE(0.00)[google.com:+];
+	TO_DN_SOME(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email]
-X-Rspamd-Queue-Id: A9E54166BDE
-X-Rspamd-Action: no action
+	NEURAL_HAM(-0.00)[-0.756];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[aliceryhl@google.com,linux-pm@vger.kernel.org];
+	DMARC_POLICY_ALLOW(0.00)[google.com,reject];
+	TAGGED_RCPT(0.00)[linux-pm,kernel];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	R_SPF_ALLOW(0.00)[+ip6:2600:3c0a:e001:db::/64:c];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[types.rs:url,asahilina.net:email,collabora.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,garyguo.net:email,pm.me:email]
+X-Rspamd-Queue-Id: 0E2E9166F12
+X-Rspamd-Action: add header
+X-Spam: Yes
 
-On 2/18/26 18:37, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Fri, Feb 20, 2026 at 10:51:10AM +0100, Andreas Hindborg wrote:
+> From: Asahi Lina <lina+kernel@asahilina.net>
 > 
-> This change is based on the observation that it is not in fact necessary
-> to select a deep idle state every time the scheduler tick has been
-> stopped before the idle state selection takes place.  Namely, if the
-> time till the closest timer (that is not the tick) is short enough,
-> a shallow idle state can be selected because the timer will kick the
-> CPU out of that state, so the damage from a possible overly optimistic
-> selection will be limited.
+> By analogy to `AlwaysRefCounted` and `ARef`, an `Ownable` type is a
+> (typically C FFI) type that *may* be owned by Rust, but need not be. Unlike
+> `AlwaysRefCounted`, this mechanism expects the reference to be unique
+> within Rust, and does not allow cloning.
 > 
-> Update the teo governor in accordance with the above in analogy with
-> the previous analogous menu governor update.
+> Conceptually, this is similar to a `KBox<T>`, except that it delegates
+> resource management to the `T` instead of using a generic allocator.
 > 
-> Among other things, this will cause the teo governor to call
-> tick_nohz_get_sleep_length() every time when the tick has been
-> stopped already and only change the original idle state selection
-> if the time till the closest timer is beyond SAFE_TIMER_RANGE_NS
-> which is way more straightforward than the current code flow.
+> [ om:
+>   - Split code into separate file and `pub use` it from types.rs.
+>   - Make from_raw() and into_raw() public.
+>   - Remove OwnableMut, and make DerefMut dependent on Unpin instead.
+>   - Usage example/doctest for Ownable/Owned.
+>   - Fixes to documentation and commit message.
+> ]
 > 
-> Of course, this effectively throws away some of the recent teo governor
-> changes, but the resulting simplification is worth it in my view.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpuidle/governors/teo.c |   80 ++++++++++++++++------------------------
->  1 file changed, 33 insertions(+), 47 deletions(-)
-> 
-> --- a/drivers/cpuidle/governors/teo.c
-> +++ b/drivers/cpuidle/governors/teo.c
-> @@ -413,50 +413,13 @@ static int teo_select(struct cpuidle_dri
->  	 * better choice.
->  	 */
->  	if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
-> -		int min_idx = idx0;
-> -
-> -		if (tick_nohz_tick_stopped()) {
-> -			/*
-> -			 * Look for the shallowest idle state below the current
-> -			 * candidate one whose target residency is at least
-> -			 * equal to the tick period length.
-> -			 */
-> -			while (min_idx < idx &&
-> -			       drv->states[min_idx].target_residency_ns < TICK_NSEC)
-> -				min_idx++;
-> -
-> -			/*
-> -			 * Avoid selecting a state with a lower index, but with
-> -			 * the same target residency as the current candidate
-> -			 * one.
-> -			 */
-> -			if (drv->states[min_idx].target_residency_ns ==
-> -					drv->states[idx].target_residency_ns)
-> -				goto constraint;
-> -		}
-> -
-> -		/*
-> -		 * If the minimum state index is greater than or equal to the
-> -		 * index of the state with the maximum intercepts metric and
-> -		 * the corresponding state is enabled, there is no need to look
-> -		 * at the deeper states.
-> -		 */
-> -		if (min_idx >= intercept_max_idx &&
-> -		    !dev->states_usage[min_idx].disable) {
-> -			idx = min_idx;
-> -			goto constraint;
-> -		}
-> -
->  		/*
->  		 * Look for the deepest enabled idle state, at most as deep as
->  		 * the one with the maximum intercepts metric, whose target
->  		 * residency had not been greater than the idle duration in over
->  		 * a half of the relevant cases in the past.
-> -		 *
-> -		 * Take the possible duration limitation present if the tick
-> -		 * has been stopped already into account.
->  		 */
-> -		for (i = idx - 1, intercept_sum = 0; i >= min_idx; i--) {
-> +		for (i = idx - 1, intercept_sum = 0; i >= idx0; i--) {
->  			intercept_sum += cpu_data->state_bins[i].intercepts;
->  
->  			if (dev->states_usage[i].disable)
-> @@ -469,7 +432,6 @@ static int teo_select(struct cpuidle_dri
->  		}
->  	}
->  
-> -constraint:
->  	/*
->  	 * If there is a latency constraint, it may be necessary to select an
->  	 * idle state shallower than the current candidate one.
-> @@ -478,13 +440,13 @@ constraint:
->  		idx = constraint_idx;
->  
->  	/*
-> -	 * If either the candidate state is state 0 or its target residency is
-> -	 * low enough, there is basically nothing more to do, but if the sleep
-> -	 * length is not updated, the subsequent wakeup will be counted as an
-> -	 * "intercept" which may be problematic in the cases when timer wakeups
-> -	 * are dominant.  Namely, it may effectively prevent deeper idle states
-> -	 * from being selected at one point even if no imminent timers are
-> -	 * scheduled.
-> +	 * If the tick has not been stopped and either the candidate state is
-> +	 * state 0 or its target residency is low enough, there is basically
-> +	 * nothing more to do, but if the sleep length is not updated, the
-> +	 * subsequent wakeup will be counted as an "intercept".  That may be
-> +	 * problematic in the cases when timer wakeups are dominant because it
-> +	 * may effectively prevent deeper idle states from being selected at one
-> +	 * point even if no imminent timers are scheduled.
->  	 *
->  	 * However, frequent timers in the RESIDENCY_THRESHOLD_NS range on one
->  	 * CPU are unlikely (user space has a default 50 us slack value for
-> @@ -500,7 +462,8 @@ constraint:
->  	 * shallow idle states regardless of the wakeup type, so the sleep
->  	 * length need not be known in that case.
->  	 */
-> -	if ((!idx || drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_NS) &&
-> +	if (!tick_nohz_tick_stopped() && (!idx ||
-> +	     drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_NS) &&
->  	    (2 * cpu_data->short_idles >= cpu_data->total ||
->  	     latency_req < LATENCY_THRESHOLD_NS))
->  		goto out_tick;
-> @@ -508,6 +471,29 @@ constraint:
->  	duration_ns = tick_nohz_get_sleep_length(&delta_tick);
->  	cpu_data->sleep_length_ns = duration_ns;
->  
-> +	/*
-> +	 * If the tick has been stopped and the closest timer is too far away,
-> +	 * update the selection to prevent the CPU from getting stuck in a
-> +	 * shallow idle state for too long.
-> +	 */
-> +	if (tick_nohz_tick_stopped() && duration_ns > SAFE_TIMER_RANGE_NS &&
-> +	    drv->states[idx].target_residency_ns < TICK_NSEC) {
-> +		/*
-> +		 * Look for the deepest enabled idle state with target
-> +		 * residency within duration_ns.
-> +		 */
-> +		for (i = drv->state_count - 1; i > idx; i--) {
+> Link: https://lore.kernel.org/all/20250202-rust-page-v1-1-e3170d7fe55e@asahilina.net/
+> Signed-off-by: Asahi Lina <lina+kernel@asahilina.net>
+> Co-developed-by: Oliver Mangold <oliver.mangold@pm.me>
+> Signed-off-by: Oliver Mangold <oliver.mangold@pm.me>
+> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+> [ Andreas: Updated documentation, examples, and formatting ]
+> Reviewed-by: Gary Guo <gary@garyguo.net>
+> Co-developed-by: Andreas Hindborg <a.hindborg@kernel.org>
+> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 
-s/drv->state_count - 1/constraint_idx/
-to respect the latency_req here?
+> +///         let result = NonNull::new(KBox::into_raw(result))
+> +///             .expect("Raw pointer to newly allocation KBox is null, this should never happen.");
 
-> +			if (dev->states_usage[i].disable)
-> +				continue;
+KBox should probably have an into_raw_nonnull().
+
+> +///    let foo = Foo::new().expect("Failed to allocate a Foo. This shouldn't happen");
+> +///    assert!(*FOO_ALLOC_COUNT.lock() == 1);
+
+Use ? here.
+
+> +/// }
+> +/// // `foo` is out of scope now, so we expect no live allocations.
+> +/// assert!(*FOO_ALLOC_COUNT.lock() == 0);
+> +/// ```
+> +pub unsafe trait Ownable {
+> +    /// Releases the object.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// Callers must ensure that:
+> +    /// - `this` points to a valid `Self`.
+> +    /// - `*this` is no longer used after this call.
+> +    unsafe fn release(this: NonNull<Self>);
+
+Honestly, not using it after this call may be too strong. I can imagine
+wanting a value where I have both an ARef<_> and Owned<_> reference to
+something similar to the existing Arc<_>/ListArc<_> pattern, and in that
+case the value may in fact be accessed after this call if you still have
+an ARef<_>.
+
+If you modify Owned<_> invariants and Owned::from_raw() safety
+requirements along the lines of what I say below, then this could just
+say that the caller must have permission to call this function. The
+concrete implementer can specify what that means more directly, but here
+all it means is that a prior call to Owned::from_raw() promised to give
+you permission to call it.
+
+> +/// A mutable reference to an owned `T`.
+> +///
+> +/// The [`Ownable`] is automatically freed or released when an instance of [`Owned`] is
+> +/// dropped.
+> +///
+> +/// # Invariants
+> +///
+> +/// - The [`Owned<T>`] has exclusive access to the instance of `T`.
+> +/// - The instance of `T` will stay alive at least as long as the [`Owned<T>`] is alive.
+> +pub struct Owned<T: Ownable> {
+> +    ptr: NonNull<T>,
+> +}
+
+I think some more direct and less fuzzy invariants would be:
+
+- This `Owned<T>` holds permissions to call `T::release()` on the value once.
+- Until `T::release()` is called, this `Owned<T>` may perform mutable access on the `T`.
+- The `T` value is pinned.
+
+> +    /// Get a pinned mutable reference to the data owned by this `Owned<T>`.
+> +    pub fn as_pin_mut(&mut self) -> Pin<&mut T> {
+> +        // SAFETY: The type invariants guarantee that the object is valid, and that we can safely
+> +        // return a mutable reference to it.
+> +        let unpinned = unsafe { self.ptr.as_mut() };
 > +
-> +			if (drv->states[i].target_residency_ns <= duration_ns) {
-> +				idx = i;
-> +				break;
-> +			}
-> +		}
-> +		return idx;
-> +	}
-> +
->  	if (!idx)
->  		goto out_tick;
->  
-> 
-> 
-> 
+> +        // SAFETY: We never hand out unpinned mutable references to the data in
+> +        // `Self`, unless the contained type is `Unpin`.
+> +        unsafe { Pin::new_unchecked(unpinned) }
 
+I'd prefer if "pinned" was a type invariant, rather than make an
+argument about what kind of APIs exist.
+
+> +impl<T: Ownable + Unpin> DerefMut for Owned<T> {
+> +    fn deref_mut(&mut self) -> &mut Self::Target {
+> +        // SAFETY: The type invariants guarantee that the object is valid, and that we can safely
+> +        // return a mutable reference to it.
+> +        unsafe { self.ptr.as_mut() }
+
+Surely this safety comment should say something about pinning.
+
+Alice
 
