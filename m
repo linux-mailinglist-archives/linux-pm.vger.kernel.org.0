@@ -1,274 +1,297 @@
-Return-Path: <linux-pm+bounces-42959-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42961-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0AhhFvvkmGn3NwMAu9opvQ
-	(envelope-from <linux-pm+bounces-42959-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 23:49:31 +0100
+	id uJdkI0YdmWkKRAMAu9opvQ
+	(envelope-from <linux-pm+bounces-42961-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Feb 2026 03:49:42 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFA6816B51E
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 23:49:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ADC316BF97
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Feb 2026 03:49:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 60AE7301DE0B
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Feb 2026 22:49:29 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8E07E300F196
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Feb 2026 02:49:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A7DF30F552;
-	Fri, 20 Feb 2026 22:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2678722B8AB;
+	Sat, 21 Feb 2026 02:49:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nS7foOf8"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Zbrur7YM";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="jqAyD1gJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010023.outbound.protection.outlook.com [40.93.198.23])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0975419DF8D;
-	Fri, 20 Feb 2026 22:49:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.23
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771627768; cv=fail; b=LuddDAXCnLq6YnLzb04Lg5woChkdEoxz/fz674mj2tIgtrmT/oLaFODo9x4+SklpU1Pgr29qL3gWPJNxrvrf66OR+qMJdIKvCUoRVtz/VeBv8q38SKcnlBDA8rNd5DboionTLuj4pQRftwd51X4vTFXFsjEVqVgnysxDs1Ga8rg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771627768; c=relaxed/simple;
-	bh=nACNI+rMDVS53dGswOc3yB2V0wC27j3hzdehaU48+G4=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=GdyDbnQjZIkLAY9cG+punxtWFRikOVYXoOZMbbGit4Je/vE+Kr7/OYt1JmO3jKF+H0moE97ylveV7DBNYLLNubT4D0L6j75A/Y9YqnNlwRxIEU9RGgxTFsjfmylaFKCndScNZi1bhNDmEC/iV7fo2lU/aw5vEYQ0WEyW5gx3mLo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nS7foOf8; arc=fail smtp.client-ip=40.93.198.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Q4cTBoF1oQW3zc6i6wn+wesF+pE0iz296Km3aRQlOJFyXBQe0uKzMSB4SfLDsFh4uC1QSucv3O1xGbxoCvbs1qxVrzr2oZhk9GK6wOcJzq3GpP3xW5wcWRj1V6yQkQdVqeDCcAKCfjjd4t9H4KunS30JCpNKJ70F7QtJoo2W5YKXa0RwHa9LhpdpPIgAvYrUccHxNU+WBTppIkUrJD+kIv1XWqrgqPFqZR0QrhEeIUgcdFJ2qoOFznPHk2hhgNQMrQiOqpO+mQAr4Ztrc+C0z1MeOFpoofhlOKargO6WZSd4ETzUxX+4AHl4DFMfiaU/z4S3BBesn+X+23fxfzm9dA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y2XSauwEXwRTcVHAjo4zGTZoxp6m10IO8d6u/6G6w+0=;
- b=Au4VPaD7/Paxw9zigzDL/x5XvUJKccgezMEuqVKUXjriHGlBNz6IdNvsEgHBVWKunMyaCTSmCCPKz7phr4nSbxJX4poUUun4vQOGDzX3op2qtgklp0Pksu9a4T8LuffTtdKybCirVHPBvIHUiYbMakZQ3tK3w5IzHWqzrVoEHMpvWNAw7dkJa3XMsXdSu1Ob68PtfabvONC4uakd3WsqoLwv9+qEgPxOo477DTVtpNfVZUSbVrpri2BnaWhwTsgML/69B/MsP3V3VPatvod1e+RVNVbf2Yh13MJSnAhGV2eTfAL7b93MoTTWOwrS1nDlRyh5hoqPGopeRVKn0Ur50A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y2XSauwEXwRTcVHAjo4zGTZoxp6m10IO8d6u/6G6w+0=;
- b=nS7foOf8LJYgse8hVgEy4Xl8Ml1a5sQbeLGdpfYUpEBgMab53ylxQ9mJv4eCxZSCcwtsPIjJhj7q9GMtK+j0VOGinhGGqbWY1gWT3vksSqexPndRroMaM17Lymk1J96yulXQylGITtfdbkfWZdoJc7yGaOm2S6izzgGgZcQhn/8J05y06GRzHyMOw8w3bqcjnOGORSQczNTwFomvJDb10L8ZzNO1Ry08YfWQdWKwZOL7pNeSf2r0fyvz4xX+2SBzB3WU3tJS54iA3AVsuRkvQR4PtMqaG4ihng9qx1FMurrklv+hngPhQZpJnH38+k6RDBVvAz/aVLTS2tBzV0KX6A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY3PR12MB9630.namprd12.prod.outlook.com (2603:10b6:930:101::14)
- by CH2PR12MB4229.namprd12.prod.outlook.com (2603:10b6:610:a5::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.12; Fri, 20 Feb
- 2026 22:49:23 +0000
-Received: from CY3PR12MB9630.namprd12.prod.outlook.com
- ([fe80::cd62:8049:5d73:ae2f]) by CY3PR12MB9630.namprd12.prod.outlook.com
- ([fe80::cd62:8049:5d73:ae2f%6]) with mapi id 15.20.9632.010; Fri, 20 Feb 2026
- 22:49:23 +0000
-From: Penghe Geng <pgeng@nvidia.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
-	Ionela Voinescu <ionela.voinescu@arm.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Penghe Geng <pgeng@nvidia.com>
-Subject: [PATCH] cpufreq: cppc: drop invariance when FIE is disabled
-Date: Fri, 20 Feb 2026 17:49:20 -0500
-Message-ID: <20260220224920.416602-1-pgeng@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MN0P222CA0018.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:208:531::19) To CY3PR12MB9630.namprd12.prod.outlook.com
- (2603:10b6:930:101::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA281AF0AF
+	for <linux-pm@vger.kernel.org>; Sat, 21 Feb 2026 02:49:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771642179; cv=none; b=h/+qpz2NDyz4OrpVpNvB9iJ7KLVl5Yn8fEFcksISr0VA8BVDuAMjPRDRtX8AAtwtGC5QKkf9DrqkZQtLH4N9lneddWuslYqgnHa27t0Vrr7ImDcNKrf/tw3Ve7b65w4Yph5ZYTWZ0P8yDNZxigM0SZxN6gLzm3blZrVH+UeQSIM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771642179; c=relaxed/simple;
+	bh=uq92ycsM47Jo3q4lAh30+sbvRyqWHRljr1zKiEWutzc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ppwghmCjc3INdxIO3kp6LJy/fe0HsIU8y8KVKvljs+5XE7k2s9S9JYQncpUmm4joZDykMa4TSJdm6nvmjdqR83SHnuCNQxaIs4U3nUROloyJm1xk3PdoF5vCVUx7hrYh5Dc6If1F39P9zJXSbusGXEwiCq/a8rVzvf3WOuvZqcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Zbrur7YM; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=jqAyD1gJ; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61KG4Uh13337643
+	for <linux-pm@vger.kernel.org>; Sat, 21 Feb 2026 02:49:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	BmWwSyvtQgL34OEqTM20cBfqvgI2QWHHCJgEeagqLDo=; b=Zbrur7YMuFsAtxgl
+	ZpG+MMTRvPm6XqWhMA1Ukb4OavUa/TsVFx9pZXgp54AeaRplZb/PjaiGgnI/GXNR
+	bwoRxRbu/ole69KAiIu2IhOCh4Arh14MtlwsjVRXpf7Shb3njsZ+ShajScnzhngH
+	ygc2/CNALxCschU2e+xiIxqTNbz/DJ6SPDjJAY7NMe3JHnR9fRMZJlcnEOQ9wN3v
+	YO2jhYMu42cqKkav9Iq37LzcOiDVKfFw912380YcxmT6l3JonCqmtvC2f604t96r
+	h4hFSNiIX2uiifLhBQY6UG0n6b/46WEGKmfkR1qG5UMdtie1ifuOoJqLh+v+Hbjn
+	PC3lWg==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cedp6kg7c-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Sat, 21 Feb 2026 02:49:37 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8cb706313beso399218785a.3
+        for <linux-pm@vger.kernel.org>; Fri, 20 Feb 2026 18:49:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1771642172; x=1772246972; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BmWwSyvtQgL34OEqTM20cBfqvgI2QWHHCJgEeagqLDo=;
+        b=jqAyD1gJZs8tCYH4XvCwi7l5+Xp/FALRNML198bziAe0Mo48Yp6xEr/TvlqJSnbapX
+         1H+Tc8gwWSIUQKGD3ukLmtWdADLKgDJiyCxXYraR7InIkBNVgMWkWAK12Pb4TPISX0K/
+         kwH6mYZy8hAslhw9m3GX2xdKNXpHnv6pHaIU9tGYbkfRxi9LjQBR5fJwDa6jvXFUYNa7
+         O8L6nsDXem+u1KP9t4M/YcC+0Y1WvBQ3EKDoo3tF58xZaL2R9J7G6fF8pL0Q04TXd8HT
+         frlOgTqHHJDkhDPvqrWyS0blExWmudlvTKihBY+WExpqq5IBlYfrkuk87Y1OBCw+2IL2
+         5PwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771642172; x=1772246972;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BmWwSyvtQgL34OEqTM20cBfqvgI2QWHHCJgEeagqLDo=;
+        b=m2elUdhVAT+ZOm7FcPfsBrY0HXbUGqSf0RUvtppPqUP7XTnnLp/jy0Zguxah2Hjnws
+         Z7ebO9V/iyZc8S3F0M6iH9ZN1rk1oZWn2S9l//WYllpEx8PIKA0Qn/eik3im0y/559Ny
+         YSr2+I9RDBBYqtrUY8hW/oFydOZX4cyG84hWhQG9jVmSIyM8jxwuMUJuE0xCcM2mY382
+         o7uCmOh4sUWLB/SOlDUsBsbNgeyL3frzjLmEt8DE6joqY6yaU1JgC88OJMN8fR9uCCvA
+         YfjMc1KbO6pkuFIJAadicpaMzl3YOMm0fwG9ajs2GPVCxZi2dpb5r/a0zMiaXjfWW5/m
+         s5hQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUsQ8xhORobTwacCAmbMveQJAgq03G1DuET4Smm5Uh47QHNHlTn0dbxtZ0ahtl5V/q1a+sNRmBOYw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZEsqSYSAseo1mW6ZkFtzu8ZBkLdKJkdQ0HDp7msYhcA+dzvKM
+	CCNTvZLkjwkPGRrXGJlO6aUNXLf1a0y9+xnE2Iham0L2ryuNAi63a6JRizr46RpTpeMaGaNCPcd
+	TK0DbKpDWBXZk/j/gJMFzWPIBbk17n698sxb9gw1RpBh4mPXYAqKR0rnncbgfkQ==
+X-Gm-Gg: AZuq6aLKVtQpJqHBHNMk8Q9e+cQ2f9BVqTXdhpILH/qD8sTwPZ3bWNFrpSlGBH+1fqs
+	6rYHVy1EE9VI2A1MwK3obe+rKsvWJwZ92XPnqCZjDFERJZqbyJC1rmRDvSoOoU+6ClyrN02poFW
+	f5QRHqHsFRhtvScXgVujUKhEe9mE5SdjLnCcbXonbaG1QX93QqOyDrYiSFibJVZVnG7jLNjwgh2
+	tzJM6GCxNCeuOCaSvm6Km2VC4C4NHvc2ZmTXIqssosoRZt1x1+xSllU3dGXaNxUFE+u7RLG4c6Y
+	JwLHJgeeN5673nrw+N+J9Eg2W+3QBw+vhEzbrELL1zeQHSjqmWFUEXP5XnEQXT3uQIbcC4joEI2
+	IsYv6dVLKCkgpq0kKemrPzMrYUp2MQDwzAcNYUjUh45EwVYRb1xCinLhjWOIl8QWUnsXu68gwME
+	yCowBF/C3HvtUSfOOu09wtUwDB6L9TUH1CWGQ=
+X-Received: by 2002:a05:620a:1a0f:b0:8c6:b45b:9e2d with SMTP id af79cd13be357-8cb8c9fc7a1mr245188085a.26.1771642172459;
+        Fri, 20 Feb 2026 18:49:32 -0800 (PST)
+X-Received: by 2002:a05:620a:1a0f:b0:8c6:b45b:9e2d with SMTP id af79cd13be357-8cb8c9fc7a1mr245185185a.26.1771642171899;
+        Fri, 20 Feb 2026 18:49:31 -0800 (PST)
+Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a0eeb1be5fsm179895e87.39.2026.02.20.18.49.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Feb 2026 18:49:31 -0800 (PST)
+Date: Sat, 21 Feb 2026 04:49:29 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Luca Weiss <luca.weiss@fairphone.com>
+Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        David Lechner <dlechner@baylibre.com>,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Hans de Goede <hansg@kernel.org>, Jens Reidel <adrian@mainlining.org>,
+        Casey Connolly <casey.connolly@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] arm64: dts: qcom: sm7225-fairphone-fp4: Add
+ battery temperature node
+Message-ID: <yikwygc5gasmr3cdyv5emfr2flaoraxcz7ap3j55wn4ib6wfqx@4yxoly5zrucx>
+References: <20260220-bat-temp-adc-v2-0-fe34ed4ea851@fairphone.com>
+ <20260220-bat-temp-adc-v2-5-fe34ed4ea851@fairphone.com>
+ <85ce1f2c-f5cf-4e97-9611-4aed03f69cd7@oss.qualcomm.com>
+ <DGJQ4WLIML3H.GAO7T4L3MCJM@fairphone.com>
+ <a422e087-a91c-4bb2-9d95-e1cefc9a91bf@oss.qualcomm.com>
+ <DGJR40B5R6MB.1V4ZK5SW1PXAV@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY3PR12MB9630:EE_|CH2PR12MB4229:EE_
-X-MS-Office365-Filtering-Correlation-Id: a6b95c20-e345-48cb-cee1-08de70d24aad
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ODE3ChoiZdhpzxf53uvAq+PD+CQpBEw1DxtJ88kBMce76Rw97zOOO42CzrqU?=
- =?us-ascii?Q?6MmACm92jVfnordmsUOPS0DtrwhPo5TU7J3b+m0HvvDXEr7KvinuvMaqHQoV?=
- =?us-ascii?Q?NlCJd2lNgZMfwlj0OO+a/ci0SWWD88QQO8y9J4uehOC1ogt+R6uAbkw1YpDl?=
- =?us-ascii?Q?Gw91tfVoKf9rI61vbDyhKdMO8XU5jrzTxIHJkcAfMwqfrCnXzx9yoiXATK9U?=
- =?us-ascii?Q?v60kPxLsh8msYf3Mg9cgMIfPSUXCz5k3gAZmFGQISuen9gGKjGz5i8xUoBjB?=
- =?us-ascii?Q?2aHrJXjz9Xbc/nInWq+EO0VM2ipSikL6HTdC0e7CXWVQ9u31K4Ac296q+Mg+?=
- =?us-ascii?Q?MjGv1SzeGjAqcXj5YUIyKU4UkkOg0kwqKyUPoyVxaqGFYPE9PqQwEGsYhdV1?=
- =?us-ascii?Q?/Jz3ZFMk1+jQfnrreT6u7GhRdSb22vlOSdLPwnJcXSBrteFT7ktXwwIPcZbF?=
- =?us-ascii?Q?mWZVbgpQdWHmI+BFJuTvPrZU4+aPVJmihx35CxnRindM53rqwoPZ03yx6EN/?=
- =?us-ascii?Q?GoP5qeN0gBZYPCF3UtFpRFIHucMHKKzRKgO6sp2sK+znFawD4+2aelhIl/9J?=
- =?us-ascii?Q?LmZ8txhG+5yhAqaNl7IwpmyzkMbky2pRWZyHKFxdKzrnjHpSAJvvcAnK9XmV?=
- =?us-ascii?Q?EwU/iReqtR0T+IQedA09KykecCfo6LmhVOrPye89BokuksRLlHGJJa1YHFCh?=
- =?us-ascii?Q?RT7c9WiEyaL6NSddl50X5JUpCiwq5wItLe0JMC5k+u5Q1OAU/zhFYiDqaTHv?=
- =?us-ascii?Q?sYHsBXsa6orB9D4e00x2u3q9znmylrrJB2sFTF1NjLN2npbOtlua0TEUaURJ?=
- =?us-ascii?Q?D9bQo0m6ymwtor/klH3NuVAJvD1IqKe5kZIewK/DztLLTim6RZXRLLhIh7YF?=
- =?us-ascii?Q?ZGPoQCth8QnK8oxXLqskBc2vsQhJvHD7PNJGuSceCHqMxct6+J5/Q2br0CWE?=
- =?us-ascii?Q?wIRz2KK9xDAiAVB4Cxze3whevhyKFSxaXsCQRu+9YIHF7CtucNtuY8MSWvh6?=
- =?us-ascii?Q?bwPxnrK3ZAsUMIxSwpnucdgdbWqg8ofz3kn2sBwj35CdtI2N2Rn06CgOj8hP?=
- =?us-ascii?Q?pLo2n+9MZse3FO6RgXvxZzs4UQ4v4MpKniBDhbvM5kVMmac534f/4huiE0SO?=
- =?us-ascii?Q?4WUPzMUW8R6hNh4Ur368L3qnV9h/uA12qc7t9p2jVhAtaRekcbgiqf7WNJXF?=
- =?us-ascii?Q?rMBi8g002Xq4qm1ksAoLQ/BuZo1ytGtwxz573BQ2l0gsl3Gj3HtrUkGRWi+r?=
- =?us-ascii?Q?uAkhB18Ua0zs87MEpJDyw5i2YZ8A9Ed34YrLd5aYKrh9i20F3IzEK0EY6p0v?=
- =?us-ascii?Q?igPJfptATZZ+pZ2uTZcN/b3qvOXt4iMlA/tQxqbJg47k9QBPpwUYD/pEKndu?=
- =?us-ascii?Q?2MxTh0dpMGsc43Gz6JyHDiWPPTmZBrmFvGvaQwOs6WltjEO24j57eYR/28sY?=
- =?us-ascii?Q?Y7VItIRGSLYIh8T7nP2pF77HtThvgAFXYvuM06LNjMARK9vXjFczyfmDXImJ?=
- =?us-ascii?Q?fK/w5T08JEApT69EFxV56eAPRMqKoF89a6r4TT30ulL1AYjmWxt2B2I0Ajkb?=
- =?us-ascii?Q?5hxZrRmj6mb19v6mrtU=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY3PR12MB9630.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ZVUDmVkqOYSzPMrPpp2o2LCgzWRz+q7MPczDDjcIh92vRETG9/EFx4lcLR1q?=
- =?us-ascii?Q?jUtLVlQbiF032YH88y4VI5pC/FCeRMSetestVzXgkT3Ipx4/DwUNcEP795Ge?=
- =?us-ascii?Q?BqVW1oV1Q+BDJTJJg5X0hEZ4HxV/o0JgiFN3/B58EsvFucFS3OT1aZz7/SxY?=
- =?us-ascii?Q?V3TKPkLPYvywP3hAoXk15Q+MZI6yZaKYvXZys+tLGs8brXzz8cw0YF6nPVFc?=
- =?us-ascii?Q?DigRkrzWG/tXwJpUqvGG6XTo5Lt7Ty9jMKTOFcUjFzqILLWOTKxtsLM7z6nX?=
- =?us-ascii?Q?HGrEFY0ZwpYBEKbaCGv2fsYicoDzWvqHW5lmfm8MR10VGB5AMQa2MzQyYrz5?=
- =?us-ascii?Q?MizDEAt8NLYADe638lzXXrttmv6Gl9dgdpMsTC9ustIq4lQ7Bm7B0UjVWnSx?=
- =?us-ascii?Q?KZyZvJyeGlkaVkEy6jLh1+6bU7/+fWUtMCuyMSKefQW3hHkY6LYVE/+GGy37?=
- =?us-ascii?Q?5ZGEblGhf5dzMd8HE82iTDust9m2tL4m2fE9YOpdjkWOBSUWjWS6RgBCv5bX?=
- =?us-ascii?Q?88TNkEPbCr10VL/2sJVqu/u+dUS1WxJzwH6RRuof13tEfpfN69jz6N5JsFrv?=
- =?us-ascii?Q?flUZaLS+7iWpfX+BT76UW2fDsonKf83ps3Xh1viy9H+lqIuhSoODDTYSpFHn?=
- =?us-ascii?Q?1oC4KoY3vgNwdsLvYtvnHABEWZDQWyBsPXkkZplEolzWixGEzTg/mvaz4MG9?=
- =?us-ascii?Q?4MmXgggGFTcaHkoVGu9pt6P5XZl7YZCHOkXuqzrpAM8u4LGYeCHK66Wwunbm?=
- =?us-ascii?Q?Tw2o2JGBczvbAzDmFBnF7rXQRg4ur5heWpxuXOVNASgsuJ7PyvRkpDA1Vg4U?=
- =?us-ascii?Q?jUrlI73y9OHmlOW3ThC5BzDXLmqgwGKuGB+TP8whalADHHgmtwJYRKJmCYxB?=
- =?us-ascii?Q?YezHlTrlEtHwiJQeuvA0KMTvAbc5T/rCBUHyALzKJ1t8nbazOKF1+t7q+YY4?=
- =?us-ascii?Q?70pp0zcLCizRGVgmEeiuVlIbcC9BikrlBMMMmJds5A4KxQR8IgRZotbmYVtt?=
- =?us-ascii?Q?thxOmuTNBSX6s1deYghrvt6miJER/7fosMjBBK4dCEwIRfMfwvOAkS89UZLy?=
- =?us-ascii?Q?0r7kmhMk4XieoJpKPEQc5pApzEPqBgpP3oTMpSm9jfLrJTy5FRYMlRuxAwGM?=
- =?us-ascii?Q?34hplHBt1BDo706v1CZlzcSxu+Xspe/poDs6SqsyveJ9+z4FNG8SCdI+tUlB?=
- =?us-ascii?Q?X2TfMsVLGy4XFNo50DE4ZY5tsOFwQNoWyWIbCO93U6F00MKkAkial48cJdn4?=
- =?us-ascii?Q?mm7z6abKaK6DX7ETFlb8BFvK2Ikno+J7e7o/7ycTs6mzjoUTbIx6nsPfwIBw?=
- =?us-ascii?Q?+l9SzCZ5fQwbgG3aThyIg53ll1r3hhIwymBzxhou+mHaKvFq7whKWSRhM9TQ?=
- =?us-ascii?Q?Yr2Z440P6FoNvYFNfet3ShQ3RI9WVWDGTo43thz5nyzaO2MBoqHqcLmKaaQ1?=
- =?us-ascii?Q?FQZoKUdenHPlU5mOMz3useDsE+D1LENwkYVTE6jWQz8WbxPXFVm4swrHzy46?=
- =?us-ascii?Q?iHvedo9AGPZ9YsW0F+Fxo7qcZZX3zt1PophPFJE9Ic01tuS7ARQlN0D6bCQm?=
- =?us-ascii?Q?T4sxx4MGDMQiPLNMOuNBrSP+sYk3FIgMygrd67E+dJPezWhUdWY/i5NVd6BI?=
- =?us-ascii?Q?BQauAYWHREcMRF+VcaTq3NCQVx9oUAOsTzWyQ0HQKWerSqhf7x6AdZcPl5vE?=
- =?us-ascii?Q?Mo/52Saz1GdvXs5dwtmprSwcIlxk0/PoqxYJVfWfJmA4qcee3RGdKQtKEYTm?=
- =?us-ascii?Q?Bfd3KIBLNw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6b95c20-e345-48cb-cee1-08de70d24aad
-X-MS-Exchange-CrossTenant-AuthSource: CY3PR12MB9630.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2026 22:49:23.3766
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3OyrdfEQabYeNcuZzamPqYNo/p4udyjy72u6tWSncCoV/LtdZbH9nrKNnQXSowObw/hijGEtRO2Xedcit0tjuA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4229
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DGJR40B5R6MB.1V4ZK5SW1PXAV@fairphone.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIxMDAyOCBTYWx0ZWRfXylf6vAccXgmR
+ Pj7fJohjgbQ935luUfvoOoTQ0kld5mxxPgX4jkFaFgRyX7r94BuXvwteeKqMo3UDtlasNYEBAwG
+ +NF7bA51XeU1/LrWfdwB9s+KMu2ollUF4l0bKMvIl+hrbf4K9m/f3YB8HQ7vGAv2mawqIsZLdnC
+ NbbtjjTFDSH7jHJ0Ci+exUisJVVJ9ZlgqZV+OlQHdXTK7R80/YqLv84Plkm1IS+pUkMh7w7vu3T
+ wJxS9qs7uOsLLUlFuSJvf6+a+ySA3j6/lO0wBe7YvnZ65aJnFAbrF/tNOCgIQGSXbpvvnvQreUb
+ IX+ljgu2+fYeL42sAXdizINDmrG96ZQ5cRunqWQng4iDT9hrsJO7QLd9erlhHK4P3SnaKRr6KF4
+ Fvkx87eRjAI7nwa+XC2Lexnt5saAMh0sRE1WYrq3jNdkZr7p0jvC6cD4RHMU4VUNYoobtCyw3bE
+ VrIX+aKyJzLjQMFGoew==
+X-Proofpoint-ORIG-GUID: zY7nle6VL4IH6PEUQ9sBZWlJaSPfC5tI
+X-Authority-Analysis: v=2.4 cv=Vuouwu2n c=1 sm=1 tr=0 ts=69991d41 cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=6H0WHjuAAAAA:8
+ a=Wrfmzfmk65d1CdvWbAUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=PEH46H7Ffwr30OY-TuGO:22 a=Soq9LBFxuPC4vsCAQt-j:22
+X-Proofpoint-GUID: zY7nle6VL4IH6PEUQ9sBZWlJaSPfC5tI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-21_01,2026-02-20_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 spamscore=0 adultscore=0 bulkscore=0 impostorscore=0
+ suspectscore=0 clxscore=1015 lowpriorityscore=0 malwarescore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602210028
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[nvidia.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
-	R_DKIM_ALLOW(-0.20)[Nvidia.com:s=selector2];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-42959-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42961-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[Nvidia.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[fairphone.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[26];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pgeng@nvidia.com,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[dmitry.baryshkov@oss.qualcomm.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,Nvidia.com:dkim,nvidia.com:mid,nvidia.com:email]
-X-Rspamd-Queue-Id: AFA6816B51E
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 0ADC316BF97
 X-Rspamd-Action: no action
 
-CONFIG_ACPI_CPPC_CPUFREQ_FIE gates CPPC counter-based frequency
-invariance support. When FIE is disabled, the CPPC driver does not
-register a frequency scale source, but cpufreq_register_driver() still
-enables cpufreq_freq_invariance for target/fast-switch drivers.
+On Fri, Feb 20, 2026 at 12:26:48PM +0100, Luca Weiss wrote:
+> On Fri Feb 20, 2026 at 11:51 AM CET, Konrad Dybcio wrote:
+> > On 2/20/26 11:40 AM, Luca Weiss wrote:
+> >> On Fri Feb 20, 2026 at 11:00 AM CET, Konrad Dybcio wrote:
+> >>> On 2/20/26 10:19 AM, Luca Weiss wrote:
+> >>>> Add a generic-adc-thermal node to convert the voltage read by the
+> >>>> battery temperature ADC into degree Celsius using the provided lookup
+> >>>> table.
+> >>>>
+> >>>> This will later be used as input for the fuel gauge node (QGauge on the
+> >>>> PM7250B).
+> >>>>
+> >>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> >>>> ---
+> >>>>  arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 83 +++++++++++++++++++++++
+> >>>>  1 file changed, 83 insertions(+)
+> >>>>
+> >>>> diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> >>>> index b697051a0aaa..7857003099a6 100644
+> >>>> --- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> >>>> +++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> >>>> @@ -108,6 +108,89 @@ rear_cam_sensor: thermal-sensor-rear-cam {
+> >>>>  		io-channel-names = "sensor-channel";
+> >>>>  	};
+> >>>>  
+> >>>> +	bat_therm_sensor: thermal-sensor-bat-therm {
+> >>>
+> >>> nit: this should be a little higher
+> >> 
+> >> meh, it's surprisingly easy to miss this sorting stuff. Will fix in v3.
+> >> 
+> >>>
+> >>>> +		compatible = "generic-adc-thermal";
+> >>>> +		#thermal-sensor-cells = <0>;
+> >>>> +		#io-channel-cells = <0>;
+> >>>> +		io-channels = <&pm7250b_adc ADC5_BAT_THERM_30K_PU>;
+> >>>> +		io-channel-names = "sensor-channel";
+> >>>> +		/*
+> >>>> +		 * Voltage to temperature table for 10kΩ (B=3435K) NTC with a
+> >>>> +		 * 1.875V reference and 30kΩ pull-up.
+> >>>> +		 */
+> >>>
+> >>> I think this looks good. Is this data going to be correct for all/most
+> >>> devices (i.e. is there a single battery sku)?
+> >> 
+> >> Yes, from my info there's just a single battery SKU, so that makes it
+> >> easy here.
+> >> 
+> >> For Fairphone 3 there's two battery SKUs:
+> >> 
+> >> * (Fuji) F3AC with NTC 100kOhm B=4100, ID resistor 10kOhm
+> >> * (Kayo) F3AC1 with NTC 100kOhm B=4050, ID resistor 49.9kOhm
+> >> 
+> >> In reality, one can probably ignore the difference between the LUT for
+> >> either B value since it only differs by a marginal amount, but
+> >> conceptually I'm not sure how this should really be resolved.
+> >> 
+> >> We could have both battery definitions in the dtb, and then the charging
+> >> driver could determine the battery that's actually present in the
+> >> system (based on the BATT_ID measurement), but given the design here
+> >> now, I'm not sure how this temperature lookup table would be propagated
+> >> to the rest of the system...
+> >
+> > The path of least resistance (pun intended) would probably be to make
+> > generic-adc-thermal consume an ID channel and accept a number of LUTs..
+> 
+> Not the worst idea ;)
+> 
+> >
+> > That sounds sensible since most battery ID mechanisms are probably also
+> > ADC-based and one would hope (tm) that the values output by these ADC channels
+> > would then be distinct enough for the driver to have an easy time confidently
+> > selecting one of the options (or a fallback)
+> 
+> Charger / fuel guage and everything else battery-related would also need
+> to get the correct battery properties for the actual one present, not
+> just this generic-adc-thermal driver.
+> 
+> But I feel like soon DT maintainers will say that Linux shouldn't
+> dynamically detect hardware that's present and the DT should be the
+> absolute source of truth. That works fine in simple cases, but in case
+> of interchangeable batteries, display panels, camera sensors, this won't
+> work. *Something* needs to determine what's actually there.
 
-Disable cpufreq frequency invariance after CPPC driver registration when
-FIE is disabled. This avoids scheduler behavior mismatch when no
-invariance updates are provided, which can cause major performance
-regressions on sensitive platforms.
+How is it handled for the Android boots? I assume there are (at least)
+two DTBOs and the correct one is being selected somehow (via the msm-id
+/ board-id?). Or does ABL pass some kind of battery identifier to the
+kernel?
 
-Export cpufreq_disable_freq_invariance() so modular cppc_cpufreq can call
-it.
+> 
+> And for most of the ways to detect which of those are present in the
+> device that is booting, you need half a kernel to power up the various
+> hardware and do some basic communication to figure out what's there. Of
+> course you could say that's U-Boot's job for example but not sure you
+> want to add a CCI (I2C), ADC driver and much more...
 
-Fixes: 1eb5dde674f5 ("cpufreq: CPPC: Add support for frequency invariance")
-Cc: stable@vger.kernel.org
-Signed-off-by: Penghe Geng <pgeng@nvidia.com>
----
- drivers/cpufreq/cppc_cpufreq.c | 4 ++++
- drivers/cpufreq/cpufreq.c      | 8 ++++++++
- include/linux/cpufreq.h        | 3 +++
- 3 files changed, 15 insertions(+)
-
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 7e8042efedd1..ad96dfb731ab 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -952,6 +952,10 @@ static int __init cppc_cpufreq_init(void)
- 	ret = cpufreq_register_driver(&cppc_cpufreq_driver);
- 	if (ret)
- 		cppc_freq_invariance_exit();
-+#ifndef CONFIG_ACPI_CPPC_CPUFREQ_FIE
-+	else
-+		cpufreq_disable_freq_invariance();
-+#endif
- 
- 	return ret;
- }
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index a7a69f4d7675..4e79f704a8e7 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -66,6 +66,14 @@ bool cpufreq_supports_freq_invariance(void)
- 	return static_branch_likely(&cpufreq_freq_invariance);
- }
- 
-+void cpufreq_disable_freq_invariance(void)
-+{
-+	cpus_read_lock();
-+	static_branch_disable_cpuslocked(&cpufreq_freq_invariance);
-+	cpus_read_unlock();
-+}
-+EXPORT_SYMBOL_GPL(cpufreq_disable_freq_invariance);
-+
- /* Flag to suspend/resume CPUFreq governors */
- static bool cpufreq_suspended;
- 
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index cc894fc38971..698b8e044e89 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -249,6 +249,7 @@ void cpufreq_update_policy(unsigned int cpu);
- void cpufreq_update_limits(unsigned int cpu);
- bool have_governor_per_policy(void);
- bool cpufreq_supports_freq_invariance(void);
-+void cpufreq_disable_freq_invariance(void);
- struct kobject *get_governor_parent_kobj(struct cpufreq_policy *policy);
- void cpufreq_enable_fast_switch(struct cpufreq_policy *policy);
- void cpufreq_disable_fast_switch(struct cpufreq_policy *policy);
-@@ -280,6 +281,8 @@ static inline bool cpufreq_supports_freq_invariance(void)
- {
- 	return false;
- }
-+
-+static inline void cpufreq_disable_freq_invariance(void) { }
- static inline void disable_cpufreq(void) { }
- static inline void cpufreq_update_limits(unsigned int cpu) { }
- static inline unsigned long cpufreq_get_pressure(int cpu)
 -- 
-2.43.0
-
+With best wishes
+Dmitry
 
