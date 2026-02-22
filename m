@@ -1,58 +1,57 @@
-Return-Path: <linux-pm+bounces-42973-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42974-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UHFlKfMBm2nPpgMAu9opvQ
-	(envelope-from <linux-pm+bounces-42973-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Feb 2026 14:17:39 +0100
+	id CLhTGQACm2nPpgMAu9opvQ
+	(envelope-from <linux-pm+bounces-42974-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Feb 2026 14:17:52 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 526D616F290
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Feb 2026 14:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 048BF16F2AE
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Feb 2026 14:17:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id ED00C301A726
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Feb 2026 13:17:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 05F64302001F
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Feb 2026 13:17:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7072E26CE3B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 963B322ACEB;
 	Sun, 22 Feb 2026 13:17:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=abscue.de header.i=@abscue.de header.b="CeKAwOCM"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=abscue.de header.i=@abscue.de header.b="Oqig/cKD"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from srv01.abscue.de (abscue.de [89.58.28.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8CB217733;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF934227BB5;
 	Sun, 22 Feb 2026 13:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.28.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771766226; cv=none; b=NbODy1gyO4Napb02k1eszv6TK4uR4ZiK64sjTi0MCBjp0lK4iRjjguMYgAHgj/juw628zDu+67FHmEoJKQAW6n+oAuBhMnQeR0eYTDw1e8l59TjwCxxNPGMxOvV+QEQBNe9jnr7Cl0oFfwSb8H+LH73EJhwQw90Me4DTPMkhO90=
+	t=1771766226; cv=none; b=MH8xBGQwo25krsKtw6m/usZHXvcKGmLtzskSFVb8yGnwulJywiw7kJuKWEYA3O4u/YRjgd1jDGYo5N2Tl/C2Oe8A+6bfYhODJDDsmmR0jsZfelU5BiIeG7t5hvzNdskQ8AJhex4hRdwLDSmlux4M6z/iPoUsBKS4uphbLqU0w8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1771766226; c=relaxed/simple;
-	bh=O/KjtfYAh0eFvpJG4/ufSjwPAa+DibSdtcTaPMSW4so=;
+	bh=Qy/ZzJzXlxJG0Kd8Vu8wKqaecC5eRWxDQXJ2vAMO9nk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=c+5EUMeVhGMj7w1RtW98Igeg5jy9ChMjNFQKr99s2qnrgCU/ouIxudusIWW/yaHM7TusZ99VWveb91AUxQqStPcARoPpJL8L9McVizyHchiK1Nb5hBKu8XDlBKNnLFwiSoEsxgR+6sAk/XKtfJysjzM9LQmqqBoHGMddzsfeDt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de; spf=pass smtp.mailfrom=abscue.de; dkim=fail (0-bit key) header.d=abscue.de header.i=@abscue.de header.b=CeKAwOCM reason="key not found in DNS"; arc=none smtp.client-ip=89.58.28.240
+	 In-Reply-To:To:Cc; b=nhWJIkMQVmmu3wqw9BEBBj0A7CsYu7VIn52o0OCNB+bDEqrnQ+DIFs1H2sQ8Eam5x2qGudFiAUJ0JdRA9c+ijVMhHQ2ki2hwlzB5NA9cNoOgX+aGnYu+TcNYP9jmNgZSTv0sWjAWBaGxJTKc/9Mpjvets9qJ+0QBe4uinQvrcB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de; spf=pass smtp.mailfrom=abscue.de; dkim=fail (0-bit key) header.d=abscue.de header.i=@abscue.de header.b=Oqig/cKD reason="key not found in DNS"; arc=none smtp.client-ip=89.58.28.240
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=abscue.de
 Received: from fluffy-mammal.metal.fwg-cag.de (unknown [IPv6:2001:9e8:cde0:3300:edee:770f:8e03:a80])
-	by srv01.abscue.de (Postfix) with ESMTPSA id 946B61C01B9;
-	Sun, 22 Feb 2026 14:16:56 +0100 (CET)
+	by srv01.abscue.de (Postfix) with ESMTPSA id 192F11C01BA;
+	Sun, 22 Feb 2026 14:16:57 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abscue.de; s=dkim;
 	t=1771766217;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=RcLqEbWvExfOz69WSf7UPJzVd4m3ddxOxrR/3cYwXIo=;
-	b=CeKAwOCMFsMDF9emlbptb4/2tfUnyf7RaBZoRRtr7CxXmN6N4O+jSm1lgqYR1/9PAMU93i
-	Q6WLABBhYXyJjvfM+XbJkL1w3uixjsK1TqiSj05XFUBCWYcFbnKgcQIaCxN0+NGLtIR24l
-	ReiFeryqF2hhh0YG/KadHM2ukmgp5/rxZvX+IbO6MtA8wa3YHVOtk0snqzmQvSAcSaNjhy
-	0C0tlLXt4IIU8W6p6+jqZF0gJILUlfoaBxpPnEdU/io8rQ55Ej5a2G53g+s9rrdWt8DCVj
-	SiFZCKJMsNyqR2s5kqZURha8N9F/+xr81UrLH1vEiY6BvvbBcQ3CiTO3w6kSrA==
+	bh=FNJ1QLnEBZKWZgNkgyks8YAmNrDo9kh16AdJax9ymZU=;
+	b=Oqig/cKD9VWziUzGKIuAsSRVA7vg9DdO51yvdiDIMNXZealdg75QdShXPQ92KjmetemDGy
+	Y4X4sALD963xv79RVrp/NhW915wyGLdiOsCI+GhpZlzNOIvzb5nYdQIcDVciYyjoOE6G7t
+	8dHfvBeZ5g+ZZwaNG/8+FXdKR6Ue845Z3pUxziwGoytY45mWIfxxP5oxbdJ+IP2WRxwNnx
+	PgiF+Oc/ENUSyYH1sQE1znZB/tognsi/tK6CW8ry/EfnfrKP1tJ1kp2nphGqKdFAMICTP+
+	vvM1V+DndRpG3ky7qmq2/RxOspyb6OUfNv0ISn4wpLiYiMupmgsCSlc+mpuYDQ==
 From: =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-Date: Sun, 22 Feb 2026 14:16:47 +0100
-Subject: [PATCH 3/6] regulator: dt-bindings: sc2731: Deprecate compatible
- property
+Date: Sun, 22 Feb 2026 14:16:48 +0100
+Subject: [PATCH 4/6] mfd: sprd-sc27xx: Switch to devm_mfd_add_devices()
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -61,7 +60,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260222-sc27xx-mfd-cells-v1-3-69526fe74c77@abscue.de>
+Message-Id: <20260222-sc27xx-mfd-cells-v1-4-69526fe74c77@abscue.de>
 References: <20260222-sc27xx-mfd-cells-v1-0-69526fe74c77@abscue.de>
 In-Reply-To: <20260222-sc27xx-mfd-cells-v1-0-69526fe74c77@abscue.de>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
@@ -85,7 +84,7 @@ X-Spamd-Result: default: False [0.04 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42973-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42974-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	DMARC_NA(0.00)[abscue.de];
 	FREEMAIL_TO(0.00)[bootlin.com,kernel.org,gmail.com,linux.alibaba.com];
@@ -100,60 +99,91 @@ X-Spamd-Result: default: False [0.04 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[otto.pflueger@abscue.de,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.597];
+	NEURAL_HAM(-0.00)[-0.580];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,abscue.de:mid,abscue.de:email]
-X-Rspamd-Queue-Id: 526D616F290
+X-Rspamd-Queue-Id: 048BF16F2AE
 X-Rspamd-Action: no action
 
-The node containing the regulators is always a child of the main PMIC
-node, which already has a compatible property identifying the type of
-PMIC. This makes the compatible in the child node redundant. Mark it
-as deprecated and remove it from the required property list and the
-examples.
+To allow instantiating subdevices such as the regulator and poweroff
+devices that do not have corresponding device tree nodes with a
+"compatible" property, use devm_mfd_add_devices() with MFD cells instead
+of devm_of_platform_populate(). Since different PMICs in the SC27xx
+series contain different components, use separate MFD cell tables for
+each PMIC model. Define cells for all components that have upstream
+drivers at this point.
 
 Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
 ---
- Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml                | 2 --
- .../devicetree/bindings/regulator/sprd,sc2731-regulator.yaml          | 4 +---
- 2 files changed, 1 insertion(+), 5 deletions(-)
+ drivers/mfd/sprd-sc27xx-spi.c | 33 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 32 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml b/Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml
-index b023e1ef8d3c..12b3258daef5 100644
---- a/Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml
-+++ b/Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml
-@@ -222,8 +222,6 @@ examples:
-         };
+diff --git a/drivers/mfd/sprd-sc27xx-spi.c b/drivers/mfd/sprd-sc27xx-spi.c
+index d6b4350779e6..57941bec4c2e 100644
+--- a/drivers/mfd/sprd-sc27xx-spi.c
++++ b/drivers/mfd/sprd-sc27xx-spi.c
+@@ -48,6 +48,31 @@ struct sprd_pmic_data {
+ 	u32 irq_base;
+ 	u32 num_irqs;
+ 	u32 charger_det;
++	const struct mfd_cell *cells;
++	int num_cells;
++};
++
++static const struct mfd_cell sc2730_devices[] = {
++	MFD_CELL_OF("sc2730-adc", NULL, NULL, 0, 0, "sprd,sc2730-adc"),
++	MFD_CELL_OF("sc2730-bltc", NULL, NULL, 0, 0, "sprd,sc2730-bltc"),
++	MFD_CELL_OF("sc2730-efuse", NULL, NULL, 0, 0, "sprd,sc2730-efuse"),
++	MFD_CELL_OF("sc2730-eic", NULL, NULL, 0, 0, "sprd,sc2730-eic"),
++	MFD_CELL_OF("sc2730-fgu", NULL, NULL, 0, 0, "sprd,sc2730-fgu"),
++	MFD_CELL_OF("sc2730-rtc", NULL, NULL, 0, 0, "sprd,sc2730-rtc"),
++	MFD_CELL_OF("sc2730-vibrator", NULL, NULL, 0, 0, "sprd,sc2730-vibrator"),
++};
++
++static const struct mfd_cell sc2731_devices[] = {
++	MFD_CELL_OF("sc2731-adc", NULL, NULL, 0, 0, "sprd,sc2731-adc"),
++	MFD_CELL_OF("sc2731-bltc", NULL, NULL, 0, 0, "sprd,sc2731-bltc"),
++	MFD_CELL_OF("sc2731-charger", NULL, NULL, 0, 0, "sprd,sc2731-charger"),
++	MFD_CELL_OF("sc2731-efuse", NULL, NULL, 0, 0, "sprd,sc2731-efuse"),
++	MFD_CELL_OF("sc2731-eic", NULL, NULL, 0, 0, "sprd,sc2731-eic"),
++	MFD_CELL_OF("sc2731-fgu", NULL, NULL, 0, 0, "sprd,sc2731-fgu"),
++	MFD_CELL_NAME("sc2731-poweroff"),
++	MFD_CELL_NAME("sc2731-regulator"),
++	MFD_CELL_OF("sc2731-rtc", NULL, NULL, 0, 0, "sprd,sc2731-rtc"),
++	MFD_CELL_OF("sc2731-vibrator", NULL, NULL, 0, 0, "sprd,sc2731-vibrator"),
+ };
  
-         regulators {
--          compatible = "sprd,sc2731-regulator";
--
-           BUCK_CPU0 {
-             regulator-name = "vddarm0";
-             regulator-min-microvolt = <400000>;
-diff --git a/Documentation/devicetree/bindings/regulator/sprd,sc2731-regulator.yaml b/Documentation/devicetree/bindings/regulator/sprd,sc2731-regulator.yaml
-index 9bd752bab68e..7af20a4781b7 100644
---- a/Documentation/devicetree/bindings/regulator/sprd,sc2731-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/sprd,sc2731-regulator.yaml
-@@ -26,6 +26,7 @@ description: |
+ /*
+@@ -59,12 +84,16 @@ static const struct sprd_pmic_data sc2730_data = {
+ 	.irq_base = SPRD_SC2730_IRQ_BASE,
+ 	.num_irqs = SPRD_SC2730_IRQ_NUMS,
+ 	.charger_det = SPRD_SC2730_CHG_DET,
++	.cells = sc2730_devices,
++	.num_cells = ARRAY_SIZE(sc2730_devices),
+ };
  
- properties:
-   compatible:
-+    deprecated: true
-     const: sprd,sc2731-regulator
+ static const struct sprd_pmic_data sc2731_data = {
+ 	.irq_base = SPRD_SC2731_IRQ_BASE,
+ 	.num_irqs = SPRD_SC2731_IRQ_NUMS,
+ 	.charger_det = SPRD_SC2731_CHG_DET,
++	.cells = sc2731_devices,
++	.num_cells = ARRAY_SIZE(sc2731_devices),
+ };
  
- patternProperties:
-@@ -39,8 +40,5 @@ patternProperties:
-     $ref: regulator.yaml#
-     unevaluatedProperties: false
+ enum usb_charger_type sprd_pmic_detect_charger_type(struct device *dev)
+@@ -204,7 +233,9 @@ static int sprd_pmic_probe(struct spi_device *spi)
+ 		return ret;
+ 	}
  
--required:
--  - compatible
--
- additionalProperties: false
- ...
+-	ret = devm_of_platform_populate(&spi->dev);
++	ret = devm_mfd_add_devices(&spi->dev, PLATFORM_DEVID_AUTO,
++				   pdata->cells, pdata->num_cells, NULL, 0,
++				   regmap_irq_get_domain(ddata->irq_data));
+ 	if (ret) {
+ 		dev_err(&spi->dev, "Failed to populate sub-devices %d\n", ret);
+ 		return ret;
 
 -- 
 2.51.0
