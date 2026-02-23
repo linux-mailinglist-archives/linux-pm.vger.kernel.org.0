@@ -1,166 +1,132 @@
-Return-Path: <linux-pm+bounces-43044-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43047-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kN0JED9snGmcGAQAu9opvQ
-	(envelope-from <linux-pm+bounces-43044-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 16:03:27 +0100
+	id jMK0HgV1nGmyHwQAu9opvQ
+	(envelope-from <linux-pm+bounces-43047-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 16:40:53 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5859C17866A
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 16:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 86220178E18
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 16:40:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D379F303F9F8
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 15:01:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 508BA30221EC
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 15:40:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 089CF366831;
-	Mon, 23 Feb 2026 15:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81DF42EFDAF;
+	Mon, 23 Feb 2026 15:40:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OaigYStr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TX9ARNsI"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C00366073;
-	Mon, 23 Feb 2026 15:01:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE8C2EDD6C;
+	Mon, 23 Feb 2026 15:40:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771858882; cv=none; b=MOqA2rFbzl7rRw/wblHE5t7rP7gQ/fwOUpm6gFrzgwM28drGXX5xeY1AfTGHT0F9Lh482H+eB73/UooGhVDLZo/UtzvCa+wgzjNJPhhSAjeYkkyrCdlVK1EF+SuGfFus8lLYvBXSMlEjvnr+ooqPvPEwH8AJRzy1q1HhBEzoDRU=
+	t=1771861247; cv=none; b=SHagQ+HID1QNWjx4VxHkia90XnzFKj4r1CIc2D5u7m/xPTn0nnsvncdZrBmaEB8kK9wYKt12Jjri8+3IpqmEVlDDW6yrt/e0s8quAr1SBCjsV6scpoSaCLuNUHcsAyOgyglZsyq2DPL7K16pgSUwAhjU6xo1qJMEcElCzR6wZ/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771858882; c=relaxed/simple;
-	bh=e5c5b74M3vTmffrZkxVqf33SIGqWmbbti+5cabgqU30=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Gz8/753a2iz7qFu0d/omKoqsYaK06rOR8TLZyh+7KhDoAHolPozHU/XnMq9FwIwXtkscrw9nsxkIdRUyBHm/3rEIZFAE6Ol2W28eD+2jokog2lTzggVFUF0rfMMjLKNTjDxArZC8PowuOtOP2pJVayO0OaT7aWW/pQHhHMI95e4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OaigYStr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40292C2BCB2;
-	Mon, 23 Feb 2026 15:01:14 +0000 (UTC)
+	s=arc-20240116; t=1771861247; c=relaxed/simple;
+	bh=6KqK3Kokr9PTuL04N6S7S6pbl18j/jJvBjYqEnLsud8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BwegTMWV//75yggGIxHZZ5wbE5HNOGh7reF4Vy5aDU7f5+FPvvN4M0yeZPeO/KqA4AltL9V+seKr4n8KTsq86vQfKcfo260F0tRqoVTbof3cdSwEgbWJE1y/jlUKERnE4dQVeGXwzwC6LJOUwwd60i5b/k2AH4zMJBCkTw3JAsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TX9ARNsI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DBD1C116C6;
+	Mon, 23 Feb 2026 15:40:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771858882;
-	bh=e5c5b74M3vTmffrZkxVqf33SIGqWmbbti+5cabgqU30=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=OaigYStrS0H58RnK9jYWZCcHDiqSEdAX7xgm52ZiTIH2hOr6lFz0pfIeHqnXSx22c
-	 fPLAmdIje8wpwT3qgmVJaXPsnkaS7NB7FwbUnfh6uL4pw4ZkNksgkgpQj1U9soOJP3
-	 I8zQ06tXZJNH9bmYxdwifxd2hS8ZyCjhPsUEDM0WvensrAB7wgg+ERxBdKJP20LcBg
-	 JyDzx8ODMtCb6QkuTBbIFDF1X1wLOYFev6Eyzhc0eMwdUu/PVzCaS4BJW214un6Gfw
-	 oem2r/xcNVnvVt1I21kKCGINo2ZynGSWPrRf7980RO65Ev+qkS2YfdT/tsiM9Vv5jR
-	 s31T8kd8QKH0w==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Tamir Duberstein
- <tamird@kernel.org>, Benno Lossin <lossin@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn?= Roy
- Baron <bjorn3_gh@protonmail.com>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Dave Ertman
- <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, Leon
- Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, Serge
- Hallyn <sergeh@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, David
- Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Alexander
- Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
- Jan Kara <jack@suse.cz>, Igor Korotin <igor.korotin.linux@gmail.com>,
- Daniel Almeida <daniel.almeida@collabora.com>, Lorenzo Stoakes
- <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen
- Boyd <sboyd@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Krzysztof
- =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Boqun Feng
- <boqun@kernel.org>,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v15 9/9] rust: page: add `from_raw()`
-In-Reply-To: <CANiq72myc+tCEHm0WtZspZHWwsSzvesxsmUvk31=GCdUN_zVNA@mail.gmail.com>
-References: <20260220-unique-ref-v15-0-893ed86b06cc@kernel.org>
- <20260220-unique-ref-v15-9-893ed86b06cc@kernel.org>
- <CANiq72myc+tCEHm0WtZspZHWwsSzvesxsmUvk31=GCdUN_zVNA@mail.gmail.com>
-Date: Mon, 23 Feb 2026 16:00:02 +0100
-Message-ID: <87sear33pp.fsf@t14s.mail-host-address-is-not-set>
+	s=k20201202; t=1771861247;
+	bh=6KqK3Kokr9PTuL04N6S7S6pbl18j/jJvBjYqEnLsud8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=TX9ARNsIiS/emThJRBXxir+ijCCjmUPfXaP9HgVa7dE7FsfCet83+B8CygA9sUAxw
+	 nagjmmuoKL5ukFee1FNWIbgoZKTAras4y5BIiIrS/hoJtnCGU05GNOZ7aXxV1uNhuT
+	 g4sXEDho1EqCAhEb57nBPn5jreehBa40q8gI/GlEyFyDqpx0nvhFRehunNzVAvCWrS
+	 WpeSNtDP+UWcVAgUAnize11c0fcZevDStQ0MGCUsOsf2/9EIgSKhCfs2V+QipZo9E2
+	 weUz7CQ3c+CO4U62SdrUBMntfKdsBlg0atB0NCB9VYnb0C6174IRtvoWgFUGfn+dL0
+	 MF3cLTmgqUkhw==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Christian Loehle <christian.loehle@arm.com>,
+ Doug Smythies <dsmythies@telus.net>,
+ Aboorva Devarajan <aboorvad@linux.ibm.com>,
+ "Ionut Nechita (Sunlight Linux)" <sunlightlinux@gmail.com>
+Subject: [PATCH v2 0/2] cpuidle: governor: Modify the handling of stopped tick
+Date: Mon, 23 Feb 2026 16:37:21 +0100
+Message-ID: <3693525.iIbC2pHGDl@rafael.j.wysocki>
+Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	CTE_CASE(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43044-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[40];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-43047-lists,linux-pm=lfdr.de];
+	TO_DN_ALL(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,garyguo.net,protonmail.com,google.com,umich.edu,linuxfoundation.org,intel.com,paul-moore.com,gmail.com,ffwll.ch,zeniv.linux.org.uk,suse.cz,collabora.com,oracle.com,ti.com,vger.kernel.org,lists.freedesktop.org,kvack.org];
+	HAS_ORG_HEADER(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,arm.com,telus.net,linux.ibm.com,gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[a.hindborg@kernel.org,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-pm];
 	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[t14s.mail-host-address-is-not-set:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5859C17866A
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6]
+X-Rspamd-Queue-Id: 86220178E18
 X-Rspamd-Action: no action
 
-Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> writes:
+Hi All,
 
-> On Fri, Feb 20, 2026 at 10:52=E2=80=AFAM Andreas Hindborg <a.hindborg@ker=
-nel.org> wrote:
->>
->> +    /// Create a `&Page` from a raw `struct page` pointer
->
-> Please end sentences with a period.
+This is an update of
 
-Ok.
+https://lore.kernel.org/linux-pm/1953482.tdWV9SEqCh@rafael.j.wysocki/
 
->
->> +        // SAFETY: By function safety requirements, ptr is not null and=
- is
->
-> Please use Markdown in comments: `ptr`.
+that fixes an issue in the second patch.  The first patch does not change and
+the changelog below still applies.
 
-Ok.
+When I was thinking about possible ways to address high CPU wakeup latency on
+isolated CPUs resulting from the selection of deep idle states by cpuidle
+governors, it occurred to me that it is not always necessary to select a
+deep idle state if the scheduler tick has been stopped.  Namely, if a timer
+is going to trigger (relatively) shortly, a shallow state may as well be
+selected because the timer will kick the CPU out of that state anyway and
+getting stuck in it for a long time is not a concern.
 
->
->> +    /// `ptr` must be valid for use as a reference for the duration of =
-`'a`.
->
-> Since we will likely try to starting introducing at least a subset of
-> the Safety Standard soon, we should try to use standard terms.
->
-> So I think this "valid for use as a reference" is not an established
-> one, no? Isn't "convertible to a shared reference" the official term?
->
->   https://doc.rust-lang.org/std/ptr/index.html#pointer-to-reference-conve=
-rsion
->
-> In fact, I see `as_ref_unchecked()` and `as_mut_unchecked()` just got
-> stabilized for 1.95.0, so we should probably starting using those were
-> applicable as we bump the minimum, but we should probably use already
-> a similar wording as the standard library for the safety section and
-> the comment:
->
->   "`ptr` must be [convertible to a reference](...)."
+Changing the menu governor to take that observation into account is a 2-line
+patch, modulo a comment update (patch [1/2]).  Of course, the SAFE_TIMER_RANGE_NS
+value is somewhat arbitrary.
 
-I'll change the wording to the "convertible" one.
+Updating the teo governor accordingly is a bit more challenging, but overall it
+is a major simplification of the stopped tick handling there, so IMV it is very
+much worth doing (patch [2/2]).
 
+By itself, this is not going to help workloads running on isolated CPUs too
+much, but if SAFE_TIMER_RANGE_NS were replaced with a per-CPU tunable, that
+could help people to configure their systems to avoid the latency issue
+mentioned above.
 
-Best regards,
-Andreas Hindborg
+Thanks,
+Rafael
+
 
 
 
