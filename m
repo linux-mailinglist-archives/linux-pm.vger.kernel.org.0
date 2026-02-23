@@ -1,153 +1,170 @@
-Return-Path: <linux-pm+bounces-43064-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43065-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AEwJLRGhnGnqJgQAu9opvQ
-	(envelope-from <linux-pm+bounces-43064-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 19:48:49 +0100
+	id WKYHNuOknGkYJwQAu9opvQ
+	(envelope-from <linux-pm+bounces-43065-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 20:05:07 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76F2017BC7C
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 19:48:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85C5717BFB5
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 20:05:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 85525301C575
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 18:48:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2C6C530528AB
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 19:05:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7DFE36922C;
-	Mon, 23 Feb 2026 18:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 042F236A015;
+	Mon, 23 Feb 2026 19:05:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sfaJyT1w"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PT59pT+N"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B26A6328B7F;
-	Mon, 23 Feb 2026 18:48:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2FD36A002;
+	Mon, 23 Feb 2026 19:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771872496; cv=none; b=IkA3Eeh5D/H2Jg85dVVG3kcpsSY7rB9u0UtS1ecunxt/kuva9RwL8ejqUqlDNUOnKnfHEvgmYT+zCWLiCl7W//lf/by7VJn5g5cpWURCGukg8cX7CCysBg9fYzmhkb+E52T32kEu2wsxGc3vq0RJn2GcVLHGcwvPYJ8jj342rWc=
+	t=1771873499; cv=none; b=LsYcVjeISie3h16ITnjUZFT+QTErhwgS9UmNWPNolJrl6qIzdXguz3sQRlkJncG5tQeDKlrq3bklhFq+E5BZ+m9Ctsb1SuC9lyyF4su2uVKWSi6O3jVHmj1sJa7xDcl9Vpdr6uL3VF/4e18Qi3zvSzFDC/a68HKCq/IJ61lAw9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771872496; c=relaxed/simple;
-	bh=JY36a2jUISNBgyzIWqavdWoGTymBOPrCDh5m1/4qjIA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LY4dwTXj3WICA4A1GJjKX06io9eL6oZWpQys7hIPO7QRgJ5ey8KpnjQalaH5+KI2cKV2HKr9T7OwrvWFFJ1ULNRTeFVM72BVA4gTkVnGE479qMoOKZOnx2yrp3J4wGUhXCnVcLn5mNbT2KgLGn/Vs/ILoUSfYBQEOBBlivSDtDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sfaJyT1w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C1CC116C6;
-	Mon, 23 Feb 2026 18:48:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771872496;
-	bh=JY36a2jUISNBgyzIWqavdWoGTymBOPrCDh5m1/4qjIA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sfaJyT1wWvFGevl1EEh0CxnaZq++wbd/uiH9qfCMoGugRwDV8duXYbJJ4HkQSPv/D
-	 9hST8Q5KTdFPuQghY/jm3yc1dax8SIpOYJkiku3R5nLn6m6YXw6IitzzNOrIBBS1NF
-	 pbTNdWquk5XxYV8CjGqHxCaR4ukIt8SDHq+pHczMITa9qNZbNz65Zc61XyI638Uhzc
-	 25fN1FpkJzkcYDA0n+hwLrEY0tpiE8GgA42aRIn/vCpoK7oDKLOta+Ro9dQDdDkE4i
-	 qV2rNW4m7iumW3ohk614sIq+E7RUunXZ8MCnJ3YVdhb5vnT61rr2qwf4sMI4G5uIMj
-	 01/RpOF5VF4gw==
-Date: Mon, 23 Feb 2026 12:48:15 -0600
-From: Rob Herring <robh@kernel.org>
-To: Luca Weiss <luca.weiss@fairphone.com>
-Cc: Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Laxman Dewangan <ldewangan@nvidia.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Hans de Goede <hansg@kernel.org>,
-	Jens Reidel <adrian@mainlining.org>,
-	Casey Connolly <casey.connolly@linaro.org>,
-	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] dt-bindings: thermal: generic-adc: Document
- #io-channel-cells
-Message-ID: <20260223184815.GA144001-robh@kernel.org>
-References: <20260220-bat-temp-adc-v2-0-fe34ed4ea851@fairphone.com>
- <20260220-bat-temp-adc-v2-2-fe34ed4ea851@fairphone.com>
+	s=arc-20240116; t=1771873499; c=relaxed/simple;
+	bh=36qoH7d2ZZRevErqizID1nHKti5Zrtn/oKG6FMsDyFU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lRbj2U5GiOiNICVfX1l62NmenMI779hUmfe8vOTskzfvK1LoXCYZA8HnmDDelX2ZnYnJLXWP/Jz1ThQ5fcqTc/IMk06fyYaqS8BjZXcRiPfakKEelqNhCJGWUPG203xYo/AKN1ZcZDpM8sbuSkkaDb+zv5Umj6vW0p96IkgLrEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PT59pT+N; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771873479; x=1803409479;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=36qoH7d2ZZRevErqizID1nHKti5Zrtn/oKG6FMsDyFU=;
+  b=PT59pT+NkDqGFKCXTwHTbFx1Xd3J0g0s1iO8XVbjoVzZQ1gd5QYZbQ9L
+   ZhxJNO3o5GsUEAnd6n/ihn2AOXqVM8tUrYCM7arToHSi8CJT+dNSlrQhB
+   EcMceeqvDAaW7MwhvXfawwN3/L2XLKNkbslQomzWTeJj/Mvvk0q17nC9z
+   NeelpFZP++gyVab5d5f9EJgTrhSpobJjQWXNt7W0KNINrYIqca7GLKuLa
+   lp+UsTVJE26C4W/GukbhOSh9BaP0zadCBE2eFygTKV0YS1vMdMigwS9vt
+   RXAojLFcxBtBVyhVGApJFtQiK6YPmuAD21wUECDGD0iCo6+hcmUnK2JHO
+   A==;
+X-CSE-ConnectionGUID: ro2yP6YrRsWmKo19V7e7ew==
+X-CSE-MsgGUID: 4Rdvi22VRkaCnX/1MdVs5g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11710"; a="98341601"
+X-IronPort-AV: E=Sophos;i="6.21,307,1763452800"; 
+   d="scan'208";a="98341601"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 11:04:36 -0800
+X-CSE-ConnectionGUID: /qIchopFRZCmhuD5ocb0Zw==
+X-CSE-MsgGUID: VuZkBKCwSU6eIRBSFKe03A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,307,1763452800"; 
+   d="scan'208";a="243747934"
+Received: from spandruv-desk.jf.intel.com ([10.54.55.20])
+  by fmviesa001.fm.intel.com with ESMTP; 23 Feb 2026 11:04:36 -0800
+From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To: rafael@kernel.org,
+	daniel.lezcano@linaro.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] thermal: intel: int340x: Read DDR data rate for Nova Lake
+Date: Mon, 23 Feb 2026 11:04:20 -0800
+Message-ID: <20260223190420.874853-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260220-bat-temp-adc-v2-2-fe34ed4ea851@fairphone.com>
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43064-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[24];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43065-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[srinivas.pandruvada@linux.intel.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 76F2017BC7C
+	NEURAL_HAM(-0.00)[-0.999];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,linux.intel.com:mid]
+X-Rspamd-Queue-Id: 85C5717BFB5
 X-Rspamd-Action: no action
 
-On Fri, Feb 20, 2026 at 10:19:06AM +0100, Luca Weiss wrote:
-> Document the property to allow using this sensor with io-channels.
+Add support for reading DDR data rate from PCI config offset.
+The register details are:
+CFG Offset : 0xE0
+Bits	   : 11:2
 
-Why? On the surface, it looks like you are adding a provider property to 
-a consumer. Maybe that's right? 
+DDR Data rate is in 33.33 MTPS units.
 
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
->  Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml b/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
-> index 12e6418dc24d..317fc39ed46a 100644
-> --- a/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
-> @@ -24,6 +24,9 @@ properties:
->    '#thermal-sensor-cells':
->      const: 0
->  
-> +  "#io-channel-cells":
-> +    const: 0
-> +
->    io-channels:
->      maxItems: 1
->  
-> @@ -58,6 +61,7 @@ examples:
->      thermal-sensor {
->          compatible = "generic-adc-thermal";
->          #thermal-sensor-cells = <0>;
-> +        #io-channel-cells = <0>;
->          io-channels = <&ads1015 1>;
->          io-channel-names = "sensor-channel";
->          temperature-lookup-table = <
-> 
-> -- 
-> 2.53.0
-> 
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ .../int340x_thermal/processor_thermal_rfim.c     | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+index 314fbc1f490f..2e834a175471 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+@@ -402,6 +402,11 @@ static ssize_t rfi_restriction_show(struct device *dev,
+ 	return sysfs_emit(buf, "%llu\n", resp);
+ }
+ 
++ /* ddr_data_rate */
++static const struct mmio_reg nvl_ddr_data_rate_reg = { 1, 0xE0, 10, 0x3FF, 2};
++
++static const struct mmio_reg *ddr_data_rate_reg;
++
+ static ssize_t ddr_data_rate_show(struct device *dev,
+ 				  struct device_attribute *attr,
+ 				  char *buf)
+@@ -410,10 +415,20 @@ static ssize_t ddr_data_rate_show(struct device *dev,
+ 	u64 resp;
+ 	int ret;
+ 
++	if (ddr_data_rate_reg) {
++		u16 reg_val;
++
++		pci_read_config_word(to_pci_dev(dev), ddr_data_rate_reg->offset, &reg_val);
++		resp = (reg_val >> ddr_data_rate_reg->shift) & ddr_data_rate_reg->mask;
++		resp = (resp * 3333) / 100;
++		goto ret_resp;
++	}
++
+ 	ret = processor_thermal_send_mbox_read_cmd(to_pci_dev(dev), id, &resp);
+ 	if (ret)
+ 		return ret;
+ 
++ret_resp:
+ 	return sysfs_emit(buf, "%llu\n", resp);
+ }
+ 
+@@ -461,6 +476,7 @@ int proc_thermal_rfim_add(struct pci_dev *pdev, struct proc_thermal_device *proc
+ 		case PCI_DEVICE_ID_INTEL_NVL_H_THERMAL:
+ 		case PCI_DEVICE_ID_INTEL_NVL_S_THERMAL:
+ 			dlvr_mmio_regs_table = nvl_dlvr_mmio_regs;
++			ddr_data_rate_reg = &nvl_ddr_data_rate_reg;
+ 			break;
+ 		default:
+ 			dlvr_mmio_regs_table = dlvr_mmio_regs;
+-- 
+2.52.0
+
 
