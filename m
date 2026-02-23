@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-43046-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43045-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OFEGJYV1nGmwHwQAu9opvQ
-	(envelope-from <linux-pm+bounces-43046-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 16:43:01 +0100
+	id 8AYiAGp1nGmwHwQAu9opvQ
+	(envelope-from <linux-pm+bounces-43045-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 16:42:34 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB229178ED0
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 16:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 68854178EB2
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 16:42:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9CB513074E01
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 15:40:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5BB4730484E8
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 15:40:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEDD02EDD6C;
-	Mon, 23 Feb 2026 15:40:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B98242EFDA4;
+	Mon, 23 Feb 2026 15:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lO99lQUO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cZ+adLah"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A92A2EBBA4;
-	Mon, 23 Feb 2026 15:40:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965F2283FC9;
+	Mon, 23 Feb 2026 15:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771861243; cv=none; b=gSjxC+9Qu4tOt4kDI1K5AASSOWjNjLh/hu/3TN7TqAKJUxgMi3CV/UPM04jUq5ysB+tMfLDycbhOSkHH/EyhnxFgl2xTp/KJVp4h4Cy848JiyHiDzAVZNaSppelzrHH6dQpRqLxbhRSvN1C5a34+wgbvCnb3QVcVZINtezsD3wQ=
+	t=1771861239; cv=none; b=GRLBKt5qN4sZ9Z3IWG5j2m2viYU1PeybL6bxLQign7phc0w3HLqBH6v9+AW9nFCp2N76/TM8o7ltS9HZX6wHpfs9U9pBAqNC7zRbGZRDq+WUV484idrjH72EJF1RZ0Pcdb12RlmWDQn3FrfjulfsD8c6jficJZqRfVc+Yb+9er8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771861243; c=relaxed/simple;
-	bh=GDYNDlHOz302hkydh0Yq7QkZCk7b6MEbVLVFrY4W2Dg=;
+	s=arc-20240116; t=1771861239; c=relaxed/simple;
+	bh=LFGqpZtrN2UKGPTbnoy92+JPz98vAxZ+Wmk7dSH9bKg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=X17wWzPaOwNztlZIuO+lzcmrV+rDsnbxcbq3nUMnFMUSqT7y/UeXjz82n3lTB81zWKT2v95xynsbqm3i9SpmynjV4qWQGi22hrR1teCc7gbpCT75wGmy6DXVmBHoajcKwxAlNqoC3784mTTa+x+jcIfLIIzNe4DRbUC3B9WZdrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lO99lQUO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7DE0C116D0;
-	Mon, 23 Feb 2026 15:40:41 +0000 (UTC)
+	 MIME-Version:Content-Type; b=PUoCLcxJrzY5OU/umfsc8csYnXo2tjtmqF2zwXSlIqRTYAyctShlWRiWM1y4+YjT+JkJFW1XIuNMC3xxY4wVoMFE36N35pOwj3a1BDm5MZ7F/MLRcxjQXaHPbw8H+tp+6VIFS1mqh1/TelSiQfomJs+crufnIDibf1Ho69FdEpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cZ+adLah; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0239C116C6;
+	Mon, 23 Feb 2026 15:40:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771861243;
-	bh=GDYNDlHOz302hkydh0Yq7QkZCk7b6MEbVLVFrY4W2Dg=;
+	s=k20201202; t=1771861239;
+	bh=LFGqpZtrN2UKGPTbnoy92+JPz98vAxZ+Wmk7dSH9bKg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lO99lQUOQXVFXAp//bcupCwfeJDvvI2iMawzmffp3yI/mpB+yTSxGypKXEW+KaILR
-	 IYhVzE3Fl0dfQJhgN8sQIYP9/dUf3cU7v+hAr6Li4nueyPGceQMhmFp9fJLJhX3IUA
-	 vWTn2t8nLncQaufVh/5WZaev2K5nRZvHicayrGsNWOSYNMXuwhyFE0UZuBlA/G9q9S
-	 64SEZyGWVivjL64RUDOhdfHadH+E0dnTdBsUnpLZPJv4sYY7b6EUv10SkOtRhFZNRA
-	 7laTRL8H9/ridQSK3fp962clp0M9JKLT5AjpXblnVYQ83pxm7G02NIqw95RYPWVklr
-	 nRY5vdUA7n1vA==
+	b=cZ+adLahDOdHKgePo9CYOy9vvYE5yO/jeWmFxvOBvrm/l1I8zmHA4eZYEYHqexw0L
+	 Q2t08ZWRXAzAL4RARHGacdvt/raXLa/U2p1U89BW9xvoSwPf4/EZc4mPzg2X/YJa9u
+	 4GoXE1cn0TU9EdmLupN03THb7Kw3AdU5x81xJCGiUEHOvA/8rcl9NZCYBHxOZ+pvZ2
+	 3TNDu6lSCz9r+3r1q6w1lwqH/IO63Q0jJH37oRj0l6DcDtVuXH37yGeDkQZlO0jnRz
+	 scoA6ydrI4VjhwNPXihoTIZcai3Fo11hlQ3I+LKEW9ZmBFT76tM/gbzD2x4UM+6kQi
+	 0F0hFTXREe1Yg==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
@@ -51,9 +51,10 @@ Cc: LKML <linux-kernel@vger.kernel.org>,
  Doug Smythies <dsmythies@telus.net>,
  Aboorva Devarajan <aboorvad@linux.ibm.com>,
  "Ionut Nechita (Sunlight Linux)" <sunlightlinux@gmail.com>
-Subject: [PATCH v2 1/2] cpuidle: governors: menu: Refine stopped tick handling
-Date: Mon, 23 Feb 2026 16:38:55 +0100
-Message-ID: <3341782.5fSG56mABF@rafael.j.wysocki>
+Subject:
+ [PATCH v2 2/2] cpuidle: governors: teo: Rearrange stopped tick handling
+Date: Mon, 23 Feb 2026 16:40:18 +0100
+Message-ID: <1865078.VLH7GnMWUR@rafael.j.wysocki>
 Organization: Linux Kernel Development
 In-Reply-To: <3693525.iIbC2pHGDl@rafael.j.wysocki>
 References: <3693525.iIbC2pHGDl@rafael.j.wysocki>
@@ -75,7 +76,7 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43046-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43045-lists,linux-pm=lfdr.de];
 	TO_DN_ALL(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	HAS_ORG_HEADER(0.00)[];
@@ -94,7 +95,7 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[6]
-X-Rspamd-Queue-Id: EB229178ED0
+X-Rspamd-Queue-Id: 68854178EB2
 X-Rspamd-Action: no action
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
@@ -107,59 +108,153 @@ a shallow idle state can be selected because the timer will kick the
 CPU out of that state, so the damage from a possible overly optimistic
 selection will be limited.
 
-Update the menu governor in accordance with the above and use twice
-the tick period length as the "safe timer range" for allowing the
-original predicted_ns value to be used even if the tick has been
-stopped.
+Update the teo governor in accordance with the above in analogy with
+the previous analogous menu governor update.
+
+Among other things, this will cause the teo governor to call
+tick_nohz_get_sleep_length() every time when the tick has been
+stopped already and only change the original idle state selection
+if the time till the closest timer is beyond SAFE_TIMER_RANGE_NS
+which is way more straightforward than the current code flow.
+
+Of course, this effectively throws away some of the recent teo governor
+changes made recently, but the resulting simplification is worth it in
+my view.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
 
-v1 -> v2: No changes
+v1 -> v2: Take constraint_idx into account when looking for a deeper idle
+          state (Christian)
 
 ---
- drivers/cpuidle/governors/gov.h  |    5 +++++
- drivers/cpuidle/governors/menu.c |   15 +++++++++------
- 2 files changed, 14 insertions(+), 6 deletions(-)
+ drivers/cpuidle/governors/teo.c |   81 ++++++++++++++++------------------------
+ 1 file changed, 34 insertions(+), 47 deletions(-)
 
---- a/drivers/cpuidle/governors/gov.h
-+++ b/drivers/cpuidle/governors/gov.h
-@@ -10,5 +10,10 @@
-  * check the time till the closest expected timer event.
-  */
- #define RESIDENCY_THRESHOLD_NS	(15 * NSEC_PER_USEC)
-+/*
-+ * If the closest timer is in this range, the governor idle state selection need
-+ * not be adjusted after the scheduler tick has been stopped.
-+ */
-+#define SAFE_TIMER_RANGE_NS	(2 * TICK_NSEC)
- 
- #endif /* __CPUIDLE_GOVERNOR_H */
---- a/drivers/cpuidle/governors/menu.c
-+++ b/drivers/cpuidle/governors/menu.c
-@@ -261,13 +261,16 @@ static int menu_select(struct cpuidle_dr
- 		predicted_ns = min((u64)timer_us * NSEC_PER_USEC, predicted_ns);
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -407,50 +407,13 @@ static int teo_select(struct cpuidle_dri
+ 	 * better choice.
+ 	 */
+ 	if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
+-		int min_idx = idx0;
+-
+-		if (tick_nohz_tick_stopped()) {
+-			/*
+-			 * Look for the shallowest idle state below the current
+-			 * candidate one whose target residency is at least
+-			 * equal to the tick period length.
+-			 */
+-			while (min_idx < idx &&
+-			       drv->states[min_idx].target_residency_ns < TICK_NSEC)
+-				min_idx++;
+-
+-			/*
+-			 * Avoid selecting a state with a lower index, but with
+-			 * the same target residency as the current candidate
+-			 * one.
+-			 */
+-			if (drv->states[min_idx].target_residency_ns ==
+-					drv->states[idx].target_residency_ns)
+-				goto constraint;
+-		}
+-
+-		/*
+-		 * If the minimum state index is greater than or equal to the
+-		 * index of the state with the maximum intercepts metric and
+-		 * the corresponding state is enabled, there is no need to look
+-		 * at the deeper states.
+-		 */
+-		if (min_idx >= intercept_max_idx &&
+-		    !dev->states_usage[min_idx].disable) {
+-			idx = min_idx;
+-			goto constraint;
+-		}
+-
  		/*
- 		 * If the tick is already stopped, the cost of possible short
--		 * idle duration misprediction is much higher, because the CPU
--		 * may be stuck in a shallow idle state for a long time as a
--		 * result of it.  In that case, say we might mispredict and use
--		 * the known time till the closest timer event for the idle
--		 * state selection.
-+		 * idle duration misprediction is higher because the CPU may get
-+		 * stuck in a shallow idle state then.  To avoid that, if
-+		 * predicted_ns is small enough, say it might be mispredicted
-+		 * and use the known time till the closest timer for idle state
-+		 * selection unless that timer is going to trigger within
-+		 * SAFE_TIMER_RANGE_NS in which case it can be regarded as a
-+		 * sufficient safety net.
+ 		 * Look for the deepest enabled idle state, at most as deep as
+ 		 * the one with the maximum intercepts metric, whose target
+ 		 * residency had not been greater than the idle duration in over
+ 		 * a half of the relevant cases in the past.
+-		 *
+-		 * Take the possible duration limitation present if the tick
+-		 * has been stopped already into account.
  		 */
--		if (tick_nohz_tick_stopped() && predicted_ns < TICK_NSEC)
-+		if (tick_nohz_tick_stopped() && predicted_ns < TICK_NSEC &&
-+		    data->next_timer_ns > SAFE_TIMER_RANGE_NS)
- 			predicted_ns = data->next_timer_ns;
- 	} else {
- 		/*
+-		for (i = idx - 1, intercept_sum = 0; i >= min_idx; i--) {
++		for (i = idx - 1, intercept_sum = 0; i >= idx0; i--) {
+ 			intercept_sum += cpu_data->state_bins[i].intercepts;
+ 
+ 			if (dev->states_usage[i].disable)
+@@ -463,7 +426,6 @@ static int teo_select(struct cpuidle_dri
+ 		}
+ 	}
+ 
+-constraint:
+ 	/*
+ 	 * If there is a latency constraint, it may be necessary to select an
+ 	 * idle state shallower than the current candidate one.
+@@ -472,13 +434,13 @@ constraint:
+ 		idx = constraint_idx;
+ 
+ 	/*
+-	 * If either the candidate state is state 0 or its target residency is
+-	 * low enough, there is basically nothing more to do, but if the sleep
+-	 * length is not updated, the subsequent wakeup will be counted as an
+-	 * "intercept" which may be problematic in the cases when timer wakeups
+-	 * are dominant.  Namely, it may effectively prevent deeper idle states
+-	 * from being selected at one point even if no imminent timers are
+-	 * scheduled.
++	 * If the tick has not been stopped and either the candidate state is
++	 * state 0 or its target residency is low enough, there is basically
++	 * nothing more to do, but if the sleep length is not updated, the
++	 * subsequent wakeup will be counted as an "intercept".  That may be
++	 * problematic in the cases when timer wakeups are dominant because it
++	 * may effectively prevent deeper idle states from being selected at one
++	 * point even if no imminent timers are scheduled.
+ 	 *
+ 	 * However, frequent timers in the RESIDENCY_THRESHOLD_NS range on one
+ 	 * CPU are unlikely (user space has a default 50 us slack value for
+@@ -494,7 +456,8 @@ constraint:
+ 	 * shallow idle states regardless of the wakeup type, so the sleep
+ 	 * length need not be known in that case.
+ 	 */
+-	if ((!idx || drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_NS) &&
++	if (!tick_nohz_tick_stopped() && (!idx ||
++	     drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_NS) &&
+ 	    (2 * cpu_data->short_idles >= cpu_data->total ||
+ 	     latency_req < LATENCY_THRESHOLD_NS))
+ 		goto out_tick;
+@@ -502,6 +465,30 @@ constraint:
+ 	duration_ns = tick_nohz_get_sleep_length(&delta_tick);
+ 	cpu_data->sleep_length_ns = duration_ns;
+ 
++	/*
++	 * If the tick has been stopped and the closest timer is too far away,
++	 * update the selection to prevent the CPU from getting stuck in a
++	 * shallow idle state for too long.
++	 */
++	if (tick_nohz_tick_stopped() && duration_ns > SAFE_TIMER_RANGE_NS &&
++	    drv->states[idx].target_residency_ns < TICK_NSEC) {
++		/*
++		 * Look for the deepest enabled idle state with exit latency
++		 * within the PM QoS limit and with target residency within
++		 * duration_ns.
++		 */
++		for (i = constraint_idx; i > idx; i--) {
++			if (dev->states_usage[i].disable)
++				continue;
++
++			if (drv->states[i].target_residency_ns <= duration_ns) {
++				idx = i;
++				break;
++			}
++		}
++		return idx;
++	}
++
+ 	if (!idx)
+ 		goto out_tick;
+ 
 
 
 
