@@ -1,163 +1,205 @@
-Return-Path: <linux-pm+bounces-42984-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42985-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8GEzDIbym2kI+AMAu9opvQ
-	(envelope-from <linux-pm+bounces-42984-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 07:24:06 +0100
+	id uG9IDUj0m2nk+AMAu9opvQ
+	(envelope-from <linux-pm+bounces-42985-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 07:31:36 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FA2D172172
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 07:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A32611721C8
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 07:31:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E021E30832C0
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 06:19:27 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8C9A930156EA
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 06:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B687E345734;
-	Mon, 23 Feb 2026 06:19:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85F94346779;
+	Mon, 23 Feb 2026 06:31:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PVf5cQQM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YcZL5Uf/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F14031A56C
-	for <linux-pm@vger.kernel.org>; Mon, 23 Feb 2026 06:19:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186863446AF
+	for <linux-pm@vger.kernel.org>; Mon, 23 Feb 2026 06:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771827565; cv=none; b=GIEQCi2V8MaaVOEP8Qzii3B/ary2Z8Ei6+w2BBpwBy1Me8TOQO3NLUeHq9OSbvvxtlhSwJxgW5K0A9fwqu1iZcdMWFdQaASH+16jy0OQGHEyW1/9aUbQvGp8znfO/S10cSSR8/YU4OnaJgpqfrvxVbmP7aQYxyiNqXAgzlRJRjI=
+	t=1771828291; cv=none; b=NoxaxENhN/NSSurBfPKubcxflcaXs+wLtoJtjr843N2b5GzWAWP/gQWQm/ma6gVwZyu2TtccqrHDwJw+hlkUZKbHxyc4xfWwkxYLFOHFRWD3A2spoYi3GgY7vkPc+bfJbaKYwz6sC4xm4DCL6vDjnTsvuTy/aelevBhdApIBx9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771827565; c=relaxed/simple;
-	bh=sT7HTPtst/zg7EmgHN1S/xyGPVLYLKf0e36YnPluPv8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Et6f++MwEJ0iw1kZQ5PU35i6txEClsP0p6HkfDn5xWfLGmPwCAIB3kovV8soaZpUHuX0qjCBXwDpuzLIlncKFyIltCTeYpalyVUMQ3i/yZrlN28HUTz9dPkv2jCIwktqtr8CzVTlUhByh1256n5t5Z9ldgaU2FKD84qdVPIRiXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PVf5cQQM; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ad4d639db3so18801005ad.0
-        for <linux-pm@vger.kernel.org>; Sun, 22 Feb 2026 22:19:24 -0800 (PST)
+	s=arc-20240116; t=1771828291; c=relaxed/simple;
+	bh=3JKhQ9beP6hoqU3EcKP3gop2A/k01QbGeVyTyZU4Hps=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XW0tM2E+ekEgg8ByHPjKrJj72ZNnqqUNEuA8PlfIo6PblLGCeTQTIUEbqj8+QP/fcsTucwb+PwvCQWjuk4fNobyiBH1tt4V4B4jREmI+pOmYf6QPIi0hbrI6yXIb/vKV7AW5BuK+rr+nJgYcmkLfwzUt48M1rEQ8SVYT7AZxxSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YcZL5Uf/; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-59e5aa4ca41so3770411e87.2
+        for <linux-pm@vger.kernel.org>; Sun, 22 Feb 2026 22:31:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1771827564; x=1772432364; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771828288; x=1772433088; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vli3G+0wOlwHpxuWTDOJRfn0EdF7sq1jdNlY7kDD5nI=;
-        b=PVf5cQQMJVYWZOsE1RcHJQTxHhN/n5knKDmxAPxxBa+GUT4R6wSBgQh4k/17F4ES4y
-         TQNlhOuIB9RFvMlMfe4WiwU2tPDpedcRH3t/4XxNWrRrasHMrifHOsQvkZx7n9CBQc3j
-         BsHE/jDh3FtMy0aN4T5p97V83bVv6W/Nowy0vR7X+TkmUkuLYak98P78Ma6vY/Ti6OnC
-         WMSJzgi3tQ+7yJ6VN3TMYYZlDGvowbgtaqWUKet6B7NQzEkOMr4fYyk6pcFWMEZ8/YsO
-         Vdyv5KXBBW9O9qSdDq/BQHk+wRX3/2wxEjctTWizZP4og3xnKqpPSIQmbqHm2rFUMEGi
-         OTww==
+        bh=KdetahYQfYhDlhuTa9nYkHK4GpTIEKzr2ZQLLZ1gumA=;
+        b=YcZL5Uf/RdWlESKhvLk8DiVdnvltEvqFRteLZ4HvEHDg+vnYBWeD+JSWAVyGpZzI+B
+         H/DxLD3dVadaL1U/YnyumzrSylXgSe9j531mt5W1sVb/6bSwMcwynXhhIL2qkrFBOHYT
+         vH31kcaO913KcrWDv2VYrFKdvqPV1s6LlrfAA3epfA1a8OWX/L9EELxIp/yd3d4XvYDO
+         NfL50o/4quObmKqYepPIONHlrOlpC1xkmJALUb09+WVvDf+4AgleZ2iroe2S44PD4n7Z
+         2TFeIrLljwOk9zy7C/isxk1Bqieth3doVWEnERvcRxNUQQZz0mlQRMqjwLiex4dLhsX1
+         msWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771827564; x=1772432364;
+        d=1e100.net; s=20230601; t=1771828288; x=1772433088;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Vli3G+0wOlwHpxuWTDOJRfn0EdF7sq1jdNlY7kDD5nI=;
-        b=rY7Fzafyg9ADUdaLoergfONxQZdVPdtYYssy96DqR5esAR/JisOB4y69rRbjnAn+TY
-         u0JSSNu+/OfCs9+TzzjN/7HBl0ap8Re1trFISJwa7IXPIxKj7SCVYYUMar/zA5dZiFLh
-         kSuZv+8Vk4TH8OBXRJ7vpHjo8+coL4s98LxWGEr0qQJw6QxY1wKKbI0mGA/1C8jCs0iB
-         HoMdRkyeKZjMx50YJ+erlBKngZCso2Hp2dhk7iCjmJbCfTHhPgVyCUfpb/0aacMcKznz
-         eAEnDjgDn4DyC5ynFwbgEF4BfQptKmJcbwgBCiV/F+OniWG9AehSFAMCarfRmQGyvi5V
-         mpQw==
-X-Forwarded-Encrypted: i=1; AJvYcCVihxrO/N2xzHQ4tPtAQma3FqAnu7d5gaqeRm74ar2OsnN9DGFirJX8RXoe0FMNBwsCvD3VvgCdAA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCUMIc/jcXb+MbFmmywHCdY+apgt/zmaGLypI9RIcFd+c4tgXj
-	KcuWkds/8l4LRbjL2h+pFEGhGUdxIMzR9JwNh0wg84BCYLSDfdLDm3pO0J6OpuX0SKE=
-X-Gm-Gg: ATEYQzw1vQJkNuAtMc8L5YLJ7qMxdMrZk+juDaq4ChFJMUXQZnAHVgJOr8OaQeNyre8
-	iHMVZ+UdFjpivp8wgJWu3nDBuFXrdoCdmH8bPj3Bj0DSU4S9dRo8HOgC7Rwsy9wN4kRJ0uHuvLr
-	QmuGjv09tFsWlKYASpsvXPo6tw1KghZ4WmUS4AQIG8WDVFeiK/uIbilgMEF/sB/PJYCptrtsRF+
-	KtIAxNM3wKQBtA1XG/0HaN5zxkFfZPQfXU7zPpTbjJnvEcxVCX+h0/2B48uuWHAa7Dqn+kpSlCW
-	py8cf6CWV1DxTJzyuHiyWUf0Xrx6e1jV8pCgDen+y/wF+XGbbQCcRweCqPkCkkkePZXMS5jhDVd
-	t3budmLYBEibhlgGZOPUA7e1wAgEcWv1G+EHz92Uq9/O9ywuj31zQ88xwSX/PINC9yMrpcjZbmp
-	qBnTQwQHKDauC0QhFwKaBuGUDm
-X-Received: by 2002:a17:902:ef01:b0:2aa:e6fa:2f6d with SMTP id d9443c01a7336-2ad74419e58mr67592045ad.1.1771827563498;
-        Sun, 22 Feb 2026 22:19:23 -0800 (PST)
-Received: from localhost ([122.172.81.207])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad7500e2b2sm60689155ad.52.2026.02.22.22.19.22
+        bh=KdetahYQfYhDlhuTa9nYkHK4GpTIEKzr2ZQLLZ1gumA=;
+        b=HGUzVW04Nz8GfQXSAB0boGGxXhaBxA2OuutLmHcdHWYrGE/7CPEqIyZzbP6IXAprGr
+         VWI5vWvK4PqT29f+MgtL/Aj/tNq6ItLiEMpwqSGgnd3i+glCcmsz5PISCW24YApKNUYe
+         ITGFA/6x17irxOT3Y355K4rhr3NckJ9kkzsIUjxEwVZS4ftUGcUvgLACgS3aDJ+lhPEs
+         FFY2BgxzguXd8uYKRb/Hg2EuxK3Zu83NHJF1T0+HZzAihjZO2MGF6Uvu/G3UqOcRxUhK
+         KI0aQyjnALhuVKPAA7U/iMF60KvAequwE6iyNZPb6qhi9WXKisUNhLAd1pD6Ed780wGc
+         IZ0w==
+X-Forwarded-Encrypted: i=1; AJvYcCWuFMN8NB11irdD+sfmyYzUVcgYjHglttRTOh6QhW2oAYH0bnc/fUCGWlGpuLarWbfNwL2kI+KZCg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGTd2gnRNFK30D9sbU9VDIOhjITQzezzoPfLmLczVk8FUDJIlK
+	ZnSLI/Tr/O2vyw6iOF5uDCiWtSpR/fvO1qAWFPZXAwdg2kqVlOQssdqQ
+X-Gm-Gg: AZuq6aL/vYwokvl22qa/7pAfTeK1uZKJ1nyG8GrC3Xj8qchb4xl9ze+6VuItSmetBSJ
+	ge1yh2sihPAW0qzvlgdvFpyho0iZn2L477z83B/KDj9UQOFxDfDE30k3p+99X5oQoGVfHNtgXmL
+	zZ5/ZH2O9Qsm9pHTEl+zFK/iAUTzEQcrVjv1FFKG3RME9ysRhjxxUD+vONjf5KUiCY16Fujym/v
+	aThF8YDBqcB/hroZdfCtCj/EuPJAFNe0lKmYjfdt0ROIZgWT99KaD60/A0lve2xqRgNyPqFAf1s
+	AALBBYAWiMH2IcAk/IVAmDnYfsZTPW9JvAf2kOos84wVaubmvbbqggtK5TjDgfMdyWlbEBnjCPd
+	Y87+JunrI9h9xyXCQnBSL1OrB9iXBL8OJgfcREnrhniCiwI5kmN/+HxRw2OCizfvpMCYlDvwK75
+	tRuuGE1Wxf9O/m
+X-Received: by 2002:a05:6512:33d3:b0:59e:53c0:5413 with SMTP id 2adb3069b0e04-5a0ed87d8admr2321278e87.5.1771828288020;
+        Sun, 22 Feb 2026 22:31:28 -0800 (PST)
+Received: from xeon ([188.163.112.76])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a0eeb14596sm1361320e87.26.2026.02.22.22.31.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Feb 2026 22:19:22 -0800 (PST)
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Viresh Kumar <vireshk@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] OPP: Move break out of scoped_guard in dev_pm_opp_xlate_required_opp()
-Date: Mon, 23 Feb 2026 11:24:41 +0530
-Message-Id: <3d2398f44a2d48fb1c575a6e0bc6b38f3e689e22.1771826075.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+        Sun, 22 Feb 2026 22:31:27 -0800 (PST)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Lee Jones <lee@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Svyatoslav Ryhel <clamor95@gmail.com>,
+	Ion Agorria <ion@agorria.com>,
+	=?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v4 0/7] mfd: Add support for Asus Transformer embedded controller
+Date: Mon, 23 Feb 2026 08:30:52 +0200
+Message-ID: <20260223063059.11322-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42984-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42985-lists,linux-pm=lfdr.de];
+	FREEMAIL_TO(0.00)[kernel.org,gmail.com,agorria.com,rere.qmqm.pl];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[viresh.kumar@linaro.org,linux-pm@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	NEURAL_HAM(-0.00)[-0.999];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	TAGGED_RCPT(0.00)[linux-pm];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linaro.org:mid,linaro.org:dkim,linaro.org:email]
-X-Rspamd-Queue-Id: 9FA2D172172
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A32611721C8
 X-Rspamd-Action: no action
 
-The commit ff9c512041f2 ("OPP: Use mutex locking guards")
-unintentionally made the for loop run longer than required.
+Add support for embedded controller used in Asus Transformers for
+managing power and input functions.
 
-scoped_guard() is implemented as a for loop. The break statement now
-breaks out out the scoped_guard() and not out of the outer for loop.
-The outer loop always iterates to completion.
-
-Fix it.
-
-Fixes: ff9c512041f2 ("OPP: Use mutex locking guards")
-Reported-by: David Lechner <dlechner@baylibre.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/opp/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v2:
+- converted sysfs debug exports into debugfs
+- added kernel-doc comments for exposed functions
+- fixed minor typos and inconsistencies
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 866641666e41..da3f5eba4341 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -2742,8 +2742,8 @@ struct dev_pm_opp *dev_pm_opp_xlate_required_opp(struct opp_table *src_table,
- 					break;
- 				}
- 			}
--			break;
- 		}
-+		break;
- 	}
- 
- 	if (IS_ERR(dest_opp)) {
+Changes in v3:
+- dropped DockRAM commits (both schema and driver)
+- integrated DockRAM functionality directly into the controller driver
+- EC schema moved to embedded controllers folder
+- removed all cell descriptions from the schema
+- removed all compatibles from the cell drivers
+- adjusted naming conventions to better align with the ASUS Transformers
+- defined EC variant sets to provide coverage for all known devices
+
+Changes in v4:
+- grouped known programming models of EC chronologically (both schema
+  and driver)
+- call debugfs init only if CONFIG_DEBUG_FS is enabled
+---
+
+Michał Mirosław (6):
+  mfd: Add driver for ASUS Transformer embedded controller
+  input: serio: Add driver for ASUS Transformer dock keyboard and
+    touchpad
+  input: keyboard: Add driver for ASUS Transformer dock multimedia keys
+  leds: Add driver for ASUS Transformer LEDs
+  power: supply: Add driver for ASUS Transformer battery
+  power: supply: Add charger driver for Asus Transformers
+
+Svyatoslav Ryhel (1):
+  dt-bindings: embedded-controller: document ASUS Transformer EC
+
+ .../asus,tf201-ec-pad.yaml                    | 105 +++
+ drivers/input/keyboard/Kconfig                |  10 +
+ drivers/input/keyboard/Makefile               |   1 +
+ .../input/keyboard/asus-transformer-ec-keys.c | 272 +++++++
+ drivers/input/serio/Kconfig                   |  15 +
+ drivers/input/serio/Makefile                  |   1 +
+ drivers/input/serio/asus-transformer-ec-kbc.c | 147 ++++
+ drivers/leds/Kconfig                          |  11 +
+ drivers/leds/Makefile                         |   1 +
+ drivers/leds/leds-asus-transformer-ec.c       |  79 ++
+ drivers/mfd/Kconfig                           |  14 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/asus-transformer-ec.c             | 762 ++++++++++++++++++
+ drivers/power/supply/Kconfig                  |  22 +
+ drivers/power/supply/Makefile                 |   2 +
+ .../supply/asus-transformer-ec-battery.c      | 272 +++++++
+ .../supply/asus-transformer-ec-charger.c      | 193 +++++
+ include/linux/mfd/asus-transformer-ec.h       | 162 ++++
+ 18 files changed, 2070 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/embedded-controller/asus,tf201-ec-pad.yaml
+ create mode 100644 drivers/input/keyboard/asus-transformer-ec-keys.c
+ create mode 100644 drivers/input/serio/asus-transformer-ec-kbc.c
+ create mode 100644 drivers/leds/leds-asus-transformer-ec.c
+ create mode 100644 drivers/mfd/asus-transformer-ec.c
+ create mode 100644 drivers/power/supply/asus-transformer-ec-battery.c
+ create mode 100644 drivers/power/supply/asus-transformer-ec-charger.c
+ create mode 100644 include/linux/mfd/asus-transformer-ec.h
+
 -- 
-2.31.1.272.g89b43f80a514
+2.51.0
 
 
