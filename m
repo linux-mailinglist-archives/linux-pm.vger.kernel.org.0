@@ -1,136 +1,65 @@
-Return-Path: <linux-pm+bounces-43066-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43068-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gGooBgilnGkYJwQAu9opvQ
-	(envelope-from <linux-pm+bounces-43066-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 20:05:44 +0100
+	id OGBZNq+wnGmYJwQAu9opvQ
+	(envelope-from <linux-pm+bounces-43068-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 20:55:27 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F0E117BFD6
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 20:05:43 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8551F17C91B
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 20:55:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 70A633062FB9
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 19:05:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F385F3040475
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 19:55:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D634A36A01A;
-	Mon, 23 Feb 2026 19:05:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CECD1374744;
+	Mon, 23 Feb 2026 19:55:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="IuqL9frT";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="GNH3VALr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNi8FQkh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836D736A002
-	for <linux-pm@vger.kernel.org>; Mon, 23 Feb 2026 19:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CD324C692;
+	Mon, 23 Feb 2026 19:55:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771873510; cv=none; b=qOl454uRcOEx0LazIssuMAW0ZZBEsk5Kw6UXtl4PppZ4kVoHs+b0zHqPf3hUqtvJkee/kdA6cIZbyvTpjKgkJ1SQpoDsOZCZ4FTJ/t6PHf3ChyNwLOmE5PgbSpeYm/AHOkrN4vUFfOEuq0VmbtaCdBaNJk5cM55oVdvpPhYmRsg=
+	t=1771876510; cv=none; b=hmx5FHfLG/z9fGhnetnzXFCDrhRMjikZiznyZ5bVBXVIheFk/2VH47seT83lGtMPKHEHB4gwJ99WLGQLOjRUN8vf9NcjyX8f5aIp4jRZ88+Q6Trs7qMEBETF/h6L1PeiwMZZO91cclPQ7kxps8D3/x8Ce7g2vKrGE9J059s3iig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771873510; c=relaxed/simple;
-	bh=+c1bZBQs/guNz7fjEph0UAOI1LMhure7eyCMtUj6mL0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ii/xssBR3R6623aSfdFucFxefroC+CjdasQLX0MST8SmLb/Uv1TvAfeCG+Qsr5m58CgSgDJGgsi+Kpbhb6bvd0DSuy48t/BraFHwQsx3wK7Kh3wJGRL2gdAv+1/MU1+A0o2F7xI9k97mak3oDknDy2Ts0MktOVuaJodysblxOlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=IuqL9frT; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=GNH3VALr; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61NDsV2d185750
-	for <linux-pm@vger.kernel.org>; Mon, 23 Feb 2026 19:05:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ZzRDmU+V1N4Y2c/BrLaePKh3e2DWyeiVEC2s5+FnDg0=; b=IuqL9frT3eYrhIIB
-	NuxvfBGQwC26oEc6lOpSKdaTr3dKtYr9sLzCX+vvkDYAu28/klWz5qjEI8bztiSK
-	l3rDltBto6ORydt1gp38//DIVORhGYpBDWPm9+8CXU9r3GLw6jDSLLGQVtFD0qHa
-	yIzhV8TchJGZW4YIMFEMgGDh80hv9H/x8jw4UuTGuWJ4SM6clqRNT26VyH+vJ8fV
-	SJQOT8kv3K1vKqi0h3JR7KDxVrcEMNIZkQTPfUGxaOUSkpfY/Exi2dJ8ZDDAD/N1
-	anHlcbk2wVz3+1tDU0yct5fW8mrLlxziJiFhO8SENs4EhfD/Kf4o5PFMbQ1CSxZe
-	dM16ZA==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cgr69h0qe-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 23 Feb 2026 19:05:08 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8c70ef98116so4968005285a.1
-        for <linux-pm@vger.kernel.org>; Mon, 23 Feb 2026 11:05:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1771873507; x=1772478307; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZzRDmU+V1N4Y2c/BrLaePKh3e2DWyeiVEC2s5+FnDg0=;
-        b=GNH3VALrJrhrVRHyfEFG6+M2vg2JhkSDXb4J1CzKsnOkrymwUzpx2feX7dlOEu4TcT
-         B5sBQ9yPcNmVEwmFMTMn+FSTq9jm/HMItsewTTFX400/mphde//tM5VgXf78ZrISR6fZ
-         qVmVNxzQvgBLUtiZW23cI8X0ntyVr1i69Gr58A5FQL+exq9BvvZWWUTyrLT604ma7/sJ
-         NUnwBa0jBgtk5gK4b/VnR6XDc7lYsVgBzLpXDPOKvGSGYfmxJroFEHu4wxa4+BDUHI8j
-         zUuJ5kmhlKESBoxLPi3CuYU9li07PEyWwJfzxre+Qst+h0p/0xrKhs6gqvdW8cKXi6zP
-         Ghdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771873507; x=1772478307;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZzRDmU+V1N4Y2c/BrLaePKh3e2DWyeiVEC2s5+FnDg0=;
-        b=Qky+zqAlEwMttbs3BFqN6s1DlQZjOIrjFBAQyBk3KQpLP7iQMed+UQpPEJh5cC021G
-         zQR9f6KzRMHm9L2hBdkaurmlvtq3pvmo44MOMuYqwFFBetw0I4qUY9PuhEe59Qb4XbCo
-         B19RVnQUFi/wVbI4lMAp33eFOFfSf5qnmmgGpBP1bSCc7IdMqTgL2GwF0fz4T3GR/ZWw
-         wFyFxO7uRuGoK4DOY8bHhELzFWNrheKldN9yzI3RYrCyQm+yHRaLJU+YESaxuA5M313K
-         xGjiNXnioL54BRWFOu5J5uQk8/HomwK7cJTIeajjdmAKFHfSSaoYoZKaQyNykX7Jzupa
-         JYMA==
-X-Forwarded-Encrypted: i=1; AJvYcCU4FUa9KY/yVcs80YjOgr+m2bXq2eKVEhYDR/IAifQsTjIM9fhyHc5epTL/Gjaq+V1Yar75hJm6+Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHnNlnsYxiyWIQXFgPkJxgJP4pgipiKPgfkcbIrw3OP0bB8vzO
-	nuIMsNxo+PQ2K0Sl2jN/NUjWMCRaGqyYqiCDL28Qp1MTtzbcQJyK3v6lFg8KLL1dONcKXhZJRMR
-	B49oFfMptYR12DViJymxOhtzyIY5nYn+d14DXgAzF6XY1jjr+uEKET+DF0UFY1g==
-X-Gm-Gg: AZuq6aJwR1y3HJLD9CECaKVDAz44iTNMRues460BiPgKdBJb7fHyLjpAU3pBDMyaKbU
-	FbPzL2fn5U1sAevMfT1jKgqR/5j3gtPmQtfvFULrzUHqXR6OVDk2j9qshnmtChpyw2mc06SWv3P
-	+v+LvbBlQubLo42ak5B8BXKAfYJ30VlwBr9A6qMSpZtbzEzgrcnAlCILiHIGuX+ebOqx7rvnGbk
-	9qiY5cGRiaChHREicbmI9DjIYTZ/gy+cflCP22P+yv5khLw0yAfbD1vhO63qMQjekJZ9DChdXEv
-	nqH8pDj3KcWdZ40WE0/P/UWx1iZ2G2Tsj/2u1GAhs4C0DiUqjkH4fSKcRJHhoU5qk/X+2bvB0f1
-	w355AQrzvHfbGSCfPCj2SlahD04y7JeToWTLjHVmu14BI1QjCgy1r6y8WzTza7xWyzXItecsfG8
-	9oSnNswfRtvf1NGGQM8d3qVXW3mwwqvqR0kDI=
-X-Received: by 2002:a05:620a:1aa9:b0:8b2:d56a:f2f1 with SMTP id af79cd13be357-8cb8c9e6647mr1251512985a.12.1771873507006;
-        Mon, 23 Feb 2026 11:05:07 -0800 (PST)
-X-Received: by 2002:a05:620a:1aa9:b0:8b2:d56a:f2f1 with SMTP id af79cd13be357-8cb8c9e6647mr1251505785a.12.1771873506405;
-        Mon, 23 Feb 2026 11:05:06 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-389a7a207a1sm16902281fa.21.2026.02.23.11.05.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 11:05:05 -0800 (PST)
-Date: Mon, 23 Feb 2026 21:05:03 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Luca Weiss <luca.weiss@fairphone.com>
-Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        David Lechner <dlechner@baylibre.com>,
-        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Hans de Goede <hansg@kernel.org>, Jens Reidel <adrian@mainlining.org>,
-        Casey Connolly <casey.connolly@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] arm64: dts: qcom: sm7225-fairphone-fp4: Add
- battery temperature node
-Message-ID: <uivc6k5luetg6dfih5bmkkywdtxkg3jxk7zpem53jwcaetfb7l@i7v37nvm2tku>
-References: <20260220-bat-temp-adc-v2-0-fe34ed4ea851@fairphone.com>
- <20260220-bat-temp-adc-v2-5-fe34ed4ea851@fairphone.com>
- <85ce1f2c-f5cf-4e97-9611-4aed03f69cd7@oss.qualcomm.com>
- <DGJQ4WLIML3H.GAO7T4L3MCJM@fairphone.com>
- <a422e087-a91c-4bb2-9d95-e1cefc9a91bf@oss.qualcomm.com>
- <DGJR40B5R6MB.1V4ZK5SW1PXAV@fairphone.com>
- <yikwygc5gasmr3cdyv5emfr2flaoraxcz7ap3j55wn4ib6wfqx@4yxoly5zrucx>
- <DGM6EAN8EJU0.2JLEY3CA0R5G9@fairphone.com>
+	s=arc-20240116; t=1771876510; c=relaxed/simple;
+	bh=i7p1CmNCkpa7NXd9zIoDHL+Mlb5Osw0tzfGBKWXI128=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=MX5yTfwMqdSMKX88TF1el767BXURG7Rs/0mA1gRtsc9HOc1jeizXpesyKV2Gg4EFM8aIr8rEs13WqIBxiLRuLoQ5POwzOuIZvgQvxYKQAKPl+8yWb4HojAN+khs41W4iNZHyfbHf02LgGhkv1ssvvW65k0/583B8GFx9TLpLOWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNi8FQkh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D50AC116C6;
+	Mon, 23 Feb 2026 19:55:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771876510;
+	bh=i7p1CmNCkpa7NXd9zIoDHL+Mlb5Osw0tzfGBKWXI128=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=cNi8FQkh1tR1+gLalvCR2h4vd1UPNsR4NYnjRtbue7OOiJD6d8rJYIPGiExF7wIya
+	 QyvPktXMmsNoCjSttoEHWkJapKD+D4x6MzO3KrJc6Jqe7kYXZmreQLEQ6FMR0k34+m
+	 O/AeadylZMKNIQ7tD8U8KnAbdssJfQOk6YvOO4DcE8uN1N82VJU15Wl7NyC3R+ZWa4
+	 sz4jlFM8P++iMwoPXGlf4U0FDeOA4856SM66lLy8itnt3gh5AMIfxSkvyPnMYEAvVs
+	 TC0C3PiN/WBEdesl5UnlpAD12/+wupJKbsMqlObn0i8Sn5slngkFfuWe3DL7xqGDZN
+	 caC3VkVozKl9A==
+Date: Mon, 23 Feb 2026 13:55:08 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
+	Jingoo Han <jingoohan1@gmail.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, jonathanh@nvidia.com,
+	bjorn.andersson@oss.qualcomm.com, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] PCI: host-common: Add helper to determine host
+ bridge D3cold eligibility
+Message-ID: <20260223195508.GA3703404@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -140,187 +69,156 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <DGM6EAN8EJU0.2JLEY3CA0R5G9@fairphone.com>
-X-Authority-Analysis: v=2.4 cv=O6A0fR9W c=1 sm=1 tr=0 ts=699ca4e4 cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=Um2Pa8k9VHT-vaBCBUpS:22 a=6H0WHjuAAAAA:8
- a=gvbEHs2N2TqGYGsSA-IA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=IoWCM6iH3mJn3m4BftBB:22 a=Soq9LBFxuPC4vsCAQt-j:22
-X-Proofpoint-ORIG-GUID: KccErrtb9ckJYlejiffK1sd03WRPkKCk
-X-Proofpoint-GUID: KccErrtb9ckJYlejiffK1sd03WRPkKCk
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDE2NSBTYWx0ZWRfX3+efdQUa92fH
- PiUXDQ5BPlgs+3PV9yjeIe5VzPCn0yRXPvvuYuF97zy4iXYrGjtiNUTEy7LN/xhODU4PxOyYCYJ
- yUEjtH2yFFHZN+SblOffH3TCcCHJx9xexCIlBfiwWtbLoDtU1wqQO7kgYS0tTNt8GMPSbCxug8c
- gQ9ynZRYX42+z3v1dY/rt09N1c5qeQaoRxWm/6ataxAPmJ0N+1YD0WFuM1MD08FZOc7yPE8cs2Y
- 2yyC8CaKy3zUhuSJbjiYjaWlaY+u9PQs+UesbdttXwIHhnnLSdReXUN1lhqy9iWj3xj8KDvQlJv
- Y/NMnVlulUXyoi0hOf5q2o4TqoNAXrhs0twZu8trVm2FU0cAyx0BBl7ABJ1ZyGMbSkobd52QaT2
- dE6wD7TUM5T2JKNXEF+1MyoaK2TkRpnkDt9doES/D75VJNYZWdcWxw8qMudaLvnCyFbCUGrzpOO
- 5JA6EomEjtoyp/iWY1w==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-23_04,2026-02-23_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0 priorityscore=1501
- impostorscore=0 phishscore=0 malwarescore=0 bulkscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602230165
+In-Reply-To: <CAJZ5v0h8dQ10oH4KQM8Pdv0jvXyTE6yD1fn5eBPkS_jDYgA8gQ@mail.gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43066-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:dkim,oss.qualcomm.com:dkim,fairphone.com:email];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-43068-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[26];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dmitry.baryshkov@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[oss.qualcomm.com,gmail.com,kernel.org,google.com,vger.kernel.org,lists.infradead.org,nvidia.com];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[helgaas@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 5F0E117BFD6
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8551F17C91B
 X-Rspamd-Action: no action
 
-On Mon, Feb 23, 2026 at 08:50:50AM +0100, Luca Weiss wrote:
-> On Sat Feb 21, 2026 at 3:49 AM CET, Dmitry Baryshkov wrote:
-> > On Fri, Feb 20, 2026 at 12:26:48PM +0100, Luca Weiss wrote:
-> >> On Fri Feb 20, 2026 at 11:51 AM CET, Konrad Dybcio wrote:
-> >> > On 2/20/26 11:40 AM, Luca Weiss wrote:
-> >> >> On Fri Feb 20, 2026 at 11:00 AM CET, Konrad Dybcio wrote:
-> >> >>> On 2/20/26 10:19 AM, Luca Weiss wrote:
-> >> >>>> Add a generic-adc-thermal node to convert the voltage read by the
-> >> >>>> battery temperature ADC into degree Celsius using the provided lookup
-> >> >>>> table.
-> >> >>>>
-> >> >>>> This will later be used as input for the fuel gauge node (QGauge on the
-> >> >>>> PM7250B).
-> >> >>>>
-> >> >>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> >> >>>> ---
-> >> >>>>  arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 83 +++++++++++++++++++++++
-> >> >>>>  1 file changed, 83 insertions(+)
-> >> >>>>
-> >> >>>> diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-> >> >>>> index b697051a0aaa..7857003099a6 100644
-> >> >>>> --- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-> >> >>>> +++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-> >> >>>> @@ -108,6 +108,89 @@ rear_cam_sensor: thermal-sensor-rear-cam {
-> >> >>>>  		io-channel-names = "sensor-channel";
-> >> >>>>  	};
-> >> >>>>  
-> >> >>>> +	bat_therm_sensor: thermal-sensor-bat-therm {
-> >> >>>
-> >> >>> nit: this should be a little higher
-> >> >> 
-> >> >> meh, it's surprisingly easy to miss this sorting stuff. Will fix in v3.
-> >> >> 
-> >> >>>
-> >> >>>> +		compatible = "generic-adc-thermal";
-> >> >>>> +		#thermal-sensor-cells = <0>;
-> >> >>>> +		#io-channel-cells = <0>;
-> >> >>>> +		io-channels = <&pm7250b_adc ADC5_BAT_THERM_30K_PU>;
-> >> >>>> +		io-channel-names = "sensor-channel";
-> >> >>>> +		/*
-> >> >>>> +		 * Voltage to temperature table for 10kΩ (B=3435K) NTC with a
-> >> >>>> +		 * 1.875V reference and 30kΩ pull-up.
-> >> >>>> +		 */
-> >> >>>
-> >> >>> I think this looks good. Is this data going to be correct for all/most
-> >> >>> devices (i.e. is there a single battery sku)?
-> >> >> 
-> >> >> Yes, from my info there's just a single battery SKU, so that makes it
-> >> >> easy here.
-> >> >> 
-> >> >> For Fairphone 3 there's two battery SKUs:
-> >> >> 
-> >> >> * (Fuji) F3AC with NTC 100kOhm B=4100, ID resistor 10kOhm
-> >> >> * (Kayo) F3AC1 with NTC 100kOhm B=4050, ID resistor 49.9kOhm
-> >> >> 
-> >> >> In reality, one can probably ignore the difference between the LUT for
-> >> >> either B value since it only differs by a marginal amount, but
-> >> >> conceptually I'm not sure how this should really be resolved.
-> >> >> 
-> >> >> We could have both battery definitions in the dtb, and then the charging
-> >> >> driver could determine the battery that's actually present in the
-> >> >> system (based on the BATT_ID measurement), but given the design here
-> >> >> now, I'm not sure how this temperature lookup table would be propagated
-> >> >> to the rest of the system...
-> >> >
-> >> > The path of least resistance (pun intended) would probably be to make
-> >> > generic-adc-thermal consume an ID channel and accept a number of LUTs..
-> >> 
-> >> Not the worst idea ;)
-> >> 
-> >> >
-> >> > That sounds sensible since most battery ID mechanisms are probably also
-> >> > ADC-based and one would hope (tm) that the values output by these ADC channels
-> >> > would then be distinct enough for the driver to have an easy time confidently
-> >> > selecting one of the options (or a fallback)
-> >> 
-> >> Charger / fuel guage and everything else battery-related would also need
-> >> to get the correct battery properties for the actual one present, not
-> >> just this generic-adc-thermal driver.
-> >> 
-> >> But I feel like soon DT maintainers will say that Linux shouldn't
-> >> dynamically detect hardware that's present and the DT should be the
-> >> absolute source of truth. That works fine in simple cases, but in case
-> >> of interchangeable batteries, display panels, camera sensors, this won't
-> >> work. *Something* needs to determine what's actually there.
+On Mon, Feb 23, 2026 at 07:46:08PM +0100, Rafael J. Wysocki wrote:
+> On Mon, Feb 23, 2026 at 7:10 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Tue, Feb 17, 2026 at 04:49:06PM +0530, Krishna Chaitanya Chundru wrote:
+> > > Add a common helper, pci_host_common_can_enter_d3cold(), to determine
+> > > whether a PCI host bridge can safely transition to D3cold.
+> > >
+> > > This helper is intended to be used by PCI host controller drivers to
+> > > decide whether they may safely put the host bridge into D3cold based on
+> > > the power state and wakeup capabilities of downstream endpoints.
+> > >
+> > > The helper walks all devices on the bridge's primary bus and only allows
+> > > the host bridge to enter D3cold if all PCIe endpoints are already in
+> > > PCI_D3hot. This ensures that we do not power off the host bridge while
+> > > any active endpoint still requires the link to remain powered.
+> > >
+> > > For devices that may wake the system, the helper additionally requires
+> > > that the device supports PME wake from D3cold (via WAKE#). Devices that
+> > > do not have wakeup enabled are not restricted by this check and do not
+> > > block the host bridge from entering D3cold.
+> > >
+> > > Devices without a bound driver and with PCI not enabled via sysfs are
+> > > treated as inactive and therefore do not prevent the host bridge from
+> > > entering D3cold. This allows controllers to power down more aggressively
+> > > when there are no actively managed endpoints.
 > >
-> > How is it handled for the Android boots? I assume there are (at least)
-> > two DTBOs and the correct one is being selected somehow (via the msm-id
-> > / board-id?). Or does ABL pass some kind of battery identifier to the
-> > kernel?
+> > This series is currently structured so it's only applicable to native
+> > host bridge drivers, i.e., things using DT.  Is there anything that
+> > prevents using D3cold for host bridges in ACPI systems?
 > 
-> On downstream the Linux driver will do the selection, there you have two
-> batterydata nodes in the dtb with each their qcom,batt-id-kohm property
-> and the driver will choose the correct one at runtime.
-> 
-> Similar with multiple display panels, but I think there usually the
-> 'detection' happens via what's passed on cmdline from the bootloader.
-> But not with two dtbs, the driver is selecting the correct panel from
-> one dtb.
+> Do you mean in principle or in practice?
 
-I remembered that all panels are a part of a single DTB, I didn't
-remember about the batteries. If there is a bootparam, in theory we can
-use it to identify the battery. Or we can find how it is being
-identified in the first place and use the same logic in the kernel /
-userspace.
+Just in principle.  I was hoping for some way to tie this decision
+making back to a spec.  Everything downstream being in D3 already, and
+any wakeup devices supporting PME from D3cold sounds plausible to me,
+but I don't know about any prescriptive spec language, and I wouldn't
+want to get locked into a scheme that couldn't be supported on ACPI.
 
-> 
-> For cameras, the camera stack is 95% in user space, so it's not quite
-> comparable but also there usually I think there it's trying probe camera
-> #1, if it fails try probing camera #2.
-> 
-> Regards
-> Luca
-> 
-> >
-> >> 
-> >> And for most of the ways to detect which of those are present in the
-> >> device that is booting, you need half a kernel to power up the various
-> >> hardware and do some basic communication to figure out what's there. Of
-> >> course you could say that's U-Boot's job for example but not sure you
-> >> want to add a CCI (I2C), ADC driver and much more...
-> 
+> x86 platforms don't support PCI host bridge PM AFAICS and the ACPI
+> driver doesn't support PM either.  I'd rather not add it ad hoc
+> because of this patch series.
 
--- 
-With best wishes
-Dmitry
+Agreed.
+
+> > > Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+> > > ---
+> > >  drivers/pci/controller/pci-host-common.c | 45 ++++++++++++++++++++++++++++++++
+> > >  drivers/pci/controller/pci-host-common.h |  2 ++
+> > >  2 files changed, 47 insertions(+)
+> > >
+> > > diff --git a/drivers/pci/controller/pci-host-common.c b/drivers/pci/controller/pci-host-common.c
+> > > index d6258c1cffe5ec480fd2a7e50b3af39ef6ac4c8c..b0a4a3c995e80e0245657f0273a349334071013c 100644
+> > > --- a/drivers/pci/controller/pci-host-common.c
+> > > +++ b/drivers/pci/controller/pci-host-common.c
+> > > @@ -106,5 +106,50 @@ void pci_host_common_remove(struct platform_device *pdev)
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(pci_host_common_remove);
+> > >
+> > > +static int pci_host_common_check_d3cold(struct pci_dev *pdev, void *userdata)
+> > > +{
+> > > +     bool *d3cold_allow = userdata;
+> > > +
+> > > +     if (pci_pcie_type(pdev) != PCI_EXP_TYPE_ENDPOINT)
+> > > +             return 0;
+> > > +
+> > > +     if (!pdev->dev.driver && !pci_is_enabled(pdev))
+> > > +             return 0;
+> > > +
+> > > +     if (pdev->current_state != PCI_D3hot)
+> > > +             goto exit;
+> > > +
+> > > +     if (device_may_wakeup(&pdev->dev) && !pci_pme_capable(pdev, PCI_D3cold))
+> > > +             goto exit;
+> > > +
+> > > +     return 0;
+> > > +exit:
+> > > +     *d3cold_allow = false;
+> > > +     return -EBUSY;
+> > > +}
+> > > +
+> > > +/**
+> > > + * pci_host_common_can_enter_d3cold - Determine whether a host bridge may enter D3cold
+> > > + * @bridge: PCI host bridge to check
+> > > + *
+> > > + * Walk downstream PCIe endpoint devices and determine whether the host bridge
+> > > + * is permitted to transition to D3cold.
+> > > + *
+> > > + * The host bridge may enter D3cold only if all active PCIe endpoints are in
+> > > + * %PCI_D3hot and any wakeup-enabled endpoint is capable of generating PME from
+> > > + * D3cold. Inactive endpoints are ignored.
+> > > + *
+> > > + * Return: %true if the host bridge may enter D3cold, otherwise %false.
+> > > + */
+> > > +bool pci_host_common_can_enter_d3cold(struct pci_host_bridge *bridge)
+> > > +{
+> > > +     bool d3cold_allow = true;
+> > > +
+> > > +     pci_walk_bus(bridge->bus, pci_host_common_check_d3cold, &d3cold_allow);
+> > > +
+> > > +     return d3cold_allow;
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(pci_host_common_can_enter_d3cold);
+> > > +
+> > >  MODULE_DESCRIPTION("Common library for PCI host controller drivers");
+> > >  MODULE_LICENSE("GPL v2");
+> > > diff --git a/drivers/pci/controller/pci-host-common.h b/drivers/pci/controller/pci-host-common.h
+> > > index b5075d4bd7eb31fbf1dc946ef1a6afd5afb5b3c6..18a731bca058828340bca84776d0e91da1edbbf7 100644
+> > > --- a/drivers/pci/controller/pci-host-common.h
+> > > +++ b/drivers/pci/controller/pci-host-common.h
+> > > @@ -20,4 +20,6 @@ void pci_host_common_remove(struct platform_device *pdev);
+> > >
+> > >  struct pci_config_window *pci_host_common_ecam_create(struct device *dev,
+> > >       struct pci_host_bridge *bridge, const struct pci_ecam_ops *ops);
+> > > +
+> > > +bool pci_host_common_can_enter_d3cold(struct pci_host_bridge *bridge);
+> > >  #endif
+> > >
+> > > --
+> > > 2.34.1
+> > >
 
