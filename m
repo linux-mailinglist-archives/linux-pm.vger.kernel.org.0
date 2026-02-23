@@ -1,381 +1,322 @@
-Return-Path: <linux-pm+bounces-43040-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43043-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2CKOFzhfnGkUFQQAu9opvQ
-	(envelope-from <linux-pm+bounces-43040-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 15:07:52 +0100
+	id 4BYfOi5unGmcGAQAu9opvQ
+	(envelope-from <linux-pm+bounces-43043-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 16:11:42 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C60A2177BF3
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 15:07:51 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CB8B178887
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 16:11:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BF0F73005143
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 14:07:50 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4FC463033035
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 15:01:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B9F6265CA8;
-	Mon, 23 Feb 2026 14:07:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12D89365A02;
+	Mon, 23 Feb 2026 15:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IPvGrBGV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jG74L8zp"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267F226ADC;
-	Mon, 23 Feb 2026 14:07:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E17B32376FD;
+	Mon, 23 Feb 2026 15:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771855668; cv=none; b=MRMaobHGcmvJmlCXn7lg1TJ4fyJiZRMwKsRdHcRrJ0qv9ogQD1KylLs+wW/IJ8Xp5K/uap9mey4me33VIUlFKDOV6hfbQPp7eRrnzmOskDc9nwloYKR5kd322UAxn19HtXG5BjCLHuI9Ljll7RrD+Mr/kLfocod2qhiyW4HRdBw=
+	t=1771858874; cv=none; b=TQ3UzwBp0xaKl9bp2ihIHS+gagjsLwGP1WmwS2JDpw7JBGwvDndDLErAZbJ/9r8x6zTkKoeMaCx28lqWlZaEDlwpHUq5Eb0sgYm51l/tc0LS0fqPw6klqEk4VvvBbq8OFRXIulmmnHVbSf1t0kl6eqHd/7dliiKCMZEgwCNYtIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771855668; c=relaxed/simple;
-	bh=dDYPhdIEdbDF1rBlpY/BXOms6MErEYtGXlLpzU7HHOg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h84yd4ao88Mhv7FtIYEGtFxInBCV2Nid89Wa2JFzSRHoFdUKnWwgnVd52+4ZZFMUEA+OnFD8w3Xcs4hJJwb8vXh1EEW9XACpu0KgCyzrGykSFC10bBVE7b2pZVUN0m5fG5MM+Tb1AJ7D54+cMfFIlm8r37JvQeXgR4f+4K+LC5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IPvGrBGV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AB57C116C6;
-	Mon, 23 Feb 2026 14:07:42 +0000 (UTC)
+	s=arc-20240116; t=1771858874; c=relaxed/simple;
+	bh=+OkF4cSWCJNdiF5CsX7iTxYUaQeVg6kTwnJIj8pgz8g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=jR8XPFVuQRuq4ZgGpwX6RVxxDQRpgN+RoOEnh4q39cTWybXiypBfevK487FZETGpZ48AZ3vzr5cUO2Ybjr3r38hjdZReOIbbns1u0G32h0yw4DUqGgsKPHLhj/89zhrrpAlEW4OaUgb9AXNCD5i05cqOLzz+DKF/vTiZ3liM/eE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jG74L8zp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F9F1C4AF09;
+	Mon, 23 Feb 2026 15:01:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771855667;
-	bh=dDYPhdIEdbDF1rBlpY/BXOms6MErEYtGXlLpzU7HHOg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IPvGrBGVF2v2yL4LlrsF4wTm4ZSPbuU5uhI4xZRidahK7i+xK2gFONhYyWixOSR7w
-	 uwR50Gu/pvCbYRwmTqqPvOm2cz87aC92HlGM5RhbrluJn5Ajm8MBI5ZbdTDs4Y6HG/
-	 weBTiPqXjogD9se7vo1/t6z5HglySBCLoQ0BAi1wo031yUGUvqgF1wc8OlLlB62711
-	 h/ezyUMJ5XU6tJm5D94aFY27d++FL4P4FuTjwiguSy/0l6vRVwjaDz7eJnjRtRUlc5
-	 rS3x9aMk4BiKlXGuNKP88zrkoFIlcwjBkDYwQuqJelUv+jTRfemBY8I88ZlPcgsve1
-	 evLYbqrm7U1cw==
-Date: Mon, 23 Feb 2026 19:37:34 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij <linusw@kernel.org>, 
-	Bartosz Golaszewski <brgl@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org, quic_vbadigan@quicinc.com, 
-	quic_mrana@quicinc.com, sherry.sun@nxp.com, driver-core@lists.linux.dev
-Subject: Re: [PATCH v7 3/3] PCI: Add support for PCIe WAKE# interrupt
-Message-ID: <pjeee3vwggsrvp4kxarc46vjx2igk53xd6eoxjqh7ri5rf6fhi@5d3ccirqnxu6>
-References: <20260218-wakeirq_support-v7-0-0d4689830207@oss.qualcomm.com>
- <20260218-wakeirq_support-v7-3-0d4689830207@oss.qualcomm.com>
+	s=k20201202; t=1771858873;
+	bh=+OkF4cSWCJNdiF5CsX7iTxYUaQeVg6kTwnJIj8pgz8g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=jG74L8zp/FnnR1Lf0m+mAJDrbPcsT++9hRX0XGunvt9GvdsjJh+bfbNJOa+uIit1K
+	 X0KhxukpE06IrB9eKeOnjxrVHQTVmftx9RNS7STt7RshsqdiKRtVOuf4G9NEV4tJz3
+	 PujNQxbv93TPYnYYhE3n1F5oqJKG4vmMXRC1nRD04BI1KV1s6uJhcB6AJ0TkBKkxbW
+	 ePQEkUdkwobo8EKqTuxmEu4Ww3QF9zongUPIdlG+oEg4S44x4LDuj5TM7LPEb1psux
+	 kirnfscubPKNmJaYqynAdub+KM2YIhojSYzldFuc8o/bqHXb+CbNo2U6bkgKwFuMKN
+	 AecqPLLUaWu3A==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn?= Roy
+ Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Trevor
+ Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Dave Ertman
+ <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, Leon
+ Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, Serge
+ Hallyn <sergeh@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, David
+ Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Alexander
+ Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
+ Jan Kara <jack@suse.cz>, Igor Korotin <igor.korotin.linux@gmail.com>,
+ Daniel Almeida <daniel.almeida@collabora.com>, Lorenzo Stoakes
+ <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen
+ Boyd <sboyd@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Krzysztof
+ =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Boqun Feng
+ <boqun@kernel.org>,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+ Asahi Lina <lina+kernel@asahilina.net>, Oliver Mangold
+ <oliver.mangold@pm.me>
+Subject: Re: [PATCH v15 1/9] rust: types: Add Ownable/Owned types
+In-Reply-To: <aZg44EmMWKK-z5KP@google.com>
+References: <20260220-unique-ref-v15-0-893ed86b06cc@kernel.org>
+ <20260220-unique-ref-v15-1-893ed86b06cc@kernel.org>
+ <aZg44EmMWKK-z5KP@google.com>
+Date: Mon, 23 Feb 2026 15:59:22 +0100
+Message-ID: <87wm0333qt.fsf@t14s.mail-host-address-is-not-set>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260218-wakeirq_support-v7-3-0d4689830207@oss.qualcomm.com>
+Content-Type: text/plain
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+X-Spamd-Result: default: False [9.34 / 15.00];
+	URIBL_BLACK(7.50)[types.rs:url];
+	SUSPICIOUS_RECIPS(1.50)[];
+	R_MISSING_CHARSET(0.50)[];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	BAD_REP_POLICIES(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-43043-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[40];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43040-lists,linux-pm=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[18];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mani@kernel.org,linux-pm@vger.kernel.org];
+	R_DKIM_ALLOW(0.00)[kernel.org:s=k20201202];
+	GREYLIST(0.00)[pass,body];
+	FREEMAIL_CC(0.00)[kernel.org,garyguo.net,protonmail.com,umich.edu,linuxfoundation.org,intel.com,paul-moore.com,gmail.com,ffwll.ch,zeniv.linux.org.uk,suse.cz,collabora.com,oracle.com,ti.com,google.com,vger.kernel.org,lists.freedesktop.org,kvack.org,asahilina.net,pm.me];
+	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,kernel];
+	FROM_NEQ_ENVFROM(0.00)[a.hindborg@kernel.org,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,qualcomm.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C60A2177BF3
-X-Rspamd-Action: no action
+	R_SPF_ALLOW(0.00)[+ip4:172.232.135.74:c];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	NEURAL_SPAM(0.00)[0.020];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[types.rs:url,asahilina.net:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,garyguo.net:email,t14s.mail-host-address-is-not-set:mid,collabora.com:email,pm.me:email]
+X-Rspamd-Queue-Id: 8CB8B178887
+X-Rspamd-Action: add header
+X-Spam: Yes
 
-On Wed, Feb 18, 2026 at 01:42:25PM +0530, Krishna Chaitanya Chundru wrote:
-> According to the PCI Express specification (PCIe r7.0, Section 5.3.3.2),
-> two link wakeup mechanisms are defined: Beacon and WAKE#. Beacon is a
-> hardware-only mechanism and is invisible to software (PCIe r7.0,
-> Section 4.2.7.8.1). This change adds support for the WAKE# mechanism in
-> the PCI core.
-> 
-> According to the PCIe specification, multiple WAKE# signals can exist in
-> a system or each component in the hierarchy could share a single WAKE#
-> signal. In configurations involving a PCIe switch, each downstream port
-> (DSP) of the switch may be connected to a separate WAKE# line, allowing
-> each endpoint to signal WAKE# independently. From figure 5.4 in sec
-> 5.3.3.2, WAKE# can also be terminated at the switch itself. To support
-> this, the WAKE# should be described in the device tree node of the
-> endpoint/bridge. If all endpoints share a single WAKE# line, then each
-> endpoint node should describe the same WAKE# signal or a single WAKE# in
-> the Root Port node.
-> 
-> In pci_device_add(), PCI framework will search for the WAKE# in device
-> node, If not found, it searches in its upstream port only if upstream port
-> is Root Port. Once found, register for the wake IRQ in shared mode, as the
-> WAKE# may be shared among multiple endpoints.
-> 
-> When a device asserts WAKE#, PM core will wakeup the system, resume the
-> device and its parent(s) in the hierarchy, which will cause the restoration
-> of power and refclk to the device.
-> 
-> WAKE# is added in dts schema and merged based on below links.
-> 
-> Link: https://lore.kernel.org/all/20250515090517.3506772-1-krishna.chundru@oss.qualcomm.com/
-> Link: https://github.com/devicetree-org/dt-schema/pull/170
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-> ---
->  drivers/pci/of.c     | 55 ++++++++++++++++++++++++++++++++++++++++++++++++++++
->  drivers/pci/pci.c    |  9 +++++++++
->  drivers/pci/pci.h    |  8 ++++++++
->  drivers/pci/probe.c  |  2 ++
->  drivers/pci/remove.c |  1 +
->  include/linux/pci.h  |  2 ++
->  6 files changed, 77 insertions(+)
-> 
-> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-> index 9bb5f258759be3f1e23496f083353600a4ef6743..23248900253faafaf9509d87c531b454fca41798 100644
-> --- a/drivers/pci/of.c
-> +++ b/drivers/pci/of.c
-> @@ -7,6 +7,7 @@
->  #define pr_fmt(fmt)	"PCI: OF: " fmt
->  
->  #include <linux/cleanup.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/irqdomain.h>
->  #include <linux/kernel.h>
->  #include <linux/pci.h>
-> @@ -15,6 +16,7 @@
->  #include <linux/of_address.h>
->  #include <linux/of_pci.h>
->  #include <linux/platform_device.h>
-> +#include <linux/pm_wakeirq.h>
->  #include "pci.h"
->  
->  #ifdef CONFIG_PCI
-> @@ -586,6 +588,59 @@ int of_irq_parse_and_map_pci(const struct pci_dev *dev, u8 slot, u8 pin)
->  	return irq_create_of_mapping(&oirq);
->  }
->  EXPORT_SYMBOL_GPL(of_irq_parse_and_map_pci);
-> +
-> +static void pci_configure_wake_irq(struct pci_dev *pdev, struct gpio_desc *wake)
-> +{
-> +	int ret, wake_irq;
-> +
-> +	wake_irq = gpiod_to_irq(wake);
-> +	if (wake_irq < 0) {
-> +		pci_err(pdev, "Failed to get wake irq: %d\n", wake_irq);
-> +		return;
-> +	}
-> +
-> +	device_init_wakeup(&pdev->dev, true);
-> +
-> +	ret = dev_pm_set_dedicated_shared_wake_irq(&pdev->dev, wake_irq,
-> +						   IRQ_TYPE_EDGE_FALLING);
-> +	if (ret < 0) {
-> +		pci_err(pdev, "Failed to set wake IRQ: %d\n", ret);
-> +		device_init_wakeup(&pdev->dev, false);
-> +	}
-> +}
-> +
-> +void pci_configure_of_wake_gpio(struct pci_dev *dev)
-> +{
-> +	struct device_node *dn = pci_device_to_OF_node(dev);
-> +	struct pci_dev *upstream;
-> +	struct gpio_desc *gpio;
-> +
-> +	if (!dn)
-> +		return;
-> +
-> +	gpio = fwnode_gpiod_get(of_fwnode_handle(dn), "wake",
-> +				GPIOD_IN | GPIOD_FLAGS_BIT_NONEXCLUSIVE, NULL);
-> +	if (IS_ERR(gpio)) {
-> +		/*
-> +		 * In case the entire topology shares a single WAKE# signal, look for it
-> +		 * in the upstream bridge node. But if it is not Root Port, then skip it.
-> +		 */
+Alice Ryhl <aliceryhl@google.com> writes:
 
-This comment need to be a bit more verbose. Something like,
+> On Fri, Feb 20, 2026 at 10:51:10AM +0100, Andreas Hindborg wrote:
+>> From: Asahi Lina <lina+kernel@asahilina.net>
+>> 
+>> By analogy to `AlwaysRefCounted` and `ARef`, an `Ownable` type is a
+>> (typically C FFI) type that *may* be owned by Rust, but need not be. Unlike
+>> `AlwaysRefCounted`, this mechanism expects the reference to be unique
+>> within Rust, and does not allow cloning.
+>> 
+>> Conceptually, this is similar to a `KBox<T>`, except that it delegates
+>> resource management to the `T` instead of using a generic allocator.
+>> 
+>> [ om:
+>>   - Split code into separate file and `pub use` it from types.rs.
+>>   - Make from_raw() and into_raw() public.
+>>   - Remove OwnableMut, and make DerefMut dependent on Unpin instead.
+>>   - Usage example/doctest for Ownable/Owned.
+>>   - Fixes to documentation and commit message.
+>> ]
+>> 
+>> Link: https://lore.kernel.org/all/20250202-rust-page-v1-1-e3170d7fe55e@asahilina.net/
+>> Signed-off-by: Asahi Lina <lina+kernel@asahilina.net>
+>> Co-developed-by: Oliver Mangold <oliver.mangold@pm.me>
+>> Signed-off-by: Oliver Mangold <oliver.mangold@pm.me>
+>> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+>> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+>> [ Andreas: Updated documentation, examples, and formatting ]
+>> Reviewed-by: Gary Guo <gary@garyguo.net>
+>> Co-developed-by: Andreas Hindborg <a.hindborg@kernel.org>
+>> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+>
+>> +///         let result = NonNull::new(KBox::into_raw(result))
+>> +///             .expect("Raw pointer to newly allocation KBox is null, this should never happen.");
+>
+> KBox should probably have an into_raw_nonnull().
 
-"The devices in a hierarchy expose wakeup capability through the 'wake-gpios'
-property defined either in the device node or in the Slot node. So first check
-for the property in device node and if not available, check in the Slot node."
+I can add that.
 
-Also, move it above fwnode_gpiod_get().
+>
+>> +///    let foo = Foo::new().expect("Failed to allocate a Foo. This shouldn't happen");
+>> +///    assert!(*FOO_ALLOC_COUNT.lock() == 1);
+>
+> Use ? here.
 
-> +		upstream = pci_upstream_bridge(dev);
-> +		if (upstream && pci_is_root_bus(upstream->bus) && upstream->wake)
+Ok.
 
-Check directly in the Root Port (Slot) node.
+>
+>> +/// }
+>> +/// // `foo` is out of scope now, so we expect no live allocations.
+>> +/// assert!(*FOO_ALLOC_COUNT.lock() == 0);
+>> +/// ```
+>> +pub unsafe trait Ownable {
+>> +    /// Releases the object.
+>> +    ///
+>> +    /// # Safety
+>> +    ///
+>> +    /// Callers must ensure that:
+>> +    /// - `this` points to a valid `Self`.
+>> +    /// - `*this` is no longer used after this call.
+>> +    unsafe fn release(this: NonNull<Self>);
+>
+> Honestly, not using it after this call may be too strong. I can imagine
+> wanting a value where I have both an ARef<_> and Owned<_> reference to
+> something similar to the existing Arc<_>/ListArc<_> pattern, and in that
+> case the value may in fact be accessed after this call if you still have
+> an ARef<_>.
 
-> +			pci_configure_wake_irq(dev, upstream->wake);
+I do not understand your use case.
 
-I don't think we need to request an IRQ in the fallback case. Let's assume that
-there is a single device in hierarchy and the wake-gpios property is defined in
-the Slot node. So here, we should just let the PCI/PM core know that this device
-supports wakeup and PME_EN needs to be set (if the device is also capable of
-generating PME#).
+You are not supposed to have both an `ARef` and an `Owned` at the same
+time. The `Owned` is to `ARef` what `UniqueArc` is to `Arc`. It is
+supposed to be unique and no `ARef` can be live while the `Owned` is
+live.
 
-And then we should call pci_configure_wake_irq() from platform_pci_set_wakeup()
-to setup the IRQ handler only for the device which has the wake-gpios property.
+A `ListArc` is "at most one per list link" and it takes a refcount on
+the object by owning an `Arc`. As far as I recall, it does not provide
+mutable access to anything but the list link. To me, that is a very
+different situation.
 
-So the flow would be:
+>
+> If you modify Owned<_> invariants and Owned::from_raw() safety
+> requirements along the lines of what I say below, then this could just
+> say that the caller must have permission to call this function. The
+> concrete implementer can specify what that means more directly, but here
+> all it means is that a prior call to Owned::from_raw() promised to give
+> you permission to call it.
 
-pci_device_add()->platform_pci_init_wakeup()->of_pci_init_wakeup():
-Request fwnode_gpiod_get() and call device_init_wakeup()
-and set 'dev->wake' if WAKE# is available in the device node. If not, then check
-the Root Port (Slot) node and if WAKE# is available, then just call
-device_init_wakeup() to indicate the PCI and PM cores that this device *may*
-support wakeup.
+I don't think we need the "permission" wording. How about this:
 
-pci_enable_wake()->platform_pci_set_wakeup()->of_pci_set_wakeup():
-Request WAKE# IRQ only if the device has the wake-gpios property ie., dev->wake
-set. If only the Slot supports wakeup, then the IRQ should be requested for the
-Root Port device. This will allow us to keep both the ACPI and OF platform code
-in sync to some extent.
 
-Then once the WAKE# is asserted, the platform will wakeup with the help of the
-above wakeup event and the host controller driver will apply power to the
-hierarchy.
+/// A mutable reference to an owned `T`.
+///
+/// The [`Ownable`] is automatically freed or released when an instance of [`Owned`] is
+/// dropped.
+///
+/// # Invariants
+///
+/// - Until `T::release` is called, this `Owned<T>` exclusively owns the underlying `T`.
+/// - The `T` value is pinned.
+pub struct Owned<T: Ownable> {...}
 
-But you do not seem to call pci_pme_wakeup_bus() after resume...
 
-> +	} else {
-> +		dev->wake = gpio;
-> +		pci_configure_wake_irq(dev, gpio);
-> +	}
-> +}
-> +
-> +void pci_remove_of_wake_gpio(struct pci_dev *dev)
-> +{
+impl<T: Ownable> Owned<T> {
+    /// Creates a new instance of [`Owned`].
+    ///
+    /// This function takes over ownership of the underlying object.
+    ///
+    /// # Safety
+    ///
+    /// Callers must ensure that:
+    /// - `ptr` points to a valid instance of `T`.
+    /// - Until `T::release` is called, the returned `Owned<T>` exclusively owns the underlying `T`.
+    pub unsafe fn from_raw(ptr: NonNull<T>) -> Self {...}
+}
 
-Missing of_node check.
+pub trait Ownable {
+    /// Tear down this `Ownable`.
+    ///
+    /// Implementers of `Ownable` can use this function to clean up the use of `Self`. This can
+    /// include freeing the underlying object.
+    ///
+    /// # Safety
+    ///
+    /// Callers must ensure that the caller has exclusive ownership of `T`, and this ownership can
+    /// be transferred to the `release` method.
+    unsafe fn release(&mut self);
+}
 
-> +	dev_pm_clear_wake_irq(&dev->dev);
-> +	device_init_wakeup(&dev->dev, false);
-> +	gpiod_put(dev->wake);
-> +	dev->wake = NULL;
-> +}
->  #endif	/* CONFIG_OF_IRQ */
->  
->  static int pci_parse_request_of_pci_ranges(struct device *dev,
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index f3244630bfd05b15d52f866d80a015ed21f98f49..225cb861b3425700fc0d9d4805f5d9efcaab6f56 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -1123,6 +1123,15 @@ static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
->  	return acpi_pci_bridge_d3(dev);
->  }
->  
-> +void platform_pci_configure_wake(struct pci_dev *dev)
-> +{
-> +	return pci_configure_of_wake_gpio(dev);
-> +}
-> +
-> +void platform_pci_remove_wake(struct pci_dev *dev)
-> +{
-> +	return pci_remove_of_wake_gpio(dev);
-> +}
 
-As mentioned above, these should go away and be part of
-platform_pci_set_wakeup().
+Note `Ownable` not being an unsafe trait.
 
->  /**
->   * pci_update_current_state - Read power state of given device and cache it
->   * @dev: PCI device to handle.
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index 13d998fbacce6698514d92500dfea03cc562cdc2..22709573e41caf0ed45b20ee7ded5963f55aa9fe 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -282,6 +282,8 @@ void pci_msix_init(struct pci_dev *dev);
->  bool pci_bridge_d3_possible(struct pci_dev *dev);
->  void pci_bridge_d3_update(struct pci_dev *dev);
->  int pci_bridge_wait_for_secondary_bus(struct pci_dev *dev, char *reset_type);
-> +void platform_pci_configure_wake(struct pci_dev *dev);
-> +void platform_pci_remove_wake(struct pci_dev *dev);
->  
->  static inline bool pci_bus_rrs_vendor_id(u32 l)
->  {
-> @@ -1195,6 +1197,9 @@ void pci_release_of_node(struct pci_dev *dev);
->  void pci_set_bus_of_node(struct pci_bus *bus);
->  void pci_release_bus_of_node(struct pci_bus *bus);
->  
-> +void pci_configure_of_wake_gpio(struct pci_dev *dev);
-> +void pci_remove_of_wake_gpio(struct pci_dev *dev);
-> +
->  int devm_of_pci_bridge_init(struct device *dev, struct pci_host_bridge *bridge);
->  bool of_pci_supply_present(struct device_node *np);
->  int of_pci_get_equalization_presets(struct device *dev,
-> @@ -1240,6 +1245,9 @@ static inline int devm_of_pci_bridge_init(struct device *dev, struct pci_host_br
->  	return 0;
->  }
->  
-> +static inline void pci_configure_of_wake_gpio(struct pci_dev *dev) { }
-> +static inline void pci_remove_of_wake_gpio(struct pci_dev *dev) { }
-> +
+>
+>> +/// A mutable reference to an owned `T`.
+>> +///
+>> +/// The [`Ownable`] is automatically freed or released when an instance of [`Owned`] is
+>> +/// dropped.
+>> +///
+>> +/// # Invariants
+>> +///
+>> +/// - The [`Owned<T>`] has exclusive access to the instance of `T`.
+>> +/// - The instance of `T` will stay alive at least as long as the [`Owned<T>`] is alive.
+>> +pub struct Owned<T: Ownable> {
+>> +    ptr: NonNull<T>,
+>> +}
+>
+> I think some more direct and less fuzzy invariants would be:
+>
+> - This `Owned<T>` holds permissions to call `T::release()` on the value once.
+> - Until `T::release()` is called, this `Owned<T>` may perform mutable access on the `T`.
 
-You've added function definitions under CONFIG_OF_IRQ, but stubs under
-CONFIG_OF. This is why kernel robot also barks at you.
+I do not like the wording for mutable access. Formulating safety
+requirements for `from_raw` and safety comments for that function
+becomes convoluted like this. I'd rather formulate the
+access capability in terms of ownership;
 
-Move the stubs to include/linux/of_pci.h under CONFIG_OF_IRQ guard.
+ - Until `T::release()` is called, this `Owned<T>` exclusively owns the
+   underlying `T`.
 
-- Mani
+How is that?
 
->  static inline bool of_pci_supply_present(struct device_node *np)
->  {
->  	return false;
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index 2975974f35e88b5025701d2b721df8386419de8d..7f5132c0c8de36a6ec2775468a3d4e5156a046d0 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -2771,6 +2771,8 @@ void pci_device_add(struct pci_dev *dev, struct pci_bus *bus)
->  	/* Establish pdev->tsm for newly added (e.g. new SR-IOV VFs) */
->  	pci_tsm_init(dev);
->  
-> +	platform_pci_configure_wake(dev);
-> +
->  	pci_npem_create(dev);
->  
->  	pci_doe_sysfs_init(dev);
-> diff --git a/drivers/pci/remove.c b/drivers/pci/remove.c
-> index e9d519993853f92f1810d3eff9f44ca7e3e1abd9..d781b41e57c4444077075690cec926a9fe15334f 100644
-> --- a/drivers/pci/remove.c
-> +++ b/drivers/pci/remove.c
-> @@ -35,6 +35,7 @@ static void pci_destroy_dev(struct pci_dev *dev)
->  	if (pci_dev_test_and_set_removed(dev))
->  		return;
->  
-> +	platform_pci_remove_wake(dev);
->  	pci_doe_sysfs_teardown(dev);
->  	pci_npem_remove(dev);
->  
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 1c270f1d512301de4d462fe7e5097c32af5c6f8d..d1e08df8a8deaa87780589f23242767fdcdba541 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -586,6 +586,8 @@ struct pci_dev {
->  	/* These methods index pci_reset_fn_methods[] */
->  	u8 reset_methods[PCI_NUM_RESET_METHODS]; /* In priority order */
->  
-> +	struct gpio_desc *wake; /* Holds WAKE# gpio */
-> +
->  #ifdef CONFIG_PCIE_TPH
->  	u16		tph_cap;	/* TPH capability offset */
->  	u8		tph_mode;	/* TPH mode */
-> 
-> -- 
-> 2.34.1
-> 
-> 
+> - The `T` value is pinned.
 
--- 
-மணிவண்ணன் சதாசிவம்
+I am unsure about the pinning terminology. If we say that `T` is pinned,
+does this mean that it will never move, even if `T: Unpin`? Or is it
+implied that `T` may move if it is `Unpin`?
+
+>
+>> +    /// Get a pinned mutable reference to the data owned by this `Owned<T>`.
+>> +    pub fn as_pin_mut(&mut self) -> Pin<&mut T> {
+>> +        // SAFETY: The type invariants guarantee that the object is valid, and that we can safely
+>> +        // return a mutable reference to it.
+>> +        let unpinned = unsafe { self.ptr.as_mut() };
+>> +
+>> +        // SAFETY: We never hand out unpinned mutable references to the data in
+>> +        // `Self`, unless the contained type is `Unpin`.
+>> +        unsafe { Pin::new_unchecked(unpinned) }
+>
+> I'd prefer if "pinned" was a type invariant, rather than make an
+> argument about what kind of APIs exist.
+
+Ok.
+
+>
+>> +impl<T: Ownable + Unpin> DerefMut for Owned<T> {
+>> +    fn deref_mut(&mut self) -> &mut Self::Target {
+>> +        // SAFETY: The type invariants guarantee that the object is valid, and that we can safely
+>> +        // return a mutable reference to it.
+>> +        unsafe { self.ptr.as_mut() }
+>
+> Surely this safety comment should say something about pinning.
+
+Yes.
+
+
+Best regards,
+Andreas Hindborg
+
+
 
