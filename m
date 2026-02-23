@@ -1,65 +1,66 @@
-Return-Path: <linux-pm+bounces-43009-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43010-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yCS6EgQdnGkZ/wMAu9opvQ
-	(envelope-from <linux-pm+bounces-43009-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 10:25:24 +0100
+	id MP37AwsdnGkZ/wMAu9opvQ
+	(envelope-from <linux-pm+bounces-43010-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 10:25:31 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0334173DBE
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 10:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 809E4173DCD
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 10:25:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 65A62303FDDC
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 09:20:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CADF4306D8C3
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 09:21:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90EE434E766;
-	Mon, 23 Feb 2026 09:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C452B34EF11;
+	Mon, 23 Feb 2026 09:20:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OrMJPJ2v"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MZH3Xf6H"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F2D1DD0EF;
-	Mon, 23 Feb 2026 09:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9815234E777;
+	Mon, 23 Feb 2026 09:20:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771838455; cv=none; b=R8tuOdoyaV/Se5QYKsR+6nA/0hf2P52tOjU35bSp4fOV5InXwJ/pAukgEujAWRn37ryjo+QOeES2B/QhwoLcE8B+lSdDjuJkxo5qHBlEZCzkHhBCfpiTWjDb2Iu7ivQLJwVBuhW0jy1KEEvgRMO4frskPghHufsyA2xP+3OXeQc=
+	t=1771838456; cv=none; b=RJPyOagjHEZGNXVSE+zRVpuQQDU86MWGQNLxuParnlbvk3OgNoyyTLOncBTzy5i4G1rJn9iuz12VxQhj6YpWYWmhfx4u0ekdIKVQ+CXGGqLFPp9ukiXxUe54eARu2twzys2clPtvfpKxywLBr3KHwv46YjYELOJnsPmI8i8kStI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771838455; c=relaxed/simple;
-	bh=oibbH2O3elq6kKizouY+eGoZSYy6Gkck+b6m4nXirkk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BDiY8x++0Xmv4VF3XbYDY5T0/YjnM9edq5wySONDKd0VXUcBqa6cteWC08yoAVOPSQC5jmOVllAlBUK/j93IBDS+ICNpxIH6Ita1gAJG55qDfN7QVN7fAv9wgF+HU/PxORDQSl7IJV3Y3ezTuJFWK2EP9mrgTwYEvKQbP3uMYCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OrMJPJ2v; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1771838456; c=relaxed/simple;
+	bh=Uv3jpUhmVoyehRTPjsR3joBh7t+FveVb5u2E+JjKH+I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QFjqwcN4/cX0xlRv4fdkz/IVR7sd12JqIscGEbhhVVb6bP+QD2QozGNwsg6NFJ9vuYNtaj5dPaGTsCttfMKYPzv4UNbtZiMML1CxmnH2nZzE/nkz2tBe+LPc9ZGYM+W01YEBO2dppo444x2bJ0iCo6tHB9gPip7jECQBs0Ao9cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MZH3Xf6H; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771838453; x=1803374453;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oibbH2O3elq6kKizouY+eGoZSYy6Gkck+b6m4nXirkk=;
-  b=OrMJPJ2vBLEOrakKj4HKxqMxVtKO6F3JxRdGZ6n4QzZ0yfPL2nz24Kxv
-   w5XrxOSg8I9+xR5woJ92W9CuoNUcLQ5uf1fQuwiCoOxt+ix/wghmGsutK
-   c9o7EBeBkNpQkGf+lS69uE1exQ77Ne+LM2QnP1L0qhuLH/3QuR3E1Yzpq
-   GXJ/0EmfO+TfIKhrxABqE1ee1WtcReYmz9nZR3kEQg3G6YkvXEemvQavW
-   vB6djcUyQdjb/Jign48Nca4fIN9F/w8pPCHdy9q8uaq3TV4MosQhG7c2/
-   UhwNyP0LUWOLjceEFHh/RqHBopk8YeLkWpLIp0ZfR8tcdWkAKhnndeU+K
-   A==;
-X-CSE-ConnectionGUID: 4yNztKgnTi2FKnUqRRdIsg==
-X-CSE-MsgGUID: 9T6wXtPOSfyAgkz8HJnMPw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11709"; a="72928677"
+  t=1771838455; x=1803374455;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Uv3jpUhmVoyehRTPjsR3joBh7t+FveVb5u2E+JjKH+I=;
+  b=MZH3Xf6HhW/xRC0e2u/5awI+bQffcEQkEqV5gNbb+pQgKU6fYdVWlZ6B
+   9OKaf9Z9IR0W5ARXgYPEaugGYKho7IbAUMPW2S6lxMqHxMKJbjBd0nsdl
+   w3Kk3NsOowzdkLUWDW40znptmmscrdrDZdswU1/5SZRQVzAOY8dwt63ly
+   d2q5PkImXp2anPk7I+IqJTI2OEFkF66J7fFP30TDZouObNghjKozvIFbP
+   JsYdNDS5EE4qlyuIkrGQvs389FsCjE+cfrw0x9h6FrYoUKmQJLTsB/MXQ
+   g69KqcRQUZ4LFrlk8/RtfF6OMGsxuSGbYGMP70Spgr9Ec8K1pC0MNHvfc
+   w==;
+X-CSE-ConnectionGUID: RKsRUmSORi6BdqWsAmxbHw==
+X-CSE-MsgGUID: zq/bY3jDRHSBZBDiTAsfrw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11709"; a="72928682"
 X-IronPort-AV: E=Sophos;i="6.21,306,1763452800"; 
-   d="scan'208";a="72928677"
+   d="scan'208";a="72928682"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 01:20:53 -0800
-X-CSE-ConnectionGUID: 60x7wAOlSumMBo5mmQEbVQ==
-X-CSE-MsgGUID: AKFJ40pBT16sXvi5+KLPkA==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 01:20:55 -0800
+X-CSE-ConnectionGUID: Gr+vAtJfRF6jFyxs+DZYiA==
+X-CSE-MsgGUID: UFP61TU/SyOUyuRrPR4Vdw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,306,1763452800"; 
-   d="scan'208";a="215346045"
+   d="scan'208";a="215346051"
 Received: from fpallare-mobl4.ger.corp.intel.com (HELO ahunter6-desk) ([10.245.245.206])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 01:20:51 -0800
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 01:20:54 -0800
 From: Adrian Hunter <adrian.hunter@intel.com>
 To: alexandre.belloni@bootlin.com
 Cc: Frank.Li@nxp.com,
@@ -67,10 +68,12 @@ Cc: Frank.Li@nxp.com,
 	linux-i3c@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH V4 0/5] i3c: mipi-i3c-hci-pci: Enable IBI while runtime suspended for Intel controllers
-Date: Mon, 23 Feb 2026 11:20:36 +0200
-Message-ID: <20260223092041.104689-1-adrian.hunter@intel.com>
+Subject: [PATCH V4 1/5] i3c: mipi-i3c-hci-pci: Set d3hot_delay to 0 for Intel controllers
+Date: Mon, 23 Feb 2026 11:20:37 +0200
+Message-ID: <20260223092041.104689-2-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260223092041.104689-1-adrian.hunter@intel.com>
+References: <20260223092041.104689-1-adrian.hunter@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,7 +93,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43009-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43010-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	HAS_ORG_HEADER(0.00)[];
@@ -106,95 +109,42 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-pm];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:mid,intel.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C0334173DBE
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:mid,intel.com:dkim,intel.com:email,nxp.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 809E4173DCD
 X-Rspamd-Action: no action
 
-Hi
+Set d3hot_delay to 0 for Intel controllers because a delay is not needed.
 
-Note all patches now have Frank's Rev'd-by.
-
-
-Changes in V4:
-
-    i3c: mipi-i3c-hci: Allow parent to manage runtime PM
-	Add Frank's Rev'd-by
-
-    i3c: mipi-i3c-hci-pci: Add optional ability to manage child runtime PM
-	Add Frank's Rev'd-by
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
+---
 
 
-Changes in V3:
+Changes in V3 and V4:
 
-    i3c: master: Mark last_busy on IBI when runtime PM is allowed
-	Patch dropped
-
-    i3c: mipi-i3c-hci: Add quirk to allow IBI while runtime suspended
-	Add Frank's Rev'd-by
-
-    i3c: mipi-i3c-hci-pci: Add optional ability to manage child runtime PM
-	Remove unnecessary pm_runtime_mark_last_busy()
-
-    i3c: mipi-i3c-hci-pci: Enable IBI while runtime suspended for Intel controllers
-	Add Frank's Rev'd-by
-
+	None
 
 Changes in V2:
 
-    i3c: mipi-i3c-hci-pci: Set d3hot_delay to 0 for Intel controllers
 	Add Frank's Rev'd-by
 
-    i3c: master: Allow controller drivers to select runtime PM device
-	Patch dropped
 
-    i3c: master: Mark last_busy on IBI when runtime PM is allowed
-	Adjusted slightly for earlier changes
+ drivers/i3c/master/mipi-i3c-hci/mipi-i3c-hci-pci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-    i3c: mipi-i3c-hci: Allow parent to manage runtime PM
-	For HCI_QUIRK_RPM_PARENT_MANAGED case, change from
-	disabling runtime PM to instead causing the runtime PM
-	callbacks to do nothing
+diff --git a/drivers/i3c/master/mipi-i3c-hci/mipi-i3c-hci-pci.c b/drivers/i3c/master/mipi-i3c-hci/mipi-i3c-hci-pci.c
+index 0f05a15c14c7..bc83caad4197 100644
+--- a/drivers/i3c/master/mipi-i3c-hci/mipi-i3c-hci-pci.c
++++ b/drivers/i3c/master/mipi-i3c-hci/mipi-i3c-hci-pci.c
+@@ -164,6 +164,7 @@ static int intel_i3c_init(struct mipi_i3c_hci_pci *hci)
+ 	dma_set_mask_and_coherent(&hci->pci->dev, DMA_BIT_MASK(64));
+ 
+ 	hci->pci->d3cold_delay = 0;
++	hci->pci->d3hot_delay = 0;
+ 
+ 	hci->private = host;
+ 	host->priv = priv;
+-- 
+2.51.0
 
-    i3c: mipi-i3c-hci-pci: Add optional ability to manage child runtime PM
-	Do not enable autosuspend.
-	Callbacks for parent-managed invocation were renamed
-	from i3c_hci_runtime_suspend to i3c_hci_rpm_suspend and
-	from i3c_hci_runtime_resume to i3c_hci_rpm_resume.
-	Amend commit message slightly.
-
-    i3c: mipi-i3c-hci-pci: Enable IBI while runtime suspended for Intel controllers
-	Retain HCI_QUIRK_RPM_ALLOWED
-	Amend commit message accordingly
-
-
-Here are patches related to enabling IBI while runtime suspended for Intel
-controllers.
-
-Intel LPSS I3C controllers can wake from runtime suspend to receive
-in-band interrupts (IBIs).
-
-It is non-trivial to implement because the parent PCI device has 2 I3C bus
-instances (MIPI I3C HCI Multi-Bus Instance capability) represented by
-platform devices with a separate driver, but the IBI-wakeup is shared by
-both, which means runtime PM has to be managed by the parent PCI driver.
-
-To make that work, the PCI driver handles runtime PM, but leverages the
-mipi-i3c-hci platform driver's functionality for saving and restoring
-controller state.
-
-
-Adrian Hunter (5):
-      i3c: mipi-i3c-hci-pci: Set d3hot_delay to 0 for Intel controllers
-      i3c: mipi-i3c-hci: Add quirk to allow IBI while runtime suspended
-      i3c: mipi-i3c-hci: Allow parent to manage runtime PM
-      i3c: mipi-i3c-hci-pci: Add optional ability to manage child runtime PM
-      i3c: mipi-i3c-hci-pci: Enable IBI while runtime suspended for Intel controllers
-
- drivers/i3c/master/mipi-i3c-hci/core.c             |  35 +++++-
- drivers/i3c/master/mipi-i3c-hci/hci.h              |   7 ++
- drivers/i3c/master/mipi-i3c-hci/mipi-i3c-hci-pci.c | 135 +++++++++++++++++++++
- 3 files changed, 172 insertions(+), 5 deletions(-)
-
-Regards
-Adrian
 
