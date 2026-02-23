@@ -1,67 +1,67 @@
-Return-Path: <linux-pm+bounces-43007-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43008-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IPWdOD8WnGkq/gMAu9opvQ
-	(envelope-from <linux-pm+bounces-43007-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 09:56:31 +0100
+	id yJa+I6gWnGkq/gMAu9opvQ
+	(envelope-from <linux-pm+bounces-43008-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 09:58:16 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6361517357D
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 09:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D40D1735A9
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 09:58:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5D6383014766
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 08:56:29 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5338B3029A7E
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 08:58:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4357D34DB52;
-	Mon, 23 Feb 2026 08:56:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1719434DB7F;
+	Mon, 23 Feb 2026 08:58:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ATXOXq1H"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VfT4Z6Gn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0630E34DB7E;
-	Mon, 23 Feb 2026 08:56:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECC534DCDF;
+	Mon, 23 Feb 2026 08:58:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771836988; cv=none; b=B1tDSZn3Lbkveytk6PKDtDgfkQrmOPxugug389IeIec82tdYKBLhxoKRiSvWJEcZt9VeABIdiT36KAJGgBntWC8YSxgTFlANJIwjPOtsVsTl1osYiUcNv0rS5J6OIhuiT8tDzSjsI7TecvOR3g+3p+PvA/Yy9PrD7B3tAjl7FVQ=
+	t=1771837090; cv=none; b=pjA7BOrslx3gpZQijCCoIDYzdxmIrPL/wWlv+nwGFdd6pVBTd9/0/mxaGEpAA2oJOYGW3anXtoCEs/wlTk9yZumu6S6nGdIpJNzdTqqaKttQPN1qwg0POr3RGH7EaZHuAhF8Q621fehoQO5lreP7LU2khBYrC4dwNggdrSY15+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771836988; c=relaxed/simple;
-	bh=vTxb26YHC2bRnF15WcUVg9+N/0yuey9uzbRSyk1F6sA=;
+	s=arc-20240116; t=1771837090; c=relaxed/simple;
+	bh=Ngc0//nsKMhxzUW0W1XhdpkPjpuyDMO5L5jYaVXufF8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PA9kB7o4HSJI/IjPDQFPwJ4B99NVjCIPUPKS2JNyNOlcUFIDmP9gEREAuI4m3Ns/zsp//kudJ5QLUV47ptHiNjVukTlxc0D42T6jsmgktbkevuQlOTv6c4U8BD6OzdDqVywdb6XvqPyBgpl99P64tKEHzWZ8Aiukgf001OkTIa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ATXOXq1H; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=QcKsRPISnoZhiRsukktBxPsSAwRG+efuxYyo/wKZwMaPfMweYQFZrhX6WLZeCKrM4Q421Xuts4Xs1v6zEYfM1AesYusV+DZfKDClwM4YD2RNIi5LTpu4RKrVYsc7d9+lqQkAWat+NAGkxmr4xLEwKvEIxdtOdfWLdc93wzUmlus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VfT4Z6Gn; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771836987; x=1803372987;
+  t=1771837089; x=1803373089;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=vTxb26YHC2bRnF15WcUVg9+N/0yuey9uzbRSyk1F6sA=;
-  b=ATXOXq1H1TOD6UVAt9Sf2dRR4dvxSkt4SyiUwtPGQXf6xP632Nnt0ScS
-   u5kdpTD9t973BBI8IpdGrdWQY/u+gv4pJUpII+DCadhTkue2RWysLL4OK
-   m7YVbwGT40WgY2VdXdLhCN3/TwE/ghgb2fPfJXPdqK6cHVIGnAL4454/Y
-   //KmCTUUusHWpGhcXKVvZpBSAo+3aivVCYi6IxYBfL+oFCTmfNJ8wVEDM
-   dWV6C457DQSsNa1+4VRO7EmS0D2qrF597aM2aVi3Yi1YImYQ8yYJYM1FX
-   C4NdUsvRtsaj8IOS8OQOWpHzhERg8Mpvbg0gg2WphVHQtrNhGlLcW8Rxr
-   A==;
-X-CSE-ConnectionGUID: yRDa/9+5RX+naFRNWs6prw==
-X-CSE-MsgGUID: dotElPPDTDK9kTYnPEIzvQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11709"; a="95443372"
+  bh=Ngc0//nsKMhxzUW0W1XhdpkPjpuyDMO5L5jYaVXufF8=;
+  b=VfT4Z6GnfkciudcbHnfsuotZcM4JyZKdgQI/fv7GhpFyPcWTSA/E9gO9
+   KM8o4RQtjVbvhJ/G/rC4jeIsFddMsMznnlWdJkrs3zxHY6yz+zNo9GQfw
+   o3RMmWKQH5hr1kuuRXDsi9wT8XPd0g39VrFE+x5IfpnHok0kJhJverzZ2
+   Bk1ReoJqBa30LJwaVq4/ZGC+3sT0kA5nTejSm/J8e25Ppy9mIqMpVaMr4
+   ESk/X1p1V7TYmA8AhCobkRPOJ+YWBpzMW9msJ0c2GC4/qjc41OzNKcSZF
+   EPStrof4M91v0C8YjGxmM4k6Imvd8lHfeyMpjba6o3od0B5aIdIGZULIk
+   w==;
+X-CSE-ConnectionGUID: XNajc0Q1QASTcMuqrPIrDQ==
+X-CSE-MsgGUID: lTdWyfgCSbisVK1dVaYjzQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11709"; a="84188581"
 X-IronPort-AV: E=Sophos;i="6.21,306,1763452800"; 
-   d="scan'208";a="95443372"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 00:56:26 -0800
-X-CSE-ConnectionGUID: ChybxgAWQCaFwtRmsXad8A==
-X-CSE-MsgGUID: weYH3rz0QoGnqBoexHAGNQ==
+   d="scan'208";a="84188581"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 00:58:08 -0800
+X-CSE-ConnectionGUID: 6dbkBlWcQpekmjJk8Yu6Xw==
+X-CSE-MsgGUID: LIs0ElR+SfGL2UTDHKAZ9w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,306,1763452800"; 
-   d="scan'208";a="214581172"
+   d="scan'208";a="219617271"
 Received: from abityuts-desk.ger.corp.intel.com (HELO localhost) ([10.245.245.222])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 00:56:21 -0800
-Date: Mon, 23 Feb 2026 10:56:18 +0200
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 00:58:02 -0800
+Date: Mon, 23 Feb 2026 10:57:59 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -83,11 +83,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org, chrome-platform@lists.linux.dev
-Subject: Re: [PATCH 1/9] workqueue: devres: Add device-managed allocate
- workqueue
-Message-ID: <aZwWMiYEvr3DXi3E@smile.fi.intel.com>
+Subject: Re: [PATCH 3/9] power: supply: max77705: Free allocated workqueue
+ and fix removal order
+Message-ID: <aZwWl57oJln1xH5m@smile.fi.intel.com>
 References: <20260223-workqueue-devm-v1-0-10b3a6087586@oss.qualcomm.com>
- <20260223-workqueue-devm-v1-1-10b3a6087586@oss.qualcomm.com>
+ <20260223-workqueue-devm-v1-3-10b3a6087586@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -96,7 +96,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260223-workqueue-devm-v1-1-10b3a6087586@oss.qualcomm.com>
+In-Reply-To: <20260223-workqueue-devm-v1-3-10b3a6087586@oss.qualcomm.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 X-Rspamd-Server: lfdr
@@ -110,7 +110,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,lwn.net,gmail.com,manjaro.org,linaro.org,collabora.com,chromium.org,lists.linux.dev,vger.kernel.org,lists.infradead.org];
-	TAGGED_FROM(0.00)[bounces-43007-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43008-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	HAS_ORG_HEADER(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
@@ -129,67 +129,60 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[smile.fi.intel.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:dkim]
-X-Rspamd-Queue-Id: 6361517357D
+X-Rspamd-Queue-Id: 0D40D1735A9
 X-Rspamd-Action: no action
 
-On Mon, Feb 23, 2026 at 08:27:29AM +0100, Krzysztof Kozlowski wrote:
-> Add a Resource-managed version of alloc_workqueue() to fix common
-> problem of drivers mixing devm() calls with destroy_workqueue.  Such
-> naive and discouraged driver approach leads to difficult to debug bugs
-> when the driver:
+On Mon, Feb 23, 2026 at 08:27:31AM +0100, Krzysztof Kozlowski wrote:
+> Use devm interface for allocating workqueue to fix two bugs at the same
+> time:
 > 
-> 1. Allocates workqueue in standard way and destroys it in driver
->    remove() callback,
-> 2. Sets work struct with devm_work_autocancel(),
-> 3. Registers interrupt handler with devm_request_threaded_irq().
+> 1. Driver leaks the memory on remove(), because the workqueue is not
+>    destroyed.
 > 
-> Which leads to following unbind/removal path:
+> 2. Driver allocates workqueue and then registers interrupt handlers
+>    with devm interface.  This means that probe error paths will not use a
+>    reversed order, but first the destroy workqueue and then, via devm
+>    release handlers, free the interrupt.
 > 
-> 1. destroy_workqueue() via driver remove(),
->    Any interrupt coming now would still execute the interrupt handler,
->    which queues work on destroyed workqueue.
-> 2. devm_irq_release(),
-> 3. devm_work_drop() -> cancel_work_sync() on destroyed workqueue.
-> 
-> devm_alloc_workqueue() has two benefits:
-> 1. Solves above problem of mix-and-match devres and non-devres code in
->    driver,
-> 2. Simplify any sane drivers which were correctly using
->    alloc_workqueue() + devm_add_action_or_reset().
-
->  include/linux/workqueue.h                        | 32 ++++++++++++++++++++++++
->  kernel/workqueue.c                               | 32 ++++++++++++++++++++++++
-
-Hmm... We have devm-helpers.h. Why the new one is in workqueue.h?
-Can we have some consistency here?
+>    The interrupt handler schedules work on this exact workqueue, thus if
+>    interrupt is hit in this short time window - after destroying
+>    workqueue, but before devm() frees the interrupt, the work scheduling
+>    will lead to use of freed memory.
 
 ...
 
-> +	ptr = devres_alloc(devm_destroy_workqueue, sizeof(*ptr), GFP_KERNEL);
-> +	if (!ptr)
-> +		return NULL;
-> +
-> +	va_start(args, max_active);
-> +	wq = alloc_workqueue(fmt, flags, max_active, args);
-> +	va_end(args);
-> +	if (wq) {
-> +		*ptr = wq;
-> +		devres_add(dev, ptr);
-> +	} else {
-> +		devres_free(ptr);
-> +	}
+>  	ret = devm_request_threaded_irq(dev, regmap_irq_get_virq(irq_data, MAX77705_CHGIN_I),
+>  					NULL, max77705_chgin_irq,
+>  					IRQF_TRIGGER_NONE,
+>  					"chgin-irq", chg);
+> -	if (ret) {
+> -		dev_err_probe(dev, ret, "Failed to Request chgin IRQ\n");
+> -		goto destroy_wq;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to Request chgin IRQ\n");
 
-Why not using devm_add_action_or_reset()?
+This should be just
+
+		return ret;
+
+
+devm_*_irq() prints the message. No need to repeat this in the caller(s).
 
 ...
 
-> +void devm_destroy_workqueue(struct device *dev, void *res)
-> +{
-> +	destroy_workqueue(*(struct workqueue_struct **)res);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_destroy_workqueue);
+>  	ret = devm_request_threaded_irq(dev, regmap_irq_get_virq(irq_data, MAX77705_AICL_I),
+>  					NULL, max77705_aicl_irq,
+>  					IRQF_TRIGGER_NONE,
+>  					"aicl-irq", chg);
+> -	if (ret) {
+> -		dev_err_probe(dev, ret, "Failed to Request aicl IRQ\n");
+> -		goto destroy_wq;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to Request aicl IRQ\n");
 
-Is this going to be used?
+Ditto.
 
 -- 
 With Best Regards,
