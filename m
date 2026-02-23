@@ -1,224 +1,151 @@
-Return-Path: <linux-pm+bounces-43068-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43069-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OGBZNq+wnGmYJwQAu9opvQ
-	(envelope-from <linux-pm+bounces-43068-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 20:55:27 +0100
+	id YJdvFuuwnGmYJwQAu9opvQ
+	(envelope-from <linux-pm+bounces-43069-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 20:56:27 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8551F17C91B
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 20:55:27 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C689117C939
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 20:56:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F385F3040475
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 19:55:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8C75B30488E7
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 19:56:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CECD1374744;
-	Mon, 23 Feb 2026 19:55:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9943E374752;
+	Mon, 23 Feb 2026 19:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNi8FQkh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C7mg8C26"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CD324C692;
-	Mon, 23 Feb 2026 19:55:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7514B165F16;
+	Mon, 23 Feb 2026 19:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771876510; cv=none; b=hmx5FHfLG/z9fGhnetnzXFCDrhRMjikZiznyZ5bVBXVIheFk/2VH47seT83lGtMPKHEHB4gwJ99WLGQLOjRUN8vf9NcjyX8f5aIp4jRZ88+Q6Trs7qMEBETF/h6L1PeiwMZZO91cclPQ7kxps8D3/x8Ce7g2vKrGE9J059s3iig=
+	t=1771876584; cv=none; b=CvfIZf5rmxfefk0sT5wTaulyf6XpMi2252K285B65RYLo8/Xxq0I+1Xw7GX0S52m8eL5Uu3AxACpobFSLktaUgQOfTJfAdfzXkW86WFO/Ic3d6QIM45t6QAIbm5PGF8Mjhaz6y8MkKeNNo9nJwE7+jCh+BR/MXWhaUx+mtKyIW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771876510; c=relaxed/simple;
-	bh=i7p1CmNCkpa7NXd9zIoDHL+Mlb5Osw0tzfGBKWXI128=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=MX5yTfwMqdSMKX88TF1el767BXURG7Rs/0mA1gRtsc9HOc1jeizXpesyKV2Gg4EFM8aIr8rEs13WqIBxiLRuLoQ5POwzOuIZvgQvxYKQAKPl+8yWb4HojAN+khs41W4iNZHyfbHf02LgGhkv1ssvvW65k0/583B8GFx9TLpLOWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNi8FQkh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D50AC116C6;
-	Mon, 23 Feb 2026 19:55:10 +0000 (UTC)
+	s=arc-20240116; t=1771876584; c=relaxed/simple;
+	bh=fUdTKyGY0sCgBkhNIkCLCe+hZ2qWhwjcWgdiva+w5eQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AOkA/ZPhv6X/0vk8a6wU34MUGNTMZOXlZKOWiv5yZe2FPouzAYiLxLPXQKqqNjpGKfAQgmerImujx0Ox65bx3DXKWQiaf+1BfTPBxYUwcmphrM6YZpwj8Y/dsuFqF4GoihXkaT33YiJ9AmwC85gFfrPvglDvKtFXCQ7aV4DLy5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C7mg8C26; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D615EC116D0;
+	Mon, 23 Feb 2026 19:56:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771876510;
-	bh=i7p1CmNCkpa7NXd9zIoDHL+Mlb5Osw0tzfGBKWXI128=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=cNi8FQkh1tR1+gLalvCR2h4vd1UPNsR4NYnjRtbue7OOiJD6d8rJYIPGiExF7wIya
-	 QyvPktXMmsNoCjSttoEHWkJapKD+D4x6MzO3KrJc6Jqe7kYXZmreQLEQ6FMR0k34+m
-	 O/AeadylZMKNIQ7tD8U8KnAbdssJfQOk6YvOO4DcE8uN1N82VJU15Wl7NyC3R+ZWa4
-	 sz4jlFM8P++iMwoPXGlf4U0FDeOA4856SM66lLy8itnt3gh5AMIfxSkvyPnMYEAvVs
-	 TC0C3PiN/WBEdesl5UnlpAD12/+wupJKbsMqlObn0i8Sn5slngkFfuWe3DL7xqGDZN
-	 caC3VkVozKl9A==
-Date: Mon, 23 Feb 2026 13:55:08 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
-	Jingoo Han <jingoohan1@gmail.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, jonathanh@nvidia.com,
-	bjorn.andersson@oss.qualcomm.com, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] PCI: host-common: Add helper to determine host
- bridge D3cold eligibility
-Message-ID: <20260223195508.GA3703404@bhelgaas>
+	s=k20201202; t=1771876584;
+	bh=fUdTKyGY0sCgBkhNIkCLCe+hZ2qWhwjcWgdiva+w5eQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=C7mg8C26QqGX9PJTYG7QFHrx7ajIu10k4NsgNNxPIzJuj/BqKkABUGSDWsu3F32CL
+	 Xu24wOlsZOccm61v1igfTiUZYDsAx+1lRzFe+MlqMI/Sb0EdUPF4WPfL50h9OP5qWj
+	 nkCuqmUy/kFzT6Mvydsdi6DtVQ8Y+crHzn+Bnv8bSwziwq3Ykxi0Uq2DTqWIN6ttmO
+	 YaPR12hNzhZS+e82qQJPNck3ABEDqISGhx6ohgMHlIBLU/S9cNrEUFWkIlLUzPXhRO
+	 86iyUa4rogkyvteFdOwCfO0maNqnd/SVQ7V/4IBBYWvSFm3MBfNvQF6OK3UIMV+dT+
+	 Woj5Ltdwwvh2g==
+From: Bjorn Andersson <andersson@kernel.org>
+To: konradybcio@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	sre@kernel.org,
+	heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org,
+	Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+Cc: linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: (subset) [PATCH v5 0/5] soc: qcom: pmic_glink: Add support for battery management running on SOCCP
+Date: Mon, 23 Feb 2026 13:56:06 -0600
+Message-ID: <177187657318.166046.16981095492238346823.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260209204915.1983997-1-anjelique.melendez@oss.qualcomm.com>
+References: <20260209204915.1983997-1-anjelique.melendez@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0h8dQ10oH4KQM8Pdv0jvXyTE6yD1fn5eBPkS_jDYgA8gQ@mail.gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43068-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43069-lists,linux-pm=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[oss.qualcomm.com,gmail.com,kernel.org,google.com,vger.kernel.org,lists.infradead.org,nvidia.com];
-	RCPT_COUNT_TWELVE(0.00)[16];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[helgaas@kernel.org,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[andersson@kernel.org,linux-pm@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8551F17C91B
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: C689117C939
 X-Rspamd-Action: no action
 
-On Mon, Feb 23, 2026 at 07:46:08PM +0100, Rafael J. Wysocki wrote:
-> On Mon, Feb 23, 2026 at 7:10 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Tue, Feb 17, 2026 at 04:49:06PM +0530, Krishna Chaitanya Chundru wrote:
-> > > Add a common helper, pci_host_common_can_enter_d3cold(), to determine
-> > > whether a PCI host bridge can safely transition to D3cold.
-> > >
-> > > This helper is intended to be used by PCI host controller drivers to
-> > > decide whether they may safely put the host bridge into D3cold based on
-> > > the power state and wakeup capabilities of downstream endpoints.
-> > >
-> > > The helper walks all devices on the bridge's primary bus and only allows
-> > > the host bridge to enter D3cold if all PCIe endpoints are already in
-> > > PCI_D3hot. This ensures that we do not power off the host bridge while
-> > > any active endpoint still requires the link to remain powered.
-> > >
-> > > For devices that may wake the system, the helper additionally requires
-> > > that the device supports PME wake from D3cold (via WAKE#). Devices that
-> > > do not have wakeup enabled are not restricted by this check and do not
-> > > block the host bridge from entering D3cold.
-> > >
-> > > Devices without a bound driver and with PCI not enabled via sysfs are
-> > > treated as inactive and therefore do not prevent the host bridge from
-> > > entering D3cold. This allows controllers to power down more aggressively
-> > > when there are no actively managed endpoints.
-> >
-> > This series is currently structured so it's only applicable to native
-> > host bridge drivers, i.e., things using DT.  Is there anything that
-> > prevents using D3cold for host bridges in ACPI systems?
+
+On Mon, 09 Feb 2026 12:49:10 -0800, Anjelique Melendez wrote:
+> System On Chip Control Processor (SOCCP) is a subsystem that can have
+> battery management firmware running on it to support Type-C/PD and
+> battery charging. Add support for devices, such as Kaanpali and Glymur,
+> which are running battery management on SOCCP.
 > 
-> Do you mean in principle or in practice?
+> Changes since v4:
+>   - Defined Glymur and Kaanapali compatible strings as "base" compatibles
+>   - Split v4 p4/4 into 2 separate patches (v5 p2/5 and v5 p3/5)
+>   - Added Glymur and Kaanapali compatible strings for pmic_glink auxiliary
+>     drivers
+>   - Link: https://lore.kernel.org/all/20260114211759.2740309-1-anjelique.melendez@oss.qualcomm.com/
+> Changes since v3:
+>   - Added "dt-bindings: soc: qcom: qcom,pmic-glink: Update X1E80100 compatible string"
+>     and "usb: typec: ucsi: ucsi_glink: Add support for X1E80100" to series
+>   - Corrected bindings dependencies
+>   - Renamed pmic_glink_data structs
+>   - Link: https://lore.kernel.org/all/20251217055655.638594-1-anjelique.melendez@oss.qualcomm.com/
+> Changes since v2:
+>   - Updated bindings dependencies
+>   - Removed qcom,glymur-pmic-glink compatible string from pmic_glink driver list
+>   - Link: https://lore.kernel.org/all/20251027212250.3847537-1-anjelique.melendez@oss.qualcomm.com/
+> Changes since V1:
+>   - Corrected bindings dependencies
+>   - Renamed pmic_glink_data variables
+>   - Dropped "soc: qcom: pmic_glink: Add support for SOCCP remoteproc channels"
+>     since it was applied from its original series:
+>     https://lore.kernel.org/all/176157405464.8818.5887965202916918883.b4-ty@kernel.org/
+>   - Link: https://lore.kernel.org/all/20251017003033.268567-1-anjelique.melendez@oss.qualcomm.com/
+> 
+> [...]
 
-Just in principle.  I was hoping for some way to tie this decision
-making back to a spec.  Everything downstream being in D3 already, and
-any wakeup devices supporting PME from D3cold sounds plausible to me,
-but I don't know about any prescriptive spec language, and I wouldn't
-want to get locked into a scheme that couldn't be supported on ACPI.
+Applied, thanks!
 
-> x86 platforms don't support PCI host bridge PM AFAICS and the ACPI
-> driver doesn't support PM either.  I'd rather not add it ad hoc
-> because of this patch series.
+[1/5] dt-bindings: soc: qcom: qcom,pmic-glink: Add Glymur and Kaanapali compatibles
+      commit: aed7440146548cbbcb36780ccc6f9db4cf18f832
+[2/5] soc: qcom: pmic_glink: Add charger PDR service information to client data
+      commit: 540262793df13d90274aae90aa70584ef6fb3aa4
+[3/5] soc: qcom: pmic_glink: Add support for Glymur and Kaanapali
+      commit: 9386d9e8cc72edc1a55ee1337c442b3ceff1d1ba
 
-Agreed.
-
-> > > Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-> > > ---
-> > >  drivers/pci/controller/pci-host-common.c | 45 ++++++++++++++++++++++++++++++++
-> > >  drivers/pci/controller/pci-host-common.h |  2 ++
-> > >  2 files changed, 47 insertions(+)
-> > >
-> > > diff --git a/drivers/pci/controller/pci-host-common.c b/drivers/pci/controller/pci-host-common.c
-> > > index d6258c1cffe5ec480fd2a7e50b3af39ef6ac4c8c..b0a4a3c995e80e0245657f0273a349334071013c 100644
-> > > --- a/drivers/pci/controller/pci-host-common.c
-> > > +++ b/drivers/pci/controller/pci-host-common.c
-> > > @@ -106,5 +106,50 @@ void pci_host_common_remove(struct platform_device *pdev)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(pci_host_common_remove);
-> > >
-> > > +static int pci_host_common_check_d3cold(struct pci_dev *pdev, void *userdata)
-> > > +{
-> > > +     bool *d3cold_allow = userdata;
-> > > +
-> > > +     if (pci_pcie_type(pdev) != PCI_EXP_TYPE_ENDPOINT)
-> > > +             return 0;
-> > > +
-> > > +     if (!pdev->dev.driver && !pci_is_enabled(pdev))
-> > > +             return 0;
-> > > +
-> > > +     if (pdev->current_state != PCI_D3hot)
-> > > +             goto exit;
-> > > +
-> > > +     if (device_may_wakeup(&pdev->dev) && !pci_pme_capable(pdev, PCI_D3cold))
-> > > +             goto exit;
-> > > +
-> > > +     return 0;
-> > > +exit:
-> > > +     *d3cold_allow = false;
-> > > +     return -EBUSY;
-> > > +}
-> > > +
-> > > +/**
-> > > + * pci_host_common_can_enter_d3cold - Determine whether a host bridge may enter D3cold
-> > > + * @bridge: PCI host bridge to check
-> > > + *
-> > > + * Walk downstream PCIe endpoint devices and determine whether the host bridge
-> > > + * is permitted to transition to D3cold.
-> > > + *
-> > > + * The host bridge may enter D3cold only if all active PCIe endpoints are in
-> > > + * %PCI_D3hot and any wakeup-enabled endpoint is capable of generating PME from
-> > > + * D3cold. Inactive endpoints are ignored.
-> > > + *
-> > > + * Return: %true if the host bridge may enter D3cold, otherwise %false.
-> > > + */
-> > > +bool pci_host_common_can_enter_d3cold(struct pci_host_bridge *bridge)
-> > > +{
-> > > +     bool d3cold_allow = true;
-> > > +
-> > > +     pci_walk_bus(bridge->bus, pci_host_common_check_d3cold, &d3cold_allow);
-> > > +
-> > > +     return d3cold_allow;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(pci_host_common_can_enter_d3cold);
-> > > +
-> > >  MODULE_DESCRIPTION("Common library for PCI host controller drivers");
-> > >  MODULE_LICENSE("GPL v2");
-> > > diff --git a/drivers/pci/controller/pci-host-common.h b/drivers/pci/controller/pci-host-common.h
-> > > index b5075d4bd7eb31fbf1dc946ef1a6afd5afb5b3c6..18a731bca058828340bca84776d0e91da1edbbf7 100644
-> > > --- a/drivers/pci/controller/pci-host-common.h
-> > > +++ b/drivers/pci/controller/pci-host-common.h
-> > > @@ -20,4 +20,6 @@ void pci_host_common_remove(struct platform_device *pdev);
-> > >
-> > >  struct pci_config_window *pci_host_common_ecam_create(struct device *dev,
-> > >       struct pci_host_bridge *bridge, const struct pci_ecam_ops *ops);
-> > > +
-> > > +bool pci_host_common_can_enter_d3cold(struct pci_host_bridge *bridge);
-> > >  #endif
-> > >
-> > > --
-> > > 2.34.1
-> > >
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
