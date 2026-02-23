@@ -1,63 +1,100 @@
-Return-Path: <linux-pm+bounces-43059-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43060-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UKpNIfGSnGnRJQQAu9opvQ
-	(envelope-from <linux-pm+bounces-43059-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 18:48:33 +0100
+	id WA8xDYuUnGnRJQQAu9opvQ
+	(envelope-from <linux-pm+bounces-43060-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 18:55:23 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2ACF17B0CD
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 18:48:32 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EE2117B288
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 18:55:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DA0713008A5A
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 17:45:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 93B63304A2EF
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 17:55:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D63843382E4;
-	Mon, 23 Feb 2026 17:45:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 901A133A6F0;
+	Mon, 23 Feb 2026 17:55:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E9x7G4jR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dH3ig7Dc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFFBE337BBF;
-	Mon, 23 Feb 2026 17:45:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B76333970F
+	for <linux-pm@vger.kernel.org>; Mon, 23 Feb 2026 17:55:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771868753; cv=none; b=DnbDwHBnUxnrd3/1F6MY6sqU3koneTnFGzQpeCKxSUpwqbMOdAwSpnbSKrMDzB4gS9tJoMbFsRsYbUZ3VARGbFdDYz6KwnD4kbchXTZfBQ5JeunWJTHsAoWW4/Zq/gUir8FCfgXmAcKvn02LHgemiwr/8y+O8I5cz3Zbo1naulA=
+	t=1771869315; cv=none; b=Fwj5x4hkjNYmrNJ6fYuDz0CG+kBg2gbVtk7ey1pzNzIX9wz5ujGkdvbdW13LdY8DS/obpZHD9M4b/ugMwzrlDjfcXaRS2NiHuR7MHapAAUyTlQdiZA5M+zFhZsua8Wp47OfoLYzq1z5CoTgG5JEdgdTjcwIvYVmAP990UQrOaOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771868753; c=relaxed/simple;
-	bh=t1u9ZUKsO/VeLrH9SoqNc6k8gKeSI/ecTL9SL8oMUPs=;
+	s=arc-20240116; t=1771869315; c=relaxed/simple;
+	bh=JF1KZ8us1B4UC6UAm56h5UA3Lh/N4+4s3jylcnX4xUQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i6vK6h4ttfAj3zShBzm1HHOEqb0DVewuwEg4304L0HA8uxVcPQep9S3tPbPcaogo3sQ9RdFJhe6nx+YF3Ku2gRF2tqhG0sXmWFJnorCJHuu0uMp96zsEmJxFUXz34p1ke93BDoB6h3mF2VICt5YN5GaMMA4FLXqggkzX4WT3IKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E9x7G4jR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C81C116C6;
-	Mon, 23 Feb 2026 17:45:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771868753;
-	bh=t1u9ZUKsO/VeLrH9SoqNc6k8gKeSI/ecTL9SL8oMUPs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E9x7G4jRuexobYHdSyWkem67PHlAPwBTpSI5UtTM/BZ4fNKdkdEOldTIHECVHqjv9
-	 YXYlwcNcc6ovFi/TzEcTprSls6K4ckP0MVAjtaS7lxc0+Wpcktlx2WV2e/NSWthqzF
-	 3wmOsEPNH0cNp3/Bdrn/tKPtt7PSOd1FCXjIOI45nnZkC/ILoW+hTL6vgeVqy6pgvv
-	 516Hw+wxmxVdK8gRBfN15/tzr5KeUG8BSOaUSCqYJvnNuGvQ1e7TTLgDjADyZTViUV
-	 JGus0M8EDaDQ2f5YEYR2QUE5ALP1dguJfmkHknAe7GgEOH4BLTik+DyEYksD+A7iRT
-	 gV/HiASnKPSOQ==
-Date: Mon, 23 Feb 2026 11:45:52 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
-	Amit Kucheria <amitk@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: Add Eliza SoC TSENS
-Message-ID: <177186875170.4166014.1658011099228218847.robh@kernel.org>
-References: <20260212161949.120898-2-krzysztof.kozlowski@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PlImLXUn9Q+dFKurL4Ql64JIwy8EMSkYTqRw+xU4Gp3r83MHOLhBRqfO96wihHvGjoP/Xl41dERSd/HabW63dLtY0Z02FoN+SUeOe3zQbpVumvb5YtuFQmqgqnrsPp3KkNk+UwFWzqC4VrUyEZ5r9tStjKms4ACouhuPM2vcblk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dH3ig7Dc; arc=none smtp.client-ip=74.125.82.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-12776bebe9fso93339c88.1
+        for <linux-pm@vger.kernel.org>; Mon, 23 Feb 2026 09:55:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771869312; x=1772474112; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8S3D2amG83bMjq3rYrixdtz5QNwrXVFuIOF99KB48r8=;
+        b=dH3ig7DcgoD2/IW68Ckw0bdharNJTHMFc8etCmoR7iPRba+y5eJ54Y/r9E7U/Iuhod
+         Ldi7g3QsXsNHLG/DmGqqjxwdZ9JL40yDti4z6Nc2tM7xmz8HnDo6RWArOd3yX0fz5Hsd
+         xjDXOs8dtiFrX/7NHm3illACfYNA9365Qet69FJ5E8x8HVGAevDgBcbxjwiG6JJX4GQG
+         4q9ElXskCyiGdnCjF7jYImsZyd3+vA8sSie3IHYr6H/nv5Y76UwBX0a3MPhNq+4AHVa9
+         UutxyWd5vr9DxURjxnQDQsygsoC8EgZzOM1gJb5Q6yFuWuPmSh0yJT4oiF2hOGJkAQDZ
+         X9kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771869312; x=1772474112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8S3D2amG83bMjq3rYrixdtz5QNwrXVFuIOF99KB48r8=;
+        b=jyacfeSZrSM6Xgt0DMEOENhpuK6UHISJCg4uukz0aX49bCJLvvaJih90oZcIkKujir
+         //u++PeLByhHqalWq3C9f4ghbJoXHsuamVMaINFdz7mwlPwY1t/GnV/CjQf3fHOMRPkz
+         vmoL2N+2MFMR/HNMH4aJ74fopQ9lhFBpW8m0lLGXHnOO2hWDllKlZwraR27I2eeA4Zsa
+         NVMY+nd7j8UwXFg2zT7mkB5jANFXRwpXhz2gAAsqUL0ocam5wQq1norGQhOTwjUCKpxm
+         KsN39Ic7w+j0Zs3IdGZPjTXzPC9FPwKAA56te8mpMKn4f+yrjk9Yi/XZBdj71mWbg8Oy
+         6aBA==
+X-Forwarded-Encrypted: i=1; AJvYcCV2wU8gAxZGXmBIPoZRdRid7j1t7YqG+T92wH7qhZF8ssbcMYeC11vOCIrQobEOFQ22TOZUB7vKkQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz50R11IR3kCDvZDilw0oeKitPR44s/JpCv/9G+ld+ZpXdusuGU
+	CQJWVCMPwfNG/iY8xwFpg6KvMbmAwjMspWTQlgynIyAJMG4NiW8gk8YU
+X-Gm-Gg: AZuq6aJAZwHPjZ4omTdbbn8EyAVbYDQEMZvX8VxlKx9DIs2UdDjAxf+HZX5cbIJ+Zk1
+	aGJyiQQJAejmRPR5NseRcJ81ok6r6Kf+zG2ARpeH346K6OMW8kCH+7SzFT7VJT0Nvgsu4/9Nj0j
+	xsnW2zHc3CWfKmV73jObGd8C6pn/hX+LwEq1iscqLRmr47F+LGqz6Qwnxm5Z8Xgf8JFuOlD7YWp
+	BnYMkUHmWPbohD3BfzUCx4YnCZwn1Baao1Rt4Hlc4I87qZIQnKRLhRaE9BAtWEGSq0d9llmaME7
+	FxHKZcuNKxtm5pCz4ELsAyM/ciTGoGwFBmYePWv9vvRhFrp3mkT3nv+sYjjyhfHJL8/VMM3YcUM
+	hW/6SdvFU0susIFuOYdOuOLd/GFylJy61HussteL7yABFG+F6DCtgFX61ucQh6RQ5MyaCwa/npR
+	PovFVV8VlovyMLVntzVSp7McI19GZ7kpECbnSkM0TGPB+vu18vefKlLBOHz1v2wkBhTdfI7gfYh
+	I4=
+X-Received: by 2002:a05:7022:2214:b0:11b:9386:a3bf with SMTP id a92af1059eb24-1276ad61a70mr4534016c88.42.1771869312175;
+        Mon, 23 Feb 2026 09:55:12 -0800 (PST)
+Received: from google.com ([2a00:79e0:2ebe:8:1b48:5d6e:ab6e:5287])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1276af7ad65sm7334624c88.11.2026.02.23.09.55.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Feb 2026 09:55:11 -0800 (PST)
+Date: Mon, 23 Feb 2026 09:55:08 -0800
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Luca Leonardo Scorcia <l.scorcia@gmail.com>
+Cc: linux-mediatek@lists.infradead.org, Val Packett <val@packett.cool>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Sen Chu <sen.chu@mediatek.com>, 
+	Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
+	Lee Jones <lee@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Eddie Huang <eddie.huang@mediatek.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Gary Bisson <bisson.gary@gmail.com>, 
+	Julien Massot <julien.massot@collabora.com>, Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>, 
+	Fabien Parent <parent.f@gmail.com>, Chen Zhong <chen.zhong@mediatek.com>, 
+	linux-input@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 7/9] input: keyboard: mtk-pmic-keys: add MT6392 support
+Message-ID: <aZyUXip4zgeDUdVQ@google.com>
+References: <cover.1771865014.git.l.scorcia@gmail.com>
+ <2c96591313084d240ac94b9d42d91d984fa9bce7.1771865015.git.l.scorcia@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,60 +103,55 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260212161949.120898-2-krzysztof.kozlowski@oss.qualcomm.com>
+In-Reply-To: <2c96591313084d240ac94b9d42d91d984fa9bce7.1771865015.git.l.scorcia@gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,vger.kernel.org,intel.com,arm.com,linaro.org];
-	TAGGED_FROM(0.00)[bounces-43059-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-43060-lists,linux-pm=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[lists.infradead.org,packett.cool,kernel.org,mediatek.com,gmail.com,collabora.com,bootlin.com,vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[27];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[dmitrytorokhov@gmail.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email]
-X-Rspamd-Queue-Id: F2ACF17B0CD
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 9EE2117B288
 X-Rspamd-Action: no action
 
+On Mon, Feb 23, 2026 at 05:12:46PM +0000, Luca Leonardo Scorcia wrote:
+> From: Val Packett <val@packett.cool>
+> 
+> Add support for the MT6392 PMIC to the keys driver.
+> 
+> Signed-off-by: Val Packett <val@packett.cool>
+> Signed-off-by: Luca Leonardo Scorcia <l.scorcia@gmail.com>
 
-On Thu, 12 Feb 2026 17:19:50 +0100, Krzysztof Kozlowski wrote:
-> Document the compatible for Qualcomm Eliza SoC TSENS module, fully
-> compatible with TSENS v2 generation (e.g. SM8650).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-> 
-> ---
-> 
-> Eliza SoC is being upstreamed and the compatible will be used in DTSI
-> posted later/soon.
-> 
-> Some existing work:
-> https://lore.kernel.org/r/20260119095907.172080-4-krzysztof.kozlowski@oss.qualcomm.com/
-> https://lore.kernel.org/linux-arm-msm/?q=eliza
-> ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Please feel free to merge with the rest of the series.
 
+Thanks.
+
+-- 
+Dmitry
 
