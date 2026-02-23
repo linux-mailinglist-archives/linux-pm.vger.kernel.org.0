@@ -1,244 +1,175 @@
-Return-Path: <linux-pm+bounces-42981-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42982-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id Tfg4Or6Om2lN2AMAu9opvQ
-	(envelope-from <linux-pm+bounces-42981-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 00:18:22 +0100
+	id +KiJOe2Ym2k23AMAu9opvQ
+	(envelope-from <linux-pm+bounces-42982-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 01:01:49 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 566D8170B79
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 00:18:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40E91170E16
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 01:01:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DCA7D300A535
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Feb 2026 23:18:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 049DB302262C
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Feb 2026 00:01:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FFD635294E;
-	Sun, 22 Feb 2026 23:18:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11C421799F;
+	Mon, 23 Feb 2026 00:01:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="E5EBItJ2";
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="Hr3sEs+G";
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="Hr3sEs+G"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Ik7jGYFq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail1.bemta41.messagelabs.com (mail1.bemta41.messagelabs.com [195.245.230.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392881D514E;
-	Sun, 22 Feb 2026 23:18:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.245.230.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B411F3EBF06
+	for <linux-pm@vger.kernel.org>; Mon, 23 Feb 2026 00:01:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771802299; cv=none; b=LEEAYBW5ab9etvqmGwseGkcyw2wXzjycofNpSUzTT109qU2/peZcHLcoIyYjVAIEki/UJgHSLdiFRSwHIeoKWwKOpZHt3EsxN/9QH/SBR8pDGbTKzQElquQZ/JGqvNVBPN0XZHiZVXKA8t9hc7puH+dpZu/kvAMw9Dk12oyeFDI=
+	t=1771804894; cv=none; b=glkEZ+gG8LVUZKj2kTELc5CVYK8QwivzyV5qdoGKzqgNJ41AsjK3mpK31jHdo8k5eESR14akWbXehS8Z2NwBMAuLMKKRKvPk9gBFWYyIiGMLa+h7WvRObZWm8bwR2yQqZmmcwFKQlPjCGUqcmqbTW/aav6w+PVaJN2tcEenl+Do=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771802299; c=relaxed/simple;
-	bh=Bp1kcCAzTgPy3IlFrjGUNEol6PjJwCi9eAmQmhXFT7s=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tWEVDYPzA/DuP6rRYaMuU9LDUF93NYj9bweCOJWCxj1oIpQCmKx+4mS8XgEBGazsBRH5OnWTXuEgaTSxjRtx1GuKfn0M1AmwwXI8U3sCKAOacPPecKZD2N8m7OqsHF+dw3gFpy5BW0+XFDAVout7OYEuMZP8y9H6BvojjfYCd6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=E5EBItJ2; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=Hr3sEs+G; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=Hr3sEs+G; arc=none smtp.client-ip=195.245.230.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-	s=170520fj; t=1771802295; i=@fujitsu.com;
-	bh=FdhqfBmWI1Vf3l9kwQ3rKzdU4/e6QfF0KHGTJW93ihI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	b=E5EBItJ2ZzovLF2zFZUe5VkoWiBx0M09mCqe95aL2KtbR28YG148xPPGpQLUxkaQv
-	 oZHWENsotDPRHcxLddOhBEQSE8uZ7rBq22HUaPcuwG2FlB8I+Ar08n3d3bb1ZTTnjl
-	 HNt62ccS/kZFeQgUAtm9jg4OqlZR0HWj5f+r1NZzrf+OrvniFcY4ARmKbG+o7JVwFs
-	 zABSLYjdxNsl2FyXGGqdVJOopdgXY717EHNnpEnrotPq+MVdeY9VjIu5G8h0BBgP/j
-	 3czCHi/UdVPuy9rKS7ThzxayGxH4zThDWENk2CgfwGlgqx6GsMH9weLZ3PNounhXEg
-	 0qejh6HWRzHSQ==
-X-Brightmail-Tracker: H4sIAAAAAAAAA12Se0xTZxjG+51bD5eSQ4FxBjq3ZrqMSPGSsS8
-  4QJwxZzFB54bJXIYWOLadpTQ9ZYLLRhFQRkWRrRJawJIamAXlJggb5ZbKqOmGcatTNsYmFxFm
-  GMIGyCXrGcG5/fd83/N7n/f54yVRcS8RQrIZOlarlqkkhDcW8wZZHG47a1ZucU5ugoPDtwi4M
-  DsF4PmKvxA4U79CwBLjLQD77mUTsOZeLYA51joC9jctEbBz9AEGzSU5CCxudaPQVnmHgKYv7A
-  jsN93EYLvdicHvvyoj4EyhA8C8ikcA5o8aEXh5fgmH+VN6FH5T2IXA8lkjCn++UAVgyfgyDmt
-  np1H4U18/DgeKehG4OO8J6HAMYTs3MHN5ZzEm7/YywbSZBoVMruMRzjR9GcZY2x8iTKPtM4Lp
-  LK8VMuNNpYDpmlgGjNGcxbgsDiEz0/gCs2juBfv9DuFKdVJaxhFc0ddSJ9TU+GVcclqFeuD2K
-  QBepJi6BuiGEn9eY9Q++mrTiLAAeHt0C0Z/a7hG8A8xdRqhl1fawBplsZxD/0fxUeWAHu2O5j
-  VBRdB3Py/7ZyCQCqRbF/swfgCl7AR95et8lDcCqETaUZ3t2Ud6kjbSVfrN/LeIiqFn7+QhvKa
-  pDfRFoxPntRe1g84xzOM8Lqai6O6mvau4P+0sHcF4jXrwnGYzujq6iXZ/14gWgQDTM5jpGcwC
-  EBuAHKv9iNWGvyZN0irlCl2qTKmSyk6EJ0vZdG2ahg0/znK6rVJ5skbKcpyUy0xNVqVI1ayuE
-  XiOyfuPl4JagWslL6IHPE8ikiBRfLxJKfZLSkvJVMg4xWFtuorlesA6kpTQokuFZqXYX8vK2Y
-  yjSpXnJNdsmvSVBIreyfXYIk4jS+WU8lXrJthONvzSZUfJ6YfGblSMqdPUbEiwaIxPonhUka5
-  +GrR23rfB+pAAERAIBGJfDatNVer+60+AYBJIAkQ2gyfFV6nWPd034amCeKp4JZXyVXSyf60Q
-  PbJ+dPuupLdiccsrzVOjgWcuxv6KO1Q19mMyQ9tAw+GUOJ/2qLq06u7BYoltrvSHgwXNPp+ec
-  F0X7IgMfTPh/JP3MXvvLr+Rjy/L548PPX59qWLu5c7MCx3GxLfHgne78P6F36NiC19dAcW7rV
-  GnDcxwke5k6Lt/Vp6kHvx4td5chfS4J4e8DrRUv1j2OEGwZfruqYEjbXs/mf6g/sMD+mr/rG0
-  7D1nHBef2rHRLvV1npIly6/2y4Rp79gL3ZKOkIy6+LKg3JbYGfS7CGcRFXulDwqI1Ryfdlhs5
-  bOR7lY6s2NAbXvv3/Xbq+ma/mJ5j7WETwbnlYwa9PjohTr4udVvXfdeegxKMU8i2hqFaTvY3+
-  NSwnVkEAAA=
-X-Env-Sender: tomasz.wolski@fujitsu.com
-X-Msg-Ref: server-10.tower-859.messagelabs.com!1771802282!263770!1
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received:
-X-StarScan-Version: 9.121.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 20350 invoked from network); 22 Feb 2026 23:18:02 -0000
-Received: from unknown (HELO n03ukasimr02.n03.fujitsu.local) (62.60.8.146)
-  by server-10.tower-859.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 22 Feb 2026 23:18:02 -0000
-Received: from n03ukasimr02.n03.fujitsu.local (localhost [127.0.0.1])
-	by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTP id E1ED7101B94;
-	Sun, 22 Feb 2026 23:18:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 n03ukasimr02.n03.fujitsu.local E1ED7101B94
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-	s=dspueurope; t=1771802281;
-	bh=FdhqfBmWI1Vf3l9kwQ3rKzdU4/e6QfF0KHGTJW93ihI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Hr3sEs+GEio8hQDyw1dFhDgofUT9QivKc/WVOEThGr9l8BD5LlauRupLNEQAFA9cT
-	 QwdQPUDdjow3G3ekqJur+xks7NE9iV2V9begC4IXxpm/UQoisNfzOxKB17BaWsFUbW
-	 cllAryfmypQE2S0j14Axp938N9zqz/7UKFgGhnBJpsuPxORxuH+dotN1snuhHblEnx
-	 S0RSf43hcjpUOikbsNhhWgS3gQuJ/dMo99qcgm6pLrwfMfJavR7Nepffa+TypLTJxS
-	 f/y8R1YEbTa06i9lNRbGGBRRhn9W4kwxQ7B2yzCP5wxUdNnWNjX7u9WgSML4c2rWle
-	 T6k9Yp50/rEHA==
-Received: from ubuntudhcp (unknown [10.172.107.4])
-	(using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTPS id BF990100B55;
-	Sun, 22 Feb 2026 23:18:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 n03ukasimr02.n03.fujitsu.local BF990100B55
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-	s=dspueurope; t=1771802281;
-	bh=FdhqfBmWI1Vf3l9kwQ3rKzdU4/e6QfF0KHGTJW93ihI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Hr3sEs+GEio8hQDyw1dFhDgofUT9QivKc/WVOEThGr9l8BD5LlauRupLNEQAFA9cT
-	 QwdQPUDdjow3G3ekqJur+xks7NE9iV2V9begC4IXxpm/UQoisNfzOxKB17BaWsFUbW
-	 cllAryfmypQE2S0j14Axp938N9zqz/7UKFgGhnBJpsuPxORxuH+dotN1snuhHblEnx
-	 S0RSf43hcjpUOikbsNhhWgS3gQuJ/dMo99qcgm6pLrwfMfJavR7Nepffa+TypLTJxS
-	 f/y8R1YEbTa06i9lNRbGGBRRhn9W4kwxQ7B2yzCP5wxUdNnWNjX7u9WgSML4c2rWle
-	 T6k9Yp50/rEHA==
-Received: from isar2.ecs00.fujitsu.local (unknown [10.172.183.27])
-	by ubuntudhcp (Postfix) with ESMTP id 394F12205E4;
-	Sun, 22 Feb 2026 23:18:01 +0000 (UTC)
-From: Tomasz Wolski <tomasz.wolski@fujitsu.com>
-To: skoralah@amd.com
-Cc: alison.schofield@intel.com,
-	ardb@kernel.org,
-	benjamin.cheatham@amd.com,
-	bp@alien8.de,
-	dan.j.williams@intel.com,
-	dave.jiang@intel.com,
-	dave@stgolabs.net,
-	gregkh@linuxfoundation.org,
-	huang.ying.caritas@gmail.com,
-	ira.weiny@intel.com,
-	jack@suse.cz,
-	jeff.johnson@oss.qualcomm.com,
-	jonathan.cameron@huawei.com,
-	len.brown@intel.com,
-	linux-cxl@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	lizhijian@fujitsu.com,
-	ming.li@zohomail.com,
-	nathan.fontenot@amd.com,
-	nvdimm@lists.linux.dev,
-	pavel@kernel.org,
-	peterz@infradead.org,
-	rafael@kernel.org,
-	rrichter@amd.com,
-	smita.koralahallichannabasappa@amd.com,
-	terry.bowman@amd.com,
-	tomasz.wolski@fujitsu.com,
-	vishal.l.verma@intel.com,
-	willy@infradead.org,
-	yaoxt.fnst@fujitsu.com,
-	yazen.ghannam@amd.com
-Subject: Re: [PATCH v6 0/9] dax/hmem, cxl: Coordinate Soft Reserved handling with CXL and HMEM
-Date: Mon, 23 Feb 2026 00:17:59 +0100
-Message-Id: <20260222231759.12403-1-tomasz.wolski@fujitsu.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <0b0eb8bb-44a5-422d-8d5b-070fb039ed68@amd.com>
-References: <0b0eb8bb-44a5-422d-8d5b-070fb039ed68@amd.com>
+	s=arc-20240116; t=1771804894; c=relaxed/simple;
+	bh=ZFV4pbi0wIK53693SAmlhLcWSmpe3LjzqEIO8JvTwJg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gP3Ex2bGBdEXRHym2tzyBNS0uaA8rxU8lrL8Krn/c80MZKBxMDRse2zx5BK3SND4rI/TJwMUE+dToB1QKr52oYYqO4++lcKV+FIhrzrFPgdWys0bqF/S4aX9BtIP6ixSurmviv2oHdfdZjfVlpnqK9tfdVkLyauctwChsxNtUc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Ik7jGYFq; arc=none smtp.client-ip=209.85.210.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7d4c65d744cso2180632a34.3
+        for <linux-pm@vger.kernel.org>; Sun, 22 Feb 2026 16:01:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1771804889; x=1772409689; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nf3cd3Ow7fpmhEaunFtWMxQ62yJiyFWj+ZVPMJhUhgs=;
+        b=Ik7jGYFqTM4+khw6hpzqzXxtFwhZAA/ywCMgTyy7NDk+yywW0F1TCl9QwFMwI9OlO3
+         pLbmX7CsKxadj9nnsJBn6MIxZYGi+rp9RhOgPMeauIB6TkDeJznCb5f5a1BIvk/kaK1d
+         8qD9ebpWWwPWjEhry/hJAoMFyTC9+J6t57IVfmQUz8lVJ9i6TCPay8cyDMQZP9FXyJmH
+         O9N0ugbrXOq3uZlfH0oKoD+NAbR4STO77FCxdJ/+MwXJwIEYuVHhCSThYJnjocnLvFWY
+         k99ajGXZSgzS17WVyl/k2wr1gRNdnA8McKBTF8jgZQgMrmPbssKUXtT8VE7r1Zs8armD
+         zktg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771804889; x=1772409689;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nf3cd3Ow7fpmhEaunFtWMxQ62yJiyFWj+ZVPMJhUhgs=;
+        b=wACWuXAmO1o+cEfdCNNegYD8W1xQfhRHB8cQ0AJ+ClxSNorrbiiPIBf2oWXWiZjwc4
+         hrKC+H8nCFDgbidqE6y2Yi7aXG1xEe1v/w/LHzFl9bNnxXKAnKVcsHh4T1dyGwzZjNxk
+         2rFSqjdSb2ln+i6fA7ag0Cbw0ONeIpXe3n5BRLEy/2Uyj0MEQaxYg8EDWaYvWM01FSM3
+         +Gf1Ds7VL/UHhcP0JM7M7pVF74pWeD33/1R+W4gtsx9Sg05ZSLiKLD+qlZVJSSbTDJ/S
+         2rRxFDOBlkUQUlrsiflUNA6KoHyxtqx9jEWGP+em5yE8uNoHde7JvO3Yi/vHFWeJGTtK
+         9pPA==
+X-Gm-Message-State: AOJu0YwFQfHjqN3w7TU7eWe8dOxPwcY/Peix1jVbutQxDo/29s9zC96w
+	BeL6DuZpeA1FhvE8q6L1MnGiaaVOMDuf4eH1vx/Y8xoBjpkq51HaWbdRVgLFezK3KIM=
+X-Gm-Gg: AZuq6aJ/HCF/K6pia4bOSbjVYwLH14L6suZSxv4TCa3irZyPHBTwZj+Wm7jjk7nr2vc
+	Ju5dNN6i6sK/zJfzP/UYTRYLr3fiaX47pC0KNWTrVn3on0tY+hiF9Q9qJceDZnKG8Uz89myy4cS
+	ky5c1p7JY18e9H5V4f3fuinQfGWqS7u7gPD41duhqzi8UBrXi22TWRlcRbIRt0B65kAak0qhfEB
+	G4vcoKuTzbCdIiBQTyJbF8gQ/bTqVrFi67asZ2TK2A5qxur8927c2Pobltd5NT9Wf3eqOrJIp/P
+	zZRJZ8LWpNCYYXCQIwiGFu9dPe3X+1KEiC5njBFPW27ydDpsE4WQwTAGRCETMuARRFyDCMAUuEc
+	4+Gj2bfLn0r8ZkFmNKNSVnR22vC1qWyAQc9fxvU2ujNCAQ6AXwNPWWlfup0V6MnZDVyaafD/WR9
+	dX7dmc5mz/Dhx3zUyKfWn4Rvhc9I/sh2G52FkRjYPtc+jp3I+ITafILLc4lKlRdhhA1Y9PieQ=
+X-Received: by 2002:a05:6830:82dc:b0:7cf:d213:7ecf with SMTP id 46e09a7af769-7d52bf5324bmr3724174a34.32.1771804889597;
+        Sun, 22 Feb 2026 16:01:29 -0800 (PST)
+Received: from ?IPV6:2600:8803:e7e4:500:e37:2309:3937:4469? ([2600:8803:e7e4:500:e37:2309:3937:4469])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d52d038804sm5803026a34.18.2026.02.22.16.01.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Feb 2026 16:01:29 -0800 (PST)
+Message-ID: <b1d73d74-ab1c-4cb6-89c0-20444ac02c4c@baylibre.com>
+Date: Sun, 22 Feb 2026 18:01:28 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6/6] OPP: Use mutex locking guards
+To: Viresh Kumar <viresh.kumar@linaro.org>, Viresh Kumar
+ <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>
+Cc: linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org
+References: <cover.1745490980.git.viresh.kumar@linaro.org>
+ <cb4bdf07e512e39af4c9142679c1361ce76e9336.1745490980.git.viresh.kumar@linaro.org>
+Content-Language: en-US
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <cb4bdf07e512e39af4c9142679c1361ce76e9336.1745490980.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[fujitsu.com,reject];
-	R_DKIM_ALLOW(-0.20)[fujitsu.com:s=170520fj,fujitsu.com:s=dspueurope];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[baylibre-com.20230601.gappssmtp.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-42981-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[intel.com,kernel.org,amd.com,alien8.de,stgolabs.net,linuxfoundation.org,gmail.com,suse.cz,oss.qualcomm.com,huawei.com,vger.kernel.org,fujitsu.com,zohomail.com,lists.linux.dev,infradead.org];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[fujitsu.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_TWELVE(0.00)[34];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tomasz.wolski@fujitsu.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_SEVEN(0.00)[7];
+	DKIM_TRACE(0.00)[baylibre-com.20230601.gappssmtp.com:+];
+	TAGGED_FROM(0.00)[bounces-42982-lists,linux-pm=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[baylibre.com];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[fujitsu.com:mid,fujitsu.com:dkim,fujitsu.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 566D8170B79
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dlechner@baylibre.com,linux-pm@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,baylibre.com:mid,linaro.org:email,baylibre-com.20230601.gappssmtp.com:dkim]
+X-Rspamd-Queue-Id: 40E91170E16
 X-Rspamd-Action: no action
 
-Hi Smita,
->Hi Tomasz,
->
->On 2/20/2026 1:45 AM, Tomasz Wolski wrote:
->> Tested on QEMU and physical setups.
->> 
->> I have one question about "Soft Reserve" parent entries in iomem.
->> On QEMU I see parent "Soft Reserved":
->> 
->> a90000000-b4fffffff : Soft Reserved
->>    a90000000-b4fffffff : CXL Window 0
->>      a90000000-b4fffffff : dax1.0
->>        a90000000-b4fffffff : System RAM (kmem)
->> 
->> While on my physical setup this is missing - not sure if this is okay?
->> 
->> BIOS-e820: [mem 0x0000002070000000-0x000000a06fffffff] soft reserved
->> 
->> 2070000000-606fffffff : CXL Window 0
->>    2070000000-606fffffff : region0
->>      2070000000-606fffffff : dax0.0
->>        2070000000-606fffffff : System RAM (kmem)
->> 6070000000-a06fffffff : CXL Window 1
->>    6070000000-a06fffffff : region1
->>      6070000000-a06fffffff : dax1.0
->>        6070000000-a06fffffff : System RAM (kmem)
->
->Thanks for testing on both setups!
->
->On QEMU: there is no region, so HMEM took ownership of the Soft Reserved 
->range (REGISTER path). Patch 9 then reintroduced the Soft Reserved entry 
->back into the iomem tree to reflect HMEM ownership.
->
->On physical setup: CXL fully claimed both ranges, region0 and region1 
->assembled successfully (DROP path). Since CXL owns the memory, there's 
->no Soft Reserved parent to reintroduce.
->
->Soft Reserved appears in /proc/iomem only when CXL does not fully claim 
->the range and HMEM takes over. Your physical setup is showing it 
->correctly. Maybe CXL_REGION config is false or region assembly failed on 
->and has cleaned up on QEMU so there aren't any regions?
+On 4/24/25 5:36 AM, Viresh Kumar wrote:
+> Use mutex locking guard in the OPP core.
+> 
+> No intentional functional impact.
 
-Thanks a lot for clarifying the behavior.
-I checked QEMU again and it works as you described (sorry, I must've
-mixed something up in my notes during previous test)
-
->Thanks,
->Smita
+There is an unintentional functional change here.
 
 > 
-> Tested-by: Tomasz Wolski <tomasz.wolski@fujitsu.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+
+...
+
+> @@ -2660,17 +2632,16 @@ struct dev_pm_opp *dev_pm_opp_xlate_required_opp(struct opp_table *src_table,
+>  		return ERR_PTR(-EBUSY);
+>  
+>  	for (i = 0; i < src_table->required_opp_count; i++) {
+> -		if (src_table->required_opp_tables[i] == dst_table) {
+> -			mutex_lock(&src_table->lock);
+> +		if (src_table->required_opp_tables[i] != dst_table)
+> +			continue;
+>  
+> +		scoped_guard(mutex, &src_table->lock) {
+>  			list_for_each_entry(opp, &src_table->opp_list, node) {
+>  				if (opp == src_opp) {
+>  					dest_opp = dev_pm_opp_get(opp->required_opps[i]);
+>  					break;
+>  				}
+>  			}
+> -
+> -			mutex_unlock(&src_table->lock);
+>  			break;
+>  		}
+>  	}
+
+scoped_guard() is implemented as a for loop. So now this break statement
+breaks out out the scoped_guard() and not out of the outer for loop. Now
+the outer loop always iterates to completion.
+
+Assuming each item in src_table->required_opp_tables is unique, this doesn't
+look like a bug. Rather it is just doing unnecessary extra iterations.
+
+To preserve the logic, the break should be moved out of the scoped_guard().
+
 
