@@ -1,184 +1,193 @@
-Return-Path: <linux-pm+bounces-43083-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43084-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ENQmIiMPnWnoMgQAu9opvQ
-	(envelope-from <linux-pm+bounces-43083-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 03:38:27 +0100
+	id uD1/IdQUnWkGMwQAu9opvQ
+	(envelope-from <linux-pm+bounces-43084-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 04:02:44 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0BC0181103
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 03:38:26 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0C211813C6
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 04:02:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1CFF03052BAA
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 02:38:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4F54C303EB80
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 03:02:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ECB022D4C3;
-	Tue, 24 Feb 2026 02:38:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56FC24BBF0;
+	Tue, 24 Feb 2026 03:02:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jst2vhew"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="REchMWN0";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="jECF49Ar"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4409F239E7F
-	for <linux-pm@vger.kernel.org>; Tue, 24 Feb 2026 02:38:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CDE726A0C7
+	for <linux-pm@vger.kernel.org>; Tue, 24 Feb 2026 03:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771900704; cv=none; b=iKTQkEKnoi22hKV63IfrAPzeF0/SdrhA6cMkzmu5ewXnxcHIRh0Alp/JA+QgoK6G5Q2jdEdumB+1Vfe+9+Q0hRovE3cdU1bQebt9pFxiPp2SzCFoeZzsroDmGnkDQjsxQJkyg401ToHGnwNi40VwNdChLH+6DxgwUBfsDEWJhig=
+	t=1771902159; cv=none; b=ehL4fsqHBlZgyiYctgNvKVi0EXvF0PHF2bNIhfeOLqnUth+pQX+HMOMFdxHcqOTDfdUhKuO7Jst03J8gxYL8QfpiSJiyqSpSuXj7jBmkG6uow2tPl1rcbJRokyddLs1hlMtdS+SFBMZYFZ+SuaE9OCgaWrnZFwL7DrjFuznI1zM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771900704; c=relaxed/simple;
-	bh=fn2u73mBSTbAd/EdpQfH9E2MCEctzADYuwz366K+YQY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h3ECAn7bEgwyH41BvMGpvsUGwwtLavS/MYLFtFWAGJBwxeXkNngmW4fjvgWBWk0RNGdr/x8o3aaqb/qFXT6zZkrsNdpyL6buKEsxe7bPcG0ZXXapZUHcmxRLrAFmIGe2EKa4R97rMHNP6+7DwvSC69VdQmtrt1SXUqvFHt33p5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jst2vhew; arc=none smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-896f44dc48dso46253076d6.2
-        for <linux-pm@vger.kernel.org>; Mon, 23 Feb 2026 18:38:23 -0800 (PST)
+	s=arc-20240116; t=1771902159; c=relaxed/simple;
+	bh=GO/u1prp16seK96r3KI5iXXMSm99vaPLp1pCX+ibIb8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RERJthp0aW/hbsBRIlKZFiZLKXrjtrzs7dlInxU9VkDQXj+xN0US1LCiXxAAbR5+OcLOlPpMADeiHTmaZSCq7os4wn5z/Varra1kx0E7KDAwmOp5iSTPai6lSQDQldeN0zLKhCthKumuztjKKyeZW3rDpmm6otC17Br2qyyatvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=REchMWN0; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=jECF49Ar; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61O2m7CM1265689
+	for <linux-pm@vger.kernel.org>; Tue, 24 Feb 2026 03:02:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=HrTy39PWaXTC438yhpHEFLsb
+	zyunpBoR5NQZvAr9AzQ=; b=REchMWN0s8t5ugMR1rbIF5uzO56kTcguYoPRN3yx
+	hsWNx3SYhbrF7toRZCPlgeowXihawVyY7LCze5QYtJv3n8nmYe5QoBd+f5QGDgZm
+	MMGJM0XecovhksAImBRAVBLPWa1t/YayPLpP4GPPcwjLA0nUeZApiS6kHtmE7JKY
+	AULbVQypuPI6Y4ndEzOONurRuBHBKiQkWDLD3o/JyFcJwck8GrlAUj969cZ8kKkO
+	II8Ks6CojIM46cJml6uTISCP/tkRwvjCZ2fWEhAgFlNGAXXOYcwIXmcFrL3y0/MX
+	6An+AlkrBgal9BnShrF0EfJ5S8GPSGCib3ysYAF24c2Fpw==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cgn8ttnv3-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 24 Feb 2026 03:02:37 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8c7166a4643so5019179185a.0
+        for <linux-pm@vger.kernel.org>; Mon, 23 Feb 2026 19:02:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771900702; x=1772505502; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uHi4kGutlHIiCP5G7IafBayijdH0c6FDLs2gsnvP6Rc=;
-        b=jst2vhewThOnLiMiXBgE4suG6tMMKaYmHbaDifof2ujJzbh9QS3pNJjIckoULbXkLN
-         Ax6INe+0l4GDsvJIAtSrbV9Dl1xC7m7gMtyJkI8aOLeIgbBovVI+LwIZuptnYQ/g7BG5
-         Hvr61z1eJ0KujUToVGylGWe34R+mNIjN3XlIQLfe/UnelW0jctstp69cJ+SKlU2soneK
-         XEvWNFOAIu66JfvrkmrjJglOl1llSHocTesJHNsFqxJ6/Guwnm0iyaYwsQI020Tx3hTR
-         h92V4LSZ6LwH6x+13qyaEPeFcb5MINDSHdWQ73m4dsODsblMmVKm6b7HyZ7dP7kQasCv
-         KfbA==
+        d=oss.qualcomm.com; s=google; t=1771902157; x=1772506957; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HrTy39PWaXTC438yhpHEFLsbzyunpBoR5NQZvAr9AzQ=;
+        b=jECF49ArC4XqapZGjyH6yjDtT9EDa0F5lmSiADSyE37iRGnXC6BlMi7aFpOpnsw45E
+         8Hf08lpDCmMAUYIMmMOEIFIRzk1CtWlt27mxnoEBZsLt1Yd6hUY/agm0FgFWUIqiuvqM
+         ZQ1e0floYrtEu4ZoiVvbsBXXcBlLSkMkHtNXhI78sbQ/eA9s1ybbFfJdX6eIKj2IhVAu
+         rFCaD7n5mFpOPhulrDNGX8dhJpFAaQDcs3bOM1hAVvINTW1jkcX1J1vVZ4WjloVEgdl/
+         hdLlzQ4k/sIeoLjOI3w1l1v4WOfDu4bXTlvCGOljdC5YxmSmJORzi0Fg1CEkWETn/TFh
+         kHuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771900702; x=1772505502;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uHi4kGutlHIiCP5G7IafBayijdH0c6FDLs2gsnvP6Rc=;
-        b=uecdZlRHEf/3ZAsRc8cG+zVWKKgeEkbnqnhdYYHRjvgCgT1hql+1hP9uYG9X6+TAQm
-         rEyJgEkeaRUOVBod97HIlQeubmSizfteSLfaXdGlvPnQaRmYMnZQ2kcL/DhMoRApdPaE
-         VdGL2sy0V+BZJs7/Dt6lzKhn4uFA6n6E63OcZJaWVcSOyAbSX/3vKwhJhqs2CUH2NXgF
-         sCzVSlobKMxCDvdDWPohBe5i4ZiDPpzyCJTtOvV3+EuDtEEnKK5cPkUAJmwjEEp1HV4S
-         +ffQ69IIGH+VH2NCFCFU1FSGrepE5R6foGEkuButsHGOA9i5Qz0sM9aEHSOU7cSVs3ws
-         QRwg==
-X-Gm-Message-State: AOJu0YxU8dRiiaeZHPs3wquPiRmntIMoM/thENgg9OPx+9yMP/u0FXqC
-	Zwu4uVEeRfJNJpdR2mp/I0HOv+E4drZCJJgXTXRbFBmodoIEmKeaUWDO
-X-Gm-Gg: ATEYQzx22KAy/Jb+dZHF+z40mfbZ5ys1BAhvlzPb0Wlp4zjsf0HoZsSqRKTh1V1PBCA
-	sTf8DyuIwSZGYgDFaCSWnUyCdxX9+SNZYIQjp8Zk5qAPbAoPpPIvuyfTpMUOzJHbSgWRVf233yv
-	lkZegKZa5hK71XjH0cOzAhAZisx5pLZmfc6I09ZPgO8k7tta1j91iVtbQCR4ulsWzfIei5BZ3Ec
-	MbBPuy2ExJNQfUiIvPc8zfFxLnruha+s7Y0L73YICQqc8kT6CF9nWYTrKMYdvNnqdIieN/fls+k
-	xRCoVtygOZF8WpLUXYarLi24Gu4gExoXblQwQV/ABxmpCJJeT383PBD5xdO4Ms8yVCN/8olhady
-	wrEQG/NX8A5vjrifid+1pN9sdWh25lEqIjhdOoNjnI6FoOJZPKcrNkMKL3h5Cg7OV0/6DRBstbA
-	GBs6LZBMiDNC4ZXTGXizTYrX0teZX/VX3fk3tOTDW/nMU0xmjHeNYDjWSii6JOnAks1LEZUa6+w
-	ew=
-X-Received: by 2002:ad4:5942:0:b0:895:5dd:3d48 with SMTP id 6a1803df08f44-89979d85395mr168711276d6.59.1771900702162;
-        Mon, 23 Feb 2026 18:38:22 -0800 (PST)
-Received: from localhost.localdomain (modemcable231.2-131-66.mc.videotron.ca. [66.131.2.231])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8997c691243sm82072666d6.3.2026.02.23.18.38.21
+        d=1e100.net; s=20230601; t=1771902157; x=1772506957;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HrTy39PWaXTC438yhpHEFLsbzyunpBoR5NQZvAr9AzQ=;
+        b=CUBPg8h/+YkOf2Mw885c1pulUnWMOtMqCkOhM+lGgTEjTzzfFoka+Qg2qNgVCeiq5f
+         mJMTmfPs0l9QwfpeQmimg8g67ylsMBRz1X1mqlrUqXrXZZnMbXWTnjLyhU05GvDZv7D7
+         PMXI5bQ9QyoURONikesyk9RyDnJbP/aC3VcMImb22pBSGf7jt1ukD/9SqHJRsx2+/QTW
+         MnDxiLjTiUZd+TasnC4FLNgjWFaoBLjcFcWHOYbdpK/+x8HPooitLbIx0Mpz9sA0oamr
+         WdVyfF356J18mXSTJp/k3n4e5h3QhE7VRmv9iET596Y7SawBzwuiJaVYcmHsIj8qmGtA
+         6UeA==
+X-Forwarded-Encrypted: i=1; AJvYcCXGlkuZFvYFepvCCw6xQdCnVp+5gFfC8keDl1qieNK3h3bwd7sbKVKLSgy4QqpQg6u99C2KQ21Lvw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqnIZRskZxFI4sjXVksGEBQmYyrh2aFvBHMwQkTD0d9osNaMK7
+	Ts24IDGkUpG+XbWT3TT9bDtRsS2zzdg7rN/kiiAh7eF9mtRdFyMgSSLSxUHrtefEOl6FZLw5ftx
+	lKqqYXkuY/Y+Cn5plx9tzsjMU9crCqCAwTA/BbZhcBd3nSbfg7uTM33z1aT5l7w==
+X-Gm-Gg: AZuq6aIMvYc9B5I6bmNsI4+3ypwjdqDECQCD/AMARrn+TXHfWWzqLVlTjxgrvul7E/7
+	4cC/qd85Z/FUwGsTM+Ll/bRplFlfofAlLp0XIqCwLWx/79vZiNu2Hk/ayxlCyWZVtgHOVsQHzdW
+	ZaW2Trpi1DyxV/36bnK010p5hkIU7fCkEjluUzAVNWdZnBonjOfjM6Cvlls1rAlBavCyh/7Yv+N
+	ShEJZeP61mXfjPwcVjDQ2Ut/0U9u4PJkqhE429a5fJf0kgtkB71JZfQ/OFpgahfswTNmymNA71H
+	x0yUhxwJzsAeXhVvR8JCoMdzIpogGRbXCfAyJjvYknygZrTl/0fLEKURTz+mLcb0DfdbqXJDG+4
+	uR8CC/NAEF46hwAuJhWZtRCU21WtlMtkTdtKeko2+cCmm0FGkj6c1qTTU6YgpRQq3AKimXkH2NJ
+	GfmJEKDit5+WCTVUByDvUmo8G6IayPlRynfsc=
+X-Received: by 2002:a05:620a:2844:b0:8ca:2cf9:8198 with SMTP id af79cd13be357-8cb8ca6ea22mr1311339785a.40.1771902156699;
+        Mon, 23 Feb 2026 19:02:36 -0800 (PST)
+X-Received: by 2002:a05:620a:2844:b0:8ca:2cf9:8198 with SMTP id af79cd13be357-8cb8ca6ea22mr1311336485a.40.1771902156299;
+        Mon, 23 Feb 2026 19:02:36 -0800 (PST)
+Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-389a7af4cdfsm18395151fa.44.2026.02.23.19.02.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 18:38:21 -0800 (PST)
-From: Serhii Pievniev <spevnev16@gmail.com>
-To: lenb@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Serhii Pievniev <spevnev16@gmail.com>
-Subject: [PATCH] tools/turbostat: fix microcode patch level reading for AMD/Hygon
-Date: Mon, 23 Feb 2026 21:37:19 -0500
-Message-ID: <20260224023719.65165-1-spevnev16@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        Mon, 23 Feb 2026 19:02:35 -0800 (PST)
+Date: Tue, 24 Feb 2026 05:02:32 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Abel Vesa <abel.vesa@oss.qualcomm.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Taniya Das <taniya.das@oss.qualcomm.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v2 2/2] pmdomain: qcom: rpmhpd: Add Eliza RPMh Power
+ Domains
+Message-ID: <zhtowrwitid4faxcfyixp4nkwmyoc7fmjtldumgqpedbtdmuqq@wqxcphyud54p>
+References: <20260223-eliza-pmdomain-v2-0-23fb87eb70ef@oss.qualcomm.com>
+ <20260223-eliza-pmdomain-v2-2-23fb87eb70ef@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260223-eliza-pmdomain-v2-2-23fb87eb70ef@oss.qualcomm.com>
+X-Authority-Analysis: v=2.4 cv=X7Jf6WTe c=1 sm=1 tr=0 ts=699d14cd cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22 a=EUspDBNiAAAA:8
+ a=hcFGLVdanMBVBe-XHWYA:9 a=CjuIK1q_8ugA:10 a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-ORIG-GUID: AM1eR0rU1kXaxTwI9f7DQOSUFkv-9ESn
+X-Proofpoint-GUID: AM1eR0rU1kXaxTwI9f7DQOSUFkv-9ESn
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDAyNCBTYWx0ZWRfX1/mlyoKjMk37
+ robJC3NTjt9GEaW/8ONYK3ulckN/C/8vLmWr/OGwYkfTWc8NX6LsFEE7Yln1OHFjXuFOMsOZhOe
+ oHPQy8o6DtJoDLNNKb9/2vmg+6YYB55aBOfJGLOLhgtk7omC+H2HuHV2O9NrIK1UAl2zEWTcEDP
+ 2N7d+kIZF2uNXYRl36cJHD4D9r5ArOBa+umdDGQMltw8JbUr2yq+dxZC5IvaD8RiPX9LZpXJ/tU
+ EVTPAsg3L2vyUI2kw7+l2MGnpvOKHaRrxhSu4y5mFZn9SmF1AZsioFtFFjERGsaE0+Hg+i5leXC
+ Th/IqjLTprEOiuni8W+oEN6Lt1z5Ctyk3WnvfjMpC285pawmqnJiFjVneccO3rTHzrO4ENn3R8w
+ xEiqt/+LSvq2e13uocOXfA5M+xm6irvM+RDTbB6IJ7b85Th/X4ix9syXKuXburhydIb0Vnm22ji
+ xBvfUJUDX143fQmpf5w==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-23_06,2026-02-23_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 suspectscore=0 priorityscore=1501 clxscore=1015 bulkscore=0
+ adultscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602240024
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43084-lists,linux-pm=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,oss.qualcomm.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43083-lists,linux-pm=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[spevnev16@gmail.com,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[dmitry.baryshkov@oss.qualcomm.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-pm];
-	NEURAL_HAM(-0.00)[-1.000];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: E0BC0181103
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: F0C211813C6
 X-Rspamd-Action: no action
 
-turbostat always used the same logic to read the microcode patch level,
-which is correct for Intel but not for AMD/Hygon.
-While Intel stores the patch level in the upper 32 bits of MSR, AMD
-stores it in the lower 32 bits, which previously caused turbostat to
-report the microcode version as 0x0 on AMD/Hygon.
+On Mon, Feb 23, 2026 at 02:07:56PM +0200, Abel Vesa wrote:
+> Add RPMh Power Domains support for the Eliza platform.
+> 
+> Reviewed-by: Taniya Das <taniya.das@oss.qualcomm.com>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
+> ---
+>  drivers/pmdomain/qcom/rpmhpd.c | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
 
-Split the logic into two paths, using upper bits of MSR_IA32_UCODE_REV
-for Intel and lower bits of MSR_AMD64_PATCH_LEVEL for AMD/Hygon.
-Although both MSRs share the same address (0x8b), separate constants
-make this semantic difference explicit.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 
-Signed-off-by: Serhii Pievniev <spevnev16@gmail.com>
----
- tools/power/x86/turbostat/turbostat.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 1a2671c2820..2698ac89376 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -9122,10 +9122,21 @@ void process_cpuid()
- 	cpuid_has_hv = ecx_flags & (1 << 31);
- 
- 	if (!no_msr) {
--		if (get_msr(sched_getcpu(), MSR_IA32_UCODE_REV, &ucode_patch))
--			warnx("get_msr(UCODE)");
--		else
--			ucode_patch_valid = true;
-+		if (authentic_amd || hygon_genuine) {
-+			if (get_msr(sched_getcpu(), MSR_AMD64_PATCH_LEVEL, &ucode_patch)) {
-+				warnx("get_msr(UCODE)");
-+			} else {
-+				ucode_patch_valid = true;
-+				ucode_patch &= 0xFFFFFFFF;
-+			}
-+		} else {
-+			if (get_msr(sched_getcpu(), MSR_IA32_UCODE_REV, &ucode_patch)) {
-+				warnx("get_msr(UCODE)");
-+			} else {
-+				ucode_patch_valid = true;
-+				ucode_patch = (ucode_patch >> 32) & 0xFFFFFFFF;
-+			}
-+		}
- 	}
- 
- 	/*
-@@ -9139,7 +9150,7 @@ void process_cpuid()
- 	if (!quiet) {
- 		fprintf(outf, "CPUID(1): family:model:stepping 0x%x:%x:%x (%d:%d:%d)", family, model, stepping, family, model, stepping);
- 		if (ucode_patch_valid)
--			fprintf(outf, " microcode 0x%x", (unsigned int)((ucode_patch >> 32) & 0xFFFFFFFF));
-+			fprintf(outf, " microcode 0x%llx", ucode_patch);
- 		fputc('\n', outf);
- 
- 		fprintf(outf, "CPUID(0x80000000): max_extended_levels: 0x%x\n", max_extended_level);
 -- 
-2.53.0
-
+With best wishes
+Dmitry
 
