@@ -1,232 +1,168 @@
-Return-Path: <linux-pm+bounces-43123-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43124-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CDQJKdGCnWlsQQQAu9opvQ
-	(envelope-from <linux-pm+bounces-43123-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 11:52:01 +0100
+	id 8A2JAK6DnWlsQQQAu9opvQ
+	(envelope-from <linux-pm+bounces-43124-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 11:55:42 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09927185AC6
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 11:52:01 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A87A2185B5E
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 11:55:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C7F7D3124CEA
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 10:42:21 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F168730EBFAD
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 10:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 693F73793CC;
-	Tue, 24 Feb 2026 10:42:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE2E037B3F7;
+	Tue, 24 Feb 2026 10:54:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GAU2pdQX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M6pgoeDG"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4327A378D8D;
-	Tue, 24 Feb 2026 10:42:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961A737B3F0
+	for <linux-pm@vger.kernel.org>; Tue, 24 Feb 2026 10:54:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771929741; cv=none; b=T8vY59VbCBAaIxVwFZBX7UhmbdWc8ypiaw4M9GNcvPyKw8wtkEf74ttFct5+v0wCbdwLPwvP3nc/EKZ3+7Anxw0rPG1zOYIksmqhpri2rGF3m2XQ3R2Dic+pw2jzee6TocttOVew1U6XIGlotzBtz20QUh4Yqw7itcEvUPnbFAc=
+	t=1771930477; cv=none; b=Jgc+PJrU4XXnvunoURznwozn7XFWymzqyXwqFF5waKNkYeyd1LvsO9Zt5ZO2S5rRujMziSgOwMYDMi6et4CEWLObNlX7Zogx2s6ZhQOos6bSMWUSQJ0fIoqanlh2n72pXSu9VqTMC6EXY3PcfSJ8kRfNMSA+BAAscslWZCNo+5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771929741; c=relaxed/simple;
-	bh=EdYMSneYGYWOu2MY/gnpVM4ln8olb1RiXGDKI2avrXU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=FSthP+NnFq7VbL49MUl8+sx8aA8HHXdF9zCaO5LinPf30IjPb9l/QN8QfAeHwwrcksaE468/gnLBf4bwy/BRXD84TBXqWOgPnonKFJyMV3KY46ymy6cHop84LrL5H/ne1bUQQgUjqu8KFE3gTNI5+UL8aJ0H8NsXmULbJ+wwlUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GAU2pdQX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 158D2C116D0;
-	Tue, 24 Feb 2026 10:42:11 +0000 (UTC)
+	s=arc-20240116; t=1771930477; c=relaxed/simple;
+	bh=Ar8h4pwA1NDtg967Id6YIJ0hbFJ+kyEH685q68t02QU=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Hje48D6xkvNCiaVmSmOrMg/mBvLD/0SJCVHfXKFefscADm7HAcmRB1H2F3AqN+pS15RczMfHrDmdJ8N7ppOtZNpfUbO8q+C/C/MIyCyqQm4c7zobM9QtfUdNtpFPCuTR02RYlxlRGAaSrYVupIAJr7xrke1caMI8Ut2J9fjt2pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M6pgoeDG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79E46C2BC9E
+	for <linux-pm@vger.kernel.org>; Tue, 24 Feb 2026 10:54:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771929740;
-	bh=EdYMSneYGYWOu2MY/gnpVM4ln8olb1RiXGDKI2avrXU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=GAU2pdQXeucHDr93YOJlBQA+9WyQyiqX3XUv0GPdy5+63ewH++MkxyrNYQumwLA4W
-	 YPvSJkU9bCvwg0PQISCbL7pQ53LDJwxCiV6mlupfv3XGnYbITTh1piGzZ+A4mlBMuk
-	 4BLlREPZdKFZhle5va0yKY3MgMD1Ru8Hzm9tCf+z8+JaypVhehj82iMeu/g36i61cS
-	 LOK6GF96u2rd6HmI4kigzcpkbtJ/Mu3uUKlP3KL6U4B3ccmjM1712HCHbTYCUdiqco
-	 kxP5N90jQc3VZcobz2Hi+vK6uI3CzGRjwp0bzDuDcBOAuwMIDp5V4VWUl94VWRudG1
-	 gdUVkzkXXqWYQ==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: aliceryhl@google.com
-Cc: Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn?= Roy
- Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Trevor
- Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Dave
- Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, Leon
- Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, Serge
- Hallyn <sergeh@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, David
- Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Alexander
- Viro <viro@zeniv.linux.org.uk>, Christian
- Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Igor Korotin
- <igor.korotin.linux@gmail.com>, Daniel Almeida
- <daniel.almeida@collabora.com>, Lorenzo Stoakes
- <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen
- Boyd <sboyd@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Krzysztof
- =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Boqun
- Feng <boqun@kernel.org>, linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org, linux-block@vger.kernel.org,
- linux-security-module@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, Asahi Lina
- <lina+kernel@asahilina.net>, Oliver Mangold <oliver.mangold@pm.me>
-Subject: Re: [PATCH v15 1/9] rust: types: Add Ownable/Owned types
-In-Reply-To: <aZ1VQmtapuoerpVo@google.com>
-References: <20260220-unique-ref-v15-0-893ed86b06cc@kernel.org>
- <20260220-unique-ref-v15-1-893ed86b06cc@kernel.org>
- <aZg44EmMWKK-z5KP@google.com>
- <87wm0333qt.fsf@t14s.mail-host-address-is-not-set>
- <IFU05rWmgywK-tzaInc7eF2Kmy1zf-BDkCrQZfRI_2JN6E0-p3zFaUMu3V6T1YTeQG9xC1hHzXThLCORJqpoWA==@protonmail.internalid>
- <aZ1VQmtapuoerpVo@google.com>
-Date: Tue, 24 Feb 2026 11:41:45 +0100
-Message-ID: <87a4wy2zkm.fsf@t14s.mail-host-address-is-not-set>
+	s=k20201202; t=1771930477;
+	bh=Ar8h4pwA1NDtg967Id6YIJ0hbFJ+kyEH685q68t02QU=;
+	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
+	b=M6pgoeDGL67rxGCyufC4jL6jDjmdisqXHbWqNCPcw6GOAHDURfGTlBlbEMGfJPoiT
+	 VybiFBRSJIoDHfXqPhzQ/0+quhEKQ9qk58BiOCZ8L/4dHMv8XjxpQNOyT6sp+KwcMg
+	 QJBbn2plHMVRDm7Pbiu4U7Y5NblmauZOc6xZnKZmlcp/lKkDCNOQOqSGG4NaoGrIoJ
+	 iahNexx6alWPwSLgdrsL0m/jVM3hbim8HvEnKVAE2pWTYJAOCzzInR545iXunE5ofm
+	 OmtWVGhSeIzxg2vyv+VqQoZCeYhs1meV02dKq8b4pja1URbLNhaMBGxWGpinv1/ei/
+	 JOQlA32OyuS8w==
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-3870d178a9aso43315171fa.0
+        for <linux-pm@vger.kernel.org>; Tue, 24 Feb 2026 02:54:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVAYia6bOCD+TT8YrPFk4e0xuSrFIt48BEiG1/M3KAw37D5C4qLxx/pEZ2fmWFwhrrzqEhBarrnKA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8d0KU16AMZ2YreBvfduAks1YnLzJaCkPMwDOirpar4icuucZc
+	CBHBia2nXpUa/EOoXuC7qLCMfhaN6aElzZM/xPkkE7oUD49ePVFXaiZ6ziYKwxcSYCeGijYTLB0
+	xUynQ1yzsi2BU7G7N2RHVr0uxRHeTLMlpeWgyniHnUQ==
+X-Received: by 2002:a05:651c:1602:b0:385:beca:f6d2 with SMTP id
+ 38308e7fff4ca-389a5c92b9bmr38250061fa.1.1771930475771; Tue, 24 Feb 2026
+ 02:54:35 -0800 (PST)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 24 Feb 2026 04:54:34 -0600
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 24 Feb 2026 04:54:34 -0600
+From: Bartosz Golaszewski <brgl@kernel.org>
+In-Reply-To: <aZ19kFCv_3QUkvPL@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20260224-pci-m2-e-v5-0-dd9b9501d33c@oss.qualcomm.com>
+ <20260224-pci-m2-e-v5-2-dd9b9501d33c@oss.qualcomm.com> <CAMRc=MethnZu_GrujadpBZwj4SpgdNXEnTfEikSvPkO2f9MJjg@mail.gmail.com>
+ <aZ19kFCv_3QUkvPL@smile.fi.intel.com>
+Date: Tue, 24 Feb 2026 04:54:34 -0600
+X-Gmail-Original-Message-ID: <CAMRc=Md5K=qPbbjSX6eX7EUwgPHpPkUhOPF7RsqD5gejXK2rnQ@mail.gmail.com>
+X-Gm-Features: AaiRm50PZNtQU10kvSbt1uPfme98Sm6BHfpF2pr5K4ZzyNi38Xb-W4BKtnbBLf4
+Message-ID: <CAMRc=Md5K=qPbbjSX6eX7EUwgPHpPkUhOPF7RsqD5gejXK2rnQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/9] serdev: Add an API to find the serdev controller
+ associated with the devicetree node
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: manivannan.sadhasivam@oss.qualcomm.com, 
+	Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>, 
+	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+	linux-pci@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, linux-acpi@vger.kernel.org, 
+	Hans de Goede <johannes.goede@oss.qualcomm.com>, Rob Herring <robh@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Hans de Goede <hansg@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Bartosz Golaszewski <brgl@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [9.34 / 15.00];
-	URIBL_BLACK(7.50)[types.rs:url];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	R_MISSING_CHARSET(0.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	BAD_REP_POLICIES(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43123-lists,linux-pm=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[40];
+	TAGGED_FROM(0.00)[bounces-43124-lists,linux-pm=lfdr.de];
+	FREEMAIL_CC(0.00)[oss.qualcomm.com,kernel.org,vger.kernel.org,linaro.org,linuxfoundation.org,linux.dev,linux.intel.com,squebb.ca,gmail.com,holtmann.org,bgdev.pl];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,qualcomm.com:email,mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[32];
 	MIME_TRACE(0.00)[0:+];
-	R_DKIM_ALLOW(0.00)[kernel.org:s=k20201202];
-	GREYLIST(0.00)[pass,body];
-	FREEMAIL_CC(0.00)[kernel.org,garyguo.net,protonmail.com,umich.edu,linuxfoundation.org,intel.com,paul-moore.com,gmail.com,ffwll.ch,zeniv.linux.org.uk,suse.cz,collabora.com,oracle.com,ti.com,google.com,vger.kernel.org,lists.freedesktop.org,kvack.org,asahilina.net,pm.me];
-	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,kernel];
-	FROM_NEQ_ENVFROM(0.00)[a.hindborg@kernel.org,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	R_SPF_ALLOW(0.00)[+ip4:172.234.253.10:c];
-	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	NEURAL_SPAM(0.00)[1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[t14s.mail-host-address-is-not-set:mid,pm.me:email,types.rs:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,asahilina.net:email,garyguo.net:email,collabora.com:email]
-X-Rspamd-Queue-Id: 09927185AC6
-X-Rspamd-Action: add header
-X-Spam: Yes
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.997];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,manivannan.sadhasivam.oss.qualcomm.com,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: A87A2185B5E
+X-Rspamd-Action: no action
 
-<aliceryhl@google.com> writes:
-
-> On Mon, Feb 23, 2026 at 03:59:22PM +0100, Andreas Hindborg wrote:
->> Alice Ryhl <aliceryhl@google.com> writes:
->>
->> > On Fri, Feb 20, 2026 at 10:51:10AM +0100, Andreas Hindborg wrote:
->> >> From: Asahi Lina <lina+kernel@asahilina.net>
->> >>
->> >> By analogy to `AlwaysRefCounted` and `ARef`, an `Ownable` type is a
->> >> (typically C FFI) type that *may* be owned by Rust, but need not be. Unlike
->> >> `AlwaysRefCounted`, this mechanism expects the reference to be unique
->> >> within Rust, and does not allow cloning.
->> >>
->> >> Conceptually, this is similar to a `KBox<T>`, except that it delegates
->> >> resource management to the `T` instead of using a generic allocator.
->> >>
->> >> [ om:
->> >>   - Split code into separate file and `pub use` it from types.rs.
->> >>   - Make from_raw() and into_raw() public.
->> >>   - Remove OwnableMut, and make DerefMut dependent on Unpin instead.
->> >>   - Usage example/doctest for Ownable/Owned.
->> >>   - Fixes to documentation and commit message.
->> >> ]
->> >>
->> >> Link: https://lore.kernel.org/all/20250202-rust-page-v1-1-e3170d7fe55e@asahilina.net/
->> >> Signed-off-by: Asahi Lina <lina+kernel@asahilina.net>
->> >> Co-developed-by: Oliver Mangold <oliver.mangold@pm.me>
->> >> Signed-off-by: Oliver Mangold <oliver.mangold@pm.me>
->> >> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
->> >> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
->> >> [ Andreas: Updated documentation, examples, and formatting ]
->> >> Reviewed-by: Gary Guo <gary@garyguo.net>
->> >> Co-developed-by: Andreas Hindborg <a.hindborg@kernel.org>
->> >> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+On Tue, 24 Feb 2026 11:29:36 +0100, Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> said:
+> On Tue, Feb 24, 2026 at 02:16:17AM -0800, Bartosz Golaszewski wrote:
+>> On Tue, 24 Feb 2026 06:30:48 +0100, Manivannan Sadhasivam via B4 Relay
+>> <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org> said:
 >> >
->> >> +///         let result = NonNull::new(KBox::into_raw(result))
->> >> +///             .expect("Raw pointer to newly allocation KBox is null, this should never happen.");
->> >
->> > KBox should probably have an into_raw_nonnull().
->>
->> I can add that.
->>
->> >
->> >> +///    let foo = Foo::new().expect("Failed to allocate a Foo. This shouldn't happen");
->> >> +///    assert!(*FOO_ALLOC_COUNT.lock() == 1);
->> >
->> > Use ? here.
->>
->> Ok.
->>
->> >
->> >> +/// }
->> >> +/// // `foo` is out of scope now, so we expect no live allocations.
->> >> +/// assert!(*FOO_ALLOC_COUNT.lock() == 0);
->> >> +/// ```
->> >> +pub unsafe trait Ownable {
->> >> +    /// Releases the object.
->> >> +    ///
->> >> +    /// # Safety
->> >> +    ///
->> >> +    /// Callers must ensure that:
->> >> +    /// - `this` points to a valid `Self`.
->> >> +    /// - `*this` is no longer used after this call.
->> >> +    unsafe fn release(this: NonNull<Self>);
->> >
->> > Honestly, not using it after this call may be too strong. I can imagine
->> > wanting a value where I have both an ARef<_> and Owned<_> reference to
->> > something similar to the existing Arc<_>/ListArc<_> pattern, and in that
->> > case the value may in fact be accessed after this call if you still have
->> > an ARef<_>.
->>
->> I do not understand your use case.
->>
->> You are not supposed to have both an `ARef` and an `Owned` at the same
->> time. The `Owned` is to `ARef` what `UniqueArc` is to `Arc`. It is
->> supposed to be unique and no `ARef` can be live while the `Owned` is
->> live.
->>
->> A `ListArc` is "at most one per list link" and it takes a refcount on
->> the object by owning an `Arc`. As far as I recall, it does not provide
->> mutable access to anything but the list link. To me, that is a very
->> different situation.
+>> > Add of_find_serdev_controller_by_node() API to find the serdev controller
+>> > device associated with the devicetree node.
 >
-> I mean, even Page is kind of an example like that.
+> ...
 >
-> Pages are refcounted, but when you have a higher-order page, the
-> __free_pages() call does something special beyond what put_page(). For
-> example, if you have an order-2 page, which consists of 4 pages, then
-> the refcount only keeps the first page alive, and __free_pages() frees
-> the 3 extra pages right away even if refcount is still non-zero. The
-> first page then stays alive until the last put_page() is called.
+>> > +struct serdev_controller *of_find_serdev_controller_by_node(struct device_node *node)
+>> > +{
+>> > +	struct device *dev = bus_find_device_by_of_node(&serdev_bus_type, node);
+>> > +
+>> > +	return (dev && dev->type == &serdev_ctrl_type) ? to_serdev_controller(dev) : NULL;
+>> > +}
+>> > +EXPORT_SYMBOL_GPL(of_find_serdev_controller_by_node);
+>>
+>> I'm not sure if I commented on it before but there's no reason for this to be
+>> OF-centric. It would work equally well as (I think the same should keep the
+>> "serdev" prefix too for correct namespacing):
+>>
+>> struct serdev_controller *serdev_find_controller_by_fwnode(struct
+>> fwnode_handle *fwnode)
+>> {
+>> 	struct device *dev = bus_find_device_by_fwnode();
+>>
+>> 	...
+>> }
+>>
+>> It would be more flexible and users can always use to_of_node().
+>
+> IIRC it was discussed already and the fact of use only in DT overlays and
+> absence of the user for all this time makes it feel like solving non-existing
+> problem. So OF-centric in this case seems to be fine.
+>
 
-I see. We currently only support order 0 pages. I think we can handle
-this situation later, if we need to handle higher order pages.
+Ok then.
 
-In that case, we could hand out `Owned<Page>` for the head page and then
-provide some way of getting a `&Page` for the tail pages. Obtaining
-`Owned<Page>` for a tail page does not make sense.
-
-More likely we will build an abstraction for `struct folio`. We can
-still hand some kind of page reference for tail pages from an `Owned<Folio>`.
-
-Best regards,
-Andreas Hindborg
-
-
+Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 
