@@ -1,252 +1,184 @@
-Return-Path: <linux-pm+bounces-43082-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43083-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QAzVHwgDnWkuMgQAu9opvQ
-	(envelope-from <linux-pm+bounces-43082-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 02:46:48 +0100
+	id ENQmIiMPnWnoMgQAu9opvQ
+	(envelope-from <linux-pm+bounces-43083-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 03:38:27 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 227E5180AF6
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 02:46:48 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0BC0181103
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 03:38:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BFE5B311AE79
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 01:45:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1CFF03052BAA
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 02:38:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66B4326738C;
-	Tue, 24 Feb 2026 01:45:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ECB022D4C3;
+	Tue, 24 Feb 2026 02:38:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I+uVTJIH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jst2vhew"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3078F24A07C;
-	Tue, 24 Feb 2026 01:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4409F239E7F
+	for <linux-pm@vger.kernel.org>; Tue, 24 Feb 2026 02:38:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771897550; cv=none; b=IV8zjFGq/Q+VISHCn5xFC+z+BLsSCJT36axkOx46SH62CEfJupcc2x3qm7xhAVgva2BE/Wfd9Hg4hKrfsCXDywR9scrKgMpdv8E71+gVPQc5ly34Gmp7MQCT3Px30isTq9o8LdTMvN7g/Zx+KI70Vl5l3LtgixEEwZZ3y4uWJaE=
+	t=1771900704; cv=none; b=iKTQkEKnoi22hKV63IfrAPzeF0/SdrhA6cMkzmu5ewXnxcHIRh0Alp/JA+QgoK6G5Q2jdEdumB+1Vfe+9+Q0hRovE3cdU1bQebt9pFxiPp2SzCFoeZzsroDmGnkDQjsxQJkyg401ToHGnwNi40VwNdChLH+6DxgwUBfsDEWJhig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771897550; c=relaxed/simple;
-	bh=lOXUdHAknlORz4WutDBBxQ6j9aq0kZdEzSPNA6F+0dU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rmluALeMaeMPOOQTqjs/hg6kn2kDDjZ/5Bga82DhvxtX3Rgr/6nbyyBferINjEOQX3f4wNDKLjUPU4RXFoFLt/HULjc2HutybHahtULvvMsVqWxaXGEZpyHjizq9+cw6w8GBzn4n/MooC5hmAVTFZMtU9uRCqdo9daL/SIOdsEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I+uVTJIH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0708CC4AF0F;
-	Tue, 24 Feb 2026 01:45:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771897550;
-	bh=lOXUdHAknlORz4WutDBBxQ6j9aq0kZdEzSPNA6F+0dU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=I+uVTJIHP+ZDDlQ/KOiwLEIAa6BdI2G6Fc+3ZRIihnVrjyrJ8wSX8hjoFGydo7CbM
-	 54byam3yvvcudJzlerXJbdOhx3uI+p+17GuSNs1QHCiiELeBs/h5xnmckAxDMVMAa2
-	 GPGCmU1Goz0s9m6ASRsHKHrM/BwjS+6hEzkv9CpKQb7LBvDuSZxOiDYqB+/10IM9mS
-	 e0BA2Wr8ktz1NKL6lNlVj8veB1zBjy53rNolA6R6bXQQWlQN1yYSC7oQpvqEG5sCXH
-	 UHfygnS9VCAdXbrcGhHxHPOHVl+lOPrsiMko/DeuqPnO2u4xo2yR2tQ+CBP9+bH0Je
-	 sb/Eby7/SIGug==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F26B5EEC2BE;
-	Tue, 24 Feb 2026 01:45:49 +0000 (UTC)
-From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
-Date: Tue, 24 Feb 2026 01:45:36 +0000
-Subject: [PATCH v8 6/6] usb: typec: tcpm/tcpci_maxim: deprecate WAR for
- setting charger mode
+	s=arc-20240116; t=1771900704; c=relaxed/simple;
+	bh=fn2u73mBSTbAd/EdpQfH9E2MCEctzADYuwz366K+YQY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h3ECAn7bEgwyH41BvMGpvsUGwwtLavS/MYLFtFWAGJBwxeXkNngmW4fjvgWBWk0RNGdr/x8o3aaqb/qFXT6zZkrsNdpyL6buKEsxe7bPcG0ZXXapZUHcmxRLrAFmIGe2EKa4R97rMHNP6+7DwvSC69VdQmtrt1SXUqvFHt33p5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jst2vhew; arc=none smtp.client-ip=209.85.219.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-896f44dc48dso46253076d6.2
+        for <linux-pm@vger.kernel.org>; Mon, 23 Feb 2026 18:38:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771900702; x=1772505502; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uHi4kGutlHIiCP5G7IafBayijdH0c6FDLs2gsnvP6Rc=;
+        b=jst2vhewThOnLiMiXBgE4suG6tMMKaYmHbaDifof2ujJzbh9QS3pNJjIckoULbXkLN
+         Ax6INe+0l4GDsvJIAtSrbV9Dl1xC7m7gMtyJkI8aOLeIgbBovVI+LwIZuptnYQ/g7BG5
+         Hvr61z1eJ0KujUToVGylGWe34R+mNIjN3XlIQLfe/UnelW0jctstp69cJ+SKlU2soneK
+         XEvWNFOAIu66JfvrkmrjJglOl1llSHocTesJHNsFqxJ6/Guwnm0iyaYwsQI020Tx3hTR
+         h92V4LSZ6LwH6x+13qyaEPeFcb5MINDSHdWQ73m4dsODsblMmVKm6b7HyZ7dP7kQasCv
+         KfbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771900702; x=1772505502;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uHi4kGutlHIiCP5G7IafBayijdH0c6FDLs2gsnvP6Rc=;
+        b=uecdZlRHEf/3ZAsRc8cG+zVWKKgeEkbnqnhdYYHRjvgCgT1hql+1hP9uYG9X6+TAQm
+         rEyJgEkeaRUOVBod97HIlQeubmSizfteSLfaXdGlvPnQaRmYMnZQ2kcL/DhMoRApdPaE
+         VdGL2sy0V+BZJs7/Dt6lzKhn4uFA6n6E63OcZJaWVcSOyAbSX/3vKwhJhqs2CUH2NXgF
+         sCzVSlobKMxCDvdDWPohBe5i4ZiDPpzyCJTtOvV3+EuDtEEnKK5cPkUAJmwjEEp1HV4S
+         +ffQ69IIGH+VH2NCFCFU1FSGrepE5R6foGEkuButsHGOA9i5Qz0sM9aEHSOU7cSVs3ws
+         QRwg==
+X-Gm-Message-State: AOJu0YxU8dRiiaeZHPs3wquPiRmntIMoM/thENgg9OPx+9yMP/u0FXqC
+	Zwu4uVEeRfJNJpdR2mp/I0HOv+E4drZCJJgXTXRbFBmodoIEmKeaUWDO
+X-Gm-Gg: ATEYQzx22KAy/Jb+dZHF+z40mfbZ5ys1BAhvlzPb0Wlp4zjsf0HoZsSqRKTh1V1PBCA
+	sTf8DyuIwSZGYgDFaCSWnUyCdxX9+SNZYIQjp8Zk5qAPbAoPpPIvuyfTpMUOzJHbSgWRVf233yv
+	lkZegKZa5hK71XjH0cOzAhAZisx5pLZmfc6I09ZPgO8k7tta1j91iVtbQCR4ulsWzfIei5BZ3Ec
+	MbBPuy2ExJNQfUiIvPc8zfFxLnruha+s7Y0L73YICQqc8kT6CF9nWYTrKMYdvNnqdIieN/fls+k
+	xRCoVtygOZF8WpLUXYarLi24Gu4gExoXblQwQV/ABxmpCJJeT383PBD5xdO4Ms8yVCN/8olhady
+	wrEQG/NX8A5vjrifid+1pN9sdWh25lEqIjhdOoNjnI6FoOJZPKcrNkMKL3h5Cg7OV0/6DRBstbA
+	GBs6LZBMiDNC4ZXTGXizTYrX0teZX/VX3fk3tOTDW/nMU0xmjHeNYDjWSii6JOnAks1LEZUa6+w
+	ew=
+X-Received: by 2002:ad4:5942:0:b0:895:5dd:3d48 with SMTP id 6a1803df08f44-89979d85395mr168711276d6.59.1771900702162;
+        Mon, 23 Feb 2026 18:38:22 -0800 (PST)
+Received: from localhost.localdomain (modemcable231.2-131-66.mc.videotron.ca. [66.131.2.231])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8997c691243sm82072666d6.3.2026.02.23.18.38.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Feb 2026 18:38:21 -0800 (PST)
+From: Serhii Pievniev <spevnev16@gmail.com>
+To: lenb@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Serhii Pievniev <spevnev16@gmail.com>
+Subject: [PATCH] tools/turbostat: fix microcode patch level reading for AMD/Hygon
+Date: Mon, 23 Feb 2026 21:37:19 -0500
+Message-ID: <20260224023719.65165-1-spevnev16@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260224-max77759-charger-v8-6-eb86bd570e9c@google.com>
-References: <20260224-max77759-charger-v8-0-eb86bd570e9c@google.com>
-In-Reply-To: <20260224-max77759-charger-v8-0-eb86bd570e9c@google.com>
-To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
- Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Badhri Jagan Sridharan <badhri@google.com>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Peter Griffin <peter.griffin@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, Mark Brown <broonie@kernel.org>, 
- Matti Vaittinen <mazziesaccount@gmail.com>, 
- Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>, 
- Amit Sunil Dhamne <amitsd@google.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771897548; l=4045;
- i=amitsd@google.com; s=20241031; h=from:subject:message-id;
- bh=mMnQywZ79m54T70kkS6R9rVtGFJGQ8QQS9OrefFa+7E=;
- b=Vbo0B2I/nwEwbqLC6gBrYXB5R07Va9I3qkpkxI4KgO6MbYtH1j180oL4AaqA+gtTnRYPwij5K
- /lYf1+FreblCsbwBnn2t1anY9pq95brB/G2CZ65/ZJ0pDASX8l1TcOY
-X-Developer-Key: i=amitsd@google.com; a=ed25519;
- pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
-X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
- auth_id=262
-X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
-Reply-To: amitsd@google.com
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43082-lists,linux-pm=lfdr.de,amitsd.google.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[kernel.org,linaro.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,gmail.com,linux-foundation.org];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[24];
-	FROM_HAS_DN(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-pm@vger.kernel.org];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	HAS_REPLYTO(0.00)[amitsd@google.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:email,intel.com:email]
-X-Rspamd-Queue-Id: 227E5180AF6
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43083-lists,linux-pm=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_THREE(0.00)[4];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[spevnev16@gmail.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-pm];
+	NEURAL_HAM(-0.00)[-1.000];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E0BC0181103
 X-Rspamd-Action: no action
 
-From: Amit Sunil Dhamne <amitsd@google.com>
+turbostat always used the same logic to read the microcode patch level,
+which is correct for Intel but not for AMD/Hygon.
+While Intel stores the patch level in the upper 32 bits of MSR, AMD
+stores it in the lower 32 bits, which previously caused turbostat to
+report the microcode version as 0x0 on AMD/Hygon.
 
-TCPCI maxim driver directly writes to the charger's register space to
-set charger mode depending on the power role. As MAX77759 chg driver
-exists, this WAR is not required.
+Split the logic into two paths, using upper bits of MSR_IA32_UCODE_REV
+for Intel and lower bits of MSR_AMD64_PATCH_LEVEL for AMD/Hygon.
+Although both MSRs share the same address (0x8b), separate constants
+make this semantic difference explicit.
 
-Instead, use a regulator interface to source vbus when typec is in
-source power mode. In other power modes, this regulator will be turned
-off if active.
-
-Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: André Draszik <andre.draszik@linaro.org>
+Signed-off-by: Serhii Pievniev <spevnev16@gmail.com>
 ---
- drivers/usb/typec/tcpm/tcpci_maxim.h      |  1 +
- drivers/usb/typec/tcpm/tcpci_maxim_core.c | 54 +++++++++++++++++++------------
- 2 files changed, 34 insertions(+), 21 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/tcpm/tcpci_maxim.h
-index b33540a42a953dc6d8197790ee4af3b6f52791ce..b314606eb0f67ddbc80d8760244aa6dee61bebc1 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim.h
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
-@@ -60,6 +60,7 @@ struct max_tcpci_chip {
- 	struct tcpm_port *port;
- 	enum contamiant_state contaminant_state;
- 	bool veto_vconn_swap;
-+	struct regulator *vbus_reg;
- };
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 1a2671c2820..2698ac89376 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -9122,10 +9122,21 @@ void process_cpuid()
+ 	cpuid_has_hv = ecx_flags & (1 << 31);
  
- static inline int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-index 19f63865079658fb2a446dc390262d141b940e9a..c0ee7e6959edf9666e499a6fa085fbca9f2b07f3 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-@@ -10,6 +10,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/usb/pd.h>
- #include <linux/usb/tcpci.h>
- #include <linux/usb/tcpm.h>
-@@ -35,12 +36,6 @@
-  */
- #define TCPC_RECEIVE_BUFFER_LEN				32
- 
--#define MAX_BUCK_BOOST_SID				0x69
--#define MAX_BUCK_BOOST_OP				0xb9
--#define MAX_BUCK_BOOST_OFF				0
--#define MAX_BUCK_BOOST_SOURCE				0xa
--#define MAX_BUCK_BOOST_SINK				0x5
--
- static const struct regmap_range max_tcpci_tcpci_range[] = {
- 	regmap_reg_range(0x00, 0x95)
- };
-@@ -202,32 +197,49 @@ static void process_rx(struct max_tcpci_chip *chip, u16 status)
- 	tcpm_pd_receive(chip->port, &msg, rx_type);
- }
- 
-+static int get_vbus_regulator_handle(struct max_tcpci_chip *chip)
-+{
-+	if (IS_ERR_OR_NULL(chip->vbus_reg)) {
-+		chip->vbus_reg = devm_regulator_get_exclusive(chip->dev,
-+							      "vbus");
-+		if (IS_ERR_OR_NULL(chip->vbus_reg)) {
-+			dev_err(chip->dev,
-+				"Failed to get vbus regulator handle\n");
-+			return -ENODEV;
+ 	if (!no_msr) {
+-		if (get_msr(sched_getcpu(), MSR_IA32_UCODE_REV, &ucode_patch))
+-			warnx("get_msr(UCODE)");
+-		else
+-			ucode_patch_valid = true;
++		if (authentic_amd || hygon_genuine) {
++			if (get_msr(sched_getcpu(), MSR_AMD64_PATCH_LEVEL, &ucode_patch)) {
++				warnx("get_msr(UCODE)");
++			} else {
++				ucode_patch_valid = true;
++				ucode_patch &= 0xFFFFFFFF;
++			}
++		} else {
++			if (get_msr(sched_getcpu(), MSR_IA32_UCODE_REV, &ucode_patch)) {
++				warnx("get_msr(UCODE)");
++			} else {
++				ucode_patch_valid = true;
++				ucode_patch = (ucode_patch >> 32) & 0xFFFFFFFF;
++			}
 +		}
-+	}
-+
-+	return 0;
-+}
-+
- static int max_tcpci_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata, bool source, bool sink)
- {
- 	struct max_tcpci_chip *chip = tdata_to_max_tcpci(tdata);
--	u8 buffer_source[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SOURCE};
--	u8 buffer_sink[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SINK};
--	u8 buffer_none[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_OFF};
--	struct i2c_client *i2c = chip->client;
- 	int ret;
- 
--	struct i2c_msg msgs[] = {
--		{
--			.addr = MAX_BUCK_BOOST_SID,
--			.flags = i2c->flags & I2C_M_TEN,
--			.len = 2,
--			.buf = source ? buffer_source : sink ? buffer_sink : buffer_none,
--		},
--	};
--
- 	if (source && sink) {
- 		dev_err(chip->dev, "Both source and sink set\n");
- 		return -EINVAL;
  	}
  
--	ret = i2c_transfer(i2c->adapter, msgs, 1);
-+	ret = get_vbus_regulator_handle(chip);
-+	if (ret) {
-+		/*
-+		 * Regulator is not necessary for sink only applications. Return
-+		 * success in cases where sink mode is being modified.
-+		 */
-+		return source ? ret : 1;
-+	}
-+
-+	if (source) {
-+		if (!regulator_is_enabled(chip->vbus_reg))
-+			ret = regulator_enable(chip->vbus_reg);
-+	} else {
-+		if (regulator_is_enabled(chip->vbus_reg))
-+			ret = regulator_disable(chip->vbus_reg);
-+	}
+ 	/*
+@@ -9139,7 +9150,7 @@ void process_cpuid()
+ 	if (!quiet) {
+ 		fprintf(outf, "CPUID(1): family:model:stepping 0x%x:%x:%x (%d:%d:%d)", family, model, stepping, family, model, stepping);
+ 		if (ucode_patch_valid)
+-			fprintf(outf, " microcode 0x%x", (unsigned int)((ucode_patch >> 32) & 0xFFFFFFFF));
++			fprintf(outf, " microcode 0x%llx", ucode_patch);
+ 		fputc('\n', outf);
  
--	return  ret < 0 ? ret : 1;
-+	return ret < 0 ? ret : 1;
- }
- 
- static void process_power_status(struct max_tcpci_chip *chip)
-
+ 		fprintf(outf, "CPUID(0x80000000): max_extended_levels: 0x%x\n", max_extended_level);
 -- 
-2.53.0.371.g1d285c8824-goog
-
+2.53.0
 
 
