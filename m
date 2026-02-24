@@ -1,59 +1,59 @@
-Return-Path: <linux-pm+bounces-43164-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43165-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QHCyKQX5nWmeSwQAu9opvQ
-	(envelope-from <linux-pm+bounces-43164-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 20:16:21 +0100
+	id GJ/4Ih75nWlzSwQAu9opvQ
+	(envelope-from <linux-pm+bounces-43165-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 20:16:46 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B3AC18BCB0
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 20:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 43EB818BCE7
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 20:16:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 245D530D0F97
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 19:15:39 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0807B30DCC07
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 19:15:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA2593A9D90;
-	Tue, 24 Feb 2026 19:15:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A5983AA1A0;
+	Tue, 24 Feb 2026 19:15:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="Kicg9aJg"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="BhWN6Rkq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26CDC28643A;
-	Tue, 24 Feb 2026 19:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B1228643A;
+	Tue, 24 Feb 2026 19:15:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771960533; cv=none; b=dINEQ6yx/EDY+JAHPqSn2GcQFWVduH1N2yA9vuUqCt8HRLYNB5mKuoCN8GypW8i1SJd+LZFyaX02Rur4e7Hif1X4PgIwgWGXtepViRa6xfGTtk6qUcMhKTk+4wK+Wo8hTxvfkPVumgtIu97IVO82cJBD0pul6F+rE74S16Sh3GA=
+	t=1771960540; cv=none; b=nsXhGmkn18y394rIlEwCNKtR0fN6eGIXFWR3BMagfrPbArBAlyGVAg3TguJcXPntTYXVWXlCvqSaC0kojg13tDpJl3gGvYLXqcocoky2UEPWSSs2Hu89O1f30cjotTvMk8c0RwEI+mwBx+k/htd0lSoO71J7U+4F7ce9bqrpNxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771960533; c=relaxed/simple;
-	bh=clcZ5FJmgMM6ci6aJDybExNNe8nVcW5PdNKApgjNU0o=;
+	s=arc-20240116; t=1771960540; c=relaxed/simple;
+	bh=vUzSdb23mgItjzTQ86+3X3cZ0kXwjbBMNG9uEN6O5yw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=b6FZgNEFVpL07xLHdwYuArvpTJI5+jV7KOFPTWDENJ+0zvMc2tkdKE87yDIyFOZicmm/WsPOjUwZd0qtIyYBDOmSaqAJS6gG2vqLvOAuxCKOOnFNXLF+BrTQM2anRrcMiCvMGNQJUrfmnz6cS0fsLvk6oUCo9CFGhQREX+jflms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=Kicg9aJg; arc=none smtp.client-ip=178.21.23.139
+	 In-Reply-To:To:Cc; b=VE92qALjqVaDz8xuEjCpZ2iv3uIQJb41L/lYQUC2bzQzxipFcaMgjIXn7K2/fsKe4PO9cBo5CSDAlFU/LSzL3qBKD6FK7OT2ZO6lf5s9K445I1+CdQgFmG48rQV8H0grrrzT8DkGX5q0LPYa9qMHaSo6PefYZ8s/EtsJPWhFqjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=BhWN6Rkq; arc=none smtp.client-ip=178.21.23.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 7FD3A26F9E;
-	Tue, 24 Feb 2026 20:15:30 +0100 (CET)
+	by disroot.org (Postfix) with ESMTP id 52C6926250;
+	Tue, 24 Feb 2026 20:15:37 +0100 (CET)
 X-Virus-Scanned: SPAM Filter at disroot.org
 Received: from layka.disroot.org ([127.0.0.1])
  by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id McWapyWDJkpn; Tue, 24 Feb 2026 20:15:29 +0100 (CET)
+ id avV5tHAzLIog; Tue, 24 Feb 2026 20:15:36 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1771960529; bh=clcZ5FJmgMM6ci6aJDybExNNe8nVcW5PdNKApgjNU0o=;
+	t=1771960536; bh=vUzSdb23mgItjzTQ86+3X3cZ0kXwjbBMNG9uEN6O5yw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=Kicg9aJgmgwEcghpV1nVMKNxzeGp5gyyba7Dlrydl58HmnqRNWanPOhfSFBOI596F
-	 Z19N4UHHT/2GDRNGRTGUnCtWRCMbtNDp/TVwot50pPkLjM7+T9/K1iJomdHr0TcSk2
-	 FG+hQzRD3pw7HNtxPidQycIlMMZIGTLEcBLEveCFMDC+rxOMV4CPotisppMtjVPqV5
-	 L6pPlM7DsKMgPHNgv4s/whM0s5zCCdlQkNNAcPVe0MaKA6XIrxsGF8ZgfhOJNwEZuw
-	 ZMA4XIN+vDH3QOzV8j+dBep1r4M2yAuGmHH61thBL7B7D06QVhGew75STqLrNaCNQg
-	 5B0ZOpJ4F7/3g==
+	b=BhWN6RkqgeUuxJxnVecfv0to8QaDkIdyqxvLzcEcxNC04HgCcTPCUKUp37aURp9UV
+	 ejj28tSnZrtk+S8+jG2HKgyW8zODq8mqztTn85Gw5WJ3kkQtwWb1FAm+pLpKXE5jAn
+	 89SHkrCYoA9HiwyJMVcw7x6cQ/etHZKJZbqa6ukCz7rDVgslhfbZzxWH4wK32mPrqd
+	 DTl0n7Fz5q7B17lRU7jDFKYmAc9ZQarnQrUAz/Ft0mt29Gm0F92qd41SXDrJkaJdUG
+	 mlTkWLobJfztOGtKvzDH4uIKsyg7GvxEw32iwo3P2Lv9ts5Bm0iLH78jb8Eyp1faxG
+	 Wllxc9NWt9eZw==
 From: Kaustabh Chakraborty <kauschluss@disroot.org>
-Date: Wed, 25 Feb 2026 00:45:04 +0530
-Subject: [PATCH v3 02/13] dt-bindings: leds: document Samsung S2M series
- PMIC RGB LED device
+Date: Wed, 25 Feb 2026 00:45:05 +0530
+Subject: [PATCH v3 03/13] dt-bindings: extcon: document Samsung S2M series
+ PMIC extcon device
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260225-s2mu005-pmic-v3-2-b4afee947603@disroot.org>
+Message-Id: <20260225-s2mu005-pmic-v3-3-b4afee947603@disroot.org>
 References: <20260225-s2mu005-pmic-v3-0-b4afee947603@disroot.org>
 In-Reply-To: <20260225-s2mu005-pmic-v3-0-b4afee947603@disroot.org>
 To: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
@@ -89,7 +89,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43164-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43165-lists,linux-pm=lfdr.de];
 	FREEMAIL_TO(0.00)[kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
@@ -108,40 +108,39 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TO_DN_SOME(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,disroot.org:mid,disroot.org:dkim,disroot.org:email,devicetree.org:url]
-X-Rspamd-Queue-Id: 6B3AC18BCB0
+X-Rspamd-Queue-Id: 43EB818BCE7
 X-Rspamd-Action: no action
 
-Certain Samsung S2M series PMICs have a three-channel LED device with
-independent brightness control for each channel, typically used as
-status indicators in mobile phones. Document the devicetree schema for
-this device.
+Certain Samsung S2M series PMICs have a MUIC device which reports
+various cable states by measuring the ID-GND resistance with an internal
+ADC. Document the devicetree schema for this device.
 
 Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
 ---
- .../bindings/leds/samsung,s2mu005-rgb.yaml         | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ .../bindings/extcon/samsung,s2mu005-muic.yaml      | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/leds/samsung,s2mu005-rgb.yaml b/Documentation/devicetree/bindings/leds/samsung,s2mu005-rgb.yaml
+diff --git a/Documentation/devicetree/bindings/extcon/samsung,s2mu005-muic.yaml b/Documentation/devicetree/bindings/extcon/samsung,s2mu005-muic.yaml
 new file mode 100644
-index 0000000000000..6806b6d869ff7
+index 0000000000000..e047e8cbc264e
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/leds/samsung,s2mu005-rgb.yaml
-@@ -0,0 +1,34 @@
++++ b/Documentation/devicetree/bindings/extcon/samsung,s2mu005-muic.yaml
+@@ -0,0 +1,39 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/leds/samsung,s2mu005-rgb.yaml#
++$id: http://devicetree.org/schemas/extcon/samsung,s2mu005-muic.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: RGB LED Controller for Samsung S2M series PMICs
++title: MUIC Device for Samsung S2M series PMICs
 +
 +maintainers:
 +  - Kaustabh Chakraborty <kauschluss@disroot.org>
 +
 +description: |
-+  The Samsung S2M series PMIC RGB LED is a three-channel LED device with
-+  8-bit brightness control for each channel, typically used as status
-+  indicators in mobile phones.
++  The Samsung S2M series PMIC MUIC device is a USB port accessory
++  detector. It reports multiple states depending on the ID-GND
++  resistance measured by an internal ADC.
 +
 +  This is a part of device tree bindings for S2M and S5M family of Power
 +  Management IC (PMIC).
@@ -149,18 +148,23 @@ index 0000000000000..6806b6d869ff7
 +  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
 +  additional information and example.
 +
-+allOf:
-+  - $ref: common.yaml#
-+
 +properties:
 +  compatible:
 +    enum:
-+      - samsung,s2mu005-rgb
++      - samsung,s2mu005-muic
++
++  connector:
++    $ref: /schemas/connector/usb-connector.yaml#
++
++  port:
++    $ref: /schemas/graph.yaml#/properties/port
 +
 +required:
 +  - compatible
++  - connector
++  - port
 +
-+unevaluatedProperties: false
++additionalProperties: false
 
 -- 
 2.52.0
