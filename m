@@ -1,207 +1,143 @@
-Return-Path: <linux-pm+bounces-43111-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43112-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oCeVJe5dnWmxOgQAu9opvQ
-	(envelope-from <linux-pm+bounces-43111-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 09:14:38 +0100
+	id CGudNcBdnWmxOgQAu9opvQ
+	(envelope-from <linux-pm+bounces-43112-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 09:13:52 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4149F183786
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 09:14:38 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00B2A183758
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 09:13:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 36CA63135EB1
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 08:10:20 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3AEF5301DA6C
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 08:13:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94195366542;
-	Tue, 24 Feb 2026 08:10:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F78836654C;
+	Tue, 24 Feb 2026 08:13:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="X0dmDTi/";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="e4j7AlC7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KvoQ/gME"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF55366060
-	for <linux-pm@vger.kernel.org>; Tue, 24 Feb 2026 08:10:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D53364E8F;
+	Tue, 24 Feb 2026 08:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771920619; cv=none; b=jqkMdpivSlmxj2ya5BSi9yleNMuA19QLAExE3my9baAW5qYwgNUZtT77qYuzl8uE5hAayqZ/vTvl9+S59fW0J58T1g+9AYYHnTESmapUyaVxPJ+j5SzLDU+N27AHlIllMNm6GexD4y+8JuOho4sBDuJQ52w3EpB/LmTRHoMAgdA=
+	t=1771920827; cv=none; b=cKtUkHdsS40QwcM2AWSkBeXezo89SfHzynGAAvGlT5RR2QG7IP4XX8pWnSAXPfynvkrQAYZ2tgX9J99A1sSJN/PH4nGeed5Q4FYT77h4uwfohVzlFvmn0uggiBxdh0KVsMTH1h6Q/yWevutTTJfg2ViPoABG+tNbgpDqHibxkgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771920619; c=relaxed/simple;
-	bh=qYVi6UpYDZWUvVX7mise+3Gu9ph4AYcoIwRD+5oqduA=;
+	s=arc-20240116; t=1771920827; c=relaxed/simple;
+	bh=Gg+RXtOcR0DYpMZ9ChetNvxgvGLU4ili+KJ+Dxx7nFU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AGXuHTRu3BUOA1aV6Gk+bSmMbuayMNI18iFB7Mdo0yyXaYSI/TNjl8Vc8SckgMpMmJO2v3xkaXrwh/RnLzBMaP4JrGQN0lmjx9h0z79xD6/QrqVlj+JngPpCrBy34f9Z7eF0PrFmkt6dtU6O8sJK19plYM9kC0kDcgWnqd5Oz5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=X0dmDTi/; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=e4j7AlC7; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61O4LipL2808544
-	for <linux-pm@vger.kernel.org>; Tue, 24 Feb 2026 08:10:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=akfh5azzDqif5zPoRlnXnETK
-	o7tY79FJ80obZSfZowQ=; b=X0dmDTi/TNbDzp4nARzZPDAuuCjz8TyVX0z0seLV
-	uhjXfCA5vyRUp2dtvsOOefB3930ilLHDEGeLe1aplBPgjpEybTa05jhuQqxF/s9f
-	7KT86wn/e3l+0uucl90XQQNQd5WmksPlZlJPaxWklnxIm0iE6ymcTEDtmE5OBoqO
-	/IYyz3uTB/SprJjuVb3V+k8atv8WzVBQlifyJ0wNQWA7BFx9MGxwXZlzqUSnI4F0
-	visi726tKWRH8XczoShtcNYIPf0K3SrjvMeatU06yOhGRqaSRqlyBVyGHQ8JMhZ/
-	lmGJUvQ0XXecOy6YtCUguNTd5h5rOpYHGuYrhEmWmJqkPg==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cgn8rbe4q-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 24 Feb 2026 08:10:17 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8c71304beb4so3512080985a.3
-        for <linux-pm@vger.kernel.org>; Tue, 24 Feb 2026 00:10:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1771920616; x=1772525416; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=akfh5azzDqif5zPoRlnXnETKo7tY79FJ80obZSfZowQ=;
-        b=e4j7AlC7q8KMEIK44jRQTlNeIxivWlAnZ1mqg9QykNPcBkU3ZG4DTZHxYrC1L5i5e1
-         uDyiA7WURk11c8LpxzEvOxEfG6GNg3LZhGBMeGKj0dcJRtXSMkdMXu5xy8R8c+0/1aws
-         mnM67Xi0o5SWaqSXtiyL8LLdPuKmrZyHiMbQ6VKs3M4qrMV2WvSPUnXBkGqhO4nSkofm
-         OSdFUz7YwfFBxXhpUl0jcyuoIH7Uolqzx0wd9phx4E4h9HNAe9t+d5h7BjFluhPoClnT
-         EeRY1FxQ3nQACsPEtbC/DYkg86VeLqgOHDvbxCSAUvXTgtoWlBEby+4lZNeEZZCLpLCg
-         Z9JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771920616; x=1772525416;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=akfh5azzDqif5zPoRlnXnETKo7tY79FJ80obZSfZowQ=;
-        b=c4RxEgTEKXmQv0b6Hk8xW4g2NsRmphvuQms8OAfnPqlXirck53YKfS3mBhMm1q+FAO
-         uc/0R+LrEGjkfGMU6dbznNqSt8BIzFiTmYhdjpUEMDvnCbTbo7/gIeCF1bU0Xm+pp8oJ
-         e6dUywRRNcBqOGnqZc28NeTLss6cKqqbDcp5d7X8k/uC/yeiFls+igHIDl28wnz6F9hr
-         EQEqjjwJ3I2B7Ce64If/KnA0ri/JMmf1UAibeNhGQHkYgG83nH1ZJdsLej2dtgy52pwL
-         DWYXsO/ExqyCP9geqViYWy3zRFRb1Errs2mZZwgmsj0qelqCdW9Jsa4B2wAJLC0UmOVI
-         ogxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWADSqNIbtq3qjCAuvJanTs5kEvIY7HnpOdrxqUxxdroL/CrUlpqZAqfuHUMs44mZcOw5Jv4PKfSA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWx/xxsR4KTHvxB9fP5M2Cd4LFbHw3BTn7hnd6I9KKJ19AKh3Y
-	jcGtYzwVQBHMq+VdpWqHHzye8sZligCQWERcf65itNmXlmyBoFr06gPHZahMiOnFSOnD8javhIB
-	/RGYP0q/kQbn3lhe6DaMMgLt/0BKaxXbbguym2Y6AQRy2Ak9cIUwIyMeIbiDTXBeAquEoqw==
-X-Gm-Gg: AZuq6aLBlC7JxajhfcsNYK7Fy8bxotSbGcdZ7tbvMwP46xM6e0nwZWJ3bOY94x2X8vz
-	pM4MBiVT5eS6sWvbMx62TUyJrmOnvTd1uNrz8I1nitvN+V4VFYLRoP6BUFnsGAkbb11HDeYfi2S
-	9WSL0/X6qGR9l5jd//K6ZOhn61XOlFQadomEXzNdYsoFc1mXpqRBxyUseSZLAhlObLWJtI/u4xB
-	ik/5R8ERB4oHAOn2ZoKaZnkqc173VhJeXRodzEcS3MyVDRLiErfVK7iug0gUPv3QtspHcZWRb2K
-	FUqwzTbkbRQJ3bqRhZGm4xHHLNhAw9sLy3yWTiGCnu1MlYInGTjM8LIBwLUz0jtyjaUM5PazCeV
-	aaJ+7OH3+NLP5wtxvouKnFIbtqSG9zD2HMZbB
-X-Received: by 2002:a05:620a:4449:b0:89f:5057:974d with SMTP id af79cd13be357-8cb8c9cc32cmr1357404885a.10.1771920616007;
-        Tue, 24 Feb 2026 00:10:16 -0800 (PST)
-X-Received: by 2002:a05:620a:4449:b0:89f:5057:974d with SMTP id af79cd13be357-8cb8c9cc32cmr1357400085a.10.1771920615132;
-        Tue, 24 Feb 2026 00:10:15 -0800 (PST)
-Received: from oss.qualcomm.com ([86.121.162.109])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483b81f8912sm19461595e9.1.2026.02.24.00.10.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Feb 2026 00:10:14 -0800 (PST)
-Date: Tue, 24 Feb 2026 10:10:12 +0200
-From: Abel Vesa <abel.vesa@oss.qualcomm.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sibi Sankar <sibi.sankar@oss.qualcomm.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: interconnect: OSM L3: Add Eliza OSM L3
- compatible
-Message-ID: <2dnws4hpakt4oxhbfpcnu5ga45mmx4fjxexou2gaueiqaveeyn@itiyzldq5cxr>
-References: <20260223-eliza-bindings-interconnect-epss-l3-v1-1-fa83970d60ae@oss.qualcomm.com>
- <20260224-hilarious-tasteful-narwhal-c492a5@quoll>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hb6oESfubT+N3KyA6UWHHGor7pYApP9S+JTJEz/Ih3LqLXu3MIXzzUpeTjRZBZ0SoD4lEdzRtdefGNO74j1nyAbzYObno4eJRYGI344mVTIOzrXAqjmZIMkf86F5Avs1jyzUJkRga5OPUfZi3V00pHg7BIyqKP84FN+vXuerW5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KvoQ/gME; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AD28C116D0;
+	Tue, 24 Feb 2026 08:13:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771920826;
+	bh=Gg+RXtOcR0DYpMZ9ChetNvxgvGLU4ili+KJ+Dxx7nFU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KvoQ/gMEOxCf62Y3lZL83ldy7+xKDPw5aHxGgacDwD6aJw6gW+lCeh6nTO7zHmHy9
+	 AF3ECTYr/LY6cHr1sb0SUo6kv9LSU87qFVl+qUCXBMuewv6WLJ48ylunfHG4h1hkXl
+	 iOQIXU3aJmQP2mKC+2Nich1uN67XjGuoFEexJKaO0C7l3VA55uPK7LxzsesEH1Mh+r
+	 BBUquYsybNh2/ApPz4MFmY9iA1D/09AsaQUxZW9s0KKW0HnljWbmJP7aEbuFb4wkTt
+	 rjRCDB8omTb91xEKRpv7pEU+8rsP0ptqcWsW2ga4YNiv31IWZvVWRXmHz1nY4RvMDy
+	 CV9Cpibrr/sMQ==
+Received: by wens.tw (Postfix, from userid 1000)
+	id C59095FAAF; Tue, 24 Feb 2026 16:13:43 +0800 (CST)
+Date: Tue, 24 Feb 2026 16:13:43 +0800
+From: Chen-Yu Tsai <wens@kernel.org>
+To: Bartosz Golaszewski <brgl@kernel.org>
+Cc: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Linus Walleij <linusw@kernel.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-gpio@vger.kernel.org, quic_vbadigan@quicinc.com,
+	quic_mrana@quicinc.com, sherry.sun@nxp.com,
+	driver-core@lists.linux.dev
+Subject: Re: [PATCH v7 0/3] PCI: Add support for PCIe WAKE# interrupt
+Message-ID: <aZ1dt626iivieo5r@wens.tw>
+References: <20260218-wakeirq_support-v7-0-0d4689830207@oss.qualcomm.com>
+ <CAMRc=MdF92kriuT_-Fbk3pj6YeJiNv6RSiDE7aB0AKL9oFZg5w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260224-hilarious-tasteful-narwhal-c492a5@quoll>
-X-Proofpoint-ORIG-GUID: PrkjU-qkHY4Udm_rkN4X-LOAmbxTJzkJ
-X-Authority-Analysis: v=2.4 cv=V7twEOni c=1 sm=1 tr=0 ts=699d5ce9 cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=oauzzCmhM186DRC0Y2yWPg==:17
- a=kj9zAlcOel0A:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=DJpcGTmdVt4CTyJn9g5Z:22
- a=EUspDBNiAAAA:8 a=9fn_TuVGXQWuGc_kkjMA:9 a=CjuIK1q_8ugA:10
- a=PEH46H7Ffwr30OY-TuGO:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDA2OCBTYWx0ZWRfXy1CRnj/7eloR
- ZyYHIRsCNdKwpTGWo+KRW+IQccYTBMOYOIrOS8T8EAG6wBZZ5elIWvLsGqwDSinD/Wop7rTDZ99
- lsrUBljdRLEtYmgw/XPZdcYoL33XbZUa46owO9Zd+2Vpk1Ay8YGVd/df9ndtY3Hp1HbJSuJv0V0
- mehNCPstjt08r+muclqE1ZwEcnxuMG09oTVpMvt3ZupY5+USAtaVMj+xBbYLK0pHCPGSRD3oEel
- 8vERuQquiw7nWAy+VIwM7oGsyWz9beaK/o/s+L9wYBn7yz9oUKCDymh9IczeO0bsMBMUoqA9F9r
- ggf+UBlsh+0Zpf37bKCVAE+EFvynyQhr14mCTjrlDk5gSztML/vSstO8tKXMWEuhLC8jNWi5Ulj
- RmAAnmtGPpmTF+Qe5UQwb3ApbqswZ4aAEbFYu4S+dYCicIo0o9Udgf3GHSd7Oa58eO5x7N0r5DN
- huEvlfUpMcw1jFqyvlg==
-X-Proofpoint-GUID: PrkjU-qkHY4Udm_rkN4X-LOAmbxTJzkJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-24_01,2026-02-23_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 spamscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
- impostorscore=0 bulkscore=0 priorityscore=1501 malwarescore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602240068
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMRc=MdF92kriuT_-Fbk3pj6YeJiNv6RSiDE7aB0AKL9oFZg5w@mail.gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	TAGGED_FROM(0.00)[bounces-43112-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43111-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email,qualcomm.com:dkim];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[abel.vesa@oss.qualcomm.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[wens@kernel.org,linux-pm@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-pm];
 	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 4149F183786
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,wens.tw:mid,qualcomm.com:email]
+X-Rspamd-Queue-Id: 00B2A183758
 X-Rspamd-Action: no action
 
-On 26-02-24 08:29:09, Krzysztof Kozlowski wrote:
-> On Mon, Feb 23, 2026 at 10:49:04AM +0200, Abel Vesa wrote:
-> > Eliza, similarly to SDM845, uses OSM hardware for L3 scaling.
-> > Document it.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
+On Wed, Feb 18, 2026 at 11:01:23AM +0100, Bartosz Golaszewski wrote:
+> On Wed, Feb 18, 2026 at 9:12 AM Krishna Chaitanya Chundru
+> <krishna.chundru@oss.qualcomm.com> wrote:
+> >
+> > PCIe WAKE# interrupt is needed for bringing back PCIe device state from
+> > D3cold to D0.
+> >
+> > This is pending from long time, there was two attempts done previously to
+> > add WAKE# support[1], [2]. Those series tried to add support for legacy
+> > interrupts along with WAKE#. Legacy interrupts are already available in
+> > the latest kernel and we can ignore them. For the wake IRQ the series is
+> > trying to use interrupts property define in the device tree.
+> >
+> > This series is using gpio property instead of interrupts, from
+> > gpio desc driver will allocate the dedicate IRQ.
+> >
+> > WAKE# is added in dts schema and merged based on this patch.
+> > https://lore.kernel.org/all/20250515090517.3506772-1-krishna.chundru@oss.qualcomm.com/
+> >
+> > [1]: https://lore.kernel.org/all/b2b91240-95fe-145d-502c-d52225497a34@nvidia.com/T/
+> > [2]: https://lore.kernel.org/all/20171226023646.17722-1-jeffy.chen@rock-chips.com/
+> >
+> > Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
 > > ---
-> >  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-> > index 4b9b98fbe8f2..6182599eb3c1 100644
-> > --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-> > +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
-> > @@ -28,6 +28,7 @@ properties:
-> >            - const: qcom,osm-l3
-> >        - items:
-> >            - enum:
-> > +              - qcom,eliza-epss-l3
 > 
-> I see EPSS, not OSM here. This is also list without SDM845, so I don't
-> understand explanation in commit msg at all.
+> This spans three subsystems, how do you want to get it upstream?
 
-So there are two issues here:
+FWIW, I'm interested in using fwnode_gpiod_get() in the net subsystem
+for the same reasons as the author. I could just use
+fwnode_gpiod_get_index() and convert later though.
 
-1. EPSS bindings are handled by the OSM schema. I believe this is by
-design as they basically do the same thing. Interconnect providers for
-L3 scaling. So the compatible is in the right schema.
 
-2. The commit message should've said SM8650 instead. Will fix and
-respin.
+ChenYu
 
+
+> Bartosz
 
