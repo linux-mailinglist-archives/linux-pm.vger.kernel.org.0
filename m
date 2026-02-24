@@ -1,384 +1,200 @@
-Return-Path: <linux-pm+bounces-43175-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43176-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kMBYFWf5nWmeSwQAu9opvQ
-	(envelope-from <linux-pm+bounces-43175-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 20:17:59 +0100
+	id gLNNJKkYnmmcTQQAu9opvQ
+	(envelope-from <linux-pm+bounces-43176-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 22:31:21 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EADA018BD7A
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 20:17:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEF3818CC9F
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 22:31:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C80763065E51
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 19:16:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7DB593039EDE
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 21:31:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 160DD3ACA6B;
-	Tue, 24 Feb 2026 19:16:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93366338904;
+	Tue, 24 Feb 2026 21:31:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="Oqzfwme4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Czdk/WrW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1333ACA42;
-	Tue, 24 Feb 2026 19:16:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F62225524C;
+	Tue, 24 Feb 2026 21:31:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771960612; cv=none; b=LMhCFRFpi5tIkT2yCduHtSL/k+/MvdCezpm5JRADmTRSUGAN0OZtu9o65BmUikVKmRqQCmk0veDKvZ5EFtD0m8oHbNJIc5K11sXylSQyCyPgkdS3S2sBXfEi+GqcN6ZraC6cfGAAglmLw2R82hV5D6E5KoRoValbK1g9U/JOUhY=
+	t=1771968677; cv=none; b=anzl9pHoUaMB6qPHnJhb4fwV2SfKz3sMR529vUSkzASaWn7Y5XTkWu8pPeEuQrEXcFglngvQ1i3Hv7TNg+RIlYleVV74jVMinMtxoH18GcU8ND+cpKSd2mK1Ulo3ZcOpRzBsHCiesGBrJzXQ3RLnOE4AgIpTi0odRXSKkdESKMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771960612; c=relaxed/simple;
-	bh=eUwB1Jan41bDQ5eE7wi0+KgVhna1qKY10VE1yGICQVI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ka7mfFAEPiRb+8uMB3Anqw5/PYEcOfRFGEyT4zxO8odiTAYuy2OukXiTWJH6Mp2/8CvqGBTjkWYAWOivIilPZnH7p+pqr74Rub79cSFi0ngkuF+0c2r86J+W44QvD6820UoNDHbQgGvtO7u6fKM04cpF6SG8p+9hwschUvuoK7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=Oqzfwme4; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 16B69262AA;
-	Tue, 24 Feb 2026 20:16:49 +0100 (CET)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b2kp0Hw9a_T8; Tue, 24 Feb 2026 20:16:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1771960608; bh=eUwB1Jan41bDQ5eE7wi0+KgVhna1qKY10VE1yGICQVI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=Oqzfwme4pPHcZ/n/VaR51MBEmiJGOxrF0rqTAnetqQO7CMPeYbn3GAkjyIXW9tLIm
-	 1d+jgl72aOg2o9NJgxyQ/WuFiwbT4ZxXd6/p2IsoYyVgeGv3Y7joduHqmKn1TWz3vR
-	 TGFWiN4EP3LDRmuOjIgLjQW1pkmjoLPdEUnzlYnZmF9pIEQrWT4XtVMm/ZjWKAq53y
-	 +fUdKfRqs0nUOYGQLCryrOsv/ILT6XXZVfoHWwrUooj82/zMYp0Aq51v1AUgmz369M
-	 /KCg9JxU9a3i1BzEZydCbbNoXquk62cRYIVoLfA5HFN2Gp2LDNrh9EUBPDr03xaeFQ
-	 eocc3gjPfsOsg==
-From: Kaustabh Chakraborty <kauschluss@disroot.org>
-Date: Wed, 25 Feb 2026 00:45:15 +0530
-Subject: [PATCH v3 13/13] power: supply: add support for Samsung S2M series
- PMIC charger device
+	s=arc-20240116; t=1771968677; c=relaxed/simple;
+	bh=UbtxL0lwVAdObZWxDmbXqs9I1KiIpKW75KMm1Hf3Cbw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HKIkZTFxw2NYgBZbVgVdx0kHXRLU2uT5CoNXqjgcry29sMqP56S+5CJHoKzPylWR5grqlj0PRib6BnEDg4zhUwHSwy2BNFxlK3uoqrC7YbVmWe8EOonxAdP7BjefmvWyUy1EkuN7gaxBA3hBRm+/mccaDtbhwRoZmhY5MesUJHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Czdk/WrW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A063C116D0;
+	Tue, 24 Feb 2026 21:31:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771968677;
+	bh=UbtxL0lwVAdObZWxDmbXqs9I1KiIpKW75KMm1Hf3Cbw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Czdk/WrW03CbLQTSWrZr0rP5OWHnw65JiuizHkpcyGPbyYxbaTL34b2hFNKMulcdY
+	 Qh9dhSWP+CLLoXcPgzGbqdzKc+AqXqHNj7XZX0UrXng8fVYKRgGzE5/Xl5fsnkinHz
+	 WLTJaPSlSZtqkoPbC3lT4siqlR2REBec629SxtDVXtf6gqRuDc0g6S7BlIuw9/erDG
+	 9EoGH/V1yC8lDXCZQssx5CvQc/StYvligEEsvJGH/sIkVv9A6L/eWfDW1h1EJNBq/1
+	 gDvNQm3aq806qE5qZPoWVDu4WgOyGgZVDUy0w+BL6KvMkq/fdq0X4CanR/CKL0e7GK
+	 2xh52QSHs3BSw==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Christian Loehle <christian.loehle@arm.com>,
+ Thomas Gleixner <tglx@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH RFC] tick/sched: Prevent pointless NOHZ transitions
+Date: Tue, 24 Feb 2026 22:31:13 +0100
+Message-ID: <5987061.DvuYhMxLoT@rafael.j.wysocki>
+Organization: Linux Kernel Development
+In-Reply-To: <87zf4yt90t.ffs@tglx>
+References:
+ <875x7mv8wd.ffs@tglx> <ca2b5ede-1922-4540-bc44-a7ff6bec406f@arm.com>
+ <87zf4yt90t.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260225-s2mu005-pmic-v3-13-b4afee947603@disroot.org>
-References: <20260225-s2mu005-pmic-v3-0-b4afee947603@disroot.org>
-In-Reply-To: <20260225-s2mu005-pmic-v3-0-b4afee947603@disroot.org>
-To: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
- Chanwoo Choi <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Nam Tran <trannamatk@gmail.com>
-Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org, 
- linux-doc@vger.kernel.org, Kaustabh Chakraborty <kauschluss@disroot.org>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[disroot.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[disroot.org:s=mail];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	CTE_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43175-lists,linux-pm=lfdr.de];
-	FREEMAIL_TO(0.00)[kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[22];
+	TAGGED_FROM(0.00)[bounces-43176-lists,linux-pm=lfdr.de];
+	TO_DN_ALL(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	URIBL_MULTI_FAIL(0.00)[sea.lore.kernel.org:server fail,rafael.j.wysocki:server fail];
+	HAS_ORG_HEADER(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kauschluss@disroot.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[disroot.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[disroot.org:mid,disroot.org:dkim,disroot.org:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: EADA018BD7A
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,rafael.j.wysocki:mid]
+X-Rspamd-Queue-Id: EEF3818CC9F
 X-Rspamd-Action: no action
 
-Add a driver for charger controllers found in certain Samsung S2M series
-PMICs. The driver has very basic support for the device, with only
-charger online reporting working.
+On Tuesday, February 24, 2026 5:13:06 PM CET Thomas Gleixner wrote:
+> On Tue, Feb 24 2026 at 09:35, Christian Loehle wrote:
+> > On 2/24/26 08:32, Thomas Gleixner wrote:
+> >> This happens with both TEO and MENU governors in a VM guest. That's not
+> >> only pointless it's also a performance issue as each rearm of the timer
+> >> implies a VM exit.
+> >
+> > This is the (drv->state_count <= 1) case I assume, no governor does anything
+> > sensible in that case.
+> 
+> Indeed.
+> 
+> > I was also curious about the performance angle recently FWIW, but didn't
+> > hear back:
+> > https://lore.kernel.org/all/73439919-e24d-4bd5-a7ed-d7633beb5e4f@arm.com/
+> 
+> Sure, but I can tell you that two VM exits for a 10us idle are really
+> harming performance a lot. That's why I noticed.
+> 
+> >> Keep track of the idle time with a moving average and check it for being
+> >> larger than TICK_NSEC in can_stop_idle_tick(). That cures this behaviour
+> >> while still allowing the system to go into long idle sleeps once the
+> >> work load stopped.
+> >> 
+> >> Signed-off-by: Thomas Gleixner <tglx@kernel.org>
+> >> ---
+> >>  kernel/time/tick-sched.c |   20 +++++++++++++++++---
+> >>  kernel/time/tick-sched.h |    9 +++++++++
+> >>  2 files changed, 26 insertions(+), 3 deletions(-)
+> >
+> > Why here and not in cpuidle?
+> 
+> I don't care where it is fixed, that's why I marked it RFC
+> 
+> > We've recently added some code for the single state case to skip
+> > governor see
+> 
+> Duh. I just noticed, the VM has no driver, so this will not end up in
+> cpuidle_select(). No wonder that changing the governor has no effect :)
+> 
+> I set the governor to haltpoll now, but that does not work either as the
+> stupid haltpoll driver is built in and not activated as it requires the
+> force parameter unless the KVM hypervisor has KVM_HINTS_REALTIME set.
+> 
+> Brilliant, intuitive and truly user friendly stuff all that.
+> 
+> It's amazing as always that all the "performance experts" who cry murder
+> on everything else never noticed this completely nonsensical default
+> behaviour.
+> 
+> Force enabling that driver and setting the governor to 'teo' makes it go
+> away. 'menu' still sucks pretty much the same way as with none; slightly
+> less so, but often enough.
+> 
+> > e5c9ffc6ae1b ("cpuidle: Skip governor when only one idle state is available")
+> > where that could also live.
+> 
+> So either ladder or the powernv driver is broken and that gets fixed in
+> the cpuidle core. Interesting choice.
+> 
+> But as I explained above adding something to this hack won't help for
+> the VM case with no driver active because cpuidle_not_available() is
+> true and idle ends up in default_idle_call().
+> 
+> So either the governor/driver muck provides some sensible default
+> implementation or this has to go into into default_idle_call().
+> 
+> Oh well...
 
-The driver includes initial support for the S2MU005 PMIC charger.
+It looks like the issue is cause by the tick_nohz_idle_stop_tick() called right
+before invoking default_idle_call().
 
-Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
+After the recent changes mentioned above, cpuidle_select() will never stop the
+tick when there's only one idle state in the cpuidle driver, so it would be
+consistent to make the default case behave analogously.  The default idle state
+is never a deep one AFAICS.
+
+So maybe something like the below?
+
 ---
- drivers/power/supply/Kconfig       |  11 ++
- drivers/power/supply/Makefile      |   1 +
- drivers/power/supply/s2m-charger.c | 213 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 225 insertions(+)
+ kernel/sched/idle.c |    2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index 92f9f7aae92f2..8276964793c1b 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -834,6 +834,17 @@ config CHARGER_RK817
- 	help
- 	  Say Y to include support for Rockchip RK817 Battery Charger.
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -186,8 +186,6 @@ static void cpuidle_idle_call(void)
+ 	}
  
-+config CHARGER_S2M
-+	tristate "Samsung S2M series PMIC battery charger support"
-+	depends on EXTCON_S2M
-+	depends on MFD_SEC_CORE
-+	select REGMAP_IRQ
-+	help
-+	  This option enables support for charger devices found in
-+	  certain Samsung S2M series PMICs, such as the S2MU005. These
-+	  devices provide USB power supply information and also required
-+	  for USB OTG role switching.
-+
- config CHARGER_SMB347
- 	tristate "Summit Microelectronics SMB3XX Battery Charger"
- 	depends on I2C
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index 4b79d5abc49a7..6e787cdc10ce9 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -106,6 +106,7 @@ obj-$(CONFIG_CHARGER_BQ25890)	+= bq25890_charger.o
- obj-$(CONFIG_CHARGER_BQ25980)	+= bq25980_charger.o
- obj-$(CONFIG_CHARGER_BQ256XX)	+= bq256xx_charger.o
- obj-$(CONFIG_CHARGER_RK817)	+= rk817_charger.o
-+obj-$(CONFIG_CHARGER_S2M)	+= s2m-charger.o
- obj-$(CONFIG_CHARGER_SMB347)	+= smb347-charger.o
- obj-$(CONFIG_CHARGER_TPS65090)	+= tps65090-charger.o
- obj-$(CONFIG_CHARGER_TPS65217)	+= tps65217_charger.o
-diff --git a/drivers/power/supply/s2m-charger.c b/drivers/power/supply/s2m-charger.c
-new file mode 100644
-index 0000000000000..e6417018daa24
---- /dev/null
-+++ b/drivers/power/supply/s2m-charger.c
-@@ -0,0 +1,213 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Battery Charger Driver for Samsung S2M series PMICs.
-+ *
-+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
-+ * Copyright (c) 2025 Kaustabh Chakraborty <kauschluss@disroot.org>
-+ */
-+
-+#include <linux/devm-helpers.h>
-+#include <linux/extcon.h>
-+#include <linux/mfd/samsung/core.h>
-+#include <linux/mfd/samsung/s2mu005.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/power_supply.h>
-+#include <linux/regmap.h>
-+
-+struct s2m_chgr {
-+	struct device *dev;
-+	struct regmap *regmap;
-+	struct power_supply *psy;
-+	struct extcon_dev *extcon;
-+	struct work_struct extcon_work;
-+	struct notifier_block extcon_nb;
-+};
-+
-+static int s2mu005_chgr_get_online(struct s2m_chgr *priv, int *value)
-+{
-+	u32 val;
-+	int ret = 0;
-+
-+	ret = regmap_read(priv->regmap, S2MU005_REG_CHGR_STATUS0, &val);
-+	if (ret < 0) {
-+		dev_err(priv->dev, "failed to read register (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	*value = !!(val & S2MU005_CHGR_CHG);
-+
-+	return ret;
-+}
-+
-+static int s2mu005_chgr_get_property(struct power_supply *psy,
-+				     enum power_supply_property psp,
-+				     union power_supply_propval *val)
-+{
-+	struct s2m_chgr *priv = power_supply_get_drvdata(psy);
-+	int ret = 0;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		ret = s2mu005_chgr_get_online(priv, &val->intval);
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static void s2mu005_chgr_extcon_work(struct work_struct *work)
-+{
-+	struct s2m_chgr *priv = container_of(work, struct s2m_chgr,
-+						 extcon_work);
-+	int ret;
-+
-+	if (extcon_get_state(priv->extcon, EXTCON_USB_HOST) == true) {
-+		ret = regmap_update_bits(priv->regmap, S2MU005_REG_CHGR_CTRL0,
-+					 S2MU005_CHGR_OP_MODE,
-+					 FIELD_PREP(S2MU005_CHGR_OP_MODE,
-+						    S2MU005_CHGR_OP_MODE_OTG));
-+		if (ret < 0)
-+			dev_err(priv->dev, "failed to set operation mode to OTG (%d)\n",
-+				ret);
-+
-+		goto psy_update;
-+	}
-+
-+	if (extcon_get_state(priv->extcon, EXTCON_USB) == true) {
-+		ret = regmap_update_bits(priv->regmap, S2MU005_REG_CHGR_CTRL0,
-+					 S2MU005_CHGR_OP_MODE,
-+					 FIELD_PREP(S2MU005_CHGR_OP_MODE,
-+						    S2MU005_CHGR_OP_MODE_CHG));
-+		if (ret < 0)
-+			dev_err(priv->dev, "failed to set operation mode to charging (%d)\n",
-+				ret);
-+
-+		goto psy_update;
-+	}
-+
-+	ret = regmap_clear_bits(priv->regmap, S2MU005_REG_CHGR_CTRL0,
-+				S2MU005_CHGR_OP_MODE);
-+	if (ret < 0)
-+		dev_err(priv->dev, "failed to clear operation mode (%d)\n", ret);
-+
-+psy_update:
-+	power_supply_changed(priv->psy);
-+}
-+
-+static const enum power_supply_property s2mu005_chgr_properties[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+};
-+
-+static const struct power_supply_desc s2mu005_chgr_psy_desc = {
-+	.name = "s2mu005-charger",
-+	.type = POWER_SUPPLY_TYPE_USB,
-+	.properties = s2mu005_chgr_properties,
-+	.num_properties = ARRAY_SIZE(s2mu005_chgr_properties),
-+	.get_property = s2mu005_chgr_get_property,
-+};
-+
-+static int s2m_chgr_extcon_notifier(struct notifier_block *nb,
-+					unsigned long event, void *param)
-+{
-+	struct s2m_chgr *priv = container_of(nb, struct s2m_chgr, extcon_nb);
-+
-+	schedule_work(&priv->extcon_work);
-+
-+	return NOTIFY_OK;
-+}
-+
-+static int s2m_chgr_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct sec_pmic_dev *pmic_drvdata = dev_get_drvdata(dev->parent);
-+	struct s2m_chgr *priv;
-+	struct device_node *extcon_node;
-+	struct power_supply_config psy_cfg = {};
-+	const struct power_supply_desc *psy_desc;
-+	work_func_t extcon_work_func;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, priv);
-+	priv->dev = dev;
-+	priv->regmap = pmic_drvdata->regmap_pmic;
-+
-+	switch (platform_get_device_id(pdev)->driver_data) {
-+	case S2MU005:
-+		psy_desc = &s2mu005_chgr_psy_desc;
-+		extcon_work_func = s2mu005_chgr_extcon_work;
-+		break;
-+	default:
-+		return dev_err_probe(dev, -ENODEV,
-+				     "device type %d is not supported by driver\n",
-+				     pmic_drvdata->device_type);
-+	}
-+
-+	psy_cfg.drv_data = priv;
-+	priv->psy = devm_power_supply_register(dev, psy_desc, &psy_cfg);
-+	if (IS_ERR(priv->psy))
-+		return dev_err_probe(dev, PTR_ERR(priv->psy),
-+				     "failed to register power supply subsystem\n");
-+
-+	/* MUIC is mandatory. If unavailable, request probe deferral */
-+	extcon_node = of_get_child_by_name(dev->parent->of_node, "extcon");
-+	priv->extcon = extcon_find_edev_by_node(extcon_node);
-+	if (IS_ERR(priv->extcon))
-+		return -EPROBE_DEFER;
-+
-+	ret = devm_work_autocancel(dev, &priv->extcon_work, extcon_work_func);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to initialize extcon work\n");
-+
-+	priv->extcon_nb.notifier_call = s2m_chgr_extcon_notifier;
-+	ret = devm_extcon_register_notifier_all(dev, priv->extcon, &priv->extcon_nb);
-+	if (ret)
-+		dev_err_probe(dev, ret, "failed to register extcon notifier\n");
-+
-+	return 0;
-+}
-+
-+static const struct platform_device_id s2m_chgr_id_table[] = {
-+	{ "s2mu005-charger", S2MU005 },
-+	{ /* sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(platform, s2m_chgr_id_table);
-+
-+/*
-+ * Device is instantiated through parent MFD device and device matching
-+ * is done through platform_device_id.
-+ *
-+ * However if device's DT node contains proper compatible and driver is
-+ * built as a module, then the *module* matching will be done through DT
-+ * aliases. This requires of_device_id table. In the same time this will
-+ * not change the actual *device* matching so do not add .of_match_table.
-+ */
-+static const struct of_device_id s2m_chgr_of_match_table[] = {
-+	{
-+		.compatible = "samsung,s2mu005-charger",
-+		.data = (void *)S2MU005,
-+	}, {
-+		/* sentinel */
-+	},
-+};
-+MODULE_DEVICE_TABLE(of, s2m_chgr_of_match_table);
-+
-+static struct platform_driver s2m_chgr_driver = {
-+	.driver = {
-+		.name = "s2m-charger",
-+	},
-+	.probe = s2m_chgr_probe,
-+	.id_table = s2m_chgr_id_table,
-+};
-+module_platform_driver(s2m_chgr_driver);
-+
-+MODULE_DESCRIPTION("Battery Charger Driver For Samsung S2M Series PMICs");
-+MODULE_AUTHOR("Kaustabh Chakraborty <kauschluss@disroot.org>");
-+MODULE_LICENSE("GPL");
+ 	if (cpuidle_not_available(drv, dev)) {
+-		tick_nohz_idle_stop_tick();
+-
+ 		default_idle_call();
+ 		goto exit_idle;
+ 	}
 
--- 
-2.52.0
+
 
 
