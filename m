@@ -1,168 +1,128 @@
-Return-Path: <linux-pm+bounces-43148-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43149-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cGKdA1q7nWklRgQAu9opvQ
-	(envelope-from <linux-pm+bounces-43148-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 15:53:14 +0100
+	id uK2/L/S6nWklRgQAu9opvQ
+	(envelope-from <linux-pm+bounces-43149-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 15:51:32 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45E46188B48
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 15:53:13 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC513188AF4
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 15:51:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 96A7E3173A94
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 14:51:16 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 71F8F300C559
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Feb 2026 14:51:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E4A3A0B1C;
-	Tue, 24 Feb 2026 14:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 517ED3A0E82;
+	Tue, 24 Feb 2026 14:51:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cD2sSTvK"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="N/q1N07Y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D42839E6F9;
-	Tue, 24 Feb 2026 14:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FAB3A0B22
+	for <linux-pm@vger.kernel.org>; Tue, 24 Feb 2026 14:51:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771944674; cv=none; b=evuh42E0Pr08DhigG+uzRih5tr0xOckgQ6qnLHjokr7SbPo7vH0xSmGJPeura/xJ3jmQh3iDZc7xEBCYsh3jMOcjbPOymdIc9kKieuKnMpkIMCirXHZxOckAoLm33HQXTOJHgMSJPoNeGeAKXxsN3gJ0Z7bz1Qdl0+ypALofa+4=
+	t=1771944688; cv=none; b=oASaIaxC0LA5kR+UC934nv9tUE7C2oCCAilgVwXBrTdFfA50Qz1PE5HHFfQxspc6wbVlG7c3PT+mNKLP2s824MU6/Oe4D2Npa0q+RZLsaMIQ2U6pw741G/PJeLwEY5V6bsZQotgKvjdsW4LQNk6pWuEJXLakDDsdsayVOwjoSYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771944674; c=relaxed/simple;
-	bh=WE8HtYcRtSahVo/SKZ+DqmPNKUcoMSnUp2yT1VcZd/o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hAz6CF0gNTwF1euqm73Zp/ICIUmy0DLKM3LoBl2l0ujb1gFHbybDBEL3zVZw+e14aLJtGKIwX7NSeCuG0J3FajWH9638PDZzw2zZ/TC31SpMGQ1GXl4VFhUiB0f5v0JRsfljlxLhnH4PMi8erAljldcixRgGBhr+/j02gVvdI+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cD2sSTvK; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 667B04E41098;
-	Tue, 24 Feb 2026 14:51:06 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 24C245FD9D;
-	Tue, 24 Feb 2026 14:51:06 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1CD291036918D;
-	Tue, 24 Feb 2026 15:50:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1771944664; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=vv63Bmk8v8hQ7TUParpNLdhU99o6I3+yG2U0bzr7vMM=;
-	b=cD2sSTvK9wDOM/N20TtC46mcK2bV3UBwXSPqsbQTDEs6c5NyXjf/DCEa3yMNuckoA+P5KB
-	DieONpwghmo3ZeTv3jcgCKxiIeaw717hsi/FDLOyIzct2cPf1A4J7wF8F7j2V2OIaFdyHX
-	gzmEKYrZ03o6cdoLelmJpOoZfSSB/1GPE7iy1YPF3O01o5GHs2rgoRqwOpOxIbPtL0wTxx
-	0k2ljd6eulJfXgGIiCspal3DXsuVS1hfScxP24FUdWLoZRqbtEv7YVOlYLzuEPwbpGXvqt
-	vdnG/K/WWHxudvj0zQHDR/mnbJr56zdLLFQOZshOw4/Agz42COIEf9F6FVm9Dg==
-Date: Tue, 24 Feb 2026 15:50:56 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Luca Leonardo Scorcia <l.scorcia@gmail.com>
-Cc: linux-mediatek@lists.infradead.org, Fabien Parent <parent.f@gmail.com>,
-	Val Packett <val@packett.cool>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Sen Chu <sen.chu@mediatek.com>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones <lee@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Eddie Huang <eddie.huang@mediatek.com>,
-	Gary Bisson <bisson.gary@gmail.com>,
-	Julien Massot <julien.massot@collabora.com>,
-	Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
-	Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 1/9] dt-bindings: mfd: mt6397: Add bindings for MT6392
- PMIC
-Message-ID: <202602241450566c680722@mail.local>
-References: <cover.1771865014.git.l.scorcia@gmail.com>
- <c5ce038359583c5318c2d5ee341287c213aef880.1771865015.git.l.scorcia@gmail.com>
+	s=arc-20240116; t=1771944688; c=relaxed/simple;
+	bh=zeRYwHDFga5XDAtn2Mh6+61unaagIljzBvZ+FU4zhT8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oIX8ZOOEsJ7v0sZ5ZNLtmchz+ez6e2irYB9HejmVu7ZFrqVM6vaf0+QHZmji2y0Pepuy6UfJvJsu6UeaPa0gNqvMU8Ew2akUYr8C1T7OM6nxezU6sH6FguM3qX707DZQy/LqMiRbcU6j7XL/1Wea/PZOMrtzOVSOOaAWTCq8k5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=N/q1N07Y; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771944684;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/+VZMh4GEF8Zz3re4kwGvvFRb4CIYeGeUY9ZbG3g6Cw=;
+	b=N/q1N07YQ21jUvXkYtgTnWz2e5nKN2nQoB7wWRfIIq2TRlHf/C4x/mI03OdN7GFMgcj2rQ
+	sX6KC0uNBgHc3sUqCrgFmo+0RPM0gxqXSHF5YzJTQsDnUCPwHCuSmHtT3WcW5HdMk3inP8
+	LF52t6XEvWsj2XKl3+2AdCjTs81MGTc=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] thermal: sprd: Use min instead of clamp in sprd_thm_temp_to_rawdata
+Date: Tue, 24 Feb 2026 15:51:07 +0100
+Message-ID: <20260224145107.585892-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5ce038359583c5318c2d5ee341287c213aef880.1771865015.git.l.scorcia@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43148-lists,linux-pm=lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[lists.infradead.org,gmail.com,packett.cool,kernel.org,mediatek.com,collabora.com,vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[27];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[kernel.org,linaro.org,intel.com,arm.com,gmail.com,linux.alibaba.com];
+	TAGGED_FROM(0.00)[bounces-43149-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[bootlin.com:+];
+	FROM_NEQ_ENVFROM(0.00)[thorsten.blum@linux.dev,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[linux.dev:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
+	TAGGED_RCPT(0.00)[linux-pm];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.local:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,packett.cool:email,bootlin.com:url,bootlin.com:dkim]
-X-Rspamd-Queue-Id: 45E46188B48
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:mid,linux.dev:dkim,linux.dev:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,alibaba.com:email]
+X-Rspamd-Queue-Id: EC513188AF4
 X-Rspamd-Action: no action
 
-On 23/02/2026 17:12:40+0000, Luca Leonardo Scorcia wrote:
-> From: Fabien Parent <parent.f@gmail.com>
-> 
-> Add the currently supported bindings for the MT6392 PMIC.
-> 
-> Signed-off-by: Fabien Parent <parent.f@gmail.com>
-> Signed-off-by: Val Packett <val@packett.cool>
-> Signed-off-by: Luca Leonardo Scorcia <l.scorcia@gmail.com>
-> ---
->  Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
-> index 6a89b479d10f..5f422d311d4d 100644
-> --- a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
-> @@ -39,6 +39,7 @@ properties:
->            - mediatek,mt6328
->            - mediatek,mt6358
->            - mediatek,mt6359
-> +          - mediatek,mt6392
->            - mediatek,mt6397
->        - items:
->            - enum:
-> @@ -67,6 +68,7 @@ properties:
->                - mediatek,mt6323-rtc
->                - mediatek,mt6331-rtc
->                - mediatek,mt6358-rtc
-> +              - mediatek,mt6392-rtc
+Clamping 'val' to itself is unnecessary and the expression can be
+simplified by using min() instead. Casting SPRD_THM_RAW_DATA_HIGH to u32
+is also redundant and can be removed.
 
-Shouldn't you rather use "mediatek,mt6392-rtc", "mediatek,mt6397-rtc" as
-the compatible so you don't have to change anything in the driver?
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+ drivers/thermal/sprd_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->                - mediatek,mt6397-rtc
->            - items:
->                - enum:
-> -- 
-> 2.43.0
-> 
-
+diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
+index e546067c9621..511f1e7959b6 100644
+--- a/drivers/thermal/sprd_thermal.c
++++ b/drivers/thermal/sprd_thermal.c
+@@ -201,7 +201,7 @@ static int sprd_thm_temp_to_rawdata(int temp, struct sprd_thermal_sensor *sen)
+ 	 */
+ 	val = (temp + sen->cal_offset) / sen->cal_slope;
+ 
+-	return clamp(val, val, (u32)(SPRD_THM_RAW_DATA_HIGH - 1));
++	return min(val, SPRD_THM_RAW_DATA_HIGH - 1);
+ }
+ 
+ static int sprd_thm_read_temp(struct thermal_zone_device *tz, int *temp)
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thorsten Blum <thorsten.blum@linux.dev>
+GPG: 1D60 735E 8AEF 3BE4 73B6  9D84 7336 78FD 8DFE EAD4
+
 
