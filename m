@@ -1,485 +1,350 @@
-Return-Path: <linux-pm+bounces-43190-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43191-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wMSvGx6pnmntWgQAu9opvQ
-	(envelope-from <linux-pm+bounces-43190-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 08:47:42 +0100
+	id cKsFArW2nmnwWwQAu9opvQ
+	(envelope-from <linux-pm+bounces-43191-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 09:45:41 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13555193B05
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 08:47:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66AF91945C3
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 09:45:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 78DCF3013458
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 07:47:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EB7A5303799E
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 08:45:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6686C27FB2E;
-	Wed, 25 Feb 2026 07:47:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CA6A284672;
+	Wed, 25 Feb 2026 08:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UBiqe4Jv"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="moZiGqZS";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="moZiGqZS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011046.outbound.protection.outlook.com [52.101.70.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1EF1286889;
-	Wed, 25 Feb 2026 07:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772005660; cv=none; b=mbpJVHsvLfmlyRq2Bs9O35nqMQ5v2QXtfveD377GifP8nbKkS0OrDT+lOPpEYOLWW28Rv2wGhsNLMw5h1iVctq0splhAN1nyY0axYoRfGQp6DWIuzAlHdyvhwuXB+CJxnKt5BheBvI6+qI3iFNcudfLBSmPRj6s/3S3Oy/KHdhk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772005660; c=relaxed/simple;
-	bh=OqeooUI7pZ5BaxuFLTOrKbBhq69+NLA4rXszyAl+W8Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lZbKxq6AeQ5tbPg6/PGS8Ec//zcuN2p20mo+MPF3YVQOV2xgJTWvqqPodRg7vdyyB1a15mZP+5KlpKLlRxLTihjRiL6wL6r+3fH1jLm0BOXZSBCAXkTTyYiZWkDowSlUqQKzitkmWTDJvM1J7jet4XDCOPB100lFROG7VsEInPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=UBiqe4Jv; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61OJWgZP2347063;
-	Wed, 25 Feb 2026 07:46:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=d1bXe+
-	YZJukwpe334qIRVVA3qbpmzBuCIUTLT5KqR1o=; b=UBiqe4Jvy07djaZq7EEzfv
-	9a/pUthbCLWxZyBFoa4ywhjVo+RE3tpswVGEpGFXclhLVf7NdX/fnBiZ2gL4LYBk
-	OyPF1YyDl945UeoPgP005soOpS/Vwxn24ajonDZUh4kC8nA2PE+k71WMhJlsA3Ux
-	OF0SQYd9AV29j/mHUpIylrUq5smn8QT8SdYR+ZIJfJPCS+le1tDIIv9mrtJqzfhW
-	O2Lr69pxkCOUZVotA2h8KLyjFbJXBBjoHrpzbIz1pc0jP8BHG8YCCq0fhP1e/t/+
-	FpylegVBMOtcVMQryaofelIXqtf2Ks1Wmsomt6saVDGjYSrrlRCsLuvw/bTX1HpA
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ch858mkqk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Feb 2026 07:46:58 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61P4H3fo027797;
-	Wed, 25 Feb 2026 07:46:57 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfsr1v3u9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Feb 2026 07:46:56 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61P7krm57864644
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 25 Feb 2026 07:46:53 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 26B902004B;
-	Wed, 25 Feb 2026 07:46:53 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8D23620040;
-	Wed, 25 Feb 2026 07:46:45 +0000 (GMT)
-Received: from [9.124.223.55] (unknown [9.124.223.55])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 25 Feb 2026 07:46:45 +0000 (GMT)
-Message-ID: <120884b0-0b09-43a9-b0f6-7dc2affe1ac0@linux.ibm.com>
-Date: Wed, 25 Feb 2026 13:16:44 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3020A2135AD;
+	Wed, 25 Feb 2026 08:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.46
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772009138; cv=fail; b=TN6c2Zoe3yHNbH5cLJjNwO5iOqY6zqcIcz1dPDHs6dUaj4TNeWazMuDSRhsA3oLv1C50IODy96221DFddKw7qhyDv1uYKcZ/6oxQTFj1DQ/Bto7TKf1Nd8jP1hOYOuQXo3+Zm3G8b0o0Ba+oVX/un9o0KgoKZixLQ7H7dFdK14Y=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772009138; c=relaxed/simple;
+	bh=HX5uYMDtW8R2nKXfzWKpNR+S0U1B16EM7nXxjobELmc=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ZYaPjvgNz/PSru+PSYZnSpTnM2x8nlWwMM7yUx55qTPVDlEnau3PmflblOFjSxS5srBmUzJw2HXRsZFQ2NHqOe5eLUoJ8qknU1+SH9O9PfnqRa5vv2zjt7u4z53SFwqvYUnhDbM99f40gJ3JEeVTQkeKGYEnHBzbrca5uN0p/Bw=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=moZiGqZS; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=moZiGqZS; arc=fail smtp.client-ip=52.101.70.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=P/WXOnmEzRnLFIDLwTbg0aWLalq+kdnEHwsUNcyU5p7XXTvCgKs/3OUfuoW8gyhggGDBz4uUsnlWO1SU84m48vfxNdjtnoYSVIVnWTWDSRn5FDZPTdTXA+jcQ8p+t+oFwSwYC+6q5rnk77XZZwqSho4vF/tuh1f0clCM98nxQPiTgLNGVr1/v8xXksLGkfYMUYc5N535LFsbPW657AWMEGXtp4NtZ/uWFkUnq2tW8gUQI70EHiluVaPybO8azghgTOp18+1i0YZhFATT0DxsrdaQJRUxNiez0Eh6TOWewK9bWWbddDZJi37K2x6WjkimAL4AVxqQ1c95D4ltbZdhwQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7UBFeedgY9O1gtbuWSSTPTcd9+gHiPl2DLldEssiCfw=;
+ b=RyJEjb7qMseGdcj2Ysh+ROz3B7JdeRl7WXOp/CL3snOfI7nH3GAQRuG3YNp+6vNk5qQq8xVwW0MQF95/em0uZENJP5soHMsbENGyvV2y28UNaLcDamSJ2iiXN/+zg00LulQtiSYynJdK+sSJWEKG0dufjW6y4NX6MtmRKVXbR9sCx+WVPnAPmk4zzyz7caX8q8V8rPMCnbaqkDirufXnMKA0NU6rT06Wnv8zxlhCYH9oNLMqlCtbexcpJnHtD4ZXNidVyElCoNio6HYWxwNWusjKKVGEBa3UTGyMPw5H3VOVUU6ZLVS/FXgHGygZK5LQiwFE08hJWlL+dTU7JaFBHQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=huawei.com smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7UBFeedgY9O1gtbuWSSTPTcd9+gHiPl2DLldEssiCfw=;
+ b=moZiGqZSeUlaFnLpn0e/9FpXLotxWnDB4pQ1HG6tS6tilprs8aY55NCfiqaELcKIvcJYUhFXf62BrfwDxnd4pmsEtYwvAdZfSAcHlnSdSg+b5HkECAVdIeBmf+qdUejSmX49+41JrQyXUYCHkDItjVVFq2rTrK8i/msXjlSMgEw=
+Received: from DU2PR04CA0201.eurprd04.prod.outlook.com (2603:10a6:10:28d::26)
+ by AM9PR08MB5907.eurprd08.prod.outlook.com (2603:10a6:20b:2da::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.23; Wed, 25 Feb
+ 2026 08:45:30 +0000
+Received: from DU2PEPF0001E9C1.eurprd03.prod.outlook.com
+ (2603:10a6:10:28d:cafe::c9) by DU2PR04CA0201.outlook.office365.com
+ (2603:10a6:10:28d::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.23 via Frontend Transport; Wed,
+ 25 Feb 2026 08:45:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ DU2PEPF0001E9C1.mail.protection.outlook.com (10.167.8.70) with Microsoft SMTP
+ Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.12 via
+ Frontend Transport; Wed, 25 Feb 2026 08:45:29 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rSWDiQDIW9cyaPUVfcMyepq1CvwFt7DVBKyHAch6paCCWAH6imKGxHYoaS2hlHHKwsDF2+Axj+PdGsGy+5a+eFDy1h9zN74L+vg2Ejl3cuwQr5q+6ixrEPcE+xXiym5EXZKOFqEs5VHlGMCjVIOaUfrGrZn374xZ7fr/Ja0u1X63wVGa4hpN7H1QMhIe8cxvx/ikQ6Fy5harnNuEgR9NmRxFklA3UIFbXrBKlxxffG3RmbjbbOlbKZ8TOgPcf1ROQUqxfRzO5cdg75niWN4tEj2wST+S29oorevXrD+Mfx/d4B7FWiWEzpxM6nYN/f6sQuz1v46dkXow4loL31a28A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7UBFeedgY9O1gtbuWSSTPTcd9+gHiPl2DLldEssiCfw=;
+ b=Vpx39h27SfxB2KSiuNompUIZcEqGF3JZU79dHi7+sUiidrtTGQdyw1Xgbrk5eD6ap92PWQdPfpRIxfH+tQGfJm+xJC+yJuxAuDItP4j3LJYKrt6yM0uzwL/wXNRbptM8cvV3WdBxwFjQ6v32gx7W2uGhJHkpuOExQDjVIhq7w2npGcPGr6uRvzwC8joxfuUFXHolJAhBV6Fp9l4uxNEx2lscSqE9IH+79fa5kvcmUraLcXRPudbzt2+AWQzqPAtyrZ+viTmijA9S7AwYFI4cW33bDRy+elxjIckvDRJEWTKz7y+Kp9/fI/kEYIf8Vcts26abmJe4+mX01qfhxhAJbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7UBFeedgY9O1gtbuWSSTPTcd9+gHiPl2DLldEssiCfw=;
+ b=moZiGqZSeUlaFnLpn0e/9FpXLotxWnDB4pQ1HG6tS6tilprs8aY55NCfiqaELcKIvcJYUhFXf62BrfwDxnd4pmsEtYwvAdZfSAcHlnSdSg+b5HkECAVdIeBmf+qdUejSmX49+41JrQyXUYCHkDItjVVFq2rTrK8i/msXjlSMgEw=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from VI0PR08MB10391.eurprd08.prod.outlook.com (2603:10a6:800:20c::6)
+ by DU4PR08MB10981.eurprd08.prod.outlook.com (2603:10a6:10:577::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.22; Wed, 25 Feb
+ 2026 08:44:25 +0000
+Received: from VI0PR08MB10391.eurprd08.prod.outlook.com
+ ([fe80::fa6b:9ba8:5c2f:ac91]) by VI0PR08MB10391.eurprd08.prod.outlook.com
+ ([fe80::fa6b:9ba8:5c2f:ac91%4]) with mapi id 15.20.9632.017; Wed, 25 Feb 2026
+ 08:44:24 +0000
+Message-ID: <8afdc768-1d64-4562-8e75-8e31d277d272@arm.com>
+Date: Wed, 25 Feb 2026 09:44:22 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/6] cpufreq: Add boost_freq_req QoS request
+To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>, linux-kernel@vger.kernel.org
+Cc: Jie Zhan <zhanjie9@hisilicon.com>,
+ Ionela Voinescu <ionela.voinescu@arm.com>, Sumit Gupta <sumitg@nvidia.com>,
+ Christian Loehle <christian.loehle@arm.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Huang Rui <ray.huang@amd.com>,
+ "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Perry Yuan <perry.yuan@amd.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Len Brown <lenb@kernel.org>, Saravana Kannan <saravanak@kernel.org>,
+ linux-pm@vger.kernel.org
+References: <20260224170828.1635135-1-pierre.gondois@arm.com>
+ <20260224170828.1635135-3-pierre.gondois@arm.com>
+ <01459267-8151-434c-8963-f37ac1eb106a@huawei.com>
+Content-Language: en-US
+From: Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <01459267-8151-434c-8963-f37ac1eb106a@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0130.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:193::9) To VI0PR08MB10391.eurprd08.prod.outlook.com
+ (2603:10a6:800:20c::6)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/15] powerpc/time: Prepare to stop elapsing in
- dynticks-idle
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Joel Fernandes <joelagnelf@nvidia.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Kieran Bingham <kbingham@kernel.org>, Mel Gorman <mgorman@suse.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Paul E . McKenney"
- <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Xin Zhao <jackzxcui1989@163.com>, linux-pm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <20260206142245.58987-1-frederic@kernel.org>
- <20260206142245.58987-5-frederic@kernel.org>
- <9413517d-963b-4e6d-b11b-b440acd7cb5a@linux.ibm.com>
- <9ab1e7d7-57ee-49f9-963c-3a1b96dda684@kernel.org>
-Content-Language: en-US
-From: Shrikanth Hegde <sshegde@linux.ibm.com>
-In-Reply-To: <9ab1e7d7-57ee-49f9-963c-3a1b96dda684@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI1MDA3NCBTYWx0ZWRfX5zL8nlc3Tkin
- WFP3VRrkGibb7X4+XFy6DJdpJSRGWFJ1dWNfbFAYy8rXwU6bmmiNFKp3HD+XdclwfASH84hP8aT
- vT+bCqxZifm5okjgmfBNqzV/t3pqtiyPu1Q64jd+AqX5SydlxkK04BgJLGB2yFOp3FkFbf8zbO9
- G7vgrq3Sf2991tZre15QhAao+rrZTiTurqtYWHJIJkwcpOeg/tW6rAwfB0js6N25UTi2dut26k6
- xp8/upN5ts5+5C+ICu8qYpENvDnq/3q4RV1C44h9ObFPuGPIjRRSkOrr++zusTLLy6vq4PX945r
- JDiVBlurD2kalIYQGBQm7hlUddeX1y5FdJSaXmH0f1Lh8W9jHr1ZNCeUlLoRU7pi0gEY10g5Q67
- QwxhBGMAJ5RVbPPw3IAH9an7bpEf3hUKBwlNDByiFH7VnimlT0bUuS6F60xQ7RM9XO0Yw9xgPFl
- 6YNOEsjXcyfmEVsE6zA==
-X-Proofpoint-GUID: W_fCjhEa7lyx7huGXmAwSIvtcFXEtHaw
-X-Authority-Analysis: v=2.4 cv=S4HUAYsP c=1 sm=1 tr=0 ts=699ea8f2 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=WUffXJQcQjR-2s-BLAsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: nL94bN1xdGzMzsg1sXV_icGzGDZcPqGR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-24_03,2026-02-23_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 clxscore=1015 impostorscore=0 malwarescore=0 bulkscore=0
- phishscore=0 adultscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602250074
+X-MS-TrafficTypeDiagnostic:
+	VI0PR08MB10391:EE_|DU4PR08MB10981:EE_|DU2PEPF0001E9C1:EE_|AM9PR08MB5907:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4ebdb9ad-ba83-4c45-281b-08de744a3afd
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?utf-8?B?REdSLzZjVnJHN3ZSbE1XcHlZcm1RWXY5V0hjdjBUUEtJVnhHUGZWdUNZejBj?=
+ =?utf-8?B?TUNIclVtNWpFbWtITmNEM1hWVTFNbjdhV2xPWnlTM0ZwYmdMdHlMdUpTZ2RN?=
+ =?utf-8?B?M0JIMzQzTW1XdXRJWUI0ZFZaT0ZsUkQrNG5iWW5CcWdZV1JZN2tYZjFZMkt1?=
+ =?utf-8?B?YTRab3ZRdWM1SDNZdHZ3V0dvcW5aNklUWFoyQUQvalBVWEJKNW1qMGNCdzZ5?=
+ =?utf-8?B?OGhPOUZCVDNXcWhuTWZmM25FY0d5dFZmYmNDeXFraDVDMDNqeElWeHFMWGI1?=
+ =?utf-8?B?T3pZbUMzZjd2RC9jWnIzUmM5eWF2aXpSeEZsOHRpQnZ1ZU5jOEFUZjdCS3Bo?=
+ =?utf-8?B?R1FnRXJxZ29MYyt6NTlGVWJ3UGRvQUVBeEN5cWZwWWcvTVEyN0g4V1ZKUEpz?=
+ =?utf-8?B?NThNTW9md0xyN3dDYmdKUlNrQVJQTllSUGJTS0N0K3hFdUJacDZURlAyN0U4?=
+ =?utf-8?B?ekJ1d3ViRml1WlNGRFpCMnBOOGN2bkxmZzhkdEZwNU9OZ3FEVzNtSVIzMjhS?=
+ =?utf-8?B?U3kvTHV6MldkSEp6K21kM0VkcENrWWFTakMveTJheC9kcXIyZm1PaGs3bWdK?=
+ =?utf-8?B?R1l4RmpnTlRpTzQrM2hJV2NDOWNkQVRqZVlGdXJjVjl5WDBidUdDb2RHdHJw?=
+ =?utf-8?B?RXBoN0lpTStYNXBaazFMWkZ5NEhoR1g4T0hSUnRteXhrWk9GcVRJbjQ0OVJn?=
+ =?utf-8?B?R2dYVWNsMVFkRE4xazdRemkrRDVzWmdWL1dpVnJOVytGZ0gvejNNdElxZVI5?=
+ =?utf-8?B?cUJpVC9nQzRWNGZrTEtONDYxOGNMdDhYVS9MaXBHeG5PWDFYWW9DeHBicVBz?=
+ =?utf-8?B?NTBEamUrWENpS1lBWExSZ1JRNHRJL2tqem5NV1VNTCszbllwY1N0S05wZ2tV?=
+ =?utf-8?B?Vkp2WlNkdmkxOUU1WTJoTmZtTzYvTHh5c1VCSlQzZVkvTmxmQ0s3MWZzL3Rs?=
+ =?utf-8?B?Z0VxdGtETnl0VXdTY0cxaUhxZUtSVlYySThUK2tSWHdpempNeFVnYkxKY0Vh?=
+ =?utf-8?B?V1J0UEI1RWhjTEhGbWQyQW51MFZ3L0VtNHN2VTFGdGxXZjdsY0Q0azRkSWpy?=
+ =?utf-8?B?NlA3VmNaL21lYlVBanJNKzNlcDRTVEpGWWc2N1VZZGZEVFB5YmxwZE1yUkc0?=
+ =?utf-8?B?eDNLdXQzc0lHZnhCWVlZRHNrVm9qR3hzaDJUZzRIcWZNWVhPdGdqZTRha0pL?=
+ =?utf-8?B?Y2dqZGJDS1JPTGE2aEZZQWFGd3oveXh1WlQ0emFQVEc2ZmlxT0pzc2FLSno3?=
+ =?utf-8?B?STRwNUgwUEoxLzNGVEtiVjdESGRucDdWem8rVGpyMjFGUi9mMjJHQ1N1ZW14?=
+ =?utf-8?B?bHU3MTdtWDJPVWk5dWdPYzdlWkduTmFhOW10Wkh2QUcvV3B3aFMzUldYZWtz?=
+ =?utf-8?B?YjdpSzE5UVhMTXZjVlo0YmZRNE1zUEtwTjhoMGg2d0locjNhcmdVbjAvVkVo?=
+ =?utf-8?B?YTNhdTJxMDU5TDV2bGNjQ1BTMlFiMENZeGRGWjVNNjdHUGV2dm1GVHRGUWY1?=
+ =?utf-8?B?a1huWHU3VDJYeHlvWlJDK1VhSEplOXdIaGU0cXZ5WjZMTFI0S0twdFI2RjJU?=
+ =?utf-8?B?MjdGQ0djQ1RYSWVKZUFuQWRxSFl4L0JtdEJRWGtyQjlxcTF4c0ZNc2gzdFlw?=
+ =?utf-8?B?WS9RdHlsNnhlSU1jek4weWxkYmI0UXhQRFNUZWx0Z0xxd0pYNURMUXp4V1RY?=
+ =?utf-8?B?VFlvK1dFemdkZVpyS3ZvQ3YvYmtSTjJpdTRMdE8rNmJPcVFoV1Z1WlcxSDZT?=
+ =?utf-8?B?NG0rUnZYSndhSnAydC9zZFlHT0wvQVpFZW9VM0dBdlRaaFY2aWtEamV0VGNR?=
+ =?utf-8?B?VjRNbFYvbW9CMUprS1E0b1dKNW81MGl2TFE0VE5lTUJiZFg1YXk0czljWEtl?=
+ =?utf-8?B?MDkycmVjYXpNOWxtOWFWNUxJcTVQb0NCSEZoVzRKTGlUZENHODN1NjVOcGJ1?=
+ =?utf-8?B?eitFS3F0Uy9QQmJmVFFjNGtRamJESUF1VzF4S2lOdWFGaWlGVWdmL2EwcDVV?=
+ =?utf-8?B?R0NRU282L0JoUlVnQWRveHRYT2s0MVpWMXBvMTl4dng1dDhubEZ3U0NtS2di?=
+ =?utf-8?B?bkprQVdHNGtobEgvemQ2ZFVkSExicml2WTV3b1N4NCtEanJOK1NxQjlhbmNU?=
+ =?utf-8?Q?WO0I=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI0PR08MB10391.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR08MB10981
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DU2PEPF0001E9C1.eurprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	995906bb-5788-45a1-8ea4-08de744a13f9
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|14060799003|376014|36860700013|7416014|35042699022|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?aWpiZVB2THRsaHBWUWM1UTBOODRTMXAzN0VQaFJnWE1JeFRGR1FEY1E0Q0Uv?=
+ =?utf-8?B?VnBJK3Z5NzNZMFBIMlN5elE5bGlnMWNTZkFJYjFlMFNlSHYrdGR3YllJQlhF?=
+ =?utf-8?B?dHYyTDNSdHh0QWl5TjVzd1V2OGlRRG40cGdMT21YYzhCd3FpT1NYa3Y0MHhq?=
+ =?utf-8?B?V1YzZFhRKzRuMWZrZlVYQnU5QUhzQzdyMmpPNlNRSDVzLzBXcVRZVzNueXhw?=
+ =?utf-8?B?amVMYlgyS09pVDZ0QkdjdjFsWldyZkFaOXk4RlRrZklEVDRQeWhRV2QwYXh4?=
+ =?utf-8?B?bEt4VVRjVDBOcXBFcmRyRzkrRk5NS1NmMFU4YUE5ajhJMngyVHUxU21IcjA5?=
+ =?utf-8?B?c3lRYXFJQVZSQmdCbFlwZkRlci9LQklqVGR2TVJPOXMwaG5BOVZaWFZBZkt2?=
+ =?utf-8?B?K20xb1MyV1hJeXAwQ2dPMkVVL21IeEN6Y0xCOXBuZStJWjM0bHBkL1ljM2pP?=
+ =?utf-8?B?UTJidjBKanBFVHIzYXFSZ0hsNG8zQnNzZ1pyT3U4cU5iWGdZcEZCZUVYeUVF?=
+ =?utf-8?B?Z25Db1FSWDNHRkpYUEsrUVRrL3ZURkxxRVA5Z2NZb1N0SFpnOTdVMHZPMVY2?=
+ =?utf-8?B?L0tKdFZRUy9QbHhIcVRXazBBbVk1YzF0NURYU3VueHpPKzI3aThOandJT0h0?=
+ =?utf-8?B?cVFNQ21KR2k1QkFDQUloVUViTkdsS1pldWMxK1BxcDBDWm1WS3hyVnozSmd5?=
+ =?utf-8?B?bFBpZlgrc2FXNFNYYUVTSC9MRm84Ym54YXNRTnpUV0ZMOTBLOGwrQnF5TDFj?=
+ =?utf-8?B?STBIUFBQV3A5Y0Y0bXFzbWZhdnJRQU5qWHBPS3FxdVVRSk5aRGptbmlqNE5S?=
+ =?utf-8?B?REdXQjQyMmlwalNEdEdTa1JLSHhKQ0Fjd2o1amZwbmJzYTlGaXhrT0UyLzkv?=
+ =?utf-8?B?VDZoWVdpdXNjcWR1UU04Zkg4YkdpZGxtaDFEaWNtcitVcFBWMkd1Rjg3dDNx?=
+ =?utf-8?B?d1licExYclRKaVlPK0Jwcmk3V3I3RDRFLy9DTDhlVm9NcGdNWkFscVBtMGpD?=
+ =?utf-8?B?bUM4blFTNy8yZ3MxN3BtSjIrMFVKdjlScGpoUloxb1lxdzd3ME9YZG0veEgy?=
+ =?utf-8?B?c05qOFYvV1Y4YTdOd2EwY3FHK1ZpZ3dtcU0yK2lyRTZRdC9USHB4bzhSTEdt?=
+ =?utf-8?B?R3pDdzhXMEJLYVl2eTlrakpCYnE0VUhVeGcvNnZlYXEydFM1eTNtODIrVzEv?=
+ =?utf-8?B?Z0M3ZWpvUzJ2Z25wQ1FWWTRzbjlpanF1V01YeGdYaEMxbE1Fc1JQQ1RxN2ph?=
+ =?utf-8?B?K0Z6YUZuVFI4aWFDbmswQXJkUEgxVGdXTTlqWE5nZ0ExOEFUc1JGd2xoU096?=
+ =?utf-8?B?UGJ1VkVVOUJISUw0Ky9SVzZjVHc5MUhHdVl2b201NjZaQ2t3NWlIUSs3dEc2?=
+ =?utf-8?B?bWRsTkZCUXJ3WWtZOTZDTWdyY2hZN0ZSQWUvQnNrVy9sUEFvN05CY2hDanBi?=
+ =?utf-8?B?bmxFU0ZXK3VSRWpJc2dyTExrWlNQYXhvbDBNdVZralRLUzJaUGxVWHlsdWFr?=
+ =?utf-8?B?bEhtRjkvdkdrZlFKUFpvZ2p0Slkxa3E3dFREbnJ4K29RTkNnUWl0UTE5U1Uz?=
+ =?utf-8?B?Z2Q0aUVpK2ZQU3ZKeE1UOG9ERENrWUl1V0lkNGNJK2QwbzJYdHNRS1BJNXV5?=
+ =?utf-8?B?QkhKb2hNWmlJR1hZTmp6LzBkMzB2dTgvdU9MUUlUeXhFa0EwL0VvQ0FucUx0?=
+ =?utf-8?B?MnBPVUhMTDNUNW9IckRiUnhxWUhHUEljTjRGZ1JiVzVGTEU1SUlSZUxTaG5u?=
+ =?utf-8?B?YTdPU1ZRTjZkY3dHRnFDM2ZKZ3FxNkMxZ3YzZmcvLzBvZGZlSmpsUjRxQk8y?=
+ =?utf-8?B?ZnBnU3BLd2FuYjFpU1RJSk1IVDlXdUxTaXhyQkZhYWtURDVsUU1GVVpNTFBG?=
+ =?utf-8?B?NzRhTm5QMUt5R2pLT1RWU3B4bDdabEdmclJHUGJ2TDBzTnl4aHgxL0Y5MmhD?=
+ =?utf-8?B?UmZRb3RqVkNFd21IaUxLUnBYVzh0MGRjMk1VdXRXZU1rQWY1VU5JcFJUVm9w?=
+ =?utf-8?B?YjlzKzdSUGNsWUJReXhVODRjVnBpMWZHcy8zSHR1bXFrNlBZQTNhWGJ4eWp0?=
+ =?utf-8?B?Nng0VDFSR3JENlMvZ2FBRGxSQS8waXNiNm5EdVFiL1R5ZVBNR21WeGNpVDlH?=
+ =?utf-8?B?dUQ0UjZ0VDNLQThaMlZLVmtZYUx5NUZHU0FFWC90NE5PVm1EbUY2eUZBSlB5?=
+ =?utf-8?B?VnIvT01JbVRwb0ZUeHBOcEFIa3dudThWaWtWWEh6Qm9pMFMxYnBoZ3V1MWJt?=
+ =?utf-8?B?T1YySDVJbVRhSm95OWF1MlRHb0FBPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(14060799003)(376014)(36860700013)(7416014)(35042699022)(82310400026);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	bGn+fbXsqXbi5xNOkMe7il3Ed7F66+nztCWxkmixVadibUw0385/zvkF7RyDz5PzOAbyLWi3E+OJXybL0UkfB8gILjah92DwXGYczL4ln42FbymwnGQMGs/IkF/8Rt6agwa8cL/dEjm2a6cMs/b98/M74qGZ3v70zSmJenUfpComibjRwASFjfiueGIcHnQnNkLdzA8+7bj/SImQ5Vzph4UT96JNuv/Q13yEQxsy+iKCJQP07U0+AeBfuIaG062wsUYWJGFnMZPG4v/q+SiOEZ14WRQSD7H8tjWRuMlFw1Utpj/zFvu6GFOGjGccrfHBe5JxqMZ4dpvcL+CY6834OId41g9z9eXTEkiQ6Lb6zl+TQs6j3ljA/N+zO50nYzHb93NFRHhJYDgqS/j9V/+xdAXJbFFbBG5Cu65tOmvQq2WJw0Q0MiC4gkb5Jsmuw6t0
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2026 08:45:29.8141
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ebdb9ad-ba83-4c45-281b-08de744a3afd
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DU2PEPF0001E9C1.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR08MB5907
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=3];
+	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
+	R_DKIM_ALLOW(-0.20)[arm.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[35];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43190-lists,linux-pm=lfdr.de];
-	FREEMAIL_CC(0.00)[kernel.org,linux.ibm.com,linutronix.de,google.com,gmail.com,arm.com,redhat.com,siemens.com,nvidia.com,suse.de,ellerman.id.au,infradead.org,goodmis.org,linaro.org,163.com,vger.kernel.org,lists.ozlabs.org];
+	TAGGED_FROM(0.00)[bounces-43191-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	DKIM_TRACE(0.00)[arm.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pierre.gondois@arm.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sshegde@linux.ibm.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[ibm.com:+];
-	NEURAL_HAM(-0.00)[-0.991];
-	TAGGED_RCPT(0.00)[linux-pm];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[11]
-X-Rspamd-Queue-Id: 13555193B05
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm];
+	RCVD_COUNT_SEVEN(0.00)[8]
+X-Rspamd-Queue-Id: 66AF91945C3
 X-Rspamd-Action: no action
 
-Hi Christophe,
 
-On 2/24/26 9:11 PM, Christophe Leroy (CS GROUP) wrote:
-> Hi Hegde,
-> 
-> Le 19/02/2026 à 19:30, Shrikanth Hegde a écrit :
+On 2/25/26 03:33, zhenglifeng (A) wrote:
+> On 2/25/2026 1:08 AM, Pierre Gondois wrote:
+>> The Power Management Quality of Service (PM QoS) allows to
+>> aggregate constraints from multiple entities. It is currently
+>> used to manage the min/max frequency of a given policy.
 >>
+>> Frequency constraints can come for instance from:
+>> - Thermal framework: acpi_thermal_cpufreq_init()
+>> - Firmware: _PPC objects: acpi_processor_ppc_init()
+>> - User: by setting policyX/scaling_[min|max]_freq
+>> The minimum of the max frequency constraints is used to compute
+>> the resulting maximum allowed frequency.
 >>
->> On 2/6/26 7:52 PM, Frederic Weisbecker wrote:
->>> Currently the tick subsystem stores the idle cputime accounting in
->>> private fields, allowing cohabitation with architecture idle vtime
->>> accounting. The former is fetched on online CPUs, the latter on offline
->>> CPUs.
->>>
->>> For consolidation purpose, architecture vtime accounting will continue
->>> to account the cputime but will make a break when the idle tick is
->>> stopped. The dyntick cputime accounting will then be relayed by the tick
->>> subsystem so that the idle cputime is still seen advancing coherently
->>> even when the tick isn't there to flush the idle vtime.
->>>
->>> Prepare for that and introduce three new APIs which will be used in
->>> subsequent patches:
->>>
->>> _ vtime_dynticks_start() is deemed to be called when idle enters in
->>>    dyntick mode. The idle cputime that elapsed so far is accumulated.
->>>
->>> - vtime_dynticks_stop() is deemed to be called when idle exits from
->>>    dyntick mode. The vtime entry clocks are fast-forward to current time
->>>    so that idle accounting restarts elapsing from now.
->>>
->>> - vtime_reset() is deemed to be called from dynticks idle IRQ entry to
->>>    fast-forward the clock to current time so that the IRQ time is still
->>>    accounted by vtime while nohz cputime is paused.
->>>
->>> Also accumulated vtime won't be flushed from dyntick-idle ticks to avoid
->>> accounting twice the idle cputime, along with nohz accounting.
->>>
->>> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+>> When enabling boost frequencies, the same frequency request object
+>> (policy->max_freq_req) as to handle requests from users is used.
+>> As a result, when setting:
+>> - scaling_max_freq
+>> - boost
+>> The last sysfs file used overwrites the request from the other
+>> sysfs file.
 >>
->> Reviewed-by: Shrikanth Hegde <sshegde@linux.ibm.com>
+>> To avoid this, create a per-policy boost_freq_req to save the boost
+>> constraints instead of overwriting the last scaling_max_freq
+>> constraint.
 >>
->>> ---
->>>   arch/powerpc/kernel/time.c | 41 ++++++++++++++++++++++++++++++++++++++
->>>   include/linux/vtime.h      |  6 ++++++
->>>   2 files changed, 47 insertions(+)
->>>
->>> diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
->>> index 4bbeb8644d3d..18506740f4a4 100644
->>> --- a/arch/powerpc/kernel/time.c
->>> +++ b/arch/powerpc/kernel/time.c
->>> @@ -376,6 +376,47 @@ void vtime_task_switch(struct task_struct *prev)
->>>           acct->starttime = acct0->starttime;
->>>       }
->>>   }
->>> +
->>> +#ifdef CONFIG_NO_HZ_COMMON
->>> +/**
->>> + * vtime_reset - Fast forward vtime entry clocks
->>> + *
->>> + * Called from dynticks idle IRQ entry to fast-forward the clocks to 
->>> current time
->>> + * so that the IRQ time is still accounted by vtime while nohz 
->>> cputime is paused.
->>> + */
->>> +void vtime_reset(void)
->>> +{
->>> +    struct cpu_accounting_data *acct = get_accounting(current);
->>> +
->>> +    acct->starttime = mftb();
->>
->> I figured out why those huge values happen.
->>
->> This happens because mftb is from when the system is booted.
->> I was doing kexec to start the new kernel and mftb wasn't getting
->> reset.
->>
->> I thought about this. This is concern for pseries too, where LPAR's
->> restart but system won't restart and mftb will continue to run instead of
->> reset.
->>
->> I think we should be using sched_clock instead of mftb here.
->> Though we need it a few more places and some cosmetic changes around it.
->>
->> Note: Some values being huge exists without series for few CPUs, with 
->> series it
->> shows up in most of the CPUs.
->>
->> So I am planning send out fix below fix separately keeping your
->> series as dependency.
->>
+>> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 >> ---
->>   arch/powerpc/include/asm/accounting.h |  4 ++--
->>   arch/powerpc/include/asm/cputime.h    | 14 +++++++-------
->>   arch/powerpc/kernel/time.c            | 22 +++++++++++-----------
->>   3 files changed, 20 insertions(+), 20 deletions(-)
+>>   drivers/cpufreq/cpufreq.c | 41 ++++++++++++++++++++++++++++++++++-----
+>>   include/linux/cpufreq.h   |  1 +
+>>   2 files changed, 37 insertions(+), 5 deletions(-)
 >>
->> diff --git a/arch/powerpc/include/asm/accounting.h b/arch/powerpc/ 
->> include/asm/accounting.h
->> index 6d79c31700e2..50f120646e6d 100644
->> --- a/arch/powerpc/include/asm/accounting.h
->> +++ b/arch/powerpc/include/asm/accounting.h
->> @@ -21,8 +21,8 @@ struct cpu_accounting_data {
->>       unsigned long steal_time;
->>       unsigned long idle_time;
->>       /* Internal counters */
->> -    unsigned long starttime;    /* TB value snapshot */
->> -    unsigned long starttime_user;    /* TB value on exit to usermode */
->> +    unsigned long starttime;    /* Time value snapshot */
->> +    unsigned long starttime_user;    /* Time value on exit to 
->> usermode */
->>   #ifdef CONFIG_ARCH_HAS_SCALED_CPUTIME
->>       unsigned long startspurr;    /* SPURR value snapshot */
->>       unsigned long utime_sspurr;    /* ->user_time when ->startspurr 
->> set */
->> diff --git a/arch/powerpc/include/asm/cputime.h b/arch/powerpc/ 
->> include/ asm/cputime.h
->> index aff858ca99c0..eb6b629b113f 100644
->> --- a/arch/powerpc/include/asm/cputime.h
->> +++ b/arch/powerpc/include/asm/cputime.h
->> @@ -20,9 +20,9 @@
->>   #include <asm/time.h>
->>   #include <asm/param.h>
->>   #include <asm/firmware.h>
->> +#include <linux/sched/clock.h>
->>
->>   #ifdef __KERNEL__
->> -#define cputime_to_nsecs(cputime) tb_to_ns(cputime)
->>
->>   /*
->>    * PPC64 uses PACA which is task independent for storing accounting 
->> data while
->> @@ -44,20 +44,20 @@
->>    */
->>   static notrace inline void account_cpu_user_entry(void)
->>   {
->> -    unsigned long tb = mftb();
->> +    unsigned long now = sched_clock();
-> 
-> Now way !
-> 
-> By doing that you'll kill performance for no reason. All we need when 
-> accounting time spent in kernel or in user is the difference between 
-> time at entry and time at exit, no mater what the time was at boot time.
-> 
+>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>> index db414c052658b..52efa4805afee 100644
+>> --- a/drivers/cpufreq/cpufreq.c
+>> +++ b/drivers/cpufreq/cpufreq.c
+>> @@ -1359,17 +1359,25 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+>>   	/* Cancel any pending policy->update work before freeing the policy. */
+>>   	cancel_work_sync(&policy->update);
+>>   
+>> -	if (policy->max_freq_req) {
+>> +	if (policy->max_freq_req || policy->boost_freq_req) {
+>>   		/*
+>> -		 * Remove max_freq_req after sending CPUFREQ_REMOVE_POLICY
+>> -		 * notification, since CPUFREQ_CREATE_POLICY notification was
+>> -		 * sent after adding max_freq_req earlier.
+>> +		 * Remove max/boost _freq_req after sending CPUFREQ_REMOVE_POLICY
+>> +		 * notification, since CPUFREQ_CREATE_POLICY notification was sent
+>> +		 * after adding max/boost _freq_req earlier.
+>>   		 */
+>>   		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
+>>   					     CPUFREQ_REMOVE_POLICY, policy);
+>> -		freq_qos_remove_request(policy->max_freq_req);
+>>   	}
+>>   
+>> +	if ((policy->max_freq_req && !policy->boost_supported) ||
+>> +	    policy->boost_freq_req) {
+> Is this if statement written in the wrong place?
 
-No. With this patch there will not be any performance difference.
-All it does is, instead of using mftb uses sched_clock at those places.
+Yes right ...
+
+I also forgot to remove the below if conditions as you suggessted
 
 
-In arch/powerpc/kernel/time.c we have sched_clock().
-notrace unsigned long long sched_clock(void)
-{
-         return mulhdu(get_tb() - boot_tb, tb_to_ns_scale) << tb_to_ns_shift;
-}
-
-It does the same mftb call, and accounts only the time after boot, which is
-what /proc/stat should do as well.
-
-"
-the amount of time, measured in units of USER_HZ
-(1/100ths of a second on most architectures
-
-user   (1) Time spent in user mode.
-
-idle   (4) Time spent in the idle task.  This value
-        should be USER_HZ times the second entry in
-        the /proc/uptime pseudo-file.
-"
-/proc/uptime is based on sched_clock, so i infer /proc/stat also should show
-values w.r.t to boot of the OS.
-
-
-> Also sched_clock() returns nanoseconds which implies calculation from 
-> timebase. This is pointless CPU consumption. The current implementation 
-> calculates nanoseconds at task switch when calling vtime_flush().Your 
-> change will now do it at every kernel entry and kernel exit by calling 
-> sched_clock().
-
-This change doesn't add any additional paths. Even without patches, mftb would have
-been called in every kernel entry/exit.  See mftb usage account_cpu_user_exit/enter
-
-Now instead of mftb sched_clock is used, that's all. No additional entry/exit points.
-And previously when accounting we would have done cputime_to_nsecs, now that conversion
-is done automatically in sched_clock. So overall computation-wise it should be same.
-
-What i am missing to see it here?
-
-> 
-> Another point is that sched_clock() returns a long long not a long.
-
-Thanks for pointing that out.
-
-Ok. Let me change some of those variables into unsigned long long.
-Compiler didn't warn me, so i didn't see it.
-
-> 
-> And also sched_clock() uses get_tb() which does mftb and mftbu. Which is 
-> pointless for calculating time deltas unless your application spends 
-> hours without being re-scheduled.
-> 
-
-I didn't get this. At current also, we use mftb, that functionality should be the same.
-Could you please explain how?
-
-> 
->>       struct cpu_accounting_data *acct = raw_get_accounting(current);
->>
->> -    acct->utime += (tb - acct->starttime_user);
->> -    acct->starttime = tb;
->> +    acct->utime += (now - acct->starttime_user);
->> +    acct->starttime = now;
->>   }
->>
->>   static notrace inline void account_cpu_user_exit(void)
->>   {
->> -    unsigned long tb = mftb();
->> +    unsigned long now = sched_clock();
->>       struct cpu_accounting_data *acct = raw_get_accounting(current);
->>
->> -    acct->stime += (tb - acct->starttime);
->> -    acct->starttime_user = tb;
->> +    acct->stime += (now - acct->starttime);
->> +    acct->starttime_user = now;
->>   }
->>
->>   static notrace inline void account_stolen_time(void)
->> diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
->> index 18506740f4a4..fb67cdae3bcb 100644
->> --- a/arch/powerpc/kernel/time.c
->> +++ b/arch/powerpc/kernel/time.c
->> @@ -215,7 +215,7 @@ static unsigned long vtime_delta(struct 
->> cpu_accounting_data *acct,
->>
->>       WARN_ON_ONCE(!irqs_disabled());
->>
->> -    now = mftb();
->> +    now = sched_clock();
->>       stime = now - acct->starttime;
->>       acct->starttime = now;
->>
->> @@ -299,9 +299,9 @@ static void vtime_flush_scaled(struct task_struct 
->> *tsk,
->>   {
->>   #ifdef CONFIG_ARCH_HAS_SCALED_CPUTIME
->>       if (acct->utime_scaled)
->> -        tsk->utimescaled += cputime_to_nsecs(acct->utime_scaled);
->> +        tsk->utimescaled += acct->utime_scaled;
->>       if (acct->stime_scaled)
->> -        tsk->stimescaled += cputime_to_nsecs(acct->stime_scaled);
->> +        tsk->stimescaled += acct->stime_scaled;
->>
->>       acct->utime_scaled = 0;
->>       acct->utime_sspurr = 0;
->> @@ -321,28 +321,28 @@ void vtime_flush(struct task_struct *tsk)
->>       struct cpu_accounting_data *acct = get_accounting(tsk);
->>
->>       if (acct->utime)
->> -        account_user_time(tsk, cputime_to_nsecs(acct->utime));
->> +        account_user_time(tsk, acct->utime);
->>
->>       if (acct->gtime)
->> -        account_guest_time(tsk, cputime_to_nsecs(acct->gtime));
->> +        account_guest_time(tsk, acct->gtime);
->>
->>       if (IS_ENABLED(CONFIG_PPC_SPLPAR) && acct->steal_time) {
->> -        account_steal_time(cputime_to_nsecs(acct->steal_time));
->> +        account_steal_time(acct->steal_time);
->>           acct->steal_time = 0;
->>       }
->>
->>       if (acct->idle_time)
->> -        account_idle_time(cputime_to_nsecs(acct->idle_time));
->> +        account_idle_time(acct->idle_time);
->>
->>       if (acct->stime)
->> -        account_system_index_time(tsk, cputime_to_nsecs(acct->stime),
->> +        account_system_index_time(tsk, acct->stime,
->>                         CPUTIME_SYSTEM);
->>
->>       if (acct->hardirq_time)
->> -        account_system_index_time(tsk, cputime_to_nsecs(acct- 
->>  >hardirq_time),
->> +        account_system_index_time(tsk, acct->hardirq_time,
->>                         CPUTIME_IRQ);
->>       if (acct->softirq_time)
->> -        account_system_index_time(tsk, cputime_to_nsecs(acct- 
->>  >softirq_time),
->> +        account_system_index_time(tsk, acct->softirq_time,
->>                         CPUTIME_SOFTIRQ);
->>
->>       vtime_flush_scaled(tsk, acct);
->> @@ -388,7 +388,7 @@ void vtime_reset(void)
->>   {
->>       struct cpu_accounting_data *acct = get_accounting(current);
->>
->> -    acct->starttime = mftb();
->> +    acct->starttime = sched_clock();
->>   #ifdef CONFIG_ARCH_HAS_SCALED_CPUTIME
->>       acct->startspurr = read_spurr(acct->starttime);
->>   #endif
-> 
-
-PS: I measured the performance with hackbench. I don't see any degradation.
-
+>
+>> +		freq_qos_remove_request(policy->boost_freq_req);
+>> +		kfree(policy->boost_freq_req);
+>> +	}
+>> +
+>> +	if (policy->max_freq_req)
+>> +		freq_qos_remove_request(policy->max_freq_req);
+>> +
+>>   	freq_qos_remove_request(policy->min_freq_req);
+>>   	kfree(policy->min_freq_req);
+>>   
+>
 
