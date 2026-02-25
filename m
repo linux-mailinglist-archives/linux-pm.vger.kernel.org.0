@@ -1,136 +1,169 @@
-Return-Path: <linux-pm+bounces-43215-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43216-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OCLiE1whn2lcZAQAu9opvQ
-	(envelope-from <linux-pm+bounces-43215-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 17:20:44 +0100
+	id KJzQFQQzn2mtZQQAu9opvQ
+	(envelope-from <linux-pm+bounces-43216-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 18:36:04 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D96AB19A77E
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 17:20:43 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC03319BA05
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 18:36:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D9D53311E034
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 16:00:11 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id F2E82300C385
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 17:36:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 146793D6696;
-	Wed, 25 Feb 2026 16:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B207E3D7D9B;
+	Wed, 25 Feb 2026 17:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t5yKOSWs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gDu4rfoc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38373D6474;
-	Wed, 25 Feb 2026 16:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054E9329C6D;
+	Wed, 25 Feb 2026 17:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772035211; cv=none; b=DYDNeWxVYBrLLyQGBaoWzvTWw8TfttcYMGaQi5T/uXvgMkZJynzNR3E2LFonu+d3iKw+mdW5IRUHh0IVvFOQO4W4b1PKibgkdflwKvGLlB6RONnCyQLM7euyZyO9QV6rOGpbrkxIqG1OxxyuHNaFIGCPSodCwGWCZIVNQbky2Ew=
+	t=1772040957; cv=none; b=brXMU3OpUZ0WgFdHagjbrjYGLYqGOgv5bosOaBOfu7PcfR50IkFnKL2o3B69DUEXD7QrfEOgeoimNlypr2U9a1KFJe2b12MUCAe4ktbqmZTabUIlkfim75E1Hl4AgoqC2SZ2NVhZzmisc3C6p8ag1CLifIDM3UWuhVIQqQhh5UI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772035211; c=relaxed/simple;
-	bh=Swg6cBoXr19d068hTQFSCJ7C1JnhMFEYMeBBAhp/aic=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=EGL7T0IU+QokExGK84qswSIztqZDrr6MxlK0nyY2gYS7NkPcDPeiPUIt+AyUHyzBcTBAt41ds33tzSGpv4bzOFimM7qN9E7tcbwjUU2FmqN2difdwyTZgnPeFGyZgCw1gJdhQkoQlhbgujsV3Hcft+uOAhiB3P0qEXqz7Nk3u0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t5yKOSWs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB5E8C116D0;
-	Wed, 25 Feb 2026 16:00:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772035210;
-	bh=Swg6cBoXr19d068hTQFSCJ7C1JnhMFEYMeBBAhp/aic=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=t5yKOSWs8to9EoIDo2HWgtu56k87ouUOmYqGMZEDwzQnFz57I3gwamihHJihwG0ZP
-	 B1q50U8To1nFvAepP+epZ0R1NSOHvPnOmqoO5Xy8WSnqJRGN5URHT0Q3u8TPbv7e45
-	 EEQ8DKKVdiCNN9WgCGrdeCoGovE7UykJJrxeKqvnmMUVspfjQ0AqunbXqhuZyaxokA
-	 OfV07B+muQL4Ebe1xofcSrI9tfI2x8glLIYKKzh8RhsWAiPII1f3D1/OOZ19HMZdvJ
-	 WKtIJjYPeSaanjKLSJbaK9dUNHaxptUt+RXHB35KPMGDW/ga5X0y9IjBTDUf4kA0Um
-	 7MEJpjSciYW6Q==
-From: Thomas Gleixner <tglx@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Christian Loehle <christian.loehle@arm.com>, LKML
- <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Frederic Weisbecker <frederic@kernel.org>, Linux PM
- <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH RFC] tick/sched: Prevent pointless NOHZ transitions
-In-Reply-To: <CAJZ5v0gZBTqnk36P+hTjE-CgSOsy+MP=SXSwHHY+zxr1HbCZQA@mail.gmail.com>
-References: <875x7mv8wd.ffs@tglx>
- <ca2b5ede-1922-4540-bc44-a7ff6bec406f@arm.com> <87zf4yt90t.ffs@tglx>
- <5987061.DvuYhMxLoT@rafael.j.wysocki> <87jyw1u7ps.ffs@tglx>
- <CAJZ5v0g-PuFsSit4_xg+B=pDqJauOo=VX55bH+Kj+s=-tpXWTQ@mail.gmail.com>
- <CAJZ5v0gZBTqnk36P+hTjE-CgSOsy+MP=SXSwHHY+zxr1HbCZQA@mail.gmail.com>
-Date: Wed, 25 Feb 2026 17:00:06 +0100
-Message-ID: <87zf4w7r09.ffs@tglx>
+	s=arc-20240116; t=1772040957; c=relaxed/simple;
+	bh=qEluW86xMkOYUJUl0za5dS2NhxcLy9wJwObTxQDqauU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=PbsZyNYF9LApOPCf0D5fMjNolrpHL8yUK6UIIxTfMH4FarChwf9jh7TrdhizvHMGcvsiHHldjj7VGpobhIpbVG/qTfnTfaukOuHVfE+v/+Yv3XHTJ/3qKT2T8/Aej1Cfd8ozvOHajZ/q8kYVvpxuwlmp2KVBTA0wX0iieDmcqK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gDu4rfoc; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772040956; x=1803576956;
+  h=date:from:to:cc:subject:message-id;
+  bh=qEluW86xMkOYUJUl0za5dS2NhxcLy9wJwObTxQDqauU=;
+  b=gDu4rfoct8RkXS5NqlPGYOrJ8kjLPWu3TIcN/F+O7d66vXVQnxFbN2Mb
+   wZ+V/27bIOmxZdv8dfKKmKMG8lpX4z1AqWvO5IWHK7PApL48fwIqE2hWk
+   UosiA8z5cBxUxzfGXbRj7F6b38lgtlPEgCkUmvqwzV+X382azj3AoYt6j
+   Lc30gU7hIYTecuuVMW4HHPxrLwyDBirTCJBp/7JCI3QZpW4vRkOmWZz6M
+   pWrEJ10YXBVumS6q6bYVWadQk43iuogGc6Z/VjBNzRPjLvARd2SRQpsdx
+   jtiWI+YBXsbihk+mzyGPMKPLBILtFSje3jufJwc2E6y7ckFOnhqtesyKw
+   g==;
+X-CSE-ConnectionGUID: XQfo0ZxJTg6jK2IBc5P7pw==
+X-CSE-MsgGUID: fSczmrp7QA6d4jI9L3M1cQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11712"; a="73264682"
+X-IronPort-AV: E=Sophos;i="6.21,310,1763452800"; 
+   d="scan'208";a="73264682"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 09:35:55 -0800
+X-CSE-ConnectionGUID: 5IbQpk4WRmSIuP72j5fHpg==
+X-CSE-MsgGUID: HZrjwSK9RQySFovmWgdUBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,310,1763452800"; 
+   d="scan'208";a="254059905"
+Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 25 Feb 2026 09:35:54 -0800
+Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vvInf-000000006oi-2K7v;
+	Wed, 25 Feb 2026 17:35:51 +0000
+Date: Thu, 26 Feb 2026 01:35:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 76/102]
+ drivers/platform/chrome/chromeos_tbmc.c:50:9: error: expected ',' or ';'
+ before 'struct'
+Message-ID: <202602260106.dVqBEPAB-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_ALL(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43215-lists,linux-pm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43216-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tglx@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D96AB19A77E
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: AC03319BA05
 X-Rspamd-Action: no action
 
-On Wed, Feb 25 2026 at 14:10, Rafael J. Wysocki wrote:
-> On Wed, Feb 25, 2026 at 1:54=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
->> >
->> > Which prevents VMs or other systems which do not have an idle driver to
->> > stop the tick at all. That's just obviously wrong, no?
->>
->> The benefit from stopping the tick in cpuidle is that it doesn't kick
->> CPUs from idle states unnecessarily, so more energy can be saved (or
->> even some energy can be saved at all if the idle state target
->> residency is large enough), but if the idle state in question is
->> shallow, that's rather not super-useful.  And I'd rather not expect
->> default idle to be a deep idle state because that would obviously hurt
->> low-latency use cases.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   afb26ba421df11fad71fc4be9b874a901efb0388
+commit: 37ca8e5f81981188405d5722825b58173c275fb5 [76/102] platform/chrome: chromeos_tbmc: Convert to a platform driver
+config: x86_64-randconfig-161-20260225 (https://download.01.org/0day-ci/archive/20260226/202602260106.dVqBEPAB-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+smatch version: v0.5.0-8994-gd50c5a4c
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260226/202602260106.dVqBEPAB-lkp@intel.com/reproduce)
 
-There are systems out there where even HLT (or the architecture specific
-equivalent) saves power magically in the firmware.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602260106.dVqBEPAB-lkp@intel.com/
 
->> I must be missing something, so what is it?
->
-> OK, if I'm not mistaken, the tick in a VM will effectively become a
-> periodic hrtimer in the host and it would prevent the host cpuidle
-> from stopping the tick.  Fair enough.
+All errors (new ones prefixed by >>):
 
-That's the energy side.
+   drivers/platform/chrome/chromeos_tbmc.c: In function 'chromeos_tbmc_notify':
+>> drivers/platform/chrome/chromeos_tbmc.c:50:9: error: expected ',' or ';' before 'struct'
+      50 |         struct acpi_device *adev = ACPI_COMPANION(dev);
+         |         ^~~~~~
+   In file included from include/linux/acpi.h:38,
+                    from drivers/platform/chrome/chromeos_tbmc.c:15:
+>> include/acpi/acpi_bus.h:531:10: error: expected statement before ')' token
+     531 |         })
+         |          ^
+   include/linux/acpi.h:58:41: note: in expansion of macro 'to_acpi_device_node'
+      58 | #define ACPI_COMPANION(dev)             to_acpi_device_node((dev)->fwnode)
+         |                                         ^~~~~~~~~~~~~~~~~~~
+   drivers/platform/chrome/chromeos_tbmc.c:50:36: note: in expansion of macro 'ACPI_COMPANION'
+      50 |         struct acpi_device *adev = ACPI_COMPANION(dev);
+         |                                    ^~~~~~~~~~~~~~
+>> drivers/platform/chrome/chromeos_tbmc.c:52:31: error: 'adev' undeclared (first use in this function); did you mean 'dev'?
+      52 |         acpi_pm_wakeup_event(&adev->dev);
+         |                               ^~~~
+         |                               dev
+   drivers/platform/chrome/chromeos_tbmc.c:52:31: note: each undeclared identifier is reported only once for each function it appears in
 
-The other problem is performance in the guest itself. If the guest idles
-only briefly and can avoid the rearm of the timer on wakeup then it wins
-performance wise. That's true for bare metal too, but the rearm on bare
-metal is less expensive than a full VM exit.
 
-Thanks,
+vim +50 drivers/platform/chrome/chromeos_tbmc.c
 
-        tglx
+    46	
+    47	static void chromeos_tbmc_notify(acpi_handle handle, u32 event, void *data)
+    48	{
+    49		struct device *dev = data
+  > 50		struct acpi_device *adev = ACPI_COMPANION(dev);
+    51	
+  > 52		acpi_pm_wakeup_event(&adev->dev);
+    53		switch (event) {
+    54		case 0x80:
+    55			chromeos_tbmc_query_switch(adev, dev_get_drvdata(dev));
+    56			break;
+    57		default:
+    58			dev_err(dev, "Unexpected event: 0x%08X\n", event);
+    59		}
+    60	}
+    61	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
