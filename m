@@ -1,41 +1,41 @@
-Return-Path: <linux-pm+bounces-43197-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43198-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sDpkC+i3nmnwWwQAu9opvQ
-	(envelope-from <linux-pm+bounces-43197-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 09:50:48 +0100
+	id eDVILfK3nmnwWwQAu9opvQ
+	(envelope-from <linux-pm+bounces-43198-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 09:50:58 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02012194671
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 09:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 666A9194678
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 09:50:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 858EE301E5F0
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 08:50:21 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 0E2F03040FDB
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 08:50:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D1CA31D39F;
-	Wed, 25 Feb 2026 08:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DDC83242D7;
+	Wed, 25 Feb 2026 08:50:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F8FF31BC84;
-	Wed, 25 Feb 2026 08:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B2D7325711;
+	Wed, 25 Feb 2026 08:50:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772009413; cv=none; b=ZeCqDNBDC35xRDBJpywlhrsDP/9xNRJ+tZxQnWeL7HYHlDIswwkMa0xBcNZP71JNCBOfCKzt0+KwRLvXVHK3/PBmaYoejw6IOOcZbriaK8enj2hsGwRUc8IKnapdc8DLkx3IOwN3rlcWtT77ZdXQ/6uHwKV4m3U6VKJ3OHaejxw=
+	t=1772009417; cv=none; b=YSOlDuxpPvTVowMHArGMtv6LdZVIfXWqZOYEhtoRPblQPY3jlS2HNjE/f7RHmxhLXM2PjZV1pd+IgPAoZMcJNyj+K95VqCO/uM2Xy2cHXdPSjFI07xgE9E9WP3RSTEBRKKcbC11+4UAY3I7MvvoccOywAITfhNdzRe9FQEjEStI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772009413; c=relaxed/simple;
-	bh=MKQACiCZQMjjR9QQVYbI6dzrK1qW3q4y9pX609FIPD8=;
+	s=arc-20240116; t=1772009417; c=relaxed/simple;
+	bh=dsB++htWglnJo1qJa8OcgIx7Ri+H3o9ijvfmCEjgPvw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F93lMQHsedtAi+U99wJcb5GH2KUAlv8ioe716fho0WEESd1TCSUrUIhXCiITuQ6hyMHGVfrFg3XS2wAek51QolyzvRpo5bhm/ToXNBepIWdwT8MGRc3ZZgIzJZ0hep/TC5Me4qqjKXYA8eb18uePsf+8/crxN0W28GLLvBjP41k=
+	 MIME-Version; b=p6dPRRyOvCGAVqdjVgSzGLmYAMduF+mUyAWh9zuYWTC/BwSon9RR0GDG7yE9KYjE2Aq00A331dvShfnhrSLlLHmPsQqZM4sBua3A2OavCgIAsiwDaivhmnFctcJXDAQIe5TbXplzMoFY71G72t8MekX/e4disGfTXNnRuBZMKJY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7CD2B165C;
-	Wed, 25 Feb 2026 00:50:04 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2926A169E;
+	Wed, 25 Feb 2026 00:50:09 -0800 (PST)
 Received: from e135073.nice.arm.com (e135073.arm.com [10.34.125.27])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A4F773F59E;
-	Wed, 25 Feb 2026 00:50:07 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E3EAC3F59E;
+	Wed, 25 Feb 2026 00:50:11 -0800 (PST)
 From: Pierre Gondois <pierre.gondois@arm.com>
 To: linux-kernel@vger.kernel.org
 Cc: Jie Zhan <zhanjie9@hisilicon.com>,
@@ -54,9 +54,9 @@ Cc: Jie Zhan <zhanjie9@hisilicon.com>,
 	Len Brown <lenb@kernel.org>,
 	Saravana Kannan <saravanak@kernel.org>,
 	linux-pm@vger.kernel.org
-Subject: [PATCH v5 5/6] cpufreq: Set policy->min and max as real QoS constraints
-Date: Wed, 25 Feb 2026 09:49:22 +0100
-Message-ID: <20260225084930.1692228-6-pierre.gondois@arm.com>
+Subject: [RFC PATCH v5 6/6] cpufreq/freq_table: Allow decreasing cpuinfo.max_freq
+Date: Wed, 25 Feb 2026 09:49:23 +0100
+Message-ID: <20260225084930.1692228-7-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260225084930.1692228-1-pierre.gondois@arm.com>
 References: <20260225084930.1692228-1-pierre.gondois@arm.com>
@@ -80,7 +80,7 @@ X-Spamd-Result: default: False [0.14 / 15.00];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-43197-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43198-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
@@ -93,238 +93,58 @@ X-Spamd-Result: default: False [0.14 / 15.00];
 	NEURAL_HAM(-0.00)[-0.998];
 	RCVD_COUNT_FIVE(0.00)[5];
 	R_DKIM_NA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:mid,arm.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 02012194671
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,arm.com:mid,arm.com:email]
+X-Rspamd-Queue-Id: 666A9194678
 X-Rspamd-Action: no action
 
-cpufreq_set_policy() will ultimately override the policy min/max
-values written in the .init() callback through:
-cpufreq_policy_online()
-\-cpufreq_init_policy()
-  \-cpufreq_set_policy()
-    \-/* Set policy->min/max */
-Thus the policy min/max values provided are only temporary.
+Drivers not using freq. tables update cpuinfo.max_freq in their
+.set_boost() callback. E.g. amd-pstate, cppc_cpufreq.
+Drivers relying on freq. tables and supporting boost frequencies
+rely on cpufreq_frequency_table_cpuinfo(). cpuinfo.max_freq is
+only updated if the new maximal value is higher than the previous
+one.
 
-There is an exception if CPUFREQ_NEED_INITIAL_FREQ_CHECK is set and:
-cpufreq_policy_online()
-\-cpufreq_init_policy()
-  \-__cpufreq_driver_target()
-    \-cpufreq_driver->target()
-is called. In this case, some drivers use the policy min/max
-values in their .target() callback before they are overridden.
+Using the scmi-cpufreq driver which relies on freq. tables, enabling
+boost will permanently increases the cpuinfo.max_freq value.
+This patch allows to lower cpuinfo.max_freq.
 
-Check cpufreq drivers:
-- if their .target() callback doesn't use policy->min or max,
-  remove the initialization
-- assuming policy->min or max values were populated as constraints,
-  set them as QoS real constraints in cpufreq_policy_online()
+Note:
+commit 538b0188da46 ("cpufreq: ACPI: Set cpuinfo.max_freq directly
+if max boost is known")
+favored having cpuinfo.max_freq reporting the maximal boosted
+frequency of a CPU instead of the maximal reachable frequency
+due to regressions in the frequency reported by cpuinfo.max
+and scaling_cur_freq.
+As stated above, this is not what most of the other cpufreq driver
+do. I assume that the following patch:
+commit 3c55e94c0ade ("cpufreq: ACPI: Extend frequency tables to
+cover boost frequencies")
+was correct, but might not have tagged the boosted frequency with
+the CPUFREQ_BOOST_FREQ flag in the freq. table.
 
 Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
- drivers/cpufreq/amd-pstate.c      | 24 ++++++++++++------------
- drivers/cpufreq/cpufreq-nforce2.c |  4 ++--
- drivers/cpufreq/cpufreq.c         | 16 ++++++++++++++--
- drivers/cpufreq/gx-suspmod.c      |  9 ++++-----
- drivers/cpufreq/intel_pstate.c    |  3 ---
- drivers/cpufreq/pcc-cpufreq.c     |  8 ++++----
- drivers/cpufreq/pxa3xx-cpufreq.c  |  4 ++--
- drivers/cpufreq/virtual-cpufreq.c |  5 +----
- 8 files changed, 39 insertions(+), 34 deletions(-)
+ drivers/cpufreq/freq_table.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 310d5938cbdf6..aaafbe9b26cae 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -1003,12 +1003,12 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
- 
- 	perf = READ_ONCE(cpudata->perf);
- 
--	policy->cpuinfo.min_freq = policy->min = perf_to_freq(perf,
--							      cpudata->nominal_freq,
--							      perf.lowest_perf);
--	policy->cpuinfo.max_freq = policy->max = perf_to_freq(perf,
--							      cpudata->nominal_freq,
--							      perf.highest_perf);
-+	policy->cpuinfo.min_freq = perf_to_freq(perf,
-+						cpudata->nominal_freq,
-+						perf.lowest_perf);
-+	policy->cpuinfo.max_freq = perf_to_freq(perf,
-+						cpudata->nominal_freq,
-+						perf.highest_perf);
- 
- 	ret = amd_pstate_cppc_enable(policy);
- 	if (ret)
-@@ -1485,12 +1485,12 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
- 
- 	perf = READ_ONCE(cpudata->perf);
- 
--	policy->cpuinfo.min_freq = policy->min = perf_to_freq(perf,
--							      cpudata->nominal_freq,
--							      perf.lowest_perf);
--	policy->cpuinfo.max_freq = policy->max = perf_to_freq(perf,
--							      cpudata->nominal_freq,
--							      perf.highest_perf);
-+	policy->cpuinfo.min_freq = perf_to_freq(perf,
-+						cpudata->nominal_freq,
-+						perf.lowest_perf);
-+	policy->cpuinfo.max_freq = perf_to_freq(perf,
-+						cpudata->nominal_freq,
-+						perf.highest_perf);
- 	policy->driver_data = cpudata;
- 
- 	ret = amd_pstate_cppc_enable(policy);
-diff --git a/drivers/cpufreq/cpufreq-nforce2.c b/drivers/cpufreq/cpufreq-nforce2.c
-index fbbbe501cf2dc..831102522ad64 100644
---- a/drivers/cpufreq/cpufreq-nforce2.c
-+++ b/drivers/cpufreq/cpufreq-nforce2.c
-@@ -355,8 +355,8 @@ static int nforce2_cpu_init(struct cpufreq_policy *policy)
- 		min_fsb = NFORCE2_MIN_FSB;
- 
- 	/* cpuinfo and default policy values */
--	policy->min = policy->cpuinfo.min_freq = min_fsb * fid * 100;
--	policy->max = policy->cpuinfo.max_freq = max_fsb * fid * 100;
-+	policy->cpuinfo.min_freq = min_fsb * fid * 100;
-+	policy->cpuinfo.max_freq = max_fsb * fid * 100;
- 
- 	return 0;
- }
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 20266fb42d18d..a855a77a5fa22 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1452,6 +1452,18 @@ static int cpufreq_policy_online(struct cpufreq_policy *policy,
- 	cpumask_and(policy->cpus, policy->cpus, cpu_online_mask);
- 
- 	if (new_policy) {
-+		unsigned int min, max;
-+
-+		/*
-+		 * If the driver has set policy->min or max,
-+		 * use the value as a QoS request.
-+		 */
-+		min = max(FREQ_QOS_MIN_DEFAULT_VALUE, policy->min);
-+		if (policy->max)
-+			max = min(FREQ_QOS_MAX_DEFAULT_VALUE, policy->max);
-+		else
-+			max = FREQ_QOS_MAX_DEFAULT_VALUE;
-+
- 		for_each_cpu(j, policy->related_cpus) {
- 			per_cpu(cpufreq_cpu_data, j) = policy;
- 			add_cpu_dev_symlink(policy, j, get_cpu_device(j));
-@@ -1466,7 +1478,7 @@ static int cpufreq_policy_online(struct cpufreq_policy *policy,
- 
- 		ret = freq_qos_add_request(&policy->constraints,
- 					   policy->min_freq_req, FREQ_QOS_MIN,
--					   FREQ_QOS_MIN_DEFAULT_VALUE);
-+					   min);
- 		if (ret < 0) {
- 			/*
- 			 * So we don't call freq_qos_remove_request() for an
-@@ -1486,7 +1498,7 @@ static int cpufreq_policy_online(struct cpufreq_policy *policy,
- 
- 		ret = freq_qos_add_request(&policy->constraints,
- 					   policy->max_freq_req, FREQ_QOS_MAX,
--					   FREQ_QOS_MAX_DEFAULT_VALUE);
-+					   max);
- 		if (ret < 0) {
- 			policy->max_freq_req = NULL;
- 			goto out_destroy_policy;
-diff --git a/drivers/cpufreq/gx-suspmod.c b/drivers/cpufreq/gx-suspmod.c
-index 75b3ef7ec6796..57999b8d51fa2 100644
---- a/drivers/cpufreq/gx-suspmod.c
-+++ b/drivers/cpufreq/gx-suspmod.c
-@@ -397,7 +397,7 @@ static int cpufreq_gx_target(struct cpufreq_policy *policy,
- 
- static int cpufreq_gx_cpu_init(struct cpufreq_policy *policy)
- {
--	unsigned int maxfreq;
-+	unsigned int minfreq, maxfreq;
- 
- 	if (!policy || policy->cpu != 0)
- 		return -ENODEV;
-@@ -418,11 +418,10 @@ static int cpufreq_gx_cpu_init(struct cpufreq_policy *policy)
- 	policy->cpu = 0;
- 
- 	if (max_duration < POLICY_MIN_DIV)
--		policy->min = maxfreq / max_duration;
-+		minfreq = maxfreq / max_duration;
- 	else
--		policy->min = maxfreq / POLICY_MIN_DIV;
--	policy->max = maxfreq;
--	policy->cpuinfo.min_freq = maxfreq / max_duration;
-+		minfreq = maxfreq / POLICY_MIN_DIV;
-+	policy->cpuinfo.min_freq = minfreq;
- 	policy->cpuinfo.max_freq = maxfreq;
- 
- 	return 0;
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index ec4abe3745736..bf2f7524d04a9 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -3047,9 +3047,6 @@ static int __intel_pstate_cpu_init(struct cpufreq_policy *policy)
- 	policy->cpuinfo.max_freq = READ_ONCE(global.no_turbo) ?
- 			cpu->pstate.max_freq : cpu->pstate.turbo_freq;
- 
--	policy->min = policy->cpuinfo.min_freq;
--	policy->max = policy->cpuinfo.max_freq;
--
- 	intel_pstate_init_acpi_perf_limits(policy);
- 
- 	policy->fast_switch_possible = true;
-diff --git a/drivers/cpufreq/pcc-cpufreq.c b/drivers/cpufreq/pcc-cpufreq.c
-index ac2e90a65f0c4..231edfe8cabaa 100644
---- a/drivers/cpufreq/pcc-cpufreq.c
-+++ b/drivers/cpufreq/pcc-cpufreq.c
-@@ -551,13 +551,13 @@ static int pcc_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 		goto out;
+diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
+index 9b37f37c36389..bd08cbe9e9ba3 100644
+--- a/drivers/cpufreq/freq_table.c
++++ b/drivers/cpufreq/freq_table.c
+@@ -50,12 +50,7 @@ int cpufreq_frequency_table_cpuinfo(struct cpufreq_policy *policy)
  	}
- 
--	policy->max = policy->cpuinfo.max_freq =
-+	policy->cpuinfo.max_freq =
- 		ioread32(&pcch_hdr->nominal) * 1000;
--	policy->min = policy->cpuinfo.min_freq =
-+	policy->cpuinfo.min_freq =
- 		ioread32(&pcch_hdr->minimum_frequency) * 1000;
- 
--	pr_debug("init: policy->max is %d, policy->min is %d\n",
--		policy->max, policy->min);
-+	pr_debug("init: max_freq is %d, min_freq is %d\n",
-+		 policy->cpuinfo.max_freq, policy->cpuinfo.min_freq);
- out:
- 	return result;
- }
-diff --git a/drivers/cpufreq/pxa3xx-cpufreq.c b/drivers/cpufreq/pxa3xx-cpufreq.c
-index 4afa48d172dbe..f53b9d7edc76a 100644
---- a/drivers/cpufreq/pxa3xx-cpufreq.c
-+++ b/drivers/cpufreq/pxa3xx-cpufreq.c
-@@ -185,8 +185,8 @@ static int pxa3xx_cpufreq_init(struct cpufreq_policy *policy)
- 	int ret = -EINVAL;
- 
- 	/* set default policy and cpuinfo */
--	policy->min = policy->cpuinfo.min_freq = 104000;
--	policy->max = policy->cpuinfo.max_freq =
-+	policy->cpuinfo.min_freq = 104000;
-+	policy->cpuinfo.max_freq =
- 		(cpu_is_pxa320()) ? 806000 : 624000;
- 	policy->cpuinfo.transition_latency = 1000; /* FIXME: 1 ms, assumed */
- 
-diff --git a/drivers/cpufreq/virtual-cpufreq.c b/drivers/cpufreq/virtual-cpufreq.c
-index 6ffa16d239b2b..60707bf6ce1e3 100644
---- a/drivers/cpufreq/virtual-cpufreq.c
-+++ b/drivers/cpufreq/virtual-cpufreq.c
-@@ -164,10 +164,7 @@ static int virt_cpufreq_get_freq_info(struct cpufreq_policy *policy)
- 		policy->cpuinfo.min_freq = 1;
- 		policy->cpuinfo.max_freq = virt_cpufreq_get_perftbl_entry(policy->cpu, 0);
- 
--		policy->min = policy->cpuinfo.min_freq;
--		policy->max = policy->cpuinfo.max_freq;
--
--		policy->cur = policy->max;
-+		policy->cur = policy->cpuinfo.max_freq;
- 		return 0;
- 	}
- 
--- 
+
+ 	policy->cpuinfo.min_freq = min_freq;
+-	/*
+-	 * If the driver has set its own cpuinfo.max_freq above max_freq, leave
+-	 * it as is.
+-	 */
+-	if (policy->cpuinfo.max_freq < max_freq)
+-		policy->cpuinfo.max_freq = max_freq;
++	policy->cpuinfo.max_freq = max_freq;
+
+ 	if (min_freq == ~0)
+ 		return -EINVAL;
+--
 2.43.0
-
 
