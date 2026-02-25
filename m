@@ -1,226 +1,212 @@
-Return-Path: <linux-pm+bounces-43203-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43204-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CMvFAg7anmkTXgQAu9opvQ
-	(envelope-from <linux-pm+bounces-43203-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 12:16:30 +0100
+	id +KAPFp/bnmkTXgQAu9opvQ
+	(envelope-from <linux-pm+bounces-43204-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 12:23:11 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6868E196548
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 12:16:29 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1EE519662D
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 12:23:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F38563044093
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 11:15:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5CBF630333EC
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 11:22:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498A73939D2;
-	Wed, 25 Feb 2026 11:15:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1086394469;
+	Wed, 25 Feb 2026 11:22:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="glkmO39J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WaRacXYw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26476329C6D;
-	Wed, 25 Feb 2026 11:15:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6E7393DDA
+	for <linux-pm@vger.kernel.org>; Wed, 25 Feb 2026 11:22:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772018144; cv=none; b=OSFmf8i7koD6dJcDL4dBsrAgu7pO7j1Mn4cLMEL0Hr/dEB1wbnA+wjEC6k3nRDfLDg4DelE2a6sEDEES8ctTh4TOMuazGPQQU8LF+6pmSkVUHRJN2hgE3/rNakOs/dsotl57a8lGrfVAypGjssLiXpGkbhfblGq/y1PxX3hq36o=
+	t=1772018574; cv=none; b=llSxDP2z8K2YkI4A73ORqNB8sJf2r4jnG3Yg5RU+ZYYGQPVib9ifGf2RUdvtYsFUWn+/nMvBz8uuXpQATNhOTKWIjLGsA7gF40agWPswmbGp7oTDw7ZKEAup2ggBRFPj0nPnsr+20h8ELJwuR2TeQNLp6TY5yZmVXqLtwcYyK8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772018144; c=relaxed/simple;
-	bh=bQpUX9iESFZR79pF0V6kpKQNgWEfKF3IUuiMBPbrNgY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eppbRC1HTfCWBkk3euivQ6qiQu74tVndcYumFrtKa3lRZt1Fd9/GG5L8rNRWqbWoqVYiDytANwb6qFlZvCMgiJ8RpZT5Mkd83D6/KwkDmd2KXBc8Yzeh4LAXReXEKqAO9G4XS6ieSyEoOk4aTOWehJYJCWorBQGzaAClDX2CnDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=glkmO39J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A061C19423;
-	Wed, 25 Feb 2026 11:14:37 +0000 (UTC)
+	s=arc-20240116; t=1772018574; c=relaxed/simple;
+	bh=6gev5tZqUw00NLGRGzGj1w6G1r7M37S8MzU31Ep9P3c=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JhxEb6Bo4l60Cp1UEfuJ61MAbHD4RyEKXzd/48EkyNsWs0i0TwmmAL62gZRqqPB4SNw0bBIKAOFksimBJiimULO1lYfeLV+D3/cqIIv+qaDVge8431dRiE6Og+3DmzXR8QIzeWbQvkfUp1xwVUM/IORZHuiZRnTB8bhod6G+aR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WaRacXYw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC68C2BCB4
+	for <linux-pm@vger.kernel.org>; Wed, 25 Feb 2026 11:22:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772018143;
-	bh=bQpUX9iESFZR79pF0V6kpKQNgWEfKF3IUuiMBPbrNgY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=glkmO39JGsJMFCHHzK2xRPLw4dlCOyTH5mgj5Q9vk6Zk7TByZ7LEpSWTzYGIjL0mK
-	 U+B/jmw1j1Ds6/2/I+WscMESWXrpHEOJvEuqzzikYZeEYd3rU9+f6FT4U6M2KHJ6ko
-	 LV3O8PezUudPfjHW4yNU7EoRqmFH6lGK5Dly13vOvrXfyqAt01v63kCQns//79aNad
-	 IW0wfZ7Ywvu1KVT9170lo8SZ5wFcsCeHkHD9elO+bEPSs61OygkXTUln5RA48o4b+L
-	 9+0tcrvFmg1LVDcIQtXLsJycvs81SHxMTSJI9QjbNwy0Nbe6yFfGPh79mWQkzbQwHq
-	 Ean2jR2uiNoBQ==
-Message-ID: <a0c6e65c-3331-402a-94eb-14ba7f4b7ba7@kernel.org>
-Date: Wed, 25 Feb 2026 12:14:35 +0100
+	s=k20201202; t=1772018574;
+	bh=6gev5tZqUw00NLGRGzGj1w6G1r7M37S8MzU31Ep9P3c=;
+	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
+	b=WaRacXYwBEbkSqFnb09HqJI8/90YgW1HTGqdQiaAlv2yd7eCoDinW+Oj4IwkPKsDY
+	 LFfX1TX5a5CAuN+cu2tJ1G7N6aMRD7dnUqxgvpksCBQ7R6cEWKyTOO9YIbUTQEpDRB
+	 D7TFtEJNAMVvKTGgZ7H2rUC0dPf6Zap+wJMUrzPe9h2ZjhriDOAJJ3o7r7JMe3a1Fe
+	 BEFzbAAUmwV+HgmiEpS/K/733VIZwgEMNacF9T+xAGLjQdlF2WVt43F9FJt0eisMpd
+	 Y5ZBh+uA0ro6birUuESD8EclhzzWezKSAydu/YQWH0bbWU5hgp7svPLI2TZlpjn5VP
+	 c23oiYayZRYfg==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-59e63b427aaso7173756e87.2
+        for <linux-pm@vger.kernel.org>; Wed, 25 Feb 2026 03:22:54 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWIsk5zH4psv8XMIZSlpUnsjomiFNj/Nh4DVGlHLJ2ZvYQC7gkuSCsBAXNdloxeWrWQhJK+vWjJ/w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjXiDzVxGektYbprApDlHCov+Qq0fnq5DRxvqr/UGKp/GilDDR
+	WD1VVL5C4VSPuUFjg4OHOOYn2EmH59InLgQgswdsxC7+BAz4HZzbFMs+6XU4tIE672nWQx+2EU2
+	9NFKN+7k9t3vLjWyPZXjWEp9Yd8cOx4F8GDXTBUQuiA==
+X-Received: by 2002:ac2:4e13:0:b0:59f:7a22:fae with SMTP id
+ 2adb3069b0e04-5a0ed9bc6demr5028853e87.43.1772018572919; Wed, 25 Feb 2026
+ 03:22:52 -0800 (PST)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 25 Feb 2026 03:22:51 -0800
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 25 Feb 2026 03:22:50 -0800
+From: Bartosz Golaszewski <brgl@kernel.org>
+In-Reply-To: <20260224-pci-m2-e-v5-9-dd9b9501d33c@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/15] powerpc/time: Prepare to stop elapsing in
- dynticks-idle
-To: Shrikanth Hegde <sshegde@linux.ibm.com>,
- Frederic Weisbecker <frederic@kernel.org>,
- LKML <linux-kernel@vger.kernel.org>,
- Madhavan Srinivasan <maddy@linux.ibm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
- Jan Kiszka <jan.kiszka@siemens.com>, Joel Fernandes <joelagnelf@nvidia.com>,
- Juri Lelli <juri.lelli@redhat.com>, Kieran Bingham <kbingham@kernel.org>,
- Mel Gorman <mgorman@suse.de>, Michael Ellerman <mpe@ellerman.id.au>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Nicholas Piggin <npiggin@gmail.com>, "Paul E . McKenney"
- <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Steven Rostedt <rostedt@goodmis.org>, Sven Schnelle <svens@linux.ibm.com>,
- Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>,
- Valentin Schneider <vschneid@redhat.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Xin Zhao <jackzxcui1989@163.com>,
- linux-pm@vger.kernel.org, linux-s390@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org
-References: <20260206142245.58987-1-frederic@kernel.org>
- <20260206142245.58987-5-frederic@kernel.org>
- <9413517d-963b-4e6d-b11b-b440acd7cb5a@linux.ibm.com>
- <9ab1e7d7-57ee-49f9-963c-3a1b96dda684@kernel.org>
- <120884b0-0b09-43a9-b0f6-7dc2affe1ac0@linux.ibm.com>
- <55720b5b-f643-4e67-8841-d81a9e712faf@kernel.org>
- <a20beb34-0e4b-4063-b6b0-6c5886bbb971@linux.ibm.com>
-Content-Language: fr-FR
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-In-Reply-To: <a20beb34-0e4b-4063-b6b0-6c5886bbb971@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20260224-pci-m2-e-v5-0-dd9b9501d33c@oss.qualcomm.com> <20260224-pci-m2-e-v5-9-dd9b9501d33c@oss.qualcomm.com>
+Date: Wed, 25 Feb 2026 03:22:50 -0800
+X-Gmail-Original-Message-ID: <CAMRc=MeJP-BLf3_zM9b+nz1nMOGVzyUhXemejHkV+AJREGPz_w@mail.gmail.com>
+X-Gm-Features: AaiRm52oa36SxdO2esRz0tZiEY1x2dCziUGws1cBwrcfkRk5CfGY9pNkO3m4CZg
+Message-ID: <CAMRc=MeJP-BLf3_zM9b+nz1nMOGVzyUhXemejHkV+AJREGPz_w@mail.gmail.com>
+Subject: Re: [PATCH v5 9/9] power: sequencing: pcie-m2: Create serdev device
+ for WCN7850 bluetooth
+To: manivannan.sadhasivam@oss.qualcomm.com
+Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+	linux-pci@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, linux-acpi@vger.kernel.org, 
+	Hans de Goede <johannes.goede@oss.qualcomm.com>, Rob Herring <robh@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Hans de Goede <hansg@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Bartosz Golaszewski <brgl@kernel.org>, 
+	Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43203-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-43204-lists,linux-pm=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,linaro.org,oss.qualcomm.com,kernel.org,linuxfoundation.org,linux.dev,linux.intel.com,squebb.ca,gmail.com,holtmann.org,bgdev.pl];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,linux.ibm.com,linutronix.de,google.com,gmail.com,arm.com,redhat.com,siemens.com,nvidia.com,suse.de,ellerman.id.au,infradead.org,goodmis.org,linaro.org,163.com,vger.kernel.org,lists.ozlabs.org];
-	RCPT_COUNT_TWELVE(0.00)[35];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[32];
 	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.996];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chleroy@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.997];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6868E196548
+	TAGGED_RCPT(0.00)[linux-pm,dt,manivannan.sadhasivam.oss.qualcomm.com];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: C1EE519662D
 X-Rspamd-Action: no action
 
-Hi Hegde,
+On Tue, 24 Feb 2026 06:30:55 +0100, Manivannan Sadhasivam via B4 Relay
+<devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org> said:
+> From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+>
+> For supporting bluetooth over the non-discoverable UART interface of
+> WCN7850, create the serdev device after enumerating the PCIe interface.
+> This is mandatory since the device ID is only known after the PCIe
+> enumeration and the ID is used for creating the serdev device.
+>
+> Since by default there is no OF or ACPI node for the created serdev,
+> create a dynamic OF 'bluetooth' node with the 'compatible' property and
+> attach it to the serdev device. This will allow the serdev device to bind
+> to the existing bluetooth driver.
+>
+> Tested-by: Hans de Goede <johannes.goede@oss.qualcomm.com> # ThinkPad T14s gen6 (arm64)
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> ---
+>
 
-Le 25/02/2026 à 11:34, Shrikanth Hegde a écrit :
-> Hi Christophe.
-> 
-> On 2/25/26 3:15 PM, Christophe Leroy (CS GROUP) wrote:
->>
->> Hope it is more explicit now.
->>
-> 
-> Got it. The main concern was around with additional computation that 
-> sched_clock,
-> not any additional paths per se.
-> 
-> yes, that would be possible,
-> 
-> 
-> How about we do below? This adds only one subtraction.
-> This achieves the same outcome.
+[snip]
 
-It adds a bit more than just a substration. It adds a call to an extern 
-fonction.
+> -static void pwrseq_pcie_m2_free_regulators(void *data)
+> +static void pwrseq_pcie_m2_free_resources(void *data)
+>  {
+>  	struct pwrseq_pcie_m2_ctx *ctx = data;
+>
+> +	serdev_device_remove(ctx->serdev);
+> +	bus_unregister_notifier(&pci_bus_type, &ctx->nb);
+> +	of_changeset_revert(ctx->ocs);
+> +	of_changeset_destroy(ctx->ocs);
+>  	regulator_bulk_free(ctx->num_vregs, ctx->regs);
+>  }
+>
+> +static int pwrseq_m2_pcie_create_bt_node(struct pwrseq_pcie_m2_ctx *ctx,
+> +					struct device_node *parent)
+> +{
+> +	struct device *dev = ctx->dev;
+> +	struct device_node *np;
+> +	int ret;
+> +
+> +	ctx->ocs = devm_kzalloc(dev, sizeof(*ctx->ocs), GFP_KERNEL);
+> +	if (!ctx->ocs)
+> +		return -ENOMEM;
+> +
+> +	of_changeset_init(ctx->ocs);
+> +
+> +	np = of_changeset_create_node(ctx->ocs, parent, "bluetooth");
+> +	if (!np) {
+> +		dev_err(dev, "Failed to create bluetooth node\n");
+> +		ret = -ENODEV;
+> +		goto err_destroy_changeset;
+> +	}
+> +
+> +	ret = of_changeset_add_prop_string(ctx->ocs, np, "compatible", "qcom,wcn7850-bt");
+> +	if (ret) {
+> +		dev_err(dev, "Failed to add bluetooth compatible: %d\n", ret);
+> +		goto err_destroy_changeset;
+> +	}
+> +
+> +	ret = of_changeset_apply(ctx->ocs);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to apply changeset: %d\n", ret);
+> +		goto err_destroy_changeset;
+> +	}
+> +
+> +	ret = device_add_of_node(&ctx->serdev->dev, np);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to add OF node: %d\n", ret);
+> +		goto err_revert_changeset;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_revert_changeset:
+> +	of_changeset_revert(ctx->ocs);
+> +err_destroy_changeset:
+> +	of_changeset_destroy(ctx->ocs);
+> +
 
-00000164 <my_account_cpu_user_entry>:
-  164:	94 21 ff f0 	stwu    r1,-16(r1)
-  168:	7c 08 02 a6 	mflr    r0
-  16c:	90 01 00 14 	stw     r0,20(r1)
-  170:	93 e1 00 0c 	stw     r31,12(r1)
-  174:	7f ec 42 e6 	mftb    r31
-  178:	48 00 00 01 	bl      178 <my_account_cpu_user_entry+0x14>
-			178: R_PPC_REL24	get_boot_tb
-  17c:	81 02 00 08 	lwz     r8,8(r2)
-  180:	81 22 00 28 	lwz     r9,40(r2)
-  184:	7c 84 f8 50 	subf    r4,r4,r31
-  188:	7d 29 40 50 	subf    r9,r9,r8
-  18c:	7d 29 22 14 	add     r9,r9,r4
-  190:	90 82 00 24 	stw     r4,36(r2)
-  194:	91 22 00 08 	stw     r9,8(r2)
-  198:	80 01 00 14 	lwz     r0,20(r1)
-  19c:	83 e1 00 0c 	lwz     r31,12(r1)
-  1a0:	7c 08 03 a6 	mtlr    r0
-  1a4:	38 21 00 10 	addi    r1,r1,16
-  1a8:	4e 80 00 20 	blr
+I would prefer pwrseq_pcie_m2_free_resources() to be split into separate
+devm actions, otherwise it's not much different from simply having the
+.remove() callback. With a split like that you'd avoid having these labels
+here.
 
-000001ac <my_account_cpu_user_exit>:
-  1ac:	94 21 ff f0 	stwu    r1,-16(r1)
-  1b0:	7c 08 02 a6 	mflr    r0
-  1b4:	90 01 00 14 	stw     r0,20(r1)
-  1b8:	93 e1 00 0c 	stw     r31,12(r1)
-  1bc:	7f ec 42 e6 	mftb    r31
-  1c0:	48 00 00 01 	bl      1c0 <my_account_cpu_user_exit+0x14>
-			1c0: R_PPC_REL24	get_boot_tb
-  1c4:	81 02 00 0c 	lwz     r8,12(r2)
-  1c8:	81 22 00 24 	lwz     r9,36(r2)
-  1cc:	7c 84 f8 50 	subf    r4,r4,r31
-  1d0:	7d 29 40 50 	subf    r9,r9,r8
-  1d4:	7d 29 22 14 	add     r9,r9,r4
-  1d8:	90 82 00 28 	stw     r4,40(r2)
-  1dc:	91 22 00 0c 	stw     r9,12(r2)
-  1e0:	80 01 00 14 	lwz     r0,20(r1)
-  1e4:	83 e1 00 0c 	lwz     r31,12(r1)
-  1e8:	7c 08 03 a6 	mtlr    r0
-  1ec:	38 21 00 10 	addi    r1,r1,16
-  1f0:	4e 80 00 20 	blr
+Otherwise looks good.
 
-
-I really still can't see the point of this substraction.
-
-At one place we do
-
-	tb1 = mftb1;
-
-	acct->utime += (tb1 - acct->starttime_user);
-	acct->starttime = tb1;
-
-At the other place we do
-
-	tb2 = mftb2;
-
-	acct->stime += (tb2 - acct->starttime);
-	acct->starttime_user = tb2;
-
-So at the end we have
-
-	acct->utime += mftb1 - mftb2;
-	acct->stime += mftb2 - mftb1;
-
-You want to change to
-	tb1 = mftb1 - boot_tb;
-	tb2 = mftb2 - boot_tb;
-
-At the end we would get
-
-	acct->utime += mftb1 - boot_tb - mftb2 + boot_tb = mftb1 - mftb2;
-	acct->stime += mftb2 - boot_tb - mftb1 + boot_tb = mftb2 - mftb1;
-
-So what's the point in doing such a useless substract that disappears at 
-the end ? What am I missing ?
-
-Christophe
+Bart
 
