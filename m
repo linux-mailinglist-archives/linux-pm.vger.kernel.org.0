@@ -1,266 +1,475 @@
-Return-Path: <linux-pm+bounces-43199-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43200-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kDqRK8u/nmnsXAQAu9opvQ
-	(envelope-from <linux-pm+bounces-43199-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 10:24:27 +0100
+	id 8L/uBoTFnmkuXQQAu9opvQ
+	(envelope-from <linux-pm+bounces-43200-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 10:48:52 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18A3A194E24
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 10:24:27 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3F7119546F
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 10:48:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EC74430F9650
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 09:17:36 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 068F530568D2
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Feb 2026 09:46:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 018D938737B;
-	Wed, 25 Feb 2026 09:17:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBA8D33D4E9;
+	Wed, 25 Feb 2026 09:46:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="fthnKRhE";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="d4dbD+TH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pZamFFOV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A29A238945D
-	for <linux-pm@vger.kernel.org>; Wed, 25 Feb 2026 09:17:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C844E283CB5;
+	Wed, 25 Feb 2026 09:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772011033; cv=none; b=nsdL51/OEj5jb+sOGgHKUI8Ed4QD+/A2nChxcryvqFLFYwswK12Okkol+HEdCb02LEp7WCEGUS1HLV3DYmlPS54j7lXvRricAwkcVlYYDek4RxMkuzq7yOorWefiC6xU2Sz/kjhyqjhfK0rkwSdoy77JZAzu0z/q8+Qc8YvmMXg=
+	t=1772012762; cv=none; b=b1JdsWrJvxVmcExq8DKv+z6TZJyOfjcDOrV9XlVPl9BqTW/4t/5kkT20C+aZi1A9DaUsUruve7LND/3r8UxsVLnCLNdDcdXeJt8vQUJhwq3YWu2QK/NLzRlV2AHIUcprZl67RJBjqjAPrCCdK1qof3FR9Qy7d0doG+ZQgGFDHcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772011033; c=relaxed/simple;
-	bh=vCe6eRdEnoX5wrPjWditaUdOWecdI5Lh6B8J3UkVwCA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oveHVTevxJeSqovNZZxRaf1SjtqIEtIoww1lbOxOjnHzpaObUxxnwgtjSr96CooaDxZdIICh2QxYD2krTDS8rG7BDsgwMUAhjPfa82pdCllSxKGKrYpkzw81cKU5LyjSKHjkEMCEfnAzqDt6Gx5H3+omTyzdk4Lnb+ZoBU1RwP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=fthnKRhE; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=d4dbD+TH; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61P7vnLb2432418
-	for <linux-pm@vger.kernel.org>; Wed, 25 Feb 2026 09:17:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=xyYMQp/RAotOxbl0cC9uDXLVLev7ys7mCX0
-	LhQGwDDQ=; b=fthnKRhEFw09Gcwx4k5B7ZdiJ9avCs/yC0mMvfqCZ/z7lxNQeMV
-	YibXfcuFSh5WL54o9aYCcdO/wXbZB9azJO20peaqx/2cxspD0ySFn+0ljFPLNRbx
-	v7+XdLNFSYIJTiIJjeJKMndIzRtCiPgcyMJGFrUxdH59URjea3w9dhGMaCUxyyN8
-	H5Amg1A5AkQL2g7GJbFZqQNMDO12xdC4dAdygU6VSAfpqeU8bzJAZfBPbOFrOOxB
-	CiyiemMk2lCwPRq2QV4s6oiMK3lmYc5iMCKLYBQfLQe8BGEQv/OoSjNCSi+Hp19B
-	RZXMAPzIUeNxQqywFmv92etNfTNWpP3pBcQ==
-Received: from mail-dl1-f70.google.com (mail-dl1-f70.google.com [74.125.82.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4chekjb2dv-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 25 Feb 2026 09:17:09 +0000 (GMT)
-Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-1276a8b0501so309883c88.2
-        for <linux-pm@vger.kernel.org>; Wed, 25 Feb 2026 01:17:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1772011028; x=1772615828; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xyYMQp/RAotOxbl0cC9uDXLVLev7ys7mCX0LhQGwDDQ=;
-        b=d4dbD+TH+/iZWh1b/2P5AscKCfr9vJrq85ehNaeL8DUaNoHwxWVi99qFCcv+agyhLG
-         9PWVJJFOq/YNM0RevXNFlxAJ+Dv2vemmf1LoZipVSKUZCsIPKObd5kI7FLrEEhveHR8o
-         mP0ZEFCqrUYjRWi+be7ZUPd9CmcMyC/gL5c/I3RXVh9/W/SKgnpq/5j88aVkxBLXHNyw
-         ayntRAhn4qc6jm9dKO/GtVeo8i5vhFdplP0/3NdOnxtZrj8fkyLsPFF4Z1J7ENR7yVA4
-         icWife8XbB29yX8hfgB2yKYcfuD3RYs0fL4r6WUZzrqziJOwkqsWkzkPzfPJe82mSXsJ
-         7zDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772011028; x=1772615828;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xyYMQp/RAotOxbl0cC9uDXLVLev7ys7mCX0LhQGwDDQ=;
-        b=fKs9XI438Y2BDs2KEAt+Wj8jqQXSjElOVBS0nl/gIxj6HVmF+nsVQc3Bxuxh8t7yXP
-         Ddvivk1qbsG0hBFlW6rd5oGhRWcivjoU18bFoO3aSnPPUBVL8e+mMb/x9uNJTZk7qVHZ
-         TzNl7eBq2A/8szMw+5KfxhB1Qk9BPmRRc/45F/tAf5+W2WCcgVdkXlXgJcKo+F67hh10
-         T0nGBA938wOBwFTPdSffqyjlB+33e1jpldkCttZSeKV2sy2kylTWTVYbFwvyw4nM0S4z
-         SUkY2SNCaka5tdrBk8EUKgfRiXyfpjzP/m2lU0I90glAlGESv/m4o04glljlVGE0HIxT
-         DzOg==
-X-Forwarded-Encrypted: i=1; AJvYcCWwTM0DRd1/zosF9DIA1vtgxdi9ajwM9tDx61njIb+/vsfelD5fqqXcGTOFJFFDO5FJmv9dhKxVdA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUQAXjnVP0TC3kDVqN2fdTjtrfh+BYSNBX9yurFr3KHsdp6I61
-	RNM9rZ1TjP2EWMikTQeIURAIKlQTGrBlZ/XYRsjUXR97s/oow2Z1ey2VpUg6Cx40BHOLXjqz8Ih
-	0O4XK+b+9v7ulPXXaOBWAYs8l8bVQLC8wt6l4j/PK+uwZ8Ea0fLJGokRDuyz12g==
-X-Gm-Gg: ATEYQzwYIhVLsiKec2lyjxXffg3GxRyuUnRxGpbQu4Lotpu+lX7YI0rctXwrTZyhnfg
-	/OZKFDuwSJ8yeajla1ev+iWaAVOv+MDft4AWZqADOC8Dhtc07IwUvEmL5H/1Qf2Xv2nr4CX0dzi
-	JTQJqxA+Bk1r/ITFxnV/4ZYUwMPDm8qewCSoGhyhEkMteRtZTIv1rTnP8JSQKef6tTWAoR95KUw
-	RyREyR65rt0zCybPSx1vKG/1VX6Wrk5BfpJ9aFg/8D+BRHp+ycBeNH5bHm30jg2sJy1amGlrDJT
-	UM/qtUmjIp73pLk4/KBiWeSBWUVRH0k7nsmzhsjrsK7ZJZj1nROZXGEZ8pERdAQCkd9qxQGoU58
-	ydJOkh2V8Drbteopa8pV3bmoZ+hxHy09kG2bwBBTk/Y69
-X-Received: by 2002:a05:7022:f40f:b0:127:3480:7ca9 with SMTP id a92af1059eb24-1276acaff99mr3188812c88.2.1772011028346;
-        Wed, 25 Feb 2026 01:17:08 -0800 (PST)
-X-Received: by 2002:a05:7022:f40f:b0:127:3480:7ca9 with SMTP id a92af1059eb24-1276acaff99mr3188800c88.2.1772011027768;
-        Wed, 25 Feb 2026 01:17:07 -0800 (PST)
-Received: from hu-weiden-sha.qualcomm.com ([114.94.8.21])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bd7dc167b2sm8386514eec.28.2026.02.25.01.17.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Feb 2026 01:17:07 -0800 (PST)
-From: Wei Deng <wei.deng@oss.qualcomm.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-pm@vger.kernel.org, cheng.jiang@oss.qualcomm.com,
-        shuai.zhang@oss.qualcomm.com
-Subject: [PATCH V3] arm64: dts: qcom: qcs8300-ride: Enable Bluetooth support
-Date: Wed, 25 Feb 2026 14:47:00 +0530
-Message-Id: <20260225091700.286108-1-wei.deng@oss.qualcomm.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1772012762; c=relaxed/simple;
+	bh=e1tQggcgK40+SWAwt4lGz/ga/c6lFzPkuamY/wn1pao=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k7wlKQV0WvSv5tol81BFDOuZY45zAZM9dtpB308acfAm69D9vMbKdZQgpQI8AKS00hfryP/dqxGHEjbDiO/cx4gekZZv+iBsFqAmlwFEegtwRlzfzoyGqjz0pM1ZXcjsDpTf7yUWvOWSWA1dHR5CXtrPn76qgdzWgnywHVNSD44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pZamFFOV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB0C7C116D0;
+	Wed, 25 Feb 2026 09:45:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772012762;
+	bh=e1tQggcgK40+SWAwt4lGz/ga/c6lFzPkuamY/wn1pao=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=pZamFFOVtclVCnwxSmXZYX1KReIgG+KclKS2BhZcJLh6yJflCG6+ZblLIShf9DeXr
+	 jJ1ajAkdlDa980REQ117y+bYIjXNVjZmXuDyolDsRb0805WtnX3L/On20paXjcAcYz
+	 741K6MH2SqCjbQMMTs7VdXOzHtLEQFiju2CNiYJODgGzWyhGF3yvHpteL5lpkx26ks
+	 02jwVU+9VlPzbgEgKIFcZBlVZNgPhF7CT2C/7c5pZdNke9CkU7RtqEhBORqB0+3RCy
+	 6IR/YL1IdGjkXSWylFpx350dgrqHvqc6RO0NvWy1cSK911YYkVKJotelztdnihCryq
+	 ViYH5BMFaP0oQ==
+Message-ID: <55720b5b-f643-4e67-8841-d81a9e712faf@kernel.org>
+Date: Wed, 25 Feb 2026 10:45:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 04/15] powerpc/time: Prepare to stop elapsing in
+ dynticks-idle
+To: Shrikanth Hegde <sshegde@linux.ibm.com>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
+ Jan Kiszka <jan.kiszka@siemens.com>, Joel Fernandes <joelagnelf@nvidia.com>,
+ Juri Lelli <juri.lelli@redhat.com>, Kieran Bingham <kbingham@kernel.org>,
+ Mel Gorman <mgorman@suse.de>, Michael Ellerman <mpe@ellerman.id.au>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Nicholas Piggin <npiggin@gmail.com>, "Paul E . McKenney"
+ <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Sven Schnelle <svens@linux.ibm.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>,
+ Valentin Schneider <vschneid@redhat.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Xin Zhao <jackzxcui1989@163.com>,
+ linux-pm@vger.kernel.org, linux-s390@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org
+References: <20260206142245.58987-1-frederic@kernel.org>
+ <20260206142245.58987-5-frederic@kernel.org>
+ <9413517d-963b-4e6d-b11b-b440acd7cb5a@linux.ibm.com>
+ <9ab1e7d7-57ee-49f9-963c-3a1b96dda684@kernel.org>
+ <120884b0-0b09-43a9-b0f6-7dc2affe1ac0@linux.ibm.com>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <120884b0-0b09-43a9-b0f6-7dc2affe1ac0@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=RNe+3oi+ c=1 sm=1 tr=0 ts=699ebe15 cx=c_pps
- a=SvEPeNj+VMjHSW//kvnxuw==:117 a=Uz3yg00KUFJ2y2WijEJ4bw==:17
- a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22 a=VwQbUJbxAAAA:8
- a=EUspDBNiAAAA:8 a=lDHZPWx9vk9YBGX9cKsA:9 a=Kq8ClHjjuc5pcCNDwlU0:22
-X-Proofpoint-ORIG-GUID: QYWXnztBw2i_fvCoXA8jgLBpXUytUJES
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI1MDA5MCBTYWx0ZWRfX08y2oddreWmc
- 2wS2p7zbfvReom26ANcphpcu3YG/FG3VOZb4EqnMLuUko9bAkKTqFkMdV8VRk6lwuPdmuuKsvJv
- yoaT7RGR/a3fMaK5Z8NU0q73Oz4MWrfw0l9foj8qyfb//zBKRPj9zMnSGMtizwF3rJO6BlqQc/n
- XEH6J2HAwhjOMaJ7eu3+jznsUOzzAKwKKTWpx32XhdVD1mgsRKbdGGskvtlnJjnFDSl+6+x1i0O
- AGHRmlO67wG9mNi6BS6Jt2RxA2WVYv5ZjWsbQaTH5eBe3ixH0IHJzrAeVM0GZRGLDLnzXc9AtMq
- 6+kcS6aPzRD7YvCkXZ/yHd41OcjxTARi6T0QXUm2IM7JdTpIYYJoVLPwuaoZCQ0hmb0n1vPZwBu
- eGQVoDKlQ1wsdMUgOgSdkb5kCZQg46t7jf6xwYdi7gXkzCZQjUUEmXLjZMBHegm6naDWJkjaYsx
- a6uqK4fappFUx6gbtYA==
-X-Proofpoint-GUID: QYWXnztBw2i_fvCoXA8jgLBpXUytUJES
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-24_03,2026-02-23_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501 phishscore=0
- clxscore=1011 spamscore=0 impostorscore=0 suspectscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602250090
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	TAGGED_FROM(0.00)[bounces-43199-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43200-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,holtmann.org,gmail.com];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wei.deng@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,linux.ibm.com,linutronix.de,google.com,gmail.com,arm.com,redhat.com,siemens.com,nvidia.com,suse.de,ellerman.id.au,infradead.org,goodmis.org,linaro.org,163.com,vger.kernel.org,lists.ozlabs.org];
+	RCPT_COUNT_TWELVE(0.00)[35];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,oss.qualcomm.com:mid,oss.qualcomm.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.994];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[chleroy@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 18A3A194E24
+	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B3F7119546F
 X-Rspamd-Action: no action
 
-Enable BT on qcs8300-ride by adding a BT device tree node.
+Hi Hegde,
 
-Since the platform uses the QCA6698 Bluetooth chip. While
-the QCA6698 shares the same IP core as the WCN6855, it has
-different RF components and RAM sizes, requiring new firmware
-files. Use the firmware-name property to specify the NVM and
-rampatch firmware to load.
+Le 25/02/2026 à 08:46, Shrikanth Hegde a écrit :
+> Hi Christophe,
+> 
+> On 2/24/26 9:11 PM, Christophe Leroy (CS GROUP) wrote:
+>> Hi Hegde,
+>>
+>> Le 19/02/2026 à 19:30, Shrikanth Hegde a écrit :
+>>>
+>>>
+>>> On 2/6/26 7:52 PM, Frederic Weisbecker wrote:
+>>>> Currently the tick subsystem stores the idle cputime accounting in
+>>>> private fields, allowing cohabitation with architecture idle vtime
+>>>> accounting. The former is fetched on online CPUs, the latter on offline
+>>>> CPUs.
+>>>>
+>>>> For consolidation purpose, architecture vtime accounting will continue
+>>>> to account the cputime but will make a break when the idle tick is
+>>>> stopped. The dyntick cputime accounting will then be relayed by the 
+>>>> tick
+>>>> subsystem so that the idle cputime is still seen advancing coherently
+>>>> even when the tick isn't there to flush the idle vtime.
+>>>>
+>>>> Prepare for that and introduce three new APIs which will be used in
+>>>> subsequent patches:
+>>>>
+>>>> _ vtime_dynticks_start() is deemed to be called when idle enters in
+>>>>    dyntick mode. The idle cputime that elapsed so far is accumulated.
+>>>>
+>>>> - vtime_dynticks_stop() is deemed to be called when idle exits from
+>>>>    dyntick mode. The vtime entry clocks are fast-forward to current 
+>>>> time
+>>>>    so that idle accounting restarts elapsing from now.
+>>>>
+>>>> - vtime_reset() is deemed to be called from dynticks idle IRQ entry to
+>>>>    fast-forward the clock to current time so that the IRQ time is still
+>>>>    accounted by vtime while nohz cputime is paused.
+>>>>
+>>>> Also accumulated vtime won't be flushed from dyntick-idle ticks to 
+>>>> avoid
+>>>> accounting twice the idle cputime, along with nohz accounting.
+>>>>
+>>>> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+>>>
+>>> Reviewed-by: Shrikanth Hegde <sshegde@linux.ibm.com>
+>>>
+>>>> ---
+>>>>   arch/powerpc/kernel/time.c | 41 ++++++++++++++++++++++++++++++++++ 
+>>>> ++++
+>>>>   include/linux/vtime.h      |  6 ++++++
+>>>>   2 files changed, 47 insertions(+)
+>>>>
+>>>> diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
+>>>> index 4bbeb8644d3d..18506740f4a4 100644
+>>>> --- a/arch/powerpc/kernel/time.c
+>>>> +++ b/arch/powerpc/kernel/time.c
+>>>> @@ -376,6 +376,47 @@ void vtime_task_switch(struct task_struct *prev)
+>>>>           acct->starttime = acct0->starttime;
+>>>>       }
+>>>>   }
+>>>> +
+>>>> +#ifdef CONFIG_NO_HZ_COMMON
+>>>> +/**
+>>>> + * vtime_reset - Fast forward vtime entry clocks
+>>>> + *
+>>>> + * Called from dynticks idle IRQ entry to fast-forward the clocks 
+>>>> to current time
+>>>> + * so that the IRQ time is still accounted by vtime while nohz 
+>>>> cputime is paused.
+>>>> + */
+>>>> +void vtime_reset(void)
+>>>> +{
+>>>> +    struct cpu_accounting_data *acct = get_accounting(current);
+>>>> +
+>>>> +    acct->starttime = mftb();
+>>>
+>>> I figured out why those huge values happen.
+>>>
+>>> This happens because mftb is from when the system is booted.
+>>> I was doing kexec to start the new kernel and mftb wasn't getting
+>>> reset.
+>>>
+>>> I thought about this. This is concern for pseries too, where LPAR's
+>>> restart but system won't restart and mftb will continue to run 
+>>> instead of
+>>> reset.
+>>>
+>>> I think we should be using sched_clock instead of mftb here.
+>>> Though we need it a few more places and some cosmetic changes around it.
+>>>
+>>> Note: Some values being huge exists without series for few CPUs, with 
+>>> series it
+>>> shows up in most of the CPUs.
+>>>
+>>> So I am planning send out fix below fix separately keeping your
+>>> series as dependency.
+>>>
+>>> ---
+>>>   arch/powerpc/include/asm/accounting.h |  4 ++--
+>>>   arch/powerpc/include/asm/cputime.h    | 14 +++++++-------
+>>>   arch/powerpc/kernel/time.c            | 22 +++++++++++-----------
+>>>   3 files changed, 20 insertions(+), 20 deletions(-)
+>>>
+>>> diff --git a/arch/powerpc/include/asm/accounting.h b/arch/powerpc/ 
+>>> include/asm/accounting.h
+>>> index 6d79c31700e2..50f120646e6d 100644
+>>> --- a/arch/powerpc/include/asm/accounting.h
+>>> +++ b/arch/powerpc/include/asm/accounting.h
+>>> @@ -21,8 +21,8 @@ struct cpu_accounting_data {
+>>>       unsigned long steal_time;
+>>>       unsigned long idle_time;
+>>>       /* Internal counters */
+>>> -    unsigned long starttime;    /* TB value snapshot */
+>>> -    unsigned long starttime_user;    /* TB value on exit to usermode */
+>>> +    unsigned long starttime;    /* Time value snapshot */
+>>> +    unsigned long starttime_user;    /* Time value on exit to 
+>>> usermode */
+>>>   #ifdef CONFIG_ARCH_HAS_SCALED_CPUTIME
+>>>       unsigned long startspurr;    /* SPURR value snapshot */
+>>>       unsigned long utime_sspurr;    /* ->user_time when ->startspurr 
+>>> set */
+>>> diff --git a/arch/powerpc/include/asm/cputime.h b/arch/powerpc/ 
+>>> include/ asm/cputime.h
+>>> index aff858ca99c0..eb6b629b113f 100644
+>>> --- a/arch/powerpc/include/asm/cputime.h
+>>> +++ b/arch/powerpc/include/asm/cputime.h
+>>> @@ -20,9 +20,9 @@
+>>>   #include <asm/time.h>
+>>>   #include <asm/param.h>
+>>>   #include <asm/firmware.h>
+>>> +#include <linux/sched/clock.h>
+>>>
+>>>   #ifdef __KERNEL__
+>>> -#define cputime_to_nsecs(cputime) tb_to_ns(cputime)
+>>>
+>>>   /*
+>>>    * PPC64 uses PACA which is task independent for storing accounting 
+>>> data while
+>>> @@ -44,20 +44,20 @@
+>>>    */
+>>>   static notrace inline void account_cpu_user_entry(void)
+>>>   {
+>>> -    unsigned long tb = mftb();
+>>> +    unsigned long now = sched_clock();
+>>
+>> Now way !
+>>
+>> By doing that you'll kill performance for no reason. All we need when 
+>> accounting time spent in kernel or in user is the difference between 
+>> time at entry and time at exit, no mater what the time was at boot time.
+>>
+> 
+> No. With this patch there will not be any performance difference.
+> All it does is, instead of using mftb uses sched_clock at those places.
+> 
+> 
+> In arch/powerpc/kernel/time.c we have sched_clock().
+> notrace unsigned long long sched_clock(void)
+> {
+>          return mulhdu(get_tb() - boot_tb, tb_to_ns_scale) << 
+> tb_to_ns_shift;
+> }
+> 
+> It does the same mftb call, and accounts only the time after boot, which is
+> what /proc/stat should do as well.
+> 
+> "
+> the amount of time, measured in units of USER_HZ
+> (1/100ths of a second on most architectures
+> 
+> user   (1) Time spent in user mode.
+> 
+> idle   (4) Time spent in the idle task.  This value
+>         should be USER_HZ times the second entry in
+>         the /proc/uptime pseudo-file.
+> "
+> /proc/uptime is based on sched_clock, so i infer /proc/stat also should 
+> show
+> values w.r.t to boot of the OS.
+> 
+> 
+>> Also sched_clock() returns nanoseconds which implies calculation from 
+>> timebase. This is pointless CPU consumption. The current 
+>> implementation calculates nanoseconds at task switch when calling 
+>> vtime_flush().Your change will now do it at every kernel entry and 
+>> kernel exit by calling sched_clock().
+> 
+> This change doesn't add any additional paths. Even without patches, mftb 
+> would have
+> been called in every kernel entry/exit.  See mftb usage 
+> account_cpu_user_exit/enter
+> 
+> Now instead of mftb sched_clock is used, that's all. No additional 
+> entry/exit points.
+> And previously when accounting we would have done cputime_to_nsecs, now 
+> that conversion
+> is done automatically in sched_clock. So overall computation-wise it 
+> should be same.
+> 
+> What i am missing to see it here?
 
-Signed-off-by: Wei Deng <wei.deng@oss.qualcomm.com>
----
-This patch depends on:
-- WLAN
-https://lore.kernel.org/all/20260122053624.4068718-1-wei.zhang@oss.qualcomm.com/
+Ok, lets try to explain in more details:
 
-Changes in v3:
-- Rebase patches
-- Remove unintended 'output-low' from bt-en-state pinctrl
-- Use prerequisite-message-id to replace prerequisite-patch-id (Konrad)
-- Link to v2: https://lore.kernel.org/all/20251118140406.1551669-2-wei.deng@oss.qualcomm.com/
+While a process is running, it will enter and leave the kernel multiple 
+times, without task switch. For instance for system calls or for interrupts.
 
-Changes for v2
-- Update commit message, add firmware name detail
-- Reorganize patchset
-- Link to v1: https://lore.kernel.org/all/20251113130942.2661069-1-wei.deng@oss.qualcomm.com/
----
- arch/arm64/boot/dts/qcom/qcs8300-ride.dts | 26 +++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+At every kernel entry and exit, account_cpu_user_entry() and 
+account_cpu_user_exit() are called. That's a very hot path.
 
-diff --git a/arch/arm64/boot/dts/qcom/qcs8300-ride.dts b/arch/arm64/boot/dts/qcom/qcs8300-ride.dts
-index 2ede6efd1afd..03c01ae630b4 100644
---- a/arch/arm64/boot/dts/qcom/qcs8300-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/qcs8300-ride.dts
-@@ -18,6 +18,7 @@ / {
- 	aliases {
- 		serial0 = &uart7;
- 		mmc0 = &sdhc_1;
-+		serial1 = &uart2;
- 	};
- 
- 	chosen {
-@@ -107,6 +108,7 @@ wcn6855-pmu {
- 		vddpcie1p3-supply = <&vreg_conn_1p35>;
- 		vddpcie1p9-supply = <&vreg_conn_1p95>;
- 
-+		bt-enable-gpios = <&tlmm 55 GPIO_ACTIVE_HIGH>;
- 		wlan-enable-gpios = <&tlmm 54 GPIO_ACTIVE_HIGH>;
- 
- 		regulators {
-@@ -559,6 +561,12 @@ &sdhc_1 {
- };
- 
- &tlmm {
-+	bt_en_state: bt-en-state {
-+		pins = "gpio55";
-+		function = "gpio";
-+		bias-pull-down;
-+	};
+I have added the following functions to see what the code looks like:
+
 +
- 	pcie0_default_state: pcie0-default-state {
- 		wake-pins {
- 			pins = "gpio0";
-@@ -633,6 +641,24 @@ wlan_en_state: wlan-en-state {
- 	};
- };
- 
-+&uart2 {
-+	status = "okay";
-+	bluetooth: bluetooth {
-+		compatible = "qcom,wcn6855-bt";
-+		firmware-name = "QCA6698/hpnv21", "QCA6698/hpbtfw21.tlv";
-+		max-speed = <3200000>;
++void my_account_cpu_user_entry(void);
++void my_account_cpu_user_entry(void)
++{
++       account_cpu_user_entry();
++}
 +
-+		vddrfacmn-supply = <&vreg_pmu_rfa_cmn>;
-+		vddaon-supply = <&vreg_pmu_aon_0p59>;
-+		vddwlcx-supply = <&vreg_pmu_wlcx_0p8>;
-+		vddwlmx-supply = <&vreg_pmu_wlmx_0p85>;
-+		vddbtcmx-supply = <&vreg_pmu_btcmx_0p85>;
-+		vddrfa0p8-supply = <&vreg_pmu_rfa_0p8>;
-+		vddrfa1p2-supply = <&vreg_pmu_rfa_1p2>;
-+		vddrfa1p8-supply = <&vreg_pmu_rfa_1p7>;
-+	};
-+};
-+
- &uart7 {
- 	status = "okay";
- };
++void my_account_cpu_user_exit(void);
++void my_account_cpu_user_exit(void)
++{
++       account_cpu_user_exit();
++}
 
-base-commit: 7dff99b354601dd01829e1511711846e04340a69
-prerequisite-message-id: 20260122053624.4068718-1-wei.zhang@oss.qualcomm.com
--- 
-2.25.1
+What we have today is very optimised:
 
+00000148 <my_account_cpu_user_entry>:
+  148:	7d 0c 42 e6 	mftb    r8
+  14c:	80 e2 00 08 	lwz     r7,8(r2)
+  150:	81 22 00 28 	lwz     r9,40(r2)
+  154:	91 02 00 24 	stw     r8,36(r2)
+  158:	7d 29 38 50 	subf    r9,r9,r7
+  15c:	7d 29 42 14 	add     r9,r9,r8
+  160:	91 22 00 08 	stw     r9,8(r2)
+  164:	4e 80 00 20 	blr
+
+00000168 <my_account_cpu_user_exit>:
+  168:	7d 0c 42 e6 	mftb    r8
+  16c:	80 e2 00 0c 	lwz     r7,12(r2)
+  170:	81 22 00 24 	lwz     r9,36(r2)
+  174:	91 02 00 28 	stw     r8,40(r2)
+  178:	7d 29 38 50 	subf    r9,r9,r7
+  17c:	7d 29 42 14 	add     r9,r9,r8
+  180:	91 22 00 0c 	stw     r9,12(r2)
+  184:	4e 80 00 20 	blr
+
+
+
+With your change we now get a call to sched_clock() instead of a simple 
+mftb,
+
+00000154 <my_account_cpu_user_entry>:
+  154:	94 21 ff f0 	stwu    r1,-16(r1)
+  158:	7c 08 02 a6 	mflr    r0
+  15c:	90 01 00 14 	stw     r0,20(r1)
+  160:	48 00 00 01 	bl      160 <my_account_cpu_user_entry+0xc>
+			160: R_PPC_REL24	sched_clock
+  164:	81 02 00 08 	lwz     r8,8(r2)
+  168:	81 22 00 28 	lwz     r9,40(r2)
+  16c:	90 82 00 24 	stw     r4,36(r2)
+  170:	7d 29 40 50 	subf    r9,r9,r8
+  174:	7d 29 22 14 	add     r9,r9,r4
+  178:	91 22 00 08 	stw     r9,8(r2)
+  17c:	80 01 00 14 	lwz     r0,20(r1)
+  180:	38 21 00 10 	addi    r1,r1,16
+  184:	7c 08 03 a6 	mtlr    r0
+  188:	4e 80 00 20 	blr
+
+0000018c <my_account_cpu_user_exit>:
+  18c:	94 21 ff f0 	stwu    r1,-16(r1)
+  190:	7c 08 02 a6 	mflr    r0
+  194:	90 01 00 14 	stw     r0,20(r1)
+  198:	48 00 00 01 	bl      198 <my_account_cpu_user_exit+0xc>
+			198: R_PPC_REL24	sched_clock
+  19c:	81 02 00 0c 	lwz     r8,12(r2)
+  1a0:	81 22 00 24 	lwz     r9,36(r2)
+  1a4:	90 82 00 28 	stw     r4,40(r2)
+  1a8:	7d 29 40 50 	subf    r9,r9,r8
+  1ac:	7d 29 22 14 	add     r9,r9,r4
+  1b0:	91 22 00 0c 	stw     r9,12(r2)
+  1b4:	80 01 00 14 	lwz     r0,20(r1)
+  1b8:	38 21 00 10 	addi    r1,r1,16
+  1bc:	7c 08 03 a6 	mtlr    r0
+  1c0:	4e 80 00 20 	blr
+
+And sched_clock() is heavy, first it has the sequence mftbu/mftb/mftbu, 
+and then it does awful lot of calculations including many multiply:
+
+000004d8 <sched_clock>:
+  4d8:	7d 2d 42 e6 	mftbu   r9
+  4dc:	7d 0c 42 e6 	mftb    r8
+  4e0:	7d 4d 42 e6 	mftbu   r10
+  4e4:	7c 09 50 40 	cmplw   r9,r10
+  4e8:	40 82 ff f0 	bne     4d8 <sched_clock>
+  4ec:	3d 40 00 00 	lis     r10,0
+			4ee: R_PPC_ADDR16_HA	.data..ro_after_init
+  4f0:	38 ca 00 00 	addi    r6,r10,0
+			4f2: R_PPC_ADDR16_LO	.data..ro_after_init
+  4f4:	3c e0 00 00 	lis     r7,0
+			4f6: R_PPC_ADDR16_HA	.data..read_mostly
+  4f8:	38 87 00 00 	addi    r4,r7,0
+			4fa: R_PPC_ADDR16_LO	.data..read_mostly
+  4fc:	80 66 00 04 	lwz     r3,4(r6)
+  500:	80 e7 00 00 	lwz     r7,0(r7)
+			502: R_PPC_ADDR16_LO	.data..read_mostly
+  504:	80 c4 00 04 	lwz     r6,4(r4)
+  508:	81 4a 00 00 	lwz     r10,0(r10)
+			50a: R_PPC_ADDR16_LO	.data..ro_after_init
+  50c:	7c 63 40 10 	subfc   r3,r3,r8
+  510:	7d 0a 49 10 	subfe   r8,r10,r9
+  514:	7d 27 19 d6 	mullw   r9,r7,r3
+  518:	7d 43 30 16 	mulhwu  r10,r3,r6
+  51c:	7c 08 31 d6 	mullw   r0,r8,r6
+  520:	7d 4a 48 14 	addc    r10,r10,r9
+  524:	7c 67 18 16 	mulhwu  r3,r7,r3
+  528:	39 20 00 00 	li      r9,0
+  52c:	7c c8 30 16 	mulhwu  r6,r8,r6
+  530:	7c a9 49 14 	adde    r5,r9,r9
+  534:	7d 67 41 d6 	mullw   r11,r7,r8
+  538:	7d 4a 00 14 	addc    r10,r10,r0
+  53c:	7c a5 01 94 	addze   r5,r5
+  540:	7c 63 30 14 	addc    r3,r3,r6
+  544:	7d 29 49 14 	adde    r9,r9,r9
+  548:	80 84 00 08 	lwz     r4,8(r4)
+  54c:	7c 63 58 14 	addc    r3,r3,r11
+  550:	7c e7 40 16 	mulhwu  r7,r7,r8
+  554:	7d 29 01 94 	addze   r9,r9
+  558:	7c 63 28 14 	addc    r3,r3,r5
+  55c:	7d 29 39 14 	adde    r9,r9,r7
+  560:	35 44 ff e0 	addic.  r10,r4,-32
+  564:	41 80 00 10 	blt     574 <sched_clock+0x9c>
+  568:	7c 63 50 30 	slw     r3,r3,r10
+  56c:	38 80 00 00 	li      r4,0
+  570:	4e 80 00 20 	blr
+  574:	21 04 00 1f 	subfic  r8,r4,31
+  578:	54 6a f8 7e 	srwi    r10,r3,1
+  57c:	7d 29 20 30 	slw     r9,r9,r4
+  580:	7d 4a 44 30 	srw     r10,r10,r8
+  584:	7c 64 20 30 	slw     r4,r3,r4
+  588:	7d 43 4b 78 	or      r3,r10,r9
+  58c:	4e 80 00 20 	blr
+
+I think the difference is obvious, no need of benchmarking. We shall 
+refrain from calling sched_clock() at every kernel entry/exit. 
+Converting from timebase to nanoseconds only need to be done in 
+vtime_flush() called by vtime_task_switch() during task switch.
+
+Hope it is more explicit now.
+
+Christophe
 
