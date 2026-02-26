@@ -1,150 +1,161 @@
-Return-Path: <linux-pm+bounces-43227-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43228-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eJERA2zWn2kYeQQAu9opvQ
-	(envelope-from <linux-pm+bounces-43227-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 06:13:16 +0100
+	id I8qDEwvgn2lbegQAu9opvQ
+	(envelope-from <linux-pm+bounces-43228-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 06:54:19 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 764DE1A0FFC
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 06:13:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1CAB1A1210
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 06:54:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3062B303338E
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 05:13:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5D0D130A0532
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 05:53:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D7B138759D;
-	Thu, 26 Feb 2026 05:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89C4E38B7AA;
+	Thu, 26 Feb 2026 05:53:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="g2K/x+Ve"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tWc4lbSO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f73.google.com (mail-dl1-f73.google.com [74.125.82.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E03332909;
-	Thu, 26 Feb 2026 05:13:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99BC12C11F8
+	for <linux-pm@vger.kernel.org>; Thu, 26 Feb 2026 05:53:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772082793; cv=none; b=pfmmvzPXdhaKgHZuQy2WL0IyG+o4L1GSzULzdvcjMwxmjbaOK9Vtj40boJrS5+V8pByieAc0D4W3Zq1KGSbmGcMmR8RPVAMdx3+FKvxTDW9f+7ZtyjwJrI5oqSrR8DdChOeu4/3sILAYRuzKql3K55UqYZFAKlp+4bCZUtpogMQ=
+	t=1772085201; cv=none; b=e9vck4xMEBhTQ6wCmGZwFRPd1ah6u6PkpSj3danqVX2z608pVwoh2gJouM7ZhT5xXX6Bc+Hk0+9On0FemjOApw4/deQ86MxFW5pI29BmTJTn17fEr4LgN8RQLHi8Ke34sTlJAHLTmmAF7cwZtlyn1+uuigBw4yFjGD65LIJ8gh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772082793; c=relaxed/simple;
-	bh=eFPYhuNy8TxNqW9jD4iHTaORDXnolL2txJksnZrmDPU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fu05YhEUtouZfjNFYRTDV7nuThO9dk+QmfRj7LMvWWLbInGQCfEUWNwOFcq6aEfg81YJCIau3tyLYovOiVOd/beuW62PcjGSN1HDk6ceTo7lg67uRF0b1ih7WM9wFf0VP5ojE9oCq6qJzEnF/gwH03tEzv/jLEVppHMhsWebfHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=g2K/x+Ve; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=XvnQFmWPOqtM26r08jbEIIkm7MyHEar1yt10naK31Dw=; b=g2K/x+Ve61snUiz/iMNWhXlkL/
-	CxayqxV7j8VYEff/JxXKoUlgV6VNzpFqBPwwhxZc55mS3IUq1g55EjYcWlXMAJ6zve2LeCvRN/F0U
-	vnFi5IQYrZgmzOXTYI4kaGQyMGEK4ILn9X1OoQjGPJlVc+xcOUNvHT1hbjicI5Vq2EsrlFWzIVDNP
-	+nwvGwCy2X2I8LcQcdgYrOdJ9yP8FdKQTFBThEuZBsZ0ePBH5NxixtGnxl4/LWEMGty0LLeTGNK6C
-	bbh7SDwjW9SDTNFGLm7rob6Opd29XXprGzXbfLMmHJthVocQkHBFt+wA2XUSIVs3i9RMhN665CFC+
-	JWbDIKnQ==;
-Received: from [50.53.43.113] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vvTgU-00000005PMM-0yX1;
-	Thu, 26 Feb 2026 05:13:10 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Nishanth Menon <nm@ti.com>,
-	linux-pm@vger.kernel.org,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Tony Lindgren <tony@atomide.com>,
-	linux-omap@vger.kernel.org,
-	Kevin Hilman <khilman@kernel.org>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH] ARM: omap: fix all kernel-doc warnings
-Date: Wed, 25 Feb 2026 21:13:09 -0800
-Message-ID: <20260226051309.556228-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1772085201; c=relaxed/simple;
+	bh=Qlw/1Ju44GL9aQDN0N2cEiRZFdixh9GCnMHZ/Mti0+w=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=WNNZnY8I+j0dfNFLroBc0sMd0K1s4exxqh1nTy4ch2IWuHAVuwyx68MMjsg3K5Y+jmczYe3wkMNw2I6l9Vb5gdr+36v7TaZ2DeM7YadnxqHsC3ni7SX+E6Vp/Q5mVHiJ81dQpLLyz5nwR0nbEGyd5TWdmZylBMOmSUJJafrwY+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tWc4lbSO; arc=none smtp.client-ip=74.125.82.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com
+Received: by mail-dl1-f73.google.com with SMTP id a92af1059eb24-1277896014fso11891055c88.1
+        for <linux-pm@vger.kernel.org>; Wed, 25 Feb 2026 21:53:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772085197; x=1772689997; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6fqgL7f/DJ61Hn3+dq/y0RfyIFeDJLaKoFUILGJGRcs=;
+        b=tWc4lbSOQ9rCulMXUSwQcNt2tJKbaeou+cWG7CJ86s/xD/CBIdQZCP2TQbwTMouHll
+         GDrYhLXZqZu0O8Jlxy5ZGiLdpB3bzMIFJ3uOLxlu3Fx66bECK3Xdzuda3mziuLeEhoXj
+         JbWhA5R6no6g0hOZ5pXkxxLBcyr4Zsa6lIhW5iOstscUVIUAvvgTMZ2FshHEPHONQjux
+         e7IlZPXHWjQMiXyak+DbJ2gXrZLxM1EZ+OqevwbleUC8GAgertiK0j+5+SqINQ8ND2g1
+         WZAb7JeMhJkgJBTsnB68yYYjPjurJAo91LM4o/GFt97VD6l03hCMp5g9sX76LN6GX4Xs
+         ocyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772085197; x=1772689997;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6fqgL7f/DJ61Hn3+dq/y0RfyIFeDJLaKoFUILGJGRcs=;
+        b=m/Ijyphvy1BbF2qd6CKk55vw/WyUpFpxBtFqaTs9Qbhxmj+NlWDKfplS0maaCwe794
+         vvWi/8RxBbliljjgWerPlD4vhmZyJ8mRkD9blwweFdWg4r2Hq8065Z6oQIog/8X92U+y
+         JboL6kB0FuXDmSivw5+QbYmiy0uNCeZrEJ0QPVpGyiSBTEOTQir04cjq0TwjjD9CXloO
+         RZx9aUCyskXecq/G4pV4cQyOwHWTofomIno/ypdTALId90mBS5/dGSZT9T29LENxrBnJ
+         B6z41yt2LfnvYQQlArFlwqfaq4EJfsJ3SuSWKGNmjCcrod/VCXsUdMOVQWzeodd+8buk
+         oohw==
+X-Forwarded-Encrypted: i=1; AJvYcCWJoCj0RC3Ii7jj3nJmAzkA7ifkRCvq+gPH/9VJRX5O/J8ZQSB7iqGIOiSOr/oOfnX2LSyo43I4ww==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgvymorHKXNVz6CEngBtmLQ8zx/NDwaQn/nBNd0GlO64tWPE3D
+	XMf8YzQYKjVc7+Qy2oP9r3iALf2RiBUpoydz/qGhF6fJ3kLf5iaheDJtskCYnCZSIo/LNSPF6ph
+	wJcNndA==
+X-Received: from dlbbz39.prod.google.com ([2002:a05:7022:23a7:b0:127:c11:f47a])
+ (user=badhri job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:670d:b0:119:e569:fbb2
+ with SMTP id a92af1059eb24-1276ad77ce7mr9417450c88.33.1772085196605; Wed, 25
+ Feb 2026 21:53:16 -0800 (PST)
+Date: Thu, 26 Feb 2026 05:53:08 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.414.gf7e9f6c205-goog
+Message-ID: <20260226055311.2591357-1-badhri@google.com>
+Subject: [PATCH v1 0/3] Add support for AVS in TCPM
+From: Badhri Jagan Sridharan <badhri@google.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+	Badhri Jagan Sridharan <badhri@google.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Amit Sunil Dhamne <amitsd@google.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[infradead.org,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[infradead.org:s=bombadil.20210309];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	MV_CASE(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[infradead.org,ti.com,vger.kernel.org,iki.fi,gmail.com,atomide.com,kernel.org,kemnade.info,baylibre.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-43227-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43228-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
 	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rdunlap@infradead.org,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[infradead.org:+];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[infradead.org:mid,infradead.org:dkim,infradead.org:email,atomide.com:email,ti.com:email,kemnade.info:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 764DE1A0FFC
+	FROM_NEQ_ENVFROM(0.00)[badhri@google.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
+	NEURAL_HAM(-0.00)[-0.966];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B1CAB1A1210
 X-Rspamd-Action: no action
 
-Use the correct struct member names to avoid kernel-doc warnings:
+To facilitate optimum charging USB_PD_R3_2 introduced a SPR AVS
+(Standard Power Range Adjustable Voltage Supply) which is a power supply
+mode operating within the Standard Power Range (up to 100W). It allows a
+Source to offer an output voltage that can be adjusted by the Sink in
+fine increments (100mV) within a defined range.
 
-Warning: include/linux/platform_data/voltage-omap.h:27 struct member
- 'volt_nominal' not described in 'omap_volt_data'
-Warning: include/linux/platform_data/voltage-omap.h:27 struct member
- 'vp_errgain' not described in 'omap_volt_data'
+Unlike the Programmable Power Supply (PPS), SPR AVS does not support a
+programmable current limit (Current Limit Mode). Instead, it functions
+similarly to a Fixed Supply where the voltage is adjustable; the Sink
+is responsible for ensuring it does not draw more current than negotiated.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
----
-Cc: Nishanth Menon <nm@ti.com>
-Cc: linux-pm@vger.kernel.org
-Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
-Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Cc: Tony Lindgren <tony@atomide.com>
-Cc: linux-omap@vger.kernel.org
-Cc: Kevin Hilman <khilman@kernel.org>
-Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
-Cc: Andreas Kemnade <andreas@kemnade.info>
-Cc: Kevin Hilman <khilman@baylibre.com>
-Cc: Roger Quadros <rogerq@kernel.org>
-Cc: Tony Lindgren <tony@atomide.com>
+This patch series enables sink to enable and negotiate SPR AVS with an
+SPR AVS capable PD source. This allows gs101 to negotiate SPR AVS with
+a SPR AVS compatible USB PD port partner. The DTS changes for gs101
+will be sent as a separate patch while marking this topic as a
+dependency.
 
- include/linux/platform_data/voltage-omap.h |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This patch series also depends on the "Introduce Sink Cap Extended AMS"
+introduced by Amit Sunil Dhamne as it introduces the SPR AVS voltage
+tier constants which this patch series relies on.
 
---- linux-next-20260225.orig/include/linux/platform_data/voltage-omap.h
-+++ linux-next-20260225/include/linux/platform_data/voltage-omap.h
-@@ -10,14 +10,14 @@
- 
- /**
-  * struct omap_volt_data - Omap voltage specific data.
-- * @voltage_nominal:	The possible voltage value in uV
-+ * @volt_nominal:	The possible voltage value in uV
-  * @sr_efuse_offs:	The offset of the efuse register(from system
-  *			control module base address) from where to read
-  *			the n-target value for the smartreflex module.
-  * @sr_errminlimit:	Error min limit value for smartreflex. This value
-  *			differs at differnet opp and thus is linked
-  *			with voltage.
-- * @vp_errorgain:	Error gain value for the voltage processor. This
-+ * @vp_errgain:		Error gain value for the voltage processor. This
-  *			field also differs according to the voltage/opp.
-  */
- struct omap_volt_data {
+Depends-on: https://lore.kernel.org/lkml/20260223-skedb-v2-0-60675765bc7e@google.com/
+
+Badhri Jagan Sridharan (3):
+  dt-bindings: connector: Add SPR AVS Sink APDO definitions
+  power: supply: Add PD SPR AVS support to USB type enum
+  tcpm: Implement sink support for PD SPR AVS negotiation
+
+ .../bindings/connector/usb-connector.yaml     |   5 +-
+ drivers/power/supply/power_supply_sysfs.c     |   2 +
+ drivers/usb/typec/tcpm/tcpm.c                 | 611 +++++++++++++++---
+ include/dt-bindings/usb/pd.h                  |  18 +
+ include/linux/power_supply.h                  |   3 +
+ include/linux/usb/pd.h                        |  32 +-
+ include/linux/usb/tcpm.h                      |   2 +-
+ 7 files changed, 563 insertions(+), 110 deletions(-)
+
+
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+prerequisite-patch-id: 4dacd8bc550e317d67134d030814765fb9f4c6e1
+prerequisite-patch-id: e863378fc602b6bee2e9fdd8c568003c00b2a38e
+-- 
+2.53.0.414.gf7e9f6c205-goog
+
 
