@@ -1,287 +1,123 @@
-Return-Path: <linux-pm+bounces-43266-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43267-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ODlYGPFXoGkNigQAu9opvQ
-	(envelope-from <linux-pm+bounces-43266-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 15:25:53 +0100
+	id EH52HjtboGm3igQAu9opvQ
+	(envelope-from <linux-pm+bounces-43267-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 15:39:55 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1E401A77E0
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 15:25:52 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 117031A7BBA
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 15:39:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9455531296B3
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 14:19:56 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E2027300DF5C
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 14:39:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA6373D5256;
-	Thu, 26 Feb 2026 14:19:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C413D3327;
+	Thu, 26 Feb 2026 14:39:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7199A3D6462;
-	Thu, 26 Feb 2026 14:19:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail.bix.bg (mail.bix.bg [193.105.196.21])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 5B043332902
+	for <linux-pm@vger.kernel.org>; Thu, 26 Feb 2026 14:39:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.105.196.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772115551; cv=none; b=coCP3m7UXzmpXsX+hTE6sp0qUMEn03Jv8fKWZNN5exd+FFloZ2YdS30wtuaWQArZEfliaHDqj1RJbup230EyyZHnyh3K0NYZ2KaziqjCwFgZSB/kh3YirwnvKlW7oy8CgsaB1/lilIoFjGre6kDhbFAwv/mPB2geeTG3B9/0VaM=
+	t=1772116785; cv=none; b=EK92Ww7Zn9Z0rzz5wDNq49kIShhlWs0X9BF64iGcHJM0xQG7yhha5hvkPpO6GEb8qDOGPC+3KUQVaZGg+j9bMxNJUXT4vUg57CCdLGimjYAiUZt75z01TlxvBGv8EQjin1K2bOPk0f5f7m5tECvUEnuxJNdJpJe5E2X3lgEKAc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772115551; c=relaxed/simple;
-	bh=dgNL9mklHsHx6AX1PqVKnUbfJT+sDKivW5kaK/7NYnc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LDj7Ao40H9ygLmil9u7NqdhlG4Pccwu1ShOLxgNiUjY4RoiAsI8ZfDU3ATbNADKzH8IBhjEe6376qwGBNb8Esw76y7cYBSYBvC9kh+qrVCZR3kLYJd2DFYOBJXrzKFOkPo5nSGqVOx918zaIjdRs/mzPb3FEfZ5RrOpiZ+Bx+wI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B5EC153B;
-	Thu, 26 Feb 2026 06:19:01 -0800 (PST)
-Received: from donnerap.manchester.arm.com (donnerap.manchester.arm.com [10.33.8.81])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F5373F99C;
-	Thu, 26 Feb 2026 06:19:05 -0800 (PST)
-From: Philip Radford <philip.radford@arm.com>
-To: linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	arm-scmi@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: sudeep.holla@arm.com,
-	james.quinlan@broadcom.com,
-	f.fainelli@gmail.com,
-	vincent.guittot@linaro.org,
-	etienne.carriere@st.com,
-	peng.fan@oss.nxp.com,
-	michal.simek@amd.com,
-	quic_sibis@quicinc.com,
-	dan.carpenter@linaro.org,
-	d-gole@ti.com,
-	souvik.chakravarty@arm.com,
-	Philip Radford <philip.radford@arm.com>
-Subject: [PATCH v3 9/9] firmware: arm_scmi: add Powercap MAI get/set support
-Date: Thu, 26 Feb 2026 14:18:30 +0000
-Message-ID: <20260226141830.3400924-10-philip.radford@arm.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260226141830.3400924-1-philip.radford@arm.com>
-References: <20260226141830.3400924-1-philip.radford@arm.com>
+	s=arc-20240116; t=1772116785; c=relaxed/simple;
+	bh=jUnVLRlYIjWKofi/vKDPcNK99SnLf7jH9tN/5zFXfrI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rWvsMKMAdaDpU152udxNG9jgHjVkZXHhSKv5lhr6CmrEXuqncFTCy18j+XXg/dI0iELueJQ5aSpwzXGdPkUDATW0uV0EsjvrIk3sR/iDIAI+5yXMYmGikPtFrFI5PpxTV5LC+r4XTgbLIPSi3LGp1fFlmCWdYUv1/KedlYqA79w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=declera.com; spf=pass smtp.mailfrom=declera.com; arc=none smtp.client-ip=193.105.196.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=declera.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=declera.com
+Received: (qmail 21106 invoked from network); 26 Feb 2026 14:32:58 -0000
+Received: from d2.declera.com (HELO ?212.116.131.122?) (212.116.131.122)
+  by indigo.declera.com with SMTP; 26 Feb 2026 14:32:58 -0000
+Message-ID: <b51a62513daa9d2390031ec350e0b33bdb7e54aa.camel@declera.com>
+Subject: Re: [PATCH v5 2/2] mfd: simple-mfd-i2c: add a reboot cell for the
+ SpacemiT P1 chip
+From: Yanko Kaneti <yaneti@declera.com>
+To: Aurelien Jarno <aurelien@aurel32.net>, linux-kernel@vger.kernel.org, Lee
+ Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>, Troy Mitchell	
+ <troy.mitchell@linux.spacemit.com>, Yixun Lan <dlan@gentoo.org>, Paul
+ Walmsley	 <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou	
+ <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, "open list:RISC-V
+ ARCHITECTURE:Keyword:riscv" <linux-riscv@lists.infradead.org>, "open
+ list:RISC-V SPACEMIT SoC Support:Keyword:spacemit"	
+ <spacemit@lists.linux.dev>
+Cc: "open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
+Date: Thu, 26 Feb 2026 16:32:58 +0200
+In-Reply-To: <20251102230352.914421-3-aurelien@aurel32.net>
+References: <20251102230352.914421-1-aurelien@aurel32.net>
+	 <20251102230352.914421-3-aurelien@aurel32.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.59.2 (3.59.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.64 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43266-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	FREEMAIL_CC(0.00)[arm.com,broadcom.com,gmail.com,linaro.org,st.com,oss.nxp.com,amd.com,quicinc.com,ti.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.902];
-	FROM_NEQ_ENVFROM(0.00)[philip.radford@arm.com,linux-pm@vger.kernel.org];
 	TAGGED_RCPT(0.00)[linux-pm];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.999];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[yaneti@declera.com,linux-pm@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,arm.com:mid,arm.com:email]
-X-Rspamd-Queue-Id: F1E401A77E0
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,aurel32.net:email];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43267-lists,linux-pm=lfdr.de];
+	DMARC_NA(0.00)[declera.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[]
+X-Rspamd-Queue-Id: 117031A7BBA
 X-Rspamd-Action: no action
 
-Add support for Power Measurement Averaging Interval (MAI)
-get and set operations to the SCMI powercap protocol driver.
-Extends scmi_powercap_info to store MAI configuration and
-implement MAI get/set via xfer and optional fast-channel
-support.
+Hello,
 
-Signed-off-by: Philip Radford <philip.radford@arm.com>
----
- drivers/firmware/arm_scmi/powercap.c | 120 +++++++++++++++++++++++++++
- include/linux/scmi_protocol.h        |   8 ++
- 2 files changed, 128 insertions(+)
+On Mon, 2025-11-03 at 00:02 +0100, Aurelien Jarno wrote:
+> Add a "spacemit-p1-reboot" cell for the SpacemiT P1 chip.
+>=20
+> Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+> ---
+> v5: no changes
+>=20
+>  drivers/mfd/simple-mfd-i2c.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+> index 0a607a1e3ca1d..542d378cdcd1f 100644
+> --- a/drivers/mfd/simple-mfd-i2c.c
+> +++ b/drivers/mfd/simple-mfd-i2c.c
+> @@ -99,6 +99,7 @@ static const struct regmap_config spacemit_p1_regmap_co=
+nfig =3D {
+>  };
+> =20
+>  static const struct mfd_cell spacemit_p1_cells[] =3D {
+> +	{ .name =3D "spacemit-p1-reboot", },
+>  	{ .name =3D "spacemit-p1-regulator", },
+>  	{ .name =3D "spacemit-p1-rtc", },
+>  };
 
-diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
-index 1087d59ac873..7dc6d3001637 100644
---- a/drivers/firmware/arm_scmi/powercap.c
-+++ b/drivers/firmware/arm_scmi/powercap.c
-@@ -401,6 +401,34 @@ scmi_powercap_domain_attrs_process(const struct scmi_protocol_handle *ph,
- 		dom_info->notify_powercap_measurement_change =
- 			SUPPORTS_POWERCAP_MEASUREMENTS_CHANGE_NOTIFY(flags);
- 
-+	if (PROTOCOL_REV_MAJOR(ph->version) >= 0x3) {
-+		struct scmi_msg_resp_powercap_domain_attributes_v3 *resp_v3 = r;
-+
-+		flags = le32_to_cpu(resp_v3->attributes);
-+		if (pinfo->notify_measurements_cmd)
-+			dom_info->notify_powercap_measurement_change =
-+			       SUPPORTS_POWERCAP_MEASUREMENTS_CHANGE_NOTIFY(flags);
-+
-+		dom_info->mai_config = SUPPORTS_POWERCAP_MAI_CONFIGURATION(flags);
-+		dom_info->min_mai = le32_to_cpu(resp_v3->min_mai);
-+		dom_info->max_mai = le32_to_cpu(resp_v3->max_mai);
-+		dom_info->mai_step = le32_to_cpu(resp_v3->mai_step);
-+
-+		if (dom_info->mai_config) {
-+			ret = scmi_powercap_validate(dom_info->min_mai,
-+						     dom_info->max_mai,
-+						     dom_info->mai_step,
-+						     dom_info->mai_config);
-+
-+			if (ret) {
-+				dev_warn(ph->dev, "Platform reported problem MAI config for domain %d - %s\n",
-+					 dom_info->id, dom_info->name);
-+
-+				return ret;
-+			}
-+		}
-+	}
-+
- 	dom_info->extended_names = SUPPORTS_EXTENDED_NAMES(flags);
- 
- 	dom_info->async_powercap_cap_set =
-@@ -1082,6 +1110,96 @@ static int scmi_powercap_cap_enable_get(const struct scmi_protocol_handle *ph,
- 	return 0;
- }
- 
-+static int scmi_powercap_xfer_mai_get(const struct scmi_protocol_handle *ph, u32 domain_id,
-+				      u32 *mai)
-+{
-+	int ret;
-+	struct scmi_xfer *t;
-+
-+	ret = ph->xops->xfer_get_init(ph, POWERCAP_MAI_GET, sizeof(u32),
-+								sizeof(u32), &t);
-+
-+	if (ret)
-+		return ret;
-+
-+	put_unaligned_le32(domain_id, t->tx.buf);
-+
-+	ret = ph->xops->do_xfer(ph, t);
-+	if (!ret)
-+		*mai = get_unaligned_le32(t->rx.buf);
-+
-+	ph->xops->xfer_put(ph, t);
-+	return ret;
-+}
-+
-+static int scmi_powercap_xfer_mai_set(const struct scmi_protocol_handle *ph, u32 domain_id, u32 mai)
-+{
-+	int ret;
-+	struct scmi_xfer *t;
-+	struct scmi_msg_powercap_cap_or_pai_set *msg;
-+
-+	ret = ph->xops->xfer_get_init(ph, POWERCAP_MAI_SET, sizeof(*msg), 0, &t);
-+	if (ret)
-+		return ret;
-+
-+	msg = t->tx.buf;
-+	msg->domain_id = cpu_to_le32(domain_id);
-+	msg->flags = cpu_to_le32(0);
-+	msg->value = cpu_to_le32(mai);
-+
-+	ret = ph->xops->do_xfer(ph, t);
-+
-+	ph->xops->xfer_put(ph, t);
-+	return ret;
-+}
-+
-+static int scmi_powercap_measurements_interval_get(const struct scmi_protocol_handle *ph,
-+						   u32 domain_id, u32 *val)
-+{
-+	const struct scmi_powercap_info *pc;
-+	struct scmi_fc_info *fci;
-+
-+	if (!val)
-+		return -EINVAL;
-+
-+	pc = scmi_powercap_dom_info_get(ph, domain_id);
-+	if (!pc)
-+		return -EINVAL;
-+
-+	fci = pc->cpli[CPL0].fc_info;
-+	if (fci && fci[POWERCAP_FC_MAI].get_addr) {
-+		*val = ioread32(fci[POWERCAP_FC_MAI].get_addr);
-+		trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_MAI_GET, domain_id, 0, *val, 0);
-+		return 0;
-+	}
-+
-+	return scmi_powercap_xfer_mai_get(ph, domain_id, val);
-+}
-+
-+static int scmi_powercap_measurements_interval_set(const struct scmi_protocol_handle *ph,
-+						   u32 domain_id, u32 val)
-+{
-+	const struct scmi_powercap_info *pc;
-+	struct scmi_fc_info *fci;
-+
-+	pc = scmi_powercap_dom_info_get(ph, domain_id);
-+	if (!pc)
-+		return -EINVAL;
-+
-+	if (!pc->mai_config || !val || val < pc->min_mai || val > pc->max_mai)
-+		return -EINVAL;
-+
-+	fci = pc->cpli[CPL0].fc_info;
-+	if (fci && fci[POWERCAP_FC_MAI].set_addr) {
-+		iowrite32(val, fci[POWERCAP_FC_MAI].set_addr);
-+		ph->hops->fastchannel_db_ring(fci[POWERCAP_FC_MAI].set_db);
-+		trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_MAI_SET, domain_id, 0, val, 0);
-+		return 0;
-+	}
-+
-+	return scmi_powercap_xfer_mai_set(ph, domain_id, val);
-+}
-+
- static const struct scmi_powercap_proto_ops powercap_proto_ops = {
- 	.num_domains_get = scmi_powercap_num_domains_get,
- 	.info_get = scmi_powercap_dom_info_get,
-@@ -1094,6 +1212,8 @@ static const struct scmi_powercap_proto_ops powercap_proto_ops = {
- 	.measurements_get = scmi_powercap_measurements_get,
- 	.measurements_threshold_set = scmi_powercap_measurements_threshold_set,
- 	.measurements_threshold_get = scmi_powercap_measurements_threshold_get,
-+	.measurements_interval_get = scmi_powercap_measurements_interval_get,
-+	.measurements_interval_set = scmi_powercap_measurements_interval_set,
- };
- 
- static void scmi_powercap_domain_init_fc(const struct scmi_protocol_handle *ph,
-diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
-index d0f6c0102559..73d66281dcc3 100644
---- a/include/linux/scmi_protocol.h
-+++ b/include/linux/scmi_protocol.h
-@@ -675,6 +675,10 @@ struct scmi_powercap_info {
- 	bool powercap_scale_uw;
- 	bool extended_names;
- 	bool fastchannels;
-+	bool mai_config;
-+	u32 min_mai;
-+	u32 max_mai;
-+	u32 mai_step;
- 	char name[SCMI_MAX_STR_SIZE];
- 	unsigned int sustainable_power;
- 	unsigned int accuracy;
-@@ -758,6 +762,10 @@ struct scmi_powercap_proto_ops {
- 	int (*measurements_threshold_get)(const struct scmi_protocol_handle *ph,
- 					  u32 domain_id, u32 *power_thresh_low,
- 					  u32 *power_thresh_high);
-+	int (*measurements_interval_get)(const struct scmi_protocol_handle *ph,
-+					 u32 domain_id, u32 *val);
-+	int (*measurements_interval_set)(const struct scmi_protocol_handle *ph,
-+					 u32 domain_id, u32 val);
- };
- 
- enum scmi_pinctrl_selector_type {
--- 
-2.47.3
+Perhaps its safe to merge this one now that everything P1 and I2C is
+already in linus tip ?
 
+mainline + patch + dts bits enabling i2c8 on the OrangePi RV2 and R2S
+allows both to soft reboot as expected.
+
+-Yanko
 
