@@ -1,86 +1,85 @@
-Return-Path: <linux-pm+bounces-43253-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43255-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cEg7GxtJoGkuhwQAu9opvQ
-	(envelope-from <linux-pm+bounces-43253-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 14:22:35 +0100
+	id qMlYJnRIoGkuhwQAu9opvQ
+	(envelope-from <linux-pm+bounces-43255-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 14:19:48 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C62361A65CE
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 14:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 07F011A6498
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 14:19:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 862C231356FA
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 13:13:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8387931A60B7
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 13:13:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ED013375D0;
-	Thu, 26 Feb 2026 13:11:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 476B133985E;
+	Thu, 26 Feb 2026 13:11:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NC1n05GK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xxUz9LCd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02279330332
-	for <linux-pm@vger.kernel.org>; Thu, 26 Feb 2026 13:11:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7673332EDD
+	for <linux-pm@vger.kernel.org>; Thu, 26 Feb 2026 13:11:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772111508; cv=none; b=H86txqZFoxmeuLMsrHAgidq6pbnjSe+zA9JzFwoOpUNUbGd9TDKzHvwuMlj/gNE7hZAASYlZWFhE93vBXvMPxGz5iNXit9HEZub9W2ltuRbrTqlTp+4DTMjJX4igKoYOIARKH+mNEtwfAlAkbmv6rzwRzlo494Pranw5DxJiAkU=
+	t=1772111509; cv=none; b=BcmnkaBhNzRosDM3ZOcer9HwJvhM2yeWCI8NMaTkFe10DEYOWNZKfjRrj83UWPZ2NN68HjyDtrGYf7sMv6KJE/r0S9k6PfCEDz86v+rgrw3BeC9tmGdy526cA98oXt5tqYugOCeYrG1diSMCcaxXmsX9eNW/LCDTmkkCBX+OlJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772111508; c=relaxed/simple;
-	bh=GPfoLWJNaZbAuE5sFY9vCrczQONk3K2jd0EZPiGevHY=;
+	s=arc-20240116; t=1772111509; c=relaxed/simple;
+	bh=wlWid3O9Fpab/ITze5p/VvOOHbyf58AYdw0ERtyxjDw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=V7JcL8ZxecZEbVnwsFyzp4HR1RgdZl58fM5VZhAZ8x/wMi56Iw8mshqmP+W9AMGuFWvp2r5MV2Jf/yn059SKXkU4Onw3ldr19+mcWbMxR7o3mCHTHn0JDB+MnzwoPy5Nze+k/BF+8P4FKFIKWb+ahDQO7RgaAum2aTskOA6Q3hQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NC1n05GK; arc=none smtp.client-ip=209.85.218.52
+	 In-Reply-To:To:Cc; b=DFfRbzXNds3Thzkh6AGH7h0psiDYacCD346HCzPWqC09FEnP7KYDD4r17EkBZbHuNasGmA1JUAG0H4URnRk8joSaoC/XydGWaABmKTol/muYH6hqDQDfbkGI+vZbwdyAWWQaTFp+wuwOzaLhNqN7C54FkxP8AJel3ZMrkqkmOEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xxUz9LCd; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b8f92f3db6fso132542066b.0
-        for <linux-pm@vger.kernel.org>; Thu, 26 Feb 2026 05:11:45 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b93698bb57aso32818366b.0
+        for <linux-pm@vger.kernel.org>; Thu, 26 Feb 2026 05:11:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1772111504; x=1772716304; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1772111505; x=1772716305; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+jqX19aDR1PCz0IO4VxlMpvKqSC9cfQfLdsBYQBVkyw=;
-        b=NC1n05GKgRjeMqSAMaNptOEI6JpKCDmRZk+++IUELVZhgu6xsz8PKIQOYsYTLt3u5Q
-         oalbvFnMkJCtI4sodKBCGvi7st/Xkoff01cXo6vqIxs//Aqq3XayCUkAm6jhTv3ZjF0y
-         Iw1su11pyePz3Kyt5l4buZtFZ5uhIR2JVElQK8rUGzwHGSltnGtCBJLPf0viBnDie7QZ
-         hzHUb3pqs2WVCkUVo0jwP7HokXeUn+Jwm+5nW1+MQawyt+7pYECSr2SqiMCHkYd5Xn7a
-         7iHNhe3JqqVy0bj6qZ+RgIjXyiP6ki6WYt473y9D1mnxZBF80lb9cws5Hc6Mjv3TU+uT
-         IEZQ==
+        bh=5gN0iJe9ljlr3ty39XAJfVPtgf4B+kaTwHCMAMG5dSc=;
+        b=xxUz9LCdaPtViFhfaAM1gYrhlGH1L+SrnQv/vqEJh8qROPC9Sf8EUwYHfHKL6paj+T
+         gTmSSZdbUxi/k6A5pkdaiL24aUPLkiJUNIp/yZcac/GbUB+066WFr+V2+jKLvSlLxR0v
+         0oYFkuGYolv6MClw4PFCHAN5uFJ/+GfCYuF3mXsNNQA3uXagd4AtZ0spvmTJyf1qrpk4
+         Lxa7eymfv4HwPSpEdaGDAPSYGN+4Fnekso9WQe4MzmgIOLXxZUibco2muzARChMEhSOg
+         XtOWChhch2X067EmBNmJn6hn1gm1uCuPpMNfzmMnnt/7zuo6ZG8enSbQWNLEtGdjZqiM
+         EeRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772111504; x=1772716304;
+        d=1e100.net; s=20230601; t=1772111505; x=1772716305;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=+jqX19aDR1PCz0IO4VxlMpvKqSC9cfQfLdsBYQBVkyw=;
-        b=ZAvxNccjXDWBxUKp1nyWxRlMqufK6xGtrrdPuUqBISmhldi+cbnSMpw+Z1Ffw7Psh0
-         4g7NAx9kg0T60uW/LiIBFDE+50DMVkNSfTn9XEGmEWAQ1XQZAMzss9K8R8WD3kL9MDkM
-         VqzYcG8VORat+N4aN0oyU7u/0+9di8Ev6R7qGK5u3J9ctCIa/uyHKmIcHgtYI8+pymJf
-         YUs4+XMzdx/DoDnOyYZ4e2t9ZKXGS0stgxu3lJRIaDxVI2A07ieMlnqnqEz9u3b70ll7
-         Y/i89p6PugCnOjR5UIo8ySSg1V7xwJtBDjNeVwyvhN3svJ0DgYQ5Z9plt/YATXWnJLR7
-         573A==
-X-Forwarded-Encrypted: i=1; AJvYcCXDheVxvef1dXIVENQRZugfuiQ/rSM1BVONsc9Qo42anLRJh/ghdiFaCf/cHtlrxLvFwAksdDzDng==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzn/tI+fvE/s+SQhfTY+JBSWm/GLMHPVFXhk85AhuZw3PIZUT/6
-	FDXSjA8J6OEkQCBfd5Vahdw06VO9Vc2DdHGi+MEabz7Xwk30IiRqe2nmpdypzh4ELZk=
-X-Gm-Gg: ATEYQzzBIC6WMAJy7tKKyzdfbLu1eXUrOpv/Vge1G2viRaU9Os9cdG4/oS4thHe0HL+
-	DgG6SqlDWy3x2mCB17UEnNu4GXoZzPS7zMyW8Y3AyKWLFY/u4IOTHNbWv/iSq+QxSEk5zCBa/YV
-	8ngwAQspkx69WlmQ+Buoc/BBxvx6Etn10cKl6T+HhxQHIMPTYc0AN1olcJ4nidaKxwuXTqB5ykH
-	DKbnfqVda038ec8rzxaK5XNV2orjWZJMeuEGvSC9p55J7LMK1LaxJ1vs5drnyGoxtZm+tjfD5CZ
-	MNDGiMO+62Geo3yTR+4h3Jn2szorW3+yrUy2n0ZJIKGJ108eBGSoQeun0Ax313M13CgBxUsIDnb
-	bB8WKhxvuduzA9gp/8mn7PniZ0t9kF6avtFaNhouSJRsKEoZXN4uOJNbYSWWTy3q6M1oVC5C/Gv
-	pL3cOE8Nv4Mone/MwRW9X90SdZx+Ci/2ZyDC17h4YgLO4vXu6L+x+6+GByf77MbvFLHDl2H3i4Z
-	iSK7Zp82UPXHRombA==
-X-Received: by 2002:a17:907:9445:b0:b93:60a3:8a47 with SMTP id a640c23a62f3a-b9360a38b06mr95155166b.45.1772111504172;
+        bh=5gN0iJe9ljlr3ty39XAJfVPtgf4B+kaTwHCMAMG5dSc=;
+        b=v7szQivVRMJX/yxCvUX4ObCCsnFPjREA4jTHG2+3hkV3Jx8qDyQ8jkWZ+ORhtJQefh
+         QyuxvkDqxi1iqvgdN7oxxr9Dy93ouEt8hIjNqMKStl6h5fJxIIFoKR0m8UWmLGDs37wU
+         mQk5vmmlZWU1ESsuu68q9nahK+QWQZy1DWJf59ZFmfY/F4ZODlGDlPTX7WbKFh5KFD12
+         aqUV2GQpE6TYG5G+8LPoWzfcodiON+28SHh/8O1NGnMyEScB4ucXYBbC4J/EgWJCl/Ak
+         x5w2HfDZbgIso7uiTOuD2MYZxV5y6BhIFkdvEAFNkE/siOOBXzFOfqMZsOIgOVfbRBT3
+         xx6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVvAEfx6gLTdX9P9MCqwUDhq65pmCeDMGh7W+8KatWV2tgGb8rTfU15fMorTsCNjdQw+pdJdeqRQA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZOKg6o/+eGxljYqva2kAjiD83ciZYe+6ohmeGyvnMX7uegPEL
+	/VE37bIJUbYDcYF4MaQ0GWXKDjm8rCneAQzilsUzWivotb/mKZSlGuG/j5rMvhJ5liw=
+X-Gm-Gg: ATEYQzy039k8xv6Q5/6kilSaXRvzUrbMrg62MPLvgkxz3c8AuejMT4bZnaJcfc/0a01
+	wqc+TYuUR87dmg1Nr6nDi0iP8LHSrqOggnOxVpMyjbXYVlAny4N+9rdqxpqk6a83q1c1SRPDRTz
+	PbMoyyEtyrhJeshrlder/i13/MbIfuj9rQao8yxEnl33bgOV2wjwzjLFv1XZ6GlC0xUtogcqPQk
+	wU2Xe+bxO5zWyrgy9VI1tPpBi8ktlGkQUazNDRdXzNmZV7WsqY8fVSII8AlLGZQbFOFZqAi9vlL
+	hU/fuTGJz2JEV/+k/JVS5kucb5y8Vjk6TJRviNmbQJdL7XTl+SHXyUQ2f9poEFNruHJBdCOW4Fn
+	hHNORUXEzgKXSXOCAHEJHv63y2q9X/ykYT1uYfOx87eubE7ty5y3oxiR7cDFA8geSCYRAYzmate
+	LfJxNd5PkkuRQiZ0HSUmpTu2bGPzMdgaJdWx5gLtq6afWTfydMgvFDoetFwHuFpIGtQmOy4Ek3q
+	TVO8vL8hi9rz3Wanw==
+X-Received: by 2002:a17:906:eecd:b0:b93:5349:d48b with SMTP id a640c23a62f3a-b9356f319fdmr159637366b.10.1772111504825;
         Thu, 26 Feb 2026 05:11:44 -0800 (PST)
 Received: from puffmais2.c.googlers.com (244.175.141.34.bc.googleusercontent.com. [34.141.175.244])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b935ac73d2asm55125866b.26.2026.02.26.05.11.43
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b935ac73d2asm55125866b.26.2026.02.26.05.11.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 05:11:43 -0800 (PST)
+        Thu, 26 Feb 2026 05:11:44 -0800 (PST)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Thu, 26 Feb 2026 13:11:44 +0000
-Subject: [PATCH 10/11] power: supply: max17042: max17042: consider task
- period (max77759)
+Date: Thu, 26 Feb 2026 13:11:45 +0000
+Subject: [PATCH 11/11] power: supply: max17042: report time to full
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,7 +88,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260226-max77759-fg-v1-10-ff0a08a70a9f@linaro.org>
+Message-Id: <20260226-max77759-fg-v1-11-ff0a08a70a9f@linaro.org>
 References: <20260226-max77759-fg-v1-0-ff0a08a70a9f@linaro.org>
 In-Reply-To: <20260226-max77759-fg-v1-0-ff0a08a70a9f@linaro.org>
 To: Hans de Goede <hansg@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -117,7 +116,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43253-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43255-lists,linux-pm=lfdr.de];
 	DKIM_TRACE(0.00)[linaro.org:+];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -132,109 +131,54 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:mid,linaro.org:dkim,linaro.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C62361A65CE
+X-Rspamd-Queue-Id: 07F011A6498
 X-Rspamd-Action: no action
 
-Several (register) values reported by the fuel gauge depend on its
-internal task period and it needs to be taken into account when
-calculating results. All relevant example formulas in the data sheet
-assume the default task period (of 5760) and final results need to be
-adjusted based on the task period in effect.
-
-Update the code as and where necessary.
+Report the remaining time to full as calculated by the firmware.
+Similar to time to empty, the reported value is only meaningful when
+charging, i.e. if it is != U16_MAX.
 
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
-
 ---
-While I do believe this should apply to all devices supported by this
-driver, given the register description in max17042_battery.h, I've made
-this change specific to max77759, as I have no way to confirm this
-works as expected on those. I've found a data sheet for
-max17047/max17050 online, which does describe the relevant register
-0x3c as 'reserved'.
----
- drivers/power/supply/max17042_battery.c | 20 ++++++++++++++++++++
- include/linux/power/max17042_battery.h  |  1 +
- 2 files changed, 21 insertions(+)
+ drivers/power/supply/max17042_battery.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
 diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index 44626abdab34..89909b140cf9 100644
+index 89909b140cf9..cf8602d925a2 100644
 --- a/drivers/power/supply/max17042_battery.c
 +++ b/drivers/power/supply/max17042_battery.c
-@@ -61,6 +61,7 @@ struct max17042_chip {
- 	struct work_struct work;
- 	int    init_complete;
- 	int    irq;
-+	int    task_period;
- };
+@@ -89,6 +89,7 @@ static enum power_supply_property max17042_battery_props[] = {
+ 	POWER_SUPPLY_PROP_HEALTH,
+ 	POWER_SUPPLY_PROP_SCOPE,
+ 	POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW,
++	POWER_SUPPLY_PROP_TIME_TO_FULL_AVG,
+ 	// these two have to be at the end on the list
+ 	POWER_SUPPLY_PROP_CURRENT_NOW,
+ 	POWER_SUPPLY_PROP_CURRENT_AVG,
+@@ -447,6 +448,23 @@ static int max17042_get_property(struct power_supply *psy,
+ 		if (data == U16_MAX)
+ 			return -ENODATA;
  
- static enum power_supply_property max17042_battery_props[] = {
-@@ -335,6 +336,8 @@ static int max17042_get_property(struct power_supply *psy,
- 			return ret;
- 
- 		data64 = data * 5000000ll;
-+		data64 *= chip->task_period;
-+		do_div(data64, MAX17042_DEFAULT_TASK_PERIOD);
- 		do_div(data64, chip->pdata->r_sns);
- 		val->intval = data64;
- 		break;
-@@ -344,6 +347,8 @@ static int max17042_get_property(struct power_supply *psy,
- 			return ret;
- 
- 		data64 = data * 5000000ll;
-+		data64 *= chip->task_period;
-+		do_div(data64, MAX17042_DEFAULT_TASK_PERIOD);
- 		do_div(data64, chip->pdata->r_sns);
- 		val->intval = data64;
- 		break;
-@@ -353,6 +358,8 @@ static int max17042_get_property(struct power_supply *psy,
- 			return ret;
- 
- 		data64 = data * 5000000ll;
-+		data64 *= chip->task_period;
-+		do_div(data64, MAX17042_DEFAULT_TASK_PERIOD);
- 		do_div(data64, chip->pdata->r_sns);
- 		val->intval = data64;
- 		break;
-@@ -362,6 +369,8 @@ static int max17042_get_property(struct power_supply *psy,
- 			return ret;
- 
- 		data64 = sign_extend64(data, 15) * 5000000ll;
-+		data64 *= chip->task_period;
-+		data64 = div_s64(data64, MAX17042_DEFAULT_TASK_PERIOD);
- 		val->intval = div_s64(data64, chip->pdata->r_sns);
- 		break;
- 	case POWER_SUPPLY_PROP_TEMP:
-@@ -1146,6 +1155,17 @@ static int max17042_probe(struct i2c_client *client, struct device *dev, int irq
- 		regmap_write(chip->regmap, MAX17042_LearnCFG, 0x0007);
- 	}
- 
-+	chip->task_period = MAX17042_DEFAULT_TASK_PERIOD;
-+	if (chip->chip_type == MAXIM_DEVICE_TYPE_MAX77759) {
-+		ret = regmap_read(chip->regmap, MAX17042_TaskPeriod, &val);
-+		if (ret)
-+			return dev_err_probe(dev, ret,
-+					     "failed to read task period\n");
-+		chip->task_period = val;
-+	}
-+	dev_dbg(dev, "task period: %#.4x (%d)\n", chip->task_period,
-+		chip->task_period);
++		val->intval = data * 5625 / 1000;
++		break;
++	case POWER_SUPPLY_PROP_TIME_TO_FULL_AVG:
++		if (chip->chip_type != MAXIM_DEVICE_TYPE_MAX17047 &&
++		    chip->chip_type != MAXIM_DEVICE_TYPE_MAX17050 &&
++		    chip->chip_type != MAXIM_DEVICE_TYPE_MAX17055 &&
++		    chip->chip_type != MAXIM_DEVICE_TYPE_MAX77759)
++			return -EINVAL;
 +
- 	chip->battery = devm_power_supply_register(dev, max17042_desc,
- 						   &psy_cfg);
- 	if (IS_ERR(chip->battery))
-diff --git a/include/linux/power/max17042_battery.h b/include/linux/power/max17042_battery.h
-index 76b85ad3cf48..c82043414c88 100644
---- a/include/linux/power/max17042_battery.h
-+++ b/include/linux/power/max17042_battery.h
-@@ -17,6 +17,7 @@
- #define MAX17042_DEFAULT_VMAX		(4500) /* LiHV cell max */
- #define MAX17042_DEFAULT_TEMP_MIN	(0)    /* For sys without temp sensor */
- #define MAX17042_DEFAULT_TEMP_MAX	(700)  /* 70 degrees Celcius */
-+#define MAX17042_DEFAULT_TASK_PERIOD	(5760)
- 
- /* Consider RepCap which is less then 10 units below FullCAP full */
- #define MAX17042_FULL_THRESHOLD		10
++		ret = regmap_read(map, MAX17055_TTF, &data);
++		if (ret < 0)
++			return ret;
++
++		/* when discharging, the value is not meaningful */
++		if (data == U16_MAX)
++			return -ENODATA;
++
+ 		val->intval = data * 5625 / 1000;
+ 		break;
+ 	default:
 
 -- 
 2.53.0.414.gf7e9f6c205-goog
