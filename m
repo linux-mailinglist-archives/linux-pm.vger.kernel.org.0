@@ -1,784 +1,466 @@
-Return-Path: <linux-pm+bounces-43232-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43233-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gBdbJkjyn2kyfAQAu9opvQ
-	(envelope-from <linux-pm+bounces-43232-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 08:12:08 +0100
+	id sCbYFCf3n2nkfAQAu9opvQ
+	(envelope-from <linux-pm+bounces-43233-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 08:32:55 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 314901A1AE7
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 08:12:08 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6CBB1A1DF5
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 08:32:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 08E773016EEC
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 07:12:02 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 2C79B302368C
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Feb 2026 07:32:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 502DC38E5CA;
-	Thu, 26 Feb 2026 07:12:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092C236EAAD;
+	Thu, 26 Feb 2026 07:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RXbqXXNB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WhvNjpNI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA28C38E5C6;
-	Thu, 26 Feb 2026 07:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772089920; cv=fail; b=tr4DJIt0l8BJVb/pvtW/zL5WUDbtc80xedX2o6ibZveuGbEc/F4IvhqW+eAcN+UpHcxydPtNluqs9md+iooVACDn48ifYGhqTazHTEzBOgNHr+rceNRRtJ2iLBO7YrFdHgNyqVwze1PsH6ne6GKtKE/22YejyOlgZgu/DsxsgW8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772089920; c=relaxed/simple;
-	bh=3FNg2kjBdEBMskxgXjVN8RWmh9Efjl0nRTGbHm0nDKQ=;
-	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
-	 Content-Disposition:MIME-Version; b=MrkkQXPGbdYQ8kmvx20MPp/wip+XI9SQ6wm5NyTBJ7/d9T5ts6VcA4/ARD3Qv1ZCA6qFslQFBwSiEhYCuDIYCqWRn+tVd+2FLdet67CZhgJeYIbecEXOfL7pdw0MNOdplSppOfsIKeI0sUZyr8UuBSkkCvWfGSY2EkSWgwzYbyQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RXbqXXNB; arc=fail smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772089915; x=1803625915;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3FNg2kjBdEBMskxgXjVN8RWmh9Efjl0nRTGbHm0nDKQ=;
-  b=RXbqXXNBBYKOH0MrIi4cJ6vDizwP9KBgMAfUznbOSegYfPno0SlzyUAI
-   2BgSxjvHYU+snBRI3q4vD/cAe/r8IRnxFlKljQQWtV6IFR7dVLpfKz1cJ
-   Qg0jEC7oqe0WNsOR+SBl2ueBSb42W+I+P25ZOtxKeHeGq8XVsjsypmkva
-   RXv+OODX6Xrdv5l83T26VJJ+ydoU19Us3+gVRXN99fW/4iFXOdEVsP4nG
-   aWf2OUymw1X358xOjx1xmBzYSWIq/vUcg81UQr77U7ClUjsdWUNchXMNJ
-   7+lp/3w8BMtOhZlNC6d4vkEiQ7yQwnuIucryuZHwsk7sZ0uyYQzY2DFZi
-   Q==;
-X-CSE-ConnectionGUID: Ia9cMaGtSOGWWlmZQXUtxw==
-X-CSE-MsgGUID: iwF/a1tOSQa53S5hFEpSnw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11712"; a="73324739"
-X-IronPort-AV: E=Sophos;i="6.21,311,1763452800"; 
-   d="scan'208";a="73324739"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 23:11:55 -0800
-X-CSE-ConnectionGUID: sCQyH6j6RGSU445t7kPT2A==
-X-CSE-MsgGUID: +M2LMCHXTbubc9VyoOntsg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,311,1763452800"; 
-   d="scan'208";a="216620864"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 23:11:55 -0800
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Wed, 25 Feb 2026 23:11:54 -0800
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Wed, 25 Feb 2026 23:11:54 -0800
-Received: from DM5PR21CU001.outbound.protection.outlook.com (52.101.62.50) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Wed, 25 Feb 2026 23:11:54 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VEmJlkmO7zvmdSvzxXsmSLBM0wpv8F+R+F9HuK8DAvMqZmxDbrStEAZh60ahPJmQmpUsup0Q4ZJiYQE5ovt5vdkruoThZRQVp+h2y9mTbvylk8+sXwI9oFp6vKY1rbgUhFOy3ChZlsQ3LW0W0NseiYGV5oQ9tPfjAxG0kv7VyBh8h1Xu1Z+KsN6L2e8rYrH32v6YNrw6kTqA+BPejxXIwT6JCL1gKpigR9YkuMJ9PaVwM9moPupd+tsZvhG/L2B81qUPFasgenMYnw5a4L2hhiuzJALWh/yszADIIRqMkhk8QGD/YM6B0l9F+Nhstpmw4+Oxxd3UYlVn6zA/1qbS6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BaV1YU4u7uCcxTZn4eVC4t+hugm4tzjziqnYs7oaEos=;
- b=gQDp75U2OZv3j8mpnmMyvWH/797i5o0Sj6MG8L4oBDVT7Sgry4ZhchYJK3CyzHZyddTlwjcKRajdyXyVLS0fx2b71EwtXsBLEgpadeNWy8znob8XCoXw47s27FrXqnUdY+VOkNKt+k+pNnz5ReSlQ7AskxegKz+qxsKJ0Zq4MFsULbSMxxdqDsuy5VHcrc1BDyv0k4Qs2X+6sIboePJT85IiVWDB+50DMT3GxJma1+TsebkW57IdcO6weGmn7ivFOAbIwDR6Xq+6pRp8AW6L/r16M0D9CaY6T20eDBCUuTYROh2imxULOiCz0Xr1hf6Q7JZQ82tX9ZPaTrvZP0eNDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from LV3PR11MB8603.namprd11.prod.outlook.com (2603:10b6:408:1b6::9)
- by DM3PPF960565C2F.namprd11.prod.outlook.com (2603:10b6:f:fc00::f39) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.14; Thu, 26 Feb
- 2026 07:11:47 +0000
-Received: from LV3PR11MB8603.namprd11.prod.outlook.com
- ([fe80::e4de:b1d:5557:7257]) by LV3PR11MB8603.namprd11.prod.outlook.com
- ([fe80::e4de:b1d:5557:7257%5]) with mapi id 15.20.9632.017; Thu, 26 Feb 2026
- 07:11:47 +0000
-Date: Thu, 26 Feb 2026 15:11:38 +0800
-From: kernel test robot <oliver.sang@intel.com>
-To: Len Brown <len.brown@intel.com>
-CC: <oe-lkp@lists.linux.dev>, <lkp@intel.com>, <linux-kernel@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <oliver.sang@intel.com>
-Subject: [linus:master] [tools/power turbostat]  28a3ad1fd2:
- lkvs.powermgr_cstate_tests.sh_-t_verify_server_perf_pkg_cstat_update.fail
-Message-ID: <202602241622.7b8af145-lkp@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-User-Agent: s-nail v14.9.25
-X-ClientProxiedBy: KL1PR01CA0020.apcprd01.prod.exchangelabs.com
- (2603:1096:820::32) To LV3PR11MB8603.namprd11.prod.outlook.com
- (2603:10b6:408:1b6::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D985833290F;
+	Thu, 26 Feb 2026 07:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772091170; cv=none; b=bi82XS0pnPkQDYxyVUhlmus/RCUdTpcQfbHyiYoueFWIv/lO9H1nPxIxZne1EXsdS4dawHZsRAhXi9x/2u9SVLJjMFN+lIRPFvgs/x7Qg4kiDVCtjTidzCspoDEDT+3B74t2/wgGmOIvR52fGM2zmWbH5rGWElfdiFdNm/G9rPY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772091170; c=relaxed/simple;
+	bh=ifqswWyiVHltZ9jFj6fgw2nxsxq2WC8ta0ADE6u9hWI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Wg+evic6EuYDvHK3VurChkm3ElcpbyH0bjDG3UVrHojoqyNSc214N7h7laW8MWC66XX88qBLc7gwDu5XJbysArSl8Nq4csrB5JdtC6hXsrAZGGODhE2pywMsdOJvIHgHh8VDUiLUUgfvEPMvXwrfsqPle/jiV5pZUpTiqWSVMSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WhvNjpNI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 799CBC19422;
+	Thu, 26 Feb 2026 07:32:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772091170;
+	bh=ifqswWyiVHltZ9jFj6fgw2nxsxq2WC8ta0ADE6u9hWI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=WhvNjpNILxETP/ReAQHkJifgws79BarPd0lr/3gqQBeIzqk0pha6jraykIWKGQtVy
+	 ZrHsOMJZnMrAm3YHBSPO4y3G750XUvfj7XhfDbyA2TSKY8m4v+v4/javixoBNFY2G2
+	 nYzQr5QIgxxfFqY9lgcQSi+bVPGFXSt6IWRTbIMUcctibqsDZR3h6yrEy/KcHTAq2G
+	 fO014sbo8trvofLQau9qwAz3BpgITpklacs/vDlBbdl4KXTiUXVisDUJ1UbLDppdhb
+	 3B2KYdLlu4vI3vxE/jLVZGsmjAeaHUtqgeSHWi1Vq8hN3ve+qwwK0L7Esrnc2sjwYJ
+	 x8ZwgdYb7lFOw==
+Message-ID: <1c1e5cf6-5b38-476c-ba49-35510312b064@kernel.org>
+Date: Thu, 26 Feb 2026 08:32:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV3PR11MB8603:EE_|DM3PPF960565C2F:EE_
-X-MS-Office365-Filtering-Correlation-Id: 360ad809-0e09-4ff7-eba5-08de75064de1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info: 0oWVI90Fx5QU6QBF/vhqbdPr36PxCqD67JkAidWUHk1wvdGo1NDVfa6PXN74WMGMK11LUKIRwmfHN3PceQM4I5sHvH7i5mkgsx+s58EQdUwfqOAzw4XypdA6PGiD7+7sg6Vz5uKeTmQRmO0mtl8y0PE3F2XIPm5i01duWbgLNazFGygtaTortZt/evx8N1mcMBbuQUJl+WKPjduhPDv+0dkKT29ieASsvE5oTMxPUxEir7Oh2RVyf4/LsCsa7s9LXUxa/igyVJR8CRNGzx04aCejZiTa63q/vtFeLasdEcr21KTB26mXnthRjQMblrt7zPlhSWHx8REiYnwu1ZlcxvI5nBHVpsGrKeDIO7xyltPuo53Nn30uPHwHoRwiYzLTacFUF0m9S+lADDOncQZb1Qxr5MI3fypTjaP9DfkCFvmC0ww2PSCypEzNmnpcVgacnEOBFHGIB0OZ2ZrDNqM2Pdpaacl6Zgv9HXBd+rTaJUnzGP7inV/GnS/oKFSxjxgANBirO6S6isGy8p3k5ZbReMJgL8QKJdQisCA/o5K3yepDmoVc7dXprBW+TQa61b3FBOqgnb3Be6O38G8ViZVyUZ6B3imrCaEEzd49PuxMqfAkvHqHlE6ZkdsRpMytLAYb/JZZhA07TLxvGuovxx27QX+EzTT7QqFWa6LPpaAo/RgpZJ7UruesRNw23quY2DUUBzKjdlxJR4rx+9ELY8IA5d6HsTEswz+ZXQW/j5lucGcbN3STMej0mZQ9CIze3fvq
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR11MB8603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WkqS+y2dN0yd7iHwXxr4ewleC/cHIWQBZjbWS/qjtl3rU4bYBNDsm7trAnkk?=
- =?us-ascii?Q?vo3k08qwWpU6psS9GU0rgPaHG9ZxVEXFC0R0LaNr7/p5OC23eJHZBrk8cio8?=
- =?us-ascii?Q?UEiud5dTvuZ40oyf9Zsnz/qyIWuvqjwCFxB44BNwhss6ycSwOQSD9butDQll?=
- =?us-ascii?Q?8PjTSzJqhva8t4ZOpLSfPfkbN36wOmPlrGk2S8Idvou0V7XyX/DG/MRJ08DD?=
- =?us-ascii?Q?LQP7qVjqzR0xqinXxn8A86Dkt1f8XUd/nbUWZEY2xtYKp0FWlmPzpKqZ6I6i?=
- =?us-ascii?Q?wJ48NBjieTFbT9DN3R28eyuqBgOwNC7dvPM8kSFVkGOZ84BZ9uwOWCfpJH9y?=
- =?us-ascii?Q?FICQOAAlDJyhbj8zXVyr+huXLb6ZgDA1XWlp4Gcuq+E20OP2K2bGZdT5cq4M?=
- =?us-ascii?Q?TmN+jeOj/UdXQ47v1dmN/a9UR+Wj9Bl+bEaJGI/UeJhNlJkiUhvWcjxdVg2m?=
- =?us-ascii?Q?63tlKm9uh5qtavX0Q3dXXEV2ZZBSdDgPN9oJy7ItMtq3mOH9n/tlghMpdgps?=
- =?us-ascii?Q?ArqM8xV4TPZb+53OxsklbIECDZuJWYjftBk1jzzhTh+Td8pXDaayw0yO8vuO?=
- =?us-ascii?Q?Pc0dTCqNgcCkRIyQAmDQXGZ/xOiLyVZAk3Xw3x8+v6EwbTtlF2LNp1Rp6V3i?=
- =?us-ascii?Q?RsppYKoKSJfX66qwDmL7RZRQOwGVskyNDQozl86ggzKtsEdrWIlQlaVST76t?=
- =?us-ascii?Q?l7ytWUSRHNxMxfRsWr695OZR2IudfNol2hK2K9f/2upUvxj0yEd0mo2me5vi?=
- =?us-ascii?Q?BVcMdsR8PjGkGk3AAi8CoqJTlDQu6UMejb6HZYvwVn28Uq8JG3G0wMq7D3Hj?=
- =?us-ascii?Q?IKqF5Z0jxyb+kV8AywbZ2j5a8t/Ttz2+UzQWhzegKNtF2lkfUPILUVeE1nel?=
- =?us-ascii?Q?DZBCCwTkS1xBuHtFEAHp77RoBXuESmh05Y3V1IlMzfd8h8nr+x21VR1uu0rD?=
- =?us-ascii?Q?gZCjzws1rwJSobQJEHRYSMM99Swyp5etOoqT+lJZ0qWcxEBoliagHq+05Yfz?=
- =?us-ascii?Q?2eTUTBqSWYkQo5J/dsmKfc7p8prnv+m3QNvlzFIai4d2mjN/K2uW/T53gZrl?=
- =?us-ascii?Q?2fDzr3qMZHZo9UT/ecwZs5t7tJUkqVYC+EKK6ngFGGdRyUF843jb1NqmjLPe?=
- =?us-ascii?Q?Rf4vjmNxex5NsTAJdLD4RxkjmNI1boIv+/iIAMpblG/CWfuW9DrXURV6tveP?=
- =?us-ascii?Q?mQKlep+fUnLlIE/Rapd3ceQv2RcMzMpEOqcMYsjIh6/2dIn2WKJ3nHGYxVEG?=
- =?us-ascii?Q?TbTL0mOYpU6Y+zIZ6APkbw09YkteYgbe6i2Jjo5dQs9BPHoc4r1xVXWg7bOa?=
- =?us-ascii?Q?UQarmnutqfHu6YMF2sBwmlKfyz8gYTFlxDEwVWz7qyHTx9stDAqy6oj0fADd?=
- =?us-ascii?Q?WnOK2ai01/WUsnUmgpf3CGhNM55kyKooLwIcguR7ezJJBaxeTlX2ZZ1rDRNB?=
- =?us-ascii?Q?Ca6kp4nv8vNnIlvEg+dZE+Pq9rhukaGExMcA0wXXFMSg0KFra18sPRuyfHCu?=
- =?us-ascii?Q?Gs72SAQaBd8QSgsbYzxxsHi6Mq7Qko0cVQF7susyNX0OTWfxHtbadUNh979T?=
- =?us-ascii?Q?R5G6JBISC8ZwqvrY5lR7m0qYJ4Yu9cQZCoxQDSNGgugNqoY7XC8eIqg/3fnx?=
- =?us-ascii?Q?egLKfwPQgiTq69zfx2kvxssj8Ul5FiWdEG9X1rHa+4+jodPUqzFbIz2YSWgH?=
- =?us-ascii?Q?OcHYB/D2av9ui6aQ5opduJBK9FufVceoLV0b2SP5ncDUEXv5vKXxR6a3je7A?=
- =?us-ascii?Q?Rumq0lmURg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 360ad809-0e09-4ff7-eba5-08de75064de1
-X-MS-Exchange-CrossTenant-AuthSource: LV3PR11MB8603.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2026 07:11:47.3938
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eev7dRscL8B9UwNVqhmxkq4y2WUyMN4rxPDZCLaHu3L4RgrRsL5S6AcG68twPA+JJfcts+1YSAwDcZ/fAqzbTA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PPF960565C2F
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 04/15] powerpc/time: Prepare to stop elapsing in
+ dynticks-idle
+To: Shrikanth Hegde <sshegde@linux.ibm.com>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
+ Jan Kiszka <jan.kiszka@siemens.com>, Joel Fernandes <joelagnelf@nvidia.com>,
+ Juri Lelli <juri.lelli@redhat.com>, Kieran Bingham <kbingham@kernel.org>,
+ Mel Gorman <mgorman@suse.de>, Michael Ellerman <mpe@ellerman.id.au>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Nicholas Piggin <npiggin@gmail.com>, "Paul E . McKenney"
+ <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Sven Schnelle <svens@linux.ibm.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>,
+ Valentin Schneider <vschneid@redhat.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Xin Zhao <jackzxcui1989@163.com>,
+ linux-pm@vger.kernel.org, linux-s390@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org
+References: <20260206142245.58987-1-frederic@kernel.org>
+ <20260206142245.58987-5-frederic@kernel.org>
+ <9413517d-963b-4e6d-b11b-b440acd7cb5a@linux.ibm.com>
+ <9ab1e7d7-57ee-49f9-963c-3a1b96dda684@kernel.org>
+ <120884b0-0b09-43a9-b0f6-7dc2affe1ac0@linux.ibm.com>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <120884b0-0b09-43a9-b0f6-7dc2affe1ac0@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43232-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43233-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,intel.com:mid,intel.com:dkim,intel.com:email];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	FROM_NEQ_ENVFROM(0.00)[oliver.sang@intel.com,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,linux.ibm.com,linutronix.de,google.com,gmail.com,arm.com,redhat.com,siemens.com,nvidia.com,suse.de,ellerman.id.au,infradead.org,goodmis.org,linaro.org,163.com,vger.kernel.org,lists.ozlabs.org];
+	RCPT_COUNT_TWELVE(0.00)[35];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.992];
 	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[chleroy@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	RCVD_COUNT_SEVEN(0.00)[10]
-X-Rspamd-Queue-Id: 314901A1AE7
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vgoip:email]
+X-Rspamd-Queue-Id: E6CBB1A1DF5
 X-Rspamd-Action: no action
 
+Hi Hegde,
+
+Le 25/02/2026 à 08:46, Shrikanth Hegde a écrit :
+> Hi Christophe,
+> 
+> On 2/24/26 9:11 PM, Christophe Leroy (CS GROUP) wrote:
+>> Hi Hegde,
+>>
+>> Le 19/02/2026 à 19:30, Shrikanth Hegde a écrit :
+>>>
+>>>
+>>> On 2/6/26 7:52 PM, Frederic Weisbecker wrote:
+>>>> Currently the tick subsystem stores the idle cputime accounting in
+>>>> private fields, allowing cohabitation with architecture idle vtime
+>>>> accounting. The former is fetched on online CPUs, the latter on offline
+>>>> CPUs.
+>>>>
+>>>> For consolidation purpose, architecture vtime accounting will continue
+>>>> to account the cputime but will make a break when the idle tick is
+>>>> stopped. The dyntick cputime accounting will then be relayed by the 
+>>>> tick
+>>>> subsystem so that the idle cputime is still seen advancing coherently
+>>>> even when the tick isn't there to flush the idle vtime.
+>>>>
+>>>> Prepare for that and introduce three new APIs which will be used in
+>>>> subsequent patches:
+>>>>
+>>>> _ vtime_dynticks_start() is deemed to be called when idle enters in
+>>>>    dyntick mode. The idle cputime that elapsed so far is accumulated.
+>>>>
+>>>> - vtime_dynticks_stop() is deemed to be called when idle exits from
+>>>>    dyntick mode. The vtime entry clocks are fast-forward to current 
+>>>> time
+>>>>    so that idle accounting restarts elapsing from now.
+>>>>
+>>>> - vtime_reset() is deemed to be called from dynticks idle IRQ entry to
+>>>>    fast-forward the clock to current time so that the IRQ time is still
+>>>>    accounted by vtime while nohz cputime is paused.
+>>>>
+>>>> Also accumulated vtime won't be flushed from dyntick-idle ticks to 
+>>>> avoid
+>>>> accounting twice the idle cputime, along with nohz accounting.
+>>>>
+>>>> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+>>>
+>>> Reviewed-by: Shrikanth Hegde <sshegde@linux.ibm.com>
+>>>
+>>>> ---
+>>>>   arch/powerpc/kernel/time.c | 41 ++++++++++++++++++++++++++++++++++ 
+>>>> ++++
+>>>>   include/linux/vtime.h      |  6 ++++++
+>>>>   2 files changed, 47 insertions(+)
+>>>>
+>>>> diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
+>>>> index 4bbeb8644d3d..18506740f4a4 100644
+>>>> --- a/arch/powerpc/kernel/time.c
+>>>> +++ b/arch/powerpc/kernel/time.c
+>>>> @@ -376,6 +376,47 @@ void vtime_task_switch(struct task_struct *prev)
+>>>>           acct->starttime = acct0->starttime;
+>>>>       }
+>>>>   }
+>>>> +
+>>>> +#ifdef CONFIG_NO_HZ_COMMON
+>>>> +/**
+>>>> + * vtime_reset - Fast forward vtime entry clocks
+>>>> + *
+>>>> + * Called from dynticks idle IRQ entry to fast-forward the clocks 
+>>>> to current time
+>>>> + * so that the IRQ time is still accounted by vtime while nohz 
+>>>> cputime is paused.
+>>>> + */
+>>>> +void vtime_reset(void)
+>>>> +{
+>>>> +    struct cpu_accounting_data *acct = get_accounting(current);
+>>>> +
+>>>> +    acct->starttime = mftb();
+>>>
+>>> I figured out why those huge values happen.
+>>>
+>>> This happens because mftb is from when the system is booted.
+>>> I was doing kexec to start the new kernel and mftb wasn't getting
+>>> reset.
+>>>
+>>> I thought about this. This is concern for pseries too, where LPAR's
+>>> restart but system won't restart and mftb will continue to run 
+>>> instead of
+>>> reset.
+>>>
+>>> I think we should be using sched_clock instead of mftb here.
+>>> Though we need it a few more places and some cosmetic changes around it.
+>>>
+>>> Note: Some values being huge exists without series for few CPUs, with 
+>>> series it
+>>> shows up in most of the CPUs.
+>>>
+>>> So I am planning send out fix below fix separately keeping your
+>>> series as dependency.
+>>>
+>>> ---
+>>>   arch/powerpc/include/asm/accounting.h |  4 ++--
+>>>   arch/powerpc/include/asm/cputime.h    | 14 +++++++-------
+>>>   arch/powerpc/kernel/time.c            | 22 +++++++++++-----------
+>>>   3 files changed, 20 insertions(+), 20 deletions(-)
+>>>
+>>> diff --git a/arch/powerpc/include/asm/accounting.h b/arch/powerpc/ 
+>>> include/asm/accounting.h
+>>> index 6d79c31700e2..50f120646e6d 100644
+>>> --- a/arch/powerpc/include/asm/accounting.h
+>>> +++ b/arch/powerpc/include/asm/accounting.h
+>>> @@ -21,8 +21,8 @@ struct cpu_accounting_data {
+>>>       unsigned long steal_time;
+>>>       unsigned long idle_time;
+>>>       /* Internal counters */
+>>> -    unsigned long starttime;    /* TB value snapshot */
+>>> -    unsigned long starttime_user;    /* TB value on exit to usermode */
+>>> +    unsigned long starttime;    /* Time value snapshot */
+>>> +    unsigned long starttime_user;    /* Time value on exit to 
+>>> usermode */
+>>>   #ifdef CONFIG_ARCH_HAS_SCALED_CPUTIME
+>>>       unsigned long startspurr;    /* SPURR value snapshot */
+>>>       unsigned long utime_sspurr;    /* ->user_time when ->startspurr 
+>>> set */
+>>> diff --git a/arch/powerpc/include/asm/cputime.h b/arch/powerpc/ 
+>>> include/ asm/cputime.h
+>>> index aff858ca99c0..eb6b629b113f 100644
+>>> --- a/arch/powerpc/include/asm/cputime.h
+>>> +++ b/arch/powerpc/include/asm/cputime.h
+>>> @@ -20,9 +20,9 @@
+>>>   #include <asm/time.h>
+>>>   #include <asm/param.h>
+>>>   #include <asm/firmware.h>
+>>> +#include <linux/sched/clock.h>
+>>>
+>>>   #ifdef __KERNEL__
+>>> -#define cputime_to_nsecs(cputime) tb_to_ns(cputime)
+>>>
+>>>   /*
+>>>    * PPC64 uses PACA which is task independent for storing accounting 
+>>> data while
+>>> @@ -44,20 +44,20 @@
+>>>    */
+>>>   static notrace inline void account_cpu_user_entry(void)
+>>>   {
+>>> -    unsigned long tb = mftb();
+>>> +    unsigned long now = sched_clock();
+>>
+>> Now way !
+>>
+>> By doing that you'll kill performance for no reason. All we need when 
+>> accounting time spent in kernel or in user is the difference between 
+>> time at entry and time at exit, no mater what the time was at boot time.
+>>
+> 
+> No. With this patch there will not be any performance difference.
+> All it does is, instead of using mftb uses sched_clock at those places.
+> 
+
+For the record, I did some benchmark test with 
+tools/testing/selftests/powerpc/benchmarks/null_syscall on powerpc 885 
+microcontroller:
+
+Without your proposed patch:
+
+root@vgoip:~# ./null_syscall
+    2729.98 ns     360.36 cycles
+
+With your proposed patch below:
+
+root@vgoip:~# ./null_syscall
+    3370.80 ns     444.95 cycles
+
+So as expected it is a huge regression, almost 25% more time to run the 
+syscall.
+
+Christophe
 
 
-Hello,
-
-kernel test robot noticed "lkvs.powermgr_cstate_tests.sh_-t_verify_server_perf_pkg_cstat_update.fail" on:
-
-commit: 28a3ad1fd2abdf45357ffd46614a6129cd395ca3 ("tools/power turbostat: Add LLC stats")
-https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-
-[test failed on linus/master      d79526b89571ae447c1a5cfd3d627efa07098348]
-[test failed on linux-next/master d4906ae14a5f136ceb671bb14cedbf13fa560da6]
-
-in testcase: lkvs
-version: lkvs-x86_64-6bdeccd-1_20260126
-with following parameters:
-
-	test: cstate-server
-
-
-config: x86_64-rhel-9.4-func
-compiler: gcc-14
-test machine: 512 threads 4 sockets Intel(R) Xeon(R) 6768P  CPU @ 2.4GHz (Granite Rapids) with 128G memory
-
-(please refer to attached dmesg/kmsg for entire log/backtrace)
-
-
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <oliver.sang@intel.com>
-| Closes: https://lore.kernel.org/oe-lkp/202602241622.7b8af145-lkp@intel.com
-
-
-The kernel config and materials to reproduce are available at:
-https://download.01.org/0day-ci/archive/20260224/202602241622.7b8af145-lkp@intel.com
-
-
-<<<test start - 'powermgr_cstate_tests.sh -t verify_server_perf_pkg_cstat_update'>>
-1.247632 sec
-Package	Die	L3	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	NMI	SMI	LLCkRPS	LLC%hit	POLL%   	C1%     	C1E%    	C6%     	C6P%    	CPU%c1	CPU%c6	CoreTmp	CoreThr	PkgTmp	Pkg%pc2	Pkg%pc6	PkgWatt	RAMWatt	PKG_%	RAM_%	UMHz0.0	UMHz1.0	UMHz3.0	UMHz4.0	SysWatt
--	-	-	-	-	17	0.43	3849	2426	0.45	19806	1	0	63846	95.91	0.00	0.00	0.09	2.23	98.31	0.14	99.07	52	0	57	33.05	0.00	253.54	6.97	0.00	0.00	1225	1225	800	800	359.08
-0	0	0	0	0	979	25.15	3891	2400	0.38	588	0	0	13474	95.42	0.00	0.00	1.44	10.87	62.69	1.52	72.67	41	0	45	34.01	0.00	63.27	1.97	0.00	0.00	1300	1300	800	800
-0	0	0	0	256	4	0.11	3738	2400	0.44	34	0	0	52	94.07	0.00	0.00	0.02	2.31	97.57	1.52
-0	0	0	1	1	342	8.79	3891	2400	0.40	177	0	0	5067	95.64	0.00	0.00	0.21	2.39	88.65	0.20	90.78	39	0
-0	0	0	1	257	4	0.10	3723	2400	0.53	32	0	0	77	97.17	0.00	0.00	0.02	2.15	97.75	0.20
-0	0	0	2	2	18	0.47	3846	2400	0.41	37	0	0	230	94.07	0.00	0.00	0.11	2.02	97.42	0.10	99.36	40	0
-0	0	0	2	258	3	0.09	3713	2400	0.56	31	0	0	77	97.14	0.00	0.00	0.03	2.07	97.81	0.10
-0	0	0	3	3	31	0.82	3803	2400	0.51	39	0	0	327	92.97	0.00	0.00	1.34	0.16	97.69	1.32	97.83	40	0
-0	0	0	3	259	2	0.06	3399	2400	0.81	31	0	0	18	94.68	0.00	0.00	0.00	2.09	97.86	1.32
-0	0	0	4	4	4	0.11	3738	2400	0.50	32	0	0	64	97.49	0.00	0.00	0.01	2.00	97.89	0.01	99.84	38	0
-0	0	0	4	260	3	0.09	3730	2400	0.56	30	0	0	49	98.39	0.00	0.00	0.00	2.00	97.92	0.01
-0	0	0	5	5	4	0.10	3681	2400	0.50	32	0	0	64	98.18	0.00	0.00	0.04	2.00	97.87	0.03	99.81	38	0
-0	0	0	5	261	3	0.08	3665	2400	0.55	29	0	0	44	98.23	0.00	0.00	0.02	1.93	97.98	0.03
-0	0	0	6	6	4	0.10	3675	2400	0.53	31	0	0	59	98.65	0.00	0.00	0.00	1.91	98.00	0.05	99.79	38	0
-0	0	0	6	262	3	0.09	3684	2400	0.60	29	0	0	52	98.39	0.00	0.00	0.05	1.92	97.96	0.05
-0	0	0	7	7	4	0.11	3723	2400	0.55	30	0	0	68	98.39	0.00	0.00	0.01	1.84	98.05	0.01	99.84	40	0
-0	0	0	7	263	3	0.08	3697	2400	0.57	28	0	0	43	97.71	0.00	0.00	0.00	1.84	98.09	0.01
-0	0	0	8	8	4	0.10	3682	2400	0.55	31	0	0	61	98.47	0.00	0.00	0.03	1.85	98.04	0.01	99.84	38	0
-0	0	0	8	264	3	0.08	3686	2400	0.64	28	0	0	47	98.22	0.00	0.00	0.01	1.85	98.07	0.01
-0	0	0	9	9	4	0.10	3703	2400	0.57	30	0	0	66	98.35	0.00	0.00	0.05	1.78	98.09	0.04	99.81	40	0
-0	0	0	9	265	3	0.07	3675	2400	0.62	26	0	0	42	98.15	0.00	0.00	0.04	1.70	98.20	0.04
-0	0	0	10	10	3	0.09	3687	2400	0.58	28	0	0	56	98.30	0.00	0.00	0.00	1.70	98.23	0.14	98.93	38	0
-0	0	0	10	266	31	0.82	3850	2400	0.45	29	0	0	673	96.14	0.00	0.00	0.14	1.59	97.48	0.14
-0	0	0	11	11	3	0.09	3693	2400	0.58	27	0	0	55	98.16	0.00	0.00	0.02	1.62	98.28	0.13	99.47	39	0
-0	0	0	11	267	10	0.27	3733	2400	0.30	120	0	0	248	99.25	0.00	0.00	0.06	8.62	91.11	0.13
-0	0	0	12	12	3	0.08	3694	2400	0.60	26	0	0	53	97.80	0.00	0.00	0.03	1.55	98.35	0.03	99.85	39	0
-0	0	0	12	268	2	0.07	3684	2400	0.64	24	0	0	38	98.11	0.00	0.00	0.02	1.55	98.38	0.03
-0	0	0	13	13	4	0.11	3702	2400	0.48	40	0	0	87	98.79	0.00	0.00	0.00	2.60	97.30	0.05	99.79	40	0
-0	0	0	13	269	2	0.06	3686	2400	0.68	23	0	0	38	98.19	0.00	0.00	0.04	1.47	98.43	0.05
-0	0	0	14	14	5	0.13	3718	2400	0.46	40	0	0	85	97.06	0.00	0.00	0.00	2.54	97.35	0.05	99.76	38	0
-0	0	0	14	270	3	0.08	3721	2400	0.65	22	0	0	44	97.00	0.00	0.00	0.04	1.38	98.51	0.05
-0	0	0	15	15	3	0.09	3733	2400	0.62	25	0	0	60	98.72	0.00	0.00	0.01	1.46	98.45	0.01	99.86	39	0
-0	0	0	15	271	2	0.06	3705	2400	0.63	22	0	0	33	97.41	0.00	0.00	0.00	1.39	98.56	0.01
-0	0	0	16	16	3	0.09	3725	2400	0.59	24	0	0	53	98.25	0.00	0.00	0.02	1.39	98.52	0.01	99.86	37	0
-0	0	0	16	272	2	0.07	3721	2400	0.67	21	0	0	37	97.47	0.00	0.00	0.00	1.31	98.63	0.01
-0	0	0	17	17	3	0.08	3699	2400	0.61	22	0	0	53	98.65	0.00	0.00	0.04	1.24	98.65	0.01	99.85	39	0
-0	0	0	17	273	3	0.08	3738	2400	0.52	20	0	0	36	93.56	0.00	0.00	0.00	1.24	98.69	0.01
-0	0	0	18	18	4	0.10	3677	2400	0.50	37	0	0	77	98.70	0.00	0.00	0.04	2.23	97.63	0.03	99.82	39	0
-0	0	0	18	274	2	0.06	3704	2400	0.68	19	0	0	33	97.22	0.00	0.00	0.02	1.16	98.76	0.03
-0	0	0	19	19	5	0.12	3708	2400	0.48	35	0	0	88	98.65	0.00	0.00	0.00	2.21	97.68	0.05	99.78	39	0
-0	0	0	19	275	2	0.06	3668	2400	0.69	18	0	0	35	97.34	0.00	0.00	0.04	1.08	98.82	0.05
-0	0	0	20	20	3	0.09	3733	2400	0.58	21	0	0	49	98.06	0.00	0.00	0.00	1.15	98.77	0.02	99.83	40	0
-0	0	0	20	276	3	0.09	3698	2400	0.51	32	0	0	61	98.49	0.00	0.00	0.00	2.14	97.78	0.02
-0	0	0	21	21	3	0.08	3737	2400	0.65	20	0	0	47	98.44	0.00	0.00	0.01	1.08	98.84	0.01	99.88	39	0
-0	0	0	21	277	2	0.06	3722	2400	0.70	18	0	0	35	97.95	0.00	0.00	0.00	1.08	98.86	0.01
-0	0	0	22	22	7	0.18	3747	2400	0.36	59	0	0	148	98.66	0.00	0.00	0.02	3.59	96.23	0.05	99.71	39	0
-0	0	0	22	278	2	0.06	3703	2400	0.71	16	0	0	30	97.55	0.00	0.00	0.01	0.93	99.00	0.05
-0	0	0	23	23	4	0.10	3699	2400	0.51	33	0	0	64	98.51	0.00	0.00	0.05	2.00	97.85	0.04	99.80	39	0
-0	0	0	23	279	3	0.09	3714	2400	0.60	30	0	0	52	98.12	0.00	0.00	0.04	2.00	97.89	0.04
-0	0	0	24	24	6	0.16	3753	2400	0.49	49	0	0	120	98.72	0.00	0.00	0.00	3.11	96.75	0.07	99.70	39	0
-0	0	0	24	280	3	0.08	3705	2400	0.53	29	0	0	46	97.28	0.00	0.00	0.05	1.85	98.03	0.07
-0	0	0	25	25	4	0.11	3740	2400	0.50	29	0	0	66	97.98	0.00	0.00	0.00	1.93	97.98	0.05	99.78	40	0
-0	0	0	25	281	4	0.10	3738	2400	0.48	28	0	0	48	94.29	0.00	0.00	0.04	1.77	98.09	0.05
-0	0	0	26	26	4	0.10	3735	2400	0.60	29	0	0	66	98.43	0.00	0.00	0.01	1.77	98.14	0.02	99.84	37	0
-0	0	0	26	282	3	0.07	3709	2400	0.61	27	0	0	41	98.00	0.00	0.00	0.00	1.76	98.17	0.02
-0	0	0	27	27	4	0.09	3737	2400	0.54	29	0	0	61	98.19	0.00	0.00	0.01	1.77	98.13	0.00	99.86	38	0
-0	0	0	27	283	3	0.07	3736	2400	0.59	27	0	0	42	98.33	0.00	0.00	0.00	1.77	98.17	0.00
-0	0	0	28	28	3	0.09	3680	2400	0.57	28	0	0	60	98.32	0.00	0.00	0.03	1.70	98.19	0.02	99.84	39	0
-0	0	0	28	284	3	0.07	3728	2400	0.67	25	0	0	46	98.48	0.00	0.00	0.02	1.61	98.30	0.02
-0	0	0	29	29	4	0.10	3679	2400	0.54	27	0	0	55	97.76	0.00	0.00	0.05	1.54	98.33	0.04	99.82	40	0
-0	0	0	29	285	3	0.08	3711	2400	0.60	25	0	0	44	98.30	0.00	0.00	0.04	1.62	98.28	0.04
-0	0	0	30	30	3	0.09	3730	2400	0.56	26	0	0	52	98.07	0.00	0.00	0.00	1.54	98.38	0.06	99.80	39	0
-0	0	0	30	286	3	0.08	3672	2400	0.60	26	0	0	43	97.89	0.00	0.00	0.05	1.62	98.26	0.06
-0	0	0	31	31	3	0.08	3746	2400	0.59	26	0	0	53	98.41	0.00	0.00	0.01	1.54	98.37	0.01	99.86	39	0
-0	0	0	31	287	3	0.07	3745	2400	0.58	24	0	0	39	97.08	0.00	0.00	0.00	1.53	98.40	0.01
-0	0	0	64	32	5	0.13	3724	2400	0.46	40	0	0	77	98.52	0.00	0.00	0.03	2.61	97.24	0.05	99.73	38	0
-0	0	0	64	288	6	0.15	3782	2400	0.36	38	0	0	60	92.38	0.00	0.00	0.04	2.55	97.28	0.05
-0	0	0	65	33	5	0.12	3731	2400	0.51	39	0	0	79	98.52	0.00	0.00	0.00	2.54	97.35	0.07	99.76	37	0
-0	0	0	65	289	4	0.10	3714	2400	0.48	37	0	0	52	98.24	0.00	0.00	0.06	2.47	97.39	0.07
-0	0	0	66	34	4	0.11	3720	2400	0.51	39	0	0	72	98.71	0.00	0.00	0.01	2.54	97.35	0.01	99.83	38	0
-0	0	0	66	290	3	0.09	3717	2400	0.52	38	0	0	53	98.45	0.00	0.00	0.00	2.55	97.38	0.01
-0	0	0	67	35	5	0.14	3754	2400	0.45	37	0	0	75	95.41	0.00	0.00	0.02	2.40	97.47	0.00	99.81	36	0
-0	0	0	67	291	3	0.09	3709	2400	0.52	35	0	0	51	98.59	0.00	0.00	0.00	2.40	97.53	0.00
-0	0	0	68	36	4	0.11	3702	2400	0.47	36	0	0	65	98.50	0.00	0.00	0.03	2.32	97.55	0.02	99.82	38	0
-0	0	0	68	292	3	0.09	3701	2400	0.51	34	0	0	51	98.11	0.00	0.00	0.02	2.32	97.59	0.02
-0	0	0	69	37	4	0.11	3703	2400	0.49	36	0	0	69	98.97	0.00	0.00	0.05	2.24	97.61	0.05	99.79	37	0
-0	0	0	69	293	3	0.09	3694	2400	0.52	36	0	0	53	98.48	0.00	0.00	0.04	2.24	97.65	0.05
-0	0	0	70	38	4	0.12	3720	2400	0.45	36	0	0	69	98.53	0.00	0.00	0.00	2.31	97.59	0.07	99.77	36	0
-0	0	0	70	294	3	0.09	3728	2400	0.51	34	0	0	51	97.10	0.00	0.00	0.05	2.24	97.63	0.07
-0	0	0	71	39	4	0.11	3718	2400	0.49	34	0	0	67	98.34	0.00	0.00	0.01	2.17	97.73	0.01	99.83	37	0
-0	0	0	71	295	3	0.09	3723	2400	0.50	32	0	0	49	97.61	0.00	0.00	0.00	2.16	97.76	0.01
-0	0	0	72	40	4	0.10	3703	2400	0.52	33	0	0	62	98.59	0.00	0.00	0.04	2.09	97.79	0.02	99.82	36	0
-0	0	0	72	296	3	0.09	3698	2400	0.53	31	0	0	47	97.93	0.00	0.00	0.02	2.09	97.82	0.02
-0	0	0	73	41	5	0.14	3704	2400	0.38	47	0	0	90	97.10	0.00	0.00	0.05	3.08	96.75	0.03	99.76	37	0
-0	0	0	73	297	3	0.09	3712	2400	0.57	31	0	0	55	98.10	0.00	0.00	0.02	2.08	97.82	0.03
-0	0	0	74	42	5	0.13	3685	2400	0.45	46	0	0	92	98.64	0.00	0.00	0.00	3.08	96.82	0.05	99.76	38	0
-0	0	0	74	298	3	0.08	3689	2400	0.57	29	0	0	46	98.19	0.00	0.00	0.04	1.93	97.95	0.05
-0	0	0	75	43	4	0.10	3710	2400	0.54	31	0	0	62	98.44	0.00	0.00	0.01	1.93	97.98	0.02	99.80	37	0
-0	0	0	75	299	4	0.11	3695	2400	0.45	47	0	0	77	98.98	0.00	0.00	0.00	3.00	96.91	0.02
-0	0	0	76	44	4	0.11	3713	2400	0.52	31	0	0	72	98.28	0.00	0.00	0.02	1.93	97.95	0.01	99.83	37	0
-0	0	0	76	300	3	0.08	3690	2400	0.56	28	0	0	43	97.91	0.00	0.00	0.00	1.86	98.07	0.01
-0	0	0	77	45	4	0.10	3713	2400	0.49	29	0	0	58	97.11	0.00	0.00	0.03	1.78	98.10	0.01	99.82	38	0
-0	0	0	77	301	4	0.10	3730	2400	0.48	28	0	0	50	94.68	0.00	0.00	0.00	1.78	98.13	0.01
-0	0	0	78	46	3	0.09	3697	2400	0.55	29	0	0	56	98.40	0.00	0.00	0.04	1.78	98.10	0.03	99.82	38	0
-0	0	0	78	302	3	0.08	3702	2400	0.63	27	0	0	49	98.01	0.00	0.00	0.02	1.77	98.13	0.03
-0	0	0	79	47	4	0.12	3689	2400	0.46	42	0	0	88	98.62	0.00	0.00	0.00	2.76	97.14	0.05	99.77	38	0
-0	0	0	79	303	3	0.08	3693	2400	0.67	25	0	0	46	97.63	0.00	0.00	0.04	1.62	98.27	0.05
-0	0	0	80	48	4	0.10	3717	2400	0.57	28	0	0	63	98.16	0.00	0.00	0.01	1.69	98.21	0.01	99.81	38	0
-0	0	0	80	304	4	0.11	3691	2400	0.46	41	0	0	74	98.53	0.00	0.00	0.00	2.76	97.15	0.01
-0	0	0	81	49	4	0.11	3717	2400	0.48	40	0	0	71	98.43	0.00	0.00	0.08	2.55	97.27	0.08	99.75	39	0
-0	0	0	81	305	4	0.10	3707	2400	0.47	40	0	0	58	98.03	0.00	0.00	0.00	2.77	97.14	0.08
-0	0	0	82	50	4	0.11	3692	2400	0.54	39	0	0	74	98.77	0.00	0.00	0.04	2.54	97.32	0.01	99.80	37	0
-0	0	0	82	306	4	0.11	3739	2400	0.45	40	0	0	58	94.19	0.00	0.00	0.00	2.55	97.35	0.01
-0	0	0	83	51	4	0.12	3687	2400	0.50	40	0	0	75	98.26	0.00	0.00	0.04	2.55	97.31	0.03	99.79	36	0
-0	0	0	83	307	4	0.10	3692	2400	0.56	37	0	0	60	98.31	0.00	0.00	0.03	2.54	97.35	0.03
-0	0	0	84	52	4	0.11	3690	2400	0.47	38	0	0	69	98.59	0.00	0.00	0.00	2.45	97.45	0.06	99.78	39	0
-0	0	0	84	308	4	0.10	3671	2400	0.57	35	0	0	58	98.55	0.00	0.00	0.05	2.39	97.48	0.06
-0	0	0	85	53	4	0.12	3715	2400	0.50	37	0	0	71	98.64	0.00	0.00	0.01	2.38	97.51	0.01	99.83	39	0
-0	0	0	85	309	3	0.09	3696	2400	0.51	35	0	0	51	98.25	0.00	0.00	0.00	2.38	97.54	0.01
-0	0	0	86	54	4	0.11	3695	2400	0.49	37	0	0	65	98.74	0.00	0.00	0.02	2.39	97.49	0.01	99.82	38	0
-0	0	0	86	310	4	0.10	3699	2400	0.48	37	0	0	60	98.59	0.00	0.00	0.01	2.47	97.44	0.01
-0	0	0	87	55	5	0.13	3721	2400	0.40	36	0	0	72	96.61	0.00	0.00	0.02	2.24	97.62	0.02	99.80	37	0
-0	0	0	87	311	3	0.09	3698	2400	0.57	33	0	0	53	98.47	0.00	0.00	0.01	2.23	97.67	0.02
-0	0	0	88	56	4	0.11	3684	2400	0.50	35	0	0	66	98.31	0.00	0.00	0.05	2.16	97.69	0.05	99.80	36	0
-0	0	0	88	312	3	0.09	3679	2400	0.60	32	0	0	55	98.04	0.00	0.00	0.04	2.16	97.72	0.05
-0	0	0	89	57	5	0.14	3719	2400	0.40	48	0	0	94	96.69	0.00	0.00	0.00	3.23	96.65	0.05	99.74	38	0
-0	0	0	89	313	3	0.08	3671	2400	0.57	31	0	0	49	98.19	0.00	0.00	0.04	2.09	97.80	0.05
-0	0	0	90	58	4	0.11	3722	2400	0.53	34	0	0	70	98.37	0.00	0.00	0.00	2.09	97.82	0.01	99.79	37	0
-0	0	0	90	314	4	0.11	3685	2400	0.44	45	0	0	78	98.83	0.00	0.00	0.00	3.15	96.76	0.01
-0	0	0	91	59	4	0.11	3729	2400	0.48	32	0	0	63	98.04	0.00	0.00	0.00	2.01	97.89	0.04	99.76	38	0
-0	0	0	91	315	4	0.11	3700	2400	0.44	44	0	0	80	98.84	0.00	0.00	0.03	2.96	96.90	0.04
-0	0	0	92	60	4	0.10	3687	2400	0.52	33	0	0	59	98.30	0.00	0.00	0.03	1.93	97.96	0.02	99.83	38	0
-0	0	0	92	316	3	0.09	3689	2400	0.57	29	0	0	50	98.03	0.00	0.00	0.01	1.92	97.99	0.02
-0	0	0	93	61	5	0.13	3648	2400	0.45	45	0	0	89	98.90	0.00	0.00	0.04	2.86	96.99	0.04	99.77	39	0
-0	0	0	93	317	3	0.09	3700	2400	0.57	29	0	0	50	97.74	0.00	0.00	0.03	1.93	97.97	0.04
-0	0	0	94	62	3	0.09	3705	2400	0.56	30	0	0	57	98.39	0.00	0.00	0.00	1.85	98.07	0.06	99.80	39	0
-0	0	0	94	318	3	0.08	3624	2400	0.57	29	0	0	44	98.01	0.00	0.00	0.05	1.85	98.02	0.06
-0	0	0	95	63	4	0.10	3734	2400	0.53	30	0	0	58	98.34	0.00	0.00	0.00	1.85	98.06	0.07	99.74	39	0
-0	0	0	95	319	4	0.11	3694	2400	0.44	41	0	0	71	97.84	0.00	0.00	0.06	2.78	97.07	0.07
-1	1	1	0	64	5	0.13	3803	2400	0.57	29	0	0	63	93.08	0.00	0.00	0.00	1.77	98.12	0.01	99.79	51	0	57	0.00	0.00	70.36	2.25	0.00	0.00	1200	1200	800	800
-1	1	1	0	320	4	0.11	3737	2400	0.42	39	0	0	69	98.05	0.00	0.00	0.00	2.69	97.22	0.01
-1	1	1	1	65	300	7.70	3898	2400	0.36	58	0	0	306	98.40	0.00	0.00	0.01	1.63	90.66	0.00	90.26	50	0
-1	1	1	1	321	120	3.09	3897	2400	0.38	40	0	0	138	97.88	0.00	0.00	0.00	1.62	95.29	0.00
-1	1	1	2	66	59	1.53	3891	2400	0.42	32	0	0	131	97.33	0.00	0.00	0.03	1.62	96.83	0.02	98.40	50	0
-1	1	1	2	322	3	0.09	3788	2400	0.54	26	0	0	44	96.78	0.00	0.00	0.02	1.63	98.28	0.02
-1	1	1	3	67	5	0.13	3704	2400	0.45	40	0	0	88	97.99	0.00	0.00	0.05	2.46	97.37	0.04	99.78	50	0
-1	1	1	3	323	3	0.07	3762	2400	0.58	26	0	0	38	97.23	0.00	0.00	0.03	1.63	98.28	0.04
-1	1	1	4	68	5	0.13	3695	2400	0.46	39	0	0	70	97.23	0.00	0.00	0.16	2.30	97.43	0.24	99.58	50	0
-1	1	1	4	324	4	0.10	3695	2400	0.48	37	0	0	52	97.48	0.00	0.00	0.08	2.36	97.47	0.24
-1	1	1	5	69	59	1.53	3881	2400	0.41	44	0	0	131	97.55	0.00	0.00	0.01	2.47	96.00	0.03	98.36	50	0
-1	1	1	5	325	4	0.10	3661	2400	0.49	37	0	0	58	97.96	0.00	0.00	0.03	2.43	97.45	0.03
-1	1	1	6	70	59	1.51	3882	2400	0.41	42	0	0	124	98.11	0.00	0.00	0.06	2.29	96.15	0.05	98.38	49	0
-1	1	1	6	326	3	0.09	3654	2400	0.50	34	0	0	49	97.48	0.00	0.00	0.01	2.32	97.59	0.05
-1	1	1	7	71	70	1.81	3884	2400	0.57	47	0	0	168	97.90	0.00	0.00	0.04	2.31	95.84	0.04	97.04	49	0
-1	1	1	7	327	62	1.60	3885	2400	0.39	43	0	0	94	95.96	0.00	0.00	0.04	2.28	96.09	0.04
-1	1	1	8	72	4	0.11	3682	2400	0.46	35	0	0	64	97.73	0.00	0.00	0.04	2.17	97.69	0.03	99.80	49	0
-1	1	1	8	328	4	0.10	3689	2400	0.53	33	0	0	53	97.18	0.00	0.00	0.03	2.16	97.72	0.03
-1	1	1	9	73	59	1.52	3882	2400	0.42	42	0	0	133	98.31	0.00	0.00	0.00	2.22	96.27	0.05	98.37	49	0
-1	1	1	9	329	3	0.09	3664	2400	0.54	33	0	0	49	97.38	0.00	0.00	0.05	2.16	97.71	0.05
-1	1	1	10	74	59	1.52	3885	2400	0.41	38	0	0	128	98.38	0.00	0.00	0.01	2.09	96.40	0.00	97.10	49	0
-1	1	1	10	330	65	1.67	3889	2400	0.40	44	0	0	87	97.87	0.00	0.00	0.00	2.15	96.19	0.00
-1	1	1	11	75	4	0.11	3674	2400	0.50	33	0	0	69	97.66	0.00	0.00	0.05	2.05	97.80	0.04	99.80	48	0
-1	1	1	11	331	3	0.08	3653	2400	0.56	30	0	0	46	97.60	0.00	0.00	0.00	2.02	97.91	0.04
-1	1	1	12	76	4	0.12	3697	2400	0.45	32	0	0	63	97.24	0.00	0.00	0.02	2.01	97.87	0.02	99.82	48	0
-1	1	1	12	332	3	0.09	3671	2400	0.53	30	0	0	46	97.44	0.00	0.00	0.01	2.01	97.90	0.02
-1	1	1	13	77	5	0.14	3740	2400	0.38	31	0	0	66	93.51	0.00	0.00	0.02	1.86	98.00	0.02	99.79	49	0
-1	1	1	13	333	4	0.10	3702	2400	0.55	31	0	0	55	97.02	0.00	0.00	0.01	2.00	97.90	0.02
-1	1	1	14	78	6	0.16	3734	2400	0.41	52	0	0	119	98.47	0.00	0.00	0.04	3.40	96.42	0.04	99.73	49	0
-1	1	1	14	334	3	0.09	3703	2400	0.57	28	0	0	47	96.79	0.00	0.00	0.03	1.77	98.12	0.04
-1	1	1	15	79	4	0.10	3674	2400	0.54	31	0	0	62	97.88	0.00	0.00	0.00	1.92	97.99	0.08	99.76	48	0
-1	1	1	15	335	3	0.08	3657	2400	0.56	28	0	0	49	97.38	0.00	0.00	0.08	1.75	98.10	0.08
-1	1	1	16	80	4	0.10	3694	2400	0.57	30	0	0	63	97.92	0.00	0.00	0.04	1.82	98.05	0.04	99.76	50	0
-1	1	1	16	336	4	0.12	3691	2400	0.43	49	0	0	88	98.46	0.00	0.00	0.03	3.29	96.59	0.04
-1	1	1	17	81	4	0.10	3673	2400	0.56	27	0	0	58	97.86	0.00	0.00	0.05	1.59	98.27	0.04	99.82	50	0
-1	1	1	17	337	3	0.08	3680	2400	0.56	27	0	0	43	97.51	0.00	0.00	0.03	1.59	98.30	0.04
-1	1	1	18	82	5	0.14	3668	2400	0.43	49	0	0	104	98.50	0.00	0.00	0.07	3.13	96.68	0.06	99.74	50	0
-1	1	1	18	338	3	0.08	3674	2400	0.58	25	0	0	42	97.31	0.00	0.00	0.05	1.52	98.36	0.06
-1	1	1	19	83	7	0.19	3725	2400	0.38	48	0	0	114	95.60	0.00	0.00	0.07	3.05	96.71	0.06	99.70	51	0
-1	1	1	19	339	3	0.08	3684	2400	0.58	23	0	0	38	97.18	0.00	0.00	0.02	1.47	98.44	0.06
-1	1	1	20	84	60	1.56	3881	2400	0.41	51	0	0	149	98.50	0.00	0.00	0.05	3.09	95.33	0.09	98.26	52	0
-1	1	1	20	340	4	0.10	3741	2400	0.52	24	0	0	44	91.79	0.00	0.00	0.09	1.39	98.43	0.09
-1	1	1	21	85	5	0.15	3705	2400	0.44	45	0	0	89	97.85	0.00	0.00	0.08	2.90	96.89	0.08	99.72	49	0
-1	1	1	21	341	4	0.11	3709	2400	0.50	42	0	0	64	97.96	0.00	0.00	0.04	2.94	96.93	0.08
-1	1	1	22	86	63	1.62	3885	2400	0.42	50	0	0	139	98.17	0.00	0.00	0.03	2.90	95.46	0.04	98.26	50	0
-1	1	1	22	342	4	0.11	3699	2400	0.46	44	0	0	65	98.46	0.00	0.00	0.00	3.00	96.91	0.04
-1	1	1	23	87	7	0.19	3750	2400	0.34	43	0	0	83	92.86	0.00	0.00	0.06	2.75	97.03	0.05	99.71	50	0
-1	1	1	23	343	4	0.11	3720	2400	0.45	40	0	0	58	98.01	0.00	0.00	0.02	2.78	97.11	0.05
-1	1	1	24	88	5	0.12	3681	2400	0.45	42	0	0	76	97.78	0.00	0.00	0.08	2.67	97.14	0.07	99.74	49	0
-1	1	1	24	344	4	0.11	3710	2400	0.45	41	0	0	62	97.66	0.00	0.00	0.06	2.75	97.09	0.07
-1	1	1	25	89	5	0.13	3713	2400	0.46	42	0	0	76	98.17	0.00	0.00	0.00	2.77	97.12	0.01	99.81	49	0
-1	1	1	25	345	3	0.09	3709	2400	0.44	39	0	0	53	98.26	0.00	0.00	0.00	2.69	97.23	0.01
-1	1	1	26	90	5	0.13	3738	2400	0.44	40	0	0	75	97.36	0.00	0.00	0.00	2.62	97.26	0.02	99.80	50	0
-1	1	1	26	346	4	0.10	3709	2400	0.45	40	0	0	54	97.93	0.00	0.00	0.00	2.70	97.22	0.02
-1	1	1	27	91	5	0.13	3717	2400	0.48	39	0	0	77	98.00	0.00	0.00	0.01	2.54	97.34	0.01	99.81	49	0
-1	1	1	27	347	4	0.10	3719	2400	0.46	37	0	0	55	97.90	0.00	0.00	0.00	2.54	97.37	0.01
-1	1	1	28	92	5	0.14	3728	2400	0.45	40	0	0	79	97.31	0.00	0.00	0.03	2.60	97.25	0.06	99.72	48	0
-1	1	1	28	348	4	0.12	3717	2400	0.42	51	0	0	83	98.64	0.00	0.00	0.00	3.62	96.27	0.06
-1	1	1	29	93	4	0.11	3707	2400	0.48	38	0	0	67	98.05	0.00	0.00	0.04	2.45	97.41	0.10	99.68	50	0
-1	1	1	29	349	5	0.14	3721	2400	0.40	51	0	0	88	95.92	0.00	0.00	0.09	3.37	96.42	0.10
-1	1	1	30	94	4	0.12	3719	2400	0.47	36	0	0	67	97.74	0.00	0.00	0.00	2.32	97.58	0.11	99.67	49	0
-1	1	1	30	350	5	0.14	3723	2400	0.42	52	0	0	95	98.49	0.00	0.00	0.08	3.46	96.35	0.11
-1	1	1	31	95	5	0.12	3740	2400	0.47	37	0	0	71	97.29	0.00	0.00	0.00	2.39	97.50	0.06	99.72	51	0
-1	1	1	31	351	5	0.13	3716	2400	0.36	51	0	0	83	95.56	0.00	0.00	0.04	3.26	96.58	0.06
-1	1	1	64	96	59	1.51	3890	2400	0.41	38	0	0	125	98.48	0.00	0.00	0.04	2.12	96.33	0.04	98.29	50	0
-1	1	1	64	352	7	0.18	3790	2400	0.40	49	0	0	116	98.40	0.00	0.00	0.04	3.35	96.46	0.04
-1	1	1	65	97	5	0.12	3766	2400	0.47	35	0	0	73	97.58	0.00	0.00	0.02	2.25	97.62	0.02	99.80	50	0
-1	1	1	65	353	3	0.09	3761	2400	0.53	32	0	0	51	97.64	0.00	0.00	0.01	2.17	97.74	0.02
-1	1	1	66	98	5	0.14	3726	2400	0.40	48	0	0	96	98.44	0.00	0.00	0.05	3.17	96.66	0.04	99.76	49	0
-1	1	1	66	354	3	0.09	3763	2400	0.52	30	0	0	46	96.88	0.00	0.00	0.03	2.01	97.88	0.04
-1	1	1	67	99	5	0.14	3714	2400	0.40	48	0	0	78	97.56	0.00	0.00	0.46	2.78	96.64	0.52	99.29	49	0
-1	1	1	67	355	4	0.11	3716	2400	0.45	45	0	0	57	97.81	0.00	0.00	0.05	3.10	96.75	0.52
-1	1	1	68	100	6	0.15	3745	2400	0.41	45	0	0	84	98.03	0.00	0.00	0.12	2.89	96.86	0.12	99.67	49	0
-1	1	1	68	356	4	0.12	3736	2400	0.42	44	0	0	61	98.32	0.00	0.00	0.00	3.01	96.89	0.12
-1	1	1	69	101	5	0.14	3721	2400	0.40	45	0	0	75	97.68	0.00	0.00	0.44	2.59	96.84	0.44	99.37	48	0
-1	1	1	69	357	4	0.11	3715	2400	0.49	44	0	0	60	98.34	0.00	0.00	0.01	3.02	96.88	0.44
-1	1	1	70	102	5	0.14	3739	2400	0.42	45	0	0	77	98.42	0.00	0.00	0.04	2.94	96.90	0.03	99.76	50	0
-1	1	1	70	358	4	0.12	3751	2400	0.46	43	0	0	70	98.10	0.00	0.00	0.02	3.02	96.85	0.03
-1	1	1	71	103	5	0.12	3725	2400	0.45	43	0	0	75	98.57	0.00	0.00	0.00	2.86	97.04	0.05	99.76	47	0
-1	1	1	71	359	4	0.11	3753	2400	0.47	40	0	0	62	97.19	0.00	0.00	0.04	2.79	97.08	0.05
-1	1	1	72	104	6	0.15	3774	2400	0.41	43	0	0	84	94.78	0.00	0.00	0.00	2.86	97.01	0.05	99.73	49	0
-1	1	1	72	360	4	0.11	3748	2400	0.51	41	0	0	63	98.04	0.00	0.00	0.04	2.79	97.08	0.05
-1	1	1	73	105	5	0.13	3744	2400	0.46	43	0	0	81	98.51	0.00	0.00	0.00	2.86	97.03	0.02	99.80	49	0
-1	1	1	73	361	4	0.10	3754	2400	0.46	42	0	0	60	97.99	0.00	0.00	0.00	2.85	97.06	0.02
-1	1	1	74	106	59	1.53	3888	2400	0.41	40	0	0	139	98.26	0.00	0.00	0.01	2.62	95.85	0.00	98.42	51	0
-1	1	1	74	362	66	1.69	3892	2400	0.39	38	0	0	117	98.29	0.00	0.00	0.00	2.59	95.74	0.00
-1	1	1	75	107	5	0.15	3768	2400	0.43	39	0	0	83	96.04	0.00	0.00	0.02	2.52	97.33	0.02	99.78	49	0
-1	1	1	75	363	3	0.09	3739	2400	0.49	37	0	0	53	97.82	0.00	0.00	0.01	2.52	97.39	0.02
-1	1	1	76	108	6	0.16	3755	2400	0.41	52	0	0	109	98.62	0.00	0.00	0.04	3.43	96.38	0.03	99.74	48	0
-1	1	1	76	364	4	0.11	3761	2400	0.46	38	0	0	58	97.47	0.00	0.00	0.03	2.59	97.28	0.03
-1	1	1	77	109	5	0.14	3761	2400	0.44	39	0	0	82	98.17	0.00	0.00	0.00	2.43	97.45	0.06	99.74	49	0
-1	1	1	77	365	4	0.10	3730	2400	0.46	37	0	0	53	97.63	0.00	0.00	0.05	2.43	97.43	0.06
-1	1	1	78	110	63	1.62	3889	2400	0.42	42	0	0	143	98.38	0.00	0.00	0.00	2.43	95.96	0.01	98.27	48	0
-1	1	1	78	366	5	0.13	3747	2400	0.39	49	0	0	85	98.17	0.00	0.00	0.00	3.33	96.56	0.01
-1	1	1	79	111	5	0.13	3733	2400	0.43	36	0	0	71	97.47	0.00	0.00	0.25	2.06	97.58	0.24	99.58	49	0
-1	1	1	79	367	4	0.11	3744	2400	0.49	34	0	0	53	97.49	0.00	0.00	0.23	2.06	97.61	0.24
-1	1	1	80	112	6	0.15	3719	2400	0.40	49	0	0	97	98.33	0.00	0.00	0.27	2.97	96.62	0.26	99.53	49	0
-1	1	1	80	368	4	0.10	3737	2400	0.53	33	0	0	52	97.21	0.00	0.00	0.26	1.99	97.67	0.26
-1	1	1	81	113	228	5.85	3896	2400	0.40	77	0	0	311	98.38	0.00	0.00	0.13	3.05	90.97	0.35	91.31	51	0
-1	1	1	81	369	126	3.24	3896	2400	0.39	50	0	0	135	97.96	0.00	0.00	0.27	1.91	94.58	0.35
-1	1	1	82	114	5	0.13	3743	2400	0.43	35	0	0	59	93.81	0.00	0.00	0.48	1.70	97.70	0.63	99.20	48	0
-1	1	1	82	370	3	0.08	3696	2400	0.54	32	0	0	36	97.11	0.00	0.00	0.27	1.91	97.75	0.63
-1	1	1	83	115	6	0.17	3776	2400	0.40	48	0	0	95	97.79	0.00	0.00	0.00	3.11	96.74	0.01	99.76	48	0
-1	1	1	83	371	5	0.13	3765	2400	0.42	44	0	0	66	98.02	0.00	0.00	0.00	3.03	96.86	0.01
-1	1	1	84	116	63	1.62	3889	2400	0.41	38	0	0	154	95.72	0.00	0.00	0.54	1.46	96.41	0.65	96.45	48	0
-1	1	1	84	372	48	1.24	3865	2400	0.43	68	0	0	1160	95.02	0.00	0.00	0.27	2.64	95.89	0.65
-1	1	1	85	117	58	1.48	3889	2400	0.41	37	0	0	110	98.25	0.00	0.00	0.01	1.98	96.54	0.00	98.45	48	0
-1	1	1	85	373	4	0.10	3767	2400	0.52	31	0	0	55	97.91	0.00	0.00	0.00	1.98	97.94	0.00
-1	1	1	86	118	727	18.67	3896	2400	0.38	133	1	0	548	98.18	0.00	0.00	0.10	1.15	80.09	0.07	61.30	49	0
-1	1	1	86	374	923	23.68	3898	2400	0.39	166	0	0	1968	94.15	0.00	0.00	0.09	1.39	74.78	0.07
-1	1	1	87	119	544	13.96	3898	2400	0.39	120	0	0	437	97.71	0.00	0.00	0.19	1.93	83.94	0.26	66.34	49	0
-1	1	1	87	375	868	22.27	3898	2400	0.40	160	0	0	1800	94.29	0.00	0.00	0.10	1.88	75.74	0.26
-1	1	1	88	120	8	0.22	3795	2400	0.33	66	0	0	137	96.20	0.00	0.00	0.02	2.14	95.87	0.04	97.95	47	0
-1	1	1	88	376	4	0.11	3822	2400	0.46	41	0	0	53	97.18	0.00	0.00	0.02	2.19	97.69	0.03
-1	1	1	89	121	4	0.11	3784	2400	0.47	35	0	0	68	97.83	0.00	0.00	0.00	2.25	97.65	0.03	99.78	49	0
-1	1	1	89	377	4	0.12	3825	2400	0.48	33	0	0	57	94.04	0.00	0.00	0.02	2.18	97.69	0.03
-1	1	1	90	122	5	0.13	3809	2400	0.44	35	0	0	72	97.36	0.00	0.00	0.06	2.18	97.64	0.05	99.77	48	0
-1	1	1	90	378	4	0.09	3807	2400	0.48	32	0	0	49	97.49	0.00	0.00	0.04	2.19	97.69	0.05
-1	1	1	91	123	4	0.12	3800	2400	0.48	31	0	0	66	97.53	0.00	0.00	0.00	2.03	97.87	0.07	99.76	48	0
-1	1	1	91	379	3	0.09	3812	2400	0.51	31	0	0	46	97.24	0.00	0.00	0.06	1.95	97.91	0.07
-1	1	1	92	124	5	0.13	3816	2400	0.47	32	0	0	70	97.50	0.00	0.00	0.01	2.02	97.86	0.01	99.82	49	0
-1	1	1	92	380	4	0.10	3835	2400	0.50	30	0	0	52	96.91	0.00	0.00	0.00	1.94	97.97	0.01
-1	1	1	93	125	4	0.10	3757	2400	0.55	30	0	0	58	97.89	0.00	0.00	0.30	1.61	98.00	0.33	99.51	47	0
-1	1	1	93	381	3	0.09	3776	2400	0.56	29	0	0	52	97.17	0.00	0.00	0.25	1.72	97.94	0.33
-1	1	1	94	126	5	0.13	3767	2400	0.42	43	0	0	89	98.06	0.00	0.00	0.01	2.86	97.02	0.14	99.67	48	0
-1	1	1	94	382	3	0.08	3792	2400	0.55	28	0	0	44	97.07	0.00	0.00	0.12	1.72	98.09	0.14
-1	1	1	95	127	4	0.11	3802	2400	0.47	32	0	0	58	97.21	0.00	0.00	0.00	1.88	98.03	0.02	99.79	49	0
-1	1	1	95	383	4	0.12	3815	2400	0.41	40	0	0	73	98.13	0.00	0.00	0.00	2.80	97.10	0.02
-2	2	2	0	128	10	0.26	3688	2400	0.41	81	0	0	200	96.03	0.00	0.00	0.36	5.32	94.09	0.40	99.27	32	0	40	50.77	0.00	57.06	1.02	0.00	0.00	1200	1200	800	800
-2	2	2	0	384	3	0.08	3667	2400	0.53	26	0	0	37	93.96	0.00	0.00	0.24	1.49	98.20	0.40
-2	2	2	1	129	6	0.15	3788	2400	0.42	27	0	0	58	91.73	0.00	0.00	0.24	1.47	98.15	0.24	99.54	32	0
-2	2	2	1	385	4	0.11	3677	2400	0.40	39	0	0	64	97.78	0.00	0.00	0.00	2.73	97.18	0.24
-2	2	2	2	130	4	0.10	3689	2400	0.51	28	0	0	53	96.74	0.00	0.00	0.26	1.49	98.16	0.25	99.61	31	0
-2	2	2	2	386	3	0.07	3693	2400	0.61	25	0	0	38	96.91	0.00	0.00	0.25	1.42	98.27	0.25
-2	2	2	3	131	3	0.09	3674	2400	0.56	28	0	0	54	97.18	0.00	0.00	0.27	1.50	98.14	0.25	99.59	31	0
-2	2	2	3	387	3	0.09	3727	2400	0.68	26	0	0	45	96.55	0.00	0.00	0.25	1.42	98.25	0.25
-2	2	2	4	132	4	0.11	3774	2400	0.51	25	0	0	59	96.64	0.00	0.00	0.00	1.49	98.41	0.06	99.74	33	0
-2	2	2	4	388	4	0.10	3686	2400	0.47	37	0	0	68	98.05	0.00	0.00	0.05	2.51	97.35	0.06
-2	2	2	5	133	6	0.16	3699	2400	0.40	41	0	0	67	89.31	0.00	0.00	0.53	1.96	97.37	0.66	99.13	32	0
-2	2	2	5	389	3	0.09	3619	2400	0.54	36	0	0	47	96.37	0.00	0.00	0.27	2.28	97.37	0.66
-2	2	2	6	134	4	0.11	3621	2400	0.50	37	0	0	61	97.49	0.00	0.00	0.24	2.27	97.39	0.29	99.52	31	0
-2	2	2	6	390	4	0.12	3684	2400	0.47	36	0	0	64	96.59	0.00	0.00	0.29	2.19	97.41	0.29
-2	2	2	7	135	4	0.12	3677	2400	0.47	34	0	0	62	97.26	0.00	0.00	0.00	2.27	97.62	0.00	99.82	32	0
-2	2	2	7	391	4	0.10	3688	2400	0.51	33	0	0	59	97.58	0.00	0.00	0.00	2.27	97.64	0.00
-2	2	2	8	136	4	0.11	3633	2400	0.50	34	0	0	63	97.57	0.00	0.00	0.03	2.27	97.60	0.02	99.82	32	0
-2	2	2	8	392	3	0.09	3623	2400	0.53	34	0	0	51	97.66	0.00	0.00	0.02	2.27	97.63	0.02
-2	2	2	9	137	5	0.14	3715	2400	0.44	34	0	0	73	94.68	0.00	0.00	0.03	2.12	97.72	0.00	99.79	31	0
-2	2	2	9	393	4	0.11	3694	2400	0.43	31	0	0	50	93.32	0.00	0.00	0.00	2.12	97.79	0.00
-2	2	2	10	138	4	0.11	3602	2400	0.51	33	0	0	58	97.37	0.00	0.00	0.28	1.89	97.74	0.27	99.59	32	0
-2	2	2	10	394	3	0.08	3588	2400	0.57	31	0	0	43	97.49	0.00	0.00	0.27	1.89	97.78	0.27
-2	2	2	11	139	4	0.10	3621	2400	0.53	32	0	0	74	93.30	0.00	0.00	0.26	1.85	97.80	0.29	99.56	32	0
-2	2	2	11	395	3	0.09	3617	2400	0.55	30	0	0	59	91.98	0.00	0.00	0.29	1.73	97.91	0.29
-2	2	2	12	140	5	0.13	3737	2400	0.47	31	0	0	60	94.55	0.00	0.00	0.24	1.71	97.94	0.37	99.47	31	0
-2	2	2	12	396	3	0.07	3647	2400	0.62	30	0	0	37	97.25	0.00	0.00	0.29	1.65	97.99	0.37
-2	2	2	13	141	4	0.10	3731	2400	0.57	30	0	0	60	97.62	0.00	0.00	0.02	1.96	97.93	0.23	99.62	31	0
-2	2	2	13	397	3	0.09	3724	2400	0.61	29	0	0	46	97.04	0.00	0.00	0.23	1.73	97.96	0.23
-2	2	2	14	142	5	0.12	3660	2400	0.45	42	0	0	68	97.87	0.00	0.00	0.04	2.75	97.11	0.03	99.80	31	0
-2	2	2	14	398	4	0.10	3639	2400	0.51	43	0	0	52	97.37	0.00	0.00	0.03	2.75	97.14	0.03
-2	2	2	15	143	4	0.10	3671	2400	0.52	30	0	0	56	97.15	0.00	0.00	0.00	1.88	98.03	0.06	99.76	32	0
-2	2	2	15	399	4	0.11	3658	2400	0.46	39	0	0	66	97.49	0.00	0.00	0.05	2.67	97.19	0.06
-2	2	2	16	144	4	0.12	3698	2400	0.50	29	0	0	64	97.24	0.00	0.00	0.00	1.87	98.02	0.02	99.80	32	0
-2	2	2	16	400	4	0.11	3655	2400	0.45	41	0	0	72	97.89	0.00	0.00	0.00	2.80	97.10	0.02
-2	2	2	17	145	4	0.11	3674	2400	0.53	27	0	0	55	96.49	0.00	0.00	0.32	1.40	98.18	0.37	99.44	33	0
-2	2	2	17	401	4	0.12	3664	2400	0.45	37	0	0	62	95.63	0.00	0.00	0.29	2.28	97.33	0.37
-2	2	2	18	146	4	0.11	3702	2400	0.53	26	0	0	59	97.37	0.00	0.00	0.00	1.64	98.26	0.01	99.81	32	0
-2	2	2	18	402	4	0.10	3656	2400	0.47	36	0	0	64	98.04	0.00	0.00	0.00	2.49	97.42	0.01
-2	2	2	19	147	4	0.11	3725	2400	0.56	25	0	0	66	97.36	0.00	0.00	0.01	1.50	98.39	0.00	99.84	32	0
-2	2	2	19	403	3	0.07	3663	2400	0.64	23	0	0	39	97.04	0.00	0.00	0.00	1.49	98.45	0.00
-2	2	2	20	148	4	0.11	3672	2400	0.56	24	0	0	57	96.21	0.00	0.00	0.28	1.24	98.38	0.32	99.53	31	0
-2	2	2	20	404	3	0.08	3648	2400	0.67	23	0	0	41	96.46	0.00	0.00	0.24	1.26	98.43	0.32
-2	2	2	21	149	4	0.12	3675	2400	0.47	36	0	0	84	94.10	0.00	0.00	0.43	1.97	97.49	0.42	99.40	32	0
-2	2	2	21	405	4	0.11	3696	2400	0.50	35	0	0	74	94.45	0.00	0.00	0.04	2.43	97.43	0.42
-2	2	2	22	150	5	0.13	3710	2400	0.46	36	0	0	71	97.18	0.00	0.00	0.00	2.27	97.62	0.01	99.81	30	0
-2	2	2	22	406	4	0.10	3672	2400	0.53	33	0	0	53	97.64	0.00	0.00	0.00	2.26	97.65	0.01
-2	2	2	23	151	4	0.11	3673	2400	0.51	35	0	0	66	98.04	0.00	0.00	0.00	2.35	97.55	0.01	99.83	30	0
-2	2	2	23	407	3	0.09	3662	2400	0.52	34	0	0	51	97.90	0.00	0.00	0.00	2.34	97.58	0.01
-2	2	2	24	152	4	0.11	3700	2400	0.46	32	0	0	60	97.32	0.00	0.00	0.00	2.12	97.78	0.00	99.79	29	0
-2	2	2	24	408	5	0.14	3741	2400	0.41	33	0	0	75	96.44	0.00	0.00	0.00	2.11	97.77	0.00
-2	2	2	25	153	6	0.17	3668	2400	0.38	31	0	0	100	97.75	0.00	0.00	0.26	1.81	97.81	0.29	95.46	30	0
-2	2	2	25	409	154	3.96	3880	2400	0.33	82	0	0	3088	90.63	0.00	0.00	0.28	1.73	94.09	0.29
-2	2	2	26	154	5	0.13	3694	2400	0.44	31	0	0	65	94.08	0.00	0.00	0.03	2.04	97.81	0.02	99.75	30	0
-2	2	2	26	410	5	0.14	3735	2400	0.47	31	0	0	71	95.20	0.00	0.00	0.02	2.03	97.83	0.02
-2	2	2	27	155	6	0.17	3726	2400	0.73	33	0	0	112	83.06	0.00	0.00	0.04	1.81	97.99	0.20	99.59	31	0
-2	2	2	27	411	4	0.12	3724	2400	0.46	29	0	0	81	90.44	0.00	0.00	0.17	1.71	98.01	0.20
-2	2	2	28	156	4	0.11	3673	2400	0.50	29	0	0	60	98.06	0.00	0.00	0.06	1.88	97.97	0.05	99.80	31	0
-2	2	2	28	412	3	0.08	3657	2400	0.56	28	0	0	44	97.33	0.00	0.00	0.04	1.88	98.00	0.05
-2	2	2	29	157	4	0.12	3723	2400	0.48	30	0	0	64	95.14	0.00	0.00	0.00	1.95	97.94	0.05	99.77	31	0
-2	2	2	29	413	3	0.08	3601	2400	0.67	27	0	0	47	97.35	0.00	0.00	0.05	1.72	98.16	0.05
-2	2	2	30	158	4	0.10	3711	2400	0.59	26	0	0	59	98.06	0.00	0.00	0.00	1.72	98.19	0.03	99.80	31	0
-2	2	2	30	414	4	0.10	3689	2400	0.48	41	0	0	74	98.53	0.00	0.00	0.00	2.81	97.10	0.03
-2	2	2	31	159	4	0.10	3726	2400	0.60	25	0	0	56	97.64	0.00	0.00	0.29	1.36	98.26	0.31	99.52	31	0
-2	2	2	31	415	4	0.10	3705	2400	0.50	38	0	0	65	98.35	0.00	0.00	0.00	2.66	97.26	0.31
-2	2	2	64	160	3	0.09	3748	2400	0.57	24	0	0	48	96.98	0.00	0.00	0.30	1.31	98.31	0.41	99.46	30	0
-2	2	2	64	416	3	0.07	3745	2400	0.61	25	0	0	36	96.31	0.00	0.00	0.25	1.42	98.26	0.41
-2	2	2	65	161	4	0.11	3762	2400	0.45	25	0	0	53	94.71	0.00	0.00	0.27	1.35	98.28	0.26	99.59	30	0
-2	2	2	65	417	3	0.08	3758	2400	0.66	25	0	0	41	97.13	0.00	0.00	0.26	1.34	98.33	0.26
-2	2	2	66	162	4	0.11	3770	2400	0.53	24	0	0	54	97.01	0.00	0.00	0.29	1.26	98.35	0.30	99.54	32	0
-2	2	2	66	418	4	0.10	3687	2400	0.48	36	0	0	61	98.30	0.00	0.00	0.05	2.44	97.42	0.30
-2	2	2	67	163	4	0.09	3794	2400	0.58	22	0	0	53	97.48	0.00	0.00	0.02	1.41	98.49	0.01	99.85	30	0
-2	2	2	67	419	3	0.08	3791	2400	0.63	23	0	0	39	96.85	0.00	0.00	0.01	1.41	98.52	0.01
-2	2	2	68	164	4	0.11	3657	2400	0.49	35	0	0	77	98.08	0.00	0.00	0.26	2.14	97.50	0.27	99.57	29	0
-2	2	2	68	420	2	0.06	3717	2400	0.69	21	0	0	33	96.96	0.00	0.00	0.27	1.10	98.57	0.27
-2	2	2	69	165	3	0.09	3718	2400	0.57	22	0	0	48	96.99	0.00	0.00	0.24	1.17	98.52	0.28	99.56	29	0
-2	2	2	69	421	3	0.09	3655	2400	0.53	33	0	0	60	97.57	0.00	0.00	0.28	2.05	97.59	0.28
-2	2	2	70	166	6	0.15	3731	2400	0.43	33	0	0	75	95.20	0.00	0.00	0.24	2.05	97.58	0.24	99.57	30	0
-2	2	2	70	422	3	0.09	3633	2400	0.48	34	0	0	46	97.33	0.00	0.00	0.00	2.35	97.57	0.24
-2	2	2	71	167	4	0.11	3651	2400	0.49	33	0	0	62	97.43	0.00	0.00	0.11	2.20	97.59	0.27	99.57	30	0
-2	2	2	71	423	3	0.09	3619	2400	0.53	35	0	0	49	97.38	0.00	0.00	0.25	2.12	97.55	0.27
-2	2	2	72	168	4	0.11	3653	2400	0.48	34	0	0	67	97.99	0.00	0.00	0.05	2.28	97.57	0.04	99.79	30	0
-2	2	2	72	424	3	0.09	3631	2400	0.53	34	0	0	53	97.71	0.00	0.00	0.04	2.36	97.53	0.04
-2	2	2	73	169	4	0.10	3639	2400	0.54	32	0	0	58	97.72	0.00	0.00	0.16	2.04	97.71	0.30	99.55	29	0
-2	2	2	73	425	3	0.08	3626	2400	0.57	32	0	0	44	97.13	0.00	0.14	0.08	1.97	97.74	0.30
-2	2	2	74	170	4	0.12	3698	2400	0.50	33	0	0	68	97.66	0.00	0.00	0.01	2.11	97.77	0.01	99.83	29	0
-2	2	2	74	426	3	0.10	3673	2400	0.49	31	0	0	49	97.51	0.00	0.00	0.00	2.11	97.80	0.01
-2	2	2	75	171	5	0.13	3728	2400	0.46	31	0	0	70	96.16	0.00	0.00	0.01	2.11	97.76	0.02	99.81	30	0
-2	2	2	75	427	3	0.09	3678	2400	0.51	31	0	0	46	96.96	0.00	0.00	0.00	2.11	97.81	0.02
-2	2	2	76	172	4	0.11	3635	2400	0.51	29	0	0	56	97.23	0.00	0.00	0.33	1.65	97.92	0.32	99.52	29	0
-2	2	2	76	428	3	0.10	3647	2400	0.56	31	0	0	53	97.00	0.00	0.00	0.24	1.89	97.79	0.32
-2	2	2	77	173	4	0.11	3664	2400	0.52	28	0	0	53	96.79	0.00	0.00	0.40	1.44	98.06	0.41	99.43	30	0
-2	2	2	77	429	3	0.09	3655	2400	0.59	28	0	0	43	96.63	0.00	0.00	0.25	1.58	98.09	0.41
-2	2	2	78	174	5	0.12	3679	2400	0.48	40	0	0	83	98.25	0.00	0.00	0.15	2.66	97.08	0.28	99.54	32	0
-2	2	2	78	430	3	0.08	3657	2400	0.63	29	0	0	57	93.82	0.00	0.00	0.28	1.57	98.07	0.28
-2	2	2	79	175	4	0.11	3721	2400	0.54	28	0	0	62	97.41	0.00	0.00	0.01	1.80	98.09	0.01	99.85	31	0
-2	2	2	79	431	3	0.08	3691	2400	0.56	27	0	0	42	97.15	0.00	0.00	0.00	1.72	98.21	0.01
-2	2	2	80	176	5	0.14	3714	2400	0.44	40	0	0	80	95.68	0.00	0.00	0.22	2.55	97.11	0.40	99.41	29	0
-2	2	2	80	432	2	0.07	3645	2400	0.68	26	0	0	35	96.94	0.00	0.00	0.24	1.42	98.28	0.40
-2	2	2	81	177	4	0.11	3656	2400	0.49	38	0	0	72	98.11	0.00	0.00	0.28	2.36	97.27	0.26	99.57	30	0
-2	2	2	81	433	3	0.07	3653	2400	0.62	24	0	0	37	96.25	0.00	0.00	0.26	1.34	98.33	0.26
-2	2	2	82	178	3	0.09	3672	2400	0.55	28	0	0	50	97.07	0.00	0.00	0.13	1.58	98.20	0.17	99.70	29	0
-2	2	2	82	434	3	0.07	3625	2400	0.62	26	0	0	38	97.12	0.00	0.00	0.05	1.65	98.23	0.17
-2	2	2	83	179	7	0.18	3764	2400	0.29	40	0	0	87	93.48	0.00	0.00	0.03	2.59	97.21	0.03	99.75	30	0
-2	2	2	83	435	3	0.07	3682	2400	0.63	23	0	0	36	97.07	0.00	0.00	0.02	1.42	98.50	0.03
-2	2	2	84	180	5	0.13	3711	2400	0.40	36	0	0	65	95.49	0.00	0.00	0.13	2.36	97.40	0.27	99.55	30	0
-2	2	2	84	436	3	0.09	3702	2400	0.52	36	0	0	49	97.65	0.00	0.00	0.27	2.20	97.45	0.27
-2	2	2	85	181	4	0.10	3703	2400	0.53	34	0	0	60	97.95	0.00	0.00	0.00	2.36	97.56	0.06	99.78	28	0
-2	2	2	85	437	3	0.09	3682	2400	0.53	34	0	0	51	97.63	0.00	0.00	0.06	2.28	97.58	0.06
-2	2	2	86	182	4	0.11	3684	2400	0.47	35	0	0	61	97.78	0.00	0.00	0.01	2.36	97.53	0.01	99.84	31	0
-2	2	2	86	438	3	0.09	3657	2400	0.47	34	0	0	48	97.67	0.00	0.00	0.00	2.28	97.64	0.01
-2	2	2	87	183	3	0.09	3576	2400	0.53	35	0	0	54	97.75	0.00	0.00	0.21	2.20	97.51	0.25	99.59	28	0
-2	2	2	87	439	3	0.10	3654	2400	0.59	33	0	0	54	97.26	0.00	0.00	0.25	2.05	97.62	0.25
-2	2	2	88	184	4	0.10	3661	2400	0.53	34	0	0	58	97.51	0.00	0.00	0.07	2.12	97.72	0.33	99.49	29	0
-2	2	2	88	440	4	0.11	3706	2400	0.50	33	0	0	55	94.37	0.00	0.00	0.26	2.05	97.60	0.33
-2	2	2	89	185	4	0.10	3610	2400	0.53	32	0	0	57	97.73	0.00	0.00	0.26	1.93	97.72	0.36	99.49	29	0
-2	2	2	89	441	3	0.09	3607	2400	0.62	30	0	0	50	97.55	0.00	0.00	0.28	1.81	97.83	0.36
-2	2	2	90	186	4	0.11	3688	2400	0.51	32	0	0	63	97.95	0.00	0.00	0.01	2.03	97.86	0.00	99.84	28	0
-2	2	2	90	442	3	0.09	3664	2400	0.51	30	0	0	48	97.67	0.00	0.00	0.00	2.03	97.89	0.00
-2	2	2	91	187	4	0.11	3696	2400	0.48	30	0	0	58	97.10	0.00	0.00	0.02	2.04	97.85	0.01	99.83	29	0
-2	2	2	91	443	4	0.10	3697	2400	0.54	31	0	0	51	97.40	0.00	0.00	0.00	2.04	97.88	0.01
-2	2	2	92	188	4	0.10	3637	2400	0.53	29	0	0	66	94.01	0.00	0.00	0.26	1.67	97.98	0.25	99.54	31	0
-2	2	2	92	444	5	0.13	3734	2400	0.44	41	0	0	96	92.26	0.00	0.00	0.25	2.67	96.97	0.25
-2	2	2	93	189	5	0.14	3706	2400	0.39	42	0	0	83	97.89	0.00	0.00	0.05	2.82	97.01	0.04	99.77	30	0
-2	2	2	93	445	3	0.09	3691	2400	0.52	28	0	0	43	96.91	0.00	0.00	0.03	1.81	98.08	0.04
-2	2	2	94	190	4	0.11	3722	2400	0.54	30	0	0	60	97.31	0.00	0.00	0.07	1.81	98.03	0.14	99.67	31	0
-2	2	2	94	446	4	0.11	3701	2400	0.46	40	0	0	71	97.71	0.00	0.00	0.06	2.75	97.10	0.14
-2	2	2	95	191	4	0.10	3752	2400	0.51	26	0	0	51	97.08	0.00	0.00	0.00	1.73	98.18	0.08	99.74	31	0
-2	2	2	95	447	4	0.11	3736	2400	0.43	41	0	0	73	98.25	0.00	0.00	0.07	2.74	97.09	0.08
-3	3	3	0	192	3	0.09	3671	2400	0.80	26	0	0	56	95.82	0.00	0.00	0.03	1.74	98.15	0.13	99.06	32	0	39	47.78	0.00	59.74	1.64	0.00	0.00	1200	1200	800	800
-3	3	3	0	448	26	0.67	3847	2400	1.03	95	0	0	344	90.64	0.00	0.00	0.05	7.56	91.76	0.13
-3	3	3	1	193	4	0.10	3598	2400	0.56	38	0	0	77	97.69	0.00	0.00	0.19	2.47	97.25	0.28	99.57	31	0
-3	3	3	1	449	3	0.07	3664	2400	0.74	24	0	0	44	96.01	0.00	0.00	0.28	1.43	98.23	0.28
-3	3	3	2	194	3	0.08	3690	2400	0.72	24	0	0	50	96.01	0.00	0.00	0.31	1.28	98.34	0.31	99.58	31	0
-3	3	3	2	450	2	0.06	3688	2400	0.72	24	0	0	36	95.74	0.00	0.00	0.00	1.58	98.36	0.31
-3	3	3	3	195	3	0.07	3596	2400	0.73	24	0	0	45	96.57	0.00	0.00	0.27	1.35	98.32	0.26	99.60	31	0
-3	3	3	3	451	3	0.09	3705	2400	0.58	23	0	0	48	91.50	0.00	0.00	0.26	1.35	98.31	0.26
-3	3	3	4	196	3	0.09	3556	2400	0.62	36	0	0	72	97.76	0.00	0.00	0.29	2.23	97.41	0.42	99.45	31	0
-3	3	3	4	452	2	0.05	3614	2400	0.84	23	0	0	33	95.30	0.00	0.00	0.29	1.19	98.47	0.42
-3	3	3	5	197	3	0.10	3605	2400	0.56	37	0	0	75	97.92	0.00	0.00	0.01	2.45	97.46	0.00	99.85	33	0
-3	3	3	5	453	2	0.06	3664	2400	0.72	22	0	0	39	96.28	0.00	0.00	0.00	1.42	98.52	0.00
-3	3	3	6	198	3	0.09	3569	2400	0.59	34	0	0	59	97.26	0.00	0.00	0.04	2.37	97.51	0.03	99.84	31	0
-3	3	3	6	454	3	0.08	3561	2400	0.60	34	0	0	52	97.12	0.00	0.00	0.02	2.37	97.54	0.03
-3	3	3	7	199	3	0.09	3530	2400	0.61	35	0	0	63	97.42	0.00	0.00	0.00	2.43	97.49	0.05	99.81	30	0
-3	3	3	7	455	3	0.09	3546	2400	0.59	34	0	0	51	96.78	0.00	0.00	0.05	2.37	97.51	0.05
-3	3	3	8	200	3	0.10	3603	2400	0.58	33	0	0	62	97.25	0.00	0.00	0.01	2.29	97.62	0.02	99.84	32	0
-3	3	3	8	456	3	0.08	3596	2400	0.61	34	0	0	48	96.72	0.00	0.00	0.00	2.29	97.64	0.02
-3	3	3	9	201	4	0.10	3624	2400	0.59	34	0	0	66	97.22	0.00	0.00	0.04	2.36	97.52	0.02	99.83	30	0
-3	3	3	9	457	3	0.09	3623	2400	0.61	34	0	0	56	97.06	0.00	0.00	0.02	2.36	97.54	0.02
-3	3	3	10	202	3	0.08	3587	2400	0.67	32	0	0	62	97.52	0.00	0.00	0.00	2.20	97.72	0.05	99.81	30	0
-3	3	3	10	458	3	0.08	3625	2400	0.58	35	0	0	53	95.36	0.00	0.00	0.05	2.21	97.67	0.05
-3	3	3	11	203	3	0.09	3639	2400	0.67	32	0	0	69	97.42	0.00	0.00	0.01	2.21	97.71	0.00	99.83	30	0
-3	3	3	11	459	4	0.10	3704	2400	0.55	32	0	0	68	95.92	0.00	0.00	0.00	2.13	97.78	0.00
-3	3	3	12	204	3	0.09	3646	2400	0.62	30	0	0	57	97.06	0.00	0.00	0.04	2.05	97.83	0.03	99.84	29	0
-3	3	3	12	460	3	0.08	3644	2400	0.61	31	0	0	50	96.79	0.00	0.00	0.02	2.13	97.78	0.03
-3	3	3	13	205	4	0.10	3706	2400	0.56	31	0	0	61	95.88	0.00	0.00	0.47	1.74	97.71	0.51	99.33	31	0
-3	3	3	13	461	3	0.08	3681	2400	0.73	29	0	0	60	95.14	0.00	0.00	0.05	1.97	97.91	0.51
-3	3	3	14	206	4	0.10	3685	2400	0.60	28	0	0	79	93.38	0.00	0.00	0.02	1.98	97.91	0.01	99.84	30	0
-3	3	3	14	462	3	0.07	3632	2400	0.65	30	0	0	64	93.66	0.00	0.00	0.01	2.05	97.88	0.01
-3	3	3	15	207	3	0.08	3610	2400	0.69	29	0	0	54	96.96	0.00	0.00	0.21	1.74	97.99	0.19	99.68	30	0
-3	3	3	15	463	3	0.07	3625	2400	0.72	28	0	0	58	95.63	0.00	0.00	0.04	1.89	98.01	0.19
-3	3	3	16	208	4	0.10	3677	2400	0.62	28	0	0	65	95.13	0.00	0.00	0.06	1.92	97.94	0.28	99.53	31	0
-3	3	3	16	464	4	0.10	3673	2400	0.50	47	0	0	81	98.12	0.00	0.00	0.28	3.09	96.54	0.28
-3	3	3	17	209	3	0.09	3645	2400	0.61	27	0	0	58	96.15	0.00	0.00	0.26	1.58	98.08	0.25	99.62	31	0
-3	3	3	17	465	2	0.07	3599	2400	0.68	27	0	0	40	96.63	0.00	0.00	0.25	1.58	98.11	0.25
-3	3	3	18	210	4	0.12	3630	2400	0.49	45	0	0	88	98.07	0.00	0.00	0.33	2.86	96.70	0.40	99.42	31	0
-3	3	3	18	466	3	0.08	3649	2400	0.69	26	0	0	44	96.17	0.00	0.00	0.27	1.50	98.16	0.40
-3	3	3	19	211	3	0.08	3659	2400	0.66	28	0	0	53	97.38	0.00	0.00	0.01	1.73	98.18	0.02	99.86	33	0
-3	3	3	19	467	3	0.07	3642	2400	0.67	27	0	0	41	96.90	0.00	0.00	0.00	1.73	98.21	0.02
-3	3	3	20	212	3	0.08	3654	2400	0.64	26	0	0	54	96.74	0.00	0.00	0.03	1.73	98.16	0.02	99.86	31	0
-3	3	3	20	468	3	0.07	3655	2400	0.64	25	0	0	43	96.75	0.00	0.00	0.01	1.66	98.27	0.02
-3	3	3	21	213	5	0.13	3677	2400	0.51	42	0	0	91	97.61	0.00	0.00	0.17	2.88	96.85	0.38	99.43	32	0
-3	3	3	21	469	3	0.08	3660	2400	0.69	25	0	0	43	96.05	0.00	0.00	0.27	1.42	98.24	0.38
-3	3	3	22	214	3	0.08	3666	2400	0.65	24	0	0	65	94.10	0.00	0.00	0.08	1.51	98.34	0.08	99.79	32	0
-3	3	3	22	470	3	0.07	3656	2400	0.65	27	0	0	60	93.11	0.00	0.00	0.00	1.65	98.29	0.08
-3	3	3	23	215	3	0.08	3529	2400	0.67	23	0	0	47	96.30	0.00	0.00	0.28	1.26	98.39	0.26	98.99	30	0
-3	3	3	23	471	27	0.69	3862	2400	0.83	29	0	0	222	84.47	0.00	0.00	0.03	1.50	97.79	0.26
-3	3	3	24	216	3	0.07	3627	2400	0.71	26	0	0	68	95.31	0.00	0.00	0.00	1.58	98.36	0.05	99.79	30	0
-3	3	3	24	472	3	0.09	3643	2400	0.53	41	0	0	83	96.54	0.00	0.00	0.04	2.85	97.02	0.05
-3	3	3	25	217	3	0.09	3631	2400	0.68	24	0	0	52	96.72	0.00	0.00	0.03	1.41	98.48	0.02	99.85	30	0
-3	3	3	25	473	3	0.08	3621	2400	0.70	24	0	0	47	96.68	0.00	0.00	0.02	1.57	98.35	0.02
-3	3	3	26	218	3	0.07	3616	2400	0.69	24	0	0	48	96.16	0.00	0.00	0.00	1.41	98.52	0.10	99.74	31	0
-3	3	3	26	474	3	0.09	3626	2400	0.52	41	0	0	71	97.93	0.00	0.00	0.10	2.79	97.03	0.10
-3	3	3	27	219	4	0.10	3676	2400	0.53	40	0	0	66	97.60	0.00	0.00	0.06	2.71	97.14	0.05	99.79	32	0
-3	3	3	27	475	3	0.09	3688	2400	0.53	39	0	0	59	97.42	0.00	0.00	0.05	2.70	97.17	0.05
-3	3	3	28	220	4	0.11	3620	2400	0.57	38	0	0	69	97.09	0.00	0.00	0.09	2.62	97.20	0.36	99.48	30	0
-3	3	3	28	476	4	0.10	3665	2400	0.57	43	0	0	62	97.36	0.00	0.00	0.34	2.70	96.87	0.36
-3	3	3	29	221	4	0.10	3662	2400	0.53	40	0	0	63	97.47	0.00	0.00	0.09	2.59	97.24	0.15	99.69	32	0
-3	3	3	29	477	3	0.09	3644	2400	0.53	38	0	0	55	96.94	0.00	0.00	0.10	2.55	97.27	0.15
-3	3	3	30	222	4	0.10	3711	2400	0.54	38	0	0	65	95.36	0.00	0.00	0.52	2.17	97.23	0.51	99.34	31	0
-3	3	3	30	478	3	0.09	3736	2400	0.54	37	0	0	49	96.74	0.00	0.00	0.05	2.63	97.25	0.51
-3	3	3	31	223	4	0.10	3646	2400	0.54	36	0	0	63	97.35	0.00	0.00	0.08	2.47	97.36	0.07	99.77	31	0
-3	3	3	31	479	4	0.09	3715	2400	0.56	36	0	0	60	97.31	0.00	0.00	0.07	2.47	97.38	0.07
-3	3	3	64	224	4	0.10	3687	2400	0.55	36	0	0	61	97.32	0.00	0.00	0.04	2.47	97.40	0.16	99.68	33	0
-3	3	3	64	480	4	0.10	3705	2400	0.46	37	0	0	54	94.22	0.00	0.00	0.16	2.40	97.35	0.16
-3	3	3	65	225	4	0.11	3693	2400	0.51	36	0	0	82	94.36	0.00	0.00	0.28	2.25	97.39	0.28	99.57	32	0
-3	3	3	65	481	3	0.08	3679	2400	0.57	35	0	0	53	94.13	0.00	0.00	0.04	2.40	97.49	0.28
-3	3	3	66	226	5	0.13	3736	2400	0.49	34	0	0	101	92.70	0.00	0.00	0.13	2.23	97.53	0.12	99.66	33	0
-3	3	3	66	482	5	0.13	3710	2400	0.41	49	0	0	95	90.84	0.00	0.00	0.04	3.48	96.36	0.12
-3	3	3	67	227	4	0.10	3693	2400	0.50	33	0	0	57	97.10	0.00	0.00	0.05	2.25	97.61	0.04	99.81	32	0
-3	3	3	67	483	3	0.09	3685	2400	0.50	33	0	0	50	97.31	0.00	0.00	0.04	2.24	97.64	0.04
-3	3	3	68	228	5	0.13	3668	2400	0.44	48	0	0	94	94.02	0.00	0.00	0.32	3.10	96.47	0.29	99.50	31	0
-3	3	3	68	484	3	0.09	3683	2400	0.59	32	0	0	69	93.77	0.00	0.00	0.06	2.25	97.61	0.29
-3	3	3	69	229	5	0.12	3678	2400	0.45	47	0	0	88	97.99	0.00	0.00	0.04	3.33	96.53	0.33	99.50	31	0
-3	3	3	69	485	3	0.08	3674	2400	0.57	34	0	0	49	97.09	0.00	0.00	0.33	2.01	97.60	0.33
-3	3	3	70	230	4	0.10	3665	2400	0.59	31	0	0	60	97.31	0.00	0.00	0.28	1.85	97.78	0.27	99.59	31	0
-3	3	3	70	486	3	0.08	3654	2400	0.56	31	0	0	43	96.86	0.00	0.00	0.04	2.08	97.81	0.27
-3	3	3	71	231	4	0.11	3738	2400	0.53	30	0	0	62	94.53	0.00	0.00	0.42	1.74	97.74	0.39	99.44	31	0
-3	3	3	71	487	4	0.10	3726	2400	0.59	29	0	0	48	93.08	0.00	0.00	0.04	2.01	97.86	0.39
-3	3	3	72	232	3	0.09	3654	2400	0.63	29	0	0	76	95.57	0.00	0.00	0.30	1.71	97.91	0.31	99.55	32	0
-3	3	3	72	488	3	0.07	3644	2400	0.63	29	0	0	56	94.72	0.00	0.00	0.15	1.86	97.93	0.31
-3	3	3	73	233	3	0.09	3673	2400	0.58	31	0	0	57	97.66	0.00	0.00	0.04	2.08	97.80	0.10	99.77	32	0
-3	3	3	73	489	3	0.08	3656	2400	0.62	30	0	0	45	97.38	0.00	0.00	0.09	1.94	97.91	0.10
-3	3	3	74	234	4	0.11	3716	2400	0.55	29	0	0	60	97.01	0.00	0.00	0.04	1.92	97.94	0.05	99.77	30	0
-3	3	3	74	490	4	0.10	3685	2400	0.44	44	0	0	69	97.83	0.00	0.00	0.04	3.02	96.85	0.05
-3	3	3	75	235	4	0.11	3688	2400	0.54	26	0	0	77	95.10	0.00	0.00	0.29	1.55	98.07	0.28	99.57	33	0
-3	3	3	75	491	3	0.08	3650	2400	0.63	28	0	0	73	94.91	0.00	0.00	0.27	1.54	98.11	0.28
-3	3	3	76	236	5	0.12	3662	2400	0.44	42	0	0	67	97.58	0.00	0.00	0.22	2.73	96.94	0.29	99.52	32	0
-3	3	3	76	492	4	0.12	3680	2400	0.49	42	0	0	62	97.25	0.00	0.00	0.29	2.63	96.97	0.29
-3	3	3	77	237	4	0.11	3647	2400	0.48	41	0	0	61	97.67	0.00	0.00	0.04	2.87	97.01	0.32	99.52	30	0
-3	3	3	77	493	4	0.10	3653	2400	0.50	42	0	0	57	97.63	0.00	0.00	0.31	2.56	97.04	0.32
-3	3	3	78	238	5	0.14	3709	2400	0.42	40	0	0	95	89.55	0.00	0.00	0.07	2.75	97.06	0.09	99.71	33	0
-3	3	3	78	494	4	0.11	3687	2400	0.46	41	0	0	76	95.15	0.00	0.00	0.08	2.79	97.04	0.09
-3	3	3	79	239	5	0.13	3689	2400	0.46	40	0	0	73	97.34	0.00	0.00	0.26	2.56	97.06	0.26	99.57	32	0
-3	3	3	79	495	4	0.11	3666	2400	0.46	41	0	0	57	97.58	0.00	0.00	0.04	2.78	97.09	0.26
-3	3	3	80	240	4	0.12	3677	2400	0.45	41	0	0	88	95.21	0.00	0.00	0.27	2.67	96.96	0.26	99.57	31	0
-3	3	3	80	496	4	0.10	3673	2400	0.49	41	0	0	75	94.77	0.00	0.00	0.06	2.80	97.06	0.26
-3	3	3	81	241	5	0.12	3694	2400	0.51	38	0	0	87	91.90	0.00	0.00	0.55	2.10	97.23	0.53	99.29	32	0
-3	3	3	81	497	4	0.10	3672	2400	0.54	38	0	0	68	94.53	0.00	0.00	0.08	2.55	97.28	0.53
-3	3	3	82	242	5	0.12	3702	2400	0.43	37	0	0	65	95.40	0.00	0.00	0.04	2.54	97.31	0.09	99.74	33	0
-3	3	3	82	498	3	0.09	3658	2400	0.51	39	0	0	50	97.30	0.00	0.00	0.09	2.48	97.35	0.09
-3	3	3	83	243	4	0.11	3701	2400	0.46	37	0	0	63	97.44	0.00	0.00	0.05	2.55	97.30	0.04	99.80	32	0
-3	3	3	83	499	4	0.10	3694	2400	0.46	38	0	0	54	97.71	0.00	0.00	0.04	2.55	97.32	0.04
-3	3	3	84	244	4	0.11	3635	2400	0.49	38	0	0	66	91.95	0.00	0.00	0.32	2.32	97.27	0.27	99.54	32	0
-3	3	3	84	500	4	0.11	3691	2400	0.50	38	0	0	57	94.08	0.00	0.00	0.27	2.16	97.46	0.27
-3	3	3	85	245	4	0.12	3677	2400	0.48	36	0	0	67	97.38	0.00	0.00	0.08	2.39	97.42	0.07	99.76	31	0
-3	3	3	85	501	4	0.10	3682	2400	0.51	37	0	0	55	97.18	0.00	0.00	0.07	2.39	97.46	0.07
-3	3	3	86	246	4	0.10	3673	2400	0.53	35	0	0	61	97.57	0.00	0.00	0.04	2.31	97.56	0.09	99.75	31	0
-3	3	3	86	502	3	0.09	3665	2400	0.52	37	0	0	55	97.64	0.00	0.00	0.09	2.40	97.43	0.09
-3	3	3	87	247	4	0.10	3700	2400	0.53	33	0	0	60	97.61	0.00	0.00	0.05	2.25	97.61	0.04	99.81	31	0
-3	3	3	87	503	3	0.09	3699	2400	0.53	33	0	0	51	96.89	0.00	0.00	0.04	2.25	97.64	0.04
-3	3	3	88	248	4	0.10	3682	2400	0.53	33	0	0	54	97.27	0.00	0.00	0.29	1.95	97.67	0.45	99.40	32	0
-3	3	3	88	504	3	0.08	3724	2400	0.54	34	0	0	45	96.36	0.00	0.00	0.31	2.00	97.62	0.45
-3	3	3	89	249	4	0.10	3650	2400	0.53	32	0	0	59	97.27	0.00	0.00	0.09	2.09	97.73	0.08	99.77	31	0
-3	3	3	89	505	3	0.09	3652	2400	0.58	32	0	0	52	97.12	0.00	0.00	0.08	2.08	97.76	0.08
-3	3	3	90	250	4	0.11	3692	2400	0.50	31	0	0	57	97.15	0.00	0.00	0.04	2.08	97.79	0.05	99.80	32	0
-3	3	3	90	506	3	0.09	3651	2400	0.53	33	0	0	51	97.18	0.00	0.00	0.04	2.14	97.74	0.05
-3	3	3	91	251	3	0.09	3698	2400	0.58	32	0	0	56	97.55	0.00	0.00	0.05	2.09	97.78	0.04	99.82	31	0
-3	3	3	91	507	3	0.08	3700	2400	0.57	33	0	0	49	97.51	0.00	0.00	0.04	2.17	97.73	0.04
-3	3	3	92	252	4	0.11	3689	2400	0.54	28	0	0	61	97.20	0.00	0.00	0.07	1.93	97.90	0.06	99.78	31	0
-3	3	3	92	508	3	0.09	3687	2400	0.61	30	0	0	51	97.32	0.00	0.00	0.06	1.92	97.94	0.06
-3	3	3	93	253	4	0.10	3665	2400	0.56	33	0	0	54	95.94	0.00	0.00	0.13	1.89	97.89	0.34	99.51	32	0
-3	3	3	93	509	3	0.09	3647	2400	0.61	33	0	0	54	94.09	0.00	0.00	0.27	1.73	97.92	0.34
-3	3	3	94	254	4	0.11	3701	2400	0.55	33	0	0	57	97.25	0.00	0.00	0.22	1.82	97.87	0.33	99.50	32	0
-3	3	3	94	510	4	0.10	3695	2400	0.49	42	0	0	63	97.32	0.00	0.00	0.23	2.58	97.10	0.33
-3	3	3	95	255	4	0.12	3741	2400	0.47	42	0	0	57	96.91	0.00	0.00	0.19	2.60	97.12	0.52	96.00	31	0
-3	3	3	95	511	128	3.31	3876	2400	2.33	971	0	0	919	93.16	0.00	0.00	0.39	11.55	84.81	0.52
-|0223_170144.125|TRACE|rdmsr tool is available.|
-|0223_170144.746|TRACE|perf event name: cstate_pkg/c2-residency/|
-|0223_170144.750|TRACE|option name:  -e cstate_pkg/c2-residency/|
-|0223_170144.762|TRACE|perf event name: cstate_pkg/c6-residency/|
-|0223_170144.766|TRACE|option name:  -e cstate_pkg/c2-residency/ -e cstate_pkg/c6-residency/|
-|0223_170144.770|TRACE|do_cmd() is called by powermgr_cstate_tests.sh:501:perf_server_cstat_update()|
-|0223_170144.773|TRACE|CMD=perf stat -o out.txt --per-socket  -e cstate_pkg/c2-residency/ -e cstate_pkg/c6-residency/ sleep 20|
-|0223_170204.948|TRACE|cstate_pkg perf events log:|
-|0223_170204.952|TRACE|do_cmd() is called by powermgr_cstate_tests.sh:503:perf_server_cstat_update()|
-|0223_170204.956|TRACE|CMD=cat out.txt|
-# started on Mon Feb 23 17:01:44 2026
-
-
- Performance counter stats for 'system wide':
-
-S0        1        20846383584      cstate_pkg/c2-residency/                                              
-S0        1                  0      cstate_pkg/c6-residency/                                              
-S1        1                  0      cstate_pkg/c2-residency/                                              
-S1        1                  0      cstate_pkg/c6-residency/                                              
-S2        1        25742939424      cstate_pkg/c2-residency/                                              
-S2        1                  0      cstate_pkg/c6-residency/                                              
-S3        1        28505615232      cstate_pkg/c2-residency/                                              
-S3        1                  0      cstate_pkg/c6-residency/                                              
-
-      20.007865801 seconds time elapsed
-
-|0223_170204.996|TRACE|cstate_pkg/c2-residency/ event counter is updated|
-|0223_170205.019|ERROR| common.sh:142:die() - FATAL: die() is called by powermgr_cstate_tests.sh:513:perf_server_cstat_update()|
-|0223_170205.022|ERROR| common.sh:143:die() - FATAL: cstate_pkg/c6-residency/ event counter shows 0|
-<<<test end, result: FAIL, duration: 26.394s>>
-
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> In arch/powerpc/kernel/time.c we have sched_clock().
+> notrace unsigned long long sched_clock(void)
+> {
+>          return mulhdu(get_tb() - boot_tb, tb_to_ns_scale) << 
+> tb_to_ns_shift;
+> }
+> 
+> It does the same mftb call, and accounts only the time after boot, which is
+> what /proc/stat should do as well.
+> 
+> "
+> the amount of time, measured in units of USER_HZ
+> (1/100ths of a second on most architectures
+> 
+> user   (1) Time spent in user mode.
+> 
+> idle   (4) Time spent in the idle task.  This value
+>         should be USER_HZ times the second entry in
+>         the /proc/uptime pseudo-file.
+> "
+> /proc/uptime is based on sched_clock, so i infer /proc/stat also should 
+> show
+> values w.r.t to boot of the OS.
+> 
+> 
+>> Also sched_clock() returns nanoseconds which implies calculation from 
+>> timebase. This is pointless CPU consumption. The current 
+>> implementation calculates nanoseconds at task switch when calling 
+>> vtime_flush().Your change will now do it at every kernel entry and 
+>> kernel exit by calling sched_clock().
+> 
+> This change doesn't add any additional paths. Even without patches, mftb 
+> would have
+> been called in every kernel entry/exit.  See mftb usage 
+> account_cpu_user_exit/enter
+> 
+> Now instead of mftb sched_clock is used, that's all. No additional 
+> entry/exit points.
+> And previously when accounting we would have done cputime_to_nsecs, now 
+> that conversion
+> is done automatically in sched_clock. So overall computation-wise it 
+> should be same.
+> 
+> What i am missing to see it here?
+> 
+>>
+>> Another point is that sched_clock() returns a long long not a long.
+> 
+> Thanks for pointing that out.
+> 
+> Ok. Let me change some of those variables into unsigned long long.
+> Compiler didn't warn me, so i didn't see it.
+> 
+>>
+>> And also sched_clock() uses get_tb() which does mftb and mftbu. Which 
+>> is pointless for calculating time deltas unless your application 
+>> spends hours without being re-scheduled.
+>>
+> 
+> I didn't get this. At current also, we use mftb, that functionality 
+> should be the same.
+> Could you please explain how?
+> 
+>>
+>>>       struct cpu_accounting_data *acct = raw_get_accounting(current);
+>>>
+>>> -    acct->utime += (tb - acct->starttime_user);
+>>> -    acct->starttime = tb;
+>>> +    acct->utime += (now - acct->starttime_user);
+>>> +    acct->starttime = now;
+>>>   }
+>>>
+>>>   static notrace inline void account_cpu_user_exit(void)
+>>>   {
+>>> -    unsigned long tb = mftb();
+>>> +    unsigned long now = sched_clock();
+>>>       struct cpu_accounting_data *acct = raw_get_accounting(current);
+>>>
+>>> -    acct->stime += (tb - acct->starttime);
+>>> -    acct->starttime_user = tb;
+>>> +    acct->stime += (now - acct->starttime);
+>>> +    acct->starttime_user = now;
+>>>   }
+>>>
+>>>   static notrace inline void account_stolen_time(void)
+>>> diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
+>>> index 18506740f4a4..fb67cdae3bcb 100644
+>>> --- a/arch/powerpc/kernel/time.c
+>>> +++ b/arch/powerpc/kernel/time.c
+>>> @@ -215,7 +215,7 @@ static unsigned long vtime_delta(struct 
+>>> cpu_accounting_data *acct,
+>>>
+>>>       WARN_ON_ONCE(!irqs_disabled());
+>>>
+>>> -    now = mftb();
+>>> +    now = sched_clock();
+>>>       stime = now - acct->starttime;
+>>>       acct->starttime = now;
+>>>
+>>> @@ -299,9 +299,9 @@ static void vtime_flush_scaled(struct task_struct 
+>>> *tsk,
+>>>   {
+>>>   #ifdef CONFIG_ARCH_HAS_SCALED_CPUTIME
+>>>       if (acct->utime_scaled)
+>>> -        tsk->utimescaled += cputime_to_nsecs(acct->utime_scaled);
+>>> +        tsk->utimescaled += acct->utime_scaled;
+>>>       if (acct->stime_scaled)
+>>> -        tsk->stimescaled += cputime_to_nsecs(acct->stime_scaled);
+>>> +        tsk->stimescaled += acct->stime_scaled;
+>>>
+>>>       acct->utime_scaled = 0;
+>>>       acct->utime_sspurr = 0;
+>>> @@ -321,28 +321,28 @@ void vtime_flush(struct task_struct *tsk)
+>>>       struct cpu_accounting_data *acct = get_accounting(tsk);
+>>>
+>>>       if (acct->utime)
+>>> -        account_user_time(tsk, cputime_to_nsecs(acct->utime));
+>>> +        account_user_time(tsk, acct->utime);
+>>>
+>>>       if (acct->gtime)
+>>> -        account_guest_time(tsk, cputime_to_nsecs(acct->gtime));
+>>> +        account_guest_time(tsk, acct->gtime);
+>>>
+>>>       if (IS_ENABLED(CONFIG_PPC_SPLPAR) && acct->steal_time) {
+>>> -        account_steal_time(cputime_to_nsecs(acct->steal_time));
+>>> +        account_steal_time(acct->steal_time);
+>>>           acct->steal_time = 0;
+>>>       }
+>>>
+>>>       if (acct->idle_time)
+>>> -        account_idle_time(cputime_to_nsecs(acct->idle_time));
+>>> +        account_idle_time(acct->idle_time);
+>>>
+>>>       if (acct->stime)
+>>> -        account_system_index_time(tsk, cputime_to_nsecs(acct->stime),
+>>> +        account_system_index_time(tsk, acct->stime,
+>>>                         CPUTIME_SYSTEM);
+>>>
+>>>       if (acct->hardirq_time)
+>>> -        account_system_index_time(tsk, cputime_to_nsecs(acct- 
+>>>  >hardirq_time),
+>>> +        account_system_index_time(tsk, acct->hardirq_time,
+>>>                         CPUTIME_IRQ);
+>>>       if (acct->softirq_time)
+>>> -        account_system_index_time(tsk, cputime_to_nsecs(acct- 
+>>>  >softirq_time),
+>>> +        account_system_index_time(tsk, acct->softirq_time,
+>>>                         CPUTIME_SOFTIRQ);
+>>>
+>>>       vtime_flush_scaled(tsk, acct);
+>>> @@ -388,7 +388,7 @@ void vtime_reset(void)
+>>>   {
+>>>       struct cpu_accounting_data *acct = get_accounting(current);
+>>>
+>>> -    acct->starttime = mftb();
+>>> +    acct->starttime = sched_clock();
+>>>   #ifdef CONFIG_ARCH_HAS_SCALED_CPUTIME
+>>>       acct->startspurr = read_spurr(acct->starttime);
+>>>   #endif
+>>
+> 
+> PS: I measured the performance with hackbench. I don't see any degradation.
+> 
 
 
