@@ -1,86 +1,86 @@
-Return-Path: <linux-pm+bounces-43288-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43289-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CI5mF/9EoWkirwQAu9opvQ
-	(envelope-from <linux-pm+bounces-43288-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 08:17:19 +0100
+	id kKrYIyFFoWkirwQAu9opvQ
+	(envelope-from <linux-pm+bounces-43289-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 08:17:53 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA1791B3BCE
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 08:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E6E641B3BD6
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 08:17:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E2CDE315D536
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 07:15:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7426D3172541
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 07:15:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE0A38B7AE;
-	Fri, 27 Feb 2026 07:15:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709563A0E85;
+	Fri, 27 Feb 2026 07:15:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VjawdX1s"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ghKYGctr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E03E36BCED
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF1F31B424F
 	for <linux-pm@vger.kernel.org>; Fri, 27 Feb 2026 07:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772176517; cv=none; b=rnTU7LsbE48ubmhfCUr4Hrlc9TpLH6DbtqHftWYG238Jld+ZlJsQOhfO/pIskzdNkU6EwZCEApBCiBC7Uo3zvCMsGTqbTWb6SP1cJkx4w/WNFATqYYmFT8GhQmJD8NZ2rcZz2fhqSEhSHRmuWK+kztgM0STqz7EIdmeW5jq+Wwg=
+	t=1772176518; cv=none; b=QEbV+CGlyQ6oSl2e3Qvrf1IWGHg5fKMOp7xHBZy2fHweS+leZSupG/t/VhliuOl7lSVGw0CxA4zRT297tKJ4F40KYsLYItebiFBonhz5oNtMk0trmuTORayQdRfak3qTTdH9J7whBdaNtnfxsOaKrqxMpfrkFHXfeT4+/J7hibE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772176517; c=relaxed/simple;
-	bh=wVYvUIvThmeYxK9y1dkxq/j7c+TyFXalQgUYZy7JXWk=;
+	s=arc-20240116; t=1772176518; c=relaxed/simple;
+	bh=fv/17d6jilgTODgpruVYpOT+gHVFDnCbMA/pv2NE/eM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NdMFRtRa47egtTiPKCaap2/b9PEt/7zjQR/ATcasyssZV/r6adZ2DeI0XkjXJKNnajqc/6fHzp/qeJRUVtSumoP5V1fi8nXfPn2axty0iJvddjQfBIaZMx9Hi76Sy7iWK+lDqyLBN7cp498U+N7HqEbGzBAxYfux7EeT2W9d/xQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VjawdX1s; arc=none smtp.client-ip=209.85.218.48
+	 In-Reply-To:To:Cc; b=Ei6a2dGfMEWJigejPhQbGsuvQ/NDZxI/cdM2mlVKP3b6s4rwW/9RjjVv1nPA9CpifwRjX02e4n6xWylOOO47yUac0fJ2HUlpFQYYqU/o5S5ilxSiEZrDjmo10rGpGe3P9yccGoK+w618DNpgY+w8onCB8P6qxhAtu8r/bwsNWBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ghKYGctr; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b936505e7a0so174742466b.1
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b932fe2e1a7so241754066b.1
         for <linux-pm@vger.kernel.org>; Thu, 26 Feb 2026 23:15:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1772176514; x=1772781314; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kxP6griohT9HSxEeETfyibe+6CSx5ahGktEAwrsPHxE=;
-        b=VjawdX1s8rgx96og/2Qb/OfG4aWnjM0am6JvuNJ+nDB52EgZXQazHHVECz3+/vC5xQ
-         la7OLFlp2K9o21MoltWNEb+jYPSZGv8XIQFauOxTYPlty5LiHYUpoHsAB9VFsE0xiwXu
-         HEI2XHBKET7SrHf/FfEaWXj+ha4KU09By95W+1xSD0F9qgjTX2DE60klfcUyuqmQRK33
-         2+z+HL7OIPbvOZ9xXqz8F/tp1WDddQdYCfSe0GvwuR9OgKt3kQ/NjQlyqi9JX3dFdi08
-         h+LYa0LEcvhK398t1qru8N9oaITGjuQiv/Ry9bsrBRM6GU0m56Jk5vI4J7/TjzdiAb5H
-         KyXQ==
+        bh=VcFko9vHiFHIBVVslk4GTSxZFkyv6j0wJU+j7yMMfnE=;
+        b=ghKYGctrtFaY4MWW1ANKPGcRHwnxBUaSU2Zn8jc0+wlzyhuZWyBGJhfo/LZ3yXRrh/
+         WFVDcpkESfdQZHvoYuy07XLA7tOVCo0KafHt7KhII2FW4ufru6wthhzskI9eM8TIxHLY
+         jURmwyuVUCxmPgovhzRbFd3agWT3O0Mj8XdDOkC6Rn2RoUzq3U+XBo7tfGNpOm5ZR9Xm
+         7WvbuTEU/u+thjZUw/oQsd9QSP7P4ROTnochNNo73NI1W5uqTIcPQiMy884DO96QQ4oz
+         +KYpIJW2g+BzgRmZ6gEo6sou5O+m/Rznzj1iXWu4JjM9qpcDxEHZiry5m2H8Spi6NSQr
+         llcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1772176514; x=1772781314;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=kxP6griohT9HSxEeETfyibe+6CSx5ahGktEAwrsPHxE=;
-        b=D8s2Sjza/bPFrz0dx+e/3k4EC5UgB9d/1nM1Ly57HoceFf9VdME9sXcF2oVMH8fIC9
-         8O3AFXmfzO7Q6tnataqf+IVbXEnBrkG36hlQImUK2b57fRW8dt9YU6OgLRBGCbZMN2jk
-         2GHCHfEqVpTwCzccddI8uYWdXV6IsailW0LjNsSpF9ZcpgL96AiDEDWT5ZWNj1aHR5z/
-         cin6a4G46WNAliSAs9ycVBfKp0lB0/qi5/WdB8NN5im+f+qdg9GDRw3OERouQ4TrRr/O
-         p2jQwYa9CCkPFg/8nQYRe7KH9dx6X9pVeWWvPqz3yDejmbeWEy0B0OaTV0Os4lKFhIaj
-         Oh2g==
-X-Forwarded-Encrypted: i=1; AJvYcCXwtMybzbL81uzYT4vz9DMa6zH0ZgHdsURULKEKA/7eoJ8NcM/xeZp23DRQKLe1taQYIh8f0pQqOA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1+Rlx/pwAjYowKcS0xgoL9kewR11Ks7TmnzbzDz/2ZGMoEBpC
-	oK0i4kCicrj5IfCf9Moxd8H+u8tRTE0ZoRR7d07Qg1LDm+YLJ2Ki2/36GnNcpPvPlfk=
-X-Gm-Gg: ATEYQzyhh/UOitZyzNgXfSCMMzCzwpNFE13t0WYm/cBU7A2R5s+/FnIO+D40yi1SIMO
-	0wi6oDqQDwTki5MemMWaP9BI1D2HaF9IVPdPpm8SMlfdCpEMVEOiJqCEmQRJXOlQR2iKfdhYZOG
-	X7HAzB+Mj6dlZL66gtWt94/uXSpdh0LKd4zVMKIIdN9HButD2T3TzuREXsSbDtDR/qIbuU29+cH
-	mtA+Q5xXX3w0bwsM2UVKEj/1svrGikb2dhclH8tDnGEnu4ZaAQtgmCndcAlxVUsCE3hURDl0T7V
-	JrEvHnnaP/dyvRKg9xYQn7ovR2VNz/y8d6sdOp1SafDuIaac+4kqxqnre6gDSj7aMUC827zCvl9
-	E6hJ/CSRnOScMQG7tdBHIG1Xe6jYJoYUg5Gx/FU1dxacTGITkw+CVYW0r7wa5ClmtM+cUJdRtqM
-	cdc60eQ5KiDGwLoO0wvZFrrmSbihX2rujRpuGcPF/WmrfAD2NAFC9cel2kzlFwK7c25iAtD5NaA
-	xtLCS/ohoCDjR0HDw==
-X-Received: by 2002:a17:907:d11:b0:b87:6bb4:9eaa with SMTP id a640c23a62f3a-b9356f38f98mr305079966b.8.1772176513601;
-        Thu, 26 Feb 2026 23:15:13 -0800 (PST)
+        bh=VcFko9vHiFHIBVVslk4GTSxZFkyv6j0wJU+j7yMMfnE=;
+        b=v3P5HP/PYDSTOT0wlZtpO5v8TUUc0mSN969NPUXRQaYQe7+l+O3Az7jFB/chfIYS8J
+         6w4upxC/6IGzVUB2Jpx9P3iJ4L9SyJ2wb9jzS66wfDn4jABhVfMlObXTIx1yzh7KnqJm
+         nBOCNdTlP3pH1NkdeRlW/73uyKfWLSskFXvSUdJF/45ZLJKfxVE+P/YV0TvBCjloVsAc
+         UC1jMPEW4EyJJbXWqv10Fp9UTiUHEsWV9rsuk3O0QKvKI4UkCbuRUn3YctKQbeNFZVYT
+         bw1wMg33MmLVnF2zlaA4Oh/u1APn2AfRZqYuygDF2tdNu379Y9bA5jJf5Fjh6c5REWaD
+         VFKA==
+X-Forwarded-Encrypted: i=1; AJvYcCWVACGgVs93OWjqRVtv2kelmj0cnFVB6y7+EA/ErpoQUPYR4E04o7FtH9WwUv3dTzj8zYNmOf9gcw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGng0GuTH3YIwEjZiLXWZtvOxIjQU6f3c53RyGszR2juKgOP02
+	iFb7PR6gl6c+1Gt5NEhB57GJWaS1vasFpcjHvX3x0IHz1jrru6p71FBVYyK7IiDqTC8=
+X-Gm-Gg: ATEYQzxobf2kF3o4zuD6mj6xu5SaH8xn48ZPg9Hf72YmtczFwdhNk4OlDFH17NkFNHj
+	2AIt5ffR4ZFxGFCiPBVD6Jxx9i6j7LJy/V3OU47b6FckWQAVvGtv8XADPBsxKCWmIw3Zk1tPqGh
+	aSKeKWhvErp+uTkr6dmPlxPa+Bf7J/BEU0/evk0ldtoOsnt/k3gquGhbRSaTzbTU1PZYt/QQ5BQ
+	xmSPzBFPFDvBf1eG/ecHlfW1luGiOXJVrdZpTZGMMagdYezrggiKMUNNVI8RHjd099mgVTUOKsu
+	+E17dr1cO/viUhA1YKagYukCuQZUIrQjAk28LELXbgzJ1lj0Sxt3SRZ7s5JU/0G/jddFfBDiZSH
+	ErgPgHC9C42xURklx2VzMqKa99sZQLOV3Kn0F+HcVtZPfg6pmj+CZeiEpM0JA8/xHmDoiza5FLi
+	KCvXhlOPDp+qx77iwzXbjVcepsAtBmPBVxUbFmNi5zBUf9A0t4bIWmA6sN+oSiq48rG1hDxg3hF
+	jrW86Ze5b6/iIKOBQ==
+X-Received: by 2002:a17:906:f59a:b0:b8f:abff:9ce7 with SMTP id a640c23a62f3a-b93764f4640mr94258566b.32.1772176514119;
+        Thu, 26 Feb 2026 23:15:14 -0800 (PST)
 Received: from puffmais2.c.googlers.com (244.175.141.34.bc.googleusercontent.com. [34.141.175.244])
         by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b935aeee867sm124205066b.66.2026.02.26.23.15.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 26 Feb 2026 23:15:13 -0800 (PST)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Fri, 27 Feb 2026 07:15:13 +0000
-Subject: [PATCH v2 08/11] power: supply: max17042: support standard
- shunt-resistor-micro-ohms DT property
+Date: Fri, 27 Feb 2026 07:15:14 +0000
+Subject: [PATCH v2 09/11] power: supply: max17042: initial support for
+ Maxim MAX77759
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,7 +89,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260227-max77759-fg-v2-8-e50be5f191f0@linaro.org>
+Message-Id: <20260227-max77759-fg-v2-9-e50be5f191f0@linaro.org>
 References: <20260227-max77759-fg-v2-0-e50be5f191f0@linaro.org>
 In-Reply-To: <20260227-max77759-fg-v2-0-e50be5f191f0@linaro.org>
 To: Hans de Goede <hansg@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -117,7 +117,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43288-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43289-lists,linux-pm=lfdr.de];
 	DKIM_TRACE(0.00)[linaro.org:+];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -132,41 +132,207 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:mid,linaro.org:dkim,linaro.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: CA1791B3BCE
+X-Rspamd-Queue-Id: E6E641B3BD6
 X-Rspamd-Action: no action
 
-shunt-resistor-micro-ohms is a standard property used to describe the
-value of a shunt resistor required when measuring currents. Standard
-properties should be used instead of vendor-specific ones of similar
-intention when possible.
+The Maxim MAX77759 is a companion PMIC intended for use in mobile
+phones and tablets. It is used on Google Pixel 6 and 6 Pro (oriole and
+raven). Amongst others, it contains a fuel gauge that is similar to the
+ones supported by this driver.
 
-Try to read it from DT, and fall back to the vendor-specific property
-maxim,rsns-microohm if unsuccessful for compatibility with existing
-DTs.
+The fuel gauge can measure battery charge and discharge current,
+battery voltage, battery temperature, and the Type C connector's
+temperature.
+
+The MAX77759 incorporates the Maxim ModelGauge m5 algorithm. It, as
+well as previous generations like m3 on max17047/max17050, requires
+the host to save/restore some register values across power cycles to
+maintain full accuracy. Extending the driver for such support is out of
+scope in this initial commit.
 
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
+
 ---
- drivers/power/supply/max17042_battery.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+v2: fix typo MAX77759_T_convert -> MAX77759_Tconvert
+---
+ drivers/power/supply/max17042_battery.c | 59 ++++++++++++++++++++++++++++++---
+ include/linux/power/max17042_battery.h  | 24 ++++++++++++--
+ 2 files changed, 77 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index bae0670e2496..823533ea5a17 100644
+index 823533ea5a17..44626abdab34 100644
 --- a/drivers/power/supply/max17042_battery.c
 +++ b/drivers/power/supply/max17042_battery.c
-@@ -929,8 +929,12 @@ max17042_get_of_pdata(struct max17042_chip *chip)
- 	/*
- 	 * Require current sense resistor value to be specified for
- 	 * current-sense functionality to be enabled at all.
-+	 * maxim,rsns-microohm is the property name used by older DTs and kept
-+	 * for compatibility.
- 	 */
--	if (of_property_read_u32(np, "maxim,rsns-microohm", &prop) == 0) {
-+	if ((of_property_read_u32(np, "shunt-resistor-micro-ohms",
-+				  &prop) == 0) ||
-+	    (of_property_read_u32(np, "maxim,rsns-microohm", &prop) == 0)) {
- 		pdata->r_sns = prop;
- 		pdata->enable_current_sense = true;
+@@ -654,7 +654,8 @@ static void max17042_write_config_regs(struct max17042_chip *chip)
+ 	regmap_write(map, MAX17042_RelaxCFG, config->relax_cfg);
+ 	if (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17047 ||
+ 			chip->chip_type == MAXIM_DEVICE_TYPE_MAX17050 ||
+-			chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055)
++			chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055 ||
++			chip->chip_type == MAXIM_DEVICE_TYPE_MAX77759)
+ 		regmap_write(map, MAX17047_FullSOCThr,
+ 						config->full_soc_thresh);
+ }
+@@ -791,7 +792,8 @@ static inline void max17042_override_por_values(struct max17042_chip *chip)
+ 
+ 	if ((chip->chip_type == MAXIM_DEVICE_TYPE_MAX17042) ||
+ 	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17047) ||
+-	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17050)) {
++	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17050) ||
++	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX77759)) {
+ 		max17042_override_por(map, MAX17042_IAvg_empty, config->iavg_empty);
+ 		max17042_override_por(map, MAX17042_TempNom, config->temp_nom);
+ 		max17042_override_por(map, MAX17042_TempLim, config->temp_lim);
+@@ -800,7 +802,8 @@ static inline void max17042_override_por_values(struct max17042_chip *chip)
+ 
+ 	if ((chip->chip_type == MAXIM_DEVICE_TYPE_MAX17047) ||
+ 	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17050) ||
+-	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055)) {
++	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055) ||
++	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX77759)) {
+ 		max17042_override_por(map, MAX17047_V_empty, config->vempty);
  	}
+ }
+@@ -1023,6 +1026,45 @@ static const struct regmap_config max17042_regmap_config = {
+ 	.val_format_endian = REGMAP_ENDIAN_NATIVE,
+ };
+ 
++static const struct regmap_range max77759_fg_registers[] = {
++	regmap_reg_range(MAX17042_STATUS, MAX77759_MixAtFull),
++	regmap_reg_range(MAX17042_VFSOC0Enable, MAX17042_VFSOC0Enable),
++	regmap_reg_range(MAX17042_MLOCKReg1, MAX17042_MLOCKReg2),
++	regmap_reg_range(MAX17042_MODELChrTbl, MAX17055_TimerH),
++	regmap_reg_range(MAX77759_IIn, MAX77759_IIn),
++	regmap_reg_range(MAX17055_AtQResidual, MAX17055_AtAvCap),
++	regmap_reg_range(MAX17042_OCVInternal, MAX17042_OCVInternal),
++	regmap_reg_range(MAX17042_VFSOC, MAX17042_VFSOC),
++};
++
++static const struct regmap_range max77759_fg_ro_registers[] = {
++	regmap_reg_range(MAX17042_FSTAT, MAX17042_FSTAT),
++	regmap_reg_range(MAX17042_OCVInternal, MAX17042_OCVInternal),
++	regmap_reg_range(MAX17042_VFSOC, MAX17042_VFSOC),
++};
++
++static const struct regmap_access_table max77759_fg_write_table = {
++	.yes_ranges = max77759_fg_registers,
++	.n_yes_ranges = ARRAY_SIZE(max77759_fg_registers),
++	.no_ranges = max77759_fg_ro_registers,
++	.n_no_ranges = ARRAY_SIZE(max77759_fg_ro_registers),
++};
++
++static const struct regmap_access_table max77759_fg_rd_table = {
++	.yes_ranges = max77759_fg_registers,
++	.n_yes_ranges = ARRAY_SIZE(max77759_fg_registers),
++};
++
++static const struct regmap_config max77759_fg_regmap_cfg = {
++	.reg_bits = 8,
++	.val_bits = 16,
++	.max_register = 0xff,
++	.wr_table = &max77759_fg_write_table,
++	.rd_table = &max77759_fg_rd_table,
++	.val_format_endian = REGMAP_ENDIAN_NATIVE,
++	.cache_type = REGCACHE_NONE,
++};
++
+ static const struct power_supply_desc max17042_psy_desc = {
+ 	.name		= "max170xx_battery",
+ 	.type		= POWER_SUPPLY_TYPE_BATTERY,
+@@ -1049,6 +1091,7 @@ static int max17042_probe(struct i2c_client *client, struct device *dev, int irq
+ {
+ 	struct i2c_adapter *adapter = client->adapter;
+ 	const struct power_supply_desc *max17042_desc = &max17042_psy_desc;
++	const struct regmap_config *regmap_config;
+ 	struct power_supply_config psy_cfg = {};
+ 	struct max17042_chip *chip;
+ 	int ret;
+@@ -1064,7 +1107,12 @@ static int max17042_probe(struct i2c_client *client, struct device *dev, int irq
+ 
+ 	chip->dev = dev;
+ 	chip->chip_type = chip_type;
+-	chip->regmap = devm_regmap_init_i2c(client, &max17042_regmap_config);
++
++	if (chip->chip_type == MAXIM_DEVICE_TYPE_MAX77759)
++		regmap_config = &max77759_fg_regmap_cfg;
++	else
++		regmap_config = &max17042_regmap_config;
++	chip->regmap = devm_regmap_init_i2c(client, regmap_config);
+ 	if (IS_ERR(chip->regmap))
+ 		return dev_err_probe(dev, PTR_ERR(chip->regmap),
+ 				     "Failed to initialize regmap\n");
+@@ -1245,6 +1293,8 @@ static const struct of_device_id max17042_dt_match[] __used = {
+ 		.data = (void *) MAXIM_DEVICE_TYPE_MAX17055 },
+ 	{ .compatible = "maxim,max77705-battery",
+ 		.data = (void *) MAXIM_DEVICE_TYPE_MAX17047 },
++	{ .compatible = "maxim,max77759-fg",
++		.data = (void *) MAXIM_DEVICE_TYPE_MAX77759 },
+ 	{ .compatible = "maxim,max77849-battery",
+ 		.data = (void *) MAXIM_DEVICE_TYPE_MAX17047 },
+ 	{ },
+@@ -1257,6 +1307,7 @@ static const struct i2c_device_id max17042_id[] = {
+ 	{ "max17047", MAXIM_DEVICE_TYPE_MAX17047 },
+ 	{ "max17050", MAXIM_DEVICE_TYPE_MAX17050 },
+ 	{ "max17055", MAXIM_DEVICE_TYPE_MAX17055 },
++	{ "max77759-fg", MAXIM_DEVICE_TYPE_MAX77759 },
+ 	{ "max77849-battery", MAXIM_DEVICE_TYPE_MAX17047 },
+ 	{ }
+ };
+diff --git a/include/linux/power/max17042_battery.h b/include/linux/power/max17042_battery.h
+index c417abd2ab70..05097f08ea36 100644
+--- a/include/linux/power/max17042_battery.h
++++ b/include/linux/power/max17042_battery.h
+@@ -105,7 +105,7 @@ enum max17042_register {
+ 
+ 	MAX17042_OCV		= 0xEE,
+ 
+-	MAX17042_OCVInternal	= 0xFB,  /* MAX17055 VFOCV */
++	MAX17042_OCVInternal	= 0xFB, /* MAX17055/77759 VFOCV */
+ 
+ 	MAX17042_VFSOC		= 0xFF,
+ };
+@@ -156,7 +156,7 @@ enum max17055_register {
+ 	MAX17055_AtAvCap	= 0xDF,
+ };
+ 
+-/* Registers specific to max17047/50/55 */
++/* Registers specific to max17047/50/55/77759 */
+ enum max17047_register {
+ 	MAX17047_QRTbl00	= 0x12,
+ 	MAX17047_FullSOCThr	= 0x13,
+@@ -167,12 +167,32 @@ enum max17047_register {
+ 	MAX17047_QRTbl30	= 0x42,
+ };
+ 
++enum max77759_register {
++	MAX77759_AvgTA0		= 0x26,
++	MAX77759_AtTTF		= 0x33,
++	MAX77759_Tconvert	= 0x34,
++	MAX77759_AvgCurrent0	= 0x3B,
++	MAX77759_THMHOT		= 0x40,
++	MAX77759_CTESample	= 0x41,
++	MAX77759_ISys		= 0x43,
++	MAX77759_AvgVCell0	= 0x44,
++	MAX77759_RlxSOC		= 0x47,
++	MAX77759_AvgISys	= 0x4B,
++	MAX77759_QH0		= 0x4C,
++	MAX77759_MixAtFull	= 0x4F,
++	MAX77759_VSys		= 0xB1,
++	MAX77759_TAlrtTh2	= 0xB2,
++	MAX77759_VByp		= 0xB3,
++	MAX77759_IIn		= 0xD0,
++};
++
+ enum max170xx_chip_type {
+ 	MAXIM_DEVICE_TYPE_UNKNOWN	= 0,
+ 	MAXIM_DEVICE_TYPE_MAX17042,
+ 	MAXIM_DEVICE_TYPE_MAX17047,
+ 	MAXIM_DEVICE_TYPE_MAX17050,
+ 	MAXIM_DEVICE_TYPE_MAX17055,
++	MAXIM_DEVICE_TYPE_MAX77759,
+ 
+ 	MAXIM_DEVICE_TYPE_NUM
+ };
 
 -- 
 2.53.0.473.g4a7958ca14-goog
