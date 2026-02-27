@@ -1,56 +1,56 @@
-Return-Path: <linux-pm+bounces-43297-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43298-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UFCHBaSioWkfvQQAu9opvQ
-	(envelope-from <linux-pm+bounces-43297-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 14:56:52 +0100
+	id 8HVrENOioWkfvQQAu9opvQ
+	(envelope-from <linux-pm+bounces-43298-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 14:57:39 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACB1E1B806D
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 14:56:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5BDA1B80D0
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 14:57:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D53B6311490A
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 13:55:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 09396316FAF6
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 13:55:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0A1640B6C9;
-	Fri, 27 Feb 2026 13:55:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B8C33F23B9;
+	Fri, 27 Feb 2026 13:55:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mS2uj6p5"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="A+7yObo/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD93E407594;
-	Fri, 27 Feb 2026 13:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF68265621;
+	Fri, 27 Feb 2026 13:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772200535; cv=none; b=IY0guqLRP2P1oTLf2zwvvEk45ce49ytxrCQzhtxaZFuc4luLyM4gfKaLz7fuKKkWo1tTm8W7vMQz4xfNBaweskd/BEhnHPpTQzhfhb5vfOhi91086OuiFyaub9xvcBRTHJgSvsfoKurhPF8w+G9k8LKNGRTNkJP0oXqJ8dEYQZQ=
+	t=1772200548; cv=none; b=kXQWwB1KBX6IqMbcWJpa2XjD843l8POZQsYr1z1inaxdSNMs8D0Ogb1Chc5tSYFUrVKS7aCYDb4af1VCE2ihIwjnoNnz5wapSBTPk6VxfHH4CM1lrEWHHLYcs0+jE5G3MzI3LzVt0QrU3i4FN4RRuAhppy1bvYjiK3veosUv0HU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772200535; c=relaxed/simple;
-	bh=FArXeehyZTW3N0bt5Bcb/H3S/Bs4a13KfFNQGV+ZYDY=;
+	s=arc-20240116; t=1772200548; c=relaxed/simple;
+	bh=rQ9386ik5scHejhWHKAfmM4chPis7l6ygutP7HAioiQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gLXgJnfjIYMJOXH95FxgJbBxoF6AdlOOdR/LALLdoivHKP3kk30z09Ie/MSl6xGjXmFX7QxHRhnEkL+O29fwn3qRKJG07Alj2pin633UfHBQwNqOgZB6f4eTRecsBcl8zZza2gpith59e7vNVOmW5cgbiSA0iQco+/FzgEV+Usg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mS2uj6p5; arc=none smtp.client-ip=185.246.85.4
+	 MIME-Version; b=N4KQdofahk6E+48mUxgtqNT2YpIM8SUudjrrGgHuu0V8IjJqzBbarMBzG7c0QucSTdrRHuIoLxfuzo2pLwKkLTc68kJ8Lg9JQR3YAeH8kKFBRrXhO7qOT4YgrZAeKbl8tN9bsxncuoMfChlnm2PvKRR2oHlWk3QmoQD2/con3P8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=A+7yObo/; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 5A7214E419CC;
-	Fri, 27 Feb 2026 13:55:29 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 2F7FBC406A8;
+	Fri, 27 Feb 2026 13:56:01 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 27B0B5FE74;
-	Fri, 27 Feb 2026 13:55:29 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4679A1036945B;
-	Fri, 27 Feb 2026 14:55:09 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 41D305FE46;
+	Fri, 27 Feb 2026 13:55:45 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id F1D8D10369460;
+	Fri, 27 Feb 2026 14:55:26 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1772200526; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1772200542; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=udl87NYHrbG5beYr+sj6tRLtpueqBaBik+Z+B4KV8SY=;
-	b=mS2uj6p5sYMMyvUUXk2OszAlkp+DSyu8AI+ZOxi9FVwinjWzl3MPnaeyZ4sN1L3HnD7NM+
-	gOrgnq8gKKsRclQHl41MG+6fLrXIlEv0O9tHyr0gfHqybYYL+mTPtSZga/j1LAI3a/es1M
-	IiTvHcXjx5jzlvRUnT659GkBv5cKyn/sU0w4j1bWsrttfbn4D0nm9T9T8Vo/WOjM/ThvYl
-	HlBcncSCXaUPdTfOYdU1XQq2KjkVq7aajYdz9m0RsHYL7vkxGW53nbiXd2Ey+Yw4x1bxnl
-	xyi4PMC+rJzJ7gw8QiV30Kr0wRTpzZ+Cxzlkeu4xCA4rgoeU+tBHaXnfIDYIjA==
+	bh=O69AwOTjqvKfpSQSdAHMm1uc7do/5N9kZQR7OTjD6w0=;
+	b=A+7yObo/IcLfXq3wKm4nu0U/uQjzcpjZMe9GeG3VIfoKJn6vei94ilHLqflWh6nGNt+OV0
+	GxvNLNl7kRjPB7BDztNQ8QVwy+SXAGcuEF7qdEnwdchVyOFZnjzauhWWYsCXPCPL7+R1p5
+	NqFTewx0oHZ9mY3PI3cayyXUl2yV+9+Tr/At+NCzt2BE0MhUld5uPq6xQpkqeSpkJYhz/b
+	EJeWpldoPq9ylHM+ZcMewH0wcf4NAeTeUcoNBj59nKdfJHNdBJpBhEkUXBIawZ97krQtfe
+	uxO0of42kKZlcJlXX1kdyhGTLQHJnttqw2E8vorEo44gIGs2mGadVMHEpztLLA==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Andrew Lunn <andrew@lunn.ch>,
 	Rob Herring <robh@kernel.org>,
@@ -116,9 +116,9 @@ Cc: Wolfram Sang <wsa@kernel.org>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Saravana Kannan <saravanak@google.com>
-Subject: [PATCH v5 01/28] Revert "treewide: Fix probing of devices in DT overlays"
-Date: Fri, 27 Feb 2026 14:53:58 +0100
-Message-ID: <20260227135428.783983-2-herve.codina@bootlin.com>
+Subject: [PATCH v5 02/28] driver core: Rename get_dev_from_fwnode() wrapper to get_device_from_fwnode()
+Date: Fri, 27 Feb 2026 14:53:59 +0100
+Message-ID: <20260227135428.783983-3-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260227135428.783983-1-herve.codina@bootlin.com>
 References: <20260227135428.783983-1-herve.codina@bootlin.com>
@@ -137,7 +137,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -145,127 +145,153 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_TO(0.00)[lunn.ch,kernel.org,glider.be,gmail.com,linuxfoundation.org,nxp.com,pengutronix.de,baylibre.com,sang-engineering.com,axentia.se,arndb.de,bootlin.com,google.com,opensource.cirrus.com,cirrus.com,linaro.org,linux.intel.com,stgolabs.net,huawei.com,intel.com];
-	TAGGED_FROM(0.00)[bounces-43297-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43298-lists,linux-pm=lfdr.de];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[bootlin.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[herve.codina@bootlin.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
-	NEURAL_HAM(-0.00)[-0.998];
+	NEURAL_HAM(-0.00)[-0.995];
 	RCPT_COUNT_GT_50(0.00)[64];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm,dt,renesas];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,bootlin.com:mid,bootlin.com:dkim,bootlin.com:email]
-X-Rspamd-Queue-Id: ACB1E1B806D
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,bootlin.com:mid,bootlin.com:dkim,bootlin.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:email]
+X-Rspamd-Queue-Id: D5BDA1B80D0
 X-Rspamd-Action: no action
 
-From: Saravana Kannan <saravanak@google.com>
+get_dev_from_fwnode() calls get_device() and so it acquires a reference
+on the device returned.
 
-This reverts commit 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924.
+In order to be more obvious that this wrapper is a get_device() variant,
+rename it to get_device_from_fwnode().
 
-While the commit fixed fw_devlink overlay handling for one case, it
-broke it for another case. So revert it and redo the fix in a separate
-patch.
-
-Fixes: 1a50d9403fb9 ("treewide: Fix probing of devices in DT overlays")
-Reported-by: Herve Codina <herve.codina@bootlin.com>
-Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com/
-Closes: https://lore.kernel.org/all/20240221095137.616d2aaa@bootlin.com/
-Closes: https://lore.kernel.org/lkml/20240312151835.29ef62a0@bootlin.com/
-Signed-off-by: Saravana Kannan <saravanak@google.com>
-Link: https://lore.kernel.org/lkml/20240411235623.1260061-2-saravanak@google.com/
+Suggested-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/lkml/CAGETcx97QjnjVR8Z5g0ndLHpK96hLd4aYSV=iEkKPNbNOccYmA@mail.gmail.com/
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Acked-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Saravana Kannan <saravanak@google.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/bus/imx-weim.c    | 6 ------
- drivers/i2c/i2c-core-of.c | 5 -----
- drivers/of/dynamic.c      | 1 -
- drivers/of/platform.c     | 5 -----
- drivers/spi/spi.c         | 5 -----
- 5 files changed, 22 deletions(-)
+ drivers/base/core.c     | 18 +++++++++---------
+ drivers/pmdomain/core.c |  4 ++--
+ include/linux/device.h  |  2 +-
+ 3 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
-index 83d623d97f5f..87070155b057 100644
---- a/drivers/bus/imx-weim.c
-+++ b/drivers/bus/imx-weim.c
-@@ -327,12 +327,6 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
- 				 "Failed to setup timing for '%pOF'\n", rd->dn);
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 791f9e444df8..33c0ff2b162d 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -1888,7 +1888,7 @@ static bool fwnode_init_without_drv(struct fwnode_handle *fwnode)
+ 	if (!(fwnode->flags & FWNODE_FLAG_INITIALIZED))
+ 		return false;
  
- 		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
--			/*
--			 * Clear the flag before adding the device so that
--			 * fw_devlink doesn't skip adding consumers to this
--			 * device.
--			 */
--			rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
- 			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
- 				dev_err(&pdev->dev,
- 					"Failed to create child device '%pOF'\n",
-diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-index eb7fb202355f..30b48a428c0b 100644
---- a/drivers/i2c/i2c-core-of.c
-+++ b/drivers/i2c/i2c-core-of.c
-@@ -176,11 +176,6 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
- 			return NOTIFY_OK;
- 		}
+-	dev = get_dev_from_fwnode(fwnode);
++	dev = get_device_from_fwnode(fwnode);
+ 	ret = !dev || dev->links.status == DL_DEV_NO_DRIVER;
+ 	put_device(dev);
  
--		/*
--		 * Clear the flag before adding the device so that fw_devlink
--		 * doesn't skip adding consumers to this device.
--		 */
--		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
- 		client = of_i2c_register_device(adap, rd->dn);
- 		if (IS_ERR(client)) {
- 			dev_err(&adap->dev, "failed to create client for '%pOF'\n",
-diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
-index 1a06175def37..aa450425ec1e 100644
---- a/drivers/of/dynamic.c
-+++ b/drivers/of/dynamic.c
-@@ -225,7 +225,6 @@ static void __of_attach_node(struct device_node *np)
- 	np->sibling = np->parent->child;
- 	np->parent->child = np;
- 	of_node_clear_flag(np, OF_DETACHED);
--	np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
+@@ -1957,7 +1957,7 @@ static struct device *fwnode_get_next_parent_dev(const struct fwnode_handle *fwn
+ 	struct device *dev;
  
- 	raw_spin_unlock_irqrestore(&devtree_lock, flags);
+ 	fwnode_for_each_parent_node(fwnode, parent) {
+-		dev = get_dev_from_fwnode(parent);
++		dev = get_device_from_fwnode(parent);
+ 		if (dev) {
+ 			fwnode_handle_put(parent);
+ 			return dev;
+@@ -2013,8 +2013,8 @@ static bool __fw_devlink_relax_cycles(struct fwnode_handle *con_handle,
+ 		goto out;
+ 	}
  
-diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-index ba591fbceb56..2037c0b3880d 100644
---- a/drivers/of/platform.c
-+++ b/drivers/of/platform.c
-@@ -738,11 +738,6 @@ static int of_platform_notify(struct notifier_block *nb,
- 		if (of_node_check_flag(rd->dn, OF_POPULATED))
- 			return NOTIFY_OK;
+-	sup_dev = get_dev_from_fwnode(sup_handle);
+-	con_dev = get_dev_from_fwnode(con_handle);
++	sup_dev = get_device_from_fwnode(sup_handle);
++	con_dev = get_device_from_fwnode(con_handle);
+ 	/*
+ 	 * If sup_dev is bound to a driver and @con hasn't started binding to a
+ 	 * driver, sup_dev can't be a consumer of @con. So, no need to check
+@@ -2153,7 +2153,7 @@ static int fw_devlink_create_devlink(struct device *con,
+ 	if (sup_handle->flags & FWNODE_FLAG_NOT_DEVICE)
+ 		sup_dev = fwnode_get_next_parent_dev(sup_handle);
+ 	else
+-		sup_dev = get_dev_from_fwnode(sup_handle);
++		sup_dev = get_device_from_fwnode(sup_handle);
  
--		/*
--		 * Clear the flag before adding the device so that fw_devlink
--		 * doesn't skip adding consumers to this device.
--		 */
--		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
- 		/* pdev_parent may be NULL when no bus platform device */
- 		pdev_parent = of_find_device_by_node(parent);
- 		pdev = of_platform_device_create(rd->dn, NULL,
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 61f7bde8c7fb..749d306ce1cc 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -4934,11 +4934,6 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
- 			return NOTIFY_OK;
- 		}
+ 	if (sup_dev) {
+ 		/*
+@@ -2222,7 +2222,7 @@ static void __fw_devlink_link_to_consumers(struct device *dev)
+ 		bool own_link = true;
+ 		int ret;
  
--		/*
--		 * Clear the flag before adding the device so that fw_devlink
--		 * doesn't skip adding consumers to this device.
--		 */
--		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
- 		spi = of_register_spi_device(ctlr, rd->dn);
- 		put_device(&ctlr->dev);
+-		con_dev = get_dev_from_fwnode(link->consumer);
++		con_dev = get_device_from_fwnode(link->consumer);
+ 		/*
+ 		 * If consumer device is not available yet, make a "proxy"
+ 		 * SYNC_STATE_ONLY link from the consumer's parent device to
+@@ -5278,7 +5278,7 @@ void device_set_node(struct device *dev, struct fwnode_handle *fwnode)
+ EXPORT_SYMBOL_GPL(device_set_node);
  
+ /**
+- * get_dev_from_fwnode - Obtain a reference count of the struct device the
++ * get_device_from_fwnode - Obtain a reference count of the struct device the
+  * struct fwnode_handle is associated with.
+  * @fwnode: The pointer to the struct fwnode_handle to obtain the struct device
+  * reference count of.
+@@ -5296,11 +5296,11 @@ EXPORT_SYMBOL_GPL(device_set_node);
+  * This is possible since struct fwnode_handle has its own reference count and
+  * hence can out-live the struct device it is associated with.
+  */
+-struct device *get_dev_from_fwnode(struct fwnode_handle *fwnode)
++struct device *get_device_from_fwnode(struct fwnode_handle *fwnode)
+ {
+ 	return get_device((fwnode)->dev);
+ }
+-EXPORT_SYMBOL_GPL(get_dev_from_fwnode);
++EXPORT_SYMBOL_GPL(get_device_from_fwnode);
+ 
+ int device_match_name(struct device *dev, const void *name)
+ {
+diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+index 52ea84e548ff..444008234b05 100644
+--- a/drivers/pmdomain/core.c
++++ b/drivers/pmdomain/core.c
+@@ -2686,7 +2686,7 @@ int of_genpd_add_provider_simple(struct device_node *np,
+ 	genpd->dev.of_node = np;
+ 
+ 	fwnode = of_fwnode_handle(np);
+-	dev = get_dev_from_fwnode(fwnode);
++	dev = get_device_from_fwnode(fwnode);
+ 	if (!dev && !genpd_is_no_sync_state(genpd)) {
+ 		genpd->sync_state = GENPD_SYNC_STATE_SIMPLE;
+ 		device_set_node(&genpd->dev, fwnode);
+@@ -2761,7 +2761,7 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+ 		data->xlate = genpd_xlate_onecell;
+ 
+ 	fwnode = of_fwnode_handle(np);
+-	dev = get_dev_from_fwnode(fwnode);
++	dev = get_device_from_fwnode(fwnode);
+ 	if (!dev)
+ 		sync_state = true;
+ 	else
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 0be95294b6e6..fd08e55e05de 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -1071,7 +1071,7 @@ void device_set_node(struct device *dev, struct fwnode_handle *fwnode);
+ int device_add_of_node(struct device *dev, struct device_node *of_node);
+ void device_remove_of_node(struct device *dev);
+ void device_set_of_node_from_dev(struct device *dev, const struct device *dev2);
+-struct device *get_dev_from_fwnode(struct fwnode_handle *fwnode);
++struct device *get_device_from_fwnode(struct fwnode_handle *fwnode);
+ 
+ static inline struct device_node *dev_of_node(struct device *dev)
+ {
 -- 
 2.53.0
 
