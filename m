@@ -1,86 +1,86 @@
-Return-Path: <linux-pm+bounces-43287-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43288-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yCwBAOZEoWkirwQAu9opvQ
-	(envelope-from <linux-pm+bounces-43287-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 08:16:54 +0100
+	id CI5mF/9EoWkirwQAu9opvQ
+	(envelope-from <linux-pm+bounces-43288-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 08:17:19 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 939951B3BC7
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 08:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA1791B3BCE
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 08:17:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AB55431412AE
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 07:15:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E2CDE315D536
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 07:15:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9995B387591;
-	Fri, 27 Feb 2026 07:15:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE0A38B7AE;
+	Fri, 27 Feb 2026 07:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CkxkEXLi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VjawdX1s"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EE03644D2
-	for <linux-pm@vger.kernel.org>; Fri, 27 Feb 2026 07:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E03E36BCED
+	for <linux-pm@vger.kernel.org>; Fri, 27 Feb 2026 07:15:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772176516; cv=none; b=uOW1oIU1BZ2DSgHFAn960DnW8EWXZeVa49FKofj/PgJ+yQ4FhwXcL/cxKmKenY2XG4a4//ltGlTGNDWMiCDZfnUaaAwqIE1oIfeV2ACMu0dRRNIJ4U9Iz+O53crcsRT+q8qMo9ha5D2kB/gjgug2Vp7O8veFyTlDFY7K4PmDyn8=
+	t=1772176517; cv=none; b=rnTU7LsbE48ubmhfCUr4Hrlc9TpLH6DbtqHftWYG238Jld+ZlJsQOhfO/pIskzdNkU6EwZCEApBCiBC7Uo3zvCMsGTqbTWb6SP1cJkx4w/WNFATqYYmFT8GhQmJD8NZ2rcZz2fhqSEhSHRmuWK+kztgM0STqz7EIdmeW5jq+Wwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772176516; c=relaxed/simple;
-	bh=wYi6aEFxaLqRH1kvID/rgCJp6pAPIM8UPMfwfiqMHiA=;
+	s=arc-20240116; t=1772176517; c=relaxed/simple;
+	bh=wVYvUIvThmeYxK9y1dkxq/j7c+TyFXalQgUYZy7JXWk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=O6Vm6364cPjgVi9CrXMVv0j7Z90Wea5yFDd10q6skdun73nzI6x1cySMFk7H9EC4EIXNqECFLlvjQ2muk5wlT3Qr4yWu+WE7fXCV4RUAQLiEnU9wibmGITyVvvXTc/HzOWGyMuZwBu8b0HVQsR+r/sy8bB4kEhnPJfc8/7noY1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CkxkEXLi; arc=none smtp.client-ip=209.85.218.48
+	 In-Reply-To:To:Cc; b=NdMFRtRa47egtTiPKCaap2/b9PEt/7zjQR/ATcasyssZV/r6adZ2DeI0XkjXJKNnajqc/6fHzp/qeJRUVtSumoP5V1fi8nXfPn2axty0iJvddjQfBIaZMx9Hi76Sy7iWK+lDqyLBN7cp498U+N7HqEbGzBAxYfux7EeT2W9d/xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VjawdX1s; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b93698bb57aso209190766b.0
-        for <linux-pm@vger.kernel.org>; Thu, 26 Feb 2026 23:15:14 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b936505e7a0so174742466b.1
+        for <linux-pm@vger.kernel.org>; Thu, 26 Feb 2026 23:15:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1772176513; x=1772781313; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1772176514; x=1772781314; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=q2F5zLIEaaTfnN0o0tOAwvcRtoPgGDxKclbiaC7adGw=;
-        b=CkxkEXLiRlo9wXZ3FRRVttkwWtrtLmkQdfRZ3WXDAcTyF/hrx/1fvAtsBN4SbHIpKO
-         rE4fpdrsSQx88/nu93xja0d8EMzzFTmDq9uFj23vRP69anHdLjLedEcnA0GQ04HWSD4N
-         63A/esQNMyr/lnPg/cXNQSNpmTAw3QDLRj3/OQ6FXnLRAiHpfkeQAUPCXxy38/NgjV1K
-         MEzzAbaPAByfBVWZXjb/hqq4gEywkk7JDO3J8jDQbb3b34oxZOLEjwZ3vfFGxBmu03ve
-         vHK0FeogP1I2IdLzSINSxz3qaD6HGZsORMJ+Hs4+XNqUU51epa1uD7qfbmRBhA5tinVg
-         WaZw==
+        bh=kxP6griohT9HSxEeETfyibe+6CSx5ahGktEAwrsPHxE=;
+        b=VjawdX1s8rgx96og/2Qb/OfG4aWnjM0am6JvuNJ+nDB52EgZXQazHHVECz3+/vC5xQ
+         la7OLFlp2K9o21MoltWNEb+jYPSZGv8XIQFauOxTYPlty5LiHYUpoHsAB9VFsE0xiwXu
+         HEI2XHBKET7SrHf/FfEaWXj+ha4KU09By95W+1xSD0F9qgjTX2DE60klfcUyuqmQRK33
+         2+z+HL7OIPbvOZ9xXqz8F/tp1WDddQdYCfSe0GvwuR9OgKt3kQ/NjQlyqi9JX3dFdi08
+         h+LYa0LEcvhK398t1qru8N9oaITGjuQiv/Ry9bsrBRM6GU0m56Jk5vI4J7/TjzdiAb5H
+         KyXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772176513; x=1772781313;
+        d=1e100.net; s=20230601; t=1772176514; x=1772781314;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=q2F5zLIEaaTfnN0o0tOAwvcRtoPgGDxKclbiaC7adGw=;
-        b=sVRzTeFJ4te4Ido8XFHmWjDNvJ+wwa216LKpDz5ZBrUzpmYUc+PUpiq2G3uVUSYUEC
-         hRT4HwpcbpYSXbNfRy25uevpnESMNazJnx3gU4o6lZs/6hh137T/fcLjUGIqZDDWvvki
-         Leo/LKgqj3YMptUP+f8Wga/gUF6Mvsod85tGQjGlgpMrRuMbVXZPyVSFUqhUZOqP1Tpb
-         +cb+GqbrEFCe+f/4TGIejaNA0/P6YwM7JXk6GMP5xL3yFTQHRlBt/kHENxMAUQkSsWer
-         a7GUPklONPWJK5uLCq9dIIW6rqtDvhcmrT5ziplNEMXQTcat5ozeV/opXI+nj0G5BKUd
-         9LcA==
-X-Forwarded-Encrypted: i=1; AJvYcCWl29JAI/28HXczvvA1FIWmTkPa05ukxeya5tUd+Pv8DCm5pX+FSeLvzSWZwRXEIOCppFimCHsWwA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRksqQC5C+f0s9iZlje3ff9OjEDAGP/+kX1h8LfGuyWRgl9kjD
-	mEBYD01bIE8DFiAgQZnWDl3cK1QLZ1MImzoJMaDK9vQBknVWJVMSMssa1Y1wSmue274=
-X-Gm-Gg: ATEYQzyT/Tb3IH8Vf70NSkUznAePrkILeGTFQcwT5ulR5JwNojROkGztyyzfzRek3/o
-	xxCb2wWF4alUz4Y1UqDI+FlYEOyaDTzaRe54V+J6+CTt/pNTnSFWqII/JOd4IQeuidNdmtGlBJv
-	79gBiYcXcNRaKESfG1DUPn6YhKveQrUmopeW7uq6kdnE4Gke6Dtj7x9INpA4+3/psS543kMJOr5
-	lgArTpSDwl9lAkMkGh/VAFr+SBED4KlMGCEQeOAhLvmnJHIkZbsP8j7Q8FiyKWj6gXBvwb/0BDM
-	ybWCC2QIW7w8kXctbWajZopg6DZrBnonLt+hTgHnz6CBwWnUKxvFsf7nPJZ25t8wFi8cZy1NsVd
-	K11ud7rK505qxhhJB4eiJ5CgnQ7DCXOv7JKtG4ORC/GkZbjnMwYo3CgpoIdTxeQUEa2oKbBe4yu
-	OUPFo49Q7ok39CIPiX2iqaWX0tjyGoTPfV98mbc28oUB5beWF1rOFz7YQWiIWbCEV/M1qQrWeT+
-	3k5/AZRY3atOogtiAuPeFdndOQb
-X-Received: by 2002:a17:906:eec2:b0:b87:31d1:4133 with SMTP id a640c23a62f3a-b937596b79amr86272566b.25.1772176513052;
+        bh=kxP6griohT9HSxEeETfyibe+6CSx5ahGktEAwrsPHxE=;
+        b=D8s2Sjza/bPFrz0dx+e/3k4EC5UgB9d/1nM1Ly57HoceFf9VdME9sXcF2oVMH8fIC9
+         8O3AFXmfzO7Q6tnataqf+IVbXEnBrkG36hlQImUK2b57fRW8dt9YU6OgLRBGCbZMN2jk
+         2GHCHfEqVpTwCzccddI8uYWdXV6IsailW0LjNsSpF9ZcpgL96AiDEDWT5ZWNj1aHR5z/
+         cin6a4G46WNAliSAs9ycVBfKp0lB0/qi5/WdB8NN5im+f+qdg9GDRw3OERouQ4TrRr/O
+         p2jQwYa9CCkPFg/8nQYRe7KH9dx6X9pVeWWvPqz3yDejmbeWEy0B0OaTV0Os4lKFhIaj
+         Oh2g==
+X-Forwarded-Encrypted: i=1; AJvYcCXwtMybzbL81uzYT4vz9DMa6zH0ZgHdsURULKEKA/7eoJ8NcM/xeZp23DRQKLe1taQYIh8f0pQqOA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1+Rlx/pwAjYowKcS0xgoL9kewR11Ks7TmnzbzDz/2ZGMoEBpC
+	oK0i4kCicrj5IfCf9Moxd8H+u8tRTE0ZoRR7d07Qg1LDm+YLJ2Ki2/36GnNcpPvPlfk=
+X-Gm-Gg: ATEYQzyhh/UOitZyzNgXfSCMMzCzwpNFE13t0WYm/cBU7A2R5s+/FnIO+D40yi1SIMO
+	0wi6oDqQDwTki5MemMWaP9BI1D2HaF9IVPdPpm8SMlfdCpEMVEOiJqCEmQRJXOlQR2iKfdhYZOG
+	X7HAzB+Mj6dlZL66gtWt94/uXSpdh0LKd4zVMKIIdN9HButD2T3TzuREXsSbDtDR/qIbuU29+cH
+	mtA+Q5xXX3w0bwsM2UVKEj/1svrGikb2dhclH8tDnGEnu4ZaAQtgmCndcAlxVUsCE3hURDl0T7V
+	JrEvHnnaP/dyvRKg9xYQn7ovR2VNz/y8d6sdOp1SafDuIaac+4kqxqnre6gDSj7aMUC827zCvl9
+	E6hJ/CSRnOScMQG7tdBHIG1Xe6jYJoYUg5Gx/FU1dxacTGITkw+CVYW0r7wa5ClmtM+cUJdRtqM
+	cdc60eQ5KiDGwLoO0wvZFrrmSbihX2rujRpuGcPF/WmrfAD2NAFC9cel2kzlFwK7c25iAtD5NaA
+	xtLCS/ohoCDjR0HDw==
+X-Received: by 2002:a17:907:d11:b0:b87:6bb4:9eaa with SMTP id a640c23a62f3a-b9356f38f98mr305079966b.8.1772176513601;
         Thu, 26 Feb 2026 23:15:13 -0800 (PST)
 Received: from puffmais2.c.googlers.com (244.175.141.34.bc.googleusercontent.com. [34.141.175.244])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b935aeee867sm124205066b.66.2026.02.26.23.15.12
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b935aeee867sm124205066b.66.2026.02.26.23.15.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 23:15:12 -0800 (PST)
+        Thu, 26 Feb 2026 23:15:13 -0800 (PST)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Fri, 27 Feb 2026 07:15:12 +0000
-Subject: [PATCH v2 07/11] power: supply: max17042: time to empty is
- meaningless when charging
+Date: Fri, 27 Feb 2026 07:15:13 +0000
+Subject: [PATCH v2 08/11] power: supply: max17042: support standard
+ shunt-resistor-micro-ohms DT property
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,7 +89,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260227-max77759-fg-v2-7-e50be5f191f0@linaro.org>
+Message-Id: <20260227-max77759-fg-v2-8-e50be5f191f0@linaro.org>
 References: <20260227-max77759-fg-v2-0-e50be5f191f0@linaro.org>
 In-Reply-To: <20260227-max77759-fg-v2-0-e50be5f191f0@linaro.org>
 To: Hans de Goede <hansg@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -117,7 +117,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43287-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43288-lists,linux-pm=lfdr.de];
 	DKIM_TRACE(0.00)[linaro.org:+];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -132,35 +132,41 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:mid,linaro.org:dkim,linaro.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 939951B3BC7
+X-Rspamd-Queue-Id: CA1791B3BCE
 X-Rspamd-Action: no action
 
-When charging, the fuel gauge reports U16_MAX as time to empty.
-Ignoring this special case (as this driver currently does), causes the
-remaining time to be reported as ~102hours, which is incorrect.
+shunt-resistor-micro-ohms is a standard property used to describe the
+value of a shunt resistor required when measuring currents. Standard
+properties should be used instead of vendor-specific ones of similar
+intention when possible.
 
-Update the code to not return anything in this case.
+Try to read it from DT, and fall back to the vendor-specific property
+maxim,rsns-microohm if unsuccessful for compatibility with existing
+DTs.
 
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
- drivers/power/supply/max17042_battery.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/power/supply/max17042_battery.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index 8808c0d2ad10..bae0670e2496 100644
+index bae0670e2496..823533ea5a17 100644
 --- a/drivers/power/supply/max17042_battery.c
 +++ b/drivers/power/supply/max17042_battery.c
-@@ -434,6 +434,10 @@ static int max17042_get_property(struct power_supply *psy,
- 		if (ret < 0)
- 			return ret;
- 
-+		/* when charging, the value is not meaningful */
-+		if (data == U16_MAX)
-+			return -ENODATA;
-+
- 		val->intval = data * 5625 / 1000;
- 		break;
- 	default:
+@@ -929,8 +929,12 @@ max17042_get_of_pdata(struct max17042_chip *chip)
+ 	/*
+ 	 * Require current sense resistor value to be specified for
+ 	 * current-sense functionality to be enabled at all.
++	 * maxim,rsns-microohm is the property name used by older DTs and kept
++	 * for compatibility.
+ 	 */
+-	if (of_property_read_u32(np, "maxim,rsns-microohm", &prop) == 0) {
++	if ((of_property_read_u32(np, "shunt-resistor-micro-ohms",
++				  &prop) == 0) ||
++	    (of_property_read_u32(np, "maxim,rsns-microohm", &prop) == 0)) {
+ 		pdata->r_sns = prop;
+ 		pdata->enable_current_sense = true;
+ 	}
 
 -- 
 2.53.0.473.g4a7958ca14-goog
