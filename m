@@ -1,185 +1,204 @@
-Return-Path: <linux-pm+bounces-43328-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43330-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wO4IDEm0oWmMvgQAu9opvQ
-	(envelope-from <linux-pm+bounces-43328-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 16:12:09 +0100
+	id 0AkdCc67oWlhwAQAu9opvQ
+	(envelope-from <linux-pm+bounces-43330-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 16:44:14 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37D2C1B97D3
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 16:12:08 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD68D1BA256
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 16:44:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 34C543010736
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 15:12:05 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E659D30D9107
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 15:36:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C01641C2FB;
-	Fri, 27 Feb 2026 15:12:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D45E43E493;
+	Fri, 27 Feb 2026 15:35:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="hJCuxZJy"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="kzyiS+eB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010035.outbound.protection.outlook.com [52.101.69.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B65E2472A6;
-	Fri, 27 Feb 2026 15:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772205121; cv=none; b=Fv7wiYEbyz6/4eGg6Gpl3kP52RYMRGwmYYg0wG0WIgJwHUMwwe9ybNdq8A3UuIIKIgf2b5XfPbwknDYyqyEsxKEHR7LvH8IKJnevcgVAR9rlbzV8icq31Rj6aL06ZO8NIlbhqnsK+RPE5Wvii6TGFMqh761rLxVpXaL4Jb6piQA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772205121; c=relaxed/simple;
-	bh=irR3JYp0TTVgm0qtqdE0bAHioGjEPqy0Cdw4ZxZ7UnM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=FtGSH1TVYface7A/yCF9clfqoaolje0qfFQXPLvA2i7egYrsCFJY6hNqgcOaxIgrcy7UtXcsWM+XH9MgIKkoiODAoMlkcwVSAspzqznGWhxuHZOJmRuYmz40yBy6vqbRQ+0qTDNFGJsFArb5Ztjewrqb3QDeAQ0ElHFBYRe3F48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=hJCuxZJy; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 529272602D;
-	Fri, 27 Feb 2026 16:11:57 +0100 (CET)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XAbdgqFAuMAv; Fri, 27 Feb 2026 16:11:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1772205116; bh=irR3JYp0TTVgm0qtqdE0bAHioGjEPqy0Cdw4ZxZ7UnM=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To;
-	b=hJCuxZJy3yGznOny6+ryfErku1V5Gb/V0QeuXGfywmX/YoPpk5knFFIT8TZB9J0+T
-	 1lpQ8pwsj+oDBTs57WoVXZubcl5g7Ssj6nOeqynazyRPA/5Ewan7VJWgpOzjmW3TXs
-	 gB+OhlSsOf7UsxO9JrjfH1bTXpCTkE3x+DRowE7qXe1+13bAgK9+t+DcTx4fSIBCbK
-	 9g4K9looklH1bJdN/fHMTp9OlrtMqJYrC+Oh12eS43O/2gt1y7JcsNU6LeQOpWG8Np
-	 Vuv6yxDDZ9TD9FSaAcGlY3l2l10Sqm395aAVxnpuThBaIJW9bUe/hOsIPnwBPzU3OY
-	 OH7lhkLshI/hQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08BE2329E60;
+	Fri, 27 Feb 2026 15:35:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.35
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772206540; cv=fail; b=q75OuSKQ4VVm+c9RmQik1U5PVSQCNa/t3hqMLATVF3k5y3/Wl3ViabA92LerCEgPaxd+3PKO43lwuf18GAKFgNHzr3k/+xgsXRBO5aloP7wYr0Wsg4W6XGOGV4O9WmBn5cp/L8gOSBdpHREltdMUVuVKBAYM8HBYgIpYxx/pD3g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772206540; c=relaxed/simple;
+	bh=dQUJw8ox+lQDRWfDfxvFL0HmZx0B1DZb/NukBarZBLE=;
+	h=From:To:CC:Subject:Message-ID:Date:MIME-Version:Content-Type; b=e0xThgHINpHjfWXrk4C4cZZzJNtNKB39KofWRW3bxpQgeek7fG0WpHpdg2Qpy2A7j6xiQOYVQQcqmONejZ1zEv6Dkn34dfEpmv1RXjHV3NxlWr5VBPUJwLiYPT+YzHEJypqz0XDQ+QTzN9RMjEVLX2HKerWvL25Aj4W3bo8wKaA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=kzyiS+eB; arc=fail smtp.client-ip=52.101.69.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DYlW444Qgj32/FrOqwHoHcFAzdMCq0+blNI5AkVKhEWZoGt5vwxTng6XMi7VRkRoncasL99bMFuaxeX0E4m2UiB/vWYe/RrzVGDMjWH5FYvG5bAOpWnuwp/gLMJQ7c7nzB5+C+hzKp6btZaNq0nIjZy9OY/stz2u8vFWsZcEOMW1DSGfeeklrqRFCCgfxz7OdL897N+3+0ThabTSek74aT2QQPMJ+6JQM4wDFcGS3m2yLr700Iwof22TmiZkkda42/tJh1MQGlbUQRUleCNJ6/qHEdX0WmXWcy0IKRWgL3Om2l2TWBRXeifBqP3LvWvjsl75BQefWvLNKGZmawKY8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XxyJrtLiYqGQOC7IgSVwQRWd5LXn2zOoL7kcBeVvSeg=;
+ b=C+Xb3NgKiwlAbnRqSgCmPq+Bvmx/nvZEZGQn+ulTvSSSCQH1El2RFk57qjj3WeD4siJc6W4huADLO4qS9MvW30eCY7YMSJXxaAf1Qe0N67knYLblvLJkC+bFSlfj71RnST876Czs4BclU9zWGdoax+4Mjqv13p8tXrw6+2PEKJH61eVX0pbehFwYngLhO/Kq37pkZiNDBS4JeFLRBSkEM6QkgvV9KIuO+V7cLmit5yOr7OEANxSXsyD5QX/aCL9xukvGE4pAz5HGZCAOQlSWtcoCIc9qvaE8ne01aTNNht4Py5Re2CK1kljoslBKp3jUg5nfN1M3iYPrSvTEFCRuOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=axis.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XxyJrtLiYqGQOC7IgSVwQRWd5LXn2zOoL7kcBeVvSeg=;
+ b=kzyiS+eBxD9etH5iQXIHHQi1BYabD7LBWtFN8UgntxbQFxzQtT+AoB/Rng9NFFm6OQKgwXvdDRoL88C28QgfqekA9zVQusoqRmh3QSQEcLL/TFYGTFxeXfphb9EmKUFSXlThwzOJ+dHIMCSipGaYUAlAcewpqHXYjt0EGnjqNCM=
+Received: from AS4P189CA0031.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:5dd::11)
+ by DB3PR0202MB9058.eurprd02.prod.outlook.com (2603:10a6:10:437::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.16; Fri, 27 Feb
+ 2026 15:35:34 +0000
+Received: from AMS0EPF000001A9.eurprd05.prod.outlook.com
+ (2603:10a6:20b:5dd:cafe::a9) by AS4P189CA0031.outlook.office365.com
+ (2603:10a6:20b:5dd::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.26 via Frontend Transport; Fri,
+ 27 Feb 2026 15:35:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=axis.com;
+Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
+ 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com; pr=C
+Received: from mail.axis.com (195.60.68.100) by
+ AMS0EPF000001A9.mail.protection.outlook.com (10.167.16.149) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9654.16 via Frontend Transport; Fri, 27 Feb 2026 15:35:33 +0000
+Received: from pc52311-2249 (10.4.0.13) by se-mail10w.axis.com (10.20.40.10)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.39; Fri, 27 Feb
+ 2026 16:35:33 +0100
+From: Waqar Hameed <waqar.hameed@axis.com>
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+CC: <kernel@axis.com>, <linux-kernel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [RFC PATCH 0/2] Add driver for TI BQ25630 charger
+User-Agent: a.out
+Message-ID: <cover.1772201049.git.waqar.hameed@axis.com>
+Date: Fri, 27 Feb 2026 16:35:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 27 Feb 2026 20:41:46 +0530
-Message-Id: <DGPUA2NC5ZJI.O10VWM5D15B3@disroot.org>
-Cc: <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
- <linux-samsung-soc@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
- <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v3 03/13] dt-bindings: extcon: document Samsung S2M
- series PMIC extcon device
-From: "Kaustabh Chakraborty" <kauschluss@disroot.org>
-To: "Kaustabh Chakraborty" <kauschluss@disroot.org>, "Lee Jones"
- <lee@kernel.org>, "Pavel Machek" <pavel@kernel.org>, "Rob Herring"
- <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor
- Dooley" <conor+dt@kernel.org>, "MyungJoo Ham" <myungjoo.ham@samsung.com>,
- "Chanwoo Choi" <cw00.choi@samsung.com>, "Sebastian Reichel"
- <sre@kernel.org>, "Krzysztof Kozlowski" <krzk@kernel.org>,
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, "Alexandre
- Belloni" <alexandre.belloni@bootlin.com>, "Jonathan Corbet"
- <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>, "Nam Tran"
- <trannamatk@gmail.com>
-References: <20260225-s2mu005-pmic-v3-0-b4afee947603@disroot.org>
- <20260225-s2mu005-pmic-v3-3-b4afee947603@disroot.org>
-In-Reply-To: <20260225-s2mu005-pmic-v3-3-b4afee947603@disroot.org>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-ClientProxiedBy: se-mail11w.axis.com (10.20.40.11) To se-mail10w.axis.com
+ (10.20.40.10)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AMS0EPF000001A9:EE_|DB3PR0202MB9058:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5235a77b-d9c2-47b8-6ff5-08de7615d8d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|36860700013|82310400026|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	ujmqM5JGmI4N+L+As+0d+W4jUG2cfhFAqYh56YMmJHxZr9QeYRcdmaaYKB/jw9WS1iQTp9cEBYG3dW0WSQfWZf9iL5gZyQmlFuHrYQPygan78MxdpeEo1Re8cas0C/PNuwYNqtmxUuePgdZIekjMTtQ1/CehK1Xkeq8SaMmaD8u3kl6HnuayJ0MXwJyW2pd2w+CcktDgwO401J9onGsfh0fruSJPdm51UaDF+XvnC7UAtBCjY+lKhE8pGwdX4FrWchd61yMSzhBYWhj++ZYT7CsGFrouvbRLhcg/9DBSHA8dUmbXM2XrgvCDVurJ0NfaMpmQVs1kGVByzzCY7lHMXR2/iD/B5N5v8/0ezNFJLTbwcMdwn5ZIf5ufOrW21AxsC6CcfjbV1wia4X4tn9XbaMCTEdKDW4IW34OiUQRmKh3hS0+WzJ7DFuZ5cq0di8SBpl2dKszagtzOP2oDjJS+zonbETIp6UA6rAVNyWzmbVcQZf4mP3Ndrty4HlhcCf1J9KQVajpOGuIOtg4VOgLLfNPCTmh+2eXWQkV13QK2GzXCYPbBx7iBpHfIXt8jkFrc8oKm/o6ZZexoblNJgDItmXixwOYMUXNlzPP2K5By2Au7KNVugMsac+eY95GcInJEoEnPgYmfaMQUedfx9bC/xreiaOXSWuEYLepYh7C/NqoqsEdRLL7vsa+nnRdy7xjgh3TB9FCMD6bjWsqz5aMfYVZHc8CA+ASk6SeLSilEBTbFJtb3g8RJN3fRATDA1lmNvUmJhnAkAevXAWDe0XME6yNrA/DLZxHhXhskdq5GmNmgifnIJiYB5NEIxWOSLZlF9oWdgp/v+mj0V9wzEaYtyA==
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(36860700013)(82310400026)(13003099007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	tCV49AkTUxdczDCitLpok+BjHs9mkMy8+fpghuoFiOwGJnF57+My4ziyalMEbZFvgOftOz0fCufid6K9ZQKT9RBh8ncestZrgWYoYljXioOYqAf3q9y7LAuMOPcXkzdL/v5aPcZMM8CbUQrH8OmdaeaSD86fL7Shur+CwZ3AcviadMb/b5pZHulhdZ2W8ignj1qq91u0GPh850ptdktEPPyPv4o9j+K5hMoz8JIFXHW5UaKQBbR1LzXm8wU9v1Qi+1yDvCSOBgyJ/dlh+xwpFUjT7qulXznPxLDHYzsJnXqZ3ZjVLTHh23GRdsvy8h0HYPTkoMBcKaalxtGqw5SJmsW9tDtPWXfbYZmvh7+pPKzkCZVN2b7i0Jk8IuMQoIggK4gAlQ9cmxE5kHbL4yJFVu0p9QDVrvzxXdUJb1uMz/1QngHWnI6ARy2LzRNPDR5Q
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2026 15:35:33.7046
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5235a77b-d9c2-47b8-6ff5-08de7615d8d5
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS0EPF000001A9.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0202MB9058
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[disroot.org,reject];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[disroot.org:s=mail];
+X-Spamd-Result: default: False [1.35 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[axis.com,none];
+	R_DKIM_ALLOW(-0.20)[axis.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43328-lists,linux-pm=lfdr.de];
-	FREEMAIL_TO(0.00)[disroot.org,kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[22];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43330-lists,linux-pm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ti.com:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kauschluss@disroot.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[disroot.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
+	FROM_NEQ_ENVFROM(0.00)[waqar.hameed@axis.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[axis.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,disroot.org:mid,disroot.org:dkim,disroot.org:email]
-X-Rspamd-Queue-Id: 37D2C1B97D3
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: DD68D1BA256
 X-Rspamd-Action: no action
 
-On 2026-02-25 00:45 +05:30, Kaustabh Chakraborty wrote:
-> Certain Samsung S2M series PMICs have a MUIC device which reports
-> various cable states by measuring the ID-GND resistance with an internal
-> ADC. Document the devicetree schema for this device.
->
-> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
-> ---
->  .../bindings/extcon/samsung,s2mu005-muic.yaml      | 39 ++++++++++++++++=
-++++++
->  1 file changed, 39 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/extcon/samsung,s2mu005-mui=
-c.yaml b/Documentation/devicetree/bindings/extcon/samsung,s2mu005-muic.yaml
-> new file mode 100644
-> index 0000000000000..e047e8cbc264e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/extcon/samsung,s2mu005-muic.yaml
-> @@ -0,0 +1,39 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/extcon/samsung,s2mu005-muic.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MUIC Device for Samsung S2M series PMICs
-> +
-> +maintainers:
-> +  - Kaustabh Chakraborty <kauschluss@disroot.org>
-> +
-> +description: |
-> +  The Samsung S2M series PMIC MUIC device is a USB port accessory
-> +  detector. It reports multiple states depending on the ID-GND
-> +  resistance measured by an internal ADC.
-> +
-> +  This is a part of device tree bindings for S2M and S5M family of Power
-> +  Management IC (PMIC).
-> +
-> +  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml fo=
-r
-> +  additional information and example.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - samsung,s2mu005-muic
-> +
-> +  connector:
-> +    $ref: /schemas/connector/usb-connector.yaml#
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/properties/port
+This patch series contains a fully working driver for the basic
+functionality for the new TI BQ25630 charger (see datasheet [1]).
+However, some functionality has no straightforward implementation. The
+following features have therefore been left out and hopefully we can
+have some design discussions to reach a clear resolution for the next
+patch version (hence the RFC tag):
 
-A v1 review from Conor says:
+  1. The USB OTG functionality (i.e. power *out* from the device) would
+     probably need a minor refactorization to use the MFD sub-system to
+     also register a regulator driver. Looking at the bq257xx driver,
+     this should be the preferred design?
+     
+  2. Other drivers add a custom `sysfs` attributes for BATFET control.
+     See for example rt9471 and bq24190. Is this the preferred approach?
+     Should we add a new power `sysfs` class ABI for this? (There is a
+     TODO left in the code for this.)
+     
+     I reckon it is quite common to have BATFET control for chargers,
+     i.e. being able to set them in "ship mode", "stand-by mode",
+     "shutdown mode" or "idle mode" (example values taken from the
+     `BATFET_CTRL` register field from datasheet [1])?
+     
+  3. This device has liquid detection and corrosion mitigation. I
+     couldn't find any existing device driver with this kind of
+     functionality. The datasheet [1] even mentions "patent pending",
+     although it refers to the USB type-C Specification 2.3... :)
+     
+     When liquid is detected in the charging port, an interrupt is
+     fired. Likewise, an interrupt can be fired when the port is dry
+     enough (according to some configured threshold value). My initial
+     thought was that maybe we can add "liquid detected" to the `health`
+     `sysfs` ABI? However, the question still remains though how one
+     should enable/disable and set threshold values for this (new power
+     class `sysfs` ABI or a custom one only for this driver)?
 
-  Why does this need a dedicated child node for just a port property?
+[1] https://www.ti.com/lit/gpn/bq25630
 
-In v3, connector is added. This now has the same properties as
-maxim,max14526. If this still applies, it would be nice to have more
-insight...
+Waqar Hameed (2):
+  dt-bindings: power: supply: Add TI BQ25630 charger
+  power: supply: Add driver for TI BQ25630 charger
 
-> +
-> +required:
-> +  - compatible
-> +  - connector
-> +  - port
-> +
-> +additionalProperties: false
+ .../bindings/power/supply/bq25630.yaml        |   68 ++
+ drivers/power/supply/Kconfig                  |    7 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/bq25630_charger.c        | 1074 +++++++++++++++++
+ 4 files changed, 1150 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/bq25630.yaml
+ create mode 100644 drivers/power/supply/bq25630_charger.c
+
+
+base-commit: f4d0ec0aa20d49f09dc01d82894ce80d72de0560
+-- 
+2.39.5
 
 
