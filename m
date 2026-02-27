@@ -1,124 +1,121 @@
-Return-Path: <linux-pm+bounces-43346-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43347-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wFaHAqLPoWn3wQQAu9opvQ
-	(envelope-from <linux-pm+bounces-43346-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 18:08:50 +0100
+	id 0N+8Lg/RoWkfwgQAu9opvQ
+	(envelope-from <linux-pm+bounces-43347-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 18:14:55 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 604D21BB39E
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 18:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 04AF31BB4AB
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 18:14:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9C66430B6D5D
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 17:01:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 47EC33017037
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 17:12:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21C9C35BDAF;
-	Fri, 27 Feb 2026 17:01:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E642356A3E;
+	Fri, 27 Feb 2026 17:12:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FLVeTTs/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WAg+Tc4E"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832933570C1
-	for <linux-pm@vger.kernel.org>; Fri, 27 Feb 2026 17:01:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B423E3542CF
+	for <linux-pm@vger.kernel.org>; Fri, 27 Feb 2026 17:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.180
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772211708; cv=pass; b=KgHjd98RgKli8FtoH8IpEdEg4qNxOp41faS2fwvbRtQOpX9x5P+k+CMZfUtUO5v+34Ez3+gKGqJd7bHzjhflL7QymL9GkKK4vuND8Z5z9RVNA9m11ejT0xcv7ctX88vX5MKUeN+NEBkjzEpwJPfMO+N1KloJx6W/ip+T6zt+m2E=
+	t=1772212335; cv=pass; b=iXYEn2MYDunCj1HoAGZ8LRWp/HjV96YluSIVZF+XhsaslaoKCWzNB4cE1kfkAhzufT0E7t+5a4ot7oXhlvWpXNPl/B7GxaPhlZ5+RgMK7y0j+PuRZx+JgISTvyWjMxFT+DqAqN6diOScS/HvkbKKiBYUf6naDHrHd8QUPx5wA8g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772211708; c=relaxed/simple;
-	bh=ZIYRl3u7bmaLRT8SRm9rQ3lQCf0ntfMkORxThMWjq60=;
+	s=arc-20240116; t=1772212335; c=relaxed/simple;
+	bh=PCfezWlqNqd7uS3taiiwQ+8glDG+PKKRTO2Yo237mH0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aRHROGolOExjXivaSiRKNHOLHjQJrAPqr8jSRsT2cfRwajOd9eE8FfuSf4rTofbQ8WWwfhPI+6svUAVzvj51EnadRvXDjRn4Js7pFrSvzcmnDoCQn/vH9y+ZEFQGd2wh231asWNWGohonmfcBGROlXtE9W0io6tzlRC9oqZ9Gec=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FLVeTTs/; arc=pass smtp.client-ip=209.85.208.46
+	 To:Cc:Content-Type; b=MPHjAKJNjJKnyVbFbqiiwQj6m9junaqiJS3v2yyR7hp0LKiVGWrFoqnm9P17s2lQ0z5jY+jN/WGOI9ZexdY7H6otAeKLLF28vv1qtTj2eN1yRa4lZV8An/4PZJcfXMfgO41kqAAYpW9HOf8QohLfC3eeURJuOhQSc5GxDkwUC1I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WAg+Tc4E; arc=pass smtp.client-ip=209.85.208.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-65f90233e28so4365040a12.1
-        for <linux-pm@vger.kernel.org>; Fri, 27 Feb 2026 09:01:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772211705; cv=none;
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-389f9e70ae6so28577891fa.2
+        for <linux-pm@vger.kernel.org>; Fri, 27 Feb 2026 09:12:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772212332; cv=none;
         d=google.com; s=arc-20240605;
-        b=B+2sqNzdX25lRRtPn/9omZp+//1RmNG+j0eiHCWHrkp6GoDld5iVOVPe9r8FN6zDkR
-         1s5qyrK5ugYLdp09XhWjKW81c61lS4q2m1M3vgCokVT0k/BfkPNiB0OyrDXx22grO2N0
-         qp6TyJ5wdTmKo+DAKbNFFbAXf7HMTDRFx3GKvWc6gxggFEapvFHPCvKTDhyBKulJH2aj
-         BTJAKICyhUfrh4Hi5V7zEWhtpKbJMM+kmh9WWks+mI/1+hEtOS8puR2NC2c1wIxc0L8j
-         T1qAKldt2hsCKSd4sxXMUAugLyEJai+AEHjqInz5XibgaMOMRJZ9fyK8rpXLiHE9vEHX
-         HgtA==
+        b=ZnTVvqKgTunK3XqKXs0zF2o6nDGox9porQv9HA83iBhE7Yj0/g4eurz6tjnwXebfFp
+         /sD1fQyMh0behAqa1D7cJCqRDY8EJnHD+YEK1T/zRdE1OtMNl6Y7X1FBlBKG2SPHKvnW
+         GiGy1nduVDPSg+EPHPtCx0QqoIkPOkjwxu4mW3V8GtlByL1u9u2VxiqCWjFtYIpzvxYA
+         r1OCzRD6+908QfE0Ff8iq4l2PHvSFHORZday7UVfvi0k3EDOPLk8In/8J3EToKSgWqeF
+         uDimkQoxz+NEcdVhxhgaBRHpOM3Z97+Jwfzxx1gyLjhFzcq3QHjxkJu9jz4C26Cg59E3
+         VahA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=CW5KUGgoFn5q9gXUzCWImq5omL1f1unPYVtcaICmZNk=;
-        fh=tX4joDqD1tKbewOFwOBEvndJGOIzrH6EoLqWz3Wi0KI=;
-        b=QNKKsmogDSFiJK2Oz1XaaxPp3yez5NoVko+bNyuxhuo6BiDzFtRxJ0FtVV+myK3Wia
-         y9sp/1aa5l22FCx/h00+cP4+KVoT71u2Rzlc3H4w/MrKYuoC+JqsHfZfU3i1ucr95qdN
-         dfv9aCEUYobIGGuS8qS7ruIkmBsI0kLgEsuIkGP/Ma4SS1/0tgFfnosuzXU+aQyahe0r
-         oVKZF4xBST+o228hCsznPidraCludh3bNhyhytAI1uO9ChspahVSIw8roRBlYF96p0CF
-         XxPgQIAPHfXOMyFu8VrpU1jNSjSKVfOUQxIS69BjLhe01b5xbzJuR6/NbR8rScgfSujo
-         aQDg==;
+        bh=DHJQnX7dxsaQirsNm1TyUYVKGkK5VW9C/E+gULXjR68=;
+        fh=7qqzAnME56tzid8wIwwyXuSSU9hbYqsjW4s6z3dRKtA=;
+        b=SSHTHoksWZ8BhwNCyZupFE0Mrg8PQPe9GPYAYXkqAmpcZMLSJSCgTNaM50+wzacxDy
+         RGW6dEC5pzY6RVAH3T7DQuAY2p1cTQtr6BU8+S7HvDVMadRJwVnJ5nOfnCG+gWIa+EI/
+         uVgI34KRTHYcQWOqIo0ysRgoA2y93ZhTjbfwvnl8lLud5qz018OrLitZd5huwEvCq0az
+         JU9Dwt0AANo/JGW3GOUbj0A6UcllPwCFocc/3+tFDycx+MFxSnWZFPDzoqHycKwC7YBO
+         av2fbIcCxLHm+vmj1LGaWXPKxHU7kOoJ7FrDz1fTe4T2I7uK5b7qjJ22k9Ao/Hjl0hJM
+         GEog==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1772211705; x=1772816505; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1772212332; x=1772817132; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CW5KUGgoFn5q9gXUzCWImq5omL1f1unPYVtcaICmZNk=;
-        b=FLVeTTs/BboDTLBfA/su+JwV0Jr7c0Sxtv1LwXCn7RJeg2M+TcmZTlin3PRQSmhZLv
-         gtcmGsXHbJbhJEqKYymGuXPPKuyIw8tUtf156eXBwhGLgO45WJdttCn6saSbJcAkAoZ8
-         wfb6kYeS4tWRaiCw7rtdeV3E4vKFjXik/OuP1S9fPRwTDRnH0sqpy+c7VR5c+qofchbV
-         veFmTALO7r6zhlc86UFGT3wXypu44pkIB7vpUV6/QUO0UuF0vl1GVvKVrYXuMJbaolr4
-         zDL4yKLUTVB0L5em8ukwjzpXCNq+bHgV33YeNYbqV87GZ43nJubl1O/STV/KvXm0Ojk8
-         TsdQ==
+        bh=DHJQnX7dxsaQirsNm1TyUYVKGkK5VW9C/E+gULXjR68=;
+        b=WAg+Tc4E2+XutrejHidE+RVygAHR6tIzp7raNgSc+8WmuZSrECJTwo55wFqOV/g3IN
+         4gHrnz6nJ3ygDDhg49oCNpbVVQcvT4t+6UaitJLMRdY0WDfgTJWwiu1ox17h2Z4muoAz
+         EfNMQF+ymZv0UB04ilyPlQL1ganrSmVOJ0ndV4EL7q53TxwthQWQHSEG1XQHgQB4ZHKt
+         q3Ks8q15nNXoxfZ/jF6moepOYmUToIfFCZkijCfOm/risrTwoEDiiBHi8sOwqRsAh/64
+         823XnBZMe3iqj7CyGPu9E34H1gwmAhgnv0ho3tJfJaheNH5GxoBdJnCxhYHmvlsey9FV
+         1hxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772211705; x=1772816505;
+        d=1e100.net; s=20230601; t=1772212332; x=1772817132;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=CW5KUGgoFn5q9gXUzCWImq5omL1f1unPYVtcaICmZNk=;
-        b=OB8rK7gS8VK+Se23+Qbt0jsDU9oI8/Pfb08XS14eZ4QTD2gy2tn84nBkqTVTU9i2KC
-         uIoBrXiz5uUqwHqJpf0Pkb/4i1wjpVIXHc53/VGqB8VyhaH3hNNqE3+zqcIbiKV7WS5z
-         fI82nPVqUWEfq0wVn7LT1sVVDeD6BKXjqtlIfa27IxUhOEgYyXdJfsXlgQplN+Yz0F1N
-         9Df2nzNFZ2MHzjURG4V/1ICWZgm0BU8K6Umt+rw+BVnlltbOZC3ZRh79CnUIydJ0lXxE
-         yXoi22id53WIjccKcgRi6upP8iALVSQmJkUctVIaHXVqlxAGlMdGhRFoZOZZahmm56f1
-         fLAA==
-X-Forwarded-Encrypted: i=1; AJvYcCW2YdQ4a3THsaGwCbKEMETZxLpG1bwlKvZsp4d9oPfVW5rNbsLWmoibQxRmIfKUdpdAOZQb3WeshA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTccqvJlgDic/nxJxWGL+wb0Za3cS1TR8gEeEYCezPqsJs+rcD
-	4yuY583/PWysGnDzMNlymt/dA1z0aLFzIzTRgs4M/oR4dGm/TaarqF5V89kO8JsQg9VimBJ2V4V
-	/DAbZAvD0FZi7WP0fXN5JYecKICsZkvijKK10Iak9Lw==
-X-Gm-Gg: ATEYQzwrHVNZVbNGX9R7S1Ty4gsR+qhzvhZ233viQPQoyZAtN0x6ntBiB1DVv/skDrw
-	DDS+r59jJAWGF8bQ5q8oC7Nn3+Lu+7IOk4IE4Ne8W9UOhobTQfpj5E1R2s0drcvkd9ivOcZoQVD
-	P+FfNBl3leorpjWyaf4N3kBHw/6yFJG84gyoUz14SvfXYYiAZI1qMNQnNUhqbpFElywdpoyYJ/M
-	BK5qZSHLNjqIdmAxOiZs2KHDeguWMihjGRIvXvBhO+GCjmQLxYqqxuHCH8d4jpe43iCtQFbwJca
-	jf/wKgI0TsWeomIbAP88Zw==
-X-Received: by 2002:a05:6402:270a:b0:65b:a76d:6fe5 with SMTP id
- 4fb4d7f45d1cf-65fde4c9357mr2418868a12.30.1772211704672; Fri, 27 Feb 2026
- 09:01:44 -0800 (PST)
+        bh=DHJQnX7dxsaQirsNm1TyUYVKGkK5VW9C/E+gULXjR68=;
+        b=Zccqr0X4bJHEZhaCoVKJYc698ixJVYM4GiKzT4qQFDACaexZnvF1kFypsTxTZLDU0S
+         KR47YHgxqbf+cEN0T6Qiqg3EDZZda0BSfT6rzK1Rx9qQLtQh6zweAyR4xLaebIvoWAdv
+         I6m3Q9FABSM1R+3NpVCa/qJOyF8H+Yq4UMucnXuiNi4qxuaN5RYqFQjyk5AhgS61z3ru
+         OtcohueG4DXJ+Q6XqSUoWqe2EN4HAknAZ9gQ/QAuBX9HdR65EBT9qfPCo1MGKDo0WGWt
+         DVm63WA/aA2VpBCBjhpvxRCzHq3YpZlDIWsG2wjSpAp84Ppni/pH5DXwEjU9CrojHe6j
+         wSMg==
+X-Forwarded-Encrypted: i=1; AJvYcCUGagsAr/xARqNmhG4KajcIFSxI4nQ4i4Vlw2Fbvfi+2nFiRk9LX/5Re5VsCA1/LXe88oX0snYMrw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzpe4zctyjAW9CQWi/5Xi2U0ikv/o79GWSHxL/sb/MeIS2XvE66
+	QWoX+tAMYcSSASNJvRJNEIJynpj3arXY+mPu818jddbwUivJbYl43i+wLGkWxOasMOcSzW3HAYz
+	HzMVte79DgjOo5FdcUjmg3vazxSNTpaKVHIOTn7IiVg==
+X-Gm-Gg: ATEYQzwP7OMp6BrV5/Yof9y9W67NLOgOxqpqG9+BH825bUBsFopRZgdChEQ9xUbhQU9
+	IH+B/nvlfStojvu1uyzQgdJdUgy5Yo6DRr2Bp+6rNmqd5vnpZpjjnsfycIn5Bn5zp8RgeQOs/69
+	oUck0Xr8lzXmran1Oyc5CFLT1jzMen4pTcOTTNf1dOcrzl6KdPFrRooi1TmncS1i8w/2bfA8Qzw
+	5DRb1ptRLYLIoKwQrwoziOArVcyyNnJgNJSLoLPDw7qc3QaHtjZCoJT5WfBZ1FZU/2SGP64nWYo
+	wVMa3E01
+X-Received: by 2002:a2e:a548:0:b0:389:ffaa:7812 with SMTP id
+ 38308e7fff4ca-389ffaa78femr22939551fa.41.1772212331723; Fri, 27 Feb 2026
+ 09:12:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260227-max77759-fg-v2-0-e50be5f191f0@linaro.org> <20260227-max77759-fg-v2-10-e50be5f191f0@linaro.org>
-In-Reply-To: <20260227-max77759-fg-v2-10-e50be5f191f0@linaro.org>
-From: Peter Griffin <peter.griffin@linaro.org>
-Date: Fri, 27 Feb 2026 17:01:33 +0000
-X-Gm-Features: AaiRm50je7Jyz9A7BguKdOxcDEnGvNXfC21AHwJKgBl8f23M-dLNvVvogDhwjVc
-Message-ID: <CADrjBPrqmyZGNVzV2Qk3yLqG2CLQi0J=rD4vHP9N1ftjDV8UOg@mail.gmail.com>
-Subject: Re: [PATCH v2 10/11] power: supply: max17042: consider task period (max77759)
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Cc: Hans de Goede <hansg@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, Purism Kernel Team <kernel@puri.sm>, 
-	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Juan Yescas <jyescas@google.com>, 
-	Amit Sunil Dhamne <amitsd@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260212150039.67117-2-mcanal@igalia.com>
+In-Reply-To: <20260212150039.67117-2-mcanal@igalia.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 27 Feb 2026 18:11:34 +0100
+X-Gm-Features: AaiRm52rbLI-MD2y29yAU8kDsNHpRGPIqV7ky23ZuQA7ygykHEA0rYtPZw_Y9NM
+Message-ID: <CAPDyKFpT6m4N9AWSMO2VKm1M3n22Ye9+i-t7QT-JtTtB6kfuFA@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: bcm: bcm2835-power: Fix broken reset status read
+To: =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
+	Scott Branden <sbranden@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Stefan Wahren <wahrenst@gmx.net>, 
+	linux-pm@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, kernel-dev@igalia.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
 	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
@@ -126,146 +123,96 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43346-lists,linux-pm=lfdr.de];
+	FREEMAIL_CC(0.00)[broadcom.com,gmx.net,vger.kernel.org,lists.infradead.org,igalia.com];
+	TAGGED_FROM(0.00)[bounces-43347-lists,linux-pm=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[linaro.org:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.griffin@linaro.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[linaro.org:+];
+	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,linaro.org:dkim,mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 604D21BB39E
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid,igalia.com:email,linaro.org:dkim]
+X-Rspamd-Queue-Id: 04AF31BB4AB
 X-Rspamd-Action: no action
 
-On Fri, 27 Feb 2026 at 07:15, Andr=C3=A9 Draszik <andre.draszik@linaro.org>=
- wrote:
+On Thu, 12 Feb 2026 at 16:02, Ma=C3=ADra Canal <mcanal@igalia.com> wrote:
 >
-> Several (register) values reported by the fuel gauge depend on its
-> internal task period and it needs to be taken into account when
-> calculating results. All relevant example formulas in the data sheet
-> assume the default task period (of 5760) and final results need to be
-> adjusted based on the task period in effect.
+> bcm2835_reset_status() has a misplaced parenthesis on every PM_READ()
+> call. Since PM_READ(reg) expands to readl(power->base + (reg)), the
+> expression:
 >
-> Update the code as and where necessary.
+>     PM_READ(PM_GRAFX & PM_V3DRSTN)
 >
-> Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
-> ---
+> computes the bitwise AND of the register offset PM_GRAFX with the
+> bitmask PM_V3DRSTN before using the result as a register offset, reading
+> from the wrong MMIO address instead of the intended PM_GRAFX register.
+> The same issue affects the PM_IMAGE cases.
+>
+> Fix by moving the closing parenthesis so PM_READ() receives only the
+> register offset, and the bitmask is applied to the value returned by
+> the read.
+>
+> Fixes: 670c672608a1 ("soc: bcm: bcm2835-pm: Add support for power domains=
+ under a new binding.")
+> Signed-off-by: Ma=C3=ADra Canal <mcanal@igalia.com>
 
-Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
+Applied fixes and added a stable tag, thanks!
 
-> While I do believe this should apply to all devices supported by this
-> driver, given the register description in max17042_battery.h, I've made
-> this change specific to max77759, as I have no way to confirm this
-> works as expected on those. I've found a data sheet for
-> max17047/max17050 online, which does describe the relevant register
-> 0x3c as 'reserved', hence I'm a bit hesitant to enable this for all.
->
-> v2:
-> * update commit message subject prefix
+Kind regards
+Uffe
+
+
 > ---
->  drivers/power/supply/max17042_battery.c | 20 ++++++++++++++++++++
->  include/linux/power/max17042_battery.h  |  1 +
->  2 files changed, 21 insertions(+)
 >
-> diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supp=
-ly/max17042_battery.c
-> index 44626abdab34..89909b140cf9 100644
-> --- a/drivers/power/supply/max17042_battery.c
-> +++ b/drivers/power/supply/max17042_battery.c
-> @@ -61,6 +61,7 @@ struct max17042_chip {
->         struct work_struct work;
->         int    init_complete;
->         int    irq;
-> +       int    task_period;
->  };
+> Hi,
 >
->  static enum power_supply_property max17042_battery_props[] =3D {
-> @@ -335,6 +336,8 @@ static int max17042_get_property(struct power_supply =
-*psy,
->                         return ret;
+> Most likely this bug went unnoticed as there is no in-tree driver
+> currently calling reset_control_status() on the BCM2835 reset
+> controller. Although I'm sending a fix to the .status callback, another
+> possibility would be removing the implementation of this callback
+> considering that (1) it's broken and (2) it's not used.
 >
->                 data64 =3D data * 5000000ll;
-> +               data64 *=3D chip->task_period;
-> +               do_div(data64, MAX17042_DEFAULT_TASK_PERIOD);
->                 do_div(data64, chip->pdata->r_sns);
->                 val->intval =3D data64;
->                 break;
-> @@ -344,6 +347,8 @@ static int max17042_get_property(struct power_supply =
-*psy,
->                         return ret;
+> I'd appreciate your feedback about the most suitable option.
 >
->                 data64 =3D data * 5000000ll;
-> +               data64 *=3D chip->task_period;
-> +               do_div(data64, MAX17042_DEFAULT_TASK_PERIOD);
->                 do_div(data64, chip->pdata->r_sns);
->                 val->intval =3D data64;
->                 break;
-> @@ -353,6 +358,8 @@ static int max17042_get_property(struct power_supply =
-*psy,
->                         return ret;
+> Best regards,
+> - Ma=C3=ADra
 >
->                 data64 =3D data * 5000000ll;
-> +               data64 *=3D chip->task_period;
-> +               do_div(data64, MAX17042_DEFAULT_TASK_PERIOD);
->                 do_div(data64, chip->pdata->r_sns);
->                 val->intval =3D data64;
->                 break;
-> @@ -362,6 +369,8 @@ static int max17042_get_property(struct power_supply =
-*psy,
->                         return ret;
+> ---
 >
->                 data64 =3D sign_extend64(data, 15) * 5000000ll;
-> +               data64 *=3D chip->task_period;
-> +               data64 =3D div_s64(data64, MAX17042_DEFAULT_TASK_PERIOD);
->                 val->intval =3D div_s64(data64, chip->pdata->r_sns);
->                 break;
->         case POWER_SUPPLY_PROP_TEMP:
-> @@ -1146,6 +1155,17 @@ static int max17042_probe(struct i2c_client *clien=
-t, struct device *dev, int irq
->                 regmap_write(chip->regmap, MAX17042_LearnCFG, 0x0007);
+>  drivers/pmdomain/bcm/bcm2835-power.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/pmdomain/bcm/bcm2835-power.c b/drivers/pmdomain/bcm/=
+bcm2835-power.c
+> index 1d29addfe036..0450202bbee2 100644
+> --- a/drivers/pmdomain/bcm/bcm2835-power.c
+> +++ b/drivers/pmdomain/bcm/bcm2835-power.c
+> @@ -580,11 +580,11 @@ static int bcm2835_reset_status(struct reset_contro=
+ller_dev *rcdev,
+>
+>         switch (id) {
+>         case BCM2835_RESET_V3D:
+> -               return !PM_READ(PM_GRAFX & PM_V3DRSTN);
+> +               return !(PM_READ(PM_GRAFX) & PM_V3DRSTN);
+>         case BCM2835_RESET_H264:
+> -               return !PM_READ(PM_IMAGE & PM_H264RSTN);
+> +               return !(PM_READ(PM_IMAGE) & PM_H264RSTN);
+>         case BCM2835_RESET_ISP:
+> -               return !PM_READ(PM_IMAGE & PM_ISPRSTN);
+> +               return !(PM_READ(PM_IMAGE) & PM_ISPRSTN);
+>         default:
+>                 return -EINVAL;
 >         }
->
-> +       chip->task_period =3D MAX17042_DEFAULT_TASK_PERIOD;
-> +       if (chip->chip_type =3D=3D MAXIM_DEVICE_TYPE_MAX77759) {
-> +               ret =3D regmap_read(chip->regmap, MAX17042_TaskPeriod, &v=
-al);
-> +               if (ret)
-> +                       return dev_err_probe(dev, ret,
-> +                                            "failed to read task period\=
-n");
-> +               chip->task_period =3D val;
-> +       }
-> +       dev_dbg(dev, "task period: %#.4x (%d)\n", chip->task_period,
-> +               chip->task_period);
-> +
->         chip->battery =3D devm_power_supply_register(dev, max17042_desc,
->                                                    &psy_cfg);
->         if (IS_ERR(chip->battery))
-> diff --git a/include/linux/power/max17042_battery.h b/include/linux/power=
-/max17042_battery.h
-> index 05097f08ea36..d5b08313cf11 100644
-> --- a/include/linux/power/max17042_battery.h
-> +++ b/include/linux/power/max17042_battery.h
-> @@ -17,6 +17,7 @@
->  #define MAX17042_DEFAULT_VMAX          (4500) /* LiHV cell max */
->  #define MAX17042_DEFAULT_TEMP_MIN      (0)    /* For sys without temp se=
-nsor */
->  #define MAX17042_DEFAULT_TEMP_MAX      (700)  /* 70 degrees Celcius */
-> +#define MAX17042_DEFAULT_TASK_PERIOD   (5760)
->
->  /* Consider RepCap which is less then 10 units below FullCAP full */
->  #define MAX17042_FULL_THRESHOLD                10
->
 > --
-> 2.53.0.473.g4a7958ca14-goog
+> 2.52.0
 >
 
