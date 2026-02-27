@@ -1,51 +1,51 @@
-Return-Path: <linux-pm+bounces-43353-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43354-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YKAFHZkBomnPyAQAu9opvQ
-	(envelope-from <linux-pm+bounces-43353-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 21:42:01 +0100
+	id EJUoGb0BomnPyAQAu9opvQ
+	(envelope-from <linux-pm+bounces-43354-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 21:42:37 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8FF71BDD7D
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 21:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA3251BDE0B
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 21:42:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E16C530BBEB3
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 20:39:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1FCCE30E97CD
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 20:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 482BC477E2F;
-	Fri, 27 Feb 2026 20:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ABD4477E2B;
+	Fri, 27 Feb 2026 20:40:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RxJ5UGqT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HT+ggsBh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245E94779BB;
-	Fri, 27 Feb 2026 20:39:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469963A1A2D;
+	Fri, 27 Feb 2026 20:40:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772224792; cv=none; b=LCgOkomt2JQP7pCkrY6X9SRJ9XWgRGr9wONYfRYKs+fxSpRMTAGosFO6XQIs5LZ85qxkCKhFT+csOqvrHMIo+QOTPIWNO/biidAuMH2LqRUniXRttbVh5St1Q0mThSZaMD+46ptB3KoX1JPT2WQG/G88FyXZbw7bwxnd/fVIjDI=
+	t=1772224831; cv=none; b=jGMsvvPbxfpxuOjf4bPZ1DKJCRB50ryy9Yqw+cazDtlUpvMSiHSyc43ZtG+NvYesVx5ZO0gVz/48tqYguqgWsVpFyLxoc1utsq8ui4clI1qdPzOlIKEVqT6pjVkpUFrqOmCGiAA4v5D4Puw7EV1pyFRUUBTmAh8coJygwDOiuJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772224792; c=relaxed/simple;
-	bh=6KccSK+/RNVKVO6WapQi1OO/X6L6RhvwEhhnUVSuMAk=;
+	s=arc-20240116; t=1772224831; c=relaxed/simple;
+	bh=uXLTmn0UmbB9sAS28s5iTcu9N3dgOYkeLQKoVGtAmEY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YQLfNZV4u2QO5q8qOKDri4/6LGRDyEUMRm1U4Wxs+0ffppEfhaHFwA5uImek/IjZGSk/UQDhop1UoPZMxV93rZxUMA9Oq9o62PerQqQ0ZQQxObmSXvUOnr6LdOeNAqeSQ7S1gajvOnyTToif5AB52hKZZXt4zV83/vwnUnkpnxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RxJ5UGqT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A931CC2BC87;
-	Fri, 27 Feb 2026 20:39:44 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=q8yN3p3omoZOyiS63rVlNsbx5EXcL0RnnHcm5Wvxe3GLS2GM87Fi4RXIL+jZyj0iqGs28VtM9VSat382EEdWoP2JfLAjblqR7KkPVS2aBnIRJVkKKUqKjFbgDKg69xH0aAvrNVt1pIeEaqNOG4wwWveLSxzMX7xguX/osBcw4Ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HT+ggsBh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6137C116C6;
+	Fri, 27 Feb 2026 20:40:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772224791;
-	bh=6KccSK+/RNVKVO6WapQi1OO/X6L6RhvwEhhnUVSuMAk=;
+	s=k20201202; t=1772224830;
+	bh=uXLTmn0UmbB9sAS28s5iTcu9N3dgOYkeLQKoVGtAmEY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RxJ5UGqTMhNKcz3e5zUuS7yqBpKIKGYKnFYDUOtnD5ZGQYiDfsCs3wCJeST9JFUvq
-	 sHSPFQSEqskEEwbbJoyQ88m8jLoOqmfJfyN1omaSGxymfsx8E/0r9sYdLTnB1Hw0Cu
-	 5JpRAAhg7lQtSdbScJWLdwmqVjf4LuXHQFaFbHzrA3dG5b2kmC7Mb2pnvgsCAIDTv1
-	 cowpF/r/IiyD25YGy6faI6nHyxgGfu3ZQkrjKakFTJYana7ctcU0BXfvDurL0DwtTC
-	 JqWRfL6dzb9UhizOZkPWHGkGcxraV9ms7id1GN/HxwvK+TWTMu45VPdiY4/OgRIude
-	 EwKBgaQ0Od9lw==
-Message-ID: <d95ec932-fbbc-48b0-9ab0-f16eea8a6172@kernel.org>
-Date: Fri, 27 Feb 2026 21:39:43 +0100
+	b=HT+ggsBhM3HwcyKKY6D9Rx6imRkxiR53dmjIms7mdZaawluoHyaf0dvqDIVXt/9kP
+	 ELKCP0j4FGQlIbGw7LpI7TBvh9gQcq+varnTzdNoXgAu73lYql7meSLerSeKyiuKRz
+	 RFeag1g0FvfQ0RITxTJ75eILf43ft65j1FPTE+44ZBPC4xFDqtKw44KHhvFXYzCMiE
+	 nuZ1QR55gI4C4rl38plH/9LusXHM9LjS+VTjOuhzQl7PvPzKI/IUenlBlyusQ9owZB
+	 ONx852aPKUBjk4WJAFPgy3TtdHkyn5X340Igj8IcNRZt7b6vJSopk1aNP6ew0K7uYv
+	 TEbjZPd5Th6QA==
+Message-ID: <1a65d41c-316a-4fd2-9a7d-146644029738@kernel.org>
+Date: Fri, 27 Feb 2026 21:40:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/5] mm: convert compaction to zone lock wrappers
+Subject: Re: [PATCH v4 4/5] mm: rename zone->lock to zone->_lock
 To: Dmitry Ilvokhin <d@ilvokhin.com>,
  Andrew Morton <akpm@linux-foundation.org>,
  Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
@@ -71,9 +71,10 @@ To: Dmitry Ilvokhin <d@ilvokhin.com>,
  Shakeel Butt <shakeel.butt@linux.dev>
 Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
  linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- "linux-cxl@vger.kernel.orgkernel-team"@meta.com
+ "linux-cxl@vger.kernel.orgkernel-team"@meta.com,
+ SeongJae Park <sj@kernel.org>
 References: <cover.1772206930.git.d@ilvokhin.com>
- <3a09e46f52cf9f709b0725bc2b648cc5212843b2.1772206930.git.d@ilvokhin.com>
+ <d61500c5784c64e971f4d328c57639303c475f81.1772206930.git.d@ilvokhin.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -120,7 +121,7 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <3a09e46f52cf9f709b0725bc2b648cc5212843b2.1772206930.git.d@ilvokhin.com>
+In-Reply-To: <d61500c5784c64e971f4d328c57639303c475f81.1772206930.git.d@ilvokhin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
@@ -133,12 +134,12 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43353-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43354-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[28];
+	RCPT_COUNT_TWELVE(0.00)[29];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
@@ -149,47 +150,24 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-pm];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ilvokhin.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.dev:email]
-X-Rspamd-Queue-Id: C8FF71BDD7D
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ilvokhin.com:email,linux-foundation.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.dev:email]
+X-Rspamd-Queue-Id: CA3251BDE0B
 X-Rspamd-Action: no action
 
 On 2/27/26 17:00, Dmitry Ilvokhin wrote:
-> Compaction uses compact_lock_irqsave(), which currently operates
-> on a raw spinlock_t pointer so it can be used for both zone->lock
-> and lruvec->lru_lock. Since zone lock operations are now wrapped,
-> compact_lock_irqsave() can no longer directly operate on a
-> spinlock_t when the lock belongs to a zone.
-> 
-> Split the helper into compact_zone_lock_irqsave() and
-> compact_lruvec_lock_irqsave(), duplicating the small amount of
-> shared logic. As there are only two call sites and both statically
-> know the lock type, this avoids introducing additional abstraction
-> or runtime dispatch in the compaction path.
+> This intentionally breaks direct users of zone->lock at compile time so
+> all call sites are converted to the zone lock wrappers. Without the
+> rename, present and future out-of-tree code could continue using
+> spin_lock(&zone->lock) and bypass the wrappers and tracing
+> infrastructure.
 > 
 > No functional change intended.
 > 
+> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
 > Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
 > Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+> Acked-by: SeongJae Park <sj@kernel.org>
 > ---
->  mm/compaction.c | 33 ++++++++++++++++++++++++---------
->  1 file changed, 24 insertions(+), 9 deletions(-)
-> 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index fa0e332a8a92..c68fcc416fc7 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -503,19 +503,36 @@ static bool test_and_set_skip(struct compact_control *cc, struct page *page)
->   *
->   * Always returns true which makes it easier to track lock state in callers.
->   */
-> -static bool compact_lock_irqsave(spinlock_t *lock, unsigned long *flags,
-> -						struct compact_control *cc)
-> -	__acquires(lock)
-> +static bool compact_zone_lock_irqsave(struct zone *zone,
-> +				      unsigned long *flags,
-> +				      struct compact_control *cc)
-
-... two tabs :)
 
 Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
