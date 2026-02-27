@@ -1,51 +1,51 @@
-Return-Path: <linux-pm+bounces-43351-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43352-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6H4oKhcBomnPyAQAu9opvQ
-	(envelope-from <linux-pm+bounces-43351-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 21:39:51 +0100
+	id QOtaFVgBomnXyAQAu9opvQ
+	(envelope-from <linux-pm+bounces-43352-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 21:40:56 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D6D11BDC7C
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 21:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AA0291BDCD0
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 21:40:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4C36C30CF02F
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 20:37:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 26621301874E
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 20:39:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 881724779B9;
-	Fri, 27 Feb 2026 20:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 653954779BB;
+	Fri, 27 Feb 2026 20:39:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tmDIHN6I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CesjGCgp"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633D446AF11;
-	Fri, 27 Feb 2026 20:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D49453493;
+	Fri, 27 Feb 2026 20:39:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772224628; cv=none; b=s6CdrlP3aQQJB3NDkd0Zrq/1tFqtx0geAOX2Vk220N3xIeSlAmIn7OqTJad7bLRszt3/7MMjh7jRhRvmraah2yWUdO204dN0UCxAX+umPypoNf5rzCJEVNbXVr+/c19W6SbkS7JWv2D4QndrwfsoZA6685HbSiC1GLoEenoQAX4=
+	t=1772224760; cv=none; b=QjHrO73ZwRys7ROMInR023KYWRED8QNR3F1nV7aY7Ztw248INU2MEHVFmb4F0nRxbL8bhlvK2R36lkNW6kEeCHz8V3qKXRmMrJInpD1Su16GTZmY1ahCofaJnpjIU65t2Z1sNhe0qy8DmL21Lm/yMZj+PdMisTLJ5Ua6wyDfuv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772224628; c=relaxed/simple;
-	bh=REZBKPMip5Pk+kcsDPtKxHXJtVWbZbE6rgnLUZlun50=;
+	s=arc-20240116; t=1772224760; c=relaxed/simple;
+	bh=C0JYE9g4fNlb54nOcYXLDnmpOOfKqRtc3+52X6TvFkI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K6npnoNj+he/1xbf91jwzSwSOTZ6MWTRc6+7nsLOZqzzocDF7Sd9iNdr5uMWNrDjgY0gFpQWDt+zf2BS8BXLGRDW63M1GDImPkDYckzOfoglvRbrx/rioky8+tmho1kz+OQrhddAWFP+dEcKwsarkrEJPWKiwAIodg6L8QhkTEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tmDIHN6I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B64D1C116C6;
-	Fri, 27 Feb 2026 20:37:01 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Oh5Cxqo39UzA5asqu/MOnBZh96Et0HZ9szNKYsbjsXuSZvDEDWIr52htbqEheqtT+jtuNAYLfm2+2sDsKGfX27MRJ1Mf0tsgPIDhAWLJW+bpl1/a22TqtXZC0eBOriRFKTsc4wiPsrewFlRYXKmkvmqIvuZXy6NHH0lRZwzzqZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CesjGCgp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D3D0C116C6;
+	Fri, 27 Feb 2026 20:39:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772224628;
-	bh=REZBKPMip5Pk+kcsDPtKxHXJtVWbZbE6rgnLUZlun50=;
+	s=k20201202; t=1772224759;
+	bh=C0JYE9g4fNlb54nOcYXLDnmpOOfKqRtc3+52X6TvFkI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tmDIHN6I/m6MfU4syrvtkjJ1nBgJ0kqrhbD05xVnWovau41AbUJWhMwOsTIjZ4M3O
-	 +8FRjhwMAFOBNRTWGZYaGjhOm64OeZl8OVoUpYLiVb9e1zOoOUUfyMKSp2DUzOu1kg
-	 e0qVYLEeU0NgkqCBPxgvn2ioZz24F9dI0dgoaDOJRc9UsKMShmV5dwpfJ05g2pqNSj
-	 9pcDEXiuANeGnHC9y5eHZHoVdaBAvK++5gsD0soVpKvt9k1pRgOHor4vctzn9sOMJb
-	 DN0Wb4++kVE7nMYnjAab9j1rJQ7aOiRzcN7q31LcBrJ5L/wEKVDRFRKZo3DmKBXTpx
-	 TkAO77LjZuKfg==
-Message-ID: <4ed265c9-9598-411f-82ca-bb7feb49e1b0@kernel.org>
-Date: Fri, 27 Feb 2026 21:36:59 +0100
+	b=CesjGCgpHbnBs+6sVaZ1GtPvtTHPtngBOYi0yU7cJOzflnqlkNKD1zRkmSQtRHvuf
+	 6RzAWIzv+oglcgdELZAMMmLzdYi0OniFpNcJ7DvoeUrxBveINOzXB19noW0WPaJNxm
+	 7smt+degjri7ytTbnFLOLsDx03xtp2ABokJlba8Ifr1d1lWv2GatQUS2NJxcy5WIQl
+	 MG3ZmSXyib5rydb/zPJc7Zy+vvDD+K7hXdh6GjT59/YHHwXwPUWqhqOSjaVkNWnmu8
+	 33uOroiy7FwbgRu2ld9UOJHpsY/sIMZ3aSL9CQY7NjHhlsf/w4SnwmaQVVhWLc+beN
+	 Q+UM5TNtP5H8A==
+Message-ID: <7e93021d-53dd-4162-97e6-3bca1f46a0c6@kernel.org>
+Date: Fri, 27 Feb 2026 21:39:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/5] mm: introduce zone lock wrappers
+Subject: Re: [PATCH v4 2/5] mm: convert zone lock users to wrappers
 To: Dmitry Ilvokhin <d@ilvokhin.com>,
  Andrew Morton <akpm@linux-foundation.org>,
  Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
@@ -71,9 +71,10 @@ To: Dmitry Ilvokhin <d@ilvokhin.com>,
  Shakeel Butt <shakeel.butt@linux.dev>
 Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
  linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- "linux-cxl@vger.kernel.orgkernel-team"@meta.com
+ "linux-cxl@vger.kernel.orgkernel-team"@meta.com,
+ SeongJae Park <sj@kernel.org>
 References: <cover.1772206930.git.d@ilvokhin.com>
- <849dee9c47df1e6fba97c9933af0d5a08b8e15d3.1772206930.git.d@ilvokhin.com>
+ <d26a43ebed2f0f1edb9cfe4fbed16dd31c7a069c.1772206930.git.d@ilvokhin.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -120,7 +121,7 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <849dee9c47df1e6fba97c9933af0d5a08b8e15d3.1772206930.git.d@ilvokhin.com>
+In-Reply-To: <d26a43ebed2f0f1edb9cfe4fbed16dd31c7a069c.1772206930.git.d@ilvokhin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
@@ -133,12 +134,12 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43351-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43352-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[28];
+	RCPT_COUNT_TWELVE(0.00)[29];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
@@ -149,25 +150,46 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-pm];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,ilvokhin.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0D6D11BDC7C
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,ilvokhin.com:email]
+X-Rspamd-Queue-Id: AA0291BDCD0
 X-Rspamd-Action: no action
 
 On 2/27/26 17:00, Dmitry Ilvokhin wrote:
-> Add thin wrappers around zone lock acquire/release operations. This
-> prepares the code for future tracepoint instrumentation without
-> modifying individual call sites.
+> Replace direct zone lock acquire/release operations with the
+> newly introduced wrappers.
 > 
-> Centralizing zone lock operations behind wrappers allows future
-> instrumentation or debugging hooks to be added without touching
-> all users.
+> The changes are purely mechanical substitutions. No functional change
+> intended. Locking semantics and ordering remain unchanged.
 > 
-> No functional change intended. The wrappers are introduced in
-> preparation for subsequent patches and are not yet used.
+> The compaction path is left unchanged for now and will be
+> handled separately in the following patch due to additional
+> non-trivial modifications.
 > 
 > Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
 > Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+> Reviewed-by: SeongJae Park <sj@kernel.org>
 > ---
+
+[...]
+
+>  #ifdef CONFIG_COMPACTION
+> @@ -530,11 +531,14 @@ static bool compact_lock_irqsave(spinlock_t *lock, unsigned long *flags,
+>   * Returns true if compaction should abort due to fatal signal pending.
+>   * Returns false when compaction can continue.
+>   */
+> -static bool compact_unlock_should_abort(spinlock_t *lock,
+> -		unsigned long flags, bool *locked, struct compact_control *cc)
+> +
+> +static bool compact_unlock_should_abort(struct zone *zone,
+> +					unsigned long flags,
+> +					bool *locked,
+> +					struct compact_control *cc)
+
+We tend to use two-tabs on second parameter line; like the existing code
+did.
+
+
+Besides that
 
 Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
