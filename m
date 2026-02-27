@@ -1,194 +1,211 @@
-Return-Path: <linux-pm+bounces-43291-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43292-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YA9WFz5FoWkirwQAu9opvQ
-	(envelope-from <linux-pm+bounces-43291-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 08:18:22 +0100
+	id WEkKBO6AoWkUtgQAu9opvQ
+	(envelope-from <linux-pm+bounces-43292-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 12:33:02 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 061941B3BFB
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 08:18:21 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 825061B69CB
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 12:33:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B3D93317DDF0
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 07:15:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5C4E63013858
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Feb 2026 11:30:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD3D3AEF5E;
-	Fri, 27 Feb 2026 07:15:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qJwObES6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A18473ED12A;
+	Fri, 27 Feb 2026 11:30:01 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F352C389E18
-	for <linux-pm@vger.kernel.org>; Fri, 27 Feb 2026 07:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+Received: from mail.bix.bg (mail.bix.bg [193.105.196.21])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 3C2C03EFD2B
+	for <linux-pm@vger.kernel.org>; Fri, 27 Feb 2026 11:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.105.196.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772176518; cv=none; b=ixGoDzBPrOhYxZqXfcDL4rQ4ShZus+ONF75KTXHUnSCK3k3CznJ2eszQ+O38ELZm3iZHOo49bgLq/PiVNNz5sNB3yY6/QjyxrSh4vbFhgtgF90fLnlyNrZuZbLFrWbFrHeoT2/j25Wf0RvIajxmU7zuJ8na4LRePOaT6aqfJU0w=
+	t=1772191801; cv=none; b=hw6BpjfWCrhFo7DeNqEFY1exZJn2wI/Se6UA54bBvHBKeBVha4T2BsN4pNgzMo54N440HGolmrflKd8qo/QuEytpGVQbfdruxAGnRs6/gGYJoQ26rI+42188rIzrpfuZfdESFQek+j54chM/AKgaaWBBtc8MFS1cLw5Ky7WlAm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772176518; c=relaxed/simple;
-	bh=mdMwa+4vXJFSq1mBJLsIE/rDEGn2SDuqUw2L2ipYiws=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LtgVEhbszrHSmlfnWI1CxoalULOhjTZT3/jzdk4L9dXVm3g06GN3wlFTK1il5PnTDVUuNEzhHkYVXRJC5LDyXE4PJKwguhQF+fhZUTSaoa8jCYEZ0rCq+AUPz59LPERHSwrOOGVePClrEhNRlIxEtaUzq5sdevYTrIIkQd7JoXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qJwObES6; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-65faaa8b807so3259520a12.3
-        for <linux-pm@vger.kernel.org>; Thu, 26 Feb 2026 23:15:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1772176515; x=1772781315; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Pb9+a6UQI9eJoPAfaI075Xgk+AX6ysZxadZXLoPE5ik=;
-        b=qJwObES6t1BuEALPr1QuOyfP1m6V6NmCubcWrKqzWkVr5xZfl4fks2KyN0PGsVGy4B
-         0/oUld4DixrrLsk6cQXeV23WDGZDmzOCPdrcWK76peUvh4qJw6Mdt656C9n/EARFMwNW
-         KD5T0XaAAGoLKWeUe5ui7mgwcze4KS/IEwYZ1yHfMoYRU2G5e9IfE2jUMOEoTLglCgOo
-         Vl6dC7FMUx9Xo+lyl3YKBhM808DBg2wVctAq1UjlIzdhLgMpvr8krZ/L8VFNshTrzItz
-         D0Qi2dRNrfiDPAFfoW5bEsWnpohwKbQ0t+aZuYYepds6rrwmUA5kPUxc2HN6hNLHv6Uw
-         dLGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772176515; x=1772781315;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Pb9+a6UQI9eJoPAfaI075Xgk+AX6ysZxadZXLoPE5ik=;
-        b=CRxbPV5WCNPHLVVMIN4zOqwu5tn2Qt3+D3BrR78OHtRgJXouhYOnzb7ipOfFT6Gwis
-         1z+Foo8SAloERw4BQhjN+S1c6I3xBUIb4Beg+iKT+9A0k/VmcEv2rm2WOfnz1tvxuwTy
-         2HzdqSsx7Unx4N6ditBU0FJNsKNHUtqJy8JD3c824slE1qF3BllfJcQxlpznsrpsMaP5
-         ZKpaNwzYtU5mRcmWTQNpkBc8CYV02aHopp08Ih92qPjK3fUuNmN9kq2uysdp25w9QcL9
-         pycLbylcts+KwcUW3wHMLslZJTWg+RbAOKUbeAoR0Pg5OAR3CsQX1znbe9iOaXDstQhY
-         7RWw==
-X-Forwarded-Encrypted: i=1; AJvYcCUa0thB7U6yaiCptPGiSjzHrrNFarqGcf0WodiVLpLy0dKjjy6brwdkAw2T1tXF6asFlt3s7LRAmw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPPV8ZC6KcIv7WgmJihpYTyk1R//yk+9quiFqw2AFvyz3OnXD3
-	QHub5ElbcO1zJr8Fu6dhN+zv65hwGbDLNUNekMM6xfgvaGEnwFXZpleXaeEAQqaEXlQ=
-X-Gm-Gg: ATEYQzwz6XpHnxk4VwwPVJkV4PLjt6nA7dx2xoRlhwpt6vc/SSyg8ChX2BwundbO/Zj
-	bHzKcotPnCboLeyXS9dePd3uO+IO304JXH7NAcBywxgMTbtjq7TJI4voqLmvc4Gnfb1kmIrXexA
-	IHThE9GyDGdAWBg4jZbaSAKq1uMOjqTxPdBwOiN+91t5j42Gp2TGeemQp12Hwi3mDmpWo/FjeZV
-	xr1sCUGSRreJbdtmBf+GqTx+iakXgd0XDAK2V+zJiAIJN5tVlTeDwRBekTuYC5ew0mNZi2Lxolu
-	CbdYqf+LZOZujJzDZAqjZFdbC5MTCgGzu3YdXQLzON6WDQozwAuSJxqa6jnfpvtaJOtsZtPJMkG
-	2FFKTNGjMayw9sb8a+M7bFd9VjVHrFOEBRfcqt0y9LShEvy1PnaJdXhYsJSaCHY0MvUELTRB+f5
-	4YfH2jDKXfmPiKyd3Mo9J8HAoX+dm+yvfUDZamjTBpbmV2s3u/nWgfru0pUmkxijBrXG2ZW7mXt
-	jA0TZSO7AcvprNViQ==
-X-Received: by 2002:a17:907:d05:b0:b87:965:907a with SMTP id a640c23a62f3a-b93765210c0mr101186166b.32.1772176515213;
-        Thu, 26 Feb 2026 23:15:15 -0800 (PST)
-Received: from puffmais2.c.googlers.com (244.175.141.34.bc.googleusercontent.com. [34.141.175.244])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b935aeee867sm124205066b.66.2026.02.26.23.15.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 23:15:14 -0800 (PST)
-From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Fri, 27 Feb 2026 07:15:16 +0000
-Subject: [PATCH v2 11/11] power: supply: max17042: report time to full
- (max17055 & max77759)
+	s=arc-20240116; t=1772191801; c=relaxed/simple;
+	bh=x1xIJL+q8Ox7m8RJ56ASpFlfFQQUFvhfbCU32E8lAiw=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AOmfEVyRlNkyaZilHnGu0C2hEcS8Tec4JC3ahpcNV3FJxLG22YNFkm27KPZFtvG61mOFCGEYbrwYaUwDrGWItdnIyGfyIi2QN2tJjiGy/5Xsiqv4LszJ6kJgI/3AuoGvJyxOP4Aps9rQAd/gkBeirRY4+ic/Oioj3RuXz0t+eSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=declera.com; spf=pass smtp.mailfrom=declera.com; arc=none smtp.client-ip=193.105.196.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=declera.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=declera.com
+Received: (qmail 9827 invoked from network); 27 Feb 2026 11:29:53 -0000
+Received: from d2.declera.com (HELO ?212.116.131.122?) (212.116.131.122)
+  by indigo.declera.com with SMTP; 27 Feb 2026 11:29:53 -0000
+Message-ID: <990bc03ed2baa05e619f0aa9cc6a23acadd66ea6.camel@declera.com>
+Subject: Re: [PATCH v5 2/2] mfd: simple-mfd-i2c: add a reboot cell for the
+ SpacemiT P1 chip
+From: Yanko Kaneti <yaneti@declera.com>
+To: linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>, Sebastian
+ Reichel	 <sre@kernel.org>, Troy Mitchell
+ <troy.mitchell@linux.spacemit.com>, Yixun Lan	 <dlan@gentoo.org>, Paul
+ Walmsley <pjw@kernel.org>, Palmer Dabbelt	 <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Alexandre Ghiti	 <alex@ghiti.fr>, "open
+ list:RISC-V ARCHITECTURE:Keyword:riscv"	 <linux-riscv@lists.infradead.org>,
+ "open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit"	
+ <spacemit@lists.linux.dev>, "open list:SYSTEM RESET/SHUTDOWN DRIVERS"	
+ <linux-pm@vger.kernel.org>
+Date: Fri, 27 Feb 2026 13:29:53 +0200
+In-Reply-To: <aaC78FTN31QYaVg0@aurel32.net>
+References: <20251102230352.914421-1-aurelien@aurel32.net>
+	 <20251102230352.914421-3-aurelien@aurel32.net>
+	 <b51a62513daa9d2390031ec350e0b33bdb7e54aa.camel@declera.com>
+	 <aaC78FTN31QYaVg0@aurel32.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.59.2 (3.59.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260227-max77759-fg-v2-11-e50be5f191f0@linaro.org>
-References: <20260227-max77759-fg-v2-0-e50be5f191f0@linaro.org>
-In-Reply-To: <20260227-max77759-fg-v2-0-e50be5f191f0@linaro.org>
-To: Hans de Goede <hansg@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
- Marek Szyprowski <m.szyprowski@samsung.com>, 
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
- Purism Kernel Team <kernel@puri.sm>, Sebastian Reichel <sre@kernel.org>, 
- Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: Peter Griffin <peter.griffin@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, Juan Yescas <jyescas@google.com>, 
- Amit Sunil Dhamne <amitsd@google.com>, kernel-team@android.com, 
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-X-Mailer: b4 0.14.3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[17];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43291-lists,linux-pm=lfdr.de];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andre.draszik@linaro.org,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:mid,linaro.org:dkim,linaro.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 061941B3BFB
+	R_DKIM_NA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[yaneti@declera.com,linux-pm@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43292-lists,linux-pm=lfdr.de];
+	DMARC_NA(0.00)[declera.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[]
+X-Rspamd-Queue-Id: 825061B69CB
 X-Rspamd-Action: no action
 
-Report the remaining time to full as calculated by the firmware for
-devices that implement this.
-Similar to time to empty, the reported value is only meaningful when
-charging, i.e. if it is != U16_MAX.
+On Thu, 2026-02-26 at 22:32 +0100, Aurelien Jarno wrote:
+> Hi,
+>=20
+> On 2026-02-26 16:32, Yanko Kaneti wrote:
+> > Hello,
+> >=20
+> > On Mon, 2025-11-03 at 00:02 +0100, Aurelien Jarno wrote:
+> > > Add a "spacemit-p1-reboot" cell for the SpacemiT P1 chip.
+> > >=20
+> > > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+> > > ---
+> > > v5: no changes
+> > >=20
+> > >  drivers/mfd/simple-mfd-i2c.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >=20
+> > > diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2=
+c.c
+> > > index 0a607a1e3ca1d..542d378cdcd1f 100644
+> > > --- a/drivers/mfd/simple-mfd-i2c.c
+> > > +++ b/drivers/mfd/simple-mfd-i2c.c
+> > > @@ -99,6 +99,7 @@ static const struct regmap_config spacemit_p1_regma=
+p_config =3D {
+> > >  };
+> > > =20
+> > >  static const struct mfd_cell spacemit_p1_cells[] =3D {
+> > > +	{ .name =3D "spacemit-p1-reboot", },
+> > >  	{ .name =3D "spacemit-p1-regulator", },
+> > >  	{ .name =3D "spacemit-p1-rtc", },
+> > >  };
+> >=20
+> > Perhaps its safe to merge this one now that everything P1 and I2C is
+> > already in linus tip ?
+>=20
+> Unfortunately, this patchset is still missing:
+> https://lore.kernel.org/all/20260207-b4-k3-i2c-pio-v7-0-626942d94d91@linu=
+x.spacemit.com/
+>=20
+> This means the reboots work most of the time, but are not 100% reliable,=
+=20
+> and that's the reason why this patch got blocked from merging.
 
-Signed-off-by: André Draszik <andre.draszik@linaro.org>
+I see. Thanks. Sounds to me like sometimes working compared to never
+working is better , but anyway..
 
----
-v2:
-- limit to max17055 & max77759, the datasheet for max17047 and max17050
-  describes the register as 'reserved'. I was mislead by the comment
-  and enum ordering in max17042_battery.h
-- report as POWER_SUPPLY_PROP_TIME_TO_FULL_NOW (not _AVG). The max17050
-  datasheet is a bit clearer than the max77759 one on that.
----
- drivers/power/supply/max17042_battery.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+FWIW  with this patch and the pio patcheset I get this rcu splat on
+reboot (which is still working). Similar splat is there without the pio
+patcheset.
 
-diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index 89909b140cf9..770d806033b9 100644
---- a/drivers/power/supply/max17042_battery.c
-+++ b/drivers/power/supply/max17042_battery.c
-@@ -89,6 +89,7 @@ static enum power_supply_property max17042_battery_props[] = {
- 	POWER_SUPPLY_PROP_HEALTH,
- 	POWER_SUPPLY_PROP_SCOPE,
- 	POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW,
-+	POWER_SUPPLY_PROP_TIME_TO_FULL_NOW,
- 	// these two have to be at the end on the list
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
- 	POWER_SUPPLY_PROP_CURRENT_AVG,
-@@ -447,6 +448,21 @@ static int max17042_get_property(struct power_supply *psy,
- 		if (data == U16_MAX)
- 			return -ENODATA;
- 
-+		val->intval = data * 5625 / 1000;
-+		break;
-+	case POWER_SUPPLY_PROP_TIME_TO_FULL_NOW:
-+		if (chip->chip_type != MAXIM_DEVICE_TYPE_MAX17055 &&
-+		    chip->chip_type != MAXIM_DEVICE_TYPE_MAX77759)
-+			return -EINVAL;
-+
-+		ret = regmap_read(map, MAX17055_TTF, &data);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* when discharging, the value is not meaningful */
-+		if (data == U16_MAX)
-+			return -ENODATA;
-+
- 		val->intval = data * 5625 / 1000;
- 		break;
- 	default:
+..
+[   56.411363] systemd-shutdown[1]: Rebooting.
+[   56.432988] reboot: Restarting system
+[   56.434120] ------------[ cut here ]------------
+[   56.438642] Voluntary context switch within RCU read-side critical secti=
+on!
+[   56.438665] WARNING: kernel/rcu/tree_plugin.h:332 at rcu_note_context_sw=
+itch+0x370/0x510, CPU#0: systemd-shutdow/1
+[   56.438693] Modules linked in: rfkill binfmt_misc vfat fat r8169 loop nf=
+netlink zram lz4hc_compress lz4_compress fuse
+[   56.438733] CPU: 0 UID: 0 PID: 1 Comm: systemd-shutdow Not tainted 7.0.0=
+-rc1+ #16 PREEMPT(full)=20
+[   56.438742] Hardware name: Unknown Unknown Product/Unknown Product, BIOS=
+ 2022.10ky-OpenWrt-r28427-6df0e3d02a 10/01/2022
+[   56.438747] epc : rcu_note_context_switch+0x370/0x510
+[   56.438757]  ra : rcu_note_context_switch+0x370/0x510
+[   56.438764] epc : ffffffff801781b8 ra : ffffffff801781b8 sp : ffffffc600=
+0432b0
+[   56.438769]  gp : ffffffff83843a90 tp : ffffffd6048bdd00 t0 : ffffffff80=
+036330
+[   56.438774]  t1 : ffffffc600043080 t2 : 2d2d2d2d2d2d2d2d s0 : ffffffc600=
+043330
+[   56.438780]  s1 : ffffffd67eb15240 a0 : 000000000000003f a1 : ffffffff83=
+559770
+[   56.438784]  a2 : 0000000000000010 a3 : ffffffff83559b30 a4 : 0000000000=
+000000
+[   56.438789]  a5 : 0000000000000000 a6 : ffffffff83529700 a7 : ffffffff83=
+559758
+[   56.438793]  s2 : ffffffff83b55370 s3 : 0000000000000000 s4 : 0000000000=
+000000
+[   56.438798]  s5 : ffffffff83b55370 s6 : 0000000000000000 s7 : ffffffd605=
+a1ccc0
+[   56.438802]  s8 : 0000000000080009 s9 : 00000000fffc4890 s10: 0000000000=
+000020
+[   56.438806]  s11: ffffffff800b5160 t3 : 00000000ffffdfff t4 : 0000000000=
+000001
+[   56.438812]  t5 : 000000000000001f t6 : ffffffc600043098 ssp : 000000000=
+0000000
+[   56.438817] status: 0000000200000100 badaddr: 0000000000000000 cause: 00=
+00000000000003
+[   56.438822] [<ffffffff801781b8>] rcu_note_context_switch+0x370/0x510
+[   56.438832] [<ffffffff81285038>] __schedule+0x88/0x870
+[   56.438844] [<ffffffff8128584e>] schedule+0x2e/0xa8
+[   56.438851] [<ffffffff8128d9e4>] schedule_timeout+0x84/0x120
+[   56.438860] [<ffffffff81286930>] wait_for_completion_timeout+0x78/0x148
+[   56.438869] [<ffffffff80e30ab6>] spacemit_i2c_xfer_common+0x2d6/0x600
+[   56.438881] [<ffffffff80e30e2a>] spacemit_i2c_xfer+0x1a/0x40
+[   56.438887] [<ffffffff80e24d3a>] __i2c_transfer+0xf2/0x570
+[   56.438896] [<ffffffff80e2520c>] i2c_transfer+0x54/0xc0
+[   56.438903] [<ffffffff80c7fc02>] regmap_i2c_read+0x5a/0x98
+[   56.438912] [<ffffffff80c791d4>] _regmap_raw_read+0xbc/0x380
+[   56.438922] [<ffffffff80c794d0>] _regmap_bus_read+0x38/0x70
+[   56.438930] [<ffffffff80c7776e>] _regmap_read+0x4e/0x1e0
+[   56.438938] [<ffffffff80c7821c>] _regmap_update_bits+0xac/0xe8
+[   56.438945] [<ffffffff80c79d04>] regmap_update_bits_base+0x5c/0x80
+[   56.438953] [<ffffffff80e3ec1c>] spacemit_p1_restart_handler+0x2c/0x70
+[   56.438963] [<ffffffff800b519a>] sys_off_notify+0x3a/0x60
+[   56.438973] [<ffffffff800b3450>] notifier_call_chain+0x68/0x1a8
+[   56.438980] [<ffffffff800b36c6>] atomic_notifier_call_chain+0x3e/0x60
+[   56.438986] [<ffffffff800b5fb2>] do_kernel_restart+0x2a/0x40
+[   56.438993] [<ffffffff80028b80>] machine_restart+0x18/0x28
+[   56.439005] [<ffffffff800b618a>] kernel_restart+0x92/0xb8
+[   56.439013] [<ffffffff800b64f2>] __do_sys_reboot+0x13a/0x238
+[   56.439021] [<ffffffff800b671a>] __riscv_sys_reboot+0x22/0x38
+[   56.439028] [<ffffffff8127ecfe>] do_trap_ecall_u+0x176/0x608
+[   56.439036] [<ffffffff812926ec>] handle_exception+0x16c/0x178
+[   56.439049] ---[ end tracsys: 0x0
 
--- 
-2.53.0.473.g4a7958ca14-goog
-
+Regards
+Yanko
 
