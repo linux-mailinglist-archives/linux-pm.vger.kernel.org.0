@@ -1,121 +1,147 @@
-Return-Path: <linux-pm+bounces-43364-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43365-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id e7ixA3YSo2lJ9gQAu9opvQ
-	(envelope-from <linux-pm+bounces-43364-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Feb 2026 17:06:14 +0100
+	id ADPbI3kWo2mJ9gQAu9opvQ
+	(envelope-from <linux-pm+bounces-43365-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Feb 2026 17:23:21 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FBFE1C435E
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Feb 2026 17:06:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 284BC1C4446
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Feb 2026 17:23:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C095E3006791
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Feb 2026 16:06:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6C8CF30692FF
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Feb 2026 16:23:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08620274B4A;
-	Sat, 28 Feb 2026 16:06:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461632DC322;
+	Sat, 28 Feb 2026 16:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qacDT2ms"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z7VuuA3T"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D963B8F48
-	for <linux-pm@vger.kernel.org>; Sat, 28 Feb 2026 16:06:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB101E8320;
+	Sat, 28 Feb 2026 16:23:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772294770; cv=none; b=lUHgvLxdSDxQiEmqyJRN4z05JwhKfmHLwJlkb3LV8VbQ049MutWedv2DFUc7bfMGuAsxKrrFtIOW4O8dV3KgEaVLAhFR3vLf9pbFH3vuca2R2lxw0TZ1+H+mvZ/84ukd9ykZZ2/W/zUwZRPFYA1Gh/BGpJieok498EoWj2Fs3lw=
+	t=1772295793; cv=none; b=gqgY+Jgeg7FFQYoOWDNYUxJHl8pY3wRSF/3milmwla47vuEbkea/ypNe4KN3POC9LS3mEBOZR/Dg+ZhWF4WYytgQ76OyTAsVS+qAxj8Qx8904/UCiEy9qxIHAjCBcwwhsxoVtAV/OeBuSy7XhTaOfD4knJvlTTgmcvsXS7GNhQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772294770; c=relaxed/simple;
-	bh=MUMwr2u5lCDbJIr6Pa+cEQCU/kSJY7HfZeRM3W9uQQw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IiUfpbxcx/WpCc/XOSmM2Btas5YQzwBdQ1gNnVyn+9w+cRpYTi1vxL4DsGBDyijfSQYOimvP1DarZ8KvuYDvaaJCfPCPme2FW5crxOabvPbx2l2fb80DpxUnqJj5Czx+yk+xBep1pGDp+3khDYGgRsdRWA88rS0pLRWJs9A4Kr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qacDT2ms; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7BD07C116D0
-	for <linux-pm@vger.kernel.org>; Sat, 28 Feb 2026 16:06:10 +0000 (UTC)
+	s=arc-20240116; t=1772295793; c=relaxed/simple;
+	bh=tDPe/nfeuLBd4fs1xZJUaluoGXlO/lbkdH6pyIPqL9M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NIvcmLkZ1KJ2xOggHZEIH6RcIaFAbSh0db/E0p+eVj7EZMeVUvyU64qugqeFMs2pcQC1UHff1UMIsCEDNiwwkfYeDVcPpl+TD2KxeyXB28Ckjr+MaMI4UCi2KbXYRyDV8BpP1o8SzHlJAp9HK/3bAJlvKCWolBiGy9JrbHctlVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z7VuuA3T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F6F2C116D0;
+	Sat, 28 Feb 2026 16:23:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772294770;
-	bh=MUMwr2u5lCDbJIr6Pa+cEQCU/kSJY7HfZeRM3W9uQQw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=qacDT2mszHxRpz52Xy+7K/Awk0OsBQOXkx3iRyQ/thMpCWFVDkerjRF7VqtbM6zkT
-	 0/fQG4z7DmUgMJZmijTWOK/EDnFZwhEPDwAp+F0vM1R521QIMTIm7HJQVFFel4iSet
-	 HJEK9tfB/7AyIJ/2UBVVMhUwU+R2XuRN7XkwO92EDw9Kc/Tns72AFx5RRB2CnGhNdq
-	 Pm7VABqXxvYTfxZsHJFBzyUm9UO2E1dDO4bglty/xCcBvZt6xqjqgYLmviSAqMAJOO
-	 WMaZvFRfrtwyxnMwiwP+F/LD4E+Izt80MelgsUqlbQ0Dn4YRHP1+xdwCRgOlprfkCt
-	 c72HvwecG9rrw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 743E1C41612; Sat, 28 Feb 2026 16:06:10 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 220117] cpufreq performance governor doesn't correctly apply in
- combination with isolcpus
-Date: Sat, 28 Feb 2026 16:06:10 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: dsmythies@telus.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220117-137361-ieClOiYSIS@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220117-137361@https.bugzilla.kernel.org/>
-References: <bug-220117-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1772295792;
+	bh=tDPe/nfeuLBd4fs1xZJUaluoGXlO/lbkdH6pyIPqL9M=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Z7VuuA3TXUQaqxvibVoBrjp222kjf9cHY1OT0LQPbIAK8IPIL8yEVzJVK54yIYJtE
+	 Xk88erL+AsJdeWRBcO3BP3hpf0H/35Tv2/B3rJ33u2IlIXX8r2cLg/eHd/dJKc2K2v
+	 RfrGZmuK1fm/LS6K7Vw3k1t6qfYJrmJ3n9jjjadv+5j/42W7+HnYOUFYz5xMdOz0qm
+	 sFofpyyGK557/M0WW1SYF5iYRAREbxuaZjIHDnWpkg6WJfoYP2t9kX4bHH1RiSdD7m
+	 e6WqMPWMiM+pQvL9FW7MLUh+WAb21vpQshcxFkteXPF1Rl/w4UypNAdW/ska6HjG5Y
+	 sruRnfYQYsHiw==
+From: SeongJae Park <sj@kernel.org>
+To: Dmitry Ilvokhin <d@ilvokhin.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>,
+	Wei Xu <weixugc@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Qi Zheng <zhengqi.arch@bytedance.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	"linux-cxl@vger.kernel.orgkernel-team"@meta.com
+Subject: Re: [PATCH v4 1/5] mm: introduce zone lock wrappers
+Date: Sat, 28 Feb 2026 08:23:08 -0800
+Message-ID: <20260228162309.213482-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <849dee9c47df1e6fba97c9933af0d5a08b8e15d3.1772206930.git.d@ilvokhin.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43364-lists,linux-pm=lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[bugzilla-daemon@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	MSBL_EBL_FAIL(0.00)[d@ilvokhin.com:query timed out];
+	TAGGED_FROM(0.00)[bounces-43365-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[30];
+	FROM_NEQ_ENVFROM(0.00)[sj@kernel.org,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_NO_DN(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_ONE(0.00)[1];
+	DBL_FAIL(0.00)[linux.dev:query timed out];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-pm];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5FBFE1C435E
+X-Rspamd-Queue-Id: 284BC1C4446
 X-Rspamd-Action: no action
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220117
+On Fri, 27 Feb 2026 16:00:23 +0000 Dmitry Ilvokhin <d@ilvokhin.com> wrote:
 
---- Comment #3 from Doug Smythies (dsmythies@telus.net) ---
-Yes, this is not a bug and can be closed.
+> Add thin wrappers around zone lock acquire/release operations. This
+> prepares the code for future tracepoint instrumentation without
+> modifying individual call sites.
+> 
+> Centralizing zone lock operations behind wrappers allows future
+> instrumentation or debugging hooks to be added without touching
+> all users.
+> 
+> No functional change intended. The wrappers are introduced in
+> preparation for subsequent patches and are not yet used.
+> 
+> Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
+> Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
 
---=20
-You may reply to this email to add a comment.
+Reviewed-by: SeongJae Park <sj@kernel.org>
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+
+Thanks,
+SJ
+
+[...]
 
