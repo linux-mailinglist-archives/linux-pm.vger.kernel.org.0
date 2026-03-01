@@ -1,223 +1,380 @@
-Return-Path: <linux-pm+bounces-43371-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43372-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sLXUKY6zo2luKQUAu9opvQ
-	(envelope-from <linux-pm+bounces-43371-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sun, 01 Mar 2026 04:33:34 +0100
+	id gNOtIbPBo2lSLwUAu9opvQ
+	(envelope-from <linux-pm+bounces-43372-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sun, 01 Mar 2026 05:33:55 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF5E91CE6DB
-	for <lists+linux-pm@lfdr.de>; Sun, 01 Mar 2026 04:33:33 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 994721CE84E
+	for <lists+linux-pm@lfdr.de>; Sun, 01 Mar 2026 05:33:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 168583028347
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Mar 2026 03:33:29 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id BE233300729E
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Mar 2026 04:33:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF56F311975;
-	Sun,  1 Mar 2026 03:33:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 843DC30BF52;
+	Sun,  1 Mar 2026 04:33:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SNdPxCyE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kYH2HNl3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4004930F934
-	for <linux-pm@vger.kernel.org>; Sun,  1 Mar 2026 03:33:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC00E1F09A5;
+	Sun,  1 Mar 2026 04:33:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772336007; cv=none; b=MAbcajXXEtvJ6t3UlGwy3QNuBGa7cOLD49nl7qp+EXlHDuMcVBNLe3/ztUcG4ZA6GloXdgHewqwIs+wYusFPy+yK2qppiIVC+5PxPItnxhoUuFTrLyfwD6k2CseWEwffLXw5JJ89CAJsdOWqkmWvKBvNC5htPp89Cd3avLBjZ3g=
+	t=1772339628; cv=none; b=hXff8ogRLIF1sKTf1DIPl54MnUjFyjb3jQE6xmJF131ESS13ggO4kf6OxzqcuZLi72Fj2/kzHO4TXf5VtbB98DXIp5aKN3YbqmtaZk7mo9yvdLUk9h9sIQplFK+MU6h9DgCTMEGK7eHB5D6vQmdrx1+jzfauLs+tojsLddIcUkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772336007; c=relaxed/simple;
-	bh=ayLAhF7pHHy+DRWLU0LDkHIehJneX3wR7Rs2/wiMYj4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=hxhMvKt6Uxw2iVL1h3Ym13swgmt6mekxNQVdH7I+W8I5Xm84gBzQg8B6JfSXUj3KVYcBFM0wRx4g9iz35OsLODlEqzLoC508yq/0h/EAVVlvomlLiWKz16r1Y66cOGXfedaQyL2FfFadIg04M/Dm7IO0fHiAY/YPWtOZUg/Nnhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SNdPxCyE; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-4376de3f128so2248293f8f.0
-        for <linux-pm@vger.kernel.org>; Sat, 28 Feb 2026 19:33:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1772336004; x=1772940804; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oGUtErtO1WheKt0/0USuDzWLghEWqZdNvFs6ivnvkR0=;
-        b=SNdPxCyEn5zgt4YjRqNG62ApPSNudN9p6fa7NrUAyyLF7z7Ym5Ij2D0eQCNN/sWkIP
-         uaCDPvL4UpOj6DoXdwU9ocfFknQ4Kf150mlSIx6VB50n2UoaKEidajHxtl8YM/wLyq+a
-         yG8N3umw31HDo9sXc38ASNgJr/qxixial3FHHl6RNgaudBAotsaunsQRaL3yg6sNaOIs
-         aj0O34ahYEU016z1/46A8egdec83HuYss3h2G4iQrELseAzTI8irsqYSkkIOcWVAFUw9
-         p/MeJfdqnlCcBBWFWnnK1lokBF1n36H2m2tdMAkFXAd738Cm1B2C0uBskraxom1Nt3b1
-         Z4+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772336004; x=1772940804;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oGUtErtO1WheKt0/0USuDzWLghEWqZdNvFs6ivnvkR0=;
-        b=WwdPfl7z0r5DuvrynabgyTW92EgFiGkhZ5CqQuzZ7l8rCH+w50DfK6En/lh7s5B8SC
-         o/PwCBHtHUH55llqE5AnlfTDhAAEc8So+aKxCG2mV5pRREyTnYwfKq/nnuF2W7PqZwUS
-         dZEGYE/ZFQIhIUtVg1u/WfBxOcDofU6Nu3a5mYAXQ83NXEHmxdnzKifmnH8tqSDoHjZ0
-         nVITXxR2dWteyiRnUOpxb6nT0OAq4Pc54wRjkU7XiBjvTYlGetxTKo7lIea4No7q4wKu
-         9RNxKSPbfwhrzjcN4Trk77cA7vZTyGorpV5GLUabifKKwXy5dJvh8mnNSopcKSO7gnY8
-         730A==
-X-Forwarded-Encrypted: i=1; AJvYcCUMn+Ai+Vdt8YANUTbubALQYnYym2MP5KSbl8ODQ7YfLxIHW2uVrhuWSThBXYr4dQ5GPKs5hAcOIw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtOjiprPaBBUcuZaqVKWUNO47U7hQQdKrxRDr08gIjtY56uet4
-	4ukOQij2roCi8XjUohOD2uwkcbIleEwgzl5c4kFE+nROlwO13XGfZnE1lbK15GO01dI=
-X-Gm-Gg: ATEYQzwDOfl2a0UGcVXg77mV+xIUeaW4i45ryJyyFnD6kQSNFBSp9GepIDmYPflyKbf
-	PoFL957KTlg9ofXn0k/ThPLNnSpwc0vrz+nuHV9bO1Du26xJwySABiAOnxwplvNXD2kKLNNO8ZI
-	khjTLot0a9kp08zHo8Y++oj1kTOLngdd0KN/ab0qy1+ieDuE0Gtda95aloRM/PRFntJ7bV2rklp
-	DSSaPmKbp8T4rCwbH2Vi16P/AFHsZ3G4c1WaLVAdOseQcpgLWWfI1RZJCmjrPhZym7EBYdDCPqZ
-	eVuHGufCW0G58eHEI+EIYUzpzxu9x4ty4Dafwrz32jUtIukxHFKd0i7dgcLLLeB06Yf6b7XSZtz
-	ASBKPoPV2TlAB6ZtsyM4cqXPkpb6XJlOZKC1GWp4PMx6Ji0R83FW0K27zixc8Jx57rp7lYBDva7
-	qR+aPxWVYcpOFUgtFz8GfZCeAwuaj20AAACxO6pHvHGo0eyepxnX2NFgvFr00Rq2N2yWoLTFrgj
-	G4iIPw+bbDb5VeTtA==
-X-Received: by 2002:a05:6000:2dc6:b0:437:6963:a115 with SMTP id ffacd0b85a97d-4399de2ca49mr12536069f8f.42.1772336004517;
-        Sat, 28 Feb 2026 19:33:24 -0800 (PST)
-Received: from localhost ([2a02:c7c:5e34:8000:6ece:b3d1:ab81:6eaf])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439b03db76bsm2970858f8f.18.2026.02.28.19.33.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 28 Feb 2026 19:33:24 -0800 (PST)
+	s=arc-20240116; t=1772339628; c=relaxed/simple;
+	bh=b+BTQ1t/wN6cDUN+c7thBS95ZO9nwEHKGCTIhFrVjfE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=suqFj34JEztCZ+Od3j+G+OOAaGh//qMhE4w1SEsgMnYOFN9I0OEJXmEht8MoNh0O+pHH62wzlAI4biS6QlJI/qnJ8/feE18eEGyFZuXcAbLwTZ7XgLF43Jq8KU6Kyg6O2XzQ7b6G5rU0+T+NfKheks1m2WarCkKbQ0Um8rhmOyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kYH2HNl3; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772339625; x=1803875625;
+  h=date:from:to:cc:subject:message-id;
+  bh=b+BTQ1t/wN6cDUN+c7thBS95ZO9nwEHKGCTIhFrVjfE=;
+  b=kYH2HNl3lOQU7FhTo58o3ScFeQvBw4ijsiBeyZrBr8MoY+S3uZkBWho+
+   kh8siXGtfU5q5n7zahmYoMBeF4xv6y+SW5Jyzyvxez4yo8EIIXixblwyY
+   zOQokNQpWmk10xJTRIWSFb03nRXG8Dz2CkjIGyDPbLlT+4X97AKppaCzD
+   RjOSZa9ehzkSwc8EajZSHvU19iEdHlCyJpT/6DmdMrl9ncilCdUuRWvQV
+   RoO5zE///kFQ3mSYa9vIQ+lWKXgSJ9UnSg2JD2bgPcPTZd5DJ15J+hb4B
+   tcjx83qddbGAWucOlW8eSinZBGzCuXpSHwAca1zd53TLDThkQeN8p8oiD
+   A==;
+X-CSE-ConnectionGUID: J0QNQW16TRKL0CP/DsYJ+A==
+X-CSE-MsgGUID: HyayYW8CSGm/MubYWK9HOQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11715"; a="73567647"
+X-IronPort-AV: E=Sophos;i="6.21,317,1763452800"; 
+   d="scan'208";a="73567647"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2026 20:33:44 -0800
+X-CSE-ConnectionGUID: xJn6Y+o2TQS+TiOK0g2m/w==
+X-CSE-MsgGUID: ddrHTVqbQYeep+vjgoNrKQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,317,1763452800"; 
+   d="scan'208";a="221918918"
+Received: from lkp-server01.sh.intel.com (HELO 59784f1c7b2a) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 28 Feb 2026 20:33:42 -0800
+Received: from kbuild by 59784f1c7b2a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vwYUt-000000001H9-3Wrc;
+	Sun, 01 Mar 2026 04:33:39 +0000
+Date: Sun, 01 Mar 2026 12:32:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 55ef3af54b8a3841abba68b2d7f3a6253bbf0f64
+Message-ID: <202603011235.gRSYojcK-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 01 Mar 2026 03:33:23 +0000
-Message-Id: <DGR4OFNJXOI2.3QACIHMM1V429@linaro.org>
-Cc: <willmcvicker@google.com>, <jyescas@google.com>, <shin.son@samsung.com>,
- <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH v2 4/7] thermal: samsung: Add support for GS101 TMU
-From: "Alexey Klimov" <alexey.klimov@linaro.org>
-To: "Tudor Ambarus" <tudor.ambarus@linaro.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>, "Zhang
- Rui" <rui.zhang@intel.com>, "Lukasz Luba" <lukasz.luba@arm.com>, "Rob
- Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzk@kernel.org>, "Alim Akhtar" <alim.akhtar@samsung.com>, "Bartlomiej
- Zolnierkiewicz" <bzolnier@gmail.com>, "Kees Cook" <kees@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>, "Peter Griffin"
- <peter.griffin@linaro.org>, =?utf-8?q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>
-X-Mailer: aerc 0.20.0
-References: <20260119-acpm-tmu-v2-0-e02a834f04c6@linaro.org>
- <20260119-acpm-tmu-v2-4-e02a834f04c6@linaro.org>
-In-Reply-To: <20260119-acpm-tmu-v2-4-e02a834f04c6@linaro.org>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43371-lists,linux-pm=lfdr.de];
-	FREEMAIL_TO(0.00)[linaro.org,kernel.org,intel.com,arm.com,samsung.com,gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[24];
+	DKIM_TRACE(0.00)[intel.com:+];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alexey.klimov@linaro.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43372-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_THREE(0.00)[3];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:mid,linaro.org:dkim,linaro.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: EF5E91CE6DB
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:mid,intel.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 994721CE84E
 X-Rspamd-Action: no action
 
-On Mon Jan 19, 2026 at 12:08 PM GMT, Tudor Ambarus wrote:
-> Add the thermal driver for the Google GS101 SoC.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 55ef3af54b8a3841abba68b2d7f3a6253bbf0f64  Merge branch 'experimental/acpi-driver-conversion' into bleeding-edge
 
-Is this driver for GS101 platforms only or for all Exynos-based
-platforms where we have deal with thermal unit via ACPM?
+elapsed time: 755m
 
-> The GS101 TMU utilizes a hybrid management model shared between the
-> Application Processor (AP) and the ACPM (Alive Clock and Power Manager)
-> firmware. The driver maintains direct memory-mapped access to the TMU
-> interrupt pending registers to identify thermal events, while delegating
-> functional tasks - such as sensor initialization, threshold configuration=
-,
-> and temperature acquisition - to the ACPM firmware via the ACPM IPC
-> protocol.
->
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
->  drivers/thermal/samsung/Kconfig    |  16 +
->  drivers/thermal/samsung/Makefile   |   2 +
->  drivers/thermal/samsung/acpm-tmu.c | 643 +++++++++++++++++++++++++++++++=
-++++++
->  3 files changed, 661 insertions(+)
->
-> diff --git a/drivers/thermal/samsung/Kconfig b/drivers/thermal/samsung/Kc=
-onfig
-> index f4eff5a41a84ce02b12abb85d6a0f8818031d0dc..5679dfa85f4079c7d40317ac2=
-31bd6a1af93c7e7 100644
-> --- a/drivers/thermal/samsung/Kconfig
-> +++ b/drivers/thermal/samsung/Kconfig
-> @@ -9,3 +9,19 @@ config EXYNOS_THERMAL
->  	  the TMU, reports temperature and handles cooling action if defined.
->  	  This driver uses the Exynos core thermal APIs and TMU configuration
->  	  data from the supported SoCs.
-> +
-> +config EXYNOS_ACPM_THERMAL
-> +	tristate "Exynos ACPM thermal management unit driver"
-> +	depends on THERMAL_OF
-> +	depends on EXYNOS_ACPM_PROTOCOL || (COMPILE_TEST && !EXYNOS_ACPM_PROTOC=
-OL)
-> +	help
-> +	  Support for the Thermal Management Unit (TMU) on Google GS101 SoC.
-> +
-> +	  The TMU on GS101 is managed through a hybrid architecture. This drive=
-r
-> +	  handles direct register access for thermal interrupt status monitorin=
-g
-> +	  and communicates with the Alive Clock and Power Manager (ACPM)
-> +	  firmware via the ACPM IPC protocol for functional sensor control and
-> +	  configuration.
-> +
-> +	  Select this if you want to monitor device temperature and enable
-> +	  thermal mitigation on GS101 based devices.
+configs tested: 255
+configs skipped: 4
 
-I don't understand this. What this driver actually supports/implements?
-Dealing with TMU over ACPM firmware is not exclusive to Google GS101 SoC,
-some other Exynos-based systems has this as well. However, it names
-the config option EXYNOS_ACPM_THERMAL but a lot of other things say that
-it is only for GS101, isn't it?
-Does it implement the generic layer dealing with TMU via ACPM (hence the na=
-me)
-and adds specific things to support gs101?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Should it be something like this (feel free to correct):
-Support for the Thermal Management Unit (TMU) exported via ACPM.
+tested configs:
+alpha                            alldefconfig    gcc-15.2.0
+alpha                             allnoconfig    gcc-15.2.0
+alpha                            allyesconfig    gcc-15.2.0
+alpha                               defconfig    gcc-15.2.0
+arc                              allmodconfig    clang-16
+arc                              allmodconfig    gcc-15.2.0
+arc                               allnoconfig    gcc-15.2.0
+arc                              allyesconfig    clang-23
+arc                          axs101_defconfig    clang-23
+arc                                 defconfig    gcc-15.2.0
+arc                        nsim_700_defconfig    gcc-15.2.0
+arc                   randconfig-001-20260301    clang-23
+arc                   randconfig-002-20260301    clang-23
+arm                               allnoconfig    gcc-15.2.0
+arm                              allyesconfig    clang-16
+arm                              allyesconfig    gcc-15.2.0
+arm                         bcm2835_defconfig    clang-23
+arm                                 defconfig    gcc-15.2.0
+arm                            hisi_defconfig    clang-23
+arm                      jornada720_defconfig    clang-23
+arm                   milbeaut_m10v_defconfig    gcc-15.2.0
+arm                       multi_v4t_defconfig    clang-23
+arm                       multi_v4t_defconfig    gcc-15.2.0
+arm                        multi_v7_defconfig    clang-23
+arm                        mvebu_v7_defconfig    gcc-15.2.0
+arm                         nhk8815_defconfig    clang-23
+arm                          pxa910_defconfig    clang-23
+arm                            qcom_defconfig    clang-23
+arm                   randconfig-001-20260301    clang-23
+arm                   randconfig-002-20260301    clang-23
+arm                   randconfig-003-20260301    clang-23
+arm                   randconfig-004-20260301    clang-23
+arm                        spear6xx_defconfig    gcc-15.2.0
+arm                           stm32_defconfig    clang-23
+arm                         vf610m4_defconfig    gcc-15.2.0
+arm                    vt8500_v6_v7_defconfig    clang-23
+arm                    vt8500_v6_v7_defconfig    gcc-15.2.0
+arm64                            allmodconfig    clang-23
+arm64                             allnoconfig    gcc-15.2.0
+arm64                               defconfig    gcc-15.2.0
+arm64                 randconfig-001-20260301    clang-16
+arm64                 randconfig-001-20260301    gcc-9.5.0
+arm64                 randconfig-002-20260301    gcc-10.5.0
+arm64                 randconfig-002-20260301    gcc-9.5.0
+arm64                 randconfig-003-20260301    clang-18
+arm64                 randconfig-003-20260301    gcc-9.5.0
+arm64                 randconfig-004-20260301    gcc-9.5.0
+csky                             allmodconfig    gcc-15.2.0
+csky                              allnoconfig    gcc-15.2.0
+csky                                defconfig    gcc-15.2.0
+csky                  randconfig-001-20260301    gcc-14.3.0
+csky                  randconfig-001-20260301    gcc-9.5.0
+csky                  randconfig-002-20260301    gcc-15.2.0
+csky                  randconfig-002-20260301    gcc-9.5.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    gcc-15.2.0
+hexagon                           allnoconfig    gcc-15.2.0
+hexagon                             defconfig    gcc-15.2.0
+hexagon               randconfig-001-20260301    clang-18
+hexagon               randconfig-001-20260301    clang-23
+hexagon               randconfig-002-20260301    clang-18
+hexagon               randconfig-002-20260301    clang-23
+i386                             alldefconfig    clang-23
+i386                             allmodconfig    clang-20
+i386                              allnoconfig    gcc-15.2.0
+i386                             allyesconfig    clang-20
+i386                             allyesconfig    gcc-14
+i386        buildonly-randconfig-001-20260301    gcc-14
+i386        buildonly-randconfig-002-20260301    gcc-14
+i386        buildonly-randconfig-003-20260301    gcc-14
+i386        buildonly-randconfig-004-20260301    gcc-14
+i386        buildonly-randconfig-005-20260301    gcc-14
+i386        buildonly-randconfig-006-20260301    gcc-14
+i386                                defconfig    gcc-15.2.0
+i386                  randconfig-001-20260301    gcc-14
+i386                  randconfig-002-20260301    gcc-14
+i386                  randconfig-003-20260301    gcc-14
+i386                  randconfig-004-20260301    gcc-14
+i386                  randconfig-005-20260301    gcc-14
+i386                  randconfig-006-20260301    gcc-12
+i386                  randconfig-006-20260301    gcc-14
+i386                  randconfig-007-20260301    gcc-14
+i386                  randconfig-011-20260301    clang-20
+i386                  randconfig-012-20260301    clang-20
+i386                  randconfig-012-20260301    gcc-14
+i386                  randconfig-013-20260301    clang-20
+i386                  randconfig-014-20260301    clang-20
+i386                  randconfig-015-20260301    clang-20
+i386                  randconfig-016-20260301    clang-20
+i386                  randconfig-017-20260301    clang-20
+loongarch                        allmodconfig    clang-23
+loongarch                         allnoconfig    gcc-15.2.0
+loongarch                           defconfig    clang-19
+loongarch                loongson32_defconfig    gcc-15.2.0
+loongarch             randconfig-001-20260301    clang-23
+loongarch             randconfig-001-20260301    gcc-15.2.0
+loongarch             randconfig-002-20260301    clang-23
+m68k                             allmodconfig    gcc-15.2.0
+m68k                              allnoconfig    gcc-15.2.0
+m68k                             allyesconfig    clang-16
+m68k                             allyesconfig    gcc-15.2.0
+m68k                         amcore_defconfig    gcc-15.2.0
+m68k                          atari_defconfig    gcc-15.2.0
+m68k                                defconfig    clang-19
+m68k                       m5275evb_defconfig    gcc-15.2.0
+m68k                        mvme147_defconfig    gcc-15.2.0
+m68k                           sun3_defconfig    gcc-15.2.0
+m68k                           virt_defconfig    clang-23
+m68k                           virt_defconfig    gcc-15.2.0
+microblaze                       alldefconfig    gcc-15.2.0
+microblaze                        allnoconfig    gcc-15.2.0
+microblaze                       allyesconfig    gcc-15.2.0
+microblaze                          defconfig    clang-19
+mips                             allmodconfig    gcc-15.2.0
+mips                              allnoconfig    gcc-15.2.0
+mips                             allyesconfig    gcc-15.2.0
+mips                         db1xxx_defconfig    clang-23
+mips                  decstation_64_defconfig    gcc-15.2.0
+mips                       lemote2f_defconfig    clang-23
+mips                    maltaup_xpa_defconfig    gcc-15.2.0
+mips                        qi_lb60_defconfig    gcc-15.2.0
+mips                       rbtx49xx_defconfig    gcc-15.2.0
+mips                           rs90_defconfig    gcc-15.2.0
+mips                        vocore2_defconfig    clang-23
+nios2                         10m50_defconfig    gcc-15.2.0
+nios2                            allmodconfig    clang-23
+nios2                            allmodconfig    gcc-11.5.0
+nios2                             allnoconfig    clang-23
+nios2                               defconfig    clang-19
+nios2                 randconfig-001-20260301    clang-23
+nios2                 randconfig-001-20260301    gcc-8.5.0
+nios2                 randconfig-002-20260301    clang-23
+nios2                 randconfig-002-20260301    gcc-10.5.0
+openrisc                         allmodconfig    clang-23
+openrisc                         allmodconfig    gcc-15.2.0
+openrisc                          allnoconfig    clang-23
+openrisc                            defconfig    gcc-15.2.0
+openrisc                 simple_smp_defconfig    clang-23
+openrisc                       virt_defconfig    clang-23
+parisc                           allmodconfig    gcc-15.2.0
+parisc                            allnoconfig    clang-23
+parisc                           allyesconfig    clang-19
+parisc                           allyesconfig    gcc-15.2.0
+parisc                              defconfig    gcc-15.2.0
+parisc                randconfig-001-20260301    gcc-10.5.0
+parisc                randconfig-002-20260301    gcc-10.5.0
+parisc64                            defconfig    clang-19
+powerpc                          allmodconfig    gcc-15.2.0
+powerpc                           allnoconfig    clang-23
+powerpc                   currituck_defconfig    gcc-15.2.0
+powerpc                       ebony_defconfig    gcc-15.2.0
+powerpc                     ep8248e_defconfig    gcc-15.2.0
+powerpc                 mpc8315_rdb_defconfig    clang-23
+powerpc               randconfig-001-20260301    gcc-10.5.0
+powerpc               randconfig-002-20260301    gcc-10.5.0
+powerpc                    sam440ep_defconfig    gcc-15.2.0
+powerpc                     tqm5200_defconfig    clang-23
+powerpc64             randconfig-001-20260301    gcc-10.5.0
+powerpc64             randconfig-002-20260301    gcc-10.5.0
+riscv                            allmodconfig    clang-23
+riscv                             allnoconfig    clang-23
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    gcc-15.2.0
+riscv                 randconfig-001-20260301    gcc-8.5.0
+riscv                 randconfig-002-20260301    gcc-8.5.0
+s390                             allmodconfig    clang-18
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-23
+s390                             allyesconfig    gcc-15.2.0
+s390                                defconfig    gcc-15.2.0
+s390                  randconfig-001-20260301    gcc-8.5.0
+s390                  randconfig-002-20260301    gcc-8.5.0
+sh                               allmodconfig    gcc-15.2.0
+sh                                allnoconfig    clang-23
+sh                               allyesconfig    clang-19
+sh                               allyesconfig    gcc-15.2.0
+sh                                  defconfig    gcc-14
+sh                ecovec24-romimage_defconfig    gcc-15.2.0
+sh                         ecovec24_defconfig    gcc-15.2.0
+sh                        edosk7705_defconfig    gcc-15.2.0
+sh                             espt_defconfig    gcc-15.2.0
+sh                 kfr2r09-romimage_defconfig    clang-23
+sh                          kfr2r09_defconfig    clang-23
+sh                          kfr2r09_defconfig    gcc-15.2.0
+sh                    randconfig-001-20260301    gcc-8.5.0
+sh                    randconfig-002-20260301    gcc-8.5.0
+sh                          sdk7786_defconfig    clang-23
+sh                          sdk7786_defconfig    gcc-15.2.0
+sh                           se7705_defconfig    gcc-15.2.0
+sh                           se7721_defconfig    gcc-15.2.0
+sh                           se7751_defconfig    gcc-15.2.0
+sh                           se7780_defconfig    gcc-15.2.0
+sh                        sh7757lcr_defconfig    gcc-15.2.0
+sh                             shx3_defconfig    clang-23
+sparc                             allnoconfig    clang-23
+sparc                               defconfig    gcc-15.2.0
+sparc                 randconfig-001-20260301    gcc-13.4.0
+sparc                 randconfig-002-20260301    gcc-13.4.0
+sparc64                          allmodconfig    clang-23
+sparc64                             defconfig    gcc-14
+sparc64               randconfig-001-20260301    gcc-13.4.0
+sparc64               randconfig-002-20260301    gcc-13.4.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-23
+um                               allyesconfig    gcc-14
+um                               allyesconfig    gcc-15.2.0
+um                                  defconfig    gcc-14
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20260301    gcc-13.4.0
+um                    randconfig-002-20260301    gcc-13.4.0
+um                           x86_64_defconfig    gcc-14
+x86_64                           allmodconfig    clang-20
+x86_64                            allnoconfig    clang-23
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20260301    clang-20
+x86_64      buildonly-randconfig-002-20260301    clang-20
+x86_64      buildonly-randconfig-003-20260301    clang-20
+x86_64      buildonly-randconfig-004-20260301    clang-20
+x86_64      buildonly-randconfig-005-20260301    clang-20
+x86_64      buildonly-randconfig-006-20260301    clang-20
+x86_64                              defconfig    gcc-14
+x86_64                                  kexec    clang-20
+x86_64                randconfig-001-20260301    clang-20
+x86_64                randconfig-002-20260301    clang-20
+x86_64                randconfig-003-20260301    clang-20
+x86_64                randconfig-004-20260301    clang-20
+x86_64                randconfig-005-20260301    clang-20
+x86_64                randconfig-006-20260301    clang-20
+x86_64                randconfig-011-20260301    gcc-14
+x86_64                randconfig-012-20260301    gcc-14
+x86_64                randconfig-013-20260301    clang-20
+x86_64                randconfig-013-20260301    gcc-14
+x86_64                randconfig-014-20260301    gcc-14
+x86_64                randconfig-015-20260301    clang-20
+x86_64                randconfig-015-20260301    gcc-14
+x86_64                randconfig-016-20260301    gcc-12
+x86_64                randconfig-016-20260301    gcc-14
+x86_64                randconfig-071-20260301    clang-20
+x86_64                randconfig-072-20260301    clang-20
+x86_64                randconfig-073-20260301    clang-20
+x86_64                randconfig-074-20260301    clang-20
+x86_64                randconfig-075-20260301    clang-20
+x86_64                randconfig-076-20260301    clang-20
+x86_64                               rhel-9.4    clang-20
+x86_64                           rhel-9.4-bpf    gcc-14
+x86_64                          rhel-9.4-func    clang-20
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                         rhel-9.4-kunit    gcc-14
+x86_64                           rhel-9.4-ltp    gcc-14
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                           alldefconfig    gcc-15.2.0
+xtensa                            allnoconfig    clang-23
+xtensa                           allyesconfig    clang-23
+xtensa                randconfig-001-20260301    gcc-13.4.0
+xtensa                randconfig-002-20260301    gcc-13.4.0
 
-This driver handles direct register access for thermal interrupt
-status monitoring and communicates with the Alive Clock and Power
-Manager (ACPM) firmware via the ACPM IPC protocol for functional
-sensor control and configuration.
-
-Select this if you want to monitor device temperature and enable
-thermal mitigation on Exynos-based devices that implement dealing
-with TMU via ACPM, for instance, GS101-based devices.
-
-?
-
-[...]
-Best regards,
-Alexey
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
