@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-43397-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43398-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KGZnKCGBpWl1CgYAu9opvQ
-	(envelope-from <linux-pm+bounces-43397-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 13:22:57 +0100
+	id cCuFDPaBpWltCwYAu9opvQ
+	(envelope-from <linux-pm+bounces-43398-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 13:26:30 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 204601D839A
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 13:22:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83DE91D84FD
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 13:26:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CE85C3033E60
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 12:21:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EA9663059809
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 12:23:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 528BF36C582;
-	Mon,  2 Mar 2026 12:21:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF30836C9C5;
+	Mon,  2 Mar 2026 12:23:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2266C329E79;
-	Mon,  2 Mar 2026 12:21:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B13A36C9C7;
+	Mon,  2 Mar 2026 12:23:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772454109; cv=none; b=fSYEIBWbOM9kvRzQ7C8pXjKui+Y5Fxpw+D9OmAHbmPg7t0wxQFdloEtshM9zmKa+jiiZp+xT0fKpujZIfIZHAJaloavzQgaQfz/NraQi8WGe4pWPykEHrGpcVDzsCShSLEkviAT3lDvuloMiQVoPdHGxmyultIAfnFM4rqK/6nQ=
+	t=1772454223; cv=none; b=b9MoijIeyR1trVEYwOdq+1dGMh+ufiXx3uEd4o/Q86JSe8ychgRwi0QKd+2gPY+JbaeCMO4XidEezVyE5AtfGJGAwJ6iuF8p5u+u61JKS+gUysaWWxe/D+qZh0GlEWjXLUUt+75V9SqNPxYX4z/LcFRfxVG1UF2wCDy93GddACE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772454109; c=relaxed/simple;
-	bh=hY4/1V4CPkbzOM46xddbLCRjIns1Rne2oR81yNkRkMQ=;
+	s=arc-20240116; t=1772454223; c=relaxed/simple;
+	bh=9F5qVvxWqgllHaVQRQ186J27Mo9BDQLO2p1Y55OAssQ=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Zs4I+AmdVZGEnrx256SEazhMrm2xjZTnZ7Qlty/7b7bWlrXt4b6GHsRRB/3Z4wA+27U7p3yuwrb0qUdxhvJAniS4/hAeYLnMSeNlXAX0ft3vdu/4sffPPrqxPdP2BtOB4mB72fTGd/OzFNy3ySDjeqauPHGpiCfGslzsVigw97M=
+	 MIME-Version:Content-Type; b=UAndQjlpNlb1gDRzoCg1/sgrik3KTtW7NnjYOeB/QZSEVNO30YAdHr60LTgGdbs8aVMd0GAW2+6EepspqmNFHEXbj6XUViDhDFCVJTU5jnn9sMLFN7OZQgyStJo2hDuO7rzghLrjMk68pE7H7mfDwP3YzsgABBrxLrKoML0Jqe4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.150])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fPdMC6pw7zJ46tt;
-	Mon,  2 Mar 2026 20:21:11 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.224.83])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fPdPS5pX4zJ46xn;
+	Mon,  2 Mar 2026 20:23:08 +0800 (CST)
 Received: from dubpeml500005.china.huawei.com (unknown [7.214.145.207])
-	by mail.maildlp.com (Postfix) with ESMTPS id 53AA54056B;
-	Mon,  2 Mar 2026 20:21:43 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 3222740086;
+	Mon,  2 Mar 2026 20:23:40 +0800 (CST)
 Received: from localhost (10.203.177.15) by dubpeml500005.china.huawei.com
  (7.214.145.207) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 2 Mar
- 2026 12:21:41 +0000
-Date: Mon, 2 Mar 2026 12:21:39 +0000
+ 2026 12:23:37 +0000
+Date: Mon, 2 Mar 2026 12:23:36 +0000
 From: Jonathan Cameron <jonathan.cameron@huawei.com>
 To: Herve Codina <herve.codina@bootlin.com>
 CC: Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>, "Krzysztof
@@ -78,11 +78,12 @@ CC: Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>, "Krzysztof
 	<allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>,
 	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli
 	<luca.ceresoli@bootlin.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v5 10/28] cxl/test: Use device_set_node()
-Message-ID: <20260302122139.00000041@huawei.com>
-In-Reply-To: <20260227135428.783983-11-herve.codina@bootlin.com>
+Subject: Re: [PATCH v5 07/28] driver core: fw_devlink: Introduce
+ fw_devlink_set_device()
+Message-ID: <20260302122336.00006bd8@huawei.com>
+In-Reply-To: <20260227135428.783983-8-herve.codina@bootlin.com>
 References: <20260227135428.783983-1-herve.codina@bootlin.com>
-	<20260227135428.783983-11-herve.codina@bootlin.com>
+	<20260227135428.783983-8-herve.codina@bootlin.com>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -99,7 +100,7 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -109,8 +110,8 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	FREEMAIL_CC(0.00)[lunn.ch,kernel.org,glider.be,gmail.com,linuxfoundation.org,nxp.com,pengutronix.de,baylibre.com,sang-engineering.com,axentia.se,arndb.de,google.com,opensource.cirrus.com,cirrus.com,linaro.org,linux.intel.com,stgolabs.net,intel.com,vger.kernel.org,lists.linux.dev,lists.infradead.org,microchip.com,bootlin.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43397-lists,linux-pm=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_FROM(0.00)[bounces-43398-lists,linux-pm=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FROM_HAS_DN(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm,dt,renesas];
 	RCVD_COUNT_FIVE(0.00)[6];
@@ -119,40 +120,46 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	TO_DN_SOME(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[62];
 	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.964];
+	NEURAL_HAM(-0.00)[-0.961];
 	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email,huawei.com:mid,huawei.com:email,bootlin.com:email]
-X-Rspamd-Queue-Id: 204601D839A
+	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:email,huawei.com:mid,linaro.org:email,intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 83DE91D84FD
 X-Rspamd-Action: no action
 
-On Fri, 27 Feb 2026 14:54:07 +0100
+On Fri, 27 Feb 2026 14:54:04 +0100
 Herve Codina <herve.codina@bootlin.com> wrote:
 
-> The code set directly dev->fwnode.
+> Setting fwnode->dev is specific to fw_devlink.
 > 
-> Use the dedicated helper to perform this operation.
+> In order to avoid having a direct 'fwnode->dev = dev;' in several
+> place in the kernel, introduce fw_devlink_set_device() helper to perform
+> this operation.
 > 
+I don't mind the helper, but the description could do with a little
+detail on why.  Is it just to avoid visibility of internal details, or
+is there a stronger reason?
+
 > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-
-Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 > ---
->  tools/testing/cxl/test/cxl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  include/linux/fwnode.h | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/tools/testing/cxl/test/cxl.c b/tools/testing/cxl/test/cxl.c
-> index 81e2aef3627a..3d9107b2661c 100644
-> --- a/tools/testing/cxl/test/cxl.c
-> +++ b/tools/testing/cxl/test/cxl.c
-> @@ -1136,7 +1136,7 @@ static void mock_companion(struct acpi_device *adev, struct device *dev)
->  {
->  	device_initialize(&adev->dev);
->  	fwnode_init(&adev->fwnode, NULL);
-> -	dev->fwnode = &adev->fwnode;
-> +	device_set_node(dev, &adev->fwnode);
->  	adev->fwnode.dev = dev;
->  }
+> diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+> index a921ca2fe940..a1345e274125 100644
+> --- a/include/linux/fwnode.h
+> +++ b/include/linux/fwnode.h
+> @@ -231,4 +231,10 @@ void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode);
+>  void fw_devlink_refresh_fwnode(struct fwnode_handle *fwnode);
+>  bool fw_devlink_is_strict(void);
 >  
+> +static inline void fw_devlink_set_device(struct fwnode_handle *fwnode,
+> +					 struct device *dev)
+> +{
+> +	fwnode->dev = dev;
+> +}
+> +
+>  #endif
 
 
