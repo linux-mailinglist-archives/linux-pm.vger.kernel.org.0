@@ -1,197 +1,145 @@
-Return-Path: <linux-pm+bounces-43449-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43450-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4CknC0kGpmlVJAAAu9opvQ
-	(envelope-from <linux-pm+bounces-43449-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 22:51:05 +0100
+	id iGmLHvYWpmkCKQAAu9opvQ
+	(envelope-from <linux-pm+bounces-43450-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 00:02:14 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC4061E4270
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 22:51:04 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AB2F1E62F9
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 00:02:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A37DD30B95FA
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 21:41:08 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 685D23023DA6
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 22:32:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F20CB33F58F;
-	Mon,  2 Mar 2026 21:18:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D50FB31E84C;
+	Mon,  2 Mar 2026 22:32:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="BggjGUVX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GwIrpcw2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7AE333F589;
-	Mon,  2 Mar 2026 21:18:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92577282F27;
+	Mon,  2 Mar 2026 22:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772486323; cv=none; b=EMyffNbuPHRvvDT0uu/Iv6ZQVvAb+yTM3+oxRrC3TbHQmZOA2BgBSkPao8ghzkuYu6j0gHQTrXawyVRfXzQjC2vRog0zqVJcAgM3i8wOKi17Hbm44BSnctMW6Te8cYu2f5mCoWCNbSrpDlk8RIVSy7WqLuGq9Yh/04EVRNQW/GA=
+	t=1772490739; cv=none; b=o+JZbvqJ6yrHE4ZZ5rMYRiRIO6/oUGapgtSv6fiWFPm2bxNR3Se4CAMpoHJwojjeftD4SBa0OBAxZJaUHYAuRAlBTgVyjd4XrG0O/YJnKoM1ztI6tNzBo5GJRXT3bCTTxF9qyJzAZiXObuSirsHaCsRkN+ZF7Krj4uxTcMtd1xQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772486323; c=relaxed/simple;
-	bh=cwnlAFdRUvgx5oN7GmLkueCH4LoRMlId64IAaTWJbJA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qF+riHZuxGcMoKIlI1PFyeEEHUXJHBpqs1bV9MS8DcERTsUFku46nOG2Zh1Cq+pc9Jmjsa1aegojv8olMT8bDJtbrK6IRp4trQiwzMOuM4hhEV+rnTA7jKYjsZZgrwgf+dqrfXUR+W6r/0afn4Nr+IAWiE7kuhFsygJBX2/VsEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=BggjGUVX; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=FPJtukf2Ik1BpCCJ2kMM8IkT8h5tYbJQkIK3N2P8ZCE=; b=BggjGUVXje2RBoTd3H23v3o80w
-	tFu81OToInMZzXkwOqkjVnAnILBU6kMeMXLsoIOcMVPq5+7hyOEuQiKuoDyw0GhCbgsOxaCWj1ri+
-	z0gHYlaYKbhUrQ9AeZ3jAgDRKEzt7HmVPPav+JAoVJBLIJourLhvgfsVvoSwMeBVJyX8rfpc5p6qV
-	7QuY0pFFfLgcowjSeSDghqP9P6njsBSMqSdtTqeo4DYiiDpu7q7GfqPcNRQy0QqnxjZZOS3iMcyvF
-	IiDOcrXfeR0o/77PgvhHVXPxLeassJ00EwKkg4oDTasBM1R7BeT5uCyF48dWbyja2Jtg8wSeq5NN/
-	964a43pg==;
-Received: from gwsc.sc.usp.br ([143.107.225.16] helo=[172.24.51.0])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1vxAeg-00894S-06; Mon, 02 Mar 2026 22:18:18 +0100
-Message-ID: <b4131a51-dbc6-4fe6-a750-771cf6169058@igalia.com>
-Date: Mon, 2 Mar 2026 18:18:08 -0300
+	s=arc-20240116; t=1772490739; c=relaxed/simple;
+	bh=7shjL7vCykEmGwXLfMogj+pQx3QqpZJ5Tzh+aSx2p8U=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cO4AF6YC867mAnXiXJcPag/Nu0mbt62bDCJSy8PMTI41wLNY9lzUqJQlFn2PtdwBU6vHoMhJ56rqkJwkVwJEzx3UMtd4qENIuAZdvRmsNxGOIi0Stp8flQfixTexWPeUPTuvzx3/M/bn9SwTyyA/NMYJmRiYK6D7KtGlkOA3E3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GwIrpcw2; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772490737; x=1804026737;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7shjL7vCykEmGwXLfMogj+pQx3QqpZJ5Tzh+aSx2p8U=;
+  b=GwIrpcw2SORFyHYF0DGC2KWDzbQNztgNbD0Ykg3kIVyfztY5I3jnlUDO
+   UvbV7q+DOTIILwtJREK8VrqOXFBg1DrzBoK1vspUL3jEZdTEqVotC2+XK
+   sj3CSvdIzeRCtTf1NoBit1mc/WAuzuqIiNZGT4m/B3Dz/ThI0vtpdy6sD
+   RJ/cy/aswGUjFiRy3Y0rUU6tT2omWBniCG0KMTrild23wz5vVeHzMGHsn
+   10WCDhz28SoZxyRp6isnsbqYms9XzDWRXFt28iyOeJEbw9XTjJn43s7lH
+   qhhiszwyIYWSsoRrIpGfDhIVHb2mkQqJhNvZkFtN3slLNtC4RNbG0cibG
+   Q==;
+X-CSE-ConnectionGUID: uURS5/+sQo2Tl8uT922iqA==
+X-CSE-MsgGUID: kvBxLjKiS86bvA820E5xjA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11717"; a="73554497"
+X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
+   d="scan'208";a="73554497"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 14:32:17 -0800
+X-CSE-ConnectionGUID: 0gHLMPaIQ4aOTN8RsaN+Qg==
+X-CSE-MsgGUID: +VoQTKZCRhWmWwM8ckJWbA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
+   d="scan'208";a="217793506"
+Received: from sghuge-mobl2.amr.corp.intel.com (HELO xpardee-desk.lan) ([10.125.108.86])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 14:32:17 -0800
+From: Xi Pardee <xi.pardee@linux.intel.com>
+To: xi.pardee@linux.intel.com,
+	irenic.rajneesh@gmail.com,
+	david.e.box@linux.intel.com,
+	ilpo.jarvinen@linux.intel.com,
+	platform-driver-x86@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH 0/6] Enable NVL support in intel_pmc_core
+Date: Mon,  2 Mar 2026 14:32:02 -0800
+Message-ID: <20260302223214.484585-1-xi.pardee@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 3/6] pmdomain: bcm: bcm2835-power: Increase ASB control
- timeout
-To: Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Nicolas Saenz Julienne <nsaenz@kernel.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Stefan Wahren <wahrenst@gmx.net>, Maxime Ripard <mripard@kernel.org>,
- Melissa Wen <mwen@igalia.com>, Iago Toral Quiroga <itoral@igalia.com>,
- Chema Casanova <jmcasanova@igalia.com>,
- Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Philipp Zabel <p.zabel@pengutronix.de>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, dri-devel@lists.freedesktop.org,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, kernel-dev@igalia.com,
- linux-pm@vger.kernel.org
-References: <20260218-v3d-power-management-v6-0-40683fd39865@igalia.com>
- <20260218-v3d-power-management-v6-3-40683fd39865@igalia.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>
-Autocrypt: addr=mcanal@igalia.com; keydata=
- xsBNBGcCwywBCADgTji02Sv9zjHo26LXKdCaumcSWglfnJ93rwOCNkHfPIBll85LL9G0J7H8
- /PmEL9y0LPo9/B3fhIpbD8VhSy9Sqz8qVl1oeqSe/rh3M+GceZbFUPpMSk5pNY9wr5raZ63d
- gJc1cs8XBhuj1EzeE8qbP6JAmsL+NMEmtkkNPfjhX14yqzHDVSqmAFEsh4Vmw6oaTMXvwQ40
- SkFjtl3sr20y07cJMDe++tFet2fsfKqQNxwiGBZJsjEMO2T+mW7DuV2pKHr9aifWjABY5EPw
- G7qbrh+hXgfT+njAVg5+BcLz7w9Ju/7iwDMiIY1hx64Ogrpwykj9bXav35GKobicCAwHABEB
- AAHNIE1hw61yYSBDYW5hbCA8bWNhbmFsQGlnYWxpYS5jb20+wsCRBBMBCAA7FiEE+ORdfQEW
- dwcppnfRP/MOinaI+qoFAmcCwywCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQ
- P/MOinaI+qoUBQgAqz2gzUP7K3EBI24+a5FwFlruQGtim85GAJZXToBtzsfGLLVUSCL3aF/5
- O335Bh6ViSBgxmowIwVJlS/e+L95CkTGzIIMHgyUZfNefR2L3aZA6cgc9z8cfow62Wu8eXnq
- GM/+WWvrFQb/dBKKuohfBlpThqDWXxhozazCcJYYHradIuOM8zyMtCLDYwPW7Vqmewa+w994
- 7Lo4CgOhUXVI2jJSBq3sgHEPxiUBOGxvOt1YBg7H9C37BeZYZxFmU8vh7fbOsvhx7Aqu5xV7
- FG+1ZMfDkv+PixCuGtR5yPPaqU2XdjDC/9mlRWWQTPzg74RLEw5sz/tIHQPPm6ROCACFls7A
- TQRnAsMsAQgAxTU8dnqzK6vgODTCW2A6SAzcvKztxae4YjRwN1SuGhJR2isJgQHoOH6oCItW
- Xc1CGAWnci6doh1DJvbbB7uvkQlbeNxeIz0OzHSiB+pb1ssuT31Hz6QZFbX4q+crregPIhr+
- 0xeDi6Mtu+paYprI7USGFFjDUvJUf36kK0yuF2XUOBlF0beCQ7Jhc+UoI9Akmvl4sHUrZJzX
- LMeajARnSBXTcig6h6/NFVkr1mi1uuZfIRNCkxCE8QRYebZLSWxBVr3h7dtOUkq2CzL2kRCK
- T2rKkmYrvBJTqSvfK3Ba7QrDg3szEe+fENpL3gHtH6h/XQF92EOulm5S5o0I+ceREwARAQAB
- wsB2BBgBCAAgFiEE+ORdfQEWdwcppnfRP/MOinaI+qoFAmcCwywCGwwACgkQP/MOinaI+qpI
- zQf+NAcNDBXWHGA3lgvYvOU31+ik9bb30xZ7IqK9MIi6TpZqL7cxNwZ+FAK2GbUWhy+/gPkX
- it2gCAJsjo/QEKJi7Zh8IgHN+jfim942QZOkU+p/YEcvqBvXa0zqW0sYfyAxkrf/OZfTnNNE
- Tr+uBKNaQGO2vkn5AX5l8zMl9LCH3/Ieaboni35qEhoD/aM0Kpf93PhCvJGbD4n1DnRhrxm1
- uEdQ6HUjWghEjC+Jh9xUvJco2tUTepw4OwuPxOvtuPTUa1kgixYyG1Jck/67reJzMigeuYFt
- raV3P8t/6cmtawVjurhnCDuURyhUrjpRhgFp+lW8OGr6pepHol/WFIOQEg==
-In-Reply-To: <20260218-v3d-power-management-v6-3-40683fd39865@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: CC4061E4270
+X-Rspamd-Queue-Id: 0AB2F1E62F9
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.36 / 15.00];
-	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[baylibre.com,kernel.org,broadcom.com,gmx.net,igalia.com,raspberrypi.com,pengutronix.de,linaro.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43449-lists,linux-pm=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DKIM_TRACE(0.00)[intel.com:+];
+	FREEMAIL_TO(0.00)[linux.intel.com,gmail.com,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-43450-lists,linux-pm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.877];
-	FROM_NEQ_ENVFROM(0.00)[mcanal@igalia.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[igalia.com:-];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[xi.pardee@linux.intel.com,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_NONE(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-0.997];
 	TAGGED_RCPT(0.00)[linux-pm];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[igalia.com:mid,igalia.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,linux.intel.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-[+cc Ulf Hansson, linux-pm]
+This patch series introduces two new features, enhances existing
+functionalities, and adds NVL support to the intel_pmc_core driver.
 
-Stefan, Florian, could you take a look at this patch when you get a
-chance? It would be great to have this patch reviewed as it can go
-independently through the linux-pm tree.
+The first two patches add new attributes to improve Package C-state
+debugging. The third and fourth patches refine current functionality
+for better support. The fifth patch enables the intel_pmc_core driver
+retrieves PMC information only for available PMCs. Finally, the last
+patch adds support for Nova Lake platforms.
 
-I'm sorry, I previously forgot to re-run --auto-to-cc, so the linux-pm
-mailing list was missing from the recipients.
+Xi Pardee (6):
+  platform/x86/intel/pmc: Enable PkgC LTR blocking counter
+  platform/x86/intel/pmc: Enable Pkgc blocking residency counter
+  platform/x86/intel/pmc: Use PCI DID for PMC SSRAM device discovery
+  platform/x86/intel/pmc: Add support for variable DMU offsets
+  platform/x86/intel/pmc: Retrieve PMC info only for available PMCs
+  platform/x86/intel/pmc: Add Nova Lake support to intel_pmc_core driver
 
-Best regards,
-- Maíra
+ drivers/platform/x86/intel/pmc/Makefile |    2 +-
+ drivers/platform/x86/intel/pmc/arl.c    |   11 +-
+ drivers/platform/x86/intel/pmc/core.c   |  141 ++-
+ drivers/platform/x86/intel/pmc/core.h   |   64 +-
+ drivers/platform/x86/intel/pmc/lnl.c    |    5 +-
+ drivers/platform/x86/intel/pmc/mtl.c    |    6 +-
+ drivers/platform/x86/intel/pmc/nvl.c    | 1537 +++++++++++++++++++++++
+ drivers/platform/x86/intel/pmc/ptl.c    |    7 +-
+ drivers/platform/x86/intel/pmc/wcl.c    |    5 +-
+ 9 files changed, 1743 insertions(+), 35 deletions(-)
+ create mode 100644 drivers/platform/x86/intel/pmc/nvl.c
 
-On 2/18/26 17:45, Maíra Canal wrote:
-> The bcm2835_asb_control() function uses a tight polling loop to wait
-> for the ASB bridge to acknowledge a request. During intensive workloads,
-> this handshake intermittently fails for V3D's master ASB on BCM2711,
-> resulting in "Failed to disable ASB master for v3d" errors during
-> runtime PM suspend. As a consequence, the failed power-off leaves V3D in
-> a broken state, leading to bus faults or system hangs on later accesses.
-> 
-> As the timeout is insufficient in some scenarios, increase the polling
-> timeout from 1us to 5us, which is still negligible in the context of a
-> power domain transition. Also, move the start timestamp to after the
-> MMIO write, as the write latency is counted against the timeout,
-> reducing the effective wait time for the hardware to respond.
-> 
-> Signed-off-by: Maíra Canal <mcanal@igalia.com>
-> ---
->   drivers/pmdomain/bcm/bcm2835-power.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/pmdomain/bcm/bcm2835-power.c b/drivers/pmdomain/bcm/bcm2835-power.c
-> index 1d29addfe036348e82293693b4059e504bb25575..7b9eea10a24e26835deeca84c60ccb616b99a508 100644
-> --- a/drivers/pmdomain/bcm/bcm2835-power.c
-> +++ b/drivers/pmdomain/bcm/bcm2835-power.c
-> @@ -166,8 +166,6 @@ static int bcm2835_asb_control(struct bcm2835_power *power, u32 reg, bool enable
->   		break;
->   	}
->   
-> -	start = ktime_get_ns();
-> -
->   	/* Enable the module's async AXI bridges. */
->   	if (enable) {
->   		val = readl(base + reg) & ~ASB_REQ_STOP;
-> @@ -176,9 +174,10 @@ static int bcm2835_asb_control(struct bcm2835_power *power, u32 reg, bool enable
->   	}
->   	writel(PM_PASSWORD | val, base + reg);
->   
-> +	start = ktime_get_ns();
->   	while (!!(readl(base + reg) & ASB_ACK) == enable) {
->   		cpu_relax();
-> -		if (ktime_get_ns() - start >= 1000)
-> +		if (ktime_get_ns() - start >= 5000)
->   			return -ETIMEDOUT;
->   	}
->   
-> 
+-- 
+2.43.0
 
 
