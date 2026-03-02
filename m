@@ -1,55 +1,54 @@
-Return-Path: <linux-pm+bounces-43426-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43427-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YGAEGO+rpWmpDgAAu9opvQ
-	(envelope-from <linux-pm+bounces-43426-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 16:25:35 +0100
+	id KPZaO3qspWmpDgAAu9opvQ
+	(envelope-from <linux-pm+bounces-43427-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 16:27:54 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA8BC1DBC7A
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 16:25:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 515D91DBD11
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 16:27:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 34F2C303A5F5
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 15:19:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2A66B30734F2
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 15:23:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B41F401490;
-	Mon,  2 Mar 2026 15:18:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 412BD4014BD;
+	Mon,  2 Mar 2026 15:23:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="oXpdMlRz"
+	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="0XQtejgo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2F333DEF7;
-	Mon,  2 Mar 2026 15:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F302DC77F;
+	Mon,  2 Mar 2026 15:23:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772464739; cv=none; b=A/zmFluESaOjgA41BWGs4ARGSeooUbIRM5w0WLZVHQ9Inuowyf0a8wbdY8F01PBgqZ+yzRLQ4geuvXdBm/XfSSAfVkXUTy1XmV1rJXX/tV7NbO60SNWC111ZchUccJGZ773J05QRllp1YXh6B+AmeZTcjTIUT47PJkFHNJ/63hA=
+	t=1772464982; cv=none; b=mgn4ZOnh0/kJZnLWOuf0mIIHaU33hXBQIC+zdLCTOt9JDdwytwj4eoAogjpJFylO7uizf6Ex8jhRQeSSTRa4WSGgFJxguVzffZ4lIAPco3P6XA7TpliiSL0zpZBjJCTKdBkh3zT/ksoavZucPdmPFfB1GWvYZf9oZpOd1Y5P4b4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772464739; c=relaxed/simple;
-	bh=dwmK2EnSIsQl57kTURLOvNMIQmr9D+99Bbr5VpbqFSo=;
+	s=arc-20240116; t=1772464982; c=relaxed/simple;
+	bh=tnGNrd08ygRLNg29w5uOg5fCwaj3xRbm+K6TxvyXixM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rn/9tTC7tnC/BKxzxmt/pUdm/s79RKt4MT6463zk1GhyuHW9NMjI5oGR0y3XV+YwVZBfIpxX4EfYuZFaq+6GIqyQFHIQb1ZjNI2zfZeuznK7gCfD+jTGpTIgF5uV5tpGKTxvUellM4fkcSJkPr40uVcjVJjLEX5tIvAz4oN3VV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=oXpdMlRz; arc=none smtp.client-ip=178.62.254.231
+	 Content-Type:Content-Disposition:In-Reply-To; b=TcsTq+bPQT86LRRea+R/Q8ra+/N5rsyyRZm4ORhOLe2j477OmDutr+jr2cKJP+n6xyAPgtlvZVazUkvNsa/c2vjtHK2YX27ZsLXhWLmtIO4LqieEDsNGBA4UQQ+A+864iwXvK8tc1qLMcaMkqeRXaMgPHVvzp/istOuaN7BKjo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=0XQtejgo; arc=none smtp.client-ip=178.62.254.231
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
 Received: from shell.ilvokhin.com (shell.ilvokhin.com [138.68.190.75])
 	(Authenticated sender: d@ilvokhin.com)
-	by mail.ilvokhin.com (Postfix) with ESMTPSA id A32A2B3085;
-	Mon, 02 Mar 2026 15:18:49 +0000 (UTC)
+	by mail.ilvokhin.com (Postfix) with ESMTPSA id BD9F5B308A;
+	Mon, 02 Mar 2026 15:22:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
-	s=mail; t=1772464730;
-	bh=BFYzZEBixlS+zcZl7LsuEKBEMzuKJceTVNM40UE/LP8=;
+	s=mail; t=1772464979;
+	bh=cZrWALVvP/5PCNYa5kN8hhPqzqgPdcu+PQQdFr2xuMA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=oXpdMlRzh3dhWg4L7e1wNlTox7fVWTR42Pud1whiidbKQmr2FQfBFHS0BOCTKSpBe
-	 R2DIdS6d5ws7XChDY9B/cUn27jM6mwloRl+Pgb1LAhHjBvlEMht6wQWyutSDnREvtR
-	 IOe0L9Ulmzror287UzM5h85fSgdc4Gtg+B8D00DE=
-Date: Mon, 2 Mar 2026 15:18:45 +0000
+	b=0XQtejgoF4lHXmQZfH+M5Yr/k2dulaPURnPgHTjB3MWoBc4ABdeo9tX28PvlJ0wfS
+	 MhnKUH1BcERlzCflotEoBh7ucIj9rGuOw5aZlwAZ3tTbpooMJtXtq+bpD3TPnVM5C9
+	 IoQNyU/1h833NedDbDGWDcatze9MhSFM3hlGuVIY=
+Date: Mon, 2 Mar 2026 15:22:57 +0000
 From: Dmitry Ilvokhin <d@ilvokhin.com>
-To: Steven Rostedt <rostedt@goodmis.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
 	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
 	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
 	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
@@ -57,6 +56,7 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	Michal Hocko <mhocko@suse.com>,
 	Axel Rasmussen <axelrasmussen@google.com>,
 	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
@@ -67,12 +67,12 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	Qi Zheng <zhengqi.arch@bytedance.com>,
 	Shakeel Butt <shakeel.butt@linux.dev>, linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 5/5] mm: add tracepoints for zone lock
-Message-ID: <aaWqVZ4t5AaJfih7@shell.ilvokhin.com>
+	linux-pm@vger.kernel.org, SeongJae Park <sj@kernel.org>
+Subject: Re: [PATCH v4 2/5] mm: convert zone lock users to wrappers
+Message-ID: <aaWrUezs2XysV2Kl@shell.ilvokhin.com>
 References: <cover.1772206930.git.d@ilvokhin.com>
- <ae145fe890f028409f727b4921904b547346fa0b.1772206930.git.d@ilvokhin.com>
- <20260227144649.3dbff742@gandalf.local.home>
+ <d26a43ebed2f0f1edb9cfe4fbed16dd31c7a069c.1772206930.git.d@ilvokhin.com>
+ <7e93021d-53dd-4162-97e6-3bca1f46a0c6@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -81,8 +81,8 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260227144649.3dbff742@gandalf.local.home>
-X-Rspamd-Queue-Id: DA8BC1DBC7A
+In-Reply-To: <7e93021d-53dd-4162-97e6-3bca1f46a0c6@kernel.org>
+X-Rspamd-Queue-Id: 515D91DBD11
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
@@ -93,12 +93,12 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43426-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43427-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[27];
+	RCPT_COUNT_TWELVE(0.00)[28];
 	DKIM_TRACE(0.00)[ilvokhin.com:+];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
@@ -110,30 +110,54 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,ilvokhin.com:dkim,ilvokhin.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,ilvokhin.com:dkim,ilvokhin.com:email,linux.dev:email,shell.ilvokhin.com:mid]
 X-Rspamd-Action: no action
 
-On Fri, Feb 27, 2026 at 02:46:49PM -0500, Steven Rostedt wrote:
-> On Fri, 27 Feb 2026 16:00:27 +0000
-> Dmitry Ilvokhin <d@ilvokhin.com> wrote:
+On Fri, Feb 27, 2026 at 09:39:11PM +0100, David Hildenbrand (Arm) wrote:
+> On 2/27/26 17:00, Dmitry Ilvokhin wrote:
+> > Replace direct zone lock acquire/release operations with the
+> > newly introduced wrappers.
+> > 
+> > The changes are purely mechanical substitutions. No functional change
+> > intended. Locking semantics and ordering remain unchanged.
+> > 
+> > The compaction path is left unchanged for now and will be
+> > handled separately in the following patch due to additional
+> > non-trivial modifications.
+> > 
+> > Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
+> > Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+> > Reviewed-by: SeongJae Park <sj@kernel.org>
+> > ---
 > 
-> >  static inline void zone_lock_init(struct zone *zone)
-> >  {
-> > @@ -12,26 +59,41 @@ static inline void zone_lock_init(struct zone *zone)
-> >  
-> >  #define zone_lock_irqsave(zone, flags)				\
-> >  do {								\
-> > +	bool success = true;					\
-> > +								\
-> > +	__zone_lock_trace_start_locking(zone);			\
-> >  	spin_lock_irqsave(&(zone)->_lock, flags);		\
-> > +	__zone_lock_trace_acquire_returned(zone, success);	\
+> [...]
 > 
-> Why the "success" variable and not just:
+> >  #ifdef CONFIG_COMPACTION
+> > @@ -530,11 +531,14 @@ static bool compact_lock_irqsave(spinlock_t *lock, unsigned long *flags,
+> >   * Returns true if compaction should abort due to fatal signal pending.
+> >   * Returns false when compaction can continue.
+> >   */
+> > -static bool compact_unlock_should_abort(spinlock_t *lock,
+> > -		unsigned long flags, bool *locked, struct compact_control *cc)
+> > +
+> > +static bool compact_unlock_should_abort(struct zone *zone,
+> > +					unsigned long flags,
+> > +					bool *locked,
+> > +					struct compact_control *cc)
 > 
-> 	__zone_lock_trace_acquire_returned(zone, true);
+> We tend to use two-tabs on second parameter line; like the existing code
+> did.
 > 
->  ?
+> 
+> Besides that
+> 
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> 
 
-Good point, passing true directly is cleaner. Happy to respin if needed.
+Thanks, David. Noted. Appreciate the review and ack.
+
+> -- 
+> Cheers,
+> 
+> David
 
