@@ -1,196 +1,235 @@
-Return-Path: <linux-pm+bounces-43403-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43404-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WPY7OX2KpWk4DgYAu9opvQ
-	(envelope-from <linux-pm+bounces-43403-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 14:02:53 +0100
+	id 8JuNLPORpWmREAYAu9opvQ
+	(envelope-from <linux-pm+bounces-43404-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 14:34:43 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3A051D9656
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 14:02:53 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D8F41D9DC9
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 14:34:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0EEC930488A2
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 12:55:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 868D7308F093
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 13:30:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD48D3B3C0B;
-	Mon,  2 Mar 2026 12:55:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19A28334681;
+	Mon,  2 Mar 2026 13:29:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TkwWD6PZ"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="TTeUUmqh";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="C4+LLwaA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96072C11C6;
-	Mon,  2 Mar 2026 12:55:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DBB0379EDA
+	for <linux-pm@vger.kernel.org>; Mon,  2 Mar 2026 13:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772456135; cv=none; b=no6FWp60W2c8ePjovnKmNbEUmxkw1pjPHFfIiaRP8vwsIjridCZpZRC5HBNuQV0mNRfQTBGXz3FCjKrs5SSYgW9s2CXtg3nhnmR5eSs/J78N+m0yzf3e1iPeQEOEIrwpf05KSLmfWQTP5yXIZk0LmvF19wFKHabMt5nUKrrG3EU=
+	t=1772458182; cv=none; b=nt56QHWb1Izn2SgM0rdVQOyPYaj6s8VBRCFqq/tHis2MbWqkug8rdpo3pEiq6QV67ZmYbhBC4POkt96j+snW33Xp33itJQXDzuAG3o5iza/cEZVpd+nUoy5pWGYdffaM6kMdjPhlGZx3Rly7GBoqvvY4BvyKUMbj1qGvj8YZDS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772456135; c=relaxed/simple;
-	bh=5q3JG5EiR7LxhydMW+Q6mZ0F0HhustgGLo0LL5/LuSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hjUo7TZBBupD8j1u3X41Ow+NEpPCHKZc66XAhyy5tVc91bvNCtWZXs5tg055R6ACvBJKHBiyUAptaDQwdrbdR7WuKbZ14OXMwBULXluaVqby70mw8XGVTK1VussUkknE79PhAlSMMuwUblYBP6Yua3c84TQFg9dEwjDsjCABgIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TkwWD6PZ; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772456134; x=1803992134;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5q3JG5EiR7LxhydMW+Q6mZ0F0HhustgGLo0LL5/LuSQ=;
-  b=TkwWD6PZR+6a9nghjOqVc/I+L8MiaW34rtrkAT5nllzud4+59c1DmVon
-   brgfcRFvkZRyguto2ahCpxyXUOVLx1PgxhYlLqzO1qtHPSHp80vVCWPzu
-   Q7SIVPI6onrZ+7RdgfEFl/CzJZUXATo4YDtLG8XAgkukd43jsYvT5y/Cb
-   LxvvTHbru+Au9yoeMggEfh9Vv+nbAxxYgCFoH1BLhaFH+dLcO2+2eHTUb
-   IsxMzoV1L5RvitMtRPmCcBArDqZExeOwMzN30/rUsOlmLcBpc7mcrziP1
-   oldLSZiwraxAejwT8IsLOY7Ezq2K1Hqad4pJZUwxi0tE3fO7tHY6+pyVK
-   A==;
-X-CSE-ConnectionGUID: snXTQ1X+QdOvTZtF/dS1Sw==
-X-CSE-MsgGUID: iZzidX7TSU+esnXGHp4Rtw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11716"; a="72489024"
-X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
-   d="scan'208";a="72489024"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 04:55:33 -0800
-X-CSE-ConnectionGUID: aMyiej+FS/G5mq/xlIUOzg==
-X-CSE-MsgGUID: PRfp/3AXSEajbcEvSpU/+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
-   d="scan'208";a="214863125"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa006.fm.intel.com with ESMTP; 02 Mar 2026 04:55:31 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 9624198; Mon, 02 Mar 2026 13:55:29 +0100 (CET)
-Date: Mon, 2 Mar 2026 13:55:29 +0100
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Badhri Jagan Sridharan <badhri@google.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Amit Sunil Dhamne <amitsd@google.com>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] tcpm: Implement sink support for PD SPR AVS
- negotiation
-Message-ID: <aaWIwQvxrAf-v5ec@black.igk.intel.com>
-References: <20260226055311.2591357-1-badhri@google.com>
- <20260226055311.2591357-4-badhri@google.com>
+	s=arc-20240116; t=1772458182; c=relaxed/simple;
+	bh=meXGgSvTGfMBUarg91iFcG54F1AZhuNxBdfaz030MnE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Ikr9sBIKy1hraOEv8JMYAP/shqVchLD0yG+7pRdXvgQocWPWXAHHGJ/+G3kWgUbggxYWAHSWlmngMFPEvhMH5V/DnqOt1xCpIdyY6HplcmTyDoWlxFYlgg8TteiBzfLcgMui81jvO57IL7aLFxwjPQPmWVIjBBEccGfGq9HJ+KE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=TTeUUmqh; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=C4+LLwaA; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6229JZGJ3742057
+	for <linux-pm@vger.kernel.org>; Mon, 2 Mar 2026 13:29:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=NrR8wBkc/3f/fInQc1117c
+	YD1EoAhKrKGP3OxuRfbMc=; b=TTeUUmqhm5TJVfWz1zFZauz2jbAmLp3tWp/4/E
+	iAP8IlZT+2UQj+x8+sVwzSE3APtgnIU16e4oXjlzN6ddfvb26z5vJZJmaRjWnlV0
+	fR8sFTA/sH6Ulu3m3NSX+h2cJcbRAcHiagyiNieIuhalgLdHEEiDg1D+R0sedU2j
+	cNa5a0fm0p/Bg2hGR3tEd8q/WSI8gaqLKHryFcP3NKHzInwOjYSkpadS7EQ8deKB
+	wPcIf4BQxAIMPS1u2dlN8eDv43DP96XpLuUGL7RajPUgrDFmMpGgliPgsZRjFQRp
+	+IaZpH1MpahkHMHDAFQeC6y9/auGb6QRyk4RMR3aOW8UNlLw==
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cn7trgtaw-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 02 Mar 2026 13:29:39 +0000 (GMT)
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-89a0249d51aso18288406d6.1
+        for <linux-pm@vger.kernel.org>; Mon, 02 Mar 2026 05:29:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1772458178; x=1773062978; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NrR8wBkc/3f/fInQc1117cYD1EoAhKrKGP3OxuRfbMc=;
+        b=C4+LLwaA2whLdKWSvo8W8igk/W2AqyqwNk0+35essva0j0LpiK6ZROdLW14yDxBlWm
+         BSK2qBfuN1K9W2pS4U6ZGKMqqfdoZ1leLk0jRa8pOOCouvExhTSmB9vK5brPgzZHirUz
+         LFVeFINiIEdRGOjjS1mkoZT2d9Fa9cv67+ywtcG2h2sEohmXgPX02K9JNG0W7xYjCIXH
+         H7YM91oi/Ur0rsmkaEzOlz7o7fYZREL/uDFc1AFMYoT7OOAE5imH5prtY8IQwEAAE+ET
+         K/A3J2EjnksImocs8YInjmGqE/AlkvMihvdaTl/uIRhdlL8NVXTT5IY91RWkuk+eGon3
+         0weA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772458178; x=1773062978;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NrR8wBkc/3f/fInQc1117cYD1EoAhKrKGP3OxuRfbMc=;
+        b=r9aty78Xk8nmGdU6CkHh7LsHX5MGnxbVUPX/O+gQiQ+trOvpflfhZSkDVHPNjJ+L7e
+         yIAxzrWaoHGYNtyILeZNthyLBiYPmpvU0oo5P449XuQlaeWD6d83nVk3F/LvZPGWnFu4
+         nVMYbYcD4O3SvzNadckVYPo419gf/6G+OR/2smnTHQ+jkHdcyxt31oMLjctCjAoyE+/o
+         rdRpu/BHiD7vfB8MU34Mo0WAs5rZA5xwzLm00bM5MgF8XXh20agd1HkCN/8eno5Xccxi
+         Z3OzvzhTAzx9EqO/Ss097PwNVgolj5i5s51jnPkoMNZaPoO8EK8PEACQnDfZP3Wn9sPO
+         tIMg==
+X-Forwarded-Encrypted: i=1; AJvYcCVBC25mtPK7VBoCXKaXYpNKCFphlAKP3hjBSQXdLtaSpAD7S8KwSoWpZcqZv94N/kw72YbTvTHm3w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWpH1Us9jepPVBUIfiFufsKDfee89NohpwHbZn5kNCu4loKgIp
+	r/qSU+PrAWEDyrgA7gJVvBqw9bZTuL69C4oXkZhdFouZu6ysW8wpTD0oxindeH5G/4G3e0LCE7V
+	16JYBJBe11QiQAEZ+uigK56NIVTWIggJRH8ZITRSjV7jXsZ9Px28I2WWlCMArCISHK1w3dA==
+X-Gm-Gg: ATEYQzwedVbnnHtBa9xwce+nAzpNjsFI1caYhj0noMvaDaie48CHN0KsJfGgl8rLmlH
+	I4IqPFjpWQ4yp5qjx9bNgd8L6lXX67ZTJe6A0lua9vrp6pizsT/2ekano+dEfu9tjJShNhqI3eH
+	OaPKfFJkpwvJb/GcGp2MohpWyMywigbQvZBG3otajsJpH0wtMRvH2pdvLnsZjOxzN/psrtpXQx+
+	eIPERfEwlBLAwV/Xbln+lWdctL3kmECFRze4S0nVV/Pr3nAzyk5bKqYukH9pHykPMN3l7apOv9/
+	y7Uij78altaZkBH5jz6FcubjhEHrpLPi0ZGJnHLbPeYlF53OXcckdkcrEAQ9qFz3EYixU2pLA0Q
+	I3QDM0cWzBjsZ8nhAS1yAxZwPyWN3fg==
+X-Received: by 2002:a05:620a:3187:b0:8cb:b062:c2ec with SMTP id af79cd13be357-8cbc8d8678cmr1557392485a.29.1772458178310;
+        Mon, 02 Mar 2026 05:29:38 -0800 (PST)
+X-Received: by 2002:a05:620a:3187:b0:8cb:b062:c2ec with SMTP id af79cd13be357-8cbc8d8678cmr1557386385a.29.1772458177578;
+        Mon, 02 Mar 2026 05:29:37 -0800 (PST)
+Received: from hackbox.lan ([86.121.162.109])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bfcbf894sm133471575e9.16.2026.03.02.05.29.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2026 05:29:36 -0800 (PST)
+From: Abel Vesa <abel.vesa@oss.qualcomm.com>
+Subject: [PATCH v4 0/2] pmdomain: qcom: Add support for Eliza SoC
+Date: Mon, 02 Mar 2026 15:29:30 +0200
+Message-Id: <20260302-eliza-pmdomain-v4-0-e61ae2bac805@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260226055311.2591357-4-badhri@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALqQpWkC/3XNQQ6CMBAF0KuQri3ptBXUlfcwLgodpEYoUiAq4
+ e62uCFBNpP8zJ83I3HYGnTkFI2kxcE4Y2sf5C4ieanqG1KjfSac8YRxSCg+zEfRptK2UqamWgM
+ 7AmRaoiT+qGmxMK8ZvFx/2fXZHfMuKKFRGtfZ9j1/HCD0NvEBKKP5HvxWyVQn+mydi5+9euS2q
+ mI/SPgx8IXCxUrhXuGiyA4pZinDYkMRS0WuFOGVBEFooVTKFPxRpmn6AuhNuq5RAQAA
+X-Change-ID: 20260216-eliza-pmdomain-dd10911bd4e4
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Abel Vesa <abel.vesa@oss.qualcomm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+        Taniya Das <taniya.das@oss.qualcomm.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1493;
+ i=abel.vesa@oss.qualcomm.com; h=from:subject:message-id;
+ bh=meXGgSvTGfMBUarg91iFcG54F1AZhuNxBdfaz030MnE=;
+ b=owEBbQKS/ZANAwAKARtfRMkAlRVWAcsmYgBppZC8cRwcUq7qzrSSOY48JUijRlQuUOj/GYN03
+ Pagg/PsPiGJAjMEAAEKAB0WIQRO8+4RTnqPKsqn0bgbX0TJAJUVVgUCaaWQvAAKCRAbX0TJAJUV
+ VmHSD/0ZLwiSY9gwTGrv1Y0LQ1FLtXpXxP8iHR9H3YgGPX++82vl1ub29pGBtW/KJX2w9dAQhaO
+ bPJVw1HlaJ4QN3pWRQWcXyJ/54GqJN6Ce7zv3KDRDU6EsuTcZjUiV0KJ2xpzivgEu+IMlAGtbfm
+ AqNXCPjnidB0Uy9mbIXcSYgqZJtjuMJXIjLPhSjwGIeYUuX8SAtOLcKXj/P1o/ITCwKFKqdtfrl
+ Ebw47fojBHBOsrzC0jp3iWTgq3xsPuU49IeN95h3ExTfXdBmTabniEBaeThry9cbjqgYsnLwWbq
+ M+DC+jMKnmCyPriWSIb+jZbdOCBrf1fKSeRW1L9XCPnDr2lMNXmJwK634ibYy3y9da2vd+mXEcZ
+ i/Fs2V5oXXf4WCW4+S2W2vMIdHQR05SLOBqNFriK17uzJyKvnpsP7wd/reQHLgA0hrPyVoujiKO
+ O08ldGoKQIMRHm86o48l5gwZJHuyjjTbfukOn8gi04ym0yNQ9clLhCPGOnisSIQremKvk+5EFGd
+ cmR5wu7iiFIdNbb2eP3HgZqaWpv56ZLLBPHRhNKG21DtZ5uySEqkCuQaZFumPJRZpD+rZ4pRIQT
+ 1yNFTNSqnX2YYDTKQwWFzUH8xvtiFDnpnjpIo6mgSZwqygXIyayN55DD4JMa5thHKnBzn5OkQ6P
+ NHlwFxLpKzxkqxw==
+X-Developer-Key: i=abel.vesa@oss.qualcomm.com; a=openpgp;
+ fpr=6AFF162D57F4223A8770EF5AF7BF214136F41FAE
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAyMDExMyBTYWx0ZWRfXyphBxPeldBo1
+ Z8q69RuYotpg/RJQHpOTdvSwN3250PfHmbfGaiOpAC7OIAnBujE5z0c70fCxZuz1t0Tr+Xnbzie
+ a8gkp+AVtlP/zGuuS/wzTECbLJPtp2OCpwEaj4SR2TTuBdRXncieomKxpgyUKHLrPcFjEttT69P
+ CMPCD1tzl66jBDwXSbVC/jSHJ2YPmKOnMJ2lWbwR+ijQWAvxr+U8iAey7FITr2bhjdVCepAoLPp
+ AEbSajpdqeo0cDIG3qJNSURNngdd3ksKpfvUTk3+ECWLs8EqfAHD+7yDFuKTnm4MykqTeeK/NTN
+ w72STM3v5ZzW4fiIdCn0pT+j4rEBoi3A7Amm3oMcb0SV8+OSa+hqHOTNf99gBAzoyhf+RdHpy06
+ FE3kKWr6h+T74N6QxaSStKbFHnxJHJpx3yWJHcOpPgtMPIJXiDKuzWPwI3Asf5N3nJFqZJLsQKo
+ 60GPDe1gE8pZJsZjFnA==
+X-Authority-Analysis: v=2.4 cv=TNhIilla c=1 sm=1 tr=0 ts=69a590c3 cx=c_pps
+ a=wEM5vcRIz55oU/E2lInRtA==:117 a=oauzzCmhM186DRC0Y2yWPg==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
+ a=bC-a23v3AAAA:8 a=EUspDBNiAAAA:8 a=w5gbrMkz2gkyNj4IujcA:9 a=QEXdDO2ut3YA:10
+ a=OIgjcC2v60KrkQgK7BGD:22 a=FO4_E8m0qiDe52t0p3_H:22
+X-Proofpoint-ORIG-GUID: _2RDI3dTR0PhQSWv8_WgQgOsCe60TJ-7
+X-Proofpoint-GUID: _2RDI3dTR0PhQSWv8_WgQgOsCe60TJ-7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-02_03,2026-02-27_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 priorityscore=1501 bulkscore=0 lowpriorityscore=0
+ malwarescore=0 spamscore=0 phishscore=0 suspectscore=0 impostorscore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
+ definitions=main-2603020113
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[intel.com:+];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	TAGGED_FROM(0.00)[bounces-43404-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43403-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,oss.qualcomm.com:mid,oss.qualcomm.com:dkim,msgid.link:url];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[heikki.krogerus@linux.intel.com,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[abel.vesa@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A3A051D9656
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 2D8F41D9DC9
 X-Rspamd-Action: no action
 
-On Thu, Feb 26, 2026 at 05:53:11AM +0000, Badhri Jagan Sridharan wrote:
-> Add support to enable TCPM to negotiate with
-> USB PD Standard Power Range Adjustable Voltage Supply (SPR AVS) when
-> acting as a power sink.
-> 
-> * Added support to the tcpm power supply properties, allowing userspace
->   to enable and control the dynamic limits (voltage and current)
->   specific to the SPR AVS contract.
-> * Implemented tcpm_pd_select_spr_avs_apdo() to select the appropriate
->   APDO and validate the requested voltage/current against both the
->   Source and Sink capabilities.
-> * Implemented tcpm_pd_build_spr_avs_request() to construct the
->   Request Data Object (RDO) for SPR AVS.
-> * Added SNK_NEGOTIATE_SPR_AVS_CAPABILITIES state to the state machine to
->   handle negotiation for SPR AVS.
-> * Updated the SNK_TRANSITION_SINK state to implement the SPR
->   AVS-specific VBUS transition rules, including reducing current draw to
->   PD_I_SNK_STBY_MA for large voltage changes, as required by USB PD spec.
-> 
-> Log stub captured when enabling AVS:
-> $ echo 3 > /sys/class/power_supply/tcpm-source-psy-1-0025/online
-> $ cat /d/usb/tcpm-1-0025/log
-> [  358.895775] request to set AVS online
-> [  358.895792] AMS POWER_NEGOTIATION start
-> [  358.895806] state change SNK_READY -> AMS_START [rev3 POWER_NEGOTIATION]
-> [  358.895850] state change AMS_START -> SNK_NEGOTIATE_SPR_AVS_CAPABILITIES [rev3 POWER_NEGOTIATION]
-> [  358.895866] SPR AVS src_pdo_index:4 snk_pdo_index:2 req_op_curr_ma roundup:2200 req_out_volt_mv roundup:9000
-> [  358.895880] Requesting APDO SPR AVS 4: 9000 mV, 2200 mA
-> [  358.896405] set_auto_vbus_discharge_threshold mode:0 pps_active:n vbus:0 pps_apdo_min_volt:0 ret:0
-> [  358.896422] PD TX, header: 0x1a82
-> [  358.900158] PD TX complete, status: 0
-> [  358.900205] pending state change SNK_NEGOTIATE_SPR_AVS_CAPABILITIES -> HARD_RESET_SEND @ 60 ms [rev3 POWER_NEGOTIATION]
-> [  358.904832] PD RX, header: 0x1a3 [1]
-> [  358.904854] state change SNK_NEGOTIATE_SPR_AVS_CAPABILITIES -> SNK_TRANSITION_SINK [rev3 POWER_NEGOTIATION]
-> [  358.904888] pending state change SNK_TRANSITION_SINK -> HARD_RESET_SEND @ 700 ms [rev3 POWER_NEGOTIATION]
-> [  359.021530] PD RX, header: 0x3a6 [1]
-> [  359.021546] Setting voltage/current limit 9000 mV 2200 mA
-> [  359.023035] set_auto_vbus_discharge_threshold mode:3 pps_active:n vbus:9000 pps_apdo_min_volt:0 ret:0
-> [  359.023053] state change SNK_TRANSITION_SINK -> SNK_READY [rev3 POWER_NEGOTIATION]
-> [  359.023090] AMS POWER_NEGOTIATION finished
-> 
-> $ cat /sys/class/power_supply/tcpm-source-psy-1-0025/online
-> 3
-> 
-> Log stub captured when increasing voltage:
-> $ echo 9100000 > /sys/class/power_supply/tcpm-source-psy-1-0025/voltage_now
-> $ cat /d/usb/tcpm-1-0025/log
-> 
-> [  632.116714] AMS POWER_NEGOTIATION start
-> [  632.116728] state change SNK_READY -> AMS_START [rev3 POWER_NEGOTIATION]
-> [  632.116779] state change AMS_START -> SNK_NEGOTIATE_SPR_AVS_CAPABILITIES [rev3 POWER_NEGOTIATION]
-> [  632.116798] SPR AVS src_pdo_index:4 snk_pdo_index:2 req_op_curr_ma roundup:2200 req_out_volt_mv roundup:9100
-> [  632.116811] Requesting APDO SPR AVS 4: 9100 mV, 2200 mA
-> [  632.117315] set_auto_vbus_discharge_threshold mode:0 pps_active:n vbus:0 pps_apdo_min_volt:0 ret:0
-> [  632.117328] PD TX, header: 0x1c82
-> [  632.121007] PD TX complete, status: 0
-> [  632.121052] pending state change SNK_NEGOTIATE_SPR_AVS_CAPABILITIES -> HARD_RESET_SEND @ 60 ms [rev3 POWER_NEGOTIATION]
-> [  632.124572] PD RX, header: 0x5a3 [1]
-> [  632.124594] state change SNK_NEGOTIATE_SPR_AVS_CAPABILITIES -> SNK_TRANSITION_SINK [rev3 POWER_NEGOTIATION]
-> [  632.124623] pending state change SNK_TRANSITION_SINK -> HARD_RESET_SEND @ 700 ms [rev3 POWER_NEGOTIATION]
-> [  632.149256] PD RX, header: 0x7a6 [1]
-> [  632.149271] Setting voltage/current limit 9100 mV 2200 mA
-> [  632.150770] set_auto_vbus_discharge_threshold mode:3 pps_active:n vbus:9100 pps_apdo_min_volt:0 ret:0
-> [  632.150787] state change SNK_TRANSITION_SINK -> SNK_READY [rev3 POWER_NEGOTIATION]
-> [  632.150823] AMS POWER_NEGOTIATION finished
-> 
-> $ cat /sys/class/power_supply/tcpm-source-psy-1-0025/voltage_now
-> 9100000
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> Reviewed-by: Amit Sunil Dhamne <amitsd@google.com>
+Document the SoC specific compatible in the devicetree bindings
+and add the driver support for this SoC.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
+---
+Changes in v4:
+- Dropped the GMXC and NXP2, as suggested by Kornad.
+- Link to v3: https://patch.msgid.link/20260224-eliza-pmdomain-v3-0-6e13d3aa70a1@oss.qualcomm.com
 
--- 
-heikki
+Changes in v3:
+- Picked up Dmitry's R-b tag for the driver patch.
+- Re-worded the commit messages with better explanations.
+- Dropped the MMCX and MXC entries as they are not described
+  in downstream and not used. Consensus reached off-list.
+- Link to v2: https://patch.msgid.link/20260223-eliza-pmdomain-v2-0-23fb87eb70ef@oss.qualcomm.com
+
+Changes in v2:
+- Changed the MMCX and MMCX_AO to the PDs with CX parent.
+- Picked up Krzysztof's R-b tag for the bindings.
+- Picked up Konrad's and Taniya's R-b tags for the driver patch.
+- Link to v1: https://patch.msgid.link/20260216-eliza-pmdomain-v1-0-c51260a47d6d@oss.qualcomm.com
+
+---
+Abel Vesa (2):
+      dt-bindings: power: qcom,rpmpd: document the Eliza RPMh Power Domains
+      pmdomain: qcom: rpmhpd: Add Eliza RPMh Power Domains
+
+ .../devicetree/bindings/power/qcom,rpmpd.yaml        |  1 +
+ drivers/pmdomain/qcom/rpmhpd.c                       | 20 ++++++++++++++++++++
+ 2 files changed, 21 insertions(+)
+---
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+change-id: 20260216-eliza-pmdomain-dd10911bd4e4
+
+Best regards,
+--  
+Abel Vesa <abel.vesa@oss.qualcomm.com>
+
 
