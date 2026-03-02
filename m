@@ -1,86 +1,86 @@
-Return-Path: <linux-pm+bounces-43408-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43410-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YG1pLcCRpWmREAYAu9opvQ
-	(envelope-from <linux-pm+bounces-43408-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 14:33:52 +0100
+	id qHwIMqCSpWnXEAYAu9opvQ
+	(envelope-from <linux-pm+bounces-43410-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 14:37:36 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 273991D9D6F
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 14:33:52 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CAF81D9EC6
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 14:37:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 159383063B4F
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 13:32:27 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 40DBB305ACA9
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 13:32:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 923923FB064;
-	Mon,  2 Mar 2026 13:32:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39CED3FB07A;
+	Mon,  2 Mar 2026 13:32:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yLGBhyBU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lWwG309B"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37ED3E0C4B
-	for <linux-pm@vger.kernel.org>; Mon,  2 Mar 2026 13:32:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3325E3FB042
+	for <linux-pm@vger.kernel.org>; Mon,  2 Mar 2026 13:32:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772458340; cv=none; b=O3lew/BKUTKTk3Vgu8m3BFuCGDJD++tlJ4ZczT7JCK8WvChWqvSLLG4HYi1xn0010MWBU7I243ZchUtYS9fyEIgyKMVtrqqHfuulNqNnV77MrqijUvG3pCXKn1QpkQ48fKzCb9/yny4RhwJIi1U5VaLOQ8vrwkZGmxNo3k0vPb8=
+	t=1772458341; cv=none; b=sf21Dhu+ErswFeBK2p8Kgdv1vXALnuIp0fMHXUicfFd7g4a2CJZYz/Fn0uT88RRqUs4AgZhYh/Tl5LfMl+eZfIwQ5AmIMLFHE5X8L2gHw4fYrNLJUN4eMaKNXpze4S/ztapzFWi1V18oGStb80r4uEotzd9sqEVz1ugjrQp4uaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772458340; c=relaxed/simple;
-	bh=iJGqesgR7MlveqxFlCsVL9U0vJy5z+2BB/KiYiOfDGk=;
+	s=arc-20240116; t=1772458341; c=relaxed/simple;
+	bh=tN/WXJoP7ER+xNNQ3wof85nYFtwctlJaEphC1C0qnK0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VIF1WqiOGNGzqd0imxL3ZGJ95jSRFfKZPs4Y6Jm5ZYwgaHVtkVbkDj1DJpNSO04C6wNjq5QejyGzcOFHHWpDjPLOi5R5BZvfHD3z/1OxS9+PYEPZTUcl6ntS+lVd8FqpmlwVSAD7SeGpONzK6JdS6Qv3xZilTqlIFk6+dTX0ZTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yLGBhyBU; arc=none smtp.client-ip=209.85.208.45
+	 In-Reply-To:To:Cc; b=qkXYVdhisWeKgFkiHRZLFyHTqHNjAJE/Qe38/b1WCNzsUhsAMNGLPXv390OriMak5SsjuEaS4OHDGZV5WcjtTn6SOKFAkh73vB5whZo4NSmHBluiqde6SZmYuZw0b8QlZqN0NsQOKMrGPmUqzm85lhjzgS3Rzf6YzRmq+bY69z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lWwG309B; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-65bfc858561so8081406a12.2
-        for <linux-pm@vger.kernel.org>; Mon, 02 Mar 2026 05:32:18 -0800 (PST)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b9381e78a31so453732766b.2
+        for <linux-pm@vger.kernel.org>; Mon, 02 Mar 2026 05:32:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1772458337; x=1773063137; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uxDE/h9r3IL5ikz6wtRHyU9C69/csAcT/xjQxm2w5X8=;
-        b=yLGBhyBUDP6PDFUvR4w9DizPd2ddUN3z/heixPvjbFlAYfAsdJBpAVJK2a9K3AAQAH
-         gLE72lrkEbnrFOyEAUMc7ezO7JuNE1wIAMv1VJmyHIZUBtMWE97ceBJIQRKNo/Is+qMg
-         v2+Tmf0OWNOsm/uPRlLML7N3fK/DXTYwsCecZ+LcbA963kr/G6Sz3zc558b8ChDCAofQ
-         4Uk6GHNTVrZSB9tIq7Ty4rg6ppJvth8hcFIX70m4tm8u+PYT3uiRaN4ntsx3zej4CQhp
-         5w0ho1UtqZuaAAYhT5iVZYkiM0kVYjRCIOiquhKFOk0En89P8Qr3zrSXrXqBhmw+MH27
-         F0cg==
+        bh=46zMNmq5bUi3mZ6HnIKgyhoL+nelJFQRkft5kdOS8cA=;
+        b=lWwG309BsaBW5FKFuvSWcxIRTgUdVr2yTDKggr4mLjnHMl87iwcGTItJ9u7C6kuUvo
+         H+JauiJo+kc+XLLQW47gjvQVSxSjrKlcPX4xH2bDDEOPaSed3vMfJUVwp1tP4AsR1PwP
+         JBvw6XacVVdHTEyFxgQKe8iHXFSPDsSm8a+vm7EOH9yxy0v+/Xqrjf8V+K9oz1wGX2Vm
+         /qc0pWa9T2AUgqtjt7/md7RfGwpSGVDNbmgxzRV6TT7Id1kUX7dXOlTUvnzEFYiYMr1K
+         nOByMUxcNidxf06IAfOyeLZY98LvGOHebZHZHNllZk1LSmeVGAhVSlrhAWrdfASw42L9
+         f5eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1772458337; x=1773063137;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=uxDE/h9r3IL5ikz6wtRHyU9C69/csAcT/xjQxm2w5X8=;
-        b=daZoL5DlgGeWcBXxknKsWuFHK0OEyrssp7jWGgwu6zusZDiwjzYJhxgRLvvu47KrIb
-         AuisDQuHo1R3bOsWd6Ye/r0u3+A7mVQtGMT3g5NCkOV1R0zqpQllGkquSyOcPTAhN8us
-         gqtjG5OwXhxiLDL0zXUXcZmd1q2BbQEpZ6QYfPd0l4599baG/VAnvcbCaL4U+e2/w/Ox
-         weCgqQhzuAQxbAgyXd6C9srkXsjx1SYVFGih45P3ZEtY9Kh61EBkuhYscZweK8edZtEb
-         jn+Fmtu4UXj+4J3pR6b8CgFKFpdr5cdVmiMJV9IDDwGA1yEDNt/uPpfXLOIEq5A8bZPv
-         k6YQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUsu8WSG0DTkiXrPNAia0cbcRLJhqNeyVvjja4t8umIfHEQuLyH+Oh5ppQtS8h2RBGT3QJAj5SV9w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxv/cdkoXlEV71C2NVP4eJYgpjNxOyQ1J5XfH1H3I5J5u6eHLuA
-	fMRk1TrzdyawKnkFAmVGu+QC2Ik4wfF+NuVPnNy9sGWOAaGKIw4o7IVlEip8vnXs74w=
-X-Gm-Gg: ATEYQzyxb7/YKNbyoLl+258Jkbv8S7K2T144uv9UsnxtwjWcaiTSl0ktPlK9QJMLA3M
-	Sfku3Os5OcziiPu7G8M0LxJKaOVBjCsoSC2nSj9UzWmXrJJ3Fy/ibMDNfzNcFq8qdsLUk0CtBYJ
-	wA5c0dGcZkxHMftwvXQdwpLIbrwRy2ez9x2+y3Lzcnic70Lgs+T8uB8+koCj1lr/7+EuEu7007l
-	zY2CmqfpvlQmOudU1vv4JF8n+MRCGCnorLqx8rOpSv9HVbskDFRS3k0+KmI8URv4YPcyonBL7lB
-	krCpm4dKkDWSUyAQ7Y9VzdeUQH+yAoNa6ZzsEvCGrjJrK3D4HqkCruBRpA3GHis+Zza8b8f5U2a
-	vJL8k3Z+wvfhi0mzZEH07X5xgePXtEV6bIug+XF8q8p8LwExiOhOBi0DvJrJOf+sG/MlyZ758OL
-	vL/6bM4Ugxf5EAHsQHtvOjHqaJdkmrEmmPkQoyk1a1lhLnXa0xyZXtyHrcDgw9D+lXRM9Nu0u7R
-	XzPISy+BGEOwx4=
-X-Received: by 2002:a05:6402:51d0:b0:65b:f30a:1081 with SMTP id 4fb4d7f45d1cf-65fdddef45fmr6870024a12.26.1772458336913;
-        Mon, 02 Mar 2026 05:32:16 -0800 (PST)
+        bh=46zMNmq5bUi3mZ6HnIKgyhoL+nelJFQRkft5kdOS8cA=;
+        b=JsoL9XrXX5scZ9WXWS7JVlJT+Kx4dQHCANrt1yqQo6lLoD13vU9/Tp/ocJp4+r89Z+
+         hzh40g0gIuIScqgv1m4j8dWqMenYyhVI6/BJPoAAZRZdOur04J4B/udPEkJBngQ6prQv
+         uA0mRuLPzzRb8olGhXW5RWb4K6FRPD58EX8HntIDKPCQg3JH7jJb/KucHI0O9iqRNvD6
+         TVLB/w/Ae9olqoMYr41ArVWyc8gyNrXDDR+Pj4TH4xXCs+ITcip6svmGcKd/UwnA6T/e
+         Cy76joaAhreaEXg6Jz1M1qnNZIMd7D4zwC3CUQMDL89KM5zklnea3UkRHMKrCEqyI/Wa
+         ykqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV2xR3m5Tee56fxpHWGbuKiZgSumuNXFRU0HK8cHCij2NPn0j69DV97UO4vCe0DaDdEBHBeeunEnA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWonIRPDpzgGhYJ+XZ/45cGltCUVIQeyHQdfhOmzARuw84ZueF
+	sfkT4RP5NNoFoqaK4A7Jt2AHwHkgHBkWJsiTS6JcwvHPWLm6bU81trXlDNsrTlyMWDA=
+X-Gm-Gg: ATEYQzwWWCdIiEK3OWPws7Yd6MBE1K3JvaPpitLbx96jj1txIlVFkuYGfHoNAuqmP+E
+	bMDlzoPWbzoESjg7QgWkb85NE+F36gikCPxcQozc3CUWNYBVpMsQa+YsaiLrmIqIVe4tHEbOlQn
+	pXCw+xfOsR59jxDB+EL5VZK14H7vK3TjnBoDm0OAoQwPFadcoFyjk7rT7ULehypprzIyTmDCc1E
+	97qqvOdzwrGUgeZC6myyZMd9IlrBV2TMK8w+RUyitdi1SbKXm/nPvSs7qvyZJXgZEp4LrT6i7H6
+	kP/dl2rXkB/0B1jEhUsZJS4qwpsUPv7G7fLxD2udDWS8VWZz5HR46vNZr/jyulJ+3HDJVz/pqdh
+	aSRgSRsgoPJ9jMdCYen2aJhqfBQ9hgh7cEjFdJ5nMzuqKSq7ZNmydV0l+wtgpwpU+Iwkq0KhkK2
+	DRpA8dgvunQscf3Af74V1vqdLjM8vGbxE22kYVmIrpXSN6XlUDeYHJO3VK9CjvwYuhnpfKevDtj
+	5Qi/1okhl8Q8ao=
+X-Received: by 2002:a17:906:564d:b0:b88:5e32:5357 with SMTP id a640c23a62f3a-b93765818acmr661349866b.59.1772458337515;
+        Mon, 02 Mar 2026 05:32:17 -0800 (PST)
 Received: from puffmais2.c.googlers.com (221.210.91.34.bc.googleusercontent.com. [34.91.210.221])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-65fabf6d1c6sm3282988a12.17.2026.03.02.05.32.16
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-65fabf6d1c6sm3282988a12.17.2026.03.02.05.32.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2026 05:32:16 -0800 (PST)
+        Mon, 02 Mar 2026 05:32:17 -0800 (PST)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Mon, 02 Mar 2026 13:32:01 +0000
-Subject: [PATCH v3 02/11] dt-bindings: power: supply: max17042: support
- shunt-resistor-micro-ohms
+Date: Mon, 02 Mar 2026 13:32:02 +0000
+Subject: [PATCH v3 03/11] dt-bindings: power: supply: max17042: drop
+ formatting specifier |
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,7 +89,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260302-max77759-fg-v3-2-3c5f01dbda23@linaro.org>
+Message-Id: <20260302-max77759-fg-v3-3-3c5f01dbda23@linaro.org>
 References: <20260302-max77759-fg-v3-0-3c5f01dbda23@linaro.org>
 In-Reply-To: <20260302-max77759-fg-v3-0-3c5f01dbda23@linaro.org>
 To: Hans de Goede <hansg@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -111,7 +111,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -119,7 +119,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[19];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43408-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43410-lists,linux-pm=lfdr.de];
 	DKIM_TRACE(0.00)[linaro.org:+];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -128,49 +128,75 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[andre.draszik@linaro.org,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,microchip.com:email,linaro.org:mid,linaro.org:dkim,linaro.org:email]
-X-Rspamd-Queue-Id: 273991D9D6F
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linaro.org:mid,linaro.org:dkim,linaro.org:email,microchip.com:email]
+X-Rspamd-Queue-Id: 8CAF81D9EC6
 X-Rspamd-Action: no action
 
-This binding supports the vendor-specific property maxim,rsns-microohm
-to describe the value of a shunt resistor required when measuring
-currents. shunt-resistor-micro-ohms is a standard property with the
-same meaning. Standard properties should be used instead of vendor-
-specific ones of similar intention when possible.
+| denotes a literal (preformatted) block and is not necessary here.
 
-Allow this standard property here, while also deprecating the existing
-vendor-specific property maxim,rsns-microohm.
+Drop them from this file.
 
-Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
 Acked-by: Conor Dooley <conor.dooley@microchip.com>
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
- Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../devicetree/bindings/power/supply/maxim,max17042.yaml     | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-index 055d1f2ee0ba..25ea8e19b980 100644
+index 25ea8e19b980..242b33f2bcba 100644
 --- a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
 +++ b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
-@@ -31,7 +31,13 @@ properties:
-     description: |
+@@ -28,7 +28,7 @@ properties:
+ 
+   interrupts:
+     maxItems: 1
+-    description: |
++    description:
        The ALRT pin (or FG_INTB pin on MAX77759), an open-drain interrupt.
  
-+  shunt-resistor-micro-ohms:
-+    description:
-+      Resistance of rsns resistor in micro Ohms (datasheet-recommended value is 10000).
-+      Defining this property enables current-sense functionality.
-+
+   shunt-resistor-micro-ohms:
+@@ -39,31 +39,31 @@ properties:
    maxim,rsns-microohm:
-+    deprecated: true
+     deprecated: true
      $ref: /schemas/types.yaml#/definitions/uint32
-     description: |
+-    description: |
++    description:
        Resistance of rsns resistor in micro Ohms (datasheet-recommended value is 10000).
+       Defining this property enables current-sense functionality.
+ 
+   maxim,cold-temp:
+     $ref: /schemas/types.yaml#/definitions/uint32
+-    description: |
++    description:
+       Temperature threshold to report battery as cold (in tenths of degree Celsius).
+       Default is not to report cold events.
+ 
+   maxim,over-heat-temp:
+     $ref: /schemas/types.yaml#/definitions/uint32
+-    description: |
++    description:
+       Temperature threshold to report battery as over heated (in tenths of degree Celsius).
+       Default is not to report over heating events.
+ 
+   maxim,dead-volt:
+     $ref: /schemas/types.yaml#/definitions/uint32
+-    description: |
++    description:
+       Voltage threshold to report battery as dead (in mV).
+       Default is not to report dead battery events.
+ 
+   maxim,over-volt:
+     $ref: /schemas/types.yaml#/definitions/uint32
+-    description: |
++    description:
+       Voltage threshold to report battery as over voltage (in mV).
+       Default is not to report over-voltage events.
+ 
 
 -- 
 2.53.0.473.g4a7958ca14-goog
