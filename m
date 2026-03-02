@@ -1,51 +1,51 @@
-Return-Path: <linux-pm+bounces-43419-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43420-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WE0/ApCTpWnXEAYAu9opvQ
-	(envelope-from <linux-pm+bounces-43419-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 14:41:36 +0100
+	id ODmfIRGVpWmPEQYAu9opvQ
+	(envelope-from <linux-pm+bounces-43420-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 14:48:01 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 712C71D9FB8
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 14:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F06001DA0F9
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 14:48:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B888F3090088
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 13:34:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8DCBC300E5C2
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 13:42:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CB8E3CC9EC;
-	Mon,  2 Mar 2026 13:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 644A2379EEC;
+	Mon,  2 Mar 2026 13:42:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cJzFxhlE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V1c4sB+k"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6912136C5A2;
-	Mon,  2 Mar 2026 13:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410D7175A89;
+	Mon,  2 Mar 2026 13:42:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772458486; cv=none; b=C+DdRId+VvDkvIuph4XHUYtSHX+oJG11KTSlAjVaE+xH6zUcaH3vZn/GpwHVtsNTHfRpI0aaptOkJncLlDrLclDg3vqPef87xOrSdeQP9HylKWHo90Lo1omXWAg5GXFBL2UdcZG85B+1s1gMl4FND1tSnC6p2UFTcD1RYJEB+bI=
+	t=1772458969; cv=none; b=lint2v0xudFbTQxgBoJh+E31T5UFQhz9CAiMn+RZRhVWzZHsD6h0WfNXVDphxuD8RzTQcanfRsyWgAaf67erNWkXJTnHf9HbGVuZdCa5/hDBZfbP/IIuhfcNCeOq123XITjXt81IgvXVHi/o3hkMy1bVQknUpnyrdOf0yGefe5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772458486; c=relaxed/simple;
-	bh=7f9Gcp4+1LkfzXFPCa7PcQqPFKqy4PcM0mCYaMby60g=;
+	s=arc-20240116; t=1772458969; c=relaxed/simple;
+	bh=T4ELE2GlSVO5CmnLs/7hGrzjhmHmj0CYFEE/iaXHyhI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E5m4ltsgQXCeRA3fZ+/QZg2Z0B8n+kqte4VEv4jYoR6XyZQH5qQYNC37PZ07uTBHxvQ0aEbgj89b/tiq92Okk7rj1+gzSOIDatlv7s7g1I+67KtsJskV0NrLN+Pg8JaZg17H5ZU5Ab9Jbgklo2nBKqeJ50uCISQbCRlSSgtwHGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cJzFxhlE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85061C19423;
-	Mon,  2 Mar 2026 13:34:40 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=KshRr61LJdykvbvlHVNn7pdaG1apqwspclzicKesWk/7wSVb2QmUlEi3GQjEFF9RvboBCr36f1SBGnDQTGDLGTkkmckzSCU/KLOiO1CFITM2TePXIHkMDO8gGawjuWL6VwrVW/8AhtGVbJDZQgsW4S2Ecp02pfCGZqCsEDd4Mlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V1c4sB+k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54D80C19423;
+	Mon,  2 Mar 2026 13:42:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772458486;
-	bh=7f9Gcp4+1LkfzXFPCa7PcQqPFKqy4PcM0mCYaMby60g=;
+	s=k20201202; t=1772458968;
+	bh=T4ELE2GlSVO5CmnLs/7hGrzjhmHmj0CYFEE/iaXHyhI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cJzFxhlE4FbWzbo5g/MSsO88667jBeaaySLaLoBd1bxFWGi77nyUK3rvGNE5eZ6FS
-	 OvQoFyJcHhWifxV97kZV86n/hrxIAwuPOywLDum7x+i2buY4ipn0S/kYasF0ykquWo
-	 MqP4Pt7NdGDVxT7awVmTEDXGPnTxD3fJ92vd2DIk/1t0qCZniFUQYMFmzuYvTb2xB1
-	 uk5T6zUHG6+PXx6wYCCtaXWGxbqfIdwEcbqt2MsLYkNE63m6ccC2X3Y58rxrEegEUA
-	 z5mqdciGCt7Ldwv/T7JBKY/c2pYkt1omagB+CrCX3Nr6XSO0kWDu0k976LiWpBDgVJ
-	 6gmvj29jmeaKg==
-Message-ID: <303e86f9-f86c-4dc9-bfc8-d32c8eeb91b3@kernel.org>
-Date: Mon, 2 Mar 2026 14:34:38 +0100
+	b=V1c4sB+krAO6rzRO/3BlZXIkReiTa+ctQFZ2SSgJsfzM6L3rNjATxtDInNdN5WDJU
+	 SvsOiKiYjNzjT13mS3ZXu4VU2HJwSBVgvfjM6O/nAYJ/N3lneoUlCQBrfQ1wZ53plX
+	 9/P7s2XoQ4uc3JcmUhEGXQXseHnftgmB1in8SfS8fZR3+vqQe55z9A/fmxr+TAE+xl
+	 9d6rTSJJJPH7UqznRs/aTMLRtEz8YG5d+jEAjuyyoZX8MvGbPjTs0+gFaxH6Qa9nfy
+	 tuYvLqBntsibmTWP6ykzHiUdCP5V8Ufby5roOZQ+DAzHmGiEsbZP7yiAPXNyvjh9Yn
+	 ldNSLHYvatfmA==
+Message-ID: <75655aa3-7d53-441c-aa08-59b99b999991@kernel.org>
+Date: Mon, 2 Mar 2026 14:42:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/5] mm: introduce zone lock wrappers
+Subject: Re: [PATCH v4 2/5] mm: convert zone lock users to wrappers
 Content-Language: en-US
 To: Dmitry Ilvokhin <d@ilvokhin.com>,
  Andrew Morton <akpm@linux-foundation.org>,
@@ -73,11 +73,12 @@ To: Dmitry Ilvokhin <d@ilvokhin.com>,
  Shakeel Butt <shakeel.butt@linux.dev>
 Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
  linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- "linux-cxl@vger.kernel.orgkernel-team"@meta.com
+ "linux-cxl@vger.kernel.orgkernel-team"@meta.com,
+ SeongJae Park <sj@kernel.org>
 References: <cover.1772206930.git.d@ilvokhin.com>
- <849dee9c47df1e6fba97c9933af0d5a08b8e15d3.1772206930.git.d@ilvokhin.com>
+ <d26a43ebed2f0f1edb9cfe4fbed16dd31c7a069c.1772206930.git.d@ilvokhin.com>
 From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-In-Reply-To: <849dee9c47df1e6fba97c9933af0d5a08b8e15d3.1772206930.git.d@ilvokhin.com>
+In-Reply-To: <d26a43ebed2f0f1edb9cfe4fbed16dd31c7a069c.1772206930.git.d@ilvokhin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
@@ -90,12 +91,12 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43419-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43420-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[29];
+	RCPT_COUNT_TWELVE(0.00)[30];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
@@ -107,96 +108,24 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linux.dev:email,ilvokhin.com:email]
-X-Rspamd-Queue-Id: 712C71D9FB8
+X-Rspamd-Queue-Id: F06001DA0F9
 X-Rspamd-Action: no action
 
 On 2/27/26 17:00, Dmitry Ilvokhin wrote:
-> Add thin wrappers around zone lock acquire/release operations. This
-> prepares the code for future tracepoint instrumentation without
-> modifying individual call sites.
+> Replace direct zone lock acquire/release operations with the
+> newly introduced wrappers.
 > 
-> Centralizing zone lock operations behind wrappers allows future
-> instrumentation or debugging hooks to be added without touching
-> all users.
+> The changes are purely mechanical substitutions. No functional change
+> intended. Locking semantics and ordering remain unchanged.
 > 
-> No functional change intended. The wrappers are introduced in
-> preparation for subsequent patches and are not yet used.
+> The compaction path is left unchanged for now and will be
+> handled separately in the following patch due to additional
+> non-trivial modifications.
 > 
 > Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
 > Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
-
-*checks patch 2 diffstat*
-
-I think we could do it as mm/zone_lock.h even and not pollute include/linux/
-Even kernel/power/snapshot.c could include it in a somewhat ugly way.
-However we should also later look at moving that particular code somewhere
-under mm/ really...
-
-Anyway,
+> Reviewed-by: SeongJae Park <sj@kernel.org>
 
 Reviewed-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
-
-> ---
->  MAINTAINERS                 |  1 +
->  include/linux/mmzone_lock.h | 38 +++++++++++++++++++++++++++++++++++++
->  2 files changed, 39 insertions(+)
->  create mode 100644 include/linux/mmzone_lock.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 55af015174a5..947298ecb111 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16672,6 +16672,7 @@ F:	include/linux/memory.h
->  F:	include/linux/mm.h
->  F:	include/linux/mm_*.h
->  F:	include/linux/mmzone.h
-> +F:	include/linux/mmzone_lock.h
->  F:	include/linux/mmdebug.h
->  F:	include/linux/mmu_notifier.h
->  F:	include/linux/pagewalk.h
-> diff --git a/include/linux/mmzone_lock.h b/include/linux/mmzone_lock.h
-> new file mode 100644
-> index 000000000000..a1cfba8408d6
-> --- /dev/null
-> +++ b/include/linux/mmzone_lock.h
-> @@ -0,0 +1,38 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_MMZONE_LOCK_H
-> +#define _LINUX_MMZONE_LOCK_H
-> +
-> +#include <linux/mmzone.h>
-> +#include <linux/spinlock.h>
-> +
-> +static inline void zone_lock_init(struct zone *zone)
-> +{
-> +	spin_lock_init(&zone->lock);
-> +}
-> +
-> +#define zone_lock_irqsave(zone, flags)				\
-> +do {								\
-> +	spin_lock_irqsave(&(zone)->lock, flags);		\
-> +} while (0)
-> +
-> +#define zone_trylock_irqsave(zone, flags)			\
-> +({								\
-> +	spin_trylock_irqsave(&(zone)->lock, flags);		\
-> +})
-> +
-> +static inline void zone_unlock_irqrestore(struct zone *zone, unsigned long flags)
-> +{
-> +	spin_unlock_irqrestore(&zone->lock, flags);
-> +}
-> +
-> +static inline void zone_lock_irq(struct zone *zone)
-> +{
-> +	spin_lock_irq(&zone->lock);
-> +}
-> +
-> +static inline void zone_unlock_irq(struct zone *zone)
-> +{
-> +	spin_unlock_irq(&zone->lock);
-> +}
-> +
-> +#endif /* _LINUX_MMZONE_LOCK_H */
 
 
