@@ -1,59 +1,58 @@
-Return-Path: <linux-pm+bounces-43438-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43442-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eI61Byu9pWn8FQAAu9opvQ
-	(envelope-from <linux-pm+bounces-43438-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 17:39:07 +0100
+	id gJtpIEvEpWnEFgAAu9opvQ
+	(envelope-from <linux-pm+bounces-43442-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 18:09:31 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6E441DD080
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 17:39:06 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD1B81DD8EF
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 18:09:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 657E4309AD5A
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 16:31:14 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id BB3603042966
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 17:08:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80AF2426D0E;
-	Mon,  2 Mar 2026 16:29:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B623FFAB6;
+	Mon,  2 Mar 2026 17:08:55 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lgeamrelo03.lge.com (lgeamrelo03.lge.com [156.147.51.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D623421884;
-	Mon,  2 Mar 2026 16:29:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8235421896
+	for <linux-pm@vger.kernel.org>; Mon,  2 Mar 2026 17:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.147.51.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772468984; cv=none; b=dnnk3AJU1auQpovsBkamgD910/10HE3rhihbTyNPVufu87e+C+YqKObnhzBwUuzDIwAo/evRLtOKJcXhBFAnu3p/19kgJLBGsGnvF7zP4kwe8GYDGZZyynvwbDumGrqGu0wBrs396hYxXnXjAACj6JN+wXx2ymIQF6honHgXkoE=
+	t=1772471335; cv=none; b=e1ULCuHOiPPOYTI7ZnXMM6mfgMzvyxJM7sBMR4vnOYKPovapYcqy1dY5MIczlZAobCr3fnvhXADAh152dlKS/Nk65PiHJ8DryGtOiskSR5QlVKv6X/xECtX6jNy+LloQSyonzkjbeHLSw+FYCWe9U7KBbrO5PlERhRY99+0iYzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772468984; c=relaxed/simple;
-	bh=H699tkmcb0/p+AtH2UBRINNfPTDUWZvLZ/ClznhC4k8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bm84XURTGCzEPmmH7uQkK2QvT6M0fpqh7QFXw9hBt0PmZFuX7sGc0rMhce1185rBfuh81yvwlrHulJyIDLdG+UJhq8l7TY3aJ0tIa2rP9Z5wFioFAVq8ZG+BMNnQeC+GgnRGou77FAG7TrDvX/5sRyrzbTnMlLqELNwMV55pLnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BDA3C2BC9E;
-	Mon,  2 Mar 2026 16:29:40 +0000 (UTC)
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
-	Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ilia Lin <ilia.lin@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 7/7] soc: renesas: Convert to of_machine_get_match()
-Date: Mon,  2 Mar 2026 17:29:11 +0100
-Message-ID: <10876b30a8bdb7d1cfcc2f23fb859f2ffea335fe.1772468323.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1772468323.git.geert+renesas@glider.be>
-References: <cover.1772468323.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1772471335; c=relaxed/simple;
+	bh=tfXW51+ANMqCAQa4c3Uk66SykB3Rz6XN668AhUnavnU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Q9cLQE5hNpj1sUkM4jnfiKEUkAOc4poAZcLPO1B/oKGQLHM4kgRMG7V7ZOtqqLshcCD6DHyzg09bsGDMWA5I+F41A4A+/15XIZsN0GMJhDlfME1oyFcISrHwx7ScG1Blsh8xSRgxhK0y121+PCY/zWA/lL/WogC3v4NyseRQWBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lge.com; spf=pass smtp.mailfrom=lge.com; arc=none smtp.client-ip=156.147.51.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lge.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lge.com
+Received: from unknown (HELO yjaykim-PowerEdge-T330.lge.net) (10.177.112.156)
+	by 156.147.51.102 with ESMTP; 3 Mar 2026 01:53:36 +0900
+X-Original-SENDERIP: 10.177.112.156
+X-Original-MAILFROM: youngjun.park@lge.com
+From: Youngjun Park <youngjun.park@lge.com>
+To: linux-pm@vger.kernel.org
+Cc: linux-mm@kvack.org,
+	rafael@kernel.org,
+	lenb@kernel.org,
+	pavel@kernel.org,
+	akpm@linux-foundation.org,
+	chrisl@kernel.org,
+	kasong@tencent.com,
+	shikemeng@huaweicloud.com,
+	nphamcs@gmail.com,
+	bhe@redhat.com,
+	baohua@kernel.org,
+	youngjun.park@lge.com
+Subject: [RFC PATCH 0/2] kernel/power: fix swap device reference handling in hibernation swap path
+Date: Tue,  3 Mar 2026 01:53:32 +0900
+Message-Id: <20260302165334.1278479-1-youngjun.park@lge.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -61,63 +60,77 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: A6E441DD080
+X-Rspamd-Queue-Id: AD1B81DD8EF
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.54 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [0.14 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[lge.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-43442-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[glider.be];
-	TAGGED_FROM(0.00)[bounces-43438-lists,linux-pm=lfdr.de,renesas];
+	PRECEDENCE_BULK(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@glider.be,linux-pm@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[15];
+	FREEMAIL_CC(0.00)[kvack.org,kernel.org,linux-foundation.org,tencent.com,huaweicloud.com,gmail.com,redhat.com,lge.com];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[kernel.org,linaro.org,gmail.com,vger.kernel.org,glider.be];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[youngjun.park@lge.com,linux-pm@vger.kernel.org];
+	NEURAL_HAM(-0.00)[-0.521];
+	TO_DN_NONE(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.827];
-	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,renesas];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[]
+	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,lge.com:mid]
 X-Rspamd-Action: no action
 
-Use the of_machine_get_match() helper to avoid accessing of_root
-directly, which is planned to become private.
+This series addresses two issues in the hibernation swap path.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-This is an alternative solution to "[PATCH v2 8/9] soc: renesas: don't
-access of_root directly"
-https://lore.kernel.org/20260223-soc-of-root-v2-8-b45da45903c8@oss.qualcomm.com
----
- drivers/soc/renesas/renesas-soc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+First, grabbing and releasing the swap device reference on every slot
+allocation is inefficient across the entire hibernation swap path.
 
-diff --git a/drivers/soc/renesas/renesas-soc.c b/drivers/soc/renesas/renesas-soc.c
-index f6c41892fbe549e8..bcba01acf283003d 100644
---- a/drivers/soc/renesas/renesas-soc.c
-+++ b/drivers/soc/renesas/renesas-soc.c
-@@ -488,7 +488,7 @@ static int __init renesas_soc_init(void)
- 	const char *soc_id;
- 	int ret;
- 
--	match = of_match_node(renesas_socs, of_root);
-+	match = of_machine_get_match(renesas_socs);
- 	if (!match)
- 		return -ENODEV;
- 
+Second, in the uswsusp path, only the swap type value is retrieved at
+lookup time without holding a reference. If swapoff races after the
+type is acquired, subsequent slot allocations operate on a stale swap
+device.
+
+The fix is to hold the swap device reference from the point the swap
+device is looked up, and release it once at each exit path.
+
+  Patch 1: Release the reference immediately after each slot allocation
+            as a preparatory step.
+  Patch 2: Lift the reference acquisition to the lookup site and place
+            put_swap_device_by_type() at all relevant cleanup paths in
+            swap.c and user.c.
+
+This series is based on mm-new.
+
+I'm sending this as RFC because my familiarity with the kernel/power
+and snapshot paths is limited. I believe the approach is reasonable,
+but I'd appreciate any feedback before moving forward with proper
+testing and a formal submission.
+
+Thanks,
+Youngjun Park
+
+Youngjun Park (2):
+  mm/swap: release swap reference on each hibernation slot allocation
+  kernel/power: hold swap device reference across hibernation swap
+    operation
+
+ include/linux/swap.h |  1 +
+ kernel/power/swap.c  | 12 +++++++---
+ kernel/power/user.c  |  9 +++++++-
+ mm/swapfile.c        | 55 ++++++++++++++++++++++----------------------
+ 4 files changed, 45 insertions(+), 32 deletions(-)
+
 -- 
-2.43.0
+2.34.1
 
 
