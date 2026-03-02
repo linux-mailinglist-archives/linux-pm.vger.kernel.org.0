@@ -1,240 +1,179 @@
-Return-Path: <linux-pm+bounces-43387-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43388-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uKpTDVBGpWkg7AUAu9opvQ
-	(envelope-from <linux-pm+bounces-43387-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 09:12:00 +0100
+	id mBK+GZRKpWn17wUAu9opvQ
+	(envelope-from <linux-pm+bounces-43388-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 09:30:12 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E2E91D4767
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 09:11:59 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7AF51D4A5C
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 09:30:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EA9A83058EF3
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 08:04:33 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id E15C43005316
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 08:30:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D709731C567;
-	Mon,  2 Mar 2026 08:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8FAE383C72;
+	Mon,  2 Mar 2026 08:30:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j9CNzJY7"
+	dkim=pass (2048-bit key) header.d=unisoc.com header.i=@unisoc.com header.b="yVZjGLsC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 717261F875A
-	for <linux-pm@vger.kernel.org>; Mon,  2 Mar 2026 08:02:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772438564; cv=pass; b=bf2ypcFm7RhZNCrE/gjRZbSumFWN80vHxTgpeG0gA7tMbBVpmh5+7uBwkkxRwuOw0WbUnzWFgCi68tF7vTUhXtDtwHo/oDNUE1gj54V7wAe5m5MBj5HnKDf0aCHBQLiaHla/7Fh8Ex+tZ4HoGrmKV5GhEOBwr9ur7BYGMkUs7lY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772438564; c=relaxed/simple;
-	bh=vjkn4ApR2SwjC9QQbFTj/Obyb525qHPBGoJ4zOPSnPo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZmRNa2ruXT/AepgxYMvcv4Co3zvWx7mWpbVBw9G5Pmyonm5ldXLIGnqY5FYX+TvWo5uyRytUeGmBCWy9Y8pejMmPqyb0ssTFKncJKp6cNoEhecb3UtrByIEtvMy6YYG9TKw0a40oR8HubW4QxPNasw8neJFC+DZ4Cimu9NbAqEQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j9CNzJY7; arc=pass smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43991064db8so4276420f8f.2
-        for <linux-pm@vger.kernel.org>; Mon, 02 Mar 2026 00:02:43 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772438562; cv=none;
-        d=google.com; s=arc-20240605;
-        b=bn9nTTA5lR8FrrOCnvRoLcV5RFNbf2DSVJBZbaVjQKLiIpaj+LXpPvqduuElAvwCub
-         ndqvZjhcpHpKcEq2fbKI/yMzTH7eowMHx9Nr3hXahMpH66EVV8bFG3TlWALYlnqtB1jB
-         tXenf+vd/UAkbaQaSRGRZJPOdEfiYs5UWXQWsEfiaVybsoCkvNnc4/eOsYRpT7KQ2w/A
-         VSeKgdQ/RcemgPEIMub/o+hUBh36iMawQp1AdEBtoyF9xVzBdUYl6tM/2fEUX2OQiDM8
-         vQnSCOrkEQicoyPGPwcvWd8gHY9nxyBi325Hn2pgc4JqO/PfEOAii97xGAyGYPOOBUxu
-         3eEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=H6APRDcRhUjIkR+M3BFPhhG/NfjMrz+PATN7/PzHvm8=;
-        fh=1LW4diJ8iBr4waccKnaPxSoelFRprXVuit/lh4C5kQ8=;
-        b=e4GWc99SL2mXEVWtkfAwLKQ4aJAhRFam/5I/OP7iHQl10g47d4qJx11pYQKkxhOcfh
-         rWA+raJmU8kYkHzo6p2E/+J4pprBy3I0WmiGIzpVBBbTNObsG3O/Mzopx4NkzlouMN+z
-         xRSHrFogQyo2e1byv44LrYngd/VMOhutk4ABSlJ4vTyfe8hOk54mHbKFnRUOsScAiMrV
-         p6+Ax2vNTbFX9Dcs+hMmEES6jMFCv3Lhbh6eoGo1WKIkAfHWrDCkjVIK0RSZRKq8VjRM
-         A8OpyRAifoF7rM8R34C6QXVb5UN9SJYYzNHTErmnFrMV7iV4k6CM1JPpw3BTVWV2YfuG
-         EHcw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772438562; x=1773043362; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H6APRDcRhUjIkR+M3BFPhhG/NfjMrz+PATN7/PzHvm8=;
-        b=j9CNzJY7UuNEHg0M+XIAyq8fqv2gsARtv0EBXfE5pR6JiLkoMF797zSQoCM8fZUay2
-         JbJh+9OVeBuMYBQHO4I4nDL4NQZaX8Mob833Cz4ggHEG206+q/rFieMBUO0w9nSKYYUN
-         in5+cc1VU3oVoopVW45IcGgCOnH5PdEMSx83ESMkkYnVfH4U/RV9IKuGR8r/TblCf3/y
-         EOrH5d/Z2z0cfGV2WQbi0M13QmT+kqNyhBeLxRyJoXRVbi/3SPzeWn5oleIRmKmY7Juo
-         f89ywFr/lEBJLps4KRwBQAinHtFv9iWWQseh8GGVXXNqStgUe7tiIAwvjthGvBgGb5VZ
-         1Uuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772438562; x=1773043362;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=H6APRDcRhUjIkR+M3BFPhhG/NfjMrz+PATN7/PzHvm8=;
-        b=DWRtKkLHvyfwuCjMnwGdQzO9PDoZW1kG4aBC7t9w8XD5XI2ECy1ZdzVrinecIxt5qJ
-         X0E2oS2b0ACMZgmb1JO7qQbyyUCHFI0n8G9QKU3CA8AJA5SDsHmTo+I7Qkg8kh/FFWOM
-         5aQbqYaUeAXbiBqbM34Igrv37f7eH4T6tDnCwJQ3j7jJAQwuK+NWioIp/kq8AmWPaM+B
-         IHXZwIxs7K8E2BmPy/WYpWVNJNNNSZNg/DQA5Q/xWULsPQk2Jmzzc1hpeEwgqEslHgio
-         SdpIwWk8Cy3FwrANQtmr4sI7pl7DqJubI3U+N34ts4OqeoqrCEhJp/EXvVHhbuRhmYId
-         XAmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXKq+VgjtFg3N0fTGAYB51pBnF5mNjZ1qcHLOQu+sDOtoMC0zDeZ6BsCViRt5BSD35Hhf+9lOancQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWCXECUVGYIetiM7UbY5PvayPAEmXWLKwFQMA5UcaL/LrtjRex
-	U9/gqbkV3kigkRnSz8qA3DH+fGdf09ajcBXCHB+Fnxnli1H82oeTTm1CwgUDY5DEeRL+Ehiwx2G
-	1GgXyssSJdU/3vIc0mcX0JRI9VfYORl4=
-X-Gm-Gg: ATEYQzzEPoMgLPeQbv5PWxwfTfDszhPdUM0UaU6zCItWH3Hi9U6iBX/eaBwjGhRneIZ
-	Umgt9H+Fs47KVeOPklD/ccHjUBMDlrcrsxVvAS1AmQHOYmr7Eyyl5CWGJY9r7rwrjCknoq35CBK
-	w1/3N0jHQtpdJs4ax4dWazZ9fWo36UmY/bC8RCzwxPpvkZpTQqHm7fUymiFbiXpuZ7I1Fa+oq0R
-	4a5uMrzTUjhOQ4B2c+WCAOmIzLDbJNJluUD6xBxpeAF6zeVpIN18HDF9CiPRxdlKd8EvKwNV62a
-	VB+XQEQrvAoOdSYmZiU=
-X-Received: by 2002:a5d:584d:0:b0:437:67fd:ef5c with SMTP id
- ffacd0b85a97d-4399dddc7efmr22120608f8f.8.1772438561482; Mon, 02 Mar 2026
- 00:02:41 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E482E414;
+	Mon,  2 Mar 2026 08:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=222.66.158.135
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772440206; cv=none; b=ENhPFKHmZVv31FmjIgZ8YxHGNhPMsqDqBe/sJ2pGIhq0UPO7lQFFkaAalBotnRtrGPOFSMESjUdULyO8TS2aipi2OK3VtAdVL+TMmJanxVNb0aPWkpx7ke+B03fPG53VY/iBbQL0CspH+1LxU4rhzQbX0skcvPq1i6uU26F6WjY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772440206; c=relaxed/simple;
+	bh=umlwZBWplzk4fzVwI0YfaCGjtS3lIFTZNo9jxaL1c7Y=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=s4qaVSxtA+oMXWGTy2HQZ7LDvS3kYFjEngjfpuBGinqFr6pCLydvDoa9SWFE9z8p7024pYzeyQAbIfh8CyFuJwDbcplphhdUt5G7xBP4lWJrFOlJd9Kmvb4j2zBwShh7YRqUdxYt91paFqiVnFqe+1agpUJjDeKa31RYXFCjszs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=unisoc.com; spf=pass smtp.mailfrom=unisoc.com; dkim=pass (2048-bit key) header.d=unisoc.com header.i=@unisoc.com header.b=yVZjGLsC; arc=none smtp.client-ip=222.66.158.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=unisoc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=unisoc.com
+Received: from dlp.unisoc.com ([10.29.3.86])
+	by SHSQR01.spreadtrum.com with ESMTP id 6228Rual056518;
+	Mon, 2 Mar 2026 16:27:56 +0800 (+08)
+	(envelope-from Xuewen.Yan@unisoc.com)
+Received: from SHDLP.spreadtrum.com (BJMBX01.spreadtrum.com [10.0.64.7])
+	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4fPX8z6pHxz2PKf9X;
+	Mon,  2 Mar 2026 16:26:59 +0800 (CST)
+Received: from BJMBX01.spreadtrum.com (10.0.64.7) by BJMBX01.spreadtrum.com
+ (10.0.64.7) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 2 Mar 2026
+ 16:27:55 +0800
+Received: from BJMBX01.spreadtrum.com ([fe80::54e:9a:129d:fac7]) by
+ BJMBX01.spreadtrum.com ([fe80::54e:9a:129d:fac7%16]) with mapi id
+ 15.00.1497.048; Mon, 2 Mar 2026 16:27:55 +0800
+From: =?utf-8?B?6Zer5a2m5paHIChYdWV3ZW4gWWFuKQ==?= <Xuewen.Yan@unisoc.com>
+To: Sasha Levin <sashal@kernel.org>,
+        "stable@vger.kernel.org"
+	<stable@vger.kernel.org>
+CC: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        =?utf-8?B?546L56eRIChLZSBXYW5nKQ==?= <Ke.Wang@unisoc.com>,
+        "xuewen.yan94@gmail.com" <xuewen.yan94@gmail.com>
+Subject: =?utf-8?B?5Zue5aSNOiBGQUlMRUQ6IFBhdGNoICJQTTogc2xlZXA6IGNvcmU6IEF2b2lk?=
+ =?utf-8?B?IGJpdCBmaWVsZCByYWNlcyByZWxhdGVkIHRvIHdvcmtfaW5fcHJvZ3Jlc3Mi?=
+ =?utf-8?Q?_failed_to_apply_to_6.18-stable_tree?=
+Thread-Topic: FAILED: Patch "PM: sleep: core: Avoid bit field races related to
+ work_in_progress" failed to apply to 6.18-stable tree
+Thread-Index: AQHcqeVdg+aiKUJfWEy4SPmQC5CCyrWa6KQA
+Date: Mon, 2 Mar 2026 08:27:55 +0000
+Message-ID: <bb8e350aa4354de8b4efa9f8aacd6f36@BJMBX01.spreadtrum.com>
+References: <202603020138.6221cujX035744@SHSPAM01.spreadtrum.com>
+In-Reply-To: <202603020138.6221cujX035744@SHSPAM01.spreadtrum.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-exchange-transport-fromentityheader: Hosted
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250828055104.8073-1-clamor95@gmail.com> <tdknls7jieu4ple3qhmdqntllmctks2auxhxzynwjjmgl3hnx2@nubqlzpgohwf>
- <da8aa4c5-4aa0-42f6-acb6-55d37cc29774@linaro.org> <amc5e3sffmwqguivwch6b5vtmlgu5dlwxm7bsrn6nd3rllbvxg@koqmavn6uuy5>
-In-Reply-To: <amc5e3sffmwqguivwch6b5vtmlgu5dlwxm7bsrn6nd3rllbvxg@koqmavn6uuy5>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Mon, 2 Mar 2026 10:02:29 +0200
-X-Gm-Features: AaiRm53AlW0Vs5liTlfz2qko8M0ob5L9wn1q8gJB9M2tLSanbYjxsAX2ISoySnw
-Message-ID: <CAPVz0n1XMpnetG6JKhTLMxW3WNSSAV0Sr52KrZc=Frt=fmSKYA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/6] thermal: tegra: add SOCTHERM support for Tegra114
-To: Thierry Reding <thierry.reding@gmail.com>, Thierry Reding <treding@nvidia.com>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Mikko Perttunen <mperttunen@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MAIL:SHSQR01.spreadtrum.com 6228Rual056518
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=unisoc.com;
+	s=default; t=1772440087;
+	bh=umlwZBWplzk4fzVwI0YfaCGjtS3lIFTZNo9jxaL1c7Y=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To;
+	b=yVZjGLsCaHoT3wdyJ3RwLGHeER5CKAJnzDZXcLJKvBSP/jwnwH27sXlytD/zO3obL
+	 JGNmpHSdsHoUwEhKLLVwOqvdCD8yZnxfFIUl69SBFSpDw24bbdzR9acSxEuLiVFFmS
+	 96bAbix13OFnE3gHj3iUjrwraTthTj+2auxNOKsyet1Ffe+lv6O/Mo2HnoGDffn20c
+	 3Ch0FeHOr1cB03Wx4dZfJ6dzvnRB3VxnxIR4QveOshTiFjk32lkm0K9h0rlJzjnAOD
+	 0Npgksb5PlxXBR+NwAJirQj4XRPEiPP4g+8TWclSnS7DAQXA2TQnbdGaLlL5/fFe6T
+	 Vo/qBxBoPBX0g==
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.56 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[unisoc.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[unisoc.com:s=default];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43387-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-43388-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,nvidia.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:email];
 	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	FREEMAIL_CC(0.00)[intel.com,vger.kernel.org,unisoc.com,gmail.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
+	FROM_NEQ_ENVFROM(0.00)[Xuewen.Yan@unisoc.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[unisoc.com:+];
+	NEURAL_HAM(-0.00)[-0.996];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 9E2E91D4767
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: D7AF51D4A5C
 X-Rspamd-Action: no action
 
-=D0=BF=D1=82, 12 =D0=B2=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 13:27 Thie=
-rry Reding <thierry.reding@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On Thu, Sep 11, 2025 at 08:56:12PM +0200, Daniel Lezcano wrote:
-> > On 11/09/2025 18:27, Thierry Reding wrote:
-> > > On Thu, Aug 28, 2025 at 08:50:58AM +0300, Svyatoslav Ryhel wrote:
-> > > > SOCTHERM is thermal sensor and thermal throttling controller found =
-in Tegra
-> > > > SoC starting from Tegra114. Existing Tegra124 setup is mostly compa=
-tible
-> > > > with Tegra114 and needs only a few slight adjustmets of fuse calibr=
-ation
-> > > > process.
-> > > >
-> > > > ---
-> > > > Changes in v2:
-> > > > - no changes, resend.
-> > > >
-> > > > Changes in v3:
-> > > > - expanded desciption of "thermal: tegra: soctherm-fuse: parametriz=
-e
-> > > >    configuration further" commit
-> > > > - changes title of "thermal: tegra: soctherm-fuse: parametrize
-> > > >    configuration further" to "thermal: tegra: soctherm-fuse: prepar=
-e
-> > > >    calibration for Tegra114 support"
-> > > > - Tegra11x > Tegra114 and Tegra12x > Tegra124
-> > > > - ft and cp shift bits dropped
-> > > > - clarified tegra114 precision
-> > > > - lower_precision > use_lower_precision
-> > > > - nominal calibration ft and cp hardcoded into SoC specific structu=
-res
-> > > > - added tegra114-soctherm header into dt-bindings
-> > > >
-> > > > Changes in v4:
-> > > > - fixed Tegra124/132/210 cp mask
-> > > > - dropped TEGRA114_SOCTHERM_SENSOR_NUM from header
-> > > > - TEGRA_SOCTHERM_THROT_LEVEL_ made SoC specific
-> > > > - adjusted soctherm node and inclusions in tegra114.dtsi
-> > > > - dropped use_lower_presision and nominal_calib_cp options
-> > > >
-> > > > Changes in v5:
-> > > > - fixed CPU and GPU hotspot offset values
-> > > > - added static_assert()s to assert the TEGRA114_* and TEGRA124_*
-> > > >    counterparts are equal
-> > > > ---
-> > > >
-> > > > Svyatoslav Ryhel (6):
-> > > >    soc: tegra: fuse: add Tegra114 nvmem cells and fuse lookups
-> > > >    dt-bindings: thermal: Document Tegra114 SOCTHERM Thermal Managem=
-ent
-> > > >      System
-> > > >    thermal: tegra: soctherm-fuse: prepare calibration for Tegra114
-> > > >      support
-> > > >    dt-bindings: thermal: add Tegra114 soctherm header
-> > > >    thermal: tegra: add Tegra114 specific SOCTHERM driver
-> > > >    ARM: tegra: Add SOCTHERM support on Tegra114
-> > >
-> > > Hi Daniel,
-> > >
-> > > there's a build-time dependency on patch 4 in both patches 5 and 6. D=
-o
-> > > you want to pick up patches 2-5 from this series and I pick up patch =
-1
-> > > and hold off on applying patch 6 until after the merge window? We cou=
-ld
-> > > also do a shared branch, but it may not be worth the extra hassle.
-> >
-> > I can take the patches 2-5. Regarding a shared branch or wait for the n=
-ext
-> > version, I would prefer the latter
->
-> Alright, let's do it that way. I've picked up patch 1. If you take
-> patches 2-5 now I'll pick up patch 6 once v6.18-rc1 has released.
->
-
-Hello Thierry!
-
-Patch 6 "ARM: tegra: Add SOCTHERM support on Tegra114" adding thermal
-sensor nodes to tegra114 tree was not picked, may you please pick it
-or should I resend this
-patch?
-
-Best regards,
-Svyatoslav R.
-
-> Thanks,
-> Thierry
+SGkgU2FzaGEsDQoNClRoaXMgcGF0Y2ggc2hvdWxkIHByZWZlcmFibHkgYmUgbWVyZ2VkIGludG8g
+dGhlIDYuMTgtc3RhYmxlIGJyYW5jaC4NCg0KVGhhbmtzIQ0KDQoNCi0tLS0t6YKu5Lu25Y6f5Lu2
+LS0tLS0NCuWPkeS7tuS6ujogU2FzaGEgTGV2aW4gPHNhc2hhbEBrZXJuZWwub3JnPiANCuWPkemA
+geaXtumXtDogMjAyNuW5tDPmnIgx5pelIDk6MTcNCuaUtuS7tuS6ujogc3RhYmxlQHZnZXIua2Vy
+bmVsLm9yZzsg6Zer5a2m5paHIChYdWV3ZW4gWWFuKSA8WHVld2VuLllhbkB1bmlzb2MuY29tPg0K
+5oqE6YCBOiBSYWZhZWwgSi4gV3lzb2NraSA8cmFmYWVsLmoud3lzb2NraUBpbnRlbC5jb20+OyBs
+aW51eC1wbUB2Z2VyLmtlcm5lbC5vcmcNCuS4u+mimDogRkFJTEVEOiBQYXRjaCAiUE06IHNsZWVw
+OiBjb3JlOiBBdm9pZCBiaXQgZmllbGQgcmFjZXMgcmVsYXRlZCB0byB3b3JrX2luX3Byb2dyZXNz
+IiBmYWlsZWQgdG8gYXBwbHkgdG8gNi4xOC1zdGFibGUgdHJlZQ0KDQoNCg0KDQpUaGUgcGF0Y2gg
+YmVsb3cgZG9lcyBub3QgYXBwbHkgdG8gdGhlIDYuMTgtc3RhYmxlIHRyZWUuDQpJZiBzb21lb25l
+IHdhbnRzIGl0IGFwcGxpZWQgdGhlcmUsIG9yIHRvIGFueSBvdGhlciBzdGFibGUgb3IgbG9uZ3Rl
+cm0gdHJlZSwgdGhlbiBwbGVhc2UgZW1haWwgdGhlIGJhY2twb3J0LCBpbmNsdWRpbmcgdGhlIG9y
+aWdpbmFsIGdpdCBjb21taXQgaWQgdG8gPHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmc+Lg0KDQpUaGFu
+a3MsDQpTYXNoYQ0KDQotLS0tLS0tLS0tLS0tLS0tLS0gb3JpZ2luYWwgY29tbWl0IGluIExpbnVz
+J3MgdHJlZSAtLS0tLS0tLS0tLS0tLS0tLS0NCg0KRnJvbSAwNDkxZjNmOWY2NjRlN2UwMTMxZWI0
+ZDJhOGIxOWM0OTU2MmU1YzY0IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQ0KRnJvbTogWHVld2Vu
+IFlhbiA8eHVld2VuLnlhbkB1bmlzb2MuY29tPg0KRGF0ZTogV2VkLCA0IEZlYiAyMDI2IDEzOjI1
+OjA5ICswMTAwDQpTdWJqZWN0OiBbUEFUQ0hdIFBNOiBzbGVlcDogY29yZTogQXZvaWQgYml0IGZp
+ZWxkIHJhY2VzIHJlbGF0ZWQgdG8gIHdvcmtfaW5fcHJvZ3Jlc3MNCg0KSW4gYWxsIG9mIHRoZSBz
+eXN0ZW0gc3VzcGVuZCB0cmFuc2l0aW9uIHBoYXNlcywgdGhlIGFzeW5jIHByb2Nlc3Npbmcgb2Yg
+YSBkZXZpY2UgbWF5IGJlIGNhcnJpZWQgb3V0IGluIHBhcmFsbGVsIHdpdGggcG93ZXIud29ya19p
+bl9wcm9ncmVzcyB1cGRhdGVzIGZvciB0aGUgZGV2aWNlJ3MgcGFyZW50IG9yIHN1cHBsaWVycyBh
+bmQgaWYgaXQgdG91Y2hlcyBiaXQgZmllbGRzIGZyb20gdGhlIHNhbWUgZ3JvdXAgKGZvciBleGFt
+cGxlLCBwb3dlci5tdXN0X3Jlc3VtZSBvciBwb3dlci53YWtldXBfcGF0aCksIGJpdCBmaWVsZCBj
+b3JydXB0aW9uIGlzIHBvc3NpYmxlLg0KDQpUbyBhdm9pZCB0aGF0LCB0dXJuIHdvcmtfaW5fcHJv
+Z3Jlc3MgaW4gc3RydWN0IGRldl9wbV9pbmZvIGludG8gYSBwcm9wZXIgYm9vbCBmaWVsZCBhbmQg
+cmVsb2NhdGUgaXQgdG8gc2F2ZSBzcGFjZS4NCg0KRml4ZXM6IGFhN2E5Mjc1YWI4MSAoIlBNOiBz
+bGVlcDogU3VzcGVuZCBhc3luYyBwYXJlbnRzIGFmdGVyIHN1c3BlbmRpbmcgY2hpbGRyZW4iKQ0K
+Rml4ZXM6IDQ0MzA0NmQxYWQ2NiAoIlBNOiBzbGVlcDogTWFrZSBzdXNwZW5kIG9mIGRldmljZXMg
+bW9yZSBhc3luY2hyb25vdXMiKQ0KU2lnbmVkLW9mZi1ieTogWHVld2VuIFlhbiA8eHVld2VuLnlh
+bkB1bmlzb2MuY29tPg0KQ2xvc2VzOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1wbS8y
+MDI2MDIwMzA2MzQ1OS4xMjgwOC0xLXh1ZXdlbi55YW5AdW5pc29jLmNvbS8NCkNjOiBBbGwgYXBw
+bGljYWJsZSA8c3RhYmxlQHZnZXIua2VybmVsLm9yZz4gWyByanc6IEFkZGVkIHN1YmplY3QgYW5k
+IGNoYW5nZWxvZyBdDQpMaW5rOiBodHRwczovL3BhdGNoLm1zZ2lkLmxpbmsvQ0FCOGlwa19WWDJW
+UG03MDZKd2ExPThOU0E3X2J0V0wyaWVYbUJnSHIySmNVTEVQNzZnQG1haWwuZ21haWwuY29tDQpT
+aWduZWQtb2ZmLWJ5OiBSYWZhZWwgSi4gV3lzb2NraSA8cmFmYWVsLmoud3lzb2NraUBpbnRlbC5j
+b20+DQotLS0NCiBpbmNsdWRlL2xpbnV4L3BtLmggfCAyICstDQogMSBmaWxlIGNoYW5nZWQsIDEg
+aW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQoNCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4
+L3BtLmggYi9pbmNsdWRlL2xpbnV4L3BtLmggaW5kZXggOThhODk5ODU4ZWNlZS4uYWZjYWFhMzdh
+ODEyNiAxMDA2NDQNCi0tLSBhL2luY2x1ZGUvbGludXgvcG0uaA0KKysrIGIvaW5jbHVkZS9saW51
+eC9wbS5oDQpAQCAtNjgxLDEwICs2ODEsMTAgQEAgc3RydWN0IGRldl9wbV9pbmZvIHsNCiAgICAg
+ICAgc3RydWN0IGxpc3RfaGVhZCAgICAgICAgZW50cnk7DQogICAgICAgIHN0cnVjdCBjb21wbGV0
+aW9uICAgICAgIGNvbXBsZXRpb247DQogICAgICAgIHN0cnVjdCB3YWtldXBfc291cmNlICAgICp3
+YWtldXA7DQorICAgICAgIGJvb2wgICAgICAgICAgICAgICAgICAgIHdvcmtfaW5fcHJvZ3Jlc3M7
+ICAgICAgIC8qIE93bmVkIGJ5IHRoZSBQTSBjb3JlICovDQogICAgICAgIGJvb2wgICAgICAgICAg
+ICAgICAgICAgIHdha2V1cF9wYXRoOjE7DQogICAgICAgIGJvb2wgICAgICAgICAgICAgICAgICAg
+IHN5c2NvcmU6MTsNCiAgICAgICAgYm9vbCAgICAgICAgICAgICAgICAgICAgbm9fcG1fY2FsbGJh
+Y2tzOjE7ICAgICAgLyogT3duZWQgYnkgdGhlIFBNIGNvcmUgKi8NCi0gICAgICAgYm9vbCAgICAg
+ICAgICAgICAgICAgICAgd29ya19pbl9wcm9ncmVzczoxOyAgICAgLyogT3duZWQgYnkgdGhlIFBN
+IGNvcmUgKi8NCiAgICAgICAgYm9vbCAgICAgICAgICAgICAgICAgICAgc21hcnRfc3VzcGVuZDox
+OyAgICAgICAgLyogT3duZWQgYnkgdGhlIFBNIGNvcmUgKi8NCiAgICAgICAgYm9vbCAgICAgICAg
+ICAgICAgICAgICAgbXVzdF9yZXN1bWU6MTsgICAgICAgICAgLyogT3duZWQgYnkgdGhlIFBNIGNv
+cmUgKi8NCiAgICAgICAgYm9vbCAgICAgICAgICAgICAgICAgICAgbWF5X3NraXBfcmVzdW1lOjE7
+ICAgICAgLyogU2V0IGJ5IHN1YnN5c3RlbXMgKi8NCi0tDQoyLjUxLjANCg0KDQoNCg0K
 
