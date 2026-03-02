@@ -1,175 +1,139 @@
-Return-Path: <linux-pm+bounces-43425-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43426-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yCfPBOihpWmuCAAAu9opvQ
-	(envelope-from <linux-pm+bounces-43425-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 15:42:48 +0100
+	id YGAEGO+rpWmpDgAAu9opvQ
+	(envelope-from <linux-pm+bounces-43426-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 16:25:35 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37E9D1DB117
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 15:42:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA8BC1DBC7A
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 16:25:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B8AEF3064EFE
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 14:31:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 34F2C303A5F5
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 15:19:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65C573FFAA8;
-	Mon,  2 Mar 2026 14:31:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B41F401490;
+	Mon,  2 Mar 2026 15:18:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZgTBPLvv"
+	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="oXpdMlRz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45EB93FD155
-	for <linux-pm@vger.kernel.org>; Mon,  2 Mar 2026 14:31:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2F333DEF7;
+	Mon,  2 Mar 2026 15:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772461911; cv=none; b=mjTUuSdVhG5inudM4B2qZy5dS0+TF0SyuCcnQjSiqGOtyMytrK4fbqDrwQIIz+FeXLOPwZpkFxaQmmr8H6rhIq1hqzKUYuKu9MNtuRjQ+M/D0EHW27J+dKDBnLx9REdVeHRQgBba5/oJwhSXuGXWUGD1IOQdD5X7eL603++6k0I=
+	t=1772464739; cv=none; b=A/zmFluESaOjgA41BWGs4ARGSeooUbIRM5w0WLZVHQ9Inuowyf0a8wbdY8F01PBgqZ+yzRLQ4geuvXdBm/XfSSAfVkXUTy1XmV1rJXX/tV7NbO60SNWC111ZchUccJGZ773J05QRllp1YXh6B+AmeZTcjTIUT47PJkFHNJ/63hA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772461911; c=relaxed/simple;
-	bh=86Ziz7ZkTNiHbyzLt91Sb1neXW3jX6vu7nzwQeYV+l4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=IhH+C+Py9sznEfef+ZBI2/r+JcWAC24MR00NL3W3SLR/tT6IkTdBIsqSkL1ByxHt+Hharx+NnS+hKjJcjTqLbTlXfXzZMfctAL6TetObjbetKhHFG6aAwxake8oyzKT8vymkQNWKOxyD7OIvSfsxpsUX2oHHgEFhz5W4LuM8B2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZgTBPLvv; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c6f306faaffso1612604a12.0
-        for <linux-pm@vger.kernel.org>; Mon, 02 Mar 2026 06:31:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772461909; x=1773066709; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4oQHoRaGFMus9JOapZuHMAdkvhHYxbOgXj0ogty6xog=;
-        b=ZgTBPLvvB/E9c/wpakGx4G4URcVUumaJiCvZ9YuKgOKfTu1TX4kX5G00u21q5n3J6I
-         MgA3/vH7b9ye/FtYcVenFiyokLQYKFi40u0WD86vX8aDT4hulxFqcpcKzS9HatNOPzBX
-         jlM9Xxvnuu8DREThmS/mejHNucOV2KehcgBvj9rISnMdYn/IqqViR0+G49z+fyLLjrCW
-         CUtYUFInX4eQxLWDVuMZUBNO2NCJINLkpnBSa8UDJQeUH35ZJuCKhtgmEhkUgSHE+j3X
-         i03jSDLV0xAPjX7aydn7RsJjrYiJ2CTn9CMKMbM0N0RqW8299LG1Amrst8jdEQpT/5Aj
-         p8ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772461909; x=1773066709;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4oQHoRaGFMus9JOapZuHMAdkvhHYxbOgXj0ogty6xog=;
-        b=BSFwQPBuNuuuWCFkUnrxfRhv2gjrj8G7FIA/nkBvbR7QAqrVsWyxocGgOjpPxLVqhD
-         A6ZAih6NxQa80m2md8SC8X8WuRpOWvIg0gAlsgna0SUR8vSyHYvX47W7lYUtSMU3VQ0z
-         5SCzGKhbN8npk9RAZ+53oJv7TbXFYjMYMixHlSzuFWW08/2FYbsNQwsLh9AxFxqfgZ/b
-         wqbNN6iz+6bXXSxcu0aLAJmKshLhFH1k2kydb6P1RczFCq48/hXHMFwwf/1A6P/ohf1e
-         cnt0rLlib8DqeB/2uvr7s3B6DKlApGFw6+ksn95/kH4UEZYnBjYwCG0cBd/RuH/U5Y3g
-         RxDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVqACPdLbydbuw3GmG7lzL4y2Dc9pDmLsF6Vss6oIu3x7mIgo+BfThP6r8UCT8o+I8HReslpdmMuw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCZP8HA9gGN4fmDyFlZhyMHFBuAi2kExyTwSIuNX6NWqrYQ6OT
-	Ytt30+ispDPQPNkSbOj2aqN46Gx7ZygqTCXWOoE+OUUJx1xSeVFgMJG2QONtaQRjJIE=
-X-Gm-Gg: ATEYQzyOXoIHirPce1leckj8G5mWjqVFM7DAYlLLNGgA5fQC8s5qBWU9M9WxXS9Yzl7
-	pAar3i6H6Jz2Y7EoVcP8bzKFh9mguWsl+2wz3ymFhWVk0CvXd7ea7MLWfAwFYgZr4G/5bSufltn
-	n4dy/X9eWZFcDtka3Clwrm2CNGC2Oi55FHJqP7o3T1gOGiEN9hWBU6We4W0XKp4sdSmIPKc/LnF
-	M5atN5t9ATCvGDSMItifxS+QfK711bv5Uq7UCXUJupX8joGqn3XGwd8L+BlegegPKq57ih+cIyP
-	CQ9PG4PvRRRnsaaJtUnRGAkXbZIkl830PMjnXuUoAxjlBpJ24WMNLtKscM5QbD61ItoUUI8tADq
-	4+PfviHU7b8xRwNCRF0uDaK/r4JIcnJlLwdWggek0ZjItBDpBn83ljNVILPN/awPEQUac+XdbIU
-	HhjF9sxDcEhn1Qq6Zh4xwVcaB9P8hEDvRTAr8oHlMdU9UfZII=
-X-Received: by 2002:a17:90b:3d4e:b0:359:989f:ab3a with SMTP id 98e67ed59e1d1-359989faddfmr407907a91.30.1772461909339;
-        Mon, 02 Mar 2026 06:31:49 -0800 (PST)
-Received: from junjungu-PC.localdomain ([2408:820c:9009:3f2:4c92:fc5c:54e5:712e])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-359135ef1d7sm11412355a91.5.2026.03.02.06.31.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2026 06:31:48 -0800 (PST)
-From: Felix Gu <ustc.gu@gmail.com>
-Date: Mon, 02 Mar 2026 22:31:44 +0800
-Subject: [PATCH] power: sequencing: pcie-m2: Fix device node reference leak
- in probe
+	s=arc-20240116; t=1772464739; c=relaxed/simple;
+	bh=dwmK2EnSIsQl57kTURLOvNMIQmr9D+99Bbr5VpbqFSo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rn/9tTC7tnC/BKxzxmt/pUdm/s79RKt4MT6463zk1GhyuHW9NMjI5oGR0y3XV+YwVZBfIpxX4EfYuZFaq+6GIqyQFHIQb1ZjNI2zfZeuznK7gCfD+jTGpTIgF5uV5tpGKTxvUellM4fkcSJkPr40uVcjVJjLEX5tIvAz4oN3VV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=oXpdMlRz; arc=none smtp.client-ip=178.62.254.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
+Received: from shell.ilvokhin.com (shell.ilvokhin.com [138.68.190.75])
+	(Authenticated sender: d@ilvokhin.com)
+	by mail.ilvokhin.com (Postfix) with ESMTPSA id A32A2B3085;
+	Mon, 02 Mar 2026 15:18:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
+	s=mail; t=1772464730;
+	bh=BFYzZEBixlS+zcZl7LsuEKBEMzuKJceTVNM40UE/LP8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=oXpdMlRzh3dhWg4L7e1wNlTox7fVWTR42Pud1whiidbKQmr2FQfBFHS0BOCTKSpBe
+	 R2DIdS6d5ws7XChDY9B/cUn27jM6mwloRl+Pgb1LAhHjBvlEMht6wQWyutSDnREvtR
+	 IOe0L9Ulmzror287UzM5h85fSgdc4Gtg+B8D00DE=
+Date: Mon, 2 Mar 2026 15:18:45 +0000
+From: Dmitry Ilvokhin <d@ilvokhin.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Qi Zheng <zhengqi.arch@bytedance.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 5/5] mm: add tracepoints for zone lock
+Message-ID: <aaWqVZ4t5AaJfih7@shell.ilvokhin.com>
+References: <cover.1772206930.git.d@ilvokhin.com>
+ <ae145fe890f028409f727b4921904b547346fa0b.1772206930.git.d@ilvokhin.com>
+ <20260227144649.3dbff742@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260302-m2-v1-1-a6533e18aa69@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAE+fpWkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDYwMj3Vwj3TQzY4sUY0tjM2OjVCWgwoKi1LTMCrAh0bG1tQDBAh8mVAA
- AAA==
-X-Change-ID: 20260302-m2-f638d393632e
-To: Manivannan Sadhasivam <mani@kernel.org>, 
- Bartosz Golaszewski <brgl@kernel.org>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
- Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
- linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Felix Gu <ustc.gu@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772461906; l=1302;
- i=ustc.gu@gmail.com; h=from:subject:message-id;
- bh=86Ziz7ZkTNiHbyzLt91Sb1neXW3jX6vu7nzwQeYV+l4=;
- b=zuLSZMTF9biur1Ulrt5Rti0GuKMmowGC/J6f/52NSyh3skq6WPI+2GW69V/u3cI//WyCJp2NS
- KiLsaD4jwbvAMhDBpynEtND8VlhqB3euXEe0XrCsBc2JJvdAmiDKrU8
-X-Developer-Key: i=ustc.gu@gmail.com; a=ed25519;
- pk=fjUXwmjchVN7Ja6KGP55IXOzFeCl9edaHoQIEUA+/hw=
-X-Rspamd-Queue-Id: 37E9D1DB117
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227144649.3dbff742@gandalf.local.home>
+X-Rspamd-Queue-Id: DA8BC1DBC7A
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[oss.qualcomm.com,vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-43425-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43426-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[27];
+	DKIM_TRACE(0.00)[ilvokhin.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ustcgu@gmail.com,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,ilvokhin.com:dkim,ilvokhin.com:email]
 X-Rspamd-Action: no action
 
-In pwrseq_pcie_m2_probe(), ctx->of_node acquires an explicit reference
-to the device node using of_node_get(), but there is no corresponding
-of_node_put() in the driver's error handling paths or removal.
+On Fri, Feb 27, 2026 at 02:46:49PM -0500, Steven Rostedt wrote:
+> On Fri, 27 Feb 2026 16:00:27 +0000
+> Dmitry Ilvokhin <d@ilvokhin.com> wrote:
+> 
+> >  static inline void zone_lock_init(struct zone *zone)
+> >  {
+> > @@ -12,26 +59,41 @@ static inline void zone_lock_init(struct zone *zone)
+> >  
+> >  #define zone_lock_irqsave(zone, flags)				\
+> >  do {								\
+> > +	bool success = true;					\
+> > +								\
+> > +	__zone_lock_trace_start_locking(zone);			\
+> >  	spin_lock_irqsave(&(zone)->_lock, flags);		\
+> > +	__zone_lock_trace_acquire_returned(zone, success);	\
+> 
+> Why the "success" variable and not just:
+> 
+> 	__zone_lock_trace_acquire_returned(zone, true);
+> 
+>  ?
 
-Since the ctx is tied to the lifecycle of the platform device, there
-is no need to hold an additional reference to the device's own of_node.
-
-Fixes: 52e7b5bd62ba ("power: sequencing: Add the Power Sequencing driver for the PCIe M.2 connectors")
-Signed-off-by: Felix Gu <ustc.gu@gmail.com>
----
- drivers/power/sequencing/pwrseq-pcie-m2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/sequencing/pwrseq-pcie-m2.c b/drivers/power/sequencing/pwrseq-pcie-m2.c
-index d31a7dd8b35c..dadb4aad9d5d 100644
---- a/drivers/power/sequencing/pwrseq-pcie-m2.c
-+++ b/drivers/power/sequencing/pwrseq-pcie-m2.c
-@@ -109,7 +109,7 @@ static int pwrseq_pcie_m2_probe(struct platform_device *pdev)
- 	if (!ctx)
- 		return -ENOMEM;
- 
--	ctx->of_node = of_node_get(dev->of_node);
-+	ctx->of_node = dev_of_node(dev);
- 	ctx->pdata = device_get_match_data(dev);
- 	if (!ctx->pdata)
- 		return dev_err_probe(dev, -ENODEV,
-
----
-base-commit: 3fa5e5702a82d259897bd7e209469bc06368bf31
-change-id: 20260302-m2-f638d393632e
-
-Best regards,
--- 
-Felix Gu <ustc.gu@gmail.com>
-
+Good point, passing true directly is cleaner. Happy to respin if needed.
 
