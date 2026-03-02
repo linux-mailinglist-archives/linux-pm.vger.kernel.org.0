@@ -1,163 +1,151 @@
-Return-Path: <linux-pm+bounces-43427-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43428-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KPZaO3qspWmpDgAAu9opvQ
-	(envelope-from <linux-pm+bounces-43427-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 16:27:54 +0100
+	id cE83GJW3pWkiFQAAu9opvQ
+	(envelope-from <linux-pm+bounces-43428-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 17:15:17 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 515D91DBD11
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 16:27:54 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA8F31DC867
+	for <lists+linux-pm@lfdr.de>; Mon, 02 Mar 2026 17:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2A66B30734F2
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 15:23:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BCBC03149FAA
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2026 15:56:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 412BD4014BD;
-	Mon,  2 Mar 2026 15:23:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDB7041B344;
+	Mon,  2 Mar 2026 15:54:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="0XQtejgo"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="koUJWiJa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F302DC77F;
-	Mon,  2 Mar 2026 15:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C290541C0CB;
+	Mon,  2 Mar 2026 15:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772464982; cv=none; b=mgn4ZOnh0/kJZnLWOuf0mIIHaU33hXBQIC+zdLCTOt9JDdwytwj4eoAogjpJFylO7uizf6Ex8jhRQeSSTRa4WSGgFJxguVzffZ4lIAPco3P6XA7TpliiSL0zpZBjJCTKdBkh3zT/ksoavZucPdmPFfB1GWvYZf9oZpOd1Y5P4b4=
+	t=1772466867; cv=none; b=QmkhFplEEDLcsVCRRVLxy6/Q93Ze8Os5zaZkgdW9jYBP5osV3lFNjyqyuFPBOVGX5rxx7jn3+1db3Gi8jmzTb/G5H7VD4sSsoT27f4Nwk4ljRbBA/DRv3bkM9Ss1zjsysCgE7MsZrPEcMovaBGCIYvbI2oDKo4SOHnfpr0QAb8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772464982; c=relaxed/simple;
-	bh=tnGNrd08ygRLNg29w5uOg5fCwaj3xRbm+K6TxvyXixM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TcsTq+bPQT86LRRea+R/Q8ra+/N5rsyyRZm4ORhOLe2j477OmDutr+jr2cKJP+n6xyAPgtlvZVazUkvNsa/c2vjtHK2YX27ZsLXhWLmtIO4LqieEDsNGBA4UQQ+A+864iwXvK8tc1qLMcaMkqeRXaMgPHVvzp/istOuaN7BKjo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=0XQtejgo; arc=none smtp.client-ip=178.62.254.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
-Received: from shell.ilvokhin.com (shell.ilvokhin.com [138.68.190.75])
-	(Authenticated sender: d@ilvokhin.com)
-	by mail.ilvokhin.com (Postfix) with ESMTPSA id BD9F5B308A;
-	Mon, 02 Mar 2026 15:22:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
-	s=mail; t=1772464979;
-	bh=cZrWALVvP/5PCNYa5kN8hhPqzqgPdcu+PQQdFr2xuMA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=0XQtejgoF4lHXmQZfH+M5Yr/k2dulaPURnPgHTjB3MWoBc4ABdeo9tX28PvlJ0wfS
-	 MhnKUH1BcERlzCflotEoBh7ucIj9rGuOw5aZlwAZ3tTbpooMJtXtq+bpD3TPnVM5C9
-	 IoQNyU/1h833NedDbDGWDcatze9MhSFM3hlGuVIY=
-Date: Mon, 2 Mar 2026 15:22:57 +0000
-From: Dmitry Ilvokhin <d@ilvokhin.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Qi Zheng <zhengqi.arch@bytedance.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: Re: [PATCH v4 2/5] mm: convert zone lock users to wrappers
-Message-ID: <aaWrUezs2XysV2Kl@shell.ilvokhin.com>
-References: <cover.1772206930.git.d@ilvokhin.com>
- <d26a43ebed2f0f1edb9cfe4fbed16dd31c7a069c.1772206930.git.d@ilvokhin.com>
- <7e93021d-53dd-4162-97e6-3bca1f46a0c6@kernel.org>
+	s=arc-20240116; t=1772466867; c=relaxed/simple;
+	bh=faGDlxTpGgDgf5lft1dr/LUhyCXcbET5nTyAJhZn1rc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RJ6u/4LuZJq4ZKZHW6zBWkC1nVQjWjpAB/qzBPFRVQbZV035eLp5BroxRBLSP4g8/vFlv7GJitCo0Ziy5YomND+r12dWSTnD+mu1c00x6iQXq5sbSlhw6P59Pkf0mUAlP5i/BSnIw9mnDZPzw1V4tYrRO6OsM9X8P7c24yWbLJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=koUJWiJa; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=MB
+	NRmuJe+0PPQ4BIarWTighfyiqD0+gta5zQYlDF/yk=; b=koUJWiJa65TZE3NOiR
+	jshin6wHuOBLR9vxA1nAEz5xkJGMjEKyqLYmA/IvDDS6dmz1OdViytSNlKj4uHHA
+	bo6BFdRe7s/gdHf1whIG67ejgu4aHoNURc2k2Qhh2X8ASw9GEuBjhhZQB4ITCjh5
+	WfTWsOCjCKFOqLd1tshKEhL2Q=
+Received: from zhb.. (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wCX1weOsqVpju7dNg--.43634S2;
+	Mon, 02 Mar 2026 23:53:51 +0800 (CST)
+From: Hans Zhang <18255117159@163.com>
+To: sudeep.holla@kernel.org,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org
+Cc: cristian.marussi@arm.com,
+	arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hans Zhang <18255117159@163.com>
+Subject: [PATCH] cpufreq: scmi: Fix of_node use-after-free in scmi_dev_used_by_cpus()
+Date: Mon,  2 Mar 2026 23:53:48 +0800
+Message-Id: <20260302155348.26374-1-18255117159@163.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7e93021d-53dd-4162-97e6-3bca1f46a0c6@kernel.org>
-X-Rspamd-Queue-Id: 515D91DBD11
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wCX1weOsqVpju7dNg--.43634S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZF15tryrGr1xGr4ruw4kZwb_yoW8Xr4rpF
+	W3C3yFyry8JFsrJw10vr4UWrWYvan3ZrW5uasxKwnava98XFy5Xryag3WUXr98CF93Xa4Y
+	yr1rta4xWayxA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUUfQiUUUUU=
+X-CM-SenderInfo: rpryjkyvrrlimvzbiqqrwthudrp/xtbCww+TN2mlso+dEgAA3W
+X-Rspamd-Queue-Id: EA8F31DC867
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[163.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-43428-lists,linux-pm=lfdr.de];
+	FREEMAIL_CC(0.00)[arm.com,vger.kernel.org,lists.infradead.org,163.com];
+	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43427-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[28];
-	DKIM_TRACE(0.00)[ilvokhin.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,linux-pm@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_FROM(0.00)[163.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[18255117159@163.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[163.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-pm];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,ilvokhin.com:dkim,ilvokhin.com:email,linux.dev:email,shell.ilvokhin.com:mid]
+	RCPT_COUNT_SEVEN(0.00)[9];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Fri, Feb 27, 2026 at 09:39:11PM +0100, David Hildenbrand (Arm) wrote:
-> On 2/27/26 17:00, Dmitry Ilvokhin wrote:
-> > Replace direct zone lock acquire/release operations with the
-> > newly introduced wrappers.
-> > 
-> > The changes are purely mechanical substitutions. No functional change
-> > intended. Locking semantics and ordering remain unchanged.
-> > 
-> > The compaction path is left unchanged for now and will be
-> > handled separately in the following patch due to additional
-> > non-trivial modifications.
-> > 
-> > Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
-> > Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
-> > Reviewed-by: SeongJae Park <sj@kernel.org>
-> > ---
-> 
-> [...]
-> 
-> >  #ifdef CONFIG_COMPACTION
-> > @@ -530,11 +531,14 @@ static bool compact_lock_irqsave(spinlock_t *lock, unsigned long *flags,
-> >   * Returns true if compaction should abort due to fatal signal pending.
-> >   * Returns false when compaction can continue.
-> >   */
-> > -static bool compact_unlock_should_abort(spinlock_t *lock,
-> > -		unsigned long flags, bool *locked, struct compact_control *cc)
-> > +
-> > +static bool compact_unlock_should_abort(struct zone *zone,
-> > +					unsigned long flags,
-> > +					bool *locked,
-> > +					struct compact_control *cc)
-> 
-> We tend to use two-tabs on second parameter line; like the existing code
-> did.
-> 
-> 
-> Besides that
-> 
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> 
+In scmi_dev_used_by_cpus(), the code previously released the of_node
+reference via of_node_put(np) before checking whether np equals scmi_np.
+This could lead to a use-after-free if the node pointer was accessed
+after being freed. Reorder the logic to perform the comparison first
+and only put the node after the check, or immediately return if they
+match. This ensures safe reference counting and avoids potential kernel
+crashes.
 
-Thanks, David. Noted. Appreciate the review and ack.
+Fixes: 6c9bb8692272 ("cpufreq: scmi: Skip SCMI devices that aren't used by the CPUs")
+Signed-off-by: Hans Zhang <18255117159@163.com>
+---
+ drivers/cpufreq/scmi-cpufreq.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-> -- 
-> Cheers,
-> 
-> David
+diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+index 4edb4f7a8aa9..187aeb65e221 100644
+--- a/drivers/cpufreq/scmi-cpufreq.c
++++ b/drivers/cpufreq/scmi-cpufreq.c
+@@ -413,17 +413,19 @@ static bool scmi_dev_used_by_cpus(struct device *scmi_dev)
+ 		cpu_np = dev_of_node(cpu_dev);
+ 
+ 		np = of_parse_phandle(cpu_np, "clocks", 0);
+-		of_node_put(np);
+-
+-		if (np == scmi_np)
++		if (np == scmi_np) {
++			of_node_put(np);
+ 			return true;
++		}
++		of_node_put(np);
+ 
+ 		idx = of_property_match_string(cpu_np, "power-domain-names", "perf");
+ 		np = of_parse_phandle(cpu_np, "power-domains", idx);
+-		of_node_put(np);
+-
+-		if (np == scmi_np)
++		if (np == scmi_np) {
++			of_node_put(np);
+ 			return true;
++		}
++		of_node_put(np);
+ 	}
+ 
+ 	/*
+-- 
+2.34.1
+
 
