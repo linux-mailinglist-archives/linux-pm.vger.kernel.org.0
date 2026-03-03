@@ -1,159 +1,189 @@
-Return-Path: <linux-pm+bounces-43485-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43486-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mF93O8DPpmnHWgAAu9opvQ
-	(envelope-from <linux-pm+bounces-43485-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 13:10:40 +0100
+	id eDs8GgXcpmnRXwAAu9opvQ
+	(envelope-from <linux-pm+bounces-43486-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 14:03:01 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BF221EF13D
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 13:10:40 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1DB81EFD13
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 14:02:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BCACA30FE939
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 12:03:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 79ABE303A936
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 12:59:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0347F33F5BF;
-	Tue,  3 Mar 2026 12:03:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD30A35E959;
+	Tue,  3 Mar 2026 12:59:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="k689BAgV"
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="G3F49INs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFF031F986;
-	Tue,  3 Mar 2026 12:03:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379D535E947
+	for <linux-pm@vger.kernel.org>; Tue,  3 Mar 2026 12:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772539424; cv=none; b=IfeLgut4hZ3iHxrWOa3044oKyoYCrPVX5OxfWVbyE65gNTkilthrRTAdHuqWXp0f+7Xk0IVIj76150f+N8y/TVC9+YpDi/nQwChphvMquciMeZIkDYsAjA8xGh1OGEiizzcSzIY4fOZnsPIbmO0O2K64OZuOeDAWTqhPEOAeGSw=
+	t=1772542749; cv=none; b=aqr+tO0AxRHGoBM+w3eSnoWHnd2jRp1GIpvwEZn/Z9kdS3Q11WexKDfU6CKAC7HSckk3iE9r1wan1M8dPtcE0khqFNMUNkInNX9hSuRWicnqjP86is9p7srzNU94qVrBU+3zYtKqFw+tzCMtIxPn3hHiw5nC3REaoc8fmg12fMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772539424; c=relaxed/simple;
-	bh=TqatppKJ8/sSOqaB9V9U7v66SprShwvtMtSnJwrs7sU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=e5bqKU5hZ+UiRZ5QzK4WxJtJyPtHybuEwWqnub9W1qJf151TsBKi/OTjvmKFz9qTazV+8f904pfdRhFo8XysTh7hwDGH4VK9mEKkCqyjx+4iCo7kodVHQdrEISefrYOLWx2G5C75hOpHuZyZu0vAjQWrVwvwkwP4H+p3ocGe2BM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=k689BAgV; arc=none smtp.client-ip=113.46.200.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=T1z2JGVSris9ggGYp/iPgLJUtlSMEdRWvCGyzfP+AsA=;
-	b=k689BAgVLs9sJv29hSwiJuvaJnZbjp5h76i2RVrl0drHggP6H3BUz+no7zijMwoF0BN4/M7zi
-	5Gbgre3iHaRtL5muO+im4aitazEw0S6TSH357aMixgyVj+uIhIS/WXIcjNJ742pRd45sfCLjA8q
-	7Cf3Ev6ugXrxgAHRVWkILIY=
-Received: from mail.maildlp.com (unknown [172.19.162.197])
-	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4fQDpp243XzpStt;
-	Tue,  3 Mar 2026 19:58:42 +0800 (CST)
-Received: from kwepemr200004.china.huawei.com (unknown [7.202.195.241])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2645F40569;
-	Tue,  3 Mar 2026 20:03:40 +0800 (CST)
-Received: from [10.67.121.62] (10.67.121.62) by kwepemr200004.china.huawei.com
- (7.202.195.241) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 3 Mar
- 2026 20:03:39 +0800
-Message-ID: <54f5795f-2c0b-49f2-a319-216c17657c0f@huawei.com>
-Date: Tue, 3 Mar 2026 20:03:38 +0800
+	s=arc-20240116; t=1772542749; c=relaxed/simple;
+	bh=jCkmEf8crPyr76/z5IV3pbKbhmAc8MFwTSLiKtnDMjU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OtnD/9TNU9MOU1qEbw1x5IUzEPBc6Gzmae5U5+M/DPI7gVwNAy/gX8rPDXt4JROz+akonnKpHKGZ4Qa64PgdTHlHlw/oel6TGrE41CyWRhX772WjggKY6BKrfPrHLwT7L8HW2w/t4Ul/B/6II5BATZoXJr58sTYC+Ld27M7vzvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=G3F49INs; arc=none smtp.client-ip=195.121.94.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
+X-KPN-MessageId: c2469769-1700-11f1-969b-005056abbe64
+Received: from smtp.kpnmail.nl (unknown [10.31.155.39])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id c2469769-1700-11f1-969b-005056abbe64;
+	Tue, 03 Mar 2026 13:59:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=xs4all.nl; s=xs4all01;
+	h=mime-version:message-id:date:subject:to:from;
+	bh=TxnaUJXOl/lvwlgC9cHqxHBw5mL0eV8RXWHVOARkZuQ=;
+	b=G3F49INszGDNveNcXoHRSmA2hRXx6GlVwcmW6rZgjOY6kkSNM7YZr74PrJhnB6o0M+ou0fLvlTTES
+	 vWvz3ynQRbmi/SCRBgmVqWhV/abFTufXVhJyzygWaycW6/zjIuqgt56pp7ZOEeAsf6DtwzsxACj1Qf
+	 Pv9D3dVEoY3MFOmrKWoBr5LJ7mq98zXuCwyEEQI8rjruERv2g/6sbw/S215wYf1Zuc6OVAZGs+w0uJ
+	 ULzkm1OGLh9pJZhhARuwrkGbX3iS2a3O+hzBTTr39EbEm9++FAFdMuQfAMONF1QoE4V7G1jgg5O+1n
+	 Vq1SAEM+Z0LFsfcSZRYSuigLrFldQng==
+X-KPN-MID: 33|MIhv6Tr+KHyPEw9mxak4PnwrKkm0vwZ/tN+zdTw3URHeK8Zws+lJOKOesJPq+dI
+ F8dPNftYPLtoWhc1iIrlBugXr7Z0anep+oWaSZUikWHM=
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|nyki5os/9ZqBUixMOt5dzUw24oacS6lG0IspIKRvKWoYci1xmtjg0yY9TsCbhAW
+ UO4l1t3pnRXYd9PcvCkNFvQ==
+Received: from daedalus.home (unknown [178.230.196.166])
+	by smtp.xs4all.nl (Halon) with ESMTPSA
+	id bf0fdb49-1700-11f1-8011-005056ab7447;
+	Tue, 03 Mar 2026 13:59:05 +0100 (CET)
+From: Jori Koolstra <jkoolstra@xs4all.nl>
+To: MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>
+Cc: Jori Koolstra <jkoolstra@xs4all.nl>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-pm@vger.kernel.org (open list:DEVICE FREQUENCY (DEVFREQ)),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] devfreq: change devfreq_class to a const struct
+Date: Tue,  3 Mar 2026 13:59:08 +0100
+Message-ID: <20260303125909.3523053-1-jkoolstra@xs4all.nl>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] cpufreq: cppc: Clamp default minimum limit to
- lowest_nonlinear_perf
-To: <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>, <lihuisong@huawei.com>,
-	<yubowen8@huawei.com>, <linhongye@h-partners.com>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <wangzhi12@huawei.com>
-References: <20260213100633.15413-1-zhangpengjie2@huawei.com>
-From: "zhangpengjie (A)" <zhangpengjie2@huawei.com>
-In-Reply-To: <20260213100633.15413-1-zhangpengjie2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemr200004.china.huawei.com (7.202.195.241)
-X-Rspamd-Queue-Id: 6BF221EF13D
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: C1DB81EFD13
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[xs4all.nl,reject];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[xs4all.nl:s=xs4all01];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[huawei.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43486-lists,linux-pm=lfdr.de];
+	FREEMAIL_CC(0.00)[xs4all.nl,linuxfoundation.org,vger.kernel.org];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	ASN_FAIL(0.00)[10.253.234.172.asn.rspamd.com:query timed out];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_FROM(0.00)[xs4all.nl];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43485-lists,linux-pm=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zhangpengjie2@huawei.com,linux-pm@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[jkoolstra@xs4all.nl,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[xs4all.nl:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-pm];
 	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_NONE(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,huawei.com:dkim,huawei.com:email,huawei.com:mid]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linuxfoundation.org:email]
 X-Rspamd-Action: no action
 
-Just a gentle ping on this patch.
-Thanks, Pengjie
+The class_create() call has been deprecated in favor of class_register()
+as the driver core now allows for a struct class to be in read-only
+memory. Change devfreq_class to be a const struct class and drop the
+class_create() call. This is compile tested only.
 
-On 2/13/2026 6:06 PM, Pengjie Zhang wrote:
-> The ACPI spec defines 'lowest_nonlinear_perf' as the threshold for
-> linear performance scaling. Performance levels below this threshold
-> are typically inefficient and should not be used by default.
->
-> Currently, the QoS minimum request is initialized to 0. This defaults
-> the performance floor to the absolute "Lowest Performance" state
-> instead of "lowest_nonlinear_perf", allowing the CPU to operate in
-> an inefficient range unnecessarily.
->
-> Signed-off-by: Pengjie Zhang <zhangpengjie2@huawei.com>
-> ---
-> Changes in v2:
->    - Renamed the patch subject to better reflect the logic change.
->    - Updated the commit log to clarify ACPI spec details.
-> Link to v1:https://lore.kernel.org/all/20260116094555.2978887-1-zhangpengjie2@huawei.com/
-> ---
->   drivers/cpufreq/cppc_cpufreq.c | 18 ++++++++++++++++--
->   1 file changed, 16 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 7e8042efedd1..4a3031d9fcf4 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -333,9 +333,23 @@ static unsigned int cppc_cpufreq_fast_switch(struct cpufreq_policy *policy,
->   	return target_freq;
->   }
->   
-> -static int cppc_verify_policy(struct cpufreq_policy_data *policy)
-> +static int cppc_verify_policy(struct cpufreq_policy_data *policy_data)
->   {
-> -	cpufreq_verify_within_cpu_limits(policy);
-> +	if (policy_data->min == FREQ_QOS_MIN_DEFAULT_VALUE) {
-> +		struct cpufreq_policy *policy __free(put_cpufreq_policy) =
-> +					      cpufreq_cpu_get(policy_data->cpu);
-> +		struct cppc_cpudata *cpu_data;
-> +
-> +		if (!policy)
-> +			return -EINVAL;
-> +
-> +		cpu_data = policy->driver_data;
-> +		policy_data->min = cppc_perf_to_khz(&cpu_data->perf_caps,
-> +			cpu_data->perf_caps.lowest_nonlinear_perf);
-> +	}
-> +
-> +	cpufreq_verify_within_cpu_limits(policy_data);
-> +
->   	return 0;
->   }
->   
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
+---
+ drivers/devfreq/devfreq.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index c0a74091b904..f2298f8e3224 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -36,7 +36,13 @@
+ #define IS_SUPPORTED_FLAG(f, name) ((f & DEVFREQ_GOV_FLAG_##name) ? true : false)
+ #define IS_SUPPORTED_ATTR(f, name) ((f & DEVFREQ_GOV_ATTR_##name) ? true : false)
+ 
+-static struct class *devfreq_class;
++static struct attribute *devfreq_attrs[];
++ATTRIBUTE_GROUPS(devfreq);
++
++static const struct class devfreq_class = {
++	.name		= "devfreq",
++	.dev_groups	= devfreq_groups
++};
+ static struct dentry *devfreq_debugfs;
+ 
+ /*
+@@ -830,7 +836,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
+ 	mutex_init(&devfreq->lock);
+ 	mutex_lock(&devfreq->lock);
+ 	devfreq->dev.parent = dev;
+-	devfreq->dev.class = devfreq_class;
++	devfreq->dev.class = &devfreq_class;
+ 	devfreq->dev.groups = profile->dev_groups;
+ 	devfreq->dev.release = devfreq_dev_release;
+ 	INIT_LIST_HEAD(&devfreq->node);
+@@ -1807,7 +1813,6 @@ static struct attribute *devfreq_attrs[] = {
+ 	&dev_attr_trans_stat.attr,
+ 	NULL,
+ };
+-ATTRIBUTE_GROUPS(devfreq);
+ 
+ static ssize_t polling_interval_show(struct device *dev,
+ 				     struct device_attribute *attr, char *buf)
+@@ -2019,19 +2024,20 @@ DEFINE_SHOW_ATTRIBUTE(devfreq_summary);
+ 
+ static int __init devfreq_init(void)
+ {
+-	devfreq_class = class_create("devfreq");
+-	if (IS_ERR(devfreq_class)) {
++	int err;
++
++	err = class_register(&devfreq_class);
++	if (err) {
+ 		pr_err("%s: couldn't create class\n", __FILE__);
+-		return PTR_ERR(devfreq_class);
++		return err;
+ 	}
+ 
+ 	devfreq_wq = create_freezable_workqueue("devfreq_wq");
+ 	if (!devfreq_wq) {
+-		class_destroy(devfreq_class);
++		class_unregister(&devfreq_class);
+ 		pr_err("%s: couldn't create workqueue\n", __FILE__);
+ 		return -ENOMEM;
+ 	}
+-	devfreq_class->dev_groups = devfreq_groups;
+ 
+ 	devfreq_debugfs = debugfs_create_dir("devfreq", NULL);
+ 	debugfs_create_file("devfreq_summary", 0444,
+
+base-commit: d466c332e106fe666d1e2f5a24d08e308bebbfa1
+-- 
+2.53.0
+
 
