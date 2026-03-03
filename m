@@ -1,101 +1,91 @@
-Return-Path: <linux-pm+bounces-43472-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43473-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8F3IFpJGpmlyNQAAu9opvQ
-	(envelope-from <linux-pm+bounces-43472-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 03:25:22 +0100
+	id 0fJ6B0hfpmlVOwAAu9opvQ
+	(envelope-from <linux-pm+bounces-43473-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 05:10:48 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B247C1E7FA1
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 03:25:21 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 800B11E8A35
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 05:10:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 61514306D8E7
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 02:25:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8A61C3014C7B
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 04:10:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A37B23750CD;
-	Tue,  3 Mar 2026 02:25:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E304F3806AC;
+	Tue,  3 Mar 2026 04:10:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HhrFmahQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GbqGTGDr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CF65474F
-	for <linux-pm@vger.kernel.org>; Tue,  3 Mar 2026 02:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3E537DEBD
+	for <linux-pm@vger.kernel.org>; Tue,  3 Mar 2026 04:10:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772504719; cv=none; b=qeQPo/bgHuGCl5JATMzPzDogbbcllPZMwsi8Zq0esUaf3HSiseUf8BzUB6qlq6I+kbmKnFzXtwg2SBzANfRQ7phIeSKAMKpwpqAjazn1kRU4q/zJaZLQTszRmZosfmbzmc/w6xBi5rh3RO2IoMqHwdP22C6DBnIGm9WaGHzASFo=
+	t=1772511042; cv=none; b=fHiuVEDbp0Uv8CHtsONRpMuak/j4TIo08me1W1+5p1gcoIFVO162qAZkURCYvtVpW/gBv770ItBMSRaeqcUnk33CuFQoe47UV5QDpxRq9J7IGz2hWRNnCZRP5x1C6xXgBqfL7vEClo4yDfFNz1dPeJUdxB6oJpcNToLnmHsR5Us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772504719; c=relaxed/simple;
-	bh=ifvNLhNdiL6AWdShIgX/PWLQhJhpX31rZnlJXn+DfJs=;
+	s=arc-20240116; t=1772511042; c=relaxed/simple;
+	bh=ycEUqxu2VC/LIBrKv1r/HjXANBQeoGPsrUfYyYj7B8o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z8D/uR4aFhmYtia8hveE7lLTjs+5cKN+RrfqjV9MA8vmEn0bqBOEff52PKETgvmQ7kWiZeTXw19sYDqZ35bBSRe7A780Wzz8lFtQ1eq6MjtjAzGKiF7hv/3+4ky0QtXIB3Hjm0tUu0acphxwSiiSMl30iJSYaxd5DoqjWqP8fZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HhrFmahQ; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-506a1627a09so28913881cf.1
-        for <linux-pm@vger.kernel.org>; Mon, 02 Mar 2026 18:25:18 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=JA9vtnar37alDR0yhHaPp/5NBKJdn/GAbIH9PLnb/G1OD+Mmh6PGs0OQZ00TYMDwXFBZ9PlC17nMJqJSmq2Pc0K8qXevoh9L8y2YYbwDIDkM8Ydtz8YcIxaMXMFXXuCx3S5spLeDuS4DFqV7bn/kGAvi3P6XHPjsqoUB9UMKIVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GbqGTGDr; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3598cab697eso1038289a91.1
+        for <linux-pm@vger.kernel.org>; Mon, 02 Mar 2026 20:10:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772504717; x=1773109517; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1772511040; x=1773115840; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=17vhc0Hs2JiBGh2C/Kc5owCSl8j4M6mqkAnMUAkK1nM=;
-        b=HhrFmahQa772OYkgAUf5Re+bF1UNgnpryrs6sWqDM+VLX/LVTjarY3wGXoHhzXWAVb
-         gufkibXJPdVSx/9LTI7O0rL88lx8m6mM/1vKwpR4Zgb5CwKbRHTRUQOMtRStSLHRcjC2
-         I93pLyX0byzAJOiVJg+BH8TIs3fGeSNMaEGfXN+nP3O/9Ww4j5ykPSNtYpyc998lxc5u
-         gcouU2LIKtbBV59smYtTFV7iE92jy8k1AJgCsNBC9ApeNLIuIswVGUiV1Yb6F5dD3r85
-         +NynFBJz6JOpsdUlPt093AfSVeh1qO/9NEVnrGGPbrMJC97nTDQPia41fxf12klPz6sz
-         vM7w==
+        bh=Wm/wTJAYni/bfoPe16quMxTzhtynqt7x0YSgPTMXEuI=;
+        b=GbqGTGDrJdKKyBtONZhgh77o7JV46u/xOx/xknH0DtTzlqdxpa02HewHeF6tkw7dxE
+         CgSWUZ8LvDfHY3oyflv4a+XBKHSjJ7pA6HZPZ2hvHTvZQ77o9u6K9vmZ0PZdiGPd3WIP
+         WIEfSXgTVznBTdtVp4ydMj2SPFv63fesPQxlBPu4q0ZmWKQ5qz5apB4S4jYjayxbwv3W
+         9yQ/TeUp0q+1k6ZBNAc9YMUmVYdAFCImPSgzBAbeRTmW0rJKg1Xf1LFMTbX2OwU2f2wl
+         cz4uhWuJ1kkOWd3ZJPsAC3N+iMrPd9lxr/xMziRephxiId4EgZd18XuLBZAoSCOyZ1SL
+         j5Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772504717; x=1773109517;
+        d=1e100.net; s=20230601; t=1772511040; x=1773115840;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=17vhc0Hs2JiBGh2C/Kc5owCSl8j4M6mqkAnMUAkK1nM=;
-        b=HY9Jx6VmigbPo4roTu/fTWkBRz/oh1+L7wMkzfa77H1NB4hTj/PkzW8c7wU6y2DTZ/
-         WsKGbG2klXdr3yDozhos5lM6AvYQ9OPRTtsUShOZRoSqznffKxEdYupUOKZpLSLnR3IC
-         UDUDL4CznqJ1WZdYIGJ/A4lzBZC5moVwtJdtGCDBt+tu8B1IzUyYRFSIEd6+sUHmISKJ
-         FwWQ/wCN4lMCGxCsLJa9Eo+06zcV8VOST0TbaLgH8tBroDUfeFYtlzMJURK6LTt1ma/z
-         nvDmYK84qohfBh2z86NPYyGnhedFkDHI/p/n6eRPLevRr3zmiv1zHpsZTIt7yIOYiMi8
-         yUqA==
-X-Forwarded-Encrypted: i=1; AJvYcCWkZztZqhVtaQVvIqDkTTpZ3bP6ikJ1UX2ltMah3G84/LjfHMvWcn11gCadi/EShIHmb9gWaX2xGg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNFj3vq0uzApZCrvN2XUSwgvjoeDwIeYL2wCznaSwT4QKxPxsZ
-	Q7clZxIEgsVVdtfEhnAYoeAAziuX8j2PjenBGctKM3vDtPZwRE2h1/3P
-X-Gm-Gg: ATEYQzxNuRQtFBax9B6EJ7EgAkfh7qCv92/ADlvA6PF1QbQHWHmVsrQakYW35Yw7KFn
-	kkLIAqlPzhA5dVVAYUcpX8QCxkZNYdNPuw64z60ifHHHpJ2Hz3BvzDNjaQVhnTM91uZwTPM4Ndj
-	1RTyYo1TuDYPZ8EEtxGbJWUONNwDXc56Tz8YN9uWsErV7p4bM9B+SWsGqNJdJFkOu3pbPlhKv6/
-	IECH+5DT2VkgdpQKe+KYTR8RXTDi+PhG2Op8zf4qKGBANzck3+CYwbj5+Lld0UaMFiigK8kg5Rq
-	2zV77sMhtdazdIILVbupKCZa0iMkQZ9lqj6eU7AM88/3+Mfq3Yd2JDdKT59P9DXjGBobiPz5PYM
-	eY1hpqiTK5O9jD8GohtlwQnrTWnfYIkVJ8tubIMpl+5/hAd3o/Xn2FZQZueJil9a52jF0/4XyVo
-	CD2tI7+GkfQEWlWcSfuqpynQnsQg==
-X-Received: by 2002:a05:622a:190f:b0:4f1:e9f7:4dee with SMTP id d75a77b69052e-5075296e804mr188944351cf.35.1772504717149;
-        Mon, 02 Mar 2026 18:25:17 -0800 (PST)
-Received: from localhost ([184.144.58.243])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-899ff659b75sm29430186d6.34.2026.03.02.18.25.16
+        bh=Wm/wTJAYni/bfoPe16quMxTzhtynqt7x0YSgPTMXEuI=;
+        b=tduitbnZl71wk0GDTnL6BmyQsHRVHBXd3wVfbzg0wrzOvLOe2K8ZBsSK8JWaDkXzwz
+         lINNULjomimVtls3klV91Wm+2a6mSr9vG0CFotpNLSfSEplo4PdKC4vmABgGHog3esuA
+         PmnllDSz01Xaj6JgnCaCkQcA4MfyPy9AAFgms/2TQBOOMQZ7oFBhysk4sLcD/X7xLshH
+         vAye2b7iXBKA7fALrN4BU/lPMGbS3ic0ehsjjEW3JTnS9PuMcb1ZYTaqbhmLWSTbRhEJ
+         nMiQBOAeHVx9LYDzEAP3MiC82Y9JPOtKN9BZ1DS0M9X+WpbOy9Bv1W8/AAKjiBiu1s30
+         c51Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUIrqW/X6Zsu4nUN5FF0cCAZnsvL41ieDZSd2zn01/clpF4Iv/tPmBrj3O/+5ioGfV9SqBybH0tTQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0vIraWIQ5JvUeH+H1UFw6TS5Ssx8D3Uy5SJPXR/hb/H65EvSB
+	7KXiHK5xMIarkbTVqKhqNZX9otwirAb6lksRtYlH6cpNHt5pHZ5Ag5RXbklVRvkfUpU=
+X-Gm-Gg: ATEYQzztYJuHTQuR8CL4vH1Ou/I+197VgT5u+5mKVE4cYpj+2mnO+GNbmcJY+NBIOwA
+	Au4vZo3WhN0nj2k7hNebpy/NPSP4jSAF14EW9vtfmC3VoEIU6trjz9EnHB+a2zq5W0p7ZMQ6713
+	+2nC5K4hIvxgHiv5ki48L4cjqEJpUt3IdcgXo2eHQO7ufXTOlaBmILygACGXmL05ZAcym8DUX/Y
+	kMjf3AR2zGhPRmlI4WkOi/Dfpvb6YVeCzAllXmUPtnfTUyjT2At3dru7bjZkLJj+SgqwR3tiXfP
+	kRaj/ZgYIHlgpMHI04DPIeemlHUn6iw69B9HeEw1Ki+ye7CVShbvSGKRaSDCXIfSHiYYcK91woY
+	hlLK1MUNelTT0LCxIEhocF/leBDnISIqzTk0x5iNPBzJh1aK1wNuyGCHduHMt4sLyN6mp314ma3
+	sjfeXRHcrR+8ff6nu03WtVJcvg
+X-Received: by 2002:a17:90b:3fc4:b0:359:901a:4b04 with SMTP id 98e67ed59e1d1-3599cee8ec6mr697357a91.14.1772511039563;
+        Mon, 02 Mar 2026 20:10:39 -0800 (PST)
+Received: from localhost ([122.172.81.200])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3599c4c0787sm895192a91.15.2026.03.02.20.10.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2026 18:25:16 -0800 (PST)
-Date: Mon, 2 Mar 2026 21:25:46 -0500
-From: Richard Acayan <mailingradian@gmail.com>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Dmitry Baryshkov <lumag@kernel.org>, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: pm660: add thermal monitor
-Message-ID: <aaXKyIJQA9SFqt41@rdacayan>
-References: <20260210021819.12673-1-mailingradian@gmail.com>
- <20260210021819.12673-4-mailingradian@gmail.com>
- <e72ede03-94cb-45c3-95e7-63dff0ca3888@oss.qualcomm.com>
+        Mon, 02 Mar 2026 20:10:38 -0800 (PST)
+Date: Tue, 3 Mar 2026 09:40:36 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Abel Vesa <abel.vesa@oss.qualcomm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Manivannan Sadhasivam <mani@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: cpufreq: qcom-hw: document Eliza cpufreq
+ hardware
+Message-ID: <3up7phdh5lywcvdmzwe7e2q4sqhpeea3lre5373d2ayanimjk5@5trdeshj6q57>
+References: <20260223-eliza-bindings-cpufreq-v1-1-421f8e1e2805@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -104,75 +94,62 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e72ede03-94cb-45c3-95e7-63dff0ca3888@oss.qualcomm.com>
-X-Rspamd-Queue-Id: B247C1E7FA1
+In-Reply-To: <20260223-eliza-bindings-cpufreq-v1-1-421f8e1e2805@oss.qualcomm.com>
+X-Rspamd-Queue-Id: 800B11E8A35
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43472-lists,linux-pm=lfdr.de];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	MIME_TRACE(0.00)[0:+];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,linaro.org,intel.com,arm.com,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-43473-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DKIM_TRACE(0.00)[linaro.org:+];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	DBL_PROHIBIT(0.00)[0.0.13.72:email,0.0.0.85:email];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mailingradian@gmail.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
+	FROM_NEQ_ENVFROM(0.00)[viresh.kumar@linaro.org,linux-pm@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,linaro.org:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Tue, Feb 10, 2026 at 10:59:20AM +0100, Konrad Dybcio wrote:
-> On 2/10/26 3:18 AM, Richard Acayan wrote:
-> > The thermal monitor is used to monitor arbitrary ADC-based thermal
-> > sensors. It is suitable for use in thermal zones. Add support for it in
-> > PM660.
-> > 
-> > Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/pm660.dtsi | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/pm660.dtsi b/arch/arm64/boot/dts/qcom/pm660.dtsi
-> > index 156b2ddff0dc..7cedf6980b34 100644
-> > --- a/arch/arm64/boot/dts/qcom/pm660.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/pm660.dtsi
-> > @@ -197,6 +197,16 @@ channel@85 {
-> >  			};
-> >  		};
-> >  
-> > +		pm660_adc_tm: adc-tm@3400 {
-> > +			compatible = "qcom,spmi-adc-tm-hc";
-> > +			reg = <0x3400>;
-> > +			interrupts = <0x0 0x34 0x0 IRQ_TYPE_EDGE_RISING>;
-> > +			#thermal-sensor-cells = <1>;
-> > +			#address-cells = <1>;
-> > +			#size-cells = <0>;
-> > +			status = "disabled";
+On 23-02-26, 10:50, Abel Vesa wrote:
+> Document the cpufreq hardware on the Eliza SoC.
 > 
-> Can we enable it by default?
+> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
+> ---
+>  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> index 22eeaef14f55..98eb36bff172 100644
+> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> @@ -35,6 +35,7 @@ properties:
+>        - description: v2 of CPUFREQ HW (EPSS)
+>          items:
+>            - enum:
+> +              - qcom,eliza-cpufreq-epss
+>                - qcom,milos-cpufreq-epss
+>                - qcom,qcs8300-cpufreq-epss
+>                - qcom,qdu1000-cpufreq-epss
 
-This is for the ADC thermal monitor, and not the ADC itself. I don't see
-the need to allocate channels just so this can be enabled by default,
-since the thermal monitor's purpose is mostly to send interrupts when
-the ADC values go above or below a certain threshold.
+Applied. Thanks.
+
+-- 
+viresh
 
