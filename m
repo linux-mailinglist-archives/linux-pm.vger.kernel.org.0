@@ -1,114 +1,146 @@
-Return-Path: <linux-pm+bounces-43469-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43471-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KP6DLSUlpmlrLAAAu9opvQ
-	(envelope-from <linux-pm+bounces-43469-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 01:02:45 +0100
+	id wAVOLfIwpmkrLwAAu9opvQ
+	(envelope-from <linux-pm+bounces-43471-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 01:53:06 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E03F1E6F0B
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 01:02:45 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F2451E7684
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 01:53:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 473D63078FCD
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 00:01:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EA6A63088600
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 00:49:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D40B7201278;
-	Tue,  3 Mar 2026 00:01:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A9C821254B;
+	Tue,  3 Mar 2026 00:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="FZRA8lxd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m3298.qiye.163.com (mail-m3298.qiye.163.com [220.197.32.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B932C1990A7;
-	Tue,  3 Mar 2026 00:01:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2EB61F192E
+	for <linux-pm@vger.kernel.org>; Tue,  3 Mar 2026 00:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772496076; cv=none; b=TWLS+X3hLQk/gAhpvxxX+uqN7IzPpg7c2LvkbTox67CJc4twYFQ8onU+rnL14QzA+h/SI2BZ3fEilD7429hVYv+4umkBNCm2uQFf1lp1AXxtv6z7JoS4VJu0yLu6GYFRoq7tQTM3j/Q6gklo87ku4ikoGcRr8+mxl3AVnCqxLC4=
+	t=1772498984; cv=none; b=te3+aJacDGJpUqmDFGN/3he+5j8WWD4EkxqAolOartnCHHWKvc21B2mbliiVhsFT67efGVZVtsbuYnqADlb2C9Aoq/Bnt23zUL1K3G+XNlfZ5SgMYYpSQnq0Tj+F/NK4sIAO6RuJQeqtzqlekv7rTYUt/WtOMyuBmPpqrcrImao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772496076; c=relaxed/simple;
-	bh=E0gUIopwmjIcVlVXfwbzb5eafZc6arvmdsswbAk/5m0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Hkp3M16ObVN732PxCXol9izaqUr0AidDWPEyWyGk7Yr9KHvcYOtjKTiG0KfN9CD/538loyD+OH+GzlugVyCe2VdJOLp8HPmzfCMfoiJ4kuJSBtKgWd/4SxnCDV6A/hRc08lat+0EW620XCk92ec0mDhnYAmwZ6mm3EKrrKDsLv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487BDC2BC86;
-	Tue,  3 Mar 2026 00:01:16 +0000 (UTC)
-Received: by venus (Postfix, from userid 1000)
-	id 5C60A180D08; Tue, 03 Mar 2026 01:01:14 +0100 (CET)
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sebastian Reichel <sre@kernel.org>, Hans de Goede <hansg@kernel.org>, 
- Chen-Yu Tsai <wens@kernel.org>, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: stable@vger.kernel.org
-In-Reply-To: <20260220174938.672883-5-krzysztof.kozlowski@oss.qualcomm.com>
-References: <20260220174938.672883-5-krzysztof.kozlowski@oss.qualcomm.com>
-Subject: Re: [PATCH 1/4] power: supply: axp288_charger: Do not cancel work
- before initializing it
-Message-Id: <177249607436.615407.12534696673275075213.b4-ty@collabora.com>
-Date: Tue, 03 Mar 2026 01:01:14 +0100
+	s=arc-20240116; t=1772498984; c=relaxed/simple;
+	bh=jcDxGBWPgH+4px9W9zIUW9QrG9LullPjfU94SIsaDg0=;
+	h=Cc:Subject:To:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=O1Fd6aH2ryFzQYPo7gwe5XHOur+GGkmhtE824xFrv+1HlTqaYONPR3MSLlkA2EPbJwgayL4t2FwEww2B+99jkCCKwUcV9OczIkvl0h9gvztAkDnK/fSJKM81ugr+00R4k50l3R1lEsGnPELvoyM9Fu4OypF+7oHQitXcjn+cwiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=FZRA8lxd; arc=none smtp.client-ip=220.197.32.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.14] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 3581a66a6;
+	Tue, 3 Mar 2026 08:49:30 +0800 (GMT+08:00)
+Cc: shawn.lin@rock-chips.com, linux-pm@vger.kernel.org, jonas@kwiboo.se,
+ pgwipeout@gmail.com, finley.xiao@rock-chips.com, kever.yang@rock-chips.com,
+ sebastian.reichel@collabora.com, heiko@sntech.de, ulf.hansson@linaro.org,
+ Chris Morgan <macromorgan@hotmail.com>,
+ Diederik de Haas <diederik@cknow-tech.com>,
+ linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH V2] pmdomain: rockchip: quiet regulator error on
+ -EPROBE_DEFER
+To: Chris Morgan <macroalpha82@gmail.com>
+References: <20260130163102.51757-1-macroalpha82@gmail.com>
+From: Shawn Lin <shawn.lin@rock-chips.com>
+Message-ID: <a1e98f19-2c68-d59e-07bd-57bbcbc742c6@rock-chips.com>
+Date: Tue, 3 Mar 2026 08:49:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3
-X-Rspamd-Queue-Id: 6E03F1E6F0B
+In-Reply-To: <20260130163102.51757-1-macroalpha82@gmail.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a9cb12be8a409cckunm83dbe4c510455dd
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQxpOQ1YYSUMfGk1CTxkaTxlWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=FZRA8lxdP09fxkkMLLfh54R6dP08hfZSKemdHFTpAj0YO8h5Rtj3Ov2Yvu7aQA2BkFzQy3Udf8pEUsuiSZOoxpQgLCqyS9YB2NEibtl1V2BbM6nom598xRQIbpNbj4uG4sF1uptiWTUkdRTK2zw7ibJ7N8bKmxeNL6a3PPmm9nA=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=qgc2EI+SrAhln7tyy6J5i4dEecxK8IQ9XGIqONjIZWo=;
+	h=date:mime-version:subject:message-id:from;
+X-Rspamd-Queue-Id: 0F2451E7684
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.36 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[rock-chips.com,none];
+	R_DKIM_ALLOW(-0.20)[rock-chips.com:s=default];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[collabora.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43469-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43471-lists,linux-pm=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[13];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_CC(0.00)[rock-chips.com,vger.kernel.org,kwiboo.se,gmail.com,collabora.com,sntech.de,linaro.org,hotmail.com,cknow-tech.com,lists.infradead.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[shawn.lin@rock-chips.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[rock-chips.com:+];
+	NEURAL_HAM(-0.00)[-0.986];
 	TAGGED_RCPT(0.00)[linux-pm];
 	MID_RHS_MATCH_FROM(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sebastian.reichel@collabora.com,linux-pm@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.929];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,collabora.com:mid,collabora.com:email]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-
-On Fri, 20 Feb 2026 18:49:39 +0100, Krzysztof Kozlowski wrote:
-> Driver registered devm handler to cancel_work_sync() before even the
-> work was initialized, thus leading to possible warning from
-> kernel/workqueue.c on (!work->func) check, if the error path was hit
-> before the initialization happened.
+ÔÚ 2026/01/31 ÐÇÆÚÁù 0:31, Chris Morgan Ð´µÀ:
+> From: Chris Morgan <macromorgan@hotmail.com>
 > 
-> Use devm_work_autocancel() on each work item independently, which
-> handles the initialization and handler to cancel work.
+> Change the dev_err() to dev_err_probe() under rockchip_pd_power_on()
+> to prevent errors early in the boot process when the requested
+> regulator is not yet available. This converts errors like the following
+> to debug messages:
 > 
-> [...]
 
-Applied, thanks!
+Reviewed-by: Shawn Lin <shawn.lin@rock-chips.com>
 
-[1/4] power: supply: axp288_charger: Do not cancel work before initializing it
-      commit: 3e2143c88b5c1e50439239693ba9994cc82d86c3
-[2/4] power: supply: axp288_charger: Simplify returns of dev_err_probe()
-      commit: c53266766ba5fb52f32f1766a71e0f96c5e51892
-[3/4] power: supply: bq24190: Avoid rescheduling after cancelling work
-      commit: ba4300a96fb2be99dd29939fd2ca84d67260deaa
-[4/4] power: supply: twl4030_madc: Drop unused header includes
-      commit: f14f741f9059a8d5492969e480453640cb5dbc85
-
-Best regards,
--- 
-Sebastian Reichel <sebastian.reichel@collabora.com>
-
+> rockchip-pm-domain fd8d8000.power-management:power-controller: Failed to enable supply: -517
+> 
+> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> Tested-by: Diederik de Haas <diederik@cknow-tech.com>
+> ---
+> Changes since v1:
+>   - Simplified return to single line
+> ---
+>   drivers/pmdomain/rockchip/pm-domains.c | 7 +++----
+>   1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
+> index 997e93c12951..6d3fb18f4ab3 100644
+> --- a/drivers/pmdomain/rockchip/pm-domains.c
+> +++ b/drivers/pmdomain/rockchip/pm-domains.c
+> @@ -705,10 +705,9 @@ static int rockchip_pd_power_on(struct generic_pm_domain *domain)
+>   	int ret;
+>   
+>   	ret = rockchip_pd_regulator_enable(pd);
+> -	if (ret) {
+> -		dev_err(pd->pmu->dev, "Failed to enable supply: %d\n", ret);
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(pd->pmu->dev, ret,
+> +				     "Failed to enable supply: %d\n", ret);
+>   
+>   	ret = rockchip_pd_power(pd, true);
+>   	if (ret)
+> 
 
