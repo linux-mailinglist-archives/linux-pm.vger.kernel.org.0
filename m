@@ -1,239 +1,203 @@
-Return-Path: <linux-pm+bounces-43529-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43530-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UKU5IaJAp2kNgAAAu9opvQ
-	(envelope-from <linux-pm+bounces-43529-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 21:12:18 +0100
+	id 0JqnKXFHp2ktgQAAu9opvQ
+	(envelope-from <linux-pm+bounces-43530-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 21:41:21 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A7741F6AB9
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 21:12:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EF791F6E73
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 21:41:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 69C053182FE6
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 20:09:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AED14306FE21
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 20:38:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77E6C39659D;
-	Tue,  3 Mar 2026 20:09:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57B13361DA1;
+	Tue,  3 Mar 2026 20:38:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="jiKbfEFa"
+	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="kF5mi4y4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010066.outbound.protection.outlook.com [52.101.46.66])
+Received: from hall.aurel32.net (hall.aurel32.net [195.154.119.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337E839D6F5;
-	Tue,  3 Mar 2026 20:09:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.66
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772568561; cv=fail; b=nWoLOGxOB/pPQwhNBjVpZpJ9gRylc8JnSNvbwdJlSPb5xzeoSKKHhghk6Zw4oRHhvMfudDL9wDg7XvQvvd08K/IVEVuYyEVs5F+uEM6BwbsHkXZW7qsNAOJNDh+jI3D4hkAd91s9humpFnsKuTVNTarmSALLb1/o9M4qIxxTRpk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772568561; c=relaxed/simple;
-	bh=U2rH50TUK969LUqB0354a7VP8vRVPQkS/Y7h6y3NJmo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZLkXesgRs4XX+D2iaFy7jHhA/0yozPOCHGGgiTTS8okCfMoJFaHL5mM+GsmD6PdtVXtEcL+8UOLbJqey6Vg3+v9irecTYWSZJwK2rm9Sev44eRHLbUzbZHkYTDO78lCuJx6QxIdx3VYq/uGKEWOArEXx/1v+3bP83ixRZKOBK0w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=jiKbfEFa; arc=fail smtp.client-ip=52.101.46.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=L2yz/+VfN2cxhnCVLWrZfb5U94+zY5G6Txu3hRyOZ56oti/5sSEI+Y/PUnbvJgvyxDAG9FxR3MeH/EMhmlNYGw27n43rWyg22E6FWBb0e/p/e5KxtQ6ZsFaXTDuF1WekqDNfeMwdvj8qSU0w0S9Fu4Ef1HXDjfhf64rG1/1qFNVn0nYODIxB+CIh5+EWrcqZZvGY2uOoD8MkGa+yChrbd6dha7oUP953a6JJXtAHEnE+/h4Rn/EpYbahrOB1p+UBBAd0DxCLYarlX3DJNu+q8ROzczP7kSpgkafc7NxRZXUMPUNexG/TZXq+Hldcsoy5EeIbDnPHXrGnRQ/7bK8ccg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=idd3KjhswRGF+dnxDbOjmWA68SsQTWDdpAbv8H6q+3g=;
- b=Gvpz+Zt8d27thzL6XWHWafZLvBKA3DxTZNOYm4fmu4gEf1T5JXJeNxJn1S/fmNXNuiuBhUfkbZVJ7p5DMp6m2ncdCWrdArSWMpXxV5Ghe+C7MUYoPeFPG9QB/UVR8NlCnyVLFHd2xdA1dnmRFIHrrVD1RlBnZNQYEzRloDkbs8fgdZz0qi385mPPqedRwhK3WHZ/fi+BWOSxBPOmFNDwhAUV1DQ4Lg9HGFly9igg08Ez/R0P/6ush3uj4Ajz/oap+MBnylJf83xLAqn/ZjePBusVZ0qYcOVGb1kY8uPg3ytQlHNue2i1g1bfT+AWyUPdVXzxFfedUF6d2McaPLfnhg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=idd3KjhswRGF+dnxDbOjmWA68SsQTWDdpAbv8H6q+3g=;
- b=jiKbfEFaEJ2S0q1mg2ZOM+ewgbCDh7QQGvN5urRfrkF11ZCZ4geWdkhCCoqtLabjVc3VPUgADlrVYJ1jB36cDfEwbXaZ4SePC8oDKCdQNX8flIoJrdtRpaXPSQyweeirPKcXUeO0tLFHUspquP3oy4B8w3Y75uPc/w4xt1UDDkuvNyuzfw6rDgZ0H3a0VPWl+xBCrDR52mrI3TIgXCIzhNJnfi5pN5em7WHV584vsGRQIj8CtfIZ0jniRmU5HBVK6+7VfnEOqnjpKDuPD26dbFQWUucPhCxUrHwHekn2NcNp/09T+f3KIorx/t6ClPgIQTtmRKPG4NiWFcByzwhYSw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from PH0PR12MB8800.namprd12.prod.outlook.com (2603:10b6:510:26f::12)
- by CH1PR12MB9574.namprd12.prod.outlook.com (2603:10b6:610:2ae::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.14; Tue, 3 Mar
- 2026 20:08:56 +0000
-Received: from PH0PR12MB8800.namprd12.prod.outlook.com
- ([fe80::f79d:ddc5:2ad7:762d]) by PH0PR12MB8800.namprd12.prod.outlook.com
- ([fe80::f79d:ddc5:2ad7:762d%4]) with mapi id 15.20.9654.022; Tue, 3 Mar 2026
- 20:08:55 +0000
-From: Yury Norov <ynorov@nvidia.com>
-To: linux-kernel@vger.kernel.org,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Kees Cook <kees@kernel.org>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Mike Leach <mike.leach@linaro.org>,
-	Moritz Fischer <mdf@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Russ Weight <russ.weight@linux.dev>,
-	Shrikanth Hegde <sshegde@linux.ibm.com>,
-	Suki K Poulose <suzuki.poulose@arm.com>,
-	Tom Rix <trix@redhat.com>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Yury Norov <yury.norov@gmail.com>,
-	Zhang Rui <rui.zhang@intel.com>,
-	coresight@lists.linaro.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-fpga@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org
-Cc: Yury Norov <ynorov@nvidia.com>,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5/5] fpga: m10bmc-sec: switch show_canceled_csk() to using sysfs_emit()
-Date: Tue,  3 Mar 2026 15:08:41 -0500
-Message-ID: <20260303200842.124996-6-ynorov@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260303200842.124996-1-ynorov@nvidia.com>
-References: <20260303200842.124996-1-ynorov@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BN9PR03CA0179.namprd03.prod.outlook.com
- (2603:10b6:408:f4::34) To PH0PR12MB8800.namprd12.prod.outlook.com
- (2603:10b6:510:26f::12)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730C0226863;
+	Tue,  3 Mar 2026 20:38:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.154.119.183
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772570326; cv=none; b=B95fxzM1GpEKiVJWeuW7PVFf4wLfo+A9CBCnOoMWwYCqHAhy0vifKTxpYIvIXn3/4G3X2zQGNTVas3FEer6x8DGljXuNJtGU5OERB63Y7ztmEKOZlzuZQbcRFlQ2O6jylYA0ED/2R7j72wBkCUALjS16+SSpcOzTkF9vuiocbJM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772570326; c=relaxed/simple;
+	bh=mXJ4UmUVxuH0ShdzLqcy4AQHr3CDFCHNtTjfyg2qfto=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aynSbaWCL5I/eMUdSL6o5RMPiZxepL7wcQlQCV3IJ5Du/wWGtwRdcA+1wQb3xxwpqUllnM6EixzfN/WErOR7l5DxuekhVqG4849fKL74JpVLy5NJ3BCkL2AVTkuvn9T7tRSynve3oxQUeC2Y/6AYR162MBJaE1kRqqpaysbk8qY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=kF5mi4y4; arc=none smtp.client-ip=195.154.119.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aurel32.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+	; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
+	Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
+	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
+	bh=ZN9YjA7A/E5P7KV/eCgsd8bu8xvdRjvgUVEuCuL5dSI=; b=kF5mi4y4bri056BNgYXfAyhKzE
+	SLZLqP74NX0rq7RrkYwmymPIZ5Vvl1XuDfCR7Ua3Ba0ntlotelICnOhisN57V4qyfT6mGODYpUwZ6
+	o/cIpbd7nuZxP/TOEoSWjY+mE/K7qMOnHo+IJUrA7/vMxUJ+R7rR+nFH73VMVK+kluEwN/FYNOU97
+	rA5pA0P/IVs+eXXCwoJg/bacFLbB/WSmY1pnA13Lf8XuOVyuUhrOX3thTmu1/iH3HVHIKxVQ0tqnX
+	45pnL5MYzw7X51YFEXGzONYfvQLpF1rHdnjlEwUGDRHyMEnxwwqMneDqOWXiOu9BXoY4SCnQCFHEV
+	O0ZC14QQ==;
+Received: from authenticated user
+	by hall.aurel32.net with esmtpsa  (TLS1.3)  tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <aurelien@aurel32.net>)
+	id 1vxWVf-0000000EkpA-3dfF;
+	Tue, 03 Mar 2026 21:38:27 +0100
+Date: Tue, 3 Mar 2026 21:38:27 +0100
+From: Aurelien Jarno <aurelien@aurel32.net>
+To: Yanko Kaneti <yaneti@declera.com>
+Cc: linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	Yixun Lan <dlan@gentoo.org>, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	"open list:RISC-V ARCHITECTURE:Keyword:riscv" <linux-riscv@lists.infradead.org>,
+	"open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit" <spacemit@lists.linux.dev>,
+	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v5 2/2] mfd: simple-mfd-i2c: add a reboot cell for the
+ SpacemiT P1 chip
+Message-ID: <aadGw1fIlJyNNoum@aurel32.net>
+Mail-Followup-To: Yanko Kaneti <yaneti@declera.com>,
+	linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	Yixun Lan <dlan@gentoo.org>, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	"open list:RISC-V ARCHITECTURE:Keyword:riscv" <linux-riscv@lists.infradead.org>,
+	"open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit" <spacemit@lists.linux.dev>,
+	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
+References: <20251102230352.914421-1-aurelien@aurel32.net>
+ <20251102230352.914421-3-aurelien@aurel32.net>
+ <b51a62513daa9d2390031ec350e0b33bdb7e54aa.camel@declera.com>
+ <aaC78FTN31QYaVg0@aurel32.net>
+ <990bc03ed2baa05e619f0aa9cc6a23acadd66ea6.camel@declera.com>
+ <aaS6xeKFZz06fb1_@aurel32.net>
+ <aaXuWwyA5NzBZzlW@aurel32.net>
+ <36f8df695463e5ff3eaaffbac357fc73026f7373.camel@declera.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR12MB8800:EE_|CH1PR12MB9574:EE_
-X-MS-Office365-Filtering-Correlation-Id: 858e782d-c9f7-43eb-2f0f-08de7960b2d7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|10070799003|376014|921020;
-X-Microsoft-Antispam-Message-Info:
-	hsXzQZZIAJoM0aaHOBprBxdvjPgjMXXAf4OVxDiKqHThIpcPlutbUZzqt4I85NrSwmYNtrpsZEUobgQgztWbteyR1tUiTE40CXvGsS/C5C+ifJu/RZYSUciQOntw4bBnMrSSk/csxx1c3LJ83rEmAJI5HHlDEIBpf+ARHOKxFEdtR4GqZ2nsZuMPbN1J5nMH6Eip7+NfzyenElqtmHzYyAx5I5h9c0dcK/4tUd/6TFXTQXY/OlLbz1RTRsGAlbnQMBVC3sBVcLzDIs+65nStWwnQ4d0xRxZx8DemPk4o118tj4xpIQeOPQCZuyYCT3gD7Q1yxHS9CPlKOWP2g9bwzwIaDJv8ml9WUnN/sbwLe5hhyDFXq/WHSmkBiALIq4pL5iwLZGSEmJc8F55ZHbWT/3DdZqWvyXmysALWD1+6MZBzO/KSuM1Y6rQwsErzKcULVilHHcV6t+r5BrssCZ212PTAyl9ZBAeuKJ8aR284EDY+xOB2vmrp3AE2UQXCJsSiKqNQdOIfnbA3KsKkmpqqtSjpOQ3hlVI2SRyxrRPo3wihBZPAkfLq980v8hfQfYSt8ab1a+AQfeCdFB4+QtEVWSf4qAP6el7gYWprq5P2MxBZY/+Fz51Y+aMY6CDsb+9JkusTk/x4M0myujIKQMJdcDPbS9nK56/FrOfh66B4CbFxG2k6jNcoIefvvjqUKwsDuHgZ+FZ89ziFHRu+mH8Xv7UOa5gDRKQ05cO/wkcfI8A+dZ/o3ZrT50IuE7WITLqgH6DOuiQJBg7V8RSkd8s6oQ==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB8800.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(10070799003)(376014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?QTFEQlhHMVVvV1FtRlBOWGdLbGpnb0c5UHp1OUs4QjZtSEFzanNhbDlFVm9S?=
- =?utf-8?B?dW14bnMzU05KckZGVW82eExHcUNWSExzS1RCMEVkWHB5SmJWU1M2LzNMbWQv?=
- =?utf-8?B?UUNzck9aNWoxb21WUldLdm5CbGhRUkdOc3BMMXV1YTdseTJqL1AwYkpkWitC?=
- =?utf-8?B?WUxQcnJUZDBEWnZpdkJmdXVWTGh1cFV1a2tJN3FxaHpYc3Zha3NVemludnla?=
- =?utf-8?B?TCs1TnFRNFRYNUJma2cxZWp0NlU5L1ZnTFVSRFNCTGRBTGtKRHBGYmNPQ2NT?=
- =?utf-8?B?cjl0eGE0Q0RRcVBtSFpPZnJwb0ZXandBdS9MQzVna1BVZlBXQ1dQTHR6dXNX?=
- =?utf-8?B?K1FaWnRmOW5FYk1UMC9sclkwSFJLQzlEVk1LNjZQbUFhWXhRdGI1VlQwMUQw?=
- =?utf-8?B?THB5a3YrRDFXaE1nS3Z1QkdORkZ3L24yK1FkVVNiRStqNWlBcy91ckcxM1g4?=
- =?utf-8?B?eXJrNjR4UkJFdFRnNVBnYnRkUjdJbzJpUTdtdlJJcWc1dEwvNTJDc0dpTk5W?=
- =?utf-8?B?Qk5ucHBIaFgrbGZjSCtLNWVkVjhNRTB1a2tFaFE3anVQWFZZQ29GNTY0dEpK?=
- =?utf-8?B?UUxjaVdkSm95OVBLTSs2alVpSGJ2WEdydHl3Zk5MekpkTGlPdjRRTG9VSHZX?=
- =?utf-8?B?UDQvUXlLR2QvajhJWWVabnB6c0lQdnlEUWZhaEpwQlFEdWRhYmEvQnU2cGZy?=
- =?utf-8?B?RlhIeGlIaUpvMnByQjVZRUxDR0RFZUNpUk9kNWdmOXRLZkxHZTVYTlhFd3dN?=
- =?utf-8?B?MXN2WVdHVnY2MDh4TmEyL2gvd3RuSTR5Y3pCNDRPb1pjK1k3dmsrQjRsYjh2?=
- =?utf-8?B?WDM1R3NGUVNwQ0VNKysxTmxsbDhEWHJ6UGhTZHF0eW1zWjFOck5LZXVnU1lm?=
- =?utf-8?B?b3dLb0RPcHhaZjhBQngyTG4wMFpXY1pzVWNyRDNrcW9yRW9taFVMV2o5MlND?=
- =?utf-8?B?ZkVTdGJSc1ZrQ3NGZjdET1FpL1hxblRFTlR5aHJER2RoOWVQNWYxQzVDNEVF?=
- =?utf-8?B?dlNPVXI1WlBEN2RQeEJkUTRXeHlRekRldW15MUFodEcrMUR3NDQ5YjF0QXZ3?=
- =?utf-8?B?aENqREVFMFcyb1NjTnN0QVR5aGFrZlQra0FNZU9QNmVqZHlyME5PKzZYOERz?=
- =?utf-8?B?ZEU5cmtUTDV0a1hNZEtIdlQrK2JMY2VxMDg5UzNTKzZRQUM1QW9NanZZRUFV?=
- =?utf-8?B?b2s2YTNYVEcxYW1sa2Y1NmU3a0xUKzNqVVlzSG1TNkRuRWE0TjVKc3RwQ3lX?=
- =?utf-8?B?REJxaUNSRDlFWXU5RDlLc0hNS1NlSlMxM2Jhb2ovcFBBRGtNNkxyK3hvY3FO?=
- =?utf-8?B?cHRUMEU4TTBhSjJqaEhSZE8yUzVtR3BMOURQL2hlQ0l4UGRNaVQwL1VTOFVv?=
- =?utf-8?B?QlJwS0FFWTRVOEgzdmZOd3d2OS9rUmJEWE9CbmtSVXVlQ0VTeEoxMGNjL2VH?=
- =?utf-8?B?K3Q1Zlg4UUNFNjl3YnZUZm5XdTZCbFQ1SWllK3N5dXZxT3dUSk5vc28xQ29O?=
- =?utf-8?B?ZjdBRnA4VFBLbEI3S2RkL3djSGxBVnZ3cmZLZkRhS0VZWGZNQWZETUF6NUNl?=
- =?utf-8?B?SWNnTERHcDlWaDlYelZwbWFIMGRMWnVWNlFyL1l0emhxY21EQXcrRVFmeHZP?=
- =?utf-8?B?NUE2RmxZM3YrVWQxSFNpZHJ3ajc2RVMrczdPdDhZamZFMUJKRTNyS080TDdj?=
- =?utf-8?B?WjkyaGJ5ZlZBOTdTOUtYQms3eFlSUmdob0xDSVViUmROY0c4VFRvSnhJRk40?=
- =?utf-8?B?WlFUclJvc2JRMjVoME1oWjVDWit4ckZIOEJLSmQxQ1Y4L1VSSmtvNmNJV1Zw?=
- =?utf-8?B?ZEVCYXVXSEYyWE5WR1RpMGhmWlRaaGlqUkgrOTY4cmRnbEdUS0FrNS8veUVp?=
- =?utf-8?B?UEZOQm1MbXJYbUJrVXRRVGVtNndyb2dvU3I0eXlhWVVtOGxSdlUzS0VUamFz?=
- =?utf-8?B?Qjk5RCtpNHBFUDdBMjhQTElMOTZvWHJ1VUhkTFFRbEp1M1VxNytHKy9CUEFJ?=
- =?utf-8?B?SDJXMVpzdW9mcGlNMXY3TWJDRXA3aXJxQ3lKRi83NHJCbThTbHZDdlhRdjlW?=
- =?utf-8?B?NWFZSitkd2l1bzVhSzhtS1NHTlhWeWRhVEw5dzVhYmk0YkhGaGpSZGFXVnIx?=
- =?utf-8?B?S0hkSFBLVENtVkIrYTZYOGhmU1RKSjRGMHFjZHcyUDgwMEErSnBmbU5ybUtW?=
- =?utf-8?B?ZThXQTdNc2FCS1dLay9YRmNDT0VkU1czNFhkTXZxbGljYlBVV1VHS0Vmc3lK?=
- =?utf-8?B?TVdvQlo1UC9Vd1VwOE1KTjdDTTkvcXNtejByaDRlTldOczJENHR6dlJrNncr?=
- =?utf-8?B?cG8wdTFVenJ0ek01YmFqbk5qMllVazJ5eG45WVFsRU4walVLVjhsZUppM3hY?=
- =?utf-8?Q?FUdLT30Q9wmpBbtD326G/277HT5v2Mihsuydg?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 858e782d-c9f7-43eb-2f0f-08de7960b2d7
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB8800.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2026 20:08:55.9083
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 45ZRDZX3bdmB7NvpBqOaLvWjXqQp7KLFfxydMoVsBi4rjuABLo/bWRWr18C1xj4FgMRziDue0/gt5dhuQzfjHw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH1PR12MB9574
-X-Rspamd-Queue-Id: 0A7741F6AB9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <36f8df695463e5ff3eaaffbac357fc73026f7373.camel@declera.com>
+User-Agent: Mutt/2.2.13 (2024-03-09)
+X-Rspamd-Queue-Id: 0EF791F6E73
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[nvidia.com,reject];
-	R_DKIM_ALLOW(-0.20)[Nvidia.com:s=selector2];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[aurel32.net,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[aurel32.net:s=202004.hall];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43529-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[vger.kernel.org,kernel.org,infradead.org,linux.intel.com,linaro.org,arm.com,linux.ibm.com,ellerman.id.au,gmail.com,linux.dev,redhat.com,weissschuh.net,intel.com,lists.linaro.org,lists.infradead.org,lists.ozlabs.org];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[30];
+	TAGGED_FROM(0.00)[bounces-43530-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[Nvidia.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ynorov@nvidia.com,linux-pm@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[aurelien@aurel32.net,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[aurel32.net:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-pm];
-	NEURAL_HAM(-0.00)[-0.999];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,weissschuh.net:email,nvidia.com:mid,nvidia.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,Nvidia.com:dkim]
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,aurel32.net:dkim,aurel32.net:email,aurel32.net:url,aurel32.net:mid]
 X-Rspamd-Action: no action
 
-Switch show_canceled_csk() to use the proper sysfs_emit("%*pbl").
+Hi,
 
-Reviewed-by: Russ Weight <russ.weight@linux.dev>
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Yury Norov <ynorov@nvidia.com>
----
- drivers/fpga/intel-m10-bmc-sec-update.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On 2026-03-02 22:34, Yanko Kaneti wrote:
+> Hello,
+> 
+> On Mon, 2026-03-02 at 21:08 +0100, Aurelien Jarno wrote:
+> > On 2026-03-01 23:16, Aurelien Jarno wrote:
+> > > On 2026-02-27 13:29, Yanko Kaneti wrote:
+> > > > On Thu, 2026-02-26 at 22:32 +0100, Aurelien Jarno wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > On 2026-02-26 16:32, Yanko Kaneti wrote:
+> > > > > > Hello,
+> > > > > > 
+> > > > > > On Mon, 2025-11-03 at 00:02 +0100, Aurelien Jarno wrote:
+> > > > > > > Add a "spacemit-p1-reboot" cell for the SpacemiT P1 chip.
+> > > > > > > 
+> > > > > > > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+> > > > > > > ---
+> > > > > > > v5: no changes
+> > > > > > > 
+> > > > > > >  drivers/mfd/simple-mfd-i2c.c | 1 +
+> > > > > > >  1 file changed, 1 insertion(+)
+> > > > > > > 
+> > > > > > > diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+> > > > > > > index 0a607a1e3ca1d..542d378cdcd1f 100644
+> > > > > > > --- a/drivers/mfd/simple-mfd-i2c.c
+> > > > > > > +++ b/drivers/mfd/simple-mfd-i2c.c
+> > > > > > > @@ -99,6 +99,7 @@ static const struct regmap_config spacemit_p1_regmap_config = {
+> > > > > > >  };
+> > > > > > >  
+> > > > > > >  static const struct mfd_cell spacemit_p1_cells[] = {
+> > > > > > > +	{ .name = "spacemit-p1-reboot", },
+> > > > > > >  	{ .name = "spacemit-p1-regulator", },
+> > > > > > >  	{ .name = "spacemit-p1-rtc", },
+> > > > > > >  };
+> > > > > > 
+> > > > > > Perhaps its safe to merge this one now that everything P1 and I2C is
+> > > > > > already in linus tip ?
+> > > > > 
+> > > > > Unfortunately, this patchset is still missing:
+> > > > > https://lore.kernel.org/all/20260207-b4-k3-i2c-pio-v7-0-626942d94d91@linux.spacemit.com/
+> > > > > 
+> > > > > This means the reboots work most of the time, but are not 100% reliable, 
+> > > > > and that's the reason why this patch got blocked from merging.
+> > > > 
+> > > > I see. Thanks. Sounds to me like sometimes working compared to never
+> > > > working is better , but anyway..
+> > > 
+> > > I agree with that, but the decision was to hold on this patch until the 
+> > > I2C PIO part got merged.
+> > > 
+> > > > FWIW  with this patch and the pio patcheset I get this rcu splat on
+> > > > reboot (which is still working). Similar splat is there without the pio
+> > > > patcheset.
+> > > 
+> > > I haven't been able to reproduce the issue here after 10+ reboots on a 
+> > > BPI-F3 board, but I tried the patch on top of 6.19. I'll try to build a 
+> > > 7.0.0-rc2 kernel and report back.
+> > 
+> > I have tried that, and I am still unable to reproduce the issue with a 
+> > 7.0.0-rc2 kernel and a BPI-F3 board.
+> 
+> I can still see it on every reboot (with the patches that allow reboot
+> to work). Do you have CONFIG_PREEMPT_RCU in your config ? its default on
+> when anything PREEMPT is selected. In Fedora its CONFIG_PREEMPT_DYNAMIC
+> that flips it.
 
-diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-index 10f678b9ed36..ae364c6636eb 100644
---- a/drivers/fpga/intel-m10-bmc-sec-update.c
-+++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-@@ -10,6 +10,7 @@
- #include <linux/firmware.h>
- #include <linux/mfd/intel-m10-bmc.h>
- #include <linux/mod_devicetable.h>
-+#include <linux/mm.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
-@@ -183,7 +184,7 @@ show_canceled_csk(struct device *dev, u32 addr, char *buf)
- 
- 	bitmap_from_arr32(csk_map, csk32, CSK_BIT_LEN);
- 	bitmap_complement(csk_map, csk_map, CSK_BIT_LEN);
--	return bitmap_print_to_pagebuf(1, buf, csk_map, CSK_BIT_LEN);
-+	return sysfs_emit(buf, "%*pbl\n", CSK_BIT_LEN, csk_map);
- }
- 
- #define DEVICE_ATTR_SEC_CSK_RO(_name)						\
+Thanks for the hint, that option was not activated here, it's not the 
+riscv64 defconfig. With it I am also able to reproduce the issue. I'll 
+try to debug that and report back.
+
+Regards
+Aurelien
+
 -- 
-2.43.0
-
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                     http://aurel32.net
 
