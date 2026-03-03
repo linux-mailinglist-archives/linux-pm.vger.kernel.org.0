@@ -1,270 +1,232 @@
-Return-Path: <linux-pm+bounces-43519-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43520-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GN4bEVgWp2m+dgAAu9opvQ
-	(envelope-from <linux-pm+bounces-43519-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 18:11:52 +0100
+	id qC6kL/Ubp2kUeAAAu9opvQ
+	(envelope-from <linux-pm+bounces-43520-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 18:35:49 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFC161F4730
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 18:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2700C1F4B14
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 18:35:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8CF1A3022633
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 17:09:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 093A43074A1D
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 17:33:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C2023C6A52;
-	Tue,  3 Mar 2026 17:09:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55BBA48AE18;
+	Tue,  3 Mar 2026 17:33:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xLsog1D8"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="m1H+/Wj7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012007.outbound.protection.outlook.com [40.107.209.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2A73370D71
-	for <linux-pm@vger.kernel.org>; Tue,  3 Mar 2026 17:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91CB3BED7D;
+	Tue,  3 Mar 2026 17:33:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.7
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772557787; cv=pass; b=B+ag55LQT7XJI2SxLkSpku9JpnVEeBi1H1ucctmTOr0jJzKbTeDcedNv6D28hUSgBDe3GzZS1W6mwoDpyreUybeX/fqeM3/sRudgJGR07bCrMHKYbFkZGthoMIr+s2HP5VD3rP6amZT7Gyr+iIu1S0GUWC1A+0HsAtdUEH79A8M=
+	t=1772559185; cv=fail; b=kmFbyssyTRciJiDX27Pdv4IMBmxRdznkYTumkJ/ED0JW2XE5Fp83zU7w1bwB7cDio43LrJCEAZ39P6igcC/h8Qx66+nkwFs9cMDXa213dx40G3/OoP1afuoSbEYPCaNHl++2OvFontyKNUbAbgYyVzmOMhFp674PsP7RppRcDyc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772557787; c=relaxed/simple;
-	bh=rdt8oIf1//UQgJmdBNW4JtjdwtTIkUas8nwXJnGiyUE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aFFeYU6eIS5nFlbRmLm5letU/Xl2eDkj3snpmO0xKUTISvFPWknmC3aOFbj5FpI9qGLHQunbcl2TdCI0xVH0Xd09XKFC/CXK9S9tlrU0vknU2zQjFNrAMBxo9O5CR5G6lVIaaNisqLEo+T14top0ol7NsleRBxm0vEYj8z8EyJQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xLsog1D8; arc=pass smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-389f9e70ae6so101372131fa.2
-        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2026 09:09:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772557784; cv=none;
-        d=google.com; s=arc-20240605;
-        b=lULQrfJ0G6h1T3oW0fA5fIg/Hoaxs3qbLK4D8NOtyQplddVacYkJirMF3M+/X6hs1p
-         b+3Q3WrYrdm1dCujd8xfMuIHoCYUyEtNNTafyMLMQCNR0GSic1xZ2pB74lPwMelX9Ypa
-         E9+pB0BUFhQ3Uwcx7ybfHEFfucwveuNWHa+dU/IuwwSii1u6fLWTXhQAiBb3m4Az5/C8
-         eIaA0RWDncIW4n3OE+x2DZZeeT4fIlLmcT3jfEhESOMsgjZtPxDPpguSbMxIjznJ6+qO
-         oDDNhaMamBsCFiOw5kPP2XfnKrymaANeIjAq1O1K8mF7Ba5KHd94Oi5cduMcUDmHGlQk
-         2aAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=rlBdi6EAVEtO25NMwMX/W9R62nC12Yqbu1jwDW8XMHE=;
-        fh=6LJFvDi7AcSjBgQbfDFi2aVFxiQy3nMjUy1PZoDQz/s=;
-        b=Sky+N4LJQn/0v6n9avvfbdysHMTlEttKTYE0Z6qcayTBCjJXEcDsDXakIQ/SEF9CIr
-         /T7ZsEp6vGwV7zsE9p1hcQlw9xKE3pYocHD6yRqPJTPhc62ga0hUaz7jWq9n8ctCW3U4
-         p0bDxv2Yt8dAyaB06qGKSApsCiO08RuPMgghBkQoASX0IyswjDrJhljgvUaC8fam7Emp
-         oP7Blany2W0yUu1eSmU4EEs+0j9GiU/rlNtvU7HAv4MUBNHoMkNFnR0BVDFOcMtsNlu8
-         jL6RdbA6ZBOJtTrszS/sV3kE3JdwQwY7JPgxvM/KXxAGfoVrDFC6bnTsjtV9vouygi4y
-         EITw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1772557784; x=1773162584; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rlBdi6EAVEtO25NMwMX/W9R62nC12Yqbu1jwDW8XMHE=;
-        b=xLsog1D8gvRfw38s4cFQ/f52YLirvXHDnACGmN+Pg53TzS31AMctE59zY2bp4ibYeK
-         4Hvs5z/Dkw65wTQnovwaxbJ/YKuHjcyT/C629qet5nbOk9AeV47eau05s0+f9xV9U/W7
-         QpRIa32cgvJRgOySTFt+E3eWhk2wzztnjS23PMd+U1Jamq5Iln1VIY6P/1DJ8/DygUlM
-         VykeQcTrJmmYs7J06C5TKWUzuwBcFvQQlzhm+KcjuHO903COzfyypvPzXNDLH2YJvq0p
-         eOjh0XrdCs9DfmNzJ8nFhVooUhyOEgMIfPz8gGr3LiBYn9wAlhgUlt4uTpCrTYf5WTj6
-         JIWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772557784; x=1773162584;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rlBdi6EAVEtO25NMwMX/W9R62nC12Yqbu1jwDW8XMHE=;
-        b=UOhG4eu/TuXQAan3YAUDkNxuVO8s5UJ8n9m+C4Wd55KzFzqz4R+efEc/gpOtaQQair
-         YwL38bSIAaoE/dGFQC3ND66Sa3IcRc13Fq9h8BofIdowsFpmpSMiXlzOZgZ+4wBTNE8F
-         /qH5HJhooac8TksxuFXBOZm1qf7XeIhBFEQBiW/7zsLHrBnGIFmRCtwedt03N0/Bpw53
-         5PVlLEPH/Vv3sdZYS2ufJGqpjwBuHbB8m+7NRUbhQHzmF8kBVp24ZJ4UuWY33HETzQep
-         5FgrCNlYtwd2X6Ac+aJ8/M4vNN/dsTxoJg7XaWJAhSp0qr8Rce2Bn5TyFfPvyjMOIsMR
-         4kbw==
-X-Forwarded-Encrypted: i=1; AJvYcCUdnFznLVd2V0nNIat2pBBEr155BaOlhW1nekePKcGpDpCfeZ6ZBsabXpuxjRpdDpUujDgCTQ/OhQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeJySq4BXPNQLNFK2dZavMOXnbn3DmzgmXM1KJMP9c3+svsRAl
-	WrJvYuL/5PLQNr0MxKyvDqdG1fVOUTnZKsXKO6kwdWpYtbWjC37luhlX/T92gMbKNeDIWjiTeWO
-	BdL9VS8hvYx+f8qsTwxSM35LNa1wQurz5Q25pfXIUDA==
-X-Gm-Gg: ATEYQzzOQjs3/9E6SIO2iWB9sqPH2deisPKw3NT2SU44hqw5UDGin9gRboCDo67ORLP
-	QMobkTNbSHDHNfLS+slqLII4e2oX/QwwbCVgVHEPCdPXlQ4nJej+VVbuFvVKjE6pcdTc2STYhfN
-	9nk2WXz8I7FFnYZFVzatgAuD0WJ9rGNL9Gt5R8FBi/5XodPrde28AI5mJfHDXGXzSefynuahayJ
-	COvMiiWpX5JohcRw6aT+TcZHNqm4c+cZ8cclDJdw8yPiD4A/pP/wwt/gerqvgkGMSkIMGqSkxp+
-	XsG8w+bv
-X-Received: by 2002:a05:651c:1c7:b0:389:fa42:b266 with SMTP id
- 38308e7fff4ca-389ff1305bemr121187391fa.11.1772557783810; Tue, 03 Mar 2026
- 09:09:43 -0800 (PST)
+	s=arc-20240116; t=1772559185; c=relaxed/simple;
+	bh=e4sYtq0I+Hhu2C1K+SGw+TEPfN35XYUM6jK4Gq50Vp8=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=cpDLOkbnfAqhz54/vsEeJIN5daMMoZ5H72O2Llq0N5X7pIX6cMDEPALfkBhQRbcSwPU7lVpczTQjfvzeRkjFgvoUtu7GnCnkoXyS5E6/29t3+8ZBb5wz+tH1q+/zbUYeow+JMT9h/+L7BOTbAbMM+ZjBYf20OK06bOLp8vxVw9s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=m1H+/Wj7; arc=fail smtp.client-ip=40.107.209.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bl+R0xbf7clHyKAkKDLRCHxUl6CLFbA1X9HRK7AaEWJ/PsTT1qFnuHXIVm+XP+ykNw+dpHP9ZvoiG0m5OreCXZcreE479Lw/Z8xmmWQjg6TpyvrvIzJBzESj5GmFaGA3bWYUf6N2lEkpj3fIM3eIk9ugkswsO/Pqj7W9cTsk0ELDlNUw2IyMN/bJET+c+OlFCUdy5Lk2zTtFeYtvc9jRk0BYAZmd1+eXX+Rnee5UgDjfIcIsOqphQLuRe4gMXORSuJ98U6NNaXAgWtcVaSloZ8fyXa5UuUlTTqPc/7hIZAeEedqE6fPlVq3GCYTcL0o2gh1yYWZArTTDahFaV4qHog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GJScsBtqVNP7sJ+Pm7/oen+PiT0zJQLonM1mP7RzOI8=;
+ b=G3HjhjRWHGLbUGxLvMLArpQLZNFmn8bGxO8eZeRaL//1DKtgBlOx91YDGIgyXzlBwe38hxBI2aplUblEEdZd4MOlNkWZHUd/SDKlzStJA+b7i28kQ8BlPxSqSyLeeDL8odcU+2+dSfK0+lIwd3FD8Nw0g36IULTZICoqG15b18MB9WzTw+jOdw4m/O6WJb/jPaUS9PgjQDhOJRwPlCsuiCuZZHsjpN6X6c2k8eycvYIUx5zZTMc0kRf30C5dFhYL5Wae7VDag5NDy8yia+8MUaQTf9X1obGfXeHrY7fVBA3SeBb3l59H556oWsQQ8gVL5nijFlAI3DgvdouFYyxgqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GJScsBtqVNP7sJ+Pm7/oen+PiT0zJQLonM1mP7RzOI8=;
+ b=m1H+/Wj7JYTSazM3ULsujtrIy1x9FvG034n1rZtA5T15Pa1yCsOrwSaMVVBwU05I2asEh7RgYxgVatMMGDLx/aBmU+9byN4h/85Se05BSYAEj8OmGheCKkVTV3BEPnguAQsX2XJARpYGkPiKAJ4NdX6cnY1HB8gxW4/WgBBMVi2poOmdAwNE1qFyWryz6HdGtykfxw+79S4hwYn+TPDITt5CINxPDuv1XZ5LuULu8LIJSkQ7kwxBESmvYCyn/VOlOTHDWHmGA18Xot4JFYPjQ5TeVcMipRU9SB1mAUna8qy5UMP+bF/rEqvDYeal+dPY1aiMpUn271k0Woq2OdT0cg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN9PR12MB5179.namprd12.prod.outlook.com (2603:10b6:408:11c::18)
+ by PH7PR12MB7137.namprd12.prod.outlook.com (2603:10b6:510:1ed::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Tue, 3 Mar
+ 2026 17:32:43 +0000
+Received: from BN9PR12MB5179.namprd12.prod.outlook.com
+ ([fe80::cf08:f59b:d016:c95f]) by BN9PR12MB5179.namprd12.prod.outlook.com
+ ([fe80::cf08:f59b:d016:c95f%6]) with mapi id 15.20.9654.022; Tue, 3 Mar 2026
+ 17:32:43 +0000
+Message-ID: <48bdf87e-39f1-402f-a7dc-1a0e1e7a819d@nvidia.com>
+Date: Tue, 3 Mar 2026 23:02:30 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 0/7] Enhanced autonomous selection and improvements
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: viresh.kumar@linaro.org, pierre.gondois@arm.com, zhenglifeng1@huawei.com,
+ ionela.voinescu@arm.com, lenb@kernel.org, robert.moore@intel.com,
+ corbet@lwn.net, rdunlap@infradead.org, ray.huang@amd.com,
+ gautham.shenoy@amd.com, mario.limonciello@amd.com, perry.yuan@amd.com,
+ zhanjie9@hisilicon.com, yumpusamongus@gmail.com, dedekind1@gmail.com,
+ linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+ treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
+ ksitaraman@nvidia.com, sanjayc@nvidia.com, nhartman@nvidia.com,
+ mochs@nvidia.com, bbasu@nvidia.com, sumitg@nvidia.com
+References: <20260206142658.72583-1-sumitg@nvidia.com>
+ <48b52f98-119e-4693-806b-78d47f7a43bb@nvidia.com>
+ <CAJZ5v0iOsqoZx0EZ3AqEk_8mrGxSj6wj-m8phRJ0cT71NTuBWA@mail.gmail.com>
+Content-Language: en-US
+From: Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <CAJZ5v0iOsqoZx0EZ3AqEk_8mrGxSj6wj-m8phRJ0cT71NTuBWA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MA5P287CA0124.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:1d0::13) To BN9PR12MB5179.namprd12.prod.outlook.com
+ (2603:10b6:408:11c::18)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260122-pmdomain-hierarchy-onecell-v5-0-76855ec856bd@baylibre.com>
- <20260122-pmdomain-hierarchy-onecell-v5-1-76855ec856bd@baylibre.com>
- <20260127151735.GA1699112-robh@kernel.org> <7hjywtzaiy.fsf@baylibre.com>
- <CAMuHMdURxN=kBQHJKnsTVEQPeuB41r5kZy4sgFNqg=U2ynuZMw@mail.gmail.com> <7hv7flrb36.fsf@baylibre.com>
-In-Reply-To: <7hv7flrb36.fsf@baylibre.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 3 Mar 2026 18:09:07 +0100
-X-Gm-Features: AaiRm50WKBsQhrWQrTeBP6GpkV839u459YirvJ0kBggs5SGvcv-i6i3nAHRwfPc
-Message-ID: <CAPDyKFq0JAKc693d+RrPEBCAH--r+gobf822dQ5Ao6f2gnjRrw@mail.gmail.com>
-Subject: Re: [PATCH RFC v5 1/2] pmdomain: core: support domain hierarchy via power-domain-map
-To: Kevin Hilman <khilman@baylibre.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>, Rob Herring <robh@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, 
-	Cristian Marussi <cristian.marussi@arm.com>, devicetree@vger.kernel.org, 
-	linux-pm@vger.kernel.org, arm-scmi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: AFC161F4730
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5179:EE_|PH7PR12MB7137:EE_
+X-MS-Office365-Filtering-Correlation-Id: f7efd4d9-fe6b-4bd7-12c0-08de794ae04f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	JDHzVck9TUQu5dwNk21Nxqu2txLyvc3khKVt/q4MKcJTBDjfk1BjoaqFtWkbRUamQF/kkUY4mA5imAURTy2kOS4fU3/3vSyX1t9WviWWyU9kY2tKufH9xmO9EFKp3K3EPZO5apGjk1EsLl9uu9ocWUmlp/H4c091Pt0E8EdPq5YegO1e7g5POm6PQquBAwkAGBM+FkD8saKqq9tNxs5gOkssJv/1A+3/fYSdT7XuP8nDIGfWtTKlxnqXQQfxEVy7oNLP/xiguib0oWhq6uAT1lMwwo0Y40SkX25nqRpGMuqa1asvLsdTjyrVR5HE1mLWH8eiAAwGhLQKU1mm9AxtlCQ2c724aqO99s7I1Z1tjoxV8eaz7e4+AtDXD3lAHW8uhjOZkPKWJG++ohJVZxmgxNN1fixgiYgbjsH/bdZ4iUm3AHmiWP7+3RpEGxkMAA73pA1R7xIdfAynfWSweC21A1OCU+VavOqsJU+XYKgLuqSYpQ9GaLTnAhC9v4VEdP/OCqx/t69pNf3nOwyFXeTseyOXYjlrED9ISdRwXY4FtEFCtKNxeb6Zfzj9UOFaBDL2crSiA3zR4xASTCDrox2RCIz937BkJjHrZjZe01S68MjhDx8ugoCblwzSvauPm2Q0MJ/mNnl34FakQ3wD0+YZTTQ1zbuBQB5UGDC6D9Yr1nbp7Kp3r5D6kqXusaZ9lckz+qt4f3gLSxB1uRQKOAG2vnXqml31mYM9OykmKe+jYy8=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?T3lCRWtxTXlOYU5oRlBXS0ZNQ01jb2wyQzVORDlWZ1dMQkZ5UU5DRVNGbXNT?=
+ =?utf-8?B?RHdZZjNFS2RNdlNmUi9BMHlTUnV2WGIwZDVNMDhreEZyUFkydkJydjRrbjJM?=
+ =?utf-8?B?V2NVQjdWK0NOSHRndHozaWt2eFlpNE84WDFCUEJ2OG81TU1uR0czM0lsalgr?=
+ =?utf-8?B?L1FEek4rREVOaU52Q0Ztc0tYeUJreC9zSklkZXBONjROMWk2dDR3cXZxS0NS?=
+ =?utf-8?B?cUtXa1R0aUUyQUhnM2hRNFM3V2tOZUhQbU0zbWFKVEx2Mlg2em5NUTZnUTMy?=
+ =?utf-8?B?dFJzTS9HcGxaVldndmJJYVoxNjJSTnJoYitSUE1KYno1K0xMcFU3SUlwdXE4?=
+ =?utf-8?B?QjlBUnphQS8xMy9FeURzTktPZWFNdUVnK2lYbHViZlI1ZWdRY2dUcXFaTEt4?=
+ =?utf-8?B?UTVaaHBaQWRGd3RlVUNSUlZEdTlDdlpqYm5DK01BcXEydlpEbHF3K2FMK0Nh?=
+ =?utf-8?B?Q1RWVFhNaWNrd2ZBbzJBeU90bFkxQ0JkR2poUmZTSEdxYng4b24xdGJ2RlMw?=
+ =?utf-8?B?WjVha0NOQ1BRenQ4a1V5UzRwZ1Fpdk41Nmg4M3J3N1FjQklvc01IT1JOQWpO?=
+ =?utf-8?B?d3NrL2NyNzM3YkYzNjMrRy9lK1RBN3pyVzM2dEE2dzczcGlaaG56QTdXZXlL?=
+ =?utf-8?B?Uk0zbHJxYTFYM2VGdlBqOUpkV3VtbWpyUDhoNEg2NncrcTkvTlJMUTNUS3dx?=
+ =?utf-8?B?NGR6M1VBaDJVQjlWR0g1ZWNIcFFFYlRKR09QTWZOYThFdVFiVVlJY1pkOUVD?=
+ =?utf-8?B?SzBwTTJKQyt2T0t0UDRWb2pkWkNiTHFDVDk4NHU2UHNqMFAzVEFxNU4yQXhO?=
+ =?utf-8?B?bnlhRmkyc01jbDR1TVhxN2VoRTh6SnUwR3J0d0NjZ1pIS3BIbkgxMUJNZGJC?=
+ =?utf-8?B?K05vSDl0M0lJVDR6YUFlalhoRjhEQlhCM0w0T2MyOXBtblRCdkVXUVpCWkx2?=
+ =?utf-8?B?cEtKSVk0MGVrTk54RFhZU3FCdzBFeEFob3owUXdwVzgwYlVnKy9vNGdpRFFQ?=
+ =?utf-8?B?anlQeTB5R0pCc0NnVDF3NnQ2RzM3ZWYwS1MrSEpoTmdqdHBmSElYaTV3SFRP?=
+ =?utf-8?B?NGtMRXNHQ3Vld1ZjeHltZFBpcWNwU0toTU03YmNRanJ1MnlMZUFpaVJ4UEsw?=
+ =?utf-8?B?U2E4c05OdGJDRlB0YTYxeHRNblc3QnExWTVtbHZGVjU0TGhxR2w2ajQyUldl?=
+ =?utf-8?B?L1hJYWNKeHJGME9WVHZSQ2FkTGU3czB2cjFOZGhXMmpVOFFjaGpZZE9qRjQw?=
+ =?utf-8?B?Z0dNQlRudWJjYlRNN3pFMUNoQUxSWmExaXVxcUZsZjVyQU1RYzRvdmVNcnV5?=
+ =?utf-8?B?RngvcUhZS1ZUaG9rTG5OSEpJbG8rTzNsT0J5ZUtzNjRlT2tka0lIWHdkMDZY?=
+ =?utf-8?B?eERoVFZaTDNxMGVjZFZvNmhndWt5WTNXRmNmSVRwYU5YSmJqQmwvNVk4SFdl?=
+ =?utf-8?B?QW9uZXlYSXhjYnZXZXV5OWl1azg4Yy9XTVVyWktQUzZyRjZBMlFSU095eC92?=
+ =?utf-8?B?SFB0T0pNK2N5RHRDMUFrVGdJMTJPYW1tTURBa2xZeTk5Znp1Z3RWRTVZRFRE?=
+ =?utf-8?B?T3RHOTRaWUNQL01oc3htbGM4Q3g4N3FXRlNCajNyclYwZko3WXM3UkVzOGxj?=
+ =?utf-8?B?RkxJTEVJNEpBZU5MTWlNMzlOdmp5RGR0U2pWOENYc0U2L3htWmtzYmU3Um9I?=
+ =?utf-8?B?OGtlMW1CSW1BL2s0OXpLYVZXWmVHNHVVQndCZVV6Q0k4MjVZcHE2NnovMHBa?=
+ =?utf-8?B?dTVLSjdsYU91Ni94R2pPS0QwL1ZXbFlVTGNscFhmbG0xcVpiTWoybG91UlEx?=
+ =?utf-8?B?aXhjb25ybHdrcVJmNWtYamRKVnQ5U0cyWlpzcVN2N1lpVUJYeWM5WEFWeloz?=
+ =?utf-8?B?Q2o4WlArNkhNWElXQS80dUhrZmYwMjM0S0xRb0VnN211a0ZMMCtTNlViZllk?=
+ =?utf-8?B?bEdEMWtLYTY4a2JDMWNBRTdTRGYxS0VsUkcrWGh1TlVOL2sxdHNpZm9GMnYy?=
+ =?utf-8?B?SEpFR0JQTU1wZU1mOC81Mzl0QmV3VzI2L2VUandla0FWcHc3M1B6SmhMelk4?=
+ =?utf-8?B?S0QyWTdtcjNxTmwwNVNzLzRUUzJFbWJ4RVAvcnFFMng0THlOaU9nZGxSN3VS?=
+ =?utf-8?B?aFhhbFcxckJ3S1kyWHhRSndMNFlraFNuS1NxbVYyUnlFWXlQT2E5ZkkwUWdF?=
+ =?utf-8?B?dEsvOHd0Zy9xRnJMckNTRFBZdDJHeTZlbmdHb0J4V1paWVl3TmZqTFlENFRX?=
+ =?utf-8?B?dzA2c3hWclg0eDYzZndhSkF6NDJIejlIOXc5SHpBQmVqZjFsZTRzSUFvaGNx?=
+ =?utf-8?Q?R3VGcndE/kgp3iWl/r?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f7efd4d9-fe6b-4bd7-12c0-08de794ae04f
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2026 17:32:43.5072
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fKspsO7exci1MEpFKBqdHOkGjE2dqQS+7/igbb205z2dTJW92tXHfTdvRZOJvycM6Nf6egSlbfe9+9PBsnuN2A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7137
+X-Rspamd-Queue-Id: 2700C1F4B14
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[nvidia.com,reject];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[Nvidia.com:s=selector2];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43519-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[linaro.org:+];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[31];
+	TAGGED_FROM(0.00)[bounces-43520-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[linaro.org,arm.com,huawei.com,kernel.org,intel.com,lwn.net,infradead.org,amd.com,hisilicon.com,gmail.com,vger.kernel.org,lists.linux.dev,nvidia.com];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-pm@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	DBL_PROHIBIT(0.00)[0.0.0.11:email];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	FROM_NEQ_ENVFROM(0.00)[sumitg@nvidia.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[Nvidia.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linux-m68k.org:email,mail.gmail.com:mid,linaro.org:dkim,baylibre.com:email]
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[Nvidia.com:dkim,nvidia.com:mid,nvidia.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Wed, 25 Feb 2026 at 00:11, Kevin Hilman <khilman@baylibre.com> wrote:
->
-> Geert Uytterhoeven <geert@linux-m68k.org> writes:
->
-> > Hi Kevin,
-> >
-> > Thanks for your series! I became aware of it only recently, and read
-> > it and its history with great interest...
-> >
-> > On Wed, 4 Feb 2026 at 00:13, Kevin Hilman <khilman@baylibre.com> wrote:
-> >> Rob Herring <robh@kernel.org> writes:
-> >> > On Thu, Jan 22, 2026 at 05:14:00PM -0800, Kevin Hilman (TI) wrote:
-> >> >> Add of_genpd_[add|remove]_subdomain_map() helper functions to support
-> >> >> hierarchical PM domains defined by using power-domains-map
-> >> >
-> >> > power-domain-map. No 's'.
-> >> >
-> >> >> property (c.f. nexus node maps in DT spec, section 2.5.1).
-> >> >>
-> >> >> This enables PM domain providers with #power-domain-cells > 0 to
-> >> >> establish subdomain relationships via the power-domain-map property,
-> >> >> which was not previously possible.
-> >> >>
-> >> >> These new helper functions:
-> >> >> - uses an OF helper to iterate to over entries in power-domain-map
-> >> >> - For each mapped entry: extracts child specifier, resolves parent phandle,
-> >> >>   extracts parent specifier args, and establishes subdomain relationship
-> >> >> - Calls genpd_[add|remove]_subdomain() with proper gpd_list_lock mutex protection
-> >> >>
-> >> >> Example from k3-am62l.dtsi:
-> >> >>
-> >> >>   scmi_pds: protocol@11 {
-> >> >>       #power-domain-cells = <1>;
-> >> >>       power-domain-map = <15 &MAIN_PD>,  /* TIMER0 */
-> >> >>                          <19 &WKUP_PD>;  /* WKUP_TIMER0 */
-> >> >>   };
-> >> >>
-> >> >>   MAIN_PD: power-controller-main {
-> >> >>       #power-domain-cells = <0>;
-> >> >>   };
-> >> >>
-> >> >>   WKUP_PD: power-controller-main {
-> >> >>       #power-domain-cells = <0>;
-> >> >>   };
-> >> >>
-> >> >> This allows SCMI power domain 15 to become a subdomain of MAIN_PD, and
-> >> >> domain 19 to become a subdomain of WKUP_PD.
-> >> >
-> >> > One concern I have here is generally *-map is transparent meaning when
-> >> > you lookup <&scmi_pds 15>, &MAIN_PD is returned as the provider. It's
-> >> > also possible to have a map point to another map until you get to the
-> >> > final provider. The only way we have to support both behaviors is the
-> >> > consumer has to specify (i.e. with of_parse_phandle_with_args_map() vs.
-> >> > of_parse_phandle_with_args()), but the consumer shouldn't really know
-> >> > this detail.
-> >
-> > This is also the first thing I was worried about, when I noticed you are
-> > not doing transparent mapping, but add an explicit hierarchy instead,
-> > based on the map.
->
-> Yeah, the map wasn't my original idea, and TBH, I had never really even
-> heard of nexus node maps before it was suggested by Rob[1] that I could
-> use it to describe hierarchy.
->
-> But... I'm gathering from Rob's and your recent feedback that my current
-> approach to using a map is an abuse/misuse of the map because it's just
-> being used to describe hierarchy, and because it's not transparent.
->
-> I'm still waiting to hear from Rob to see if I understood that right,
-> but your feedback is making me think that's the case.
->
-> If so, I'm honestly not sure where to go next.
->
-> >> > Maybe a transparent map of power-domains would never make sense. IDK. If
-> >> > so, then there's not really any issue since the pmdomain core handles
-> >> > everyone the same way.
-> >
-> > AFAIUI, SCMI is not limited to the SoC, but may be used for the whole
-> > hardware platform, so it could control power to external devices, too.
-> > Once we need to map a power domain through a connector, we need
-> > support for transparent mapping through a nexus node.
-> >
-> >> I don't really know enough about potential usage of maps to know if
-> >> there's ever a usecase for transparent maps.  However, the problem I'm
-> >> trying to solve is less about transparent maps, and more about
-> >> describing hierarchy in a situation where "leaf" domains of the same
-> >> type (e.g. SCMI) can have different parent domains.
-> >
-> > Hierarchy is indeed something that cannot be described with the current
-> > SCMI power domain management protocol.  This includes external hierarchy
-> > (your use case), and internal hierarchy: AFAIK, Linux cannot be made
-> > aware of the hierarchical relationship among the different power
-> > domains controlled through SCMI either.
->
-> Yes, the limitations of SCMI (both the protocol, and the Linux
-> implementation) are the root cause here.  In case you didn't see it,
-> before I posted the original version of this series, I started a thread
-> on the arm-scmi list to discuss implementation options[2]
->
-> So since this is primarily and SCMI limitation, maybe I should just go
-> back to the original proposal of using power-domains-child-ids[3]?
->
-> I'm definitely open to suggestions here as I'm a bit out of my depth
-> here.
 
-FWIW, I favor re-trying the "power-domains-child-ids" [3] approach.
+On 28/02/26 02:06, Rafael J. Wysocki wrote:
+> External email: Use caution opening links or attachments
+>
+>
+> On Thu, Feb 26, 2026 at 2:59 PM Sumit Gupta <sumitg@nvidia.com> wrote:
+>>
+>>> This patch series improves the CPPC cpufreq driver with new ACPI APIs
+>>> and enhancements for Autonomous Selection (auto_select).
+>>>
+>>> CPPC auto_select enables hardware-driven CPU performance scaling using
+>>> Energy Performance Preference (EPP) hints. Currently, there's limited
+>>> runtime control and visibility into CPPC performance registers.
+>>>
+>>> The series adds cppc_get_perf() API to read performance controls, updates
+>>> MIN_PERF/MAX_PERF in target callbacks using existing scaling_min/max_freq
+>>> interface similar to intel_cpufreq HWP handling, and exposes perf_limited
+>>> register via sysfs to detect throttling events.
+>>>
+>>> The patches are grouped as below:
+>>> - Patch 1: Add cppc_get_perf() API (independent).
+>>> - Patch 2: Warn on missing mandatory DESIRED_PERF (independent).
+>>> - Patch 3: Extend cppc_set_epp_perf for FFH/SystemMemory (independent).
+>>> - Patch 4: Update cached perf_ctrls on sysfs write (independent).
+>>> - Patch 5: Update MIN_PERF/MAX_PERF in target callbacks (depends on 4).
+>>> - Patch 6-7: APIs, sysfs and doc for perf_limited (independent).
+>> Gentle ping.
+>>
+>> If there are no further comments, could this be considered for merging.
+> Applied as 7.1 material, thanks!
 
-The main reason is that we already have the "power-domains" property,
-which allows us to describe parents using a list of phandles.
-
-To me, it seems more sensible to extend this with a new
-"power-domains-child-ids" property, which can be used when needed,
-rather than inventing an entirely new property, that would replace the
-existing one.
-
-Kind regards
-Uffe
+Thank you for applying the series.
 
 >
-> [1] https://lore.kernel.org/r/20250528203532.GA704342-robh@kernel.org
-> [2] https://lore.kernel.org/arm-scmi/7hecy3h7ky.fsf@baylibre.com/
-> [3] https://lore.kernel.org/all/20250528-pmdomain-hierarchy-onecell-v1-1-851780700c68@baylibre.com/
+> That said, wouldn't it be prudent to check cpc_read() return values 
+> everywhere? They are handled quite inconsistently and this series 
+> doesn't improve that. 
+
+I will send a follow-up patch to address this.
+
+Thank you
+Sumit Gupta
+
+
 
