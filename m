@@ -1,78 +1,78 @@
-Return-Path: <linux-pm+bounces-43481-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43482-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OJa8JA/Cpmn3TQAAu9opvQ
-	(envelope-from <linux-pm+bounces-43481-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 12:12:15 +0100
+	id cHQRBQnFpml4TgAAu9opvQ
+	(envelope-from <linux-pm+bounces-43482-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 12:24:57 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 905891ED84C
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 12:12:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B202E1EDB5F
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 12:24:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 991373007B2A
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 11:12:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9CF863105608
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 11:19:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01ABA3D3D02;
-	Tue,  3 Mar 2026 11:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CE543B95FF;
+	Tue,  3 Mar 2026 11:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kn9C6wwl"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XOzAjF+E"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE58F282F17;
-	Tue,  3 Mar 2026 11:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C1D421F16;
+	Tue,  3 Mar 2026 11:19:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772536328; cv=none; b=lAgH7iRpfU+DxZu3d7NaZYkLLdbQmx5URUHVuAupHLxAfm2dy123MfBXjPx7baJcBC0xqxN0N3quPTJ48zWuMHJibJi4SOVBNbpVXAHfOON9YAcNWP7ieQ/cwj/FmxDqiNwjZhHuLku+arur++oGDGQJHA2/9guYuKgxu/79mIA=
+	t=1772536772; cv=none; b=dixR6TytaG8jptfIyTH5YyafBNJCXY7NXa7YRmRl6CTHr9kwJLF0wiCW11aRZELfLksDYeR2Jy4u+YlrzhfzYBEd92t8h16sZgYFWAczotjsuprpMVnym5IPfhHJEjIV+KoYvA0/Xn0rR4KmlfCk+Kc50XHrv6pwAObCZU42IN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772536328; c=relaxed/simple;
-	bh=jLZOY6WAwrY9fo3pShlsIhNH58r2Ro+Orz3HeUJxOb4=;
+	s=arc-20240116; t=1772536772; c=relaxed/simple;
+	bh=y4tJpQJGapw5Taf4zWnX2UW9wPHcdF3WN734qjMu7Io=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NYAah2AosChI96E2pqMrgeGkhmoG8w8g90WWhtV6noRSWCjSsI5pe3Sj3iw4x/Zy6cLJuEh+19TRTlteCNU9xHLZRRqxA+93HDyLJWEq8T4eNs1r8mMsEQwNl8WqAc53GVp9+58qng8RjRTQGQZBPl6SUgW3sP8tqI3GWkUG3ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kn9C6wwl; arc=none smtp.client-ip=148.163.156.1
+	 In-Reply-To:Content-Type; b=IpusDEA+sHCZ3p9CvRNi9ahy71qbEPr6MpaVeBLnUfaKSeRRpHxdBJfkcqrCyv5BasuRYssah7WSeFt1YmmOOGxq8SJg8OOqKhycWHJeJx+r8LXAqeoZBWVWyJWvC8krbuzj8YXCeCbM0J6J5mvsrvb4zWVoIBEKdJoxPaVoVCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XOzAjF+E; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6237FTXp2104794;
-	Tue, 3 Mar 2026 11:11:31 GMT
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6237c0sP2459770;
+	Tue, 3 Mar 2026 11:17:58 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=5R7/8c
-	d7xW9zkt0oSt0vLll879jI88nP5jlzNhGC1Go=; b=kn9C6wwljog+hJvduGFq12
-	v5wuELVOt/KFg6LCcm2DcHkP/eCRu9BJVKlQgBiIWyQr7u4kMkOhl8rIxOyKVC5Q
-	nRvnCjjayux6BzxkwdnXWlSdqxGrPxr7vjx1cLhajMKOiLgGw9LVaNrolj6rzwe5
-	Z4mUYUbxj5NTZlcpFKdGvaeWj3/XKiGFNXSIc7/YTeYS11QLPWzZooAwwJwtdPRb
-	OcfAdpUCBArmB4eK/9GPfUJBcqLzt7Y9JKlASFuDvxEWv0ueygmdBeCt6XHcZ3/S
-	+pP44VC0GCZn2TAPHXLHXoLQgfuUBKu4Cb7hSsQBqmEG3DsBddB2JLxBYQHxpk8A
+	:message-id:mime-version:references:subject:to; s=pp1; bh=58Gi1B
+	PEW+NhDXk+xEQWqKkDA5EIat7IWlQuy8hDA2g=; b=XOzAjF+Es70FI80cfcEf+B
+	fah1NPhLCnmW8etxVT+6tx3qyCwMVEgO+uBTJJDzI56zu0LqIevzF6cOSXK5EYTP
+	rymdtckQK0JKQIoMBV99Ixk3w+5HzrnIimQk8FKrOsZ2aMZHpdumg69e/9F8JOQH
+	J5aeDN2g90zZ0ispJ6r6AKQr3SLrqgBI3ctH6R4rB1raTiVRY5gxcTB+RWP/wwB6
+	S4Y4mpPecPp8skwz6eMdhIzBjdHXR4d1O+qDyNjTQqTTDRTozCOQAL6fcnH3BhQE
+	GWsftk2v7eBrypjMp32cVPcmqGmVsAPx4flWN2TPlRJ5dDnlzWdUmAwgNdJ7wLoA
 	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cksjdanec-1
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ckssmje0u-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Mar 2026 11:11:31 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6235rGEt008791;
-	Tue, 3 Mar 2026 11:11:30 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cmdd19mrh-1
+	Tue, 03 Mar 2026 11:17:57 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6239aBUH003275;
+	Tue, 3 Mar 2026 11:17:57 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cmb2y22vh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Mar 2026 11:11:29 +0000
+	Tue, 03 Mar 2026 11:17:56 +0000
 Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 623BBQDV30998832
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 623BHqaV50004294
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 3 Mar 2026 11:11:26 GMT
+	Tue, 3 Mar 2026 11:17:52 GMT
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2B22320043;
-	Tue,  3 Mar 2026 11:11:26 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id C868F2004B;
+	Tue,  3 Mar 2026 11:17:52 +0000 (GMT)
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8BA9B2004B;
-	Tue,  3 Mar 2026 11:11:19 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 04E5D20043;
+	Tue,  3 Mar 2026 11:17:46 +0000 (GMT)
 Received: from [9.124.210.250] (unknown [9.124.210.250])
 	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  3 Mar 2026 11:11:19 +0000 (GMT)
-Message-ID: <415e925a-e9f0-40ad-9f53-263dd34dd2a9@linux.ibm.com>
-Date: Tue, 3 Mar 2026 16:41:18 +0530
+	Tue,  3 Mar 2026 11:17:45 +0000 (GMT)
+Message-ID: <be30e259-a690-4530-996c-0c092833bb66@linux.ibm.com>
+Date: Tue, 3 Mar 2026 16:47:45 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -80,7 +80,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 14/15] sched/cputime: Handle idle irqtime gracefully
+Subject: Re: [PATCH 15/15] sched/cputime: Handle dyntick-idle steal time
+ correctly
 To: Frederic Weisbecker <frederic@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
 Cc: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
@@ -113,44 +114,44 @@ Cc: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
         Xin Zhao <jackzxcui1989@163.com>, linux-pm@vger.kernel.org,
         linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
 References: <20260206142245.58987-1-frederic@kernel.org>
- <20260206142245.58987-15-frederic@kernel.org>
-From: Shrikanth Hegde <sshegde@linux.ibm.com>
+ <20260206142245.58987-16-frederic@kernel.org>
 Content-Language: en-US
-In-Reply-To: <20260206142245.58987-15-frederic@kernel.org>
+From: Shrikanth Hegde <sshegde@linux.ibm.com>
+In-Reply-To: <20260206142245.58987-16-frederic@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=M9BA6iws c=1 sm=1 tr=0 ts=69a6c1e3 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDA4NiBTYWx0ZWRfX9fy6pZQ8rl2U
+ 4JvSsUo8us4RFr+87x9HHqKuttkP4YFNr4o9dbZQ4JjvWNEmfVRS0g5h/xwci4zrWoFHJGYYHPL
+ E7OC7KLmE8eU0eBgJu5raasJw/4Q5omRn237tfeRboTDr5jtblnz7OrwSeTgWx5bTIVLr3eKCv9
+ oOY0jDa7w6DouUUTJoZhfy4l0K7K0rFUwFO9P8UIJgH3ETXQDgX0TZZHksIqEDRinQK4sOMqtZC
+ tSEmgyOsJFDTZGW1YcteipRi/KlL0bhbVe6VcqujpcvVaXmq+6BIgrD+S9rEHkrw+Vlge6A65lx
+ OjY9yqwtPx9yFyDY9sOAUEgfr07pf7wHoSYotmMYIg31aVi+jlPBhoRRDsuREunOfCP2qBjm+yS
+ pIB7jIJNd4pKVEtRTqetk5LCJ4YDTPPQUpxGC9sBi3RqdMmMChwmlEEektjlwAkF0yloiMDzDoZ
+ 06jY+9gFfs0fuB1A7mw==
+X-Proofpoint-ORIG-GUID: _t3s3NyLA8LzJG1-lGM_QRzy4Zn7pHmn
+X-Proofpoint-GUID: eLgjsOmzuOTxGRUDfGjOCD-0P5c5EUkr
+X-Authority-Analysis: v=2.4 cv=AobjHe9P c=1 sm=1 tr=0 ts=69a6c366 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
  a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8
- a=WffY0ah0q7W8p7317v4A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: iOvsbUvpvsRb0o9WyNLZDxuI7eo5f5b8
-X-Proofpoint-GUID: t3Mj4QLPgnhluBsZ6V0TeElOuOBh_39W
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDA4NiBTYWx0ZWRfX+mA/8CnyaB72
- J71qrO5vFg7C1rSBMjcWXUpLpNxl0rhLe4+zS7kgyOPQ77xdvSeubvjU8C4WzKR/uEHRYPG0/O0
- RP/I9EY6x8si7M8fx7LWbzulq6gvqVt1IDBgKy9TgHZaIuG9qRXvU1NcTkVD52NzjAnR4srojvF
- 0FnRJqZbNrPBSqForkgm16KTgfsnwcpKkr510yohyRmHQ1DzUle80iAIa1yzdXcxfSYcXJPHiH/
- QHE8CQrHNN26xBG2pXtrhOoO9DHWyOkbAZSr58XjhSHxSn6Oq/LUFlIx7x52l9IZZnbpS9TsmhJ
- Oe+e21fl7621RgwrAJsPwSmgOp+SkwMQVHyEpsLfwfNgNXYqb4jUuZ+K7MmRwCIfktbjAL8VyHL
- 5AIwUIYGaOWi0uj5C1FGMiiE6/fcGfJQNBN4mxO/GQ0j60/2+IdHtx7OJWPvGMsoTnl9Cz/e7x+
- dVZkNLCWzSNvk+wXHJA==
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
+ a=Y8yXDIHhMlYSrwm1qnwA:9 a=QEXdDO2ut3YA:10
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-03-02_05,2026-03-03_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 spamscore=0 adultscore=0 malwarescore=0
- bulkscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0 suspectscore=0
+ phishscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ spamscore=0 clxscore=1015 suspectscore=0 adultscore=0 priorityscore=1501
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603030086
-X-Rspamd-Queue-Id: 905891ED84C
+X-Rspamd-Queue-Id: B202E1EDB5F
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -158,11 +159,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[35];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43481-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43482-lists,linux-pm=lfdr.de];
 	FREEMAIL_CC(0.00)[kernel.org,linux.ibm.com,linutronix.de,google.com,gmail.com,arm.com,redhat.com,siemens.com,nvidia.com,suse.de,ellerman.id.au,infradead.org,goodmis.org,linaro.org,163.com,vger.kernel.org,lists.ozlabs.org];
 	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,linux.ibm.com:mid];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linux.ibm.com:mid];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[sshegde@linux.ibm.com,linux-pm@vger.kernel.org];
@@ -175,131 +176,107 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_COUNT_SEVEN(0.00)[11]
 X-Rspamd-Action: no action
 
-Hi Frederic,
+
 
 On 2/6/26 7:52 PM, Frederic Weisbecker wrote:
-> The dyntick-idle cputime accounting always assumes that IRQ time
-> accounting is enabled and consequently stops elapsing the idle time
-> during dyntick-idle IRQs.
+> The dyntick-idle steal time is currently accounted when the tick
+> restarts but the stolen idle time is not substracted from the idle time
+> that was already accounted. This is to avoid observing the idle time
+> going backward as the dyntick-idle cputime accessors can't reliably know
+> in advance the stolen idle time.
 > 
-> This doesn't mix up well with disabled IRQ time accounting because then
-> idle IRQs become a cputime blind-spot. Also this feature is disabled
-> on most configurations and the overhead of pausing dyntick-idle
-> accounting while in idle IRQs could then be avoided.
+> In order to maintain a forward progressing idle cputime while
+> substracting idle steal time from it, keep track of the previously
+> accounted idle stolen time and substract it from _later_ idle cputime
+> accounting.
 > 
-> Fix the situation with conditionally pausing dyntick-idle accounting
-> during idle IRQs only if neither native vtime (which does IRQ time
-> accounting) nor generic IRQ time accounting are enabled.
-> 
-> Also make sure that the accumulated IRQ time is not accidentally
-> substracted from later accounting.
-> 
+
+s/substract/subtract ?
+
 > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 > ---
->   kernel/sched/cputime.c | 24 +++++++++++++++++++++---
->   kernel/sched/sched.h   |  1 +
->   2 files changed, 22 insertions(+), 3 deletions(-)
+>   include/linux/kernel_stat.h |  1 +
+>   kernel/sched/cputime.c      | 21 +++++++++++++++------
+>   2 files changed, 16 insertions(+), 6 deletions(-)
 > 
+> diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
+> index 512104b0ff49..24a54a6151ba 100644
+> --- a/include/linux/kernel_stat.h
+> +++ b/include/linux/kernel_stat.h
+> @@ -39,6 +39,7 @@ struct kernel_cpustat {
+>   	bool		idle_elapse;
+>   	seqcount_t	idle_sleeptime_seq;
+>   	u64		idle_entrytime;
+> +	u64		idle_stealtime;
+>   #endif
+>   	u64		cpustat[NR_STATS];
+>   };
 > diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-> index d588a4a50e57..92fa2f037b6e 100644
+> index 92fa2f037b6e..7e79288eb327 100644
 > --- a/kernel/sched/cputime.c
 > +++ b/kernel/sched/cputime.c
-> @@ -46,7 +46,8 @@ static void irqtime_account_delta(struct irqtime *irqtime, u64 delta,
->   	u64_stats_update_begin(&irqtime->sync);
->   	cpustat[idx] += delta;
->   	irqtime->total += delta;
-> -	irqtime->tick_delta += delta;
-> +	if (!irqtime->idle_dyntick)
-> +		irqtime->tick_delta += delta;
-
-Wouldn't kcpustat_idle_dyntick achieve the same thing?
-
->   	u64_stats_update_end(&irqtime->sync);
->   }
->   
-> @@ -81,6 +82,16 @@ void irqtime_account_irq(struct task_struct *curr, unsigned int offset)
->   		irqtime_account_delta(irqtime, delta, CPUTIME_SOFTIRQ);
->   }
->   
-> +static inline void irqtime_dyntick_start(void)
-> +{
-> +	__this_cpu_write(cpu_irqtime.idle_dyntick, true);
-> +}
-> +
-> +static inline void irqtime_dyntick_stop(void)
-> +{
-> +	__this_cpu_write(cpu_irqtime.idle_dyntick, false);
-> +}
-> +
->   static u64 irqtime_tick_accounted(u64 maxtime)
+> @@ -424,19 +424,25 @@ static inline void irqtime_account_process_tick(struct task_struct *p, int user_
+>   static void kcpustat_idle_stop(struct kernel_cpustat *kc, u64 now)
 >   {
->   	struct irqtime *irqtime = this_cpu_ptr(&cpu_irqtime);
-> @@ -94,6 +105,9 @@ static u64 irqtime_tick_accounted(u64 maxtime)
+>   	u64 *cpustat = kc->cpustat;
+> -	u64 delta;
+> +	u64 delta, steal, steal_delta;
 >   
->   #else /* !CONFIG_IRQ_TIME_ACCOUNTING: */
+>   	if (!kc->idle_elapse)
+>   		return;
 >   
-> +static inline void irqtime_dyntick_start(void) { }
-> +static inline void irqtime_dyntick_stop(void) { }
+>   	delta = now - kc->idle_entrytime;
+> +	steal = steal_account_process_time(delta);
+>   
+>   	write_seqcount_begin(&kc->idle_sleeptime_seq);
+> +	steal_delta = min_t(u64, kc->idle_stealtime, delta);
+> +	delta -= steal_delta;
+
+I didn;t get this logic. Why do we need idle_stealtime?
+
+Lets say 10ms was steal time and 50ms was delta. but idle_stealtime is
+sum of past accumulated steal time. we only need to subtract steal time there no?
+
+Shouldn't this be delta -= steal ?
+
+
+> +	kc->idle_stealtime -= steal_delta;
 > +
->   static u64 irqtime_tick_accounted(u64 dummy)
->   {
->   	return 0;
-> @@ -444,6 +458,7 @@ void kcpustat_dyntick_stop(u64 now)
->   		WARN_ON_ONCE(!kc->idle_dyntick);
->   		kcpustat_idle_stop(kc, now);
+>   	if (nr_iowait_cpu(smp_processor_id()) > 0)
+>   		cpustat[CPUTIME_IOWAIT] += delta;
+>   	else
+>   		cpustat[CPUTIME_IDLE] += delta;
+>   
+> +	kc->idle_stealtime += steal;
+>   	kc->idle_entrytime = now;
+>   	kc->idle_elapse = false;
+>   	write_seqcount_end(&kc->idle_sleeptime_seq);
+> @@ -460,7 +466,6 @@ void kcpustat_dyntick_stop(u64 now)
 >   		kc->idle_dyntick = false;
-> +		irqtime_dyntick_stop();
+>   		irqtime_dyntick_stop();
 >   		vtime_dyntick_stop();
->   		steal_account_process_time(ULONG_MAX);
+> -		steal_account_process_time(ULONG_MAX);
 >   	}
-> @@ -455,6 +470,7 @@ void kcpustat_dyntick_start(u64 now)
->   
->   	if (!vtime_generic_enabled_this_cpu()) {
->   		vtime_dyntick_start();
-> +		irqtime_dyntick_start();
->   		kc->idle_dyntick = true;
->   		kcpustat_idle_start(kc, now);
->   	}
-> @@ -464,7 +480,8 @@ void kcpustat_irq_enter(u64 now)
->   {
->   	struct kernel_cpustat *kc = kcpustat_this_cpu;
->   
-> -	if (!vtime_generic_enabled_this_cpu())
-> +	if (!vtime_generic_enabled_this_cpu() &&
-> +	    (irqtime_enabled() || vtime_accounting_enabled_this_cpu()))
->   		kcpustat_idle_stop(kc, now);
->   }
-Scenario: context_tracking is not enabled(since nohz_full or isolcpus not specified) and
-irqtime/native is not enabled. ( config is CONFIG_VIRT_CPU_ACCOUNTING_GEN + IRQ_TIME=n)
-
-
-cpu goes into tickless mode. Gets irqs, but kcpustat_irq_enter/exit is nop.
-Then the time it spent in irq is still accounted for idle time, during kcpustat_dyntick_stop?
-
-Who is going to account the irq time in this case?
-
->   
-> @@ -472,7 +489,8 @@ void kcpustat_irq_exit(u64 now)
->   {
->   	struct kernel_cpustat *kc = kcpustat_this_cpu;
->   
-> -	if (!vtime_generic_enabled_this_cpu())
-> +	if (!vtime_generic_enabled_this_cpu() &&
-> +	    (irqtime_enabled() || vtime_accounting_enabled_this_cpu()))
->   		kcpustat_idle_start(kc, now);
 >   }
 >   
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index d30cca6870f5..cf677ff12b10 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -3307,6 +3307,7 @@ static inline void sched_core_tick(struct rq *rq) { }
->   #ifdef CONFIG_IRQ_TIME_ACCOUNTING
+> @@ -505,10 +510,14 @@ static u64 kcpustat_field_dyntick(int cpu, enum cpu_usage_stat idx,
+>   	do {
+>   		seq = read_seqcount_begin(&kc->idle_sleeptime_seq);
 >   
->   struct irqtime {
-> +	bool			idle_dyntick;
->   	u64			total;
->   	u64			tick_delta;
->   	u64			irq_start_time;
+> -		if (kc->idle_elapse && compute_delta)
+> -			idle = cpustat[idx] + (now - kc->idle_entrytime);
+> -		else
+> -			idle = cpustat[idx];
+> +		idle = cpustat[idx];
+> +
+> +		if (kc->idle_elapse && compute_delta) {
+> +			u64 delta = now - kc->idle_entrytime;
+> +
+> +			delta -= min_t(u64, kc->idle_stealtime, delta);
+> +			idle += delta;
+> +		}
+>   	} while (read_seqcount_retry(&kc->idle_sleeptime_seq, seq));
+>   
+>   	return idle;
 
 
