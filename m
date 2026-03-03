@@ -1,197 +1,195 @@
-Return-Path: <linux-pm+bounces-43503-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43504-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cJ3bOYj+pmk7bgAAu9opvQ
-	(envelope-from <linux-pm+bounces-43503-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 16:30:16 +0100
+	id sAoeGEL/pmk7bgAAu9opvQ
+	(envelope-from <linux-pm+bounces-43504-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 16:33:22 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77F961F2A6A
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 16:30:16 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 226491F2B3A
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Mar 2026 16:33:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9511030B2C9F
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 15:24:44 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 6DFF930398C8
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2026 15:33:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4408481FAF;
-	Tue,  3 Mar 2026 15:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8E3648AE0A;
+	Tue,  3 Mar 2026 15:33:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g2lKT83P"
+	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="hxuIy/qv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67814423175;
-	Tue,  3 Mar 2026 15:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4709447DFA0
+	for <linux-pm@vger.kernel.org>; Tue,  3 Mar 2026 15:32:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772551480; cv=none; b=G2yhSBmBykhXkJ/WADRSzsrTEd0rlpV7VNykf5oFDGhlFZvpJrFRjj/mcYHBYFR71I71Up5Zg3v9Qn85wVgDBHaXwVFBIuw9mbqAN5o7fVtKoe0ggLkHPF+njwf/uNIJJ7vBbSgbjSlVCRECTBlkqkYoLFLgpMpbk0MR4lx3o0M=
+	t=1772551980; cv=none; b=Oi40516WU0FWcuA73S5x0ngqjiIBMsuFtvifwh3kK6Et33ws0u9+bmLAOa11lUt962uRLT+A9Pek/qOI4WWv7LwXJoUMMEcJZ4cp925U765AMkidcmr0MBvRdT187scyF1+CPy4jWlgBqeXS4+aElru1GUrMQbeyZA6gFiVXu7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772551480; c=relaxed/simple;
-	bh=ezIjOizC8RAT3P5qFtSymLpkn/IPMdhnAN93KcIKjO8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VxwCw/V3L3WL5bP8x+KQaF700SmT4y7MJTavj/5RcFrRo/lLgwf3wj51xRiEfteu6P9seotXxJIPQty+fb/dizFl70RwAz9Hrq93VUQ6NJ+KEMLU+XjJUt5lpc/Mcupq0KZtOl3fkmCRKw/1+cQ9QYTcY0YKangN3OsvXFaLkQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g2lKT83P; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772551479; x=1804087479;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ezIjOizC8RAT3P5qFtSymLpkn/IPMdhnAN93KcIKjO8=;
-  b=g2lKT83PCVDXdE/G1YlMMkkjIjJTI4SKcJyJYnBsc1VNm2dXL/VN/Zk2
-   lrtowPuerKv5i+UF0PagWc/6uFJI8RDqIvm/tpvufhahuM+lO19DD+dBb
-   mFmyzRT3FLICbmEjps6kb0cwYV25JZ6Qn7x+l+2uoxChuI4aHwUkZCM/L
-   aE6Sv7c+fy64QjAF+AoLXCO8cdp3op88BgyjeKPxsVFlBb47cZLPHcLbf
-   JcqIQ5LfPNqRcHMGuBiWouQi8/+7NQZH1NNprgM6KFLDFoJhYpKadpe0B
-   iN+GqlYZ5JMmw55z9MEj1DYNHexlddlah8iEr9bX2zqyjd6a3IiWTeBtF
-   A==;
-X-CSE-ConnectionGUID: xGE6+JdZQXyak+SI9MqpCQ==
-X-CSE-MsgGUID: m5NTSEq/SXy6lmorKSnlTg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11718"; a="73505063"
-X-IronPort-AV: E=Sophos;i="6.21,322,1763452800"; 
-   d="scan'208";a="73505063"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2026 07:24:38 -0800
-X-CSE-ConnectionGUID: 8EDCa8VCSnelhlWlG1ZesA==
-X-CSE-MsgGUID: 5BGaqm/dSdmyx5dAFD99/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,322,1763452800"; 
-   d="scan'208";a="217269195"
-Received: from dalessan-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.245.32])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2026 07:24:25 -0800
-Date: Tue, 3 Mar 2026 17:24:22 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Kalle Niemi <kaleposti@gmail.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Frank Li <Frank.Li@nxp.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
-	Saravana Kannan <saravanak@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	David Rhodes <david.rhodes@cirrus.com>,
-	Linus Walleij <linusw@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Shawn Guo <shawnguo@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-	linux-kernel@vger.kernel.org, driver-core@lists.linux.dev,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-sound@vger.kernel.org, patches@opensource.cirrus.com,
-	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v5 07/28] driver core: fw_devlink: Introduce
- fw_devlink_set_device()
-Message-ID: <aab9Js6nRaeH3pn9@ashevche-desk.local>
-References: <20260227135428.783983-1-herve.codina@bootlin.com>
- <20260227135428.783983-8-herve.codina@bootlin.com>
- <20260302122336.00006bd8@huawei.com>
- <20260303151210.6e8462b8@bootlin.com>
+	s=arc-20240116; t=1772551980; c=relaxed/simple;
+	bh=qiMt4AKxRW6uzIHaOc4XWX09wGEBsrHpnjGhmEeRg3U=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=O+Y1Mfeo7sEX5O3BR4KWO3G4gI+BieMcBVSZigeSV5WzZVGleEBxM8AaSw5gexcdEckpFSyEPz3jU2qehcBYsMVKF9n/gXMTJahQOxxh1Q/zPmNdthZIQsRdSHWZxzdiQ0i+kXsz7E+kksN3pAg9pdXcx/ekGobz3IGRJfUYbWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=hxuIy/qv; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-483bd7354efso77014585e9.2
+        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2026 07:32:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flipper.net; s=google; t=1772551978; x=1773156778; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lR9itk2uXqg3duC81sXm2F1W0Z/G0NBQ0f28RHZQOcc=;
+        b=hxuIy/qvmAKWUHq4TrmjnNtynVs8ldsC1Vw2u0WBoZD0J46NJnuuj42aqSuH/dHhDd
+         8uogG7FO9WXA+HrcLOgSGYAFh0DcKGaB/lheN0i7glbpmBESLAC3VQkoZpg7xTdfk0Fz
+         1UqmMBXzeiR5IHKAWwSWQfedIUKbvJh2s7DU83tB0mcmlv803P7TtqXIpc4pRpzsymLJ
+         yqe6v9HhTK6rE4Kc9ScK3Cx4Go0pxZPBJcVD/cobnRRgK+2SFNpwbe6jMXcnTa34+NQQ
+         fWGm0TK6RaZ8JFK7W0QCwKa6wcBTGAaGQWSOuqgdFEKdU1xFgGldHI5Rqe+gNhEwB+wb
+         LP7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772551978; x=1773156778;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lR9itk2uXqg3duC81sXm2F1W0Z/G0NBQ0f28RHZQOcc=;
+        b=n5/KoyPdN0uFACFgXftSGlm4rhaaSMiBCxwujhXS0EXOmAJWWudHuFK1ZxGqfN5Rb9
+         WkTuBowuYJILNYEh+kM5M40KyS7KXdYyy+VH30H2l5yIovmw7XmAeX6L/08GGH4qq2FX
+         M+yHtHCy/Wu6SESeUb/S3kuzjUsz/9cASsT7SqZYvt+1cvwxJydCIo46ygDy+dDrxuyh
+         BEWT1zOiDU43A0mO5TzIkhiiNvlRqlDNWpqC3rWk5Zjys21g9OIf3sX2Of4Ri1nco/Cx
+         3KRAW6PWXEaC4a/ZBiviyn5+lihHCjGIrIfvQ5aGD0Q45YLF8cfra5xt9y+zdi+LQmlT
+         rL4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUqQhlHNisWu8WEjTawbAMYzwwsIxWOL60I+ritoSB1QnQKDmMDZycoA6G5W5VfTru/wFXRFqIrpQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzmw7scNoCGJqFXCg7qy4au7KpqAABx23kq51rhBLAfJVIEGMI5
+	SPeaAopLbKFGH+iFFcDMkuQ+f8fRbzvpBPL4TXQZ9nu1AEz8wC2dv7sKhS+KzeJqUC/Zzqie/+B
+	9SSbhdiM=
+X-Gm-Gg: ATEYQzyFayqe0EJ7hIB7s0zaVV5snol3MqPa0olaiJvtmIUFcncQBeFfqxow1PgloVa
+	5l+7gRabnyKQB2emxcvzbVRyzx/a6h0jh10udU6ajxr3GGehaXo8imxcD2n32S1JrN0NSvNDCCE
+	LeDvDi1HvCsIz9evXesLQgKEOKrqmfrQQgAT75lw5HddhZ83bGRUQvU43zW9BKgZ7w9uVG/grk8
+	ZR+Aolc1Kjdz3w3yr4XBZBHiHGbxF8Sy654gxgpyXodScO00bNe7zACNzwazeOlj0rrbEfL3/s9
+	L8sDlj+Jm9+fn2iiQYaKBJC91bWW/AlAS9qMzg4vESYJTbLoULu5pM0PZ//nnyxF6+KdsNVI4U5
+	ppnSZTiPe5Xq3hzvBVi6wPc0rzzWo0azJkA9URspFVT3UPycKBMVNqlHhoG9mbtnx7QNGrKxlLS
+	V9fHrOcp/Myburr6m1FjIaOh2kqIsEJFh1LmgjIyjhMCFboyxUGXC5N988gK5BHrfFZyRo1sXGV
+	/8=
+X-Received: by 2002:a05:600c:4e8e:b0:483:a922:2e8d with SMTP id 5b1f17b1804b1-483c9b97198mr270143195e9.4.1772551977423;
+        Tue, 03 Mar 2026 07:32:57 -0800 (PST)
+Received: from alchark-surface.localdomain (bba-94-59-44-101.alshamil.net.ae. [94.59.44.101])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439b55d15besm19799447f8f.30.2026.03.03.07.32.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2026 07:32:57 -0800 (PST)
+From: Alexey Charkov <alchark@flipper.net>
+Subject: [PATCH 00/11] Add support for the TI BQ25792 battery charger
+Date: Tue, 03 Mar 2026 19:32:45 +0400
+Message-Id: <20260303-bq25792-v1-0-e6e5e0033458@flipper.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260303151210.6e8462b8@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
-X-Rspamd-Queue-Id: 77F961F2A6A
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB3/pmkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDYwNj3aRCI1NzSyNdA0Njo8RkCzMLE7MUJaDqgqLUtMwKsEnRsbW1ADj
+ AvYlZAAAA
+X-Change-ID: 20260303-bq25792-0132ac86846d
+To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Chris Morgan <macromorgan@hotmail.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Sebastian Reichel <sre@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ linux-pm@vger.kernel.org, Alexey Charkov <alchark@flipper.net>, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2511; i=alchark@flipper.net;
+ h=from:subject:message-id; bh=qiMt4AKxRW6uzIHaOc4XWX09wGEBsrHpnjGhmEeRg3U=;
+ b=owGbwMvMwCW2adGNfoHIK0sZT6slMWQu+6/mWnhU/Y7Xn+AVIvuyS2cvyzFoy4q7t2r2Dr1jP
+ 1ZfkE9N75jIwiDGxWAppsgy99sS26lGfLN2eXh8hZnDygQyRFqkgQEIWBj4chPzSo10jPRMtQ31
+ DA11jHWMGLg4BWCq/x1lZJiXfbXzS8ZWe/Oy+HsGD7bqn6qwP/6/qUetd0/hzI1v3VUY/ocECfW
+ 8W/HavEx1IkOk/fcPDnmctWE/Kg2zPJ1/W12dxwgA
+X-Developer-Key: i=alchark@flipper.net; a=openpgp;
+ fpr=9DF6A43D95320E9ABA4848F5B2A2D88F1059D4A5
+X-Rspamd-Queue-Id: 226491F2B3A
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[flipper.net,quarantine];
+	R_DKIM_ALLOW(-0.20)[flipper.net:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[huawei.com,lunn.ch,kernel.org,glider.be,gmail.com,linuxfoundation.org,nxp.com,pengutronix.de,baylibre.com,sang-engineering.com,axentia.se,arndb.de,google.com,opensource.cirrus.com,cirrus.com,linaro.org,linux.intel.com,stgolabs.net,intel.com,vger.kernel.org,lists.linux.dev,lists.infradead.org,microchip.com,bootlin.com];
-	TAGGED_FROM(0.00)[bounces-43503-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43504-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_TO(0.00)[kernel.org,hotmail.com,gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[flipper.net:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[alchark@flipper.net,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[62];
-	TAGGED_RCPT(0.00)[linux-pm,dt,renesas];
 	NEURAL_HAM(-0.00)[-0.999];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ashevche-desk.local:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,intel.com:dkim,huawei.com:email,bootlin.com:email]
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Tue, Mar 03, 2026 at 03:12:10PM +0100, Herve Codina wrote:
-> On Mon, 2 Mar 2026 12:23:36 +0000
-> Jonathan Cameron <jonathan.cameron@huawei.com> wrote:
-> > On Fri, 27 Feb 2026 14:54:04 +0100
-> > Herve Codina <herve.codina@bootlin.com> wrote:
-> > 
-> > > Setting fwnode->dev is specific to fw_devlink.
-> > > 
-> > > In order to avoid having a direct 'fwnode->dev = dev;' in several
-> > > place in the kernel, introduce fw_devlink_set_device() helper to perform
-> > > this operation.
-> > >   
-> > I don't mind the helper, but the description could do with a little
-> > detail on why.  Is it just to avoid visibility of internal details, or
-> > is there a stronger reason?
-> 
-> I think the idea was to avoid visibility.
-> 
-> It cames from feedback received on my first iteration
->   https://lore.kernel.org/all/20250408145139.293c79a2@bootlin.com/
-> 
-> I found the idea relevant and so I did the patch.
+This adds support for the TI BQ25792 battery charger, which is similar in
+overall logic to the BQ25703A, but has a different register layout and
+slightly different lower-level programming logic.
 
-Yes, the idea is to hide the fwnode devlink related stuff behind the getters
-and setters. Ideally, everything in fwnode_handle related to devlinks should
-be marked as __private.
+The series is organized as follows:
+- Patch 1 adds the new variant to the existing DT binding, including the
+  changes in electrical characteristics
+- Patches 2-4 are minor cleanups to the existing BQ25703A OTG regulator
+  driver, slimming down the code and making it more reusable for the new
+  BQ25792 variant
+- Patch 5 is a logical fix to the BQ25703A clamping logic for VSYSMIN
+  (this is a standalone fix which can be applied independently and may be
+  backported to stable)
+- Patches 6-8 are slight refactoring of the existing BQ25703A charger
+  driver to make it more reusable for the new BQ25792 variant
+- Patch 9 adds platform data to distinguish between the two variants in
+  the parent MFD driver, and binds it to the new compatible string
+- Patches 10-11 add variant-specific code to support the new BQ25792
+  variant in the regulator part and the charger part respectively,
+  selected by the platform data added in patch 9
 
+Signed-off-by: Alexey Charkov <alchark@flipper.net>
+---
+Alexey Charkov (11):
+      dt-bindings: mfd: ti,bq25703a: Expand to include BQ25792
+      regulator: bq257xx: Remove reference to the parent MFD's dev
+      regulator: bq257xx: Drop the regulator_dev from the driver data
+      regulator: bq257xx: Make OTG enable GPIO really optional
+      power: supply: bq257xx: Fix VSYSMIN clamping logic
+      power: supply: bq257xx: Make the default current limit a per-chip attribute
+      power: supply: bq257xx: Consistently use indirect get/set helpers
+      power: supply: bq257xx: Add fields for 'charging' and 'overvoltage' states
+      mfd: bq257xx: Add BQ25792 support
+      regulator: bq257xx: Add support for BQ25792
+      power: supply: bq257xx: Add support for BQ25792
+
+ .../devicetree/bindings/mfd/ti,bq25703a.yaml       |  79 ++-
+ drivers/mfd/bq257xx.c                              |  60 ++-
+ drivers/power/supply/bq257xx_charger.c             | 534 ++++++++++++++++++++-
+ drivers/regulator/bq257xx-regulator.c              | 123 ++++-
+ include/linux/mfd/bq257xx.h                        | 415 ++++++++++++++++
+ 5 files changed, 1163 insertions(+), 48 deletions(-)
+---
+base-commit: d517cb8cea012f43b069617fc8179b45404f8018
+change-id: 20260303-bq25792-0132ac86846d
+
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Alexey Charkov <alchark@flipper.net>
 
 
