@@ -1,66 +1,80 @@
-Return-Path: <linux-pm+bounces-43630-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43631-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4EPnDau1qGmJwgAAu9opvQ
-	(envelope-from <linux-pm+bounces-43630-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 23:43:55 +0100
+	id 8H48Iq+4qGnLwgAAu9opvQ
+	(envelope-from <linux-pm+bounces-43631-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 23:56:47 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34F8D208BD6
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 23:43:54 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EB73208CCD
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 23:56:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id EFF01300C36B
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 22:43:50 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 40E7F302D9EC
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 22:56:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7D1539A062;
-	Wed,  4 Mar 2026 22:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C0A396590;
+	Wed,  4 Mar 2026 22:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WFh4P833"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A7E38F654
-	for <linux-pm@vger.kernel.org>; Wed,  4 Mar 2026 22:43:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993FC373C0B;
+	Wed,  4 Mar 2026 22:56:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772664229; cv=none; b=ec0DNGShQ18HPszJ7TfWM2Eok7VC1wLx1Tlf856HROX0GkUlb0UeZ1QhiZUT/vY8pTuUQgmFtO7wbgzDS6vOUzWTeTfSWmJmrj7H5zytcpaij7Um8KUvOi5hWyFOwzlPjkJl66QI3OPlwG8ryUOEl2rx/jDpMjxKuijjCOOpsvg=
+	t=1772665005; cv=none; b=hfbO2eXygEtB1+LJBE74v+hf0LWDjuomRF/e9X7CKSUE8NShyDQUG+K33mqQhQSRkpJP7bRGaRn3vrLrSGabLrOu3PKrZ1ucJ4Pojp2GgaAZv82QT7lGVkQoA1fBCs9U/ULS5vtMabnvBOHvjms/uGS3mLMUKuvlqhcG1pXtAME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772664229; c=relaxed/simple;
-	bh=HpFjgJqjXvrWPtsCwNxzcY/RDjTdvqu3hgXzsPJTUsE=;
+	s=arc-20240116; t=1772665005; c=relaxed/simple;
+	bh=0rXkdgSsjeXUw9O29HMod7MgndTa2Hf8FCWu+uPgaMY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S1WrK3ijPDcqnI8yzmP5KEVLjxQGm7klNYzWwCaCf/UiqCdaCagI2m3b/6ZQmmHLGoRF+el2CZ87GbqS0BIaAMAdSbxNYfvXD6trpNpI8xXWWNKY7bScTes6kuyp0qACjx1239L6l14jkefXgNZJQhhegRYJNVQjzIDHiWGYR/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1vxuw5-0005U1-JJ; Wed, 04 Mar 2026 23:43:21 +0100
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1vxuw3-003mmA-1A;
-	Wed, 04 Mar 2026 23:43:20 +0100
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1vxuw4-00000000XUD-2P6S;
-	Wed, 04 Mar 2026 23:43:20 +0100
-Date: Wed, 4 Mar 2026 23:43:20 +0100
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Franz Schnyder <fra.schnyder@gmail.com>
-Cc: ming.qian@oss.nxp.com, linux-media@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, ulf.hansson@linaro.org, 
-	benjamin.gaignard@collabora.com, kernel@pengutronix.de, sebastian.fricke@collabora.com, 
-	linux-pm@vger.kernel.org, festevam@gmail.com, s.hauer@pengutronix.de, Frank.li@nxp.com, 
-	peng.fan@nxp.com, nicolas@ndufresne.ca, regressions@lists.linux.dev, 
-	eagle.zhou@nxp.com, linux-imx@nxp.com, p.zabel@pengutronix.de, 
-	hverkuil-cisco@xs4all.nl, mchehab@kernel.org, shawnguo@kernel.org, 
-	linux-kernel@vger.kernel.org, l.stach@pengutronix.de
-Subject: Re: [REGRESSION] boot failure on imx8mp due to e0203ddf9af7
-Message-ID: <fcsge66ba6toath5g3t2yw6vxqqldn7utxq3ekrfecfuwgzjrg@ftbzb6xvarcr>
-References: <n3qmcb62tepxltoskpf7ws6yiirc2so62ia23b42rj3wlmpl67@rvkbuirx7kkp>
+	 Content-Type:Content-Disposition:In-Reply-To; b=fXEPnUQfS+RJnkxXsHRwFT/3xvFggbqEn29cEem++rxcU2Ld8BPUYpmnVRoLVEWmMWXsixfCHMeIyxF3lD7Lo1LDWI2Wwt7ChWQ8t0bUjW6TK8IoC7EPKe2kSrbtHGGoDQ/8aeG97u3qbEUR9E0hvpQIYmMGSMtVjQM1seK7nt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WFh4P833; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772665002; x=1804201002;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0rXkdgSsjeXUw9O29HMod7MgndTa2Hf8FCWu+uPgaMY=;
+  b=WFh4P833Sug1XkOZIHvYijZPDxiu54CiwqCQinqojkdH0fYmd9abrm9H
+   KB5jEAHa8cv6DvlMa3OdBtwUBkgemnV4f6mKw6mEB4a1e8n1/m/B1pJCq
+   bdkzPL5Ywup8Z1dqIC0fs7pD+qjbXdyQF3xovZ6mN2KxNh/QhsizQyh0M
+   24xZuIJ+4hMhGeIVrTFmomwKpB2ArPXEnsBS/Pf+p5FPq7r/Hx5JGBtPu
+   NSHXa9H5AfXOt2lOZh/Z0ilDY2zmUIjo1JDKexISD/5H2OqEAgFvJh8+l
+   MwycHwYfgqdR7tfSH0k1CHAVQv/+OP3mG36VLXAv7XYdWs3SYhhEYuTch
+   Q==;
+X-CSE-ConnectionGUID: ePlOpdFqTNmjB40CNZM2lg==
+X-CSE-MsgGUID: yc5RSb3hR0WNqv/yRiOdPw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="99209040"
+X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
+   d="scan'208";a="99209040"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 14:56:42 -0800
+X-CSE-ConnectionGUID: VlbvOeV6QSemWMbmWJyJ+Q==
+X-CSE-MsgGUID: xrxG+dIDSqalZu71ln8rHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
+   d="scan'208";a="222628482"
+Received: from lkp-server01.sh.intel.com (HELO f27a57aa7a36) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 04 Mar 2026 14:56:40 -0800
+Received: from kbuild by f27a57aa7a36 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vxv8v-000000004eH-09jN;
+	Wed, 04 Mar 2026 22:56:37 +0000
+Date: Thu, 5 Mar 2026 06:56:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pengpeng Hou <pengpeng.hou@isrc.iscas.ac.cn>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Pengpeng Hou <pengpeng.hou@isrc.iscas.ac.cn>
+Subject: Re: [PATCH] PM: Move to_device() out of CONFIG_PM_SLEEP protection
+Message-ID: <202603050651.Tp7mTeNL-lkp@intel.com>
+References: <20260302105456.4134882-1-pengpeng.hou@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -69,158 +83,105 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <n3qmcb62tepxltoskpf7ws6yiirc2so62ia23b42rj3wlmpl67@rvkbuirx7kkp>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Rspamd-Queue-Id: 34F8D208BD6
+In-Reply-To: <20260302105456.4134882-1-pengpeng.hou@isrc.iscas.ac.cn>
+X-Rspamd-Queue-Id: 2EB73208CCD
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.54 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43630-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[pengutronix.de];
-	RCPT_COUNT_TWELVE(0.00)[24];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	TAGGED_FROM(0.00)[bounces-43631-lists,linux-pm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[oss.nxp.com,vger.kernel.org,lists.infradead.org,lists.linux.dev,linaro.org,collabora.com,pengutronix.de,gmail.com,nxp.com,ndufresne.ca,xs4all.nl,kernel.org];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[m.felsch@pengutronix.de,linux-pm@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.399];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-pm];
-	R_DKIM_NA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,intel.com:mid,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,01.org:url]
 X-Rspamd-Action: no action
 
-Hi Franz,
+Hi Pengpeng,
 
-On 26-03-04, Franz Schnyder wrote:
-> Hello,
-> 
-> Our iMX8MP SoMs (Verdin and Toradex SMARC) fail to boot after 
-> commit e0203ddf9af7 ("media: verisilicon: Avoid G2 bus error while decoding H.264 and HEVC").
-> On rare occasions, it's still able to boot.
-> It fails after having registered g1 VPU, probably when it tries to
-> register g2 VPU.
-> 
-> Ming: Any ideas on how to proceed here?
-> 
-> Success::
-> [    9.040517] hantro-vpu 38300000.video-codec: registered nxp,imx8mm-vpu-g1-dec as /dev/video0
-> [    9.052133] hantro-vpu 38310000.video-codec: registered nxp,imx8mq-vpu-g2-dec as /dev/video1
-> 
-> 
-> Failure with decoded stacktrace::
-> 
-> [    9.004477] hantro-vpu 38300000.video-codec: registered nxp,imx8mm-vpu-g1-dec as /dev/video0
-> [    9.027097] Unable to handle kernel paging request at virtual address ffffd9c18eb05000
+kernel test robot noticed the following build errors:
 
-This is quite a nasty bug you triggered here! I think the issue is that
-the newly added imx8mq_vpu_shared_resources[] is of type __initconst
-where as it should be __initconst_or_module. You can test this
-assumption if you switch from a module [M] build for the hantro_vpu
-driver to a builtin [x] build.
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge amd-pstate/linux-next amd-pstate/bleeding-edge linus/master v7.0-rc2 next-20260303]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Regards,
-  Marco
+url:    https://github.com/intel-lab-lkp/linux/commits/Pengpeng-Hou/PM-Move-to_device-out-of-CONFIG_PM_SLEEP-protection/20260302-190351
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20260302105456.4134882-1-pengpeng.hou%40isrc.iscas.ac.cn
+patch subject: [PATCH] PM: Move to_device() out of CONFIG_PM_SLEEP protection
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260305/202603050651.Tp7mTeNL-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603050651.Tp7mTeNL-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603050651.Tp7mTeNL-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/base/core.c:38:
+>> drivers/base/power/power.h:163:50: error: no member named 'entry' in 'struct dev_pm_info'
+     163 |         return container_of(entry, struct device, power.entry);
+         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/linux/container_of.h:21:49: note: expanded from macro 'container_of'
+      21 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+      22 |                       __same_type(*(ptr), void),                        \
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      23 |                       "pointer type mismatch in container_of()");       \
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:617:74: note: expanded from macro '__same_type'
+     617 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                                          ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   In file included from drivers/base/core.c:38:
+>> drivers/base/power/power.h:163:9: error: no member named 'entry' in 'dev_pm_info'
+     163 |         return container_of(entry, struct device, power.entry);
+         |                ^                                       ~~~~~~
+   include/linux/container_of.h:24:21: note: expanded from macro 'container_of'
+      24 |         ((type *)(__mptr - offsetof(type, member))); })
+         |                            ^              ~~~~~~
+   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+         |                                 ^                        ~~~~~~
+   2 errors generated.
 
 
-> [    9.027132] Mem abort info:
-> [    9.027139]   ESR = 0x0000000096000007
-> [    9.027147]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [    9.027156]   SET = 0, FnV = 0
-> [    9.027164]   EA = 0, S1PTW = 0
-> [    9.027171]   FSC = 0x07: level 3 translation fault
-> [    9.027180] Data abort info:
-> [    9.027187]   ISV = 0, ISS = 0x00000007, ISS2 = 0x00000000
-> [    9.027196]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> [    9.027205]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> [    9.027215] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000004924f000
-> [    9.027226] [ffffd9c18eb05000] pgd=0000000000000000, p4d=10000000496dd003, pud=1000000102e42403, pmd=100000010c33d403, pte=0000000000000000
-> [    9.027258] Internal error: Oops: 0000000096000007 [#1]  SMP
-> [    9.101669] Modules linked in: snd_soc_fsl_sai crypto_engine rng_core imx_pcm_dma authenc snd_soc_fsl_aud2htx snd_soc_fsl_utils imx8mp_interconnect libdes i
-> mx8mp_hdmi_pai evdev imx8mp_hdmi_tx aes_ce_blk dw_hdmi ghash_ce drm_display_helper snd_soc_simple_card hantro_vpu phy_fsl_imx8mq_usb libaes phy_fsl_samsung_hdm
-> i snd_soc_simple_card_utils cec phy_fsl_imx8m_pcie v4l2_vp9 imx8mp_hdmi_pvi typec fsl_imx8_ddr_perf snd_soc_imx_hdmi gf128mul samsung_dsim v4l2_h264 etnaviv ti
-> _ads1015 industrialio_triggered_buffer snd_soc_nau8822 ina2xx lm75 gpu_sched i3c lontium_lt8912b kfifo_buf governor_userspace imx_sdma flexcan imx_aipstz dwc3_
-> imx8mp imx_bus can_dev spi_nxp_fspi caam spi_imx error pwm_imx27 imx8mm_thermal nvmem_snvs_lpgpr snvs_pwrkey usb_conn_gpio gpio_keys display_connector roles lo
-> op fuse ipv6 libsha1 autofs4
-> [    9.173690] CPU: 3 UID: 0 PID: 45 Comm: kworker/u16:2 Not tainted 6.19.0+ #47 PREEMPT
-> [    9.181623] Hardware name: Toradex Verdin iMX8M Plus on Verdin Development Board (DT)
-> [    9.189462] Workqueue: events_unbound deferred_probe_work_func
-> [    9.195314] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    9.202284] pc : of_find_matching_node_and_match (drivers/of/base.c:1129 drivers/of/base.c:1120 drivers/of/base.c:1187)
-> [    9.207869] lr : of_find_matching_node_and_match (drivers/of/base.c:1185)
-> [    9.213452] sp : ffff8000805dbad0
-> [    9.216771] x29: ffff8000805dbad0 x28: 0000000000000000 x27: 0000000000000000
-> [    9.223927] x26: 0000000000000000 x25: 0000000000000000 x24: ffffd9c2060d48e0
-> [    9.231078] x23: 0000000000000000 x22: ffffd9c18eb05000 x21: ffff0000ff79d7f8
-> [    9.238231] x20: 0000000000000000 x19: ffffd9c18eb05000 x18: 00000000ffffffff
-> [    9.245385] x17: ffff263ef9a67000 x16: ffffd9c2055d3d54 x15: ffff8000805db870
-> [    9.252536] x14: 0000000000000000 x13: 006365646f632d6f x12: 0000000000000001
-> [    9.259689] x11: 0000000000000003 x10: 0000000000000020 x9 : 0000000000000000
-> [    9.266842] x8 : 0000000000000020 x7 : 00000000ffffffff x6 : ffff0000c4a9d8c8
-> [    9.273995] x5 : 0000000000000014 x4 : 0000000000000000 x3 : 0000000000000001
-> [    9.281145] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
-> [    9.288301] Call trace:
-> [    9.290753]  of_find_matching_node_and_match (drivers/of/base.c:1129 drivers/of/base.c:1120 drivers/of/base.c:1187) (P)
-> [    9.296336] hantro_probe (./include/linux/of.h:983 drivers/media/platform/verisilicon/hantro_drv.c:1047 drivers/media/platform/verisilicon/hantro_drv.c:1225) hantro_vpu
-> [    9.301144]  platform_probe (drivers/base/platform.c:1449)
-> [    9.304815]  really_probe (drivers/base/dd.c:583 drivers/base/dd.c:661)
-> [    9.308399]  __driver_probe_device (drivers/base/dd.c:803)
-> [    9.312765]  driver_probe_device (drivers/base/dd.c:833)
-> [    9.316956]  __device_attach_driver (drivers/base/dd.c:962)
-> [    9.321415]  bus_for_each_drv (drivers/base/bus.c:500)
-> [    9.325262]  __device_attach (drivers/base/dd.c:1035)
-> [    9.329109]  device_initial_probe (drivers/base/dd.c:1088)
-> [    9.333303]  bus_probe_device (drivers/base/bus.c:576)
-> [    9.337152]  deferred_probe_work_func (drivers/base/dd.c:125 (discriminator 14))
-> [    9.341697]  process_one_work (kernel/workqueue.c:3268)
-> [    9.345719]  worker_thread (kernel/workqueue.c:3334 kernel/workqueue.c:3421)
-> [    9.349477]  kthread (kernel/kthread.c:467)
-> [    9.352716]  ret_from_fork (arch/arm64/kernel/entry.S:861)
-> [    9.356303] Code: 6b14001f 9a93d35a 1a80d294 91032273 (39400264)
-> All code
-> ========
->    0:   6b14001f        cmp     w0, w20
->    4:   9a93d35a        csel    x26, x26, x19, le
->    8:   1a80d294        csel    w20, w20, w0, le
->    c:   91032273        add     x19, x19, #0xc8
->   10:*  39400264        ldrb    w4, [x19]               <-- trapping instruction
-> 
-> Code starting with the faulting instruction
-> ===========================================
->    0:   39400264        ldrb    w4, [x19]
-> [    9.362413] ---[ end trace 0000000000000000 ]---
-> [    9.367037] note: kworker/u16:2[45] exited with irqs disabled
-> [    9.367134] note: kworker/u16:2[45] exited with preempt_count 1
-> 
-> 
-> Thanks,
-> Franz
-> 
-> 
-> 
+vim +163 drivers/base/power/power.h
+
+   160	
+   161	static inline struct device *to_device(struct list_head *entry)
+   162	{
+ > 163		return container_of(entry, struct device, power.entry);
+   164	}
+   165	
 
 -- 
-#gernperDu 
-#CallMeByMyFirstName
-
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | https://www.pengutronix.de/ |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-9    |
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
