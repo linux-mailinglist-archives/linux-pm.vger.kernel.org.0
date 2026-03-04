@@ -1,151 +1,185 @@
-Return-Path: <linux-pm+bounces-43563-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43564-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sDxiLuv4p2mtmwAAu9opvQ
-	(envelope-from <linux-pm+bounces-43563-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 10:18:35 +0100
+	id 6FTtNFP9p2mlnAAAu9opvQ
+	(envelope-from <linux-pm+bounces-43564-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 10:37:23 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCB351FD725
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 10:18:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36B6A1FDB69
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 10:37:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 3BD0C300C37C
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 09:18:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D053730AD480
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 09:34:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6720539659D;
-	Wed,  4 Mar 2026 09:18:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D7B738737B;
+	Wed,  4 Mar 2026 09:34:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BnWrIXro"
+	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="83aNDBSu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22FC395DA3;
-	Wed,  4 Mar 2026 09:18:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772615908; cv=none; b=mBs8l9BpgVotw2P1TwxNjO7IBwVa8E3WOTH8iYerdbHiXJ75M4rvxnvbSEJryJLxfsy3ryv8/ugwTp+/Vz41gp1cZyE1XBV3pjUQt0+h1IBPi26WD7R/rvr/Zp8NhWerKn6ZPSJRcbAHFByWMp5LlTvrd7hQtpIefgtMGvvL3oc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772615908; c=relaxed/simple;
-	bh=DqQFigDJ368Z5nPS5m9Q7Nq+wqG5hNprsu/1QDUlhA8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c1TXIfqhXL5rApicYjGBTObX5zkwESv4oFjfWmBAbjZTSdoElX+C0eS+07ecLUt+ckH74giM6jL1Ew9dDdaGGh0D1NQW69nRdJmHc0ehSm6PMQ3L04XZ62hfLULaXWRdRPL6sKhmYg0WxiIOvvsZlKY8aZuSOyri1rveLYn7IUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BnWrIXro; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D60C19425;
-	Wed,  4 Mar 2026 09:18:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772615907;
-	bh=DqQFigDJ368Z5nPS5m9Q7Nq+wqG5hNprsu/1QDUlhA8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BnWrIXroRr6DGO6COgDOsecmpa7x+fF4yHx2u2k5WsZ+BLWzvzUUV7uMfNIoE+iQs
-	 mdoGPSlZc5kn466gYE/XfSeyng33oXkMDsg0aemnWoU6RYpNSCTaHml0kjxL8q74MP
-	 SGXt4SuWVja8WXGIX2YM+yHvI/BtWxlwFxtniqrT2FTrVITiI0mSIOQzGxB40qTb4t
-	 01cuZXikRWIUb+pX7EDFNBbWVCDy1Hz6X++yupk9wfbTs0+Fa6FiLXxi0KaGhO19NR
-	 DHp8BPZqYYB7ADvmkyvU/D4747R18C1Chuzd92zyNH3hQnNTSLQ8HWJskm8ahAhvXP
-	 ElVD3LF0lvU+w==
-Message-ID: <d9e9703f-8166-41a9-a927-5bcd7ad4a8db@kernel.org>
-Date: Wed, 4 Mar 2026 10:18:16 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C5E3822BE
+	for <linux-pm@vger.kernel.org>; Wed,  4 Mar 2026 09:34:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772616876; cv=pass; b=m9rtCwAbzFMZ/MrqExanIbBvklxUf3wFZDE3ZbEIQExyW5BjxDVtpZm0hmx0HmeUMRzs2CGgCOpW4BLHkHWS7SqFCjx2HA/MVE9p3GB39WxBaYpOz87XNhjwWiOQWJvsXww08MS9kkpbOA13LNWAb4ZuX6zx9E195L1MvPnXtkU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772616876; c=relaxed/simple;
+	bh=3r5U46JYIUoR2bl5Gkm/sJyECPpQWiCpRw6+O/Z2HYU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=T0ivKKVXqbdhhINmHJ79HY2CT7Jbg5XehzsZ0kEMenUvzvunrXMoC8bHLNGH7iOHL2hKSy3jRR3g/I4vuF7+YMnIvquj3C67ORrrNLERTcerSz0zgwOXECth8GA8q8kVnyIKpc6E8vTFPiUqm4cQXDjgYPBcA/g34R3OIBl0cFs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=83aNDBSu; arc=pass smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b8fa449e618so955940866b.0
+        for <linux-pm@vger.kernel.org>; Wed, 04 Mar 2026 01:34:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772616873; cv=none;
+        d=google.com; s=arc-20240605;
+        b=QFRdvMSKTo0T86Zs6d7LdGltlZzWRRS8Xff4i2heye2ykhYGpSaY8Dyw6ooWIgrohU
+         BZoQoz1cQyGV2LjwLnXZ8AT7W0bH31Mtku4RoT27gTNUlZ0/U0MhNAchFZgQ7QUKgIc1
+         9EjeuPCkX5RJfm9pNrJSovs78ToUx2pFu4Zr9gMUcjhTF15lZWdpqbud32DDKfssv0Hh
+         5ot6n/cbyIb8m5e5TAs+z/dpRJAaYBQSkibMj6JvVUNcEZZu9pXOxbp8AVRIAiYUKrLW
+         DJ7iqwtcNUG1zgxkaX4xmU7ve2wGNCAoQjDhoI7WcwE9uaYObSeBpGP2/PQZr5FxFUu6
+         +SwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5AUBDCy7nbW9VUhgHwbf6uyAyDJf03F0fUhfohAeZuA=;
+        fh=uyM2tVOrw+ovRRys+rcHYdK18SPOJPMCtUzLh1Ad4j4=;
+        b=MPEEA87H3eGEcuB3+A6RnewxlQ4qAKTXLB1PGWI0PNRFzxZiRVsoWeV4HdHpLAekPv
+         sBn/yGFyFtb1AF1fbmGpZqMspQbNUvkOs/E+TwMZ/DnI88wgmPxUgWvSSFfddMJZcccS
+         gW4JvHumFoZ1wUp60GwwPNdO90xwMSYs5aSC8ky8X602tzkiBvJHtfg3TUPf4OGFpFUE
+         zjnQ5QlQ0N2mZ1Q2g4BA0L4GtySoLMB5rF4FAYUno4fKcEa8vq4pTt8lAFOtfnJoD1CT
+         GNaEggmbl9SYR1qjmSZ+wdzjncrU0FPT5pgF8rNyizFqE0p47Qw9c7VHQ/D5e26UUTvG
+         3xbg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flipper.net; s=google; t=1772616873; x=1773221673; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5AUBDCy7nbW9VUhgHwbf6uyAyDJf03F0fUhfohAeZuA=;
+        b=83aNDBSu9p1AiqJW29lno3L/eA106DLRr4mK6WXX8ttYt53rylLt54CU3a6Qe6G1hL
+         1FGGoTe7u75IpGTEKBGiIwg6PlEHfEgO3K8nxKdjCAqoYoZpawpxPDV9/QMSL+o5RMaa
+         6MgKn3Jcx11lL1yjaCk++c+6TwqyCT/RmsX4V7Ycsq7ArrhcwEGK30zCIPaLNCMKiF7A
+         tvxndWPyTiIT4mOoOH9aWHDAZjf6Ga0uRdyLU99PaWA1uc5tsfZ3YzkZIXw9evGHzvYX
+         KoDqE23/+SLKNJKnbttbdl71H87Lofo/4zgan0b2kJ6J23lfzId/wGlk59HGjd/DrHI+
+         USuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772616873; x=1773221673;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5AUBDCy7nbW9VUhgHwbf6uyAyDJf03F0fUhfohAeZuA=;
+        b=NJ3Lq6nYhh8ezkz/0jE+4C/Gp7b8e/1HuFTh6LESl6V8wM8NzyILEYX/ycb2GD2ZAN
+         Kh998jDiJslFqwQwa+L4fRNdaYfcpgIH7/W3JGfAZIuk194z5zLyfpnSP8GPLxt8sPdp
+         mLFLlW6TT7s5XIqfzz83m8uShn5BIzCadTkY1RSvq0Y7QvYl/Ol02rqRL5rZI+863Ipa
+         MyyHwpfqI7e4UycypbsV/M9Mt2lSanhIysNnH5BgqosHXQVetdu7h14WA+uSCwt0Rc5v
+         C21tHkOjz4Q6QxsJ5U4hC1qYBYcpk9BslyXKL2+QmtKbvL/I8ujWbC2psfISAavtRWoZ
+         IDRg==
+X-Forwarded-Encrypted: i=1; AJvYcCWZwhLhiqtzJbSLfom/9kOc49VPQRn+v3WLixXsK0WnbGubDj8I2uemElae/4cXgq5OM7P1uJQCPQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHmF/PrDDQHW9fFhILsfDW1rLwENiJjxFNy/VHR8Q5vsGOjz9f
+	0rXEq+St7OZZa1d1ousTvyD6UxZMmkHVY60oM6gVaRgdZvE+XrZlKpH8YbBYhFM+dj2ilv67l2R
+	e6cSVdNYyqE3xwhS4oBjtln8TB7kHkjJrVFogVhfXxQ==
+X-Gm-Gg: ATEYQzx9njT8tzV8OKZ9sH8W3ww+8qqg4oMrxZw1xePHA19NRl0JcklbX/fKTyK+bBC
+	hG2L/m3m+fQZOh7p8pho9ip7AtvErXnrDXRXDDWaKxeMA6962hg9IPsQydSHesI33UFzkHYO3lh
+	lZBDpDdayNV/Awo4dkNJ+Yc6LYqx+6KDtSFNSrd8z+1XHijXTpcdD7mEVyZRPiVW3wZeO/s2Jke
+	3xxgyDQe9hWH4sYJSsebmIAU+0euZFV5xZ11CYBqQmA7aKyZYpt9bMrRCb/lnDD1zFybFW0N3f+
+	a/0myA==
+X-Received: by 2002:a17:907:980e:b0:b73:572d:3b07 with SMTP id
+ a640c23a62f3a-b93f13f0948mr72180366b.28.1772616873304; Wed, 04 Mar 2026
+ 01:34:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/14] powerpc: drop unneeded dependency on OF_GPIO
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Alexey Brodkin <abrodkin@synopsys.com>, Vineet Gupta <vgupta@kernel.org>,
- Scott Wood <oss@buserror.net>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
- Russell King <linux@armlinux.org.uk>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>,
- Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Guenter Roeck <linux@roeck-us.net>, Wim Van Sebroeck
- <wim@linux-watchdog.org>, Mauro Carvalho Chehab <mchehab@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sebastian Reichel <sre@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-amlogic@lists.infradead.org, linux-leds@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
- linux-pm@vger.kernel.org
-References: <20260304-gpio-of-kconfig-v1-0-d597916e79e7@oss.qualcomm.com>
- <20260304-gpio-of-kconfig-v1-3-d597916e79e7@oss.qualcomm.com>
-Content-Language: fr-FR
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-In-Reply-To: <20260304-gpio-of-kconfig-v1-3-d597916e79e7@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: BCB351FD725
+References: <20260303-bq25792-v1-0-e6e5e0033458@flipper.net>
+ <20260303-bq25792-v1-1-e6e5e0033458@flipper.net> <177255519061.3485716.8870568133764595988.robh@kernel.org>
+In-Reply-To: <177255519061.3485716.8870568133764595988.robh@kernel.org>
+From: Alexey Charkov <alchark@flipper.net>
+Date: Wed, 4 Mar 2026 13:34:25 +0400
+X-Gm-Features: AaiRm51Enl5LcXd6PAPQAWRhQIDDudWLZr4mU0k-EhYOjS9Inm3uW-TiPcT-vUI
+Message-ID: <CAKTNdwGyrBihrL2hQgxZ7pyaYoRGTnNibLGnhKWEi-DsJn3==g@mail.gmail.com>
+Subject: Re: [PATCH 01/11] dt-bindings: mfd: ti,bq25703a: Expand to include BQ25792
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Lee Jones <lee@kernel.org>, Chris Morgan <macromorgan@hotmail.com>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Sebastian Reichel <sebastian.reichel@collabora.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 36B6A1FDB69
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[flipper.net,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[flipper.net:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43563-lists,linux-pm=lfdr.de];
-	FREEMAIL_TO(0.00)[oss.qualcomm.com,arm.com,kernel.org,synopsys.com,buserror.net,linux.ibm.com,ellerman.id.au,gmail.com,lunn.ch,armlinux.org.uk,davemloft.net,google.com,redhat.com,linaro.org,baylibre.com,googlemail.com,tibbo.com,roeck-us.net,linux-watchdog.org,linuxfoundation.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[46];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-43564-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FREEMAIL_CC(0.00)[kernel.org,hotmail.com,gmail.com,collabora.com,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chleroy@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,qualcomm.com:email]
+	FROM_NEQ_ENVFROM(0.00)[alchark@flipper.net,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[flipper.net:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,flipper.net:dkim,flipper.net:email]
 X-Rspamd-Action: no action
 
+On Tue, Mar 3, 2026 at 8:26=E2=80=AFPM Rob Herring (Arm) <robh@kernel.org> =
+wrote:
+>
+>
+> On Tue, 03 Mar 2026 19:32:46 +0400, Alexey Charkov wrote:
+> > TI BQ25792 is similar in operation to BQ25703A, but has a different
+> > register layout and different current/voltage capabilities.
+> >
+> > Expand the existing BQ25703A binding to include BQ25792, and move the
+> > voltage and current limits into per-variant conditional statements.
+> >
+> > Signed-off-by: Alexey Charkov <alchark@flipper.net>
+> > ---
+> >  .../devicetree/bindings/mfd/ti,bq25703a.yaml       | 79 ++++++++++++++=
++++-----
+> >  1 file changed, 62 insertions(+), 17 deletions(-)
+> >
+>
+> My bot found errors running 'make dt_binding_check' on your patch:
+>
+> yamllint warnings/errors:
+>
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/m=
+fd/ti,bq25703a.yaml: ignoring, error in schema: properties: allOf
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/m=
+fd/ti,bq25703a.yaml: properties: 'allOf' should not be valid under {'$ref':=
+ '#/definitions/json-schema-prop-names'}
+>         hint: A json-schema keyword was found instead of a DT property na=
+me.
 
+Thanks bot, fixed in v2 along with further comments from Krzysztof.
+Will wait for any further feedback and send out.
 
-Le 04/03/2026 à 10:02, Bartosz Golaszewski a écrit :
-> OF_GPIO is automatically enabled on all OF systems. There's no need to
-> select it explicitly.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-
-Reviewed-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
-
-> ---
->   arch/powerpc/platforms/85xx/Kconfig | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/powerpc/platforms/85xx/Kconfig b/arch/powerpc/platforms/85xx/Kconfig
-> index 604c1b4b6d45c11dc3149ee8b9adabe593882c8e..6805c19ac8a915dae1bd24b13010a56cf1948ad4 100644
-> --- a/arch/powerpc/platforms/85xx/Kconfig
-> +++ b/arch/powerpc/platforms/85xx/Kconfig
-> @@ -217,7 +217,6 @@ config GE_IMP3A
->   config SGY_CTS1000
->   	tristate "Servergy CTS-1000 support"
->   	select GPIOLIB
-> -	select OF_GPIO
->   	depends on CORENET_GENERIC
->   	help
->   	  Enable this to support functionality in Servergy's CTS-1000 systems.
-> 
-
+Best regards,
+Alexey
 
