@@ -1,154 +1,104 @@
-Return-Path: <linux-pm+bounces-43567-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43568-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wBOOGy0GqGmEnQAAu9opvQ
-	(envelope-from <linux-pm+bounces-43567-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 11:15:09 +0100
+	id eNuLObIJqGn2nQAAu9opvQ
+	(envelope-from <linux-pm+bounces-43568-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 11:30:10 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7332D1FE28D
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 11:15:08 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E39D1FE5C3
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 11:30:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 5FE4F30095DA
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 10:15:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AB6BA31A3E83
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 10:24:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DF393368A9;
-	Wed,  4 Mar 2026 10:15:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SKSDuzq5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 097DC3A2544;
+	Wed,  4 Mar 2026 10:24:05 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99EAC398911
-	for <linux-pm@vger.kernel.org>; Wed,  4 Mar 2026 10:15:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5BE236A00F;
+	Wed,  4 Mar 2026 10:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772619304; cv=none; b=KkBJnUsj8ziUZSBBMOPykxUkL2qT/pkXUr+irpeCCm4j1/HEqlMyHwnPvc6jeo1Zh5ypoJFsCeTcpGkcH3i76OPVol32YrxU7CCNbNgkVbqIl9lEQtakyP6KAVtC0yiBr++0Q1ja3j+xSo6/uiUR7VmYGf3g4dPNs8DHea7NRuo=
+	t=1772619844; cv=none; b=bcEQ7GU9Kp9PQdffR9fHATZDwZ0MIZpQS8LbXLNpT5XtrcvaViIuMp5V6JSosJcHRUexoWgNVWNFKqU6R5sGT3vLmfXgxjss4E28BpaLUL0fO7/cDI7B/0b5HjnasIoAGXkfGdl7YoZHkH3KqgzBeL/aYmLUXV+7W03BMhKNsCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772619304; c=relaxed/simple;
-	bh=4sTqdoVtxIVe8ztceUvqH0vr1KFn6QFMvGvuTz1nYbE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GnDZO8mB5y7A6m27rPSTQwIBOJk0EESlmm1WMqTlCI7vyoZ6gpGlkVcWQYah7pUTefvcBvEEtJa3r/T1+wuKI8Qr+nDoakp9QZC0yYpKEqGNU4lrLhOt2cFDgD1pue/sNrS1NtfmGUnE3MhoUoK6qsPKpKWkG/aLnbgH1qiqGqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SKSDuzq5; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-38704f70ea3so118823431fa.2
-        for <linux-pm@vger.kernel.org>; Wed, 04 Mar 2026 02:15:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1772619301; x=1773224101; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uakOWlLezjhnuaH8mro0N46VAkqU0tG4gdp3L9C60EM=;
-        b=SKSDuzq5A99wgShriuzSOKF7MOHP2JfW+P0pQ1xp/1G51B8PRgUv4htuTeDxdk7ZI6
-         GDBEdAo0WSjojMp9n9iqRKKfp/Y6z7Rxs6yj4EKTlFdOAg8hrY9CF3xbbgAw/R9YsKhf
-         0BO5gQ3WDYQIoHzZGuLRtwAj7VjX810ofrCCbkDRfdfyKIfZkGCGtjdhxB6vhQ1927+X
-         24+BGixe0zTpccimYVebOHUOyVyGRVfcVBkDshJRMYm5xy7OUwHzS8hVEwugUneqAUm8
-         x7OAbN0d9gFHQK/W0IwGxrKDFsSRPSqdIcVUa21uJv0K4s04BtfVxo508lv3/kSaoKZ/
-         UdYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772619301; x=1773224101;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uakOWlLezjhnuaH8mro0N46VAkqU0tG4gdp3L9C60EM=;
-        b=ZwIFCHAqN1tuMr9jxU5jWowWBskOnMvDyNYlAKZwbHMDFujk5XHeUjebSxKraZXqWJ
-         HGWRVaEkay92GRgJ0ZBDga3eTjp5HiyMdbR7SqyKmqY2+uPuqUuB7SSt4VEBYmJaDuhK
-         IIu4T/jQxo1S6Ze6uHE9+MFOhSlPV4obJSsWWxCDlHFwxcI3CxyoiIt8layoal16z+9O
-         nRcA5ZkG53kpiJVdxpy65iD+uN7ztGg135QPyMiQvJlwrMHqfMEgxnWu1OQub7/ty/Xw
-         eThar32BsE/EPWOhWIsRjLr++f4DQHlV6wby2qxy8vJ7G3pb+JSwi0Sw6jQ7OZDkrOlY
-         WGBg==
-X-Forwarded-Encrypted: i=1; AJvYcCUBsHZo/7bUdwxjvx9ptTaAb2305aj6N7MS2rMF9UFMtisT2R8s9lhWBDoErQKDRl649s2rDmaQmA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7sKIDit3cEf9OCcfZReyhCbfm5+QLBdjYkAuA6qnHS+50xszK
-	lnf3QbhCydjqsQD+vZXMJulvRh27eFxYSFYwujHZhJ9oHTmnsdnQeKSsqUdK2Up7kf4=
-X-Gm-Gg: ATEYQzx8aW+utum3JlHIf+CGhkgCAAfo2Sv014pQF6ogstbtlDfVSNkNDIddcokJ+Pe
-	yVMQIWhUGSH1kFMSNlWVT7VitHRm4tVUPEczFYEn6Iep7fw/nxvE0D89tAOoiguqzv1Cynb7NrO
-	KtTMOhpSu8iW4Zp2jXoV8CUJgqd+i2SCosf3DOjsHVsr5d7K2fNlb52VgspZSIihGUMHUnA401p
-	TMDmgD51opNljWJZSgvbC4Gh9zFMj/j79eUnXb7x6H7HG74UW91+C66EbdOvt5keGNvDFmKF5cX
-	/GMPIpQaPyziBVjCTgBfDn6liSd9tNoG3h0A/Tuv63lp6WcqJXtFNUrYgk8mvPsZEIstxgfyOoe
-	byWtC0M/KneBesLIZY+k5g4mBzuurx5tocEE77iMrlD/RfNx+j0dXTz3Tl/i5S8ZDLNj/ZiDGTL
-	PFPb9OfbrqF/6whBLlIOssg6pWPVcD1M+0ZB39gL9XdlYT6JiFOewOFpHkkvUsfrSSwaRCe/4m
-X-Received: by 2002:a05:651c:1509:b0:386:91a1:f1f2 with SMTP id 38308e7fff4ca-38a2c55fac0mr11929111fa.7.1772619300617;
-        Wed, 04 Mar 2026 02:15:00 -0800 (PST)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a123573db0sm1200985e87.67.2026.03.04.02.14.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 02:15:00 -0800 (PST)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-pm@vger.kernel.org,
-	arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] pmdomain: arm: Add print after a successful probe for SCMI power domains
-Date: Wed,  4 Mar 2026 11:14:57 +0100
-Message-ID: <20260304101457.7470-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1772619844; c=relaxed/simple;
+	bh=tAH5Fh//r0yTs3/fYZ1gphLpXoMSTNidzCwnGpKutrU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nMzAJYF1DRAwNta2kOMFyJNTBFeGb9I0ccZqlrpFz9qWHuAK+8juBzjGzc3c8n+1MYhqAdwgzlIbx619cP00ddbphdoN/g5OEqEVK4aATSpdpYmHnhTM/YGmMdHU9jNiEIPMFhQCBhdEvNn20Gh7GagBybMxUt179Y8a+ZjQTE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE86E339;
+	Wed,  4 Mar 2026 02:23:55 -0800 (PST)
+Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 01EEF3F7BD;
+	Wed,  4 Mar 2026 02:23:59 -0800 (PST)
+Date: Wed, 4 Mar 2026 10:23:50 +0000
+From: Cristian Marussi <cristian.marussi@arm.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	linux-pm@vger.kernel.org, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pmdomain: arm: Add print after a successful probe for
+ SCMI power domains
+Message-ID: <aagINsZj6sgR7pNY@pluto>
+References: <20260304101457.7470-1-ulf.hansson@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 7332D1FE28D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260304101457.7470-1-ulf.hansson@linaro.org>
+X-Rspamd-Queue-Id: 7E39D1FE5C3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.86 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43567-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-pm@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-43568-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,linaro.org:dkim,linaro.org:email,linaro.org:mid]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[cristian.marussi@arm.com,linux-pm@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.915];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,arm.com:email]
 X-Rspamd-Action: no action
 
-It can be discussed how useful a print is after a successful probe. In the
-SCMI power domain case it's seems valuable, as it let us inform about the
-number of initialized power domains too, which is fetched from firmware.
+On Wed, Mar 04, 2026 at 11:14:57AM +0100, Ulf Hansson wrote:
+> It can be discussed how useful a print is after a successful probe. In the
+> SCMI power domain case it's seems valuable, as it let us inform about the
+> number of initialized power domains too, which is fetched from firmware.
 
-Therefore, let's add a print about this, which also aligns with the
-behaviour of the SCMI perf domain driver.
+Hi,
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/pmdomain/arm/scmi_pm_domain.c | 1 +
- 1 file changed, 1 insertion(+)
+yes indeed we tend to print such 'summary' info at the end of a
+successful probe in other SCMI drivers.
 
-diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
-index b5e2ffd5ea64..5454faed7d5d 100644
---- a/drivers/pmdomain/arm/scmi_pm_domain.c
-+++ b/drivers/pmdomain/arm/scmi_pm_domain.c
-@@ -113,6 +113,7 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
- 		goto err_rm_genpds;
- 
- 	dev_set_drvdata(dev, scmi_pd_data);
-+	dev_info(dev, "Initialized %d power domains", num_domains);
- 
- 	return 0;
- err_rm_genpds:
--- 
-2.43.0
+LGTM.
+Review-by: Cristian Marussi <cristian.marussi@arm.com>
 
+Thanks,
+Cristian
 
