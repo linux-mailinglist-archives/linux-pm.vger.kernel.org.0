@@ -1,185 +1,205 @@
-Return-Path: <linux-pm+bounces-43579-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43580-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KOHlGlEpqGkdpAAAu9opvQ
-	(envelope-from <linux-pm+bounces-43579-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 13:45:05 +0100
+	id qGT2C1ctqGlPpQAAu9opvQ
+	(envelope-from <linux-pm+bounces-43580-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 14:02:15 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8CF41FFC73
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 13:45:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9F741FFFC1
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 14:02:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 47D643015894
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 12:45:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7B9B43040F84
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 13:02:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2E371DE8AE;
-	Wed,  4 Mar 2026 12:45:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6198D266B67;
+	Wed,  4 Mar 2026 13:02:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="pFthcIOp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318DE1B4156
-	for <linux-pm@vger.kernel.org>; Wed,  4 Mar 2026 12:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9C81DE8AE;
+	Wed,  4 Mar 2026 13:01:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772628301; cv=none; b=opCxKZ79nreQZjhgcynQOjjPf7qFGdMqTACgDFXHowJX/kvuZt7543tt1MDkTupEDDBLt+dwiYp4HzRGoIQ32l/j9G5AoxgAuMCFnSb5qR/ylQU4JHcYyDjgd0nG3yc79gU40OfNxtEYnDJx1+FYtKNav87bL/i5tYKh1VilSLs=
+	t=1772629320; cv=none; b=SpxJXVm7Fkr/vc4ly7wfhr9R+OT7WKR2BYLDtEn9UWJua2ZXuoDSjjM9Rz+fnaZz6GbtKWqrqf3snnLnrOB1t1q18tBs4dJL5HL78WB4RhvwzHcKakPVSPhaz2Eo1hFEdzDeCjPcEr8idb0VTdEN6GxXQfjasX9VZUhaBkWhVPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772628301; c=relaxed/simple;
-	bh=3Mro9ieTCWZnccA7uYcdmNAs151qBip0jfucMzPC6HU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UlL8HZfuJAVcB6CascHCDAb1zD7fEm39iDAaFuNZw5cQSFguhWhLaYyl/K0KYbA1Au1u5Ac7oi+ahe6jXftMmtOegzvdmxdKFpwVHvSN32MCv+NDWNDA3FjTo+Wr5uHQBLZb5Rw3uhQPDmGyxSpo/K42nHc5Da+o34iSNdL1Mb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-5ffb61b0babso220981137.3
-        for <linux-pm@vger.kernel.org>; Wed, 04 Mar 2026 04:45:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772628299; x=1773233099;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5jOJis2k42MuXRJfCHvO4iLfTzm70s8fuGt1UGFetG0=;
-        b=l/LYZ6scQ6gsO5o5uPMm70wtxMYqDp1anFDPJ7k7NYJ1ocyw/wLU11G+3OQThXVnvB
-         y8/3tbsdeU1mzjjTk2rfKfJROGjF29bmUejtp+E0+yBVSyqAuaF+Jy0zMZdtYZDe2RLx
-         shP6w+aJAfTRIC7K8W/WXCeExR/jcbIQw0b1kTLo9i5FUvWvuREUeBXbcmaIQGebHz8g
-         oEgx2mw8TqlStRfqUmLWGeuoBbNgR9jiqoaik3VgPP40A5HbHTCrfXYnu8KS6SL4pZYb
-         KDG8YFPa7Td2VICYprfLg/F8b4/eQ/u2Py/uJtpQGyzhHU+Wbvmx0iUpBDC7rcLMxKgn
-         mf1g==
-X-Gm-Message-State: AOJu0YwcMC8MurMC7CAugMDeUfOSnVzuceN4UCIXXQiY6x94bjtnY3Q3
-	SGGkMvviziSJVM9g943G6wURSV5FZikWArwhlMzgULnI9JkZe4KWhBCeQyzwgwNm
-X-Gm-Gg: ATEYQzxEXLVA7Aww555pTH/iFZzIe3rFxPvLa9u+9WcOWY3Za1dhvP2Ue1/3Vgy6z68
-	x01WMjyJsxI8wEAm1kwWzx86tl8EWtILF6uyzWFxqjkcanLfntJUBzy8dHzAOqA3QMnKU6Y3kzW
-	CJTt+qy9G4ptJWe3b+M033jw92BD8DxQW3oCJoVndlh9ByM1lyuUm63YQLIi+Ox99UyE5rZs4g9
-	nxF4ziknMZBz573e7B8WJ6ximyedeR9Xy3VTfNCHmqaNvq+25r2T1Svtn3hbXMdQ52uaS3tNZt6
-	oO89lSbh7nmAZyW3L9O/rJaQcejV7p9mb6ofGn5xta/8bKZyp4VzaLj+n6KdGboPqFCPz3NXcwI
-	5hQ1t/ccArqz6kgr1zQkFI7NsNy0+4hqhAvo7tBM50nBSdcMjE/kNvyEO8IRcbHARlKrc5sLbMN
-	lZKx4mWNeXdK4Zcp6e2AnRG2jrDyq0k599g/WvvJXeVH94QWF0QhjnbITGNKRn
-X-Received: by 2002:a05:6102:cd2:b0:5fc:2b29:b005 with SMTP id ada2fe7eead31-5ffaaf469b2mr766421137.24.1772628299125;
-        Wed, 04 Mar 2026 04:44:59 -0800 (PST)
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5ff1e808164sm20153747137.4.2026.03.04.04.44.58
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Mar 2026 04:44:58 -0800 (PST)
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-5ff174502ffso4801528137.1
-        for <linux-pm@vger.kernel.org>; Wed, 04 Mar 2026 04:44:58 -0800 (PST)
-X-Received: by 2002:a05:6102:d93:b0:5f8:e54c:2f72 with SMTP id
- ada2fe7eead31-5ffaaf499d5mr808375137.20.1772628298656; Wed, 04 Mar 2026
- 04:44:58 -0800 (PST)
+	s=arc-20240116; t=1772629320; c=relaxed/simple;
+	bh=Kb3qzLz/b1BGRAyVf2N/dxJ8GTEZDpzuub4ZDwWzUNE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tWHXSpKfMBpK5/iScNnSeA2YXCObWiHAKnPaOPHhQlsOkqgebzcPSeckMoVqF8g+oVKhsltgFIEYgbnNW1bcuuKfulHW7kiYJpQDUvLusIVcD3JjzH4kB4R6DjrhxEIDDFcX3ss8FcKGHoaHybLkNqACpN+6FAmL5zv1Z6aDde4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=pFthcIOp; arc=none smtp.client-ip=178.62.254.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
+Received: from shell.ilvokhin.com (shell.ilvokhin.com [138.68.190.75])
+	(Authenticated sender: d@ilvokhin.com)
+	by mail.ilvokhin.com (Postfix) with ESMTPSA id 87BDEB3180;
+	Wed, 04 Mar 2026 13:01:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
+	s=mail; t=1772629310;
+	bh=A9Z22CwhsOMBQOd91GzYVcy5QaFqoA5vc5xFlhCLB5c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=pFthcIOpg6gMssYocf5aeRIIf77W9v5hZIKXBO7FBI43GEFsFtiRaFd/8KmWzEQbq
+	 r5Mij1YYDKyrPnmIdgwa/tHoTR+2WzWnTHVmDS1cW790Wkj+VNUORUSHNy9/MsuVMl
+	 j/JEInhSlK7v2JYG+6N18JlNqCd4oHXPL8TqT9y0=
+Date: Wed, 4 Mar 2026 13:01:45 +0000
+From: Dmitry Ilvokhin <d@ilvokhin.com>
+To: SeongJae Park <sj@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Qi Zheng <zhengqi.arch@bytedance.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 4/5] mm: rename zone->lock to zone->_lock
+Message-ID: <aagtOctLQqpDcw_h@shell.ilvokhin.com>
+References: <aabvc4Xhc9qBfaG7@shell.ilvokhin.com>
+ <20260304015035.84839-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1cfa86b72b2a5aa2ade92f247dd318c9cb6ef2a1.1771267504.git.geert+renesas@glider.be>
- <CAPDyKFotV3bUEQic6X3PEC8m4fcXtc0JF0u7HTj9nRF1koowgA@mail.gmail.com>
- <CAMuHMdUwLqWxp1pYj3fHf6OVtxrScg=wP=bdwLbjo7vpgmP4Jw@mail.gmail.com> <CAPDyKFq2it5TAEBBKBh+q+UiRsGYaORar0Q_42LCuxyKRLYj0A@mail.gmail.com>
-In-Reply-To: <CAPDyKFq2it5TAEBBKBh+q+UiRsGYaORar0Q_42LCuxyKRLYj0A@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 4 Mar 2026 13:44:47 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVYydpHzVCyCWjM97R72Kw7CC_yixh90Xkdx7zTFLrp1A@mail.gmail.com>
-X-Gm-Features: AaiRm50ns5ZCriEiTsGAXYy21SfUlanA_iiWCQM7_dyXADpF8EAVg--zFZV8C4o
-Message-ID: <CAMuHMdVYydpHzVCyCWjM97R72Kw7CC_yixh90Xkdx7zTFLrp1A@mail.gmail.com>
-Subject: Re: [PATCH/RFC] pmdomain: core: Support pd_ignore_unused with sync_state
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: A8CF41FFC73
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260304015035.84839-1-sj@kernel.org>
+X-Rspamd-Queue-Id: B9F741FFFC1
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.46 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
+	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43579-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43580-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	RSPAMD_URIBL_FAIL(0.00)[linux.dev:query timed out,linux-foundation.org:query timed out];
+	ASN_FAIL(0.00)[1.2.3.5.c.f.2.1.0.0.0.0.0.0.0.0.c.6.3.0.1.0.0.e.4.0.c.3.0.0.6.2.asn6.rspamd.com:query timed out];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.919];
+	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[ilvokhin.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,linaro.org:email,glider.be:email,linux-m68k.org:email]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,ilvokhin.com:dkim,ilvokhin.com:email,linux-foundation.org:email,linux.dev:email,shell.ilvokhin.com:mid]
 X-Rspamd-Action: no action
 
-Hi Ulf,
+On Tue, Mar 03, 2026 at 05:50:34PM -0800, SeongJae Park wrote:
+> On Tue, 3 Mar 2026 14:25:55 +0000 Dmitry Ilvokhin <d@ilvokhin.com> wrote:
+> 
+> > On Mon, Mar 02, 2026 at 02:37:43PM -0800, Andrew Morton wrote:
+> > > On Mon, 2 Mar 2026 15:10:03 +0100 "Vlastimil Babka (SUSE)" <vbabka@kernel.org> wrote:
+> > > 
+> > > > On 2/27/26 17:00, Dmitry Ilvokhin wrote:
+> > > > > This intentionally breaks direct users of zone->lock at compile time so
+> > > > > all call sites are converted to the zone lock wrappers. Without the
+> > > > > rename, present and future out-of-tree code could continue using
+> > > > > spin_lock(&zone->lock) and bypass the wrappers and tracing
+> > > > > infrastructure.
+> > > > > 
+> > > > > No functional change intended.
+> > > > > 
+> > > > > Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+> > > > > Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
+> > > > > Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+> > > > > Acked-by: SeongJae Park <sj@kernel.org>
+> > > > 
+> > > > I see some more instances of 'zone->lock' in comments in
+> > > > include/linux/mmzone.h and under Documentation/ but otherwise LGTM.
+> > > > 
+> > > 
+> > > I fixed (most of) that in the previous version but my fix was lost.
+> > 
+> > Thanks for the fixups, Andrew.
+> > 
+> > I still see a few 'zone->lock' references in Documentation remain on
+> > mm-new. This patch cleans them up, as noted by Vlastimil.
+> > 
+> > I'm happy to adjust this patch if anything else needs attention.
+> > 
+> > From 9142d5a8b60038fa424a6033253960682e5a51f4 Mon Sep 17 00:00:00 2001
+> > From: Dmitry Ilvokhin <d@ilvokhin.com>
+> > Date: Tue, 3 Mar 2026 06:13:13 -0800
+> > Subject: [PATCH] mm: fix remaining zone->lock references
+> > 
+> > Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
+> > ---
+> >  Documentation/mm/physical_memory.rst | 4 ++--
+> >  Documentation/trace/events-kmem.rst  | 8 ++++----
+> >  2 files changed, 6 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
+> > index b76183545e5b..e344f93515b6 100644
+> > --- a/Documentation/mm/physical_memory.rst
+> > +++ b/Documentation/mm/physical_memory.rst
+> > @@ -500,11 +500,11 @@ General
+> >  ``nr_isolate_pageblock``
+> >    Number of isolated pageblocks. It is used to solve incorrect freepage counting
+> >    problem due to racy retrieving migratetype of pageblock. Protected by
+> > -  ``zone->lock``. Defined only when ``CONFIG_MEMORY_ISOLATION`` is enabled.
+> > +  ``zone_lock``. Defined only when ``CONFIG_MEMORY_ISOLATION`` is enabled.
+> 
+> Dmitry's original patch [1] was doing 's/zone->lock/zone->_lock/', which aligns
+> to my expectation.  But this patch is doing 's/zone->lock/zone_lock/'.  Same
+> for the rest of this patch.
+> 
+> I was initially thinking this is just a mistake, but I also found Andrew is
+> doing same change [2], so I'm bit confused.  Is this an intentional change?
+> 
+> [1] https://lore.kernel.org/d61500c5784c64e971f4d328c57639303c475f81.1772206930.git.d@ilvokhin.com
+> [2] https://lore.kernel.org/20260302143743.220eed4feb36d7572fe726cc@linux-foundation.org
+> 
 
-On Wed, 4 Mar 2026 at 12:52, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> On Wed, 4 Mar 2026 at 12:06, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Wed, 4 Mar 2026 at 11:56, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > On Mon, 16 Feb 2026 at 19:47, Geert Uytterhoeven
-> > > <geert+renesas@glider.be> wrote:
-> > > > Since the introduction of the sync_state mechanism, the
-> > > > "pd_ignore_unused" kernel command line option doesn't really work
-> > > > anymore.  While genpd_power_off_unused() still checks for that flag
-> > > > before powering down unused domains, the new sync_state callbacks lack
-> > > > such checks, thus powering down unused domains regardless.
-> > > >
-> > > > Fix this by adding checks to the sync_state helpers and callbacks.
-> > > > Factor out the printing of the warning message, to make sure it is
-> > > > printed only once.
-> > > >
-> > > > Fixes: 002ebddd695a5399 ("pmdomain: core: Restore behaviour for disabling unused PM domains")
-> > > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > > ---
-> > > > RFC as I have no need for this in upstream.
-> > >
-> > > I am trying to understand the use case and whether we should consider
-> > > to land this upstream.
-> > >
-> > > Would you mind elaborating on how this is useful for you?
-> >
-> > It is (currently) not useful for me, but it may be useful for others.
-> > During work on a new SoC, someone had hardcoded "pd_ignore_unused"
-> > in the kernel command line.  After adding support for PM Domains on
-> > that SoC, I noticed PM Domains were still powered down.
-> >
-> > The issue is that pd_ignore_unused no longer does what it claims to do:
-> >
-> >         pd_ignore_unused
-> >                         [PM]
-> >                         Keep all power-domains already enabled by bootloader on,
-> >                         even if no driver has claimed them. This is useful
-> >                         for debug and development, but should not be
-> >                         needed on a platform with proper driver support.
-> >
+Good catch, thanks for pointing this out, SJ.
 
-[...]
+Originally the mechanical rename was indeed zone->lock -> zone->_lock.
+However, in Documentation I intentionally switched references to
+zone_lock instead of zone->_lock. The reasoning is that _lock is now an
+internal implementation detail, and direct access is discouraged. The
+intended interface is via the zone_lock_*() / zone_unlock_*() wrappers,
+so referencing zone_lock in documentation felt more appropriate than
+mentioning the private struct field (zone->_lock).
 
-> > So IMO that should either be fixed, or the option should be removed.
-> > Do you agree?
->
-> Right, I think it's time to consider removing it, unless people still
-> find it useful ofcourse.
->
-> Do you want to send a patch that we can test/review or you prefer me
-> to handle it?
+That said, I agree this creates inconsistency with the mechanical
+rename, and I'm happy to adjust either way: either consistently refer
+to the wrapper API, or keep documentation aligned with zone->_lock.
 
-Feel free to handle it.
-Thanks!
+I slightly prefer referring to the wrapper API, but don't have a strong
+preference as long as we're consistent.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> 
+> Thanks,
+> SJ
+> 
+> [...]
 
