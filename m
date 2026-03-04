@@ -1,237 +1,191 @@
-Return-Path: <linux-pm+bounces-43583-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43584-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sMIuLE9SqGnUtAAAu9opvQ
-	(envelope-from <linux-pm+bounces-43583-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 16:39:59 +0100
+	id gOWHEjVaqGlxtgAAu9opvQ
+	(envelope-from <linux-pm+bounces-43584-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 17:13:41 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27DD7202F42
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 16:39:59 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDA91203F16
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 17:13:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B831230143E7
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 15:17:58 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3A4963068FE3
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 16:03:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FA3032A3EC;
-	Wed,  4 Mar 2026 15:17:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C80622222CC;
+	Wed,  4 Mar 2026 16:03:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSvA+2M7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NF72tvyX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B666273D8D;
-	Wed,  4 Mar 2026 15:17:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CAD33E7;
+	Wed,  4 Mar 2026 16:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772637476; cv=none; b=UpyzRrsHTbpxCKBE7ifPdttAfe3eZlSl1i/Dl+FMjm+/4ei8KsO55Dr2svqGYjO1thc/T1Rph54veyjzujGxkPI+FGqaLVJLgX+tbgePVXKCmhIVwHr4tjd6pNHC+RD9baGmDq6IkvwWbMKMZlcF4Jx8xraZnopNUBQDtDNYZNg=
+	t=1772640186; cv=none; b=IyFvGkLnsCWff0EunzXYJ1lPVeCTQ2mOUxgfTad7N577wyJOT9VRX41y60imOlT5q0uk0a0T/9xcrEoYgtG57HoOsBWV+9jJpFyTo/MBhN+PGSmR2rABzpFvrmcZL941lCWNrY2rUhw56DN8wVIvgueG4gj6CqWaCXLoPv0y7FM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772637476; c=relaxed/simple;
-	bh=57ImQNx7V4C6fEwHSIwRuOuyP5pxZ9XC+64vaT7Z0fY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P3zy5IZ24Ien+WuFsyevSa2KDx9OzxJBPyD2I/ZcBF4jETI10a5s/WlxvJ7W2ic62kQiO01cabkunm6koXpw76jFgRY23WrVuKoewT4MME49GlzrPD9+jK8OF2SxzRztG2v9mhY2+Cj654Vdgn+0WAmvYtPSL8j4CCHlC7bqBbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSvA+2M7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53805C4CEF7;
-	Wed,  4 Mar 2026 15:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772637475;
-	bh=57ImQNx7V4C6fEwHSIwRuOuyP5pxZ9XC+64vaT7Z0fY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lSvA+2M7lNneZJtS9EGoh6arq6gkKMsjh8L1g9NeTPJUw6aLeazosXn2Yr481RbLC
-	 8CgsomHKptHsJMI0NQlhWQ0lvwTUsaF1AHrB7r/4ds+y9Y4mljkvugHvk3awgfu0ge
-	 Z3XjZDeT2GSxIWMOj7/aunr2TxAhmq6d4oKxq7qnApk+uW7l9zdS4CoaBulAwg9dY8
-	 LrKKqMzFdQ09K2IJVi/Ebqq4u+pi4iPbtIi3OBbt+fy5iXvIb4hdwFuqXGMMcbau/D
-	 3v1Adi2arxboGcAoVQIvnmkPL8z9b324zPTHBBaYTjG9jujKTNSqy+1Yt1x2e3T7kA
-	 rn4ftOD6VwIlw==
-From: SeongJae Park <sj@kernel.org>
-To: SeongJae Park <sj@kernel.org>
-Cc: Dmitry Ilvokhin <d@ilvokhin.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>,
-	Wei Xu <weixugc@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Zi Yan <ziy@nvidia.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Qi Zheng <zhengqi.arch@bytedance.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 4/5] mm: rename zone->lock to zone->_lock
-Date: Wed,  4 Mar 2026 07:17:46 -0800
-Message-ID: <20260304151747.172713-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260304151335.172572-1-sj@kernel.org>
-References: 
+	s=arc-20240116; t=1772640186; c=relaxed/simple;
+	bh=Z4MlP0pcwsJnvGgg0+nCTAjPNwgwdLgy8oD9Ai3EQhA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=HcTG/yWT3I6Fbl8jdgU5uY5weudAp7EvClqT/JpfVoaH3PiLytO1HOScTJ91uxyk1UZSKB2U/4AqZd6Vs+yqoHDlDUPLv7SP4G5j1G4Mz3TCG81PGrbR3K703mVv1cYfEkfEDJ5Y4APL0MzIoW9pU9qBRsBbMQ/Mp5rdaZ23P2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NF72tvyX; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772640186; x=1804176186;
+  h=date:from:to:cc:subject:message-id;
+  bh=Z4MlP0pcwsJnvGgg0+nCTAjPNwgwdLgy8oD9Ai3EQhA=;
+  b=NF72tvyXXJzeufpr30GJlGo9Tc9bN1cLXCo0/YjdE3cpLTIhdcpfJG29
+   zP8b2Mrh3WnTstqKI4vs2Eft92ajd+/4TW7oxjhAG378UCek4YABsatYz
+   9M/JN1oVCljQHRfthJfqN4ofz52zBLqS13ZSwCleQu8fVQQwymLhGBWwJ
+   RQuZGYCZtbhtIWauBVcCFWStiPEa5plYgTZZCWfx5rG0lO09Nbo7aWXKC
+   EK3KJUEouj5PL6KC/mo7tx+gbUcTO2tpo59+sFDUvgPjVwzy/r3k02C+r
+   oNGR7F5I3bF8Nihse4JcUhH+2nlr92Ei6mDQC3eGzAWR9TgpBwQOhtqh/
+   A==;
+X-CSE-ConnectionGUID: j4EJJKcTR2u21WoQFE5MPw==
+X-CSE-MsgGUID: YOBRdSt8QyWr+VBbcH1FqQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="77310332"
+X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
+   d="scan'208";a="77310332"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 08:03:06 -0800
+X-CSE-ConnectionGUID: CNxRToOVRoeJdGJzqoHJHQ==
+X-CSE-MsgGUID: VYRQSXCGTS218vIMPrU6+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
+   d="scan'208";a="248856504"
+Received: from lkp-server01.sh.intel.com (HELO f27a57aa7a36) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 04 Mar 2026 08:03:04 -0800
+Received: from kbuild by f27a57aa7a36 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vxogf-00000000424-1WqY;
+	Wed, 04 Mar 2026 16:03:01 +0000
+Date: Thu, 05 Mar 2026 00:02:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:fixes] BUILD SUCCESS
+ 8ca098725827d6509f75752ed807ab5a8d5b6bf1
+Message-ID: <202603050042.zooczN38-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 27DD7202F42
+X-Rspamd-Queue-Id: EDA91203F16
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43583-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[intel.com:+];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[29];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_FROM(0.00)[bounces-43584-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_THREE(0.00)[3];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sj@kernel.org,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-pm];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,linux.dev:email,linux-foundation.org:email,ilvokhin.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,intel.com:dkim,intel.com:mid]
 X-Rspamd-Action: no action
 
-On Wed,  4 Mar 2026 07:13:34 -0800 SeongJae Park <sj@kernel.org> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
+branch HEAD: 8ca098725827d6509f75752ed807ab5a8d5b6bf1  Merge branch 'acpi-pm' into fixes
 
-> On Wed, 4 Mar 2026 13:01:45 +0000 Dmitry Ilvokhin <d@ilvokhin.com> wrote:
-> 
-> > On Tue, Mar 03, 2026 at 05:50:34PM -0800, SeongJae Park wrote:
-> > > On Tue, 3 Mar 2026 14:25:55 +0000 Dmitry Ilvokhin <d@ilvokhin.com> wrote:
-> > > 
-> > > > On Mon, Mar 02, 2026 at 02:37:43PM -0800, Andrew Morton wrote:
-> > > > > On Mon, 2 Mar 2026 15:10:03 +0100 "Vlastimil Babka (SUSE)" <vbabka@kernel.org> wrote:
-> > > > > 
-> > > > > > On 2/27/26 17:00, Dmitry Ilvokhin wrote:
-> > > > > > > This intentionally breaks direct users of zone->lock at compile time so
-> > > > > > > all call sites are converted to the zone lock wrappers. Without the
-> > > > > > > rename, present and future out-of-tree code could continue using
-> > > > > > > spin_lock(&zone->lock) and bypass the wrappers and tracing
-> > > > > > > infrastructure.
-> > > > > > > 
-> > > > > > > No functional change intended.
-> > > > > > > 
-> > > > > > > Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> > > > > > > Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
-> > > > > > > Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
-> > > > > > > Acked-by: SeongJae Park <sj@kernel.org>
-> > > > > > 
-> > > > > > I see some more instances of 'zone->lock' in comments in
-> > > > > > include/linux/mmzone.h and under Documentation/ but otherwise LGTM.
-> > > > > > 
-> > > > > 
-> > > > > I fixed (most of) that in the previous version but my fix was lost.
-> > > > 
-> > > > Thanks for the fixups, Andrew.
-> > > > 
-> > > > I still see a few 'zone->lock' references in Documentation remain on
-> > > > mm-new. This patch cleans them up, as noted by Vlastimil.
-> > > > 
-> > > > I'm happy to adjust this patch if anything else needs attention.
-> > > > 
-> > > > From 9142d5a8b60038fa424a6033253960682e5a51f4 Mon Sep 17 00:00:00 2001
-> > > > From: Dmitry Ilvokhin <d@ilvokhin.com>
-> > > > Date: Tue, 3 Mar 2026 06:13:13 -0800
-> > > > Subject: [PATCH] mm: fix remaining zone->lock references
-> > > > 
-> > > > Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
-> > > > ---
-> > > >  Documentation/mm/physical_memory.rst | 4 ++--
-> > > >  Documentation/trace/events-kmem.rst  | 8 ++++----
-> > > >  2 files changed, 6 insertions(+), 6 deletions(-)
-> > > > 
-> > > > diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
-> > > > index b76183545e5b..e344f93515b6 100644
-> > > > --- a/Documentation/mm/physical_memory.rst
-> > > > +++ b/Documentation/mm/physical_memory.rst
-> > > > @@ -500,11 +500,11 @@ General
-> > > >  ``nr_isolate_pageblock``
-> > > >    Number of isolated pageblocks. It is used to solve incorrect freepage counting
-> > > >    problem due to racy retrieving migratetype of pageblock. Protected by
-> > > > -  ``zone->lock``. Defined only when ``CONFIG_MEMORY_ISOLATION`` is enabled.
-> > > > +  ``zone_lock``. Defined only when ``CONFIG_MEMORY_ISOLATION`` is enabled.
-> > > 
-> > > Dmitry's original patch [1] was doing 's/zone->lock/zone->_lock/', which aligns
-> > > to my expectation.  But this patch is doing 's/zone->lock/zone_lock/'.  Same
-> > > for the rest of this patch.
-> > > 
-> > > I was initially thinking this is just a mistake, but I also found Andrew is
-> > > doing same change [2], so I'm bit confused.  Is this an intentional change?
-> > > 
-> > > [1] https://lore.kernel.org/d61500c5784c64e971f4d328c57639303c475f81.1772206930.git.d@ilvokhin.com
-> > > [2] https://lore.kernel.org/20260302143743.220eed4feb36d7572fe726cc@linux-foundation.org
-> > > 
-> > 
-> > Good catch, thanks for pointing this out, SJ.
-> > 
-> > Originally the mechanical rename was indeed zone->lock -> zone->_lock.
-> > However, in Documentation I intentionally switched references to
-> > zone_lock instead of zone->_lock. The reasoning is that _lock is now an
-> > internal implementation detail, and direct access is discouraged. The
-> > intended interface is via the zone_lock_*() / zone_unlock_*() wrappers,
-> > so referencing zone_lock in documentation felt more appropriate than
-> > mentioning the private struct field (zone->_lock).
-> 
-> Thank you for this nice and kind clarification, Dmitry!  I agree mentioning
-> zone_[un]lock_*() helpers instead of the hidden member (zone->_lock) can be
-> better.
-> 
-> But, I'm concerned if people like me might not aware the intention under
-> 'zone_lock'.  If there is a well-known convention that allows people to know it
-> is for 'zone_[un]lock_*()' helpers, making it more clear would be nice, in my
-> humble opinion.  If there is such a convention but I'm just missing it, please
-> ignore.  If I'm not, for eaxmaple,
-> 
-> "protected by ``zone->lock``" could be re-wrote to
-> "protected by ``zone_[un]lock_*()`` locking helpers" or,
-> "protected by zone lock helper functions (``zone_[un]lock_*()``)" ?
+elapsed time: 1500m
 
-Maybe too verbose and people who not used to regex might be confused.
-Mentioning mmzone_lock.h might be better?  E.g.,
+configs tested: 66
+configs skipped: 1
 
-    protected by functions in mmzone_lock.h
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> 
-> > 
-> > That said, I agree this creates inconsistency with the mechanical
-> > rename, and I'm happy to adjust either way: either consistently refer
-> > to the wrapper API, or keep documentation aligned with zone->_lock.
-> > 
-> > I slightly prefer referring to the wrapper API, but don't have a strong
-> > preference as long as we're consistent.
-> 
-> I also think both approaches are good.  But for the wrapper approach, I think
-> giving more contexts rather than just ``zone_lock`` to readers would be nice.
+tested configs:
+alpha                             allnoconfig    gcc-15.2.0
+alpha                            allyesconfig    gcc-15.2.0
+arc                              allmodconfig    gcc-15.2.0
+arc                               allnoconfig    gcc-15.2.0
+arc                              allyesconfig    gcc-15.2.0
+arm                               allnoconfig    clang-23
+arm                              allyesconfig    gcc-15.2.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-15.2.0
+csky                             allmodconfig    gcc-15.2.0
+csky                              allnoconfig    gcc-15.2.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-23
+i386                             allmodconfig    gcc-14
+i386                              allnoconfig    gcc-14
+i386                             allyesconfig    gcc-14
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-23
+m68k                             allmodconfig    gcc-15.2.0
+m68k                              allnoconfig    gcc-15.2.0
+m68k                             allyesconfig    gcc-15.2.0
+microblaze                        allnoconfig    gcc-15.2.0
+microblaze                       allyesconfig    gcc-15.2.0
+mips                             allmodconfig    gcc-15.2.0
+mips                              allnoconfig    gcc-15.2.0
+mips                             allyesconfig    gcc-15.2.0
+nios2                            allmodconfig    gcc-11.5.0
+nios2                             allnoconfig    gcc-11.5.0
+openrisc                         allmodconfig    gcc-15.2.0
+openrisc                          allnoconfig    gcc-15.2.0
+parisc                           allmodconfig    gcc-15.2.0
+parisc                            allnoconfig    gcc-15.2.0
+parisc                           allyesconfig    gcc-15.2.0
+powerpc                          allmodconfig    gcc-15.2.0
+powerpc                           allnoconfig    gcc-15.2.0
+riscv                            allmodconfig    clang-23
+riscv                             allnoconfig    gcc-15.2.0
+riscv                            allyesconfig    clang-16
+riscv                 randconfig-001-20260304    gcc-8.5.0
+riscv                 randconfig-002-20260304    clang-23
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-23
+s390                             allyesconfig    gcc-15.2.0
+s390                  randconfig-001-20260304    clang-23
+s390                  randconfig-002-20260304    gcc-15.2.0
+sh                               allmodconfig    gcc-15.2.0
+sh                                allnoconfig    gcc-15.2.0
+sh                               allyesconfig    gcc-15.2.0
+sh                          r7780mp_defconfig    gcc-15.2.0
+sh                    randconfig-001-20260304    gcc-15.2.0
+sh                    randconfig-002-20260304    gcc-15.2.0
+sh                     sh7710voipgw_defconfig    gcc-15.2.0
+sparc                             allnoconfig    gcc-15.2.0
+sparc64                          allmodconfig    clang-23
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-23
+um                               allyesconfig    gcc-14
+x86_64                           allmodconfig    clang-20
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20260304    gcc-14
+x86_64      buildonly-randconfig-002-20260304    clang-20
+x86_64      buildonly-randconfig-003-20260304    clang-20
+x86_64      buildonly-randconfig-004-20260304    gcc-14
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.2.0
 
-
-Thanks,
-SJ
-
-[...]
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
