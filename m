@@ -1,205 +1,240 @@
-Return-Path: <linux-pm+bounces-43580-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43581-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qGT2C1ctqGlPpQAAu9opvQ
-	(envelope-from <linux-pm+bounces-43580-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 14:02:15 +0100
+	id YPtjMeM0qGm+pQAAu9opvQ
+	(envelope-from <linux-pm+bounces-43581-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 14:34:27 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9F741FFFC1
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 14:02:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id E23962007CB
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 14:34:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7B9B43040F84
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 13:02:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 23B68300D178
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 13:33:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6198D266B67;
-	Wed,  4 Mar 2026 13:02:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ADED389101;
+	Wed,  4 Mar 2026 13:33:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="pFthcIOp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qif17WzB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9C81DE8AE;
-	Wed,  4 Mar 2026 13:01:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EABDE1CAA78
+	for <linux-pm@vger.kernel.org>; Wed,  4 Mar 2026 13:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772629320; cv=none; b=SpxJXVm7Fkr/vc4ly7wfhr9R+OT7WKR2BYLDtEn9UWJua2ZXuoDSjjM9Rz+fnaZz6GbtKWqrqf3snnLnrOB1t1q18tBs4dJL5HL78WB4RhvwzHcKakPVSPhaz2Eo1hFEdzDeCjPcEr8idb0VTdEN6GxXQfjasX9VZUhaBkWhVPI=
+	t=1772631218; cv=none; b=aG5rolUopVrdDsDezv4uAzWpfTGUyFQuHv+Nk9Eu/UudEcNKglv1rsk/csW3O9hA0XS7DRZO5Ef+0WMsT2gW3BjYc9NtNjJ8n1XHy8nA/vRID/K9XU88954q7LLE92vSFs+C8pe/TQ6nGPOo074UDGQQbP/QjL2di4JPqOi4uzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772629320; c=relaxed/simple;
-	bh=Kb3qzLz/b1BGRAyVf2N/dxJ8GTEZDpzuub4ZDwWzUNE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tWHXSpKfMBpK5/iScNnSeA2YXCObWiHAKnPaOPHhQlsOkqgebzcPSeckMoVqF8g+oVKhsltgFIEYgbnNW1bcuuKfulHW7kiYJpQDUvLusIVcD3JjzH4kB4R6DjrhxEIDDFcX3ss8FcKGHoaHybLkNqACpN+6FAmL5zv1Z6aDde4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=pFthcIOp; arc=none smtp.client-ip=178.62.254.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
-Received: from shell.ilvokhin.com (shell.ilvokhin.com [138.68.190.75])
-	(Authenticated sender: d@ilvokhin.com)
-	by mail.ilvokhin.com (Postfix) with ESMTPSA id 87BDEB3180;
-	Wed, 04 Mar 2026 13:01:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
-	s=mail; t=1772629310;
-	bh=A9Z22CwhsOMBQOd91GzYVcy5QaFqoA5vc5xFlhCLB5c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=pFthcIOpg6gMssYocf5aeRIIf77W9v5hZIKXBO7FBI43GEFsFtiRaFd/8KmWzEQbq
-	 r5Mij1YYDKyrPnmIdgwa/tHoTR+2WzWnTHVmDS1cW790Wkj+VNUORUSHNy9/MsuVMl
-	 j/JEInhSlK7v2JYG+6N18JlNqCd4oHXPL8TqT9y0=
-Date: Wed, 4 Mar 2026 13:01:45 +0000
-From: Dmitry Ilvokhin <d@ilvokhin.com>
-To: SeongJae Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Qi Zheng <zhengqi.arch@bytedance.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 4/5] mm: rename zone->lock to zone->_lock
-Message-ID: <aagtOctLQqpDcw_h@shell.ilvokhin.com>
-References: <aabvc4Xhc9qBfaG7@shell.ilvokhin.com>
- <20260304015035.84839-1-sj@kernel.org>
+	s=arc-20240116; t=1772631218; c=relaxed/simple;
+	bh=qX8bwC7Pr9sLJEwNHDJdwt6wRYUINp909IFCD+BCZGM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jSKQ/JA0hRc2m7m3bp0AzLKmY8Qir5ig1iY7KC8HGmI50Hazbu8WA1nJuQ21ATB3ErMFfFX9uRXAVbcxmBHnejj6JAtnlTecvGkujQZ/jDUkAXdumI8HuI2VrUILkRzfpGyY4ulxK0/nJMFIAj8hr6cOHX0DFhntw2pz4uOrKIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qif17WzB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A27C5C2BC9E
+	for <linux-pm@vger.kernel.org>; Wed,  4 Mar 2026 13:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772631217;
+	bh=qX8bwC7Pr9sLJEwNHDJdwt6wRYUINp909IFCD+BCZGM=;
+	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
+	b=Qif17WzBzBvkoZ/nngJnz8sJxXvmtVb7CDH2GgHnvD8Eg4wXcB7/iUPikO1Rj7Lw+
+	 nTyeDShVWEJOTO6LH41cgsGChErXNk4UKZM7InHw5IsnZgGFDjFjAs2YidL2FRDYye
+	 wldPBeuWRLX4A9id9QwKZBANP4J2ET6394qW5k7N2UQGEsmgZCa+jY9ZNUFKoJtfcc
+	 kp4S9COjdi8zaoMeBQU/KYuckEHF9LS1wWSUozRuey+J3NCBd5gFrq0etry2kCVYsH
+	 3j8h0Gcx7Fgo/89C/1X2+zm7mvzM9yMm9WVMK/zifcZLgf5JixXx4xcD8IqOZHyO8b
+	 mExfYykDd2sgQ==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-38a2f196cbaso7866711fa.1
+        for <linux-pm@vger.kernel.org>; Wed, 04 Mar 2026 05:33:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXRR2ObkP1v4kf9XoDHWWsC1jV+uovDRZFv/K9jZPOg1gzuqbFxN+xyRWy3DM7cp4tBe8KWUonSNA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqpI8gEhJptmnEjQ+u/eXWEipbInn2+aMupohtpwTFy98W93nX
+	pnROmZvaj3PnLZzwhsgh7nl73nk/XfTUMoP/cZsUkm2mTg0tpkrsJnlm6sJV+9HbnKCTPt2A0ON
+	evZoFmrjwYA6Q15W3LKsBzBlXrvHoQWU=
+X-Received: by 2002:a05:651c:997:b0:389:ff39:d36f with SMTP id
+ 38308e7fff4ca-38a2c564975mr18004471fa.8.1772631216030; Wed, 04 Mar 2026
+ 05:33:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260304015035.84839-1-sj@kernel.org>
-X-Rspamd-Queue-Id: B9F741FFFC1
+References: <20260304-b4-pck600-a733-v1-0-2f54efdb8cc2@gmail.com> <20260304-b4-pck600-a733-v1-2-2f54efdb8cc2@gmail.com>
+In-Reply-To: <20260304-b4-pck600-a733-v1-2-2f54efdb8cc2@gmail.com>
+Reply-To: wens@kernel.org
+From: Chen-Yu Tsai <wens@kernel.org>
+Date: Wed, 4 Mar 2026 22:33:23 +0900
+X-Gmail-Original-Message-ID: <CAGb2v64n_8RyWDieUKvbpkTikipB9ZvqEscYRRLowe+rvaJKCQ@mail.gmail.com>
+X-Gm-Features: AaiRm52IhPssfKwic0-9MUev9i9zshO3IgtBuLjVx0xGClavhc7qhY1LONhcieE
+Message-ID: <CAGb2v64n_8RyWDieUKvbpkTikipB9ZvqEscYRRLowe+rvaJKCQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] pmdomain: sunxi: Add support for A733 to Allwinner
+ PCK600 driver
+To: Yuanshen Cao <alex.caoys@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, Ulf Hansson <ulf.hansson@linaro.org>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: E23962007CB
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
-	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43580-lists,linux-pm=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[28];
-	RSPAMD_URIBL_FAIL(0.00)[linux.dev:query timed out,linux-foundation.org:query timed out];
-	ASN_FAIL(0.00)[1.2.3.5.c.f.2.1.0.0.0.0.0.0.0.0.c.6.3.0.1.0.0.e.4.0.c.3.0.0.6.2.asn6.rspamd.com:query timed out];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-43581-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,sholland.org,linaro.org,vger.kernel.org,lists.infradead.org,lists.linux.dev];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	HAS_REPLYTO(0.00)[wens@kernel.org];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[ilvokhin.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[wens@kernel.org,linux-pm@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,ilvokhin.com:dkim,ilvokhin.com:email,linux-foundation.org:email,linux.dev:email,shell.ilvokhin.com:mid]
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Tue, Mar 03, 2026 at 05:50:34PM -0800, SeongJae Park wrote:
-> On Tue, 3 Mar 2026 14:25:55 +0000 Dmitry Ilvokhin <d@ilvokhin.com> wrote:
-> 
-> > On Mon, Mar 02, 2026 at 02:37:43PM -0800, Andrew Morton wrote:
-> > > On Mon, 2 Mar 2026 15:10:03 +0100 "Vlastimil Babka (SUSE)" <vbabka@kernel.org> wrote:
-> > > 
-> > > > On 2/27/26 17:00, Dmitry Ilvokhin wrote:
-> > > > > This intentionally breaks direct users of zone->lock at compile time so
-> > > > > all call sites are converted to the zone lock wrappers. Without the
-> > > > > rename, present and future out-of-tree code could continue using
-> > > > > spin_lock(&zone->lock) and bypass the wrappers and tracing
-> > > > > infrastructure.
-> > > > > 
-> > > > > No functional change intended.
-> > > > > 
-> > > > > Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> > > > > Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
-> > > > > Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
-> > > > > Acked-by: SeongJae Park <sj@kernel.org>
-> > > > 
-> > > > I see some more instances of 'zone->lock' in comments in
-> > > > include/linux/mmzone.h and under Documentation/ but otherwise LGTM.
-> > > > 
-> > > 
-> > > I fixed (most of) that in the previous version but my fix was lost.
-> > 
-> > Thanks for the fixups, Andrew.
-> > 
-> > I still see a few 'zone->lock' references in Documentation remain on
-> > mm-new. This patch cleans them up, as noted by Vlastimil.
-> > 
-> > I'm happy to adjust this patch if anything else needs attention.
-> > 
-> > From 9142d5a8b60038fa424a6033253960682e5a51f4 Mon Sep 17 00:00:00 2001
-> > From: Dmitry Ilvokhin <d@ilvokhin.com>
-> > Date: Tue, 3 Mar 2026 06:13:13 -0800
-> > Subject: [PATCH] mm: fix remaining zone->lock references
-> > 
-> > Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
-> > ---
-> >  Documentation/mm/physical_memory.rst | 4 ++--
-> >  Documentation/trace/events-kmem.rst  | 8 ++++----
-> >  2 files changed, 6 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
-> > index b76183545e5b..e344f93515b6 100644
-> > --- a/Documentation/mm/physical_memory.rst
-> > +++ b/Documentation/mm/physical_memory.rst
-> > @@ -500,11 +500,11 @@ General
-> >  ``nr_isolate_pageblock``
-> >    Number of isolated pageblocks. It is used to solve incorrect freepage counting
-> >    problem due to racy retrieving migratetype of pageblock. Protected by
-> > -  ``zone->lock``. Defined only when ``CONFIG_MEMORY_ISOLATION`` is enabled.
-> > +  ``zone_lock``. Defined only when ``CONFIG_MEMORY_ISOLATION`` is enabled.
-> 
-> Dmitry's original patch [1] was doing 's/zone->lock/zone->_lock/', which aligns
-> to my expectation.  But this patch is doing 's/zone->lock/zone_lock/'.  Same
-> for the rest of this patch.
-> 
-> I was initially thinking this is just a mistake, but I also found Andrew is
-> doing same change [2], so I'm bit confused.  Is this an intentional change?
-> 
-> [1] https://lore.kernel.org/d61500c5784c64e971f4d328c57639303c475f81.1772206930.git.d@ilvokhin.com
-> [2] https://lore.kernel.org/20260302143743.220eed4feb36d7572fe726cc@linux-foundation.org
-> 
+On Wed, Mar 4, 2026 at 12:44=E2=80=AFPM Yuanshen Cao <alex.caoys@gmail.com>=
+ wrote:
+>
+> The Allwinner A733 PCK600, similar to A523 PCK600, is likely a
+> customized version of ARM PCK-600 power controller. It shares
+> the same BSP driver with A523. According to the BSP provided
+> by Radxa, unlike A523, it doesn't require reset.
+>
+> Make reset optional in the sunxi pck600 driver and add support
+> for A733.
+>
+> Signed-off-by: Yuanshen Cao <alex.caoys@gmail.com>
+> ---
+>  drivers/pmdomain/sunxi/sun55i-pck600.c | 53 ++++++++++++++++++++++++++++=
+++----
+>  1 file changed, 48 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/pmdomain/sunxi/sun55i-pck600.c b/drivers/pmdomain/su=
+nxi/sun55i-pck600.c
+> index c7ab51514531..8f9fdc3915bd 100644
+> --- a/drivers/pmdomain/sunxi/sun55i-pck600.c
+> +++ b/drivers/pmdomain/sunxi/sun55i-pck600.c
+> @@ -52,6 +52,7 @@ struct sunxi_pck600_desc {
+>         u32 logic_power_switch0_delay;
+>         u32 logic_power_switch1_delay;
+>         u32 off2on_delay;
+> +       bool has_rst_clk;
+>  };
+>
+>  struct sunxi_pck600_pd {
+> @@ -151,9 +152,11 @@ static int sunxi_pck600_probe(struct platform_device=
+ *pdev)
+>         if (IS_ERR(base))
+>                 return PTR_ERR(base);
+>
+> -       rst =3D devm_reset_control_get_exclusive_released(dev, NULL);
+> -       if (IS_ERR(rst))
+> -               return dev_err_probe(dev, PTR_ERR(rst), "failed to get re=
+set control\n");
+> +       if (desc->has_rst_clk) {
+> +               rst =3D devm_reset_control_get_exclusive_released(dev, NU=
+LL);
+> +               if (IS_ERR(rst))
+> +                       return dev_err_probe(dev, PTR_ERR(rst), "failed t=
+o get reset control\n");
+> +       }
+>
+>         clk =3D devm_clk_get_enabled(dev, NULL);
+>         if (IS_ERR(clk))
+> @@ -193,7 +196,14 @@ static int sunxi_pck600_probe(struct platform_device=
+ *pdev)
+>  }
+>
+>  static const char * const sun55i_a523_pck600_pd_names[] =3D {
+> -       "VE", "GPU", "VI", "VO0", "VO1", "DE", "NAND", "PCIE"
+> +       "VE",
+> +       "GPU",
+> +       "VI",
+> +       "VO0",
+> +       "VO1",
+> +       "DE",
+> +       "NAND",
+> +       "PCIE",
 
-Good catch, thanks for pointing this out, SJ.
+No need to change this part.
 
-Originally the mechanical rename was indeed zone->lock -> zone->_lock.
-However, in Documentation I intentionally switched references to
-zone_lock instead of zone->_lock. The reasoning is that _lock is now an
-internal implementation detail, and direct access is discouraged. The
-intended interface is via the zone_lock_*() / zone_unlock_*() wrappers,
-so referencing zone_lock in documentation felt more appropriate than
-mentioning the private struct field (zone->_lock).
-
-That said, I agree this creates inconsistency with the mechanical
-rename, and I'm happy to adjust either way: either consistently refer
-to the wrapper API, or keep documentation aligned with zone->_lock.
-
-I slightly prefer referring to the wrapper API, but don't have a strong
-preference as long as we're consistent.
-
-> 
-> Thanks,
-> SJ
-> 
-> [...]
+>  };
+>
+>  static const struct sunxi_pck600_desc sun55i_a523_pck600_desc =3D {
+> @@ -206,7 +216,36 @@ static const struct sunxi_pck600_desc sun55i_a523_pc=
+k600_desc =3D {
+>         .device_ctrl1_delay =3D 0xffff,
+>         .logic_power_switch0_delay =3D 0x8080808,
+>         .logic_power_switch1_delay =3D 0x808,
+> -       .off2on_delay =3D 0x8
+> +       .off2on_delay =3D 0x8,
+> +       .has_rst_clk =3D true,
+> +};
+> +
+> +static const char * const sun60i_a733_pck600_pd_names[] =3D {
+> +       "VI",
+> +       "DE_SYS",
+> +       "VE_DEC",
+> +       "VE_ENC",
+> +       "NPU",
+> +       "GPU_TOP",
+> +       "GPU_CORE",
+> +       "PCIE",
+> +       "USB2",
+> +       "VO",
+> +       "VO1",
+> +};
+> +
+> +static const struct sunxi_pck600_desc sun60i_a733_pck600_desc =3D {
+> +       .pd_names =3D sun60i_a733_pck600_pd_names,
+> +       .num_domains =3D ARRAY_SIZE(sun60i_a733_pck600_pd_names),
+> +       .logic_power_switch0_delay_offset =3D 0xc00,
+> +       .logic_power_switch1_delay_offset =3D 0xc04,
+> +       .off2on_delay_offset =3D 0xc10,
+> +       .device_ctrl0_delay =3D 0x1f1f1f,
+> +       .device_ctrl1_delay =3D 0x1f1f,
+> +       .logic_power_switch0_delay =3D 0x8080808,
+> +       .logic_power_switch1_delay =3D 0x808,
+> +       .off2on_delay =3D 0x8,
+> +       .has_rst_clk =3D false,
+>  };
+>
+>  static const struct of_device_id sunxi_pck600_of_match[] =3D {
+> @@ -214,6 +253,10 @@ static const struct of_device_id sunxi_pck600_of_mat=
+ch[] =3D {
+>                 .compatible     =3D "allwinner,sun55i-a523-pck-600",
+>                 .data           =3D &sun55i_a523_pck600_desc,
+>         },
+> +       {
+> +               .compatible     =3D "allwinner,sun60i-a733-pck-600",
+> +               .data           =3D &sun60i_a733_pck600_desc,
+> +       },
+>         {}
+>  };
+>  MODULE_DEVICE_TABLE(of, sunxi_pck600_of_match);
+>
+> --
+> 2.53.0
+>
 
