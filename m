@@ -1,232 +1,194 @@
-Return-Path: <linux-pm+bounces-43573-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43574-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QGzoLqcWqGlTnwAAu9opvQ
-	(envelope-from <linux-pm+bounces-43573-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 12:25:27 +0100
+	id eDGWLrUWqGlTnwAAu9opvQ
+	(envelope-from <linux-pm+bounces-43574-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 12:25:41 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 633E41FEF02
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 12:25:27 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 589001FEF11
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 12:25:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 942A63002306
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 11:25:26 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3692F302F7FD
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 11:25:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F90A3A8741;
-	Wed,  4 Mar 2026 11:25:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0035B3ACA5D;
+	Wed,  4 Mar 2026 11:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="V6s0UtRu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XbkvQoPz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6BB43A874A
-	for <linux-pm@vger.kernel.org>; Wed,  4 Mar 2026 11:25:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159763A875E
+	for <linux-pm@vger.kernel.org>; Wed,  4 Mar 2026 11:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.169
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772623525; cv=pass; b=hFK4ZiQfWKfbAZfWuJtglVEYzMwjhU0B1D+3f1Gm+46SRAvWAUjOZqB/lDc5pY47d/WXubtc+A47yfo1fE9l/LZgRK55zs2d7Rk0xpQKfmq7ZX41YSdCIm6isSRMbfT/o7jZ1vn8Qfcy467/7MyFTcZDahUtV7SXhar6nM5qhZQ=
+	t=1772623532; cv=pass; b=NJmPA2RFR0bLqnUcMt8l/qIS6QmeBmRLH11Q9Myz+5+gwdLbvzmHA+3e4pBve6KmURplOPuLEoWKgImpRPMlUdbFRpEM9b+vkBmJQMa6LQBR+BnQs9yNYhgeRADwrt0T7KAiXyyZW79puN9IqeyXSYJe/6IoZG34EWUhY7/h+TY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772623525; c=relaxed/simple;
-	bh=MGVNt7Zv077AR1/6k+SSxZzDXAKG2uIqldi8aMY2xso=;
+	s=arc-20240116; t=1772623532; c=relaxed/simple;
+	bh=vaFKWCxd8ZTBId2T/qJaZ2Y9EtjCIKwEhTuJSKgdHgU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZD/xelVpneSCoiQQKQyX7XHdDfPLiTFbx1oUNToXOe/zqaDSzImV+pqshonzBbV9lIlgvcO62j5oGiRoTnOYK2VqyOveeTpPvxnxBCmBPvAbSPfZSbW0glKDqbKInAPOtF+QcpKSrdlpI0ABpnGpugRSGFV5bhhu6dnaBPc2SLA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=V6s0UtRu; arc=pass smtp.client-ip=209.85.208.175
+	 To:Cc:Content-Type; b=DxR0l0KFpfonLyLs1Xvf3R+uZ+ee1ziyGcgFs30dZhyxUZOFA4ULDmMwNkY57rn59eCkKINAzk/t+SoswRGAjv7AC97WxiESu1Yxyy3LtwuEfCdxkh3JM1hJr5J4w9H0cz2AIif7+MLNDXxdwrTgsV3+xuASrVYXrSQ3Cqgh/0c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XbkvQoPz; arc=pass smtp.client-ip=209.85.208.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-38a2f92fab4so4752751fa.2
-        for <linux-pm@vger.kernel.org>; Wed, 04 Mar 2026 03:25:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772623522; cv=none;
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-38a2cc31e20so10690421fa.1
+        for <linux-pm@vger.kernel.org>; Wed, 04 Mar 2026 03:25:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772623529; cv=none;
         d=google.com; s=arc-20240605;
-        b=ZmgiRAQBEe3dnJhMjuW7wESFPQ7ZHMOZ5v5gV5GVou+fYgZMIBKbkdXHue2FhD9otR
-         3HeLyDFjW99h/N7sNXTgc2J23aThxW4n3n5E9+rOOHWfBCN+4xLYaEvRsiGcb0AZLsKx
-         pPQYaDZDulvxq0sY0z6S+ij7nJ4LyjfRwXXOTheAzzfWC7+fZA3+LYsWFoqV5dLk+Pya
-         ZDxeoObWTaXRGg34L4SjrQimygHdvjEe2TXc6hSDviwkQ6jYuaXAkms365hEW5ZaBtSU
-         egcgIM3iIAk2m7VSwFr8IH215OY3lH5D/Q1TO2V3gY0z6BeJYvbzlNWVty8ArmMKzoPg
-         sTvw==
+        b=ePovmJP7uOVNdorv2XbRUZS4rk0VCqzthKRzyXqksAY1Vg8J93ytm7K4lVAU0d/X9c
+         7363xVjEY2gPLOpGB5h0eW8ByFxM868WoJkuntzcRqsRLNQv95nP+f9qskxSn8FJzqzX
+         J3SVW4HMcI7wg2aKZbLNofcJpsWoJj5VXPX9u3Lgg66zVKxsW/T86AIo6bftvTmVAAJ8
+         /TTQ2WwJtvSXeXVxBGymlMkrGJLWXiawF8xfk2xcAoRlEIDLkWUb3D+K34pk77XGybyn
+         Kjys/ZEJ6Zj9XW8cXYIn/kK/DuUidThFTkJ1ggIbj8ju6piNQ9YO94qJEVfEwhXiUq61
+         jK9A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=jqB5j+E4DSf4EbBKzvqlflmatvTKbzzjeiwDCgjc31o=;
-        fh=ir1uRjvs8wKHLGB7g5X8z2nWu5IL8yvRWPdvW23svfk=;
-        b=FM4ENwchK6Lw9Y0xRBUzEi3OdKrppe/Yb77JpvKVqDpAZGiwDJUroKCZcrA/GmUrmc
-         Ew0c3JNU+3ubDNvMb6T9ZBsbWd5VNXWe0SgnuezxnQOo6dEKfpoNm0lE4sJEQdnDgyPX
-         Jijyy5oiIELnGIFNpChWQwI+QzAexiX/ODJtmlFcEsJpK0YUMRYuO2o150uF6ckBsevt
-         ljsPSsF1IY3cIAnAtdYoqgHE8GjH8hTaFpkHxRz/TKWMEmIfZNDYzphoAzjNCWigg+3s
-         As1MiqcrVE7PzAHBVyfA/MzV2a+FMkplBGGk67C5fpYlZPcGAWV+koLU0sIEAUHlup+A
-         988A==;
+        bh=9EMh8wUgn0IgQJLSLJ0VUslGZv8eXjoOaloL2TpWxi0=;
+        fh=OnMddJ/+cgx3YJcXf/bITMiaSrllrPY2ivrkkpMn/Js=;
+        b=PDPcDBrzXEEyxEDDHeIqH07IDvNLI44EaXfgTRmigVj+CScM2LzIkvFuMET0WF3Iqu
+         ihBUBtO5ILzhVYuO+Yri0Lrn+svwXzCOnDQUd8OnSQLBPGPgIgC4fIpakBPHWN4V+rcg
+         QgnqFhxSJ1Mz+1Y3iz9FBLf7+JzGewUW+a5uxdy2RDdPhxAb4aXmnqweh1omlE/pTfXh
+         uRBAaTbQghhL7SkQgDgPvcKrXhJetxKUSvYX1peppe4CW1Ya1AZEP2JAAuRMxC2935uk
+         se7nDFQYLOp8H87FQbAc49jD79ovGwtps8QxZkCnfS/br6pON6ow882Ql4ZQOAiNeyjd
+         0MKg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1772623522; x=1773228322; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1772623529; x=1773228329; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jqB5j+E4DSf4EbBKzvqlflmatvTKbzzjeiwDCgjc31o=;
-        b=V6s0UtRujNl/XjhEZJmovto9kDVGiJTPPR1b/xeweJ/Bc1TDzQFeO0GopBaX8i56cg
-         ErIXI0hKu1bobTLQc2tD6gtINqAfn5cugOzZDZgM8VbgeeuspX4U6sP3XDAOEIPNxNQx
-         9DR3yejUHZD42RJ2sdXMO2DzWhSGEcC/vfqgMSqAbMCQudKmCLehN8cWSud+/2hXKKR+
-         uMloTMu+bEjaxSVM11mwwBZQcysRhK73OOUXejLyuUfj3xfJcEowLnu1JtkKebPe2Rx1
-         kuQIHCb5oCbG0CS+IZYQxguV/gAPMzjfx2JetwnRePWqVXx66tplpmzSYM9XoO6plhlb
-         xZgw==
+        bh=9EMh8wUgn0IgQJLSLJ0VUslGZv8eXjoOaloL2TpWxi0=;
+        b=XbkvQoPzdNYB7AOcrt9aQKAz146JikIjVc1nKKjoumuP0vKAu8ti4rS4uC+SuG/OGv
+         hHdfQUOg9BNhk1vfVL+ozrn1DRaU2pH6GAoSgSti5qUuEHoswwJUelebAWptxf7bp8Fq
+         WasPtAcQrga0oVPr16jwklce0s9PmZRdmeN6G5TJmxAJLBqP2WG7U4K7voKDktVdtXl/
+         zdv39kBw5Hsd6FXT8i21A3AB4iBSofI4Ykjn+n2whe/54+gKpHgWj/fX1WTY12kEJiIn
+         2WVfa/cGyZ7jmsIYXv270rSEeOs1d903hncRVMKtiFn0tHEHtOI94KnbZlU8x9vuAfN1
+         At+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772623522; x=1773228322;
+        d=1e100.net; s=20230601; t=1772623529; x=1773228329;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jqB5j+E4DSf4EbBKzvqlflmatvTKbzzjeiwDCgjc31o=;
-        b=puaaYpRkyisvnS5d3SZ/MKnTcWYx4i1Zb+g70im/pfoxLLeiLuZ5YZgs3XgFcskGla
-         Q9t5MEGss76TL3qdZPg73jmDnGPnK6NNd2OkhNS2Rx2WUnLlE0K8HQDDgfiDZ1YuKewS
-         dTMcM2AjyfoB/3WatTe5efZ8VbhI5/9kDV/swLNolvAr7ROCpP4mWKNTvfdbYkmsyRow
-         4nEbK59l8yH9Vbnu6GyqCdTl7njXyRkMOwYjGAiWtyoAtWG2zEzixC912JQ6keqrh1P6
-         ZH6dvGX5QXolrM/wWcZj5+Xwtq6jdpFkEJfU2xS3vevhWAeNhNYc/mLan0bkLWOgCeZz
-         Wnxg==
-X-Forwarded-Encrypted: i=1; AJvYcCU6HadTnUf/d9PBvaXQSstLEhDzXiSc8jt+g9+1YMLH0gWfnHrc73QTGTPaQNtFy04bEQm/EqqC4g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpozquM8FaivIGYGHqORJ0j40mPthBKzit8RpD1WWjZ50GTRwQ
-	L3PVg6X7JbrWFJGxZqBTghbpKqvHdQ2S4yl7t8cIGgsBgDIfLaj3GTJNl8Ki6syzst1He+INWo7
-	NMp+fqqaMxcTeclzNGmX7XZkTka4frlNAs6qr715ksQ==
-X-Gm-Gg: ATEYQzytBZiVRirx6aGOInTmF/4PtJln1/9qVbJ6c/5ERenVXKuEdxbfzFvJAEuXY9f
-	+0t0K2LbxRXtZDTDCeQQYnrFQBlyU5Dg8r+8N78477Xg5oOf2TUupW4kakMUOsIVwinveKEqUBm
-	fBdJXYvN0i+vYb3C64GOstQ0qVkOtbme9skHjTvKJ/KGExP0m/wT3j+mxKqo9rAswozotYfPoic
-	uWr+PENGAxNhtyGAMJBeYoJfngfnJt2+qA4AGRYt95ROUafmyPpTJdqvX1ox542dkhWB3bvLf2m
-	maRSt310
-X-Received: by 2002:a05:651c:1541:b0:382:fccd:f999 with SMTP id
- 38308e7fff4ca-38a2c7bc7c6mr16035541fa.25.1772623521873; Wed, 04 Mar 2026
- 03:25:21 -0800 (PST)
+        bh=9EMh8wUgn0IgQJLSLJ0VUslGZv8eXjoOaloL2TpWxi0=;
+        b=hJ+9RtOeyuejdZr3HAtcKiOHLtK8RdRJyHiIpxPiHjyc+aimpi3O74AYUQEjNkviEb
+         qKbZzv0jsvgXePcYq6P6KBZ9EvTXWxPrbaIeBgnuCzpAza/3oijI7b7NnGeh0GQ0f/9h
+         TRm+7z7SE8CuLZJR8ubuT1/Mv0E+LHA/0h9AqTt1pNZSjDYpZyBMiGOg9Mr9u+dRkWHT
+         TB+JOk05QfZwTg4Md8CKJE2mCByqY0dNNlz0SviKM5b7r6eVpUiM10FBcc9iXmPbviie
+         H9O07C7jKsDiAkq9tMy1v4cDL9jhGaDIyA5VffmKIB0yEgxXwFm62W2f6WVPwaUVyYF2
+         oODQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU0wEDB1FskUy6Q95KrQwVqD8XShEC+PLgcpQPEba09qi1faj1TBSUORgC1iKRjS6HBGZeMB0t2iw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yye3z/9MBeHH8MAeM45zBajOrHqSvxmcnSdusLnAoKuF+mF5ZK5
+	icohQE9FrEXRiqNRURLgYOZdLs4zHsFTS7UsOc/tUMWPhwC+diKmhTWmjVTo8d+iA3qaOJZbZOB
+	dyQZMOm5uFbzyRnzp5DBSHNFN0MyXA12sF6dvfxp2nTIIoii4GNsFEFM=
+X-Gm-Gg: ATEYQzw7j2+5FZqequNx039ih8izvifuWLlFyYiJmupIrnfli0Nqr78zSvJRf0G5Yr0
+	9CVyQsN8Zuk/lzxErhGdkequNfYTZ+Pl9iol20gOCHne67ENYBHHe+zApTE8GeENY+e46Dnk+5j
+	TGh6PijTVbuzA9gDkzilMliKy73nDkEhlSTkHMWy0RxoJbFZ9kw/FaYAyN0r/Mq+LiG6PC31DEx
+	KswGy7K8qRjUiUcB0A4cBvHKJcWgIHk7ZxHkNrG+b5TG0vEgUyyZV2BvEBip06MZ7tcVund5lRD
+	O3mxPcKB
+X-Received: by 2002:a2e:9659:0:b0:38a:1eb8:b435 with SMTP id
+ 38308e7fff4ca-38a2c7c6255mr9876541fa.38.1772623528965; Wed, 04 Mar 2026
+ 03:25:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1771988101-49877-1-git-send-email-shawn.lin@rock-chips.com>
-In-Reply-To: <1771988101-49877-1-git-send-email-shawn.lin@rock-chips.com>
+References: <20260130163102.51757-1-macroalpha82@gmail.com>
+In-Reply-To: <20260130163102.51757-1-macroalpha82@gmail.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 4 Mar 2026 12:24:45 +0100
-X-Gm-Features: AaiRm50bUQu-RI-pXbdDTdDQj139yGzcF2dqA4SgUmdK1yk7k6TutZG0mI55cco
-Message-ID: <CAPDyKFrG1GFPPa=H0pnvX-+SpwD30vad8YYsBp7tZd5H_huxUA@mail.gmail.com>
-Subject: Re: [PATCH v3] pmdomain: rockchip: Fix PD_VCODEC for RK3588
-To: Shawn Lin <shawn.lin@rock-chips.com>
-Cc: Finley Xiao <finley.xiao@rock-chips.com>, Frank Zhang <rmxpzlb@gmail.com>, 
-	linux-pm@vger.kernel.org, Sebastian Reichel <sebastian.reichel@collabora.com>, 
-	Detlev Casanova <detlev.casanova@collabora.com>, Heiko Stuebner <heiko@sntech.de>, 
-	linux-rockchip@lists.infradead.org, stable@vger.kernel.org, 
-	Chaoyi Chen <chaoyi.chen@rock-chips.com>
+Date: Wed, 4 Mar 2026 12:24:52 +0100
+X-Gm-Features: AaiRm51vwLJRv4uMlhHz56lEDfVHnRw03Pv2ZO-dJihRDJQnOhTHepTLjORfXlA
+Message-ID: <CAPDyKFpCp+EJRmaPhSZQ0fmitM=+0ocGzjKx172Nv9UhKH8FAg@mail.gmail.com>
+Subject: Re: [PATCH V2] pmdomain: rockchip: quiet regulator error on -EPROBE_DEFER
+To: Chris Morgan <macroalpha82@gmail.com>
+Cc: linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org, 
+	jonas@kwiboo.se, pgwipeout@gmail.com, finley.xiao@rock-chips.com, 
+	kever.yang@rock-chips.com, shawn.lin@rock-chips.com, 
+	sebastian.reichel@collabora.com, heiko@sntech.de, 
+	Chris Morgan <macromorgan@hotmail.com>, Diederik de Haas <diederik@cknow-tech.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 633E41FEF02
+X-Rspamd-Queue-Id: 589001FEF11
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[rock-chips.com,gmail.com,vger.kernel.org,collabora.com,sntech.de,lists.infradead.org];
-	TAGGED_FROM(0.00)[bounces-43573-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-43574-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FREEMAIL_CC(0.00)[lists.infradead.org,vger.kernel.org,kwiboo.se,gmail.com,rock-chips.com,collabora.com,sntech.de,hotmail.com,cknow-tech.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-pm@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[linaro.org:+];
+	NEURAL_HAM(-0.00)[-0.998];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,mail.gmail.com:mid,linaro.org:dkim]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,linaro.org:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,cknow-tech.com:email]
 X-Rspamd-Action: no action
 
-On Wed, 25 Feb 2026 at 03:55, Shawn Lin <shawn.lin@rock-chips.com> wrote:
+On Fri, 30 Jan 2026 at 17:33, Chris Morgan <macroalpha82@gmail.com> wrote:
 >
-> From the RK3588 TRM Table 7-1 RK3588 Voltage Domain and Power Domain Summary,
-> PD_RKVDEC0/1 and PD_VENC0/1 rely on VD_VCODEC which require extra voltages to
-> be applied, otherwise it breaks RK3588-evb1-v10 board after vdec support landed[1].
-> The panic looks like below:
+> From: Chris Morgan <macromorgan@hotmail.com>
 >
->   rockchip-pm-domain fd8d8000.power-management:power-controller: failed to set domain 'rkvdec0' on, val=0
->   rockchip-pm-domain fd8d8000.power-management:power-controller: failed to set domain 'rkvdec1' on, val=0
->   ...
->   Hardware name: Rockchip RK3588S EVB1 V10 Board (DT)
->   Workqueue: pm genpd_power_off_work_fn
->   Call trace:
->   show_stack+0x18/0x24 (C)
->   dump_stack_lvl+0x40/0x84
->   dump_stack+0x18/0x24
->   vpanic+0x1ec/0x4fc
->   vpanic+0x0/0x4fc
->   check_panic_on_warn+0x0/0x94
->   arm64_serror_panic+0x6c/0x78
->   do_serror+0xc4/0xcc
->   el1h_64_error_handler+0x3c/0x5c
->   el1h_64_error+0x6c/0x70
->   regmap_mmio_read32le+0x18/0x24 (P)
->   regmap_bus_reg_read+0xfc/0x130
->   regmap_read+0x188/0x1ac
->   regmap_read+0x54/0x78
->   rockchip_pd_power+0xcc/0x5f0
->   rockchip_pd_power_off+0x1c/0x4c
->   genpd_power_off+0x84/0x120
->   genpd_power_off+0x1b4/0x260
->   genpd_power_off_work_fn+0x38/0x58
->   process_scheduled_works+0x194/0x2c4
->   worker_thread+0x2ac/0x3d8
->   kthread+0x104/0x124
->   ret_from_fork+0x10/0x20
->   SMP: stopping secondary CPUs
->   Kernel Offset: disabled
->   CPU features: 0x3000000,000e0005,40230521,0400720b
->   Memory Limit: none
->   ---[ end Kernel panic - not syncing: Asynchronous SError Interrupt ]---
+> Change the dev_err() to dev_err_probe() under rockchip_pd_power_on()
+> to prevent errors early in the boot process when the requested
+> regulator is not yet available. This converts errors like the following
+> to debug messages:
 >
-> Chaoyi pointed out the PD_VCODEC is the parent of PD_RKVDEC0/1 and PD_VENC0/1, so checking
-> the PD_VCODEC is enough.
+> rockchip-pm-domain fd8d8000.power-management:power-controller: Failed to enable supply: -517
 >
-> [1] https://lore.kernel.org/linux-rockchip/20251020212009.8852-2-detlev.casanova@collabora.com/
-> Fixes: db6df2e3fc16 ("pmdomain: rockchip: add regulator support")
-> Cc: stable@vger.kernel.org
-> Suggested-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-> Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> Tested-by: Diederik de Haas <diederik@cknow-tech.com>
 
-Applied for fixes, thanks!
+Applied for next, thanks!
 
 Kind regards
 Uffe
 
 
->
 > ---
->
-> Changes in v3:
-> - drop tags
-> - rework it for just changing PD_VCODEC(chaoyi)
->
-> Changes in v2:
-> - collect tags
-> - correct TRM section(Sebastian)
->
->  drivers/pmdomain/rockchip/pm-domains.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes since v1:
+>  - Simplified return to single line
+> ---
+>  drivers/pmdomain/rockchip/pm-domains.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 >
 > diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-> index 997e93c..44d3484 100644
+> index 997e93c12951..6d3fb18f4ab3 100644
 > --- a/drivers/pmdomain/rockchip/pm-domains.c
 > +++ b/drivers/pmdomain/rockchip/pm-domains.c
-> @@ -1311,7 +1311,7 @@ static const struct rockchip_domain_info rk3576_pm_domains[] = {
->  static const struct rockchip_domain_info rk3588_pm_domains[] = {
->         [RK3588_PD_GPU]         = DOMAIN_RK3588("gpu",     0x0, BIT(0),  0,       0x0, 0,       BIT(1),  0x0, BIT(0),  BIT(0),  false, true),
->         [RK3588_PD_NPU]         = DOMAIN_RK3588("npu",     0x0, BIT(1),  BIT(1),  0x0, 0,       0,       0x0, 0,       0,       false, true),
-> -       [RK3588_PD_VCODEC]      = DOMAIN_RK3588("vcodec",  0x0, BIT(2),  BIT(2),  0x0, 0,       0,       0x0, 0,       0,       false, false),
-> +       [RK3588_PD_VCODEC]      = DOMAIN_RK3588("vcodec",  0x0, BIT(2),  BIT(2),  0x0, 0,       0,       0x0, 0,       0,       false, true),
->         [RK3588_PD_NPUTOP]      = DOMAIN_RK3588("nputop",  0x0, BIT(3),  0,       0x0, BIT(11), BIT(2),  0x0, BIT(1),  BIT(1),  false, false),
->         [RK3588_PD_NPU1]        = DOMAIN_RK3588("npu1",    0x0, BIT(4),  0,       0x0, BIT(12), BIT(3),  0x0, BIT(2),  BIT(2),  false, false),
->         [RK3588_PD_NPU2]        = DOMAIN_RK3588("npu2",    0x0, BIT(5),  0,       0x0, BIT(13), BIT(4),  0x0, BIT(3),  BIT(3),  false, false),
+> @@ -705,10 +705,9 @@ static int rockchip_pd_power_on(struct generic_pm_domain *domain)
+>         int ret;
+>
+>         ret = rockchip_pd_regulator_enable(pd);
+> -       if (ret) {
+> -               dev_err(pd->pmu->dev, "Failed to enable supply: %d\n", ret);
+> -               return ret;
+> -       }
+> +       if (ret)
+> +               return dev_err_probe(pd->pmu->dev, ret,
+> +                                    "Failed to enable supply: %d\n", ret);
+>
+>         ret = rockchip_pd_power(pd, true);
+>         if (ret)
 > --
-> 2.7.4
+> 2.43.0
 >
 
