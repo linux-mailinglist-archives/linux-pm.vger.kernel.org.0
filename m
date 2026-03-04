@@ -1,191 +1,184 @@
-Return-Path: <linux-pm+bounces-43584-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43585-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gOWHEjVaqGlxtgAAu9opvQ
-	(envelope-from <linux-pm+bounces-43584-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 17:13:41 +0100
+	id gBH+C4VeqGmZtgAAu9opvQ
+	(envelope-from <linux-pm+bounces-43585-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 17:32:05 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDA91203F16
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 17:13:40 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 834F72044E3
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Mar 2026 17:32:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3A4963068FE3
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 16:03:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6AC0B30179D9
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 16:16:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C80622222CC;
-	Wed,  4 Mar 2026 16:03:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 740C435E923;
+	Wed,  4 Mar 2026 16:16:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NF72tvyX"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="KvyMhbpy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011000.outbound.protection.outlook.com [52.101.70.0])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CAD33E7;
-	Wed,  4 Mar 2026 16:03:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772640186; cv=none; b=IyFvGkLnsCWff0EunzXYJ1lPVeCTQ2mOUxgfTad7N577wyJOT9VRX41y60imOlT5q0uk0a0T/9xcrEoYgtG57HoOsBWV+9jJpFyTo/MBhN+PGSmR2rABzpFvrmcZL941lCWNrY2rUhw56DN8wVIvgueG4gj6CqWaCXLoPv0y7FM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772640186; c=relaxed/simple;
-	bh=Z4MlP0pcwsJnvGgg0+nCTAjPNwgwdLgy8oD9Ai3EQhA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=HcTG/yWT3I6Fbl8jdgU5uY5weudAp7EvClqT/JpfVoaH3PiLytO1HOScTJ91uxyk1UZSKB2U/4AqZd6Vs+yqoHDlDUPLv7SP4G5j1G4Mz3TCG81PGrbR3K703mVv1cYfEkfEDJ5Y4APL0MzIoW9pU9qBRsBbMQ/Mp5rdaZ23P2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NF72tvyX; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772640186; x=1804176186;
-  h=date:from:to:cc:subject:message-id;
-  bh=Z4MlP0pcwsJnvGgg0+nCTAjPNwgwdLgy8oD9Ai3EQhA=;
-  b=NF72tvyXXJzeufpr30GJlGo9Tc9bN1cLXCo0/YjdE3cpLTIhdcpfJG29
-   zP8b2Mrh3WnTstqKI4vs2Eft92ajd+/4TW7oxjhAG378UCek4YABsatYz
-   9M/JN1oVCljQHRfthJfqN4ofz52zBLqS13ZSwCleQu8fVQQwymLhGBWwJ
-   RQuZGYCZtbhtIWauBVcCFWStiPEa5plYgTZZCWfx5rG0lO09Nbo7aWXKC
-   EK3KJUEouj5PL6KC/mo7tx+gbUcTO2tpo59+sFDUvgPjVwzy/r3k02C+r
-   oNGR7F5I3bF8Nihse4JcUhH+2nlr92Ei6mDQC3eGzAWR9TgpBwQOhtqh/
-   A==;
-X-CSE-ConnectionGUID: j4EJJKcTR2u21WoQFE5MPw==
-X-CSE-MsgGUID: YOBRdSt8QyWr+VBbcH1FqQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="77310332"
-X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="77310332"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 08:03:06 -0800
-X-CSE-ConnectionGUID: CNxRToOVRoeJdGJzqoHJHQ==
-X-CSE-MsgGUID: VYRQSXCGTS218vIMPrU6+w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="248856504"
-Received: from lkp-server01.sh.intel.com (HELO f27a57aa7a36) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 04 Mar 2026 08:03:04 -0800
-Received: from kbuild by f27a57aa7a36 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vxogf-00000000424-1WqY;
-	Wed, 04 Mar 2026 16:03:01 +0000
-Date: Thu, 05 Mar 2026 00:02:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:fixes] BUILD SUCCESS
- 8ca098725827d6509f75752ed807ab5a8d5b6bf1
-Message-ID: <202603050042.zooczN38-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220C235DA75;
+	Wed,  4 Mar 2026 16:16:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.0
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772641013; cv=fail; b=oMCpAFILT8hOcQh03WYrHl7hy/NvhOH7H+nB8crd3lStpR44c2aVopNEq2t9OmHZFV0GUliyinf9nxlQiDY28oRC1LksVeubtyYkdgzLC2spItHBs5BPxXSwPxo0ltndDtThZ3J+u40mrLjJkuZg1g754vatJydTQWTNmzA2xbY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772641013; c=relaxed/simple;
+	bh=my2TcbKi2tN/bQ1wSewYiM5CSbqYL6cCxjvCcsvFhqk=;
+	h=From:To:CC:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ULVS1+N5hewP9F4UeLxZcVAIVSJPcNh5qE/bhvrKZt3ISXr5KguebnQbvcFdVZQlE0vSTAocP4xBwjH4JW6bAUyXXQ6Etmatj2kEKDJbcQsDvTht9wpPQ/91MtoVV37BUEygRiljyEaP3/K3jMLO+66MrDzEqJ8g6uSfsKncb/0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=KvyMhbpy; arc=fail smtp.client-ip=52.101.70.0
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=tQNjkn4tjqNxMpHjEU68+DS44vfkFzKh1zfGTcNcRACJEI+dmZthd9P3S6irWhSovZlD2+jrFXliW1Ap/5TjEtS9lInAWqd98s9D5Bz658nwtJMBnZUMf3g0i8JRmvtpul2aWZvA3JssTxnDhGeBSHWyIRhGLzH8kWUVGr5sFSaxcT3vDJv9As4moNSmI0XjNPeC33mDquaAq0FPTxZwKh6faUJFPEnMUstS0KfjkRm6tBrjzRYO/RErNGoasert9RhdNrW4fzZJlF96IFZEQxk0f5tCUd4mNAvjN+ZdLuggyPlC0uEezIC+OMN12RpEBKyPf+0IlrxI2HJgnDP6aQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=my2TcbKi2tN/bQ1wSewYiM5CSbqYL6cCxjvCcsvFhqk=;
+ b=KaPeBtAwmwnyBQ+cdEORUssrF4Te8yvW03/MerzyHzipHzseF3W5mbBhqIhjNDuibs063XTSdIdIZf4IyhjL3pKVA1q8fdnHZEZyf1UNTpjLuLaznJYm/tWw6YCSMm6oS/tGfa0VKD2XSimH4nUraxNB5wQ4loCcPdD6EbIk9xubxAzkdiwY5dkWnfqT2f7wyFPgHNCQkPtzI98MnLuBIen8+uL1YHfEhRq+Kbxr26aELpbLThNW8/xCWD7kHIGSc5cL8K/287oT27hYHBetlxIigpgT68w2oxjfFVzUcygJK+8f7HSFylDhnqk6LS1fjPGDkFZFc8mVm9dgYZMJgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=axis.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=my2TcbKi2tN/bQ1wSewYiM5CSbqYL6cCxjvCcsvFhqk=;
+ b=KvyMhbpy6ARgWuzG/Cni793xb3V0kCAIbpeEhCDCwYvca6z63RXqvBp0Aw85qm8ISa5ajFyn6q24atJulHIqag9Br9mFpiGoCSVygfYDKpfe0Gz2W5BDYtD8fC7L5jzJakAs9Qz86O2CHc1bVtX4Jm0h6aBljLa2wMgb9ZvDSNU=
+Received: from DB7PR05CA0003.eurprd05.prod.outlook.com (2603:10a6:10:36::16)
+ by DB9PR02MB6905.eurprd02.prod.outlook.com (2603:10a6:10:1ff::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.17; Wed, 4 Mar
+ 2026 16:16:47 +0000
+Received: from DU6PEPF00009526.eurprd02.prod.outlook.com
+ (2603:10a6:10:36:cafe::fc) by DB7PR05CA0003.outlook.office365.com
+ (2603:10a6:10:36::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.22 via Frontend Transport; Wed,
+ 4 Mar 2026 16:16:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=axis.com;
+Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
+ 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com; pr=C
+Received: from mail.axis.com (195.60.68.100) by
+ DU6PEPF00009526.mail.protection.outlook.com (10.167.8.7) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9678.18 via Frontend Transport; Wed, 4 Mar 2026 16:16:47 +0000
+Received: from pc52311-2249 (10.4.0.13) by se-mail10w.axis.com (10.20.40.10)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.39; Wed, 4 Mar
+ 2026 17:16:46 +0100
+From: Waqar Hameed <waqar.hameed@axis.com>
+To: Conor Dooley <conor@kernel.org>
+CC: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	<kernel@axis.com>, <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 1/2] dt-bindings: power: supply: Add TI BQ25630 charger
+In-Reply-To: <20260302-removing-fidgeting-ea8909e3f407@spud> (Conor Dooley's
+	message of "Mon, 2 Mar 2026 17:47:41 +0000")
+References: <cover.1772201049.git.waqar.hameed@axis.com>
+	<65f55d19b4bcf8f07300df5922ba1605bb669138.1772201049.git.waqar.hameed@axis.com>
+	<20260227-percolate-armful-ac15f947b2ff@spud> <pnd8qcawdl8.a.out@axis.com>
+	<20260302-removing-fidgeting-ea8909e3f407@spud>
+User-Agent: a.out
+Date: Wed, 4 Mar 2026 17:16:46 +0100
+Message-ID: <pndldg7a7td.a.out@axis.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-X-Rspamd-Queue-Id: EDA91203F16
+MIME-Version: 1.0
+Content-Type: text/plain
+X-ClientProxiedBy: se-mail11w.axis.com (10.20.40.11) To se-mail10w.axis.com
+ (10.20.40.10)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU6PEPF00009526:EE_|DB9PR02MB6905:EE_
+X-MS-Office365-Filtering-Correlation-Id: c2eb4c53-f110-423d-5886-08de7a096f74
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700016;
+X-Microsoft-Antispam-Message-Info:
+	C55jMfL+nJoDJbpd/KgxKwuXiXzmp/EhWgrF6x8QkauwDhQkw0YSwJ94af0s1vRLT6uShBcOHBSg2DjDhi3hY29cnKP3BIoeXYelVJ+JyLEmKKYOS2jQWrwLxa1BTUQ+N9qhgFiQssC1T+2FvrbnZujakkDoeOtQj/ZDddSkk36qXmYN7T01FAMgbN1TXQQXfl1f8CY/nJiv/xp/L9Ebj6hzHo+aftsxXVSZ/Kwz20AgDsReG5+LLVacPG/JyQNHYNo57AvebUBERoo/wymkVBhICnH5HCmjrbRxQx2rvTZ4ai24qVjSZ06jBZyeajPBaBj/D3BHKJYpwrBdp4sgB56bteiq6g+wgfdVpyy39C1xNK2RdQ85Ph/2gKXPQUIt6gLTohiH2rduL4OWWWleeb7ED5wa3U375iepPEJttaUvgSjcCncihuFSRJaMl2Xos7iC9IM+w5leQh2EEdO5UwmXemtWqlPN3eBwgA3jFivgTSZZYjHmVM1+aKY0vBeq5Ua/HNarRc4bWCp+K5wKamVQBbZPwLg/j8/md077oGkF/R8AMd8qRm5tSMmqiQkcuZweZ5A82Dp/ART0Hz7Ysz/vCjBeM3ssTwWVgR7UGYWUkTss3CTSfX9MVhJPv7VfeNetOp9HWjbvh3ueIC/6pRgX028uZqNDUGrDpPqXyR1xsSUMMAO79Q2p/v9DsyI/ku817b5vXjof4nY03bMBtqgPMZ+zq63qEmrlHqOLElV83rD5k/O7XGqmYGrxZD1Hr4w2SJekNlJSdbmkt01Jug==
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	JNGuigdAJBJSZi2oi3Fwg18DX/yNDKasFZ/c0Rwg1sjDl8ew5wxUSvfEr5Tx55l5wCW8T/Xe18HRokR6sij6TneCwqxi0rWEerFZHFkOaAb4rneccOP/R+YHJUwjdXgus5Lm1GeLBakjlvRP4u1T9r4Vfew46rd52ggY30AkPe5WripK7WRWzM9ZIVIL5xJcj6nIm4DviWIKeHDme2H6T4itrZBkIowRlSujVYEGQ6AJv919hKXPkBOLumn4d2tEA7YEQ2PUfuI1IJMVg8vh5jtVo5XBR0QHC+tP26evB86F/ZVBkMRYsvLGS7XHCX84h9hgmJ1XvyNs8JoFC6FOznULleVarUzMorW8MgK+6Me7nu8m3NoI+T5GmW/wFBOExw3ZtIAfrEJZ8Eh8qoZfZtALoq4AGZh3ZtVTBuwMC/En2CwskZ3lW6cKezBSPBAQ
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2026 16:16:47.5878
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2eb4c53-f110-423d-5886-08de7a096f74
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DU6PEPF00009526.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR02MB6905
+X-Rspamd-Queue-Id: 834F72044E3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [0.35 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[axis.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_DKIM_ALLOW(-0.20)[axis.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[intel.com:+];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43585-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[axis.com:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43584-lists,linux-pm=lfdr.de];
-	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[waqar.hameed@axis.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,intel.com:dkim,intel.com:mid]
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Action: no action
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
-branch HEAD: 8ca098725827d6509f75752ed807ab5a8d5b6bf1  Merge branch 'acpi-pm' into fixes
+On Mon, Mar 02, 2026 at 17:47 +0000 Conor Dooley <conor@kernel.org> wrote:
 
-elapsed time: 1500m
+> On Mon, Mar 02, 2026 at 02:44:19PM +0100, Waqar Hameed wrote:
 
-configs tested: 66
-configs skipped: 1
+[...]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>> I'm guessing you mean that when extracting the example, the insertion of
+>> `/plugin/` to the `*.example.dts`-file will "falsify the phandle"?
+>
+> I'll be honest, I don't know exactly what the mechanism is that fakes
+> the phandles, but it means that any sort of generic device doesn't need
+> to be included in the example.
 
-tested configs:
-alpha                             allnoconfig    gcc-15.2.0
-alpha                            allyesconfig    gcc-15.2.0
-arc                              allmodconfig    gcc-15.2.0
-arc                               allnoconfig    gcc-15.2.0
-arc                              allyesconfig    gcc-15.2.0
-arm                               allnoconfig    clang-23
-arm                              allyesconfig    gcc-15.2.0
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-15.2.0
-csky                             allmodconfig    gcc-15.2.0
-csky                              allnoconfig    gcc-15.2.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-23
-i386                             allmodconfig    gcc-14
-i386                              allnoconfig    gcc-14
-i386                             allyesconfig    gcc-14
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-23
-m68k                             allmodconfig    gcc-15.2.0
-m68k                              allnoconfig    gcc-15.2.0
-m68k                             allyesconfig    gcc-15.2.0
-microblaze                        allnoconfig    gcc-15.2.0
-microblaze                       allyesconfig    gcc-15.2.0
-mips                             allmodconfig    gcc-15.2.0
-mips                              allnoconfig    gcc-15.2.0
-mips                             allyesconfig    gcc-15.2.0
-nios2                            allmodconfig    gcc-11.5.0
-nios2                             allnoconfig    gcc-11.5.0
-openrisc                         allmodconfig    gcc-15.2.0
-openrisc                          allnoconfig    gcc-15.2.0
-parisc                           allmodconfig    gcc-15.2.0
-parisc                            allnoconfig    gcc-15.2.0
-parisc                           allyesconfig    gcc-15.2.0
-powerpc                          allmodconfig    gcc-15.2.0
-powerpc                           allnoconfig    gcc-15.2.0
-riscv                            allmodconfig    clang-23
-riscv                             allnoconfig    gcc-15.2.0
-riscv                            allyesconfig    clang-16
-riscv                 randconfig-001-20260304    gcc-8.5.0
-riscv                 randconfig-002-20260304    clang-23
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-23
-s390                             allyesconfig    gcc-15.2.0
-s390                  randconfig-001-20260304    clang-23
-s390                  randconfig-002-20260304    gcc-15.2.0
-sh                               allmodconfig    gcc-15.2.0
-sh                                allnoconfig    gcc-15.2.0
-sh                               allyesconfig    gcc-15.2.0
-sh                          r7780mp_defconfig    gcc-15.2.0
-sh                    randconfig-001-20260304    gcc-15.2.0
-sh                    randconfig-002-20260304    gcc-15.2.0
-sh                     sh7710voipgw_defconfig    gcc-15.2.0
-sparc                             allnoconfig    gcc-15.2.0
-sparc64                          allmodconfig    clang-23
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-23
-um                               allyesconfig    gcc-14
-x86_64                           allmodconfig    clang-20
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20260304    gcc-14
-x86_64      buildonly-randconfig-002-20260304    clang-20
-x86_64      buildonly-randconfig-003-20260304    clang-20
-x86_64      buildonly-randconfig-004-20260304    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.2.0
+Haha alright. I appreciate the honesty :)
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I'll stick to my explanation for now then, since it makes sense for me
+at least (someone otherwise please correct me).
+
+>
+>> There are some other examples in this folder that include this node. Not
+>> sure if it's worth the churn to fix those as well to help the next
+>> person?
+>
+> Probably isn't worth the churn /shrug
+
+Alright, let's leave it then.
 
