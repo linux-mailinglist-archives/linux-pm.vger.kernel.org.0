@@ -1,141 +1,187 @@
-Return-Path: <linux-pm+bounces-43670-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43671-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UL6SDtVVqWng5gAAu9opvQ
-	(envelope-from <linux-pm+bounces-43670-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 11:07:17 +0100
+	id iP7JE4RcqWkL6AAAu9opvQ
+	(envelope-from <linux-pm+bounces-43671-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 11:35:48 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFB7220F60A
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 11:07:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1A3420FC3D
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 11:35:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 8DDE83010B42
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 10:05:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C3FE430363AA
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 10:33:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 922DA37BE77;
-	Thu,  5 Mar 2026 10:05:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rrk1MOcb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9324737C118;
+	Thu,  5 Mar 2026 10:33:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF7E375F62
-	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 10:05:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 560BD378D85
+	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 10:33:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772705124; cv=none; b=QjpniLbju05jebPDCtPiXmgY9qHdiU8i/uWMjEhVaMFb8Vr20O2nZ7Yx8vcaplfD1XA0pJHaxV7w6E1H/1ppBzxZEK6QIctGy2ayf2qhRu39YnvbuZ6FmD/SMRLkAV/lIEaiS+pymukVD1jd4A5TKzzUBh5Ur1dtoNLQGtvDalA=
+	t=1772706805; cv=none; b=qIjOlFhbvfA0eryIXwbkQ6zWY0+Fy1GwTcy0gZtf0ZFMe2h2fYP4w9EMoQnZpLk/a5LLy6bU8CJXU/yRb8gnvK5YsIhtt5PifaB3oixGGia0Fhfsi5X7qgGc9AjCJR76UgT9n4HGfYRH/gI+RFs/X30K7xsBZfnUzQ7dZDfJgn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772705124; c=relaxed/simple;
-	bh=lQ0T9bUE9C/9y8Vs6pywRcQ3tiB0ev9f4VxMdnV+hAk=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ar40oasfXA+WChFV41r2dg/I3HCbmK11OiplqRmFlf5CThE0AvpybztMdpB7EXet+tm8fRztqBH1a/IDEvODAqAUTUIWvsBQbs5BSiLHSl+1tbnX8DPJjtdZebQOlXWv932lo0IH1tU3X6MaSm25pWPIpuqSYsHP+7IqFkohvfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rrk1MOcb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F8EC19423
-	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 10:05:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772705124;
-	bh=lQ0T9bUE9C/9y8Vs6pywRcQ3tiB0ev9f4VxMdnV+hAk=;
-	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
-	b=Rrk1MOcbJC7diGpkgHuAM97vXMc8P/tAN1MFcvPsz7M8WIioAvB9XmrQqu5l+dSOg
-	 aqOzcPXh6wSPUm4OVtyZxFCi+cRg9dF2mhjO7HfmL6gRHmrm4l6E+qtIfIiBx3RM8d
-	 dkaAfVCb4KCX0Q53zYLrv8P7wUElGWhYZn9npg6tk4bytkPMfj/oDiiZoqr9PVQNyZ
-	 XrwRcUKB0ctZvgOj+MPTqa6r76dEWwCKo97NqFJlBdWXE4eLOzRIGpzVIrspHKuzwN
-	 +UsuV5+xp7XgdQWqMORe8SoS+IHXb9l30Aw1JZGDBSl0dJkLjmhcnKw+1mfgfnpvhQ
-	 y7sT9ETdlhkPQ==
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-38a2a59baa6so20323001fa.2
-        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2026 02:05:24 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVMedbV/D3MQDYtfvLJ22fAktWlpz6hRawq1oF5dFtIXE+5LHSUPV9uuYt4QjnteslHG6JqpaxIHQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqkcqIUvoDf+gPnc2KHGsrWzEcOMYmDJRefQor0AauQ7D9Ds2Q
-	Aoi0KTMZIy9aoLvdp98rk1ARv/zHRULPIjLGKcbbBA9CvD/88dkYgfyuZ19mMg213+YyKKiDzlF
-	wxGHtFSneD/bUp36nFH04Q016p3XiqHviuSd78FB4/g==
-X-Received: by 2002:a05:651c:41d6:b0:387:4ee2:1cbe with SMTP id
- 38308e7fff4ca-38a2c564d92mr31840641fa.2.1772705122833; Thu, 05 Mar 2026
- 02:05:22 -0800 (PST)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 5 Mar 2026 05:05:20 -0500
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 5 Mar 2026 05:05:20 -0500
-From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <20260304-arm-psci-system_reset2-vendor-reboots-v20-1-cf7d346b8372@oss.qualcomm.com>
+	s=arc-20240116; t=1772706805; c=relaxed/simple;
+	bh=O2ceNp0v1y7OfAwh+zyQ5ZRZ8khQkWInlECudLwPWvU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q8zPf1uHTYyLCV/u/CS5AUrmb7IdhT5ZoSqmb9ceoPihjW2yBgqHArtG1qzBZv2JVpeek7FtPGUJyM/vw5LsCTAMheBtXc6DicuivW0DStKIoizPqSQX/qmbM4ayPFtkNSr+hXW1Pqu+x2ewRloozsr7KT3UIpoTBDY4lB58qrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vy60p-0005YH-Bg; Thu, 05 Mar 2026 11:32:59 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vy60m-003rpi-1E;
+	Thu, 05 Mar 2026 11:32:57 +0100
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vy60n-00000002Foi-2UBF;
+	Thu, 05 Mar 2026 11:32:57 +0100
+Date: Thu, 5 Mar 2026 11:32:57 +0100
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: ming.qian@oss.nxp.com
+Cc: linux-media@vger.kernel.org, mchehab@kernel.org, 
+	hverkuil-cisco@xs4all.nl, nicolas@ndufresne.ca, benjamin.gaignard@collabora.com, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de, 
+	sebastian.fricke@collabora.com, shawnguo@kernel.org, ulf.hansson@linaro.org, 
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, 
+	fra.schnyder@gmail.com, linux-imx@nxp.com, l.stach@pengutronix.de, Frank.li@nxp.com, 
+	peng.fan@nxp.com, eagle.zhou@nxp.com, devicetree@vger.kernel.org, 
+	imx@lists.linux.dev, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] media: verisilicon: Fix kernel panic due to
+ __initconst misuse
+Message-ID: <azwbgxp4pl3m6klyvd5htmy7h7pc76nqvvgmi6pudvfl7zippl@svv7tiibyrci>
+References: <20260305100149.722-1-ming.qian@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260304-arm-psci-system_reset2-vendor-reboots-v20-0-cf7d346b8372@oss.qualcomm.com>
- <20260304-arm-psci-system_reset2-vendor-reboots-v20-1-cf7d346b8372@oss.qualcomm.com>
-Date: Thu, 5 Mar 2026 05:05:20 -0500
-X-Gmail-Original-Message-ID: <CAMRc=Mdnf_F2JtSOaz4AkZT6EErYhMcVT8HZ+bf_zO+FCH+OUA@mail.gmail.com>
-X-Gm-Features: AaiRm52_Ghl_cyrpx4-PLseenakv1wMTEmeY_ZbSCiMyp4qVQG4KYHqTiXWk5K0
-Message-ID: <CAMRc=Mdnf_F2JtSOaz4AkZT6EErYhMcVT8HZ+bf_zO+FCH+OUA@mail.gmail.com>
-Subject: Re: [PATCH v20 01/10] power: reset: reboot-mode: Remove devres based allocations
-To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, Andre Draszik <andre.draszik@linaro.org>, 
-	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	Srinivas Kandagatla <srini@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Souvik Chakravarty <Souvik.Chakravarty@arm.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Andy Yan <andy.yan@rock-chips.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Conor Dooley <conor+dt@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, John Stultz <john.stultz@linaro.org>, 
-	Moritz Fischer <moritz.fischer@ettus.com>, Bartosz Golaszewski <brgl@kernel.org>, 
-	Sudeep Holla <sudeep.holla@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: CFB7220F60A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260305100149.722-1-ming.qian@oss.nxp.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Rspamd-Queue-Id: A1A3420FC3D
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43670-lists,linux-pm=lfdr.de];
-	FREEMAIL_CC(0.00)[broadcom.com,kernel.org,oss.qualcomm.com,linaro.org,vger.kernel.org,lists.infradead.org,arndb.de,arm.com,rock-chips.com,gmail.com,ettus.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,qualcomm.com:email,mail.gmail.com:mid];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[29];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,xs4all.nl,ndufresne.ca,collabora.com,pengutronix.de,linaro.org,gmail.com,nxp.com,lists.linux.dev,lists.infradead.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43671-lists,linux-pm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[pengutronix.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[27];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[m.felsch@pengutronix.de,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.963];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:url,pengutronix.de:email,checkpatch.pl:url,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,toradex.com:email,nxp.com:email]
 X-Rspamd-Action: no action
 
-On Wed, 4 Mar 2026 19:03:01 +0100, Shivendra Pratap
-<shivendra.pratap@oss.qualcomm.com> said:
-> Devres APIs are intended for use in drivers, where the managed lifetime
-> of resources is tied directly to the driver attach/detach cycle. In
-> shared subsystem code, there is no guarantee that the subsystem
-> functions will only be called after a driver has been attached, nor that
-> they will not be referenced after the managed resources have been
-> released during driver detach.
->
-> To ensure correct lifetime handling, avoid using devres-based
-> allocations in the reboot-mode and explicitly handle allocation and
-> cleanup of resources.
->
-> Fixes: 4fcd504edbf7 ("power: reset: add reboot mode driver")
-> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-> ---
+On 26-03-05, ming.qian@oss.nxp.com wrote:
+> From: Ming Qian <ming.qian@oss.nxp.com>
+> 
+> Fix a kernel panic when probing the driver as a module:
+> 
+>   Unable to handle kernel paging request at virtual address
+>   ffffd9c18eb05000
+>   of_find_matching_node_and_match+0x5c/0x1a0
+>   hantro_probe+0x2f4/0x7d0 [hantro_vpu]
+> 
+> The imx8mq_vpu_shared_resources array is referenced by variant
+> structures through their shared_devices field. When built as a
+> module, __initconst causes this data to be freed after module
+> init, but it's later accessed during probe, causing a page fault.
+> 
+> The imx8mq_vpu_shared_resources is referenced from non-init code,
+> so keeping __initconst or __initconst_or_module here is wrong.
+> 
+> Drop the __initconst annotation and let it live in the normal .rodata
+> section.
+> 
+> Fixes: e0203ddf9af7 ("media: verisilicon: Avoid G2 bus error while decoding H.264 and HEVC")
+> Reported-by: Franz Schnyder <franz.schnyder@toradex.com>
+> Closes: https://lore.kernel.org/all/n3qmcb62tepxltoskpf7ws6yiirc2so62ia23b42rj3wlmpl67@rvkbuirx7kkp/
+> Suggested-by: Marco Felsch <m.felsch@pengutronix.de>
 
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+This fix was suggested by Krzysztof :)
+
+> Signed-off-by: Ming Qian <ming.qian@oss.nxp.com>
+> ---
+> v2
+> - Remove __initconst
+> - Add missing Reported-by tag
+> - Add missing Suggested-by tag
+> - Remove comments of sentinel to pass checkpatch.pl
+> 
+>  drivers/media/platform/verisilicon/imx8m_vpu_hw.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
+> index 6f8e43b7f157..6fbe3c581032 100644
+> --- a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
+> +++ b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
+> @@ -343,10 +343,10 @@ const struct hantro_variant imx8mq_vpu_variant = {
+>  	.num_regs = ARRAY_SIZE(imx8mq_reg_names)
+>  };
+>  
+> -static const struct of_device_id imx8mq_vpu_shared_resources[] __initconst = {
+> +static const struct of_device_id imx8mq_vpu_shared_resources[] = {
+>  	{ .compatible = "nxp,imx8mq-vpu-g1", },
+>  	{ .compatible = "nxp,imx8mq-vpu-g2", },
+> -	{ /* sentinel */ }
+> +	{}
+
+Unnecessary change.
+
+With both fixed:
+
+Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
+
+
+>  };
+>  
+>  const struct hantro_variant imx8mq_vpu_g1_variant = {
+> -- 
+> 2.52.0
+> 
+> 
+
+-- 
+#gernperDu 
+#CallMeByMyFirstName
+
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | https://www.pengutronix.de/ |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-9    |
 
