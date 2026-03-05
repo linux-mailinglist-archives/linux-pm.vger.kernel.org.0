@@ -1,230 +1,284 @@
-Return-Path: <linux-pm+bounces-43700-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43701-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id DTQYFZzIqWkAFAEAu9opvQ
-	(envelope-from <linux-pm+bounces-43700-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 19:17:00 +0100
+	id +FIuEynPqWk+FgEAu9opvQ
+	(envelope-from <linux-pm+bounces-43701-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 19:44:57 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56872216E60
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 19:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DE3F21716F
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 19:44:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9CA3D300CE4E
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 18:16:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3E0AC307839B
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 18:44:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF07829AB07;
-	Thu,  5 Mar 2026 18:16:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 362B63E51FE;
+	Thu,  5 Mar 2026 18:44:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="ERHsymTj"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="W9/68gUQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azhn15012028.outbound.protection.outlook.com [52.102.149.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C904C92;
-	Thu,  5 Mar 2026 18:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772734596; cv=none; b=X6sYHaRirx802zfRicJt1RSgTUiDSDf1ckYGoKFO2qr8fP36a4Qb04WlCA6T9K0W6WawoMIs6R0asNm9q9SzHD4ZR6kMhsOxOpR+/g78XQEygkuVm9ZZiK2rUD613//nUquva4GKqvi5Z8VUPwK2YpFQ+JSwMhLZesPphTBufrM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772734596; c=relaxed/simple;
-	bh=6NYevW4IZk56xrlcBEQn5OwzVvmj1C/vTN3wsO3zRw0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MdRX03D9s8CFm4Q8talDtRbD017zq2ENLHti46X5Azk7BQSyobynal/p7CsZHBucNdYSJ0ZK9VEulP0mL53CWey8JavKQWFrHntauTNdF8sNPCBe6Ks1cRLO1uv/I+oq/gQOg4+9pwGxNmkxHe2C0L/fbHiYi9MX2IgUWcbFdXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=ERHsymTj; arc=none smtp.client-ip=178.62.254.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
-Received: from shell.ilvokhin.com (shell.ilvokhin.com [138.68.190.75])
-	(Authenticated sender: d@ilvokhin.com)
-	by mail.ilvokhin.com (Postfix) with ESMTPSA id 6B5C1B3372;
-	Thu, 05 Mar 2026 18:16:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
-	s=mail; t=1772734586;
-	bh=RIxu2UmisZj1gBHdIkVdu8dfhc8pgW90ZwBwUMZ5Nt8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ERHsymTj9fD63/PVjhhmH9C1LwEd9+RUVtbRLwgIZpQxPyzqTf8Xu6psm6AfXHl8w
-	 /d5TZigph9IPleKxGJSRug/wlIRqY9Cg72ZdQkvR9hR24OhGq56INmDCERndOUVXxL
-	 wAIjy/hh/1LaLFYcySTpruGS/PgjuhwMUdO67AEI=
-Date: Thu, 5 Mar 2026 18:16:22 +0000
-From: Dmitry Ilvokhin <d@ilvokhin.com>
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Qi Zheng <zhengqi.arch@bytedance.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 4/5] mm: rename zone->lock to zone->_lock
-Message-ID: <aanIdk2i-Eo9M967@shell.ilvokhin.com>
-References: <20260304151335.172572-1-sj@kernel.org>
- <ebd994ca-eb04-4dff-a0a8-47aef0934c2c@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4727F364E99;
+	Thu,  5 Mar 2026 18:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.102.149.28
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772736277; cv=fail; b=rtC9tkbB7UyLpXGpUbja9ZeQ4G5zuicz0C0YVCrc7tKyP3j/YonywhoU3R3ofeLE2m6gLu/QiJBoyDHmTj/vWoPuPsEFv53CpRw3ZpOZ9gOYYj2C9DqdvnGE+JOqBMoN7js7eAcRQO6iWG+ES3IOLo0fYs2NB9B8XN9lMv73iAA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772736277; c=relaxed/simple;
+	bh=Ai+6tZHycv8EaTo4HgjE8WOEg/4a16+15V9pRuwGUDs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=EqNYumterzLvjUjHG3SIh+usRK9OHCJwxCkll9wXCdVQFWIYzcC0vdWrlYwM5JSEd1eeq8aApMn7HgJCrM9vomeCVxbEle0oa6D1xKavjtzAXNzTpQHE9NwVrZH9JTaPlPNBySaV6pfjB+I6UYW9T0jHiITuNmGgVr0e5KGhPvA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=W9/68gUQ; arc=fail smtp.client-ip=52.102.149.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=N1SAZpS6ZaqJsZXYfrw0RRTjWhLEkVCZ0eRYS5trB/7Q2VsGTnhObpl8iDfx8B9N8kndbqF5SBGIVLbHzevP/fDuSoBCTgPqveyabi2XLTk5NBFvzGAWuOOiYeuJdzmnmJ3+4uieG+YgyQLRAZper+4V/GDRa3Z5bw0PSWxsrbJ1vPzuiPcAh2+ffK7+8QUZs1LPjCO5l+GIrFVmFDFYohYXeeUucaqe1XWO6JiVeDhPPFLm1v5Ohti/bQ8suSvPc5XZNSXiObtQVyXLyb212k2EyVSPET7vOE6KX6uyyPx0NXpXMwn3I98ZWrBjXB1yGeJ8W+SbH3KeZOkmfFbPQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=p/InfKTyXkgN1PvmXo/6+5rZe0iozex09wg2bfgN7qQ=;
+ b=kTsXxskQVid1/icpPYxJ3smD1Rs/AOogtaAvFoMuQcOjanA0GCZ9nDYegyP5vZ3m6MNoxXv0UnTGIUCJJnSqxZxsjEfg45CN8X6dpA02p5wmwGHHrGaYdQesKrwZY0z8/s52903LwWDx6kux5sBDdJel72rbe2Tm6z2pObNMocI2v78IeMoA4tTM7lZJtsbiJbqUxuvLcWWf74dUSGVrVAQd1sg79UEDx+uxPo+BW98Cn/uK9F/8W4hMGm1CE1LXE307BvJn4Id5OE8voAzvoSFG6HX7Ge1JFsU3Ji7R2PWOs3IVGUNKRcofFSiFOsqv2g9cpgPdBKmLV7nfaVaEVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.21.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p/InfKTyXkgN1PvmXo/6+5rZe0iozex09wg2bfgN7qQ=;
+ b=W9/68gUQ8B15ZaovfWlonDrEKpyySDIGS0lQ01xTpovJOTwnTRenSu9VaQSOLUQvzHlWQ1pbyRS2cn1w50KITU+hzqzu5e+xarG/Z7PjqrxILm05/BFrQwTUcYLKLiJuwfA8loTeEqOnQdNF1MX5oiWGqlRIw+YNedv3zhBrogw=
+Received: from PH7P221CA0061.NAMP221.PROD.OUTLOOK.COM (2603:10b6:510:328::15)
+ by BY5PR10MB4243.namprd10.prod.outlook.com (2603:10b6:a03:210::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.18; Thu, 5 Mar
+ 2026 18:44:33 +0000
+Received: from CY4PEPF0000E9D9.namprd05.prod.outlook.com
+ (2603:10b6:510:328:cafe::9c) by PH7P221CA0061.outlook.office365.com
+ (2603:10b6:510:328::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.23 via Frontend Transport; Thu,
+ 5 Mar 2026 18:44:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
+Received: from flwvzet201.ext.ti.com (198.47.21.195) by
+ CY4PEPF0000E9D9.mail.protection.outlook.com (10.167.241.72) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9678.18 via Frontend Transport; Thu, 5 Mar 2026 18:44:30 +0000
+Received: from DFLE210.ent.ti.com (10.64.6.68) by flwvzet201.ext.ti.com
+ (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 5 Mar
+ 2026 12:44:29 -0600
+Received: from DFLE215.ent.ti.com (10.64.6.73) by DFLE210.ent.ti.com
+ (10.64.6.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 5 Mar
+ 2026 12:44:25 -0600
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE215.ent.ti.com
+ (10.64.6.73) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Thu, 5 Mar 2026 12:44:25 -0600
+Received: from [10.249.42.149] ([10.249.42.149])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 625IiO7G2857803;
+	Thu, 5 Mar 2026 12:44:25 -0600
+Message-ID: <aa2899ff-a8d9-4740-b256-266f7073f0a9@ti.com>
+Date: Thu, 5 Mar 2026 12:44:24 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ebd994ca-eb04-4dff-a0a8-47aef0934c2c@kernel.org>
-X-Rspamd-Queue-Id: 56872216E60
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] ti: sci: Drop fake 'const' on handle pointer
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, Nishanth Menon
+	<nm@ti.com>, Tero Kristo <kristo@kernel.org>, Santosh Shilimkar
+	<ssantosh@kernel.org>, Michael Turquette <mturquette@baylibre.com>, "Stephen
+ Boyd" <sboyd@kernel.org>, Peter Ujfalusi <peter.ujfalusi@gmail.com>, "Vinod
+ Koul" <vkoul@kernel.org>, Frank Li <Frank.Li@kernel.org>, Thomas Gleixner
+	<tglx@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Bjorn Andersson
+	<andersson@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>,
+	"Philipp Zabel" <p.zabel@pengutronix.de>, Dave Gerlach <d-gerlach@ti.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-clk@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
+CC: <stable@vger.kernel.org>
+References: <20260223202426.566958-2-krzysztof.kozlowski@oss.qualcomm.com>
+ <195cc8dc-8642-481c-8bdd-f5409ab8f5b5@ti.com>
+ <5b6a4284-4766-424c-9171-feaa08c52ad1@oss.qualcomm.com>
+ <2d852f07-0bd9-4076-b0dd-93425ed237f4@ti.com>
+ <c768706e-f063-44bd-92cd-f3984ad3bfbc@oss.qualcomm.com>
+Content-Language: en-US
+From: Andrew Davis <afd@ti.com>
+In-Reply-To: <c768706e-f063-44bd-92cd-f3984ad3bfbc@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D9:EE_|BY5PR10MB4243:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7d3e5d10-6700-41b6-26fc-08de7ae73c5a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|7416014|36860700016|34020700016|376014|921020|12100799066;
+X-Microsoft-Antispam-Message-Info:
+	01QlmEKCQw7H221QOm+anKMleDiJ9ZE4YBF+79avqADBK4K/enYpewwf3vBq4SGmocoJwpZslIeVWQnb9k2Fgul6SJzHoCKkMhpivWEvyoPgzyiDdjnt3znfqeTsAUwol7bgEb2970jkp2EJlhpScUj3W3ZTzu30KPWWhzriMlj7TYyJAEKfoFRbhzOgYBHU0DJjJ6kBI679tMMbk9Y5qoV/E3xPReQ2CaSYOHuSOuuxJyX9a9tNmZ7V2yQqJBLs3UvDmQpITDrHigp9dm9lrCTUPhpuobKP94ea3+B357wVkI+dLTOzTwlFBzBkAwVYSCmc53/m5APAigdmqzzHUpWMFfOM/Ud64GH81EkMI6NupKVlMuQqNV+XUIZdeOAJo+vDdcm0luCi+UVW2A7haYelsQM5jvAoGrXd5i4+sYzdSa8d2sgvic0z+LcOCsuOiVOekGqDvyUJOZyBsMmKHtIhIpYLbV/SztG6CNNuqkq+z/i1C0UY40C77vZjdTEmFFbR5iyrtbtGUwV5kUGoAQE27Sa0mUxuamjdp1HGH1BR47e+NvV+JK5gdpXLScvxxi65efhcB5vOiWNywvLcW+oYt5RPZI0hDxW95nQ3xLnq4/UPYLZSq+wBuaLrwfStkePFp0Qk05W1DQrly3zwEOw9ezDFXc4P3WgOAgaKXNZDKm2oDjVR650IltpJ2/lWs5dAY9zyqUOzJfTxdEaq9wfLjQfqn7X8OPSxf0AoNHzbEBbN1t2n1Ztpv9pH2kmhD2QYmTn9XpsRWzfjDLZZpQ==
+X-Forefront-Antispam-Report:
+	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(7416014)(36860700016)(34020700016)(376014)(921020)(12100799066);DIR:OUT;SFP:1501;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	4FuUm2GQ70MA6Za6CwN0A8qOHHhEcmC3rNs0LekX1f7ImeEC62VJbClbsFHY39fyVoLLKaD6zH/iPc/9gTzX4fBnSgcTigasGu1Z/U5Q6D72mIiK+Wbu7R4H6ImS1o9HlxNBeKmhpgXN90cHxU7T4XVslTSa3PN5w9xNm+FtUbFb3OM6EOxSE+vJ844dWnfuf9FbZ5I5HWbLO2jI4Rf4yoAldUKB+jMoBM7bH5FZ4NypLb0SD6Jc1nqi3B2kxic1HeGQMRQVLuT0bimeV/F13OAS/X5juiFb6pOi+97TCNKFwU3SWEjgQJUw0SzmO4vt8nEQWK2VjPNStDDCJbmNTfarqAaMZm4U7QVmBoEtuRA9i09ii0srbqgExxj36Xxyv+K/R2qc8FhS+1Wvia6bYnXE4bAYN//2PXMQHumMPMnEOn9tSizTkmTLORB0JrKi
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2026 18:44:30.0881
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d3e5d10-6700-41b6-26fc-08de7ae73c5a
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000E9D9.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4243
+X-Rspamd-Queue-Id: 9DE3F21716F
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
-	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[ti.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[ti.com:s=selector1];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43700-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[ilvokhin.com:+];
+	TAGGED_FROM(0.00)[bounces-43701-lists,linux-pm=lfdr.de];
+	FREEMAIL_TO(0.00)[oss.qualcomm.com,ti.com,kernel.org,baylibre.com,gmail.com,linaro.org,pengutronix.de,lists.infradead.org,vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[ti.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_TWELVE(0.00)[29];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,linux-pm@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[afd@ti.com,linux-pm@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
 	TAGGED_RCPT(0.00)[linux-pm];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[10]
 X-Rspamd-Action: no action
 
-On Thu, Mar 05, 2026 at 10:27:07AM +0100, Vlastimil Babka (SUSE) wrote:
-> On 3/4/26 16:13, SeongJae Park wrote:
-> > On Wed, 4 Mar 2026 13:01:45 +0000 Dmitry Ilvokhin <d@ilvokhin.com> wrote:
-> > 
-> >> On Tue, Mar 03, 2026 at 05:50:34PM -0800, SeongJae Park wrote:
-> >> > On Tue, 3 Mar 2026 14:25:55 +0000 Dmitry Ilvokhin <d@ilvokhin.com> wrote:
-> >> > 
-> >> > > On Mon, Mar 02, 2026 at 02:37:43PM -0800, Andrew Morton wrote:
-> >> > > > On Mon, 2 Mar 2026 15:10:03 +0100 "Vlastimil Babka (SUSE)" <vbabka@kernel.org> wrote:
-> >> > > > 
-> >> > > > > On 2/27/26 17:00, Dmitry Ilvokhin wrote:
-> >> > > > > > This intentionally breaks direct users of zone->lock at compile time so
-> >> > > > > > all call sites are converted to the zone lock wrappers. Without the
-> >> > > > > > rename, present and future out-of-tree code could continue using
-> >> > > > > > spin_lock(&zone->lock) and bypass the wrappers and tracing
-> >> > > > > > infrastructure.
-> >> > > > > > 
-> >> > > > > > No functional change intended.
-> >> > > > > > 
-> >> > > > > > Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> >> > > > > > Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
-> >> > > > > > Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
-> >> > > > > > Acked-by: SeongJae Park <sj@kernel.org>
-> >> > > > > 
-> >> > > > > I see some more instances of 'zone->lock' in comments in
-> >> > > > > include/linux/mmzone.h and under Documentation/ but otherwise LGTM.
-> >> > > > > 
-> >> > > > 
-> >> > > > I fixed (most of) that in the previous version but my fix was lost.
-> >> > > 
-> >> > > Thanks for the fixups, Andrew.
-> >> > > 
-> >> > > I still see a few 'zone->lock' references in Documentation remain on
-> >> > > mm-new. This patch cleans them up, as noted by Vlastimil.
-> >> > > 
-> >> > > I'm happy to adjust this patch if anything else needs attention.
-> >> > > 
-> >> > > From 9142d5a8b60038fa424a6033253960682e5a51f4 Mon Sep 17 00:00:00 2001
-> >> > > From: Dmitry Ilvokhin <d@ilvokhin.com>
-> >> > > Date: Tue, 3 Mar 2026 06:13:13 -0800
-> >> > > Subject: [PATCH] mm: fix remaining zone->lock references
-> >> > > 
-> >> > > Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
-> >> > > ---
-> >> > >  Documentation/mm/physical_memory.rst | 4 ++--
-> >> > >  Documentation/trace/events-kmem.rst  | 8 ++++----
-> >> > >  2 files changed, 6 insertions(+), 6 deletions(-)
-> >> > > 
-> >> > > diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
-> >> > > index b76183545e5b..e344f93515b6 100644
-> >> > > --- a/Documentation/mm/physical_memory.rst
-> >> > > +++ b/Documentation/mm/physical_memory.rst
-> >> > > @@ -500,11 +500,11 @@ General
-> >> > >  ``nr_isolate_pageblock``
-> >> > >    Number of isolated pageblocks. It is used to solve incorrect freepage counting
-> >> > >    problem due to racy retrieving migratetype of pageblock. Protected by
-> >> > > -  ``zone->lock``. Defined only when ``CONFIG_MEMORY_ISOLATION`` is enabled.
-> >> > > +  ``zone_lock``. Defined only when ``CONFIG_MEMORY_ISOLATION`` is enabled.
-> >> > 
-> >> > Dmitry's original patch [1] was doing 's/zone->lock/zone->_lock/', which aligns
-> >> > to my expectation.  But this patch is doing 's/zone->lock/zone_lock/'.  Same
-> >> > for the rest of this patch.
-> >> > 
-> >> > I was initially thinking this is just a mistake, but I also found Andrew is
-> >> > doing same change [2], so I'm bit confused.  Is this an intentional change?
-> >> > 
-> >> > [1] https://lore.kernel.org/d61500c5784c64e971f4d328c57639303c475f81.1772206930.git.d@ilvokhin.com
-> >> > [2] https://lore.kernel.org/20260302143743.220eed4feb36d7572fe726cc@linux-foundation.org
-> >> > 
-> >> 
-> >> Good catch, thanks for pointing this out, SJ.
-> >> 
-> >> Originally the mechanical rename was indeed zone->lock -> zone->_lock.
-> >> However, in Documentation I intentionally switched references to
-> >> zone_lock instead of zone->_lock. The reasoning is that _lock is now an
-> >> internal implementation detail, and direct access is discouraged. The
-> >> intended interface is via the zone_lock_*() / zone_unlock_*() wrappers,
-> >> so referencing zone_lock in documentation felt more appropriate than
-> >> mentioning the private struct field (zone->_lock).
-> > 
-> > Thank you for this nice and kind clarification, Dmitry!  I agree mentioning
-> > zone_[un]lock_*() helpers instead of the hidden member (zone->_lock) can be
-> > better.
-> > 
-> > But, I'm concerned if people like me might not aware the intention under
-> > 'zone_lock'.  If there is a well-known convention that allows people to know it
-> > is for 'zone_[un]lock_*()' helpers, making it more clear would be nice, in my
-> > humble opinion.  If there is such a convention but I'm just missing it, please
-> > ignore.  If I'm not, for eaxmaple,
-> > 
-> > "protected by ``zone->lock``" could be re-wrote to
-> > "protected by ``zone_[un]lock_*()`` locking helpers" or,
-> > "protected by zone lock helper functions (``zone_[un]lock_*()``)" ?
-> > 
-> >> 
-> >> That said, I agree this creates inconsistency with the mechanical
-> >> rename, and I'm happy to adjust either way: either consistently refer
-> >> to the wrapper API, or keep documentation aligned with zone->_lock.
-> >> 
-> >> I slightly prefer referring to the wrapper API, but don't have a strong
-> >> preference as long as we're consistent.
-> > 
-> > I also think both approaches are good.  But for the wrapper approach, I think
-> > giving more contexts rather than just ``zone_lock`` to readers would be nice.
+On 3/5/26 9:59 AM, Krzysztof Kozlowski wrote:
+> On 05/03/2026 16:52, Andrew Davis wrote:
+>>>>> The code is not correct logically, either, because functions like
+>>>>> ti_sci_get_handle() and ti_sci_put_handle() are meant to modify the
+>>>>> handle reference counting, thus they must modify the handle.
+>>>>
+>>>> The reference counting is handled outside of the ti_sci_handle struct,
+>>>> the contents of the handle are never modified after it is created.
+>>>>
+>>>> The const is only added by functions return a handle to consumers.
+>>>> We cannot return non-const to consumer drivers or then they would
+>>>> be able to modify the content without a compiler warning, which would
+>>>> be a real problem.
+>>>
+>>> This is the same argument as making pointer to const the pointer freed
+>>> via kfree() (or free() in userspace). kfree() does not modify the
+>>> contents of the pointer, right? The same as getting putting handle does
+>>> not modify the handle...
+>>>
+>>
+>> In that argument, if we wanted the consumer of the pointer to not free()
+>> it we would return a const pointer, free()'ing that would result in the
+>> warning we want (discards const qualifier).
+>>
+>> If you could somehow malloc() from a const area in memory then free()
+>> doesn't modify the pointed to values, only the non-const record keeping
+>> which would be stored outside of the const memory. So even in this analogy
+>> there isn't a problem.
 > 
-> Grep tells me that we also have comments mentioning simply "zone lock", btw.
-> And it's also a term used often in informal conversations. Maybe we could
-> just standardize on that in comments/documentations as it's easier to read.
-> Discovering that the field is called _lock and that wrappers should be used,
-> is hopefully not that difficult.
+> I am not saying about malloc. I am saying about free() which does not
+> modify the freed memory.
+> 
 
-Thanks for the suggestion, Vlastimil. That sounds reasonable to me as
-well. I'll update the comments and documentation to consistently use
-"zone lock".
+And if you look, kfree() in Linux takes a const pointer. We also do not
+modify the content of the pointer we are given either, so we should
+be okay using const by the same reasoning.
+
+>>
+>>> The point is that storing the reference counter outside of handle does
+>>> not make the argument correct. Logically when you get a reference, you
+>>> increase the counter, so it is not a pointer to const. And the code
+>>> agrees, because you must drop the const.
+>>>
+>>
+>> The record keeping memory is not const and can be modified.
+>>
+>> And where do we drop the const? The outer "struct ti_sci_info" was never
+>> const to begin with, so no dropped const.
+> 
+> We discuss about different points. I did not say the outer memory is
+> const. I said that you drop the const - EXPLICITLY - from the pointer to
+> handle.
+> 
+
+Only because container_of() forces the const to be dropped, that is out
+of our control. But we never modify handle though the non-const parent
+struct.
+
+> And that API which gets a handle (increases reference count) via pointer
+> to const is completely illogical, because increasing refcnt is already
+> modifying it. Just because you store the refcnt outside, does not change
+> the fact that API is simply confusing.
+> 
+
+If the refcnt is not inside the const struct, then the contents are not
+changed, therefor const is still correct. Even if the content of handle
+were in fixed ROM, nothing would break here.
+
+>>
+>> If the issue is that the handle is not const inside that outer struct
+>> we could fix that,
+>>
+>> struct ti_sci_info {
+>> ...
+>> -	struct ti_sci_handle handle;
+>> +	const struct ti_sci_handle handle;
+>> ...
+>> };
+>>
+>> And with that change even your original commit message example issue
+>> goes away,
+>>
+>> struct ti_sci_info *info = handle_to_ti_sci_info(handle);
+>> info->handle.version.abi_major = 0;
+>>
+>> would now fail to work to compile.
+> 
+> But you cannot do that for other reasons in your code because you DO
+> modify the handle in all the APIs which you call "pointer to const".
+> 
+
+Show me *any* API that modifies the handle. The *only* time handle
+contents are modified is when initialized in probe() and functions
+called only by probe(), never in any API function.
+
+If the thing making this confusing is that the const gets dropped
+by container_of() then it seems there is a new version of that now
+that explicitly fixes that issue we could move to[0] with a small
+modification.
+
+Andrew
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/container_of.h#n26
+
+> 
+> Best regards,
+> Krzysztof
+
 
