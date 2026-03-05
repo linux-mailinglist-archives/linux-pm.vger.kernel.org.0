@@ -1,232 +1,259 @@
-Return-Path: <linux-pm+bounces-43634-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43635-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oCVDEMHSqGnRxgAAu9opvQ
-	(envelope-from <linux-pm+bounces-43634-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 01:48:01 +0100
+	id 2DAmIR/wqGkwzAAAu9opvQ
+	(envelope-from <linux-pm+bounces-43635-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 03:53:19 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EECF620994D
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 01:48:00 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E588320A578
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 03:53:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8571E305C3D0
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 00:47:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C06B13058560
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 02:52:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E3F3218E91;
-	Thu,  5 Mar 2026 00:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C50826ED41;
+	Thu,  5 Mar 2026 02:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SbddCAUB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qXA5KvPS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43CCF1D61BC
-	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 00:47:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3876626D4C7
+	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 02:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772671658; cv=none; b=q3E12oUH6BuBjX5hZUxL22DYBfDWOjrD4IKldsMOsO0LJq5sWCY5zbeR7lee2pXPau0av6KV+OTn9CtA8SKpL8W2IVTzGnGfEmpQbK/6DdcyidznpcuU6BTyJNdEJIuXJWimu0L8llU+x+g+jjUbtZKAh5vEJBOCqb3EiQUsn28=
+	t=1772679146; cv=none; b=mXv1HdM0+0dTiY0bpbhl6S+WJNCGJNEYkpz08UarrhMRNka9Z/yf5IV0JqRryVkmk7YepC0t3r4f/oVReZzv0NeQc88GiKdOYOZVJGq4QwYaJxArDYO3//MvPMg/UWeF6Y8rw+fYkgTOS5PpOZ2d0ZFBfUX6jogY+zIt/Iwh9Hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772671658; c=relaxed/simple;
-	bh=jwYlQBzET3f4zTTMKAlhyCamvFBUK1aZIoy+0DU6SqE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P3FwrBreFajWyqEGCYgRq6sGukMq+ZivIMREi+Th+53tXLSwcRTSRTOAEpnmm7q60+5sCvkSYPM5bHwvkXzII66LUUXAD4FoBciQBGOAWlKo/fpvvQpq3fHmV82FE42ZwqAFd2UnKpw+d5G+UkNLRnN2lHrirKTpHUQRVo7cuHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SbddCAUB; arc=none smtp.client-ip=74.125.82.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-12713e56abdso4614768c88.1
-        for <linux-pm@vger.kernel.org>; Wed, 04 Mar 2026 16:47:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772671655; x=1773276455; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=II0rb2vFhVofV67r7/LZnYmrjLvZ0d0KzZkjaY3PKtc=;
-        b=SbddCAUBnLjmLTQY/rJhZqfvH7bg5T41qJWf3/z4zM84FzeTLOFOzZ8KpYCH8sbiOK
-         Ty7fe2qNGVbJXZFDcb2Y5Yv1QR7TfLPaCOnsP2qmjKqLZ5Vr3kYbsTojBZ1v+2hB3tc8
-         9jCgf7gBsMmtkfi9JDjMDip/i1wj1MzCIw5u+p70I/YG4iKR6yKjqY7LP9joSih/+v5e
-         gmxoIKYoaPghVoNLw4KmBD0qjha71qxYto/Cwqs+X6LXBqWociO0nFQ/L8Tot7/tVFSk
-         B4qCkSbjsihsd9C/G95FSoYxr1WvIZMRJN8qnCoXhVu12UqUxdAW3nUmAvmpKvrJRLe1
-         35mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772671655; x=1773276455;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=II0rb2vFhVofV67r7/LZnYmrjLvZ0d0KzZkjaY3PKtc=;
-        b=cl+bxaxRuPKHFuQlpHfKqBLcbbMu6zW8L4K7KTNIuYbLipOm0UOAFIDti81Y48jVM1
-         dDacMU/1Y4Ef50E/d8nHCyxHfec+2K6U0orsn9DtVy8N1er1eT9umY+kcOG9WRAb/vCy
-         PC3AFLVpqOfu082WD1pXngwIadOg49BtzEO3H4CA2+efJK3wjehJHiTaKTHVrtujKVs/
-         D3xnu0lK9//HB0AdGZorq1zDBTORJxpZp2IHTMMByo63oE42/JBlnAjFMXMn3yGxKRzb
-         9HPjS4xJecGfZGTQj27zcj70313GEisUaW4d1Xms4nOrGs6Tiqjq9ATkBHuRdLJlAwF3
-         DJzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVlQn73Nc0n+KeK704U4FP+IS6ZpK83QXG3ibFvqF/1SUtsddvfMyifSWfe+yWpNcGgLomSJxwd0Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1gFbxU7TdLZg32xMYaz+hC6dQXfv8M1+Fjb/i3x77iETRrAOc
-	9GNeWw5AIS62o9fGKuG3x/9pUPndoUSCgG5jZYXCFEOHTv9aTn1sqdMv
-X-Gm-Gg: ATEYQzxM/HSv3xcifbjjLVPWHqwbyaqVRvmXnXCpRFV5VsQNWyEsPWqKPhqDx7frirk
-	cfhcz92jDyuA9B3PtZaeW9b/Pf/x/nsDGDM14g+hgPjSS7UadjFIwz5Hj0iUanxKCUB6/UR/P2Z
-	FLvn0ly5EEemnhedkmLjvrOXc8AbN9LpE+Oh+hSRoH49fMqa9Z8u4ZeLGqkC7xkFl8qWZqPyXDl
-	8RjsHFC9FjOgWpa0NMEE0T/Ul4mnvh2OGT1x0V/P5oibdmWq9uouOg2XD3FullYRCUNa1Dpa0vT
-	QATLuy3ZCJawgxvi68Cs2DiBlH5VNOdOiTIQ9pUomw4g3+zLf2Fc07kd2ZcsUL0pG7evg2mng2T
-	KKoKpyxfurwdStf9KS6RM5ri+4zCdW50HgXBr0tcKP0pxLxc/8j84m6kCrUfMLNe2Pnsdfadxic
-	gqSJMAGTHtUrRYXVpsLxLLa1daUkBCo8yv92Ottzb1wJoLClx7ytZ01sCQxBpJJkH2R/qVZFnG
-X-Received: by 2002:a05:7022:911:b0:123:2de5:346e with SMTP id a92af1059eb24-128bbebf073mr299216c88.0.1772671655140;
-        Wed, 04 Mar 2026 16:47:35 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-127899eab46sm19645861c88.8.2026.03.04.16.47.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Mar 2026 16:47:34 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0387c2a3-fa2b-428c-a897-0da2d87fe008@roeck-us.net>
-Date: Wed, 4 Mar 2026 16:47:31 -0800
+	s=arc-20240116; t=1772679146; c=relaxed/simple;
+	bh=02fIQkRhxEYW6dcEHiMxZAUWzpvF05ukxv85t9Jzd+Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hFPeR4WlZLfqasQtelqDrqYWkEZmtJ6ddmC/RQnt94KSIlzOZvHXaJMkDAjZhxqF4vVJb0FmzVtS03BnqhYIouK1xEfLXS//74mdThBySM4zJQBTJhv/zSsBFtquUb8MEHP8DnCPR6yaGW7z4F+4FS8bMUBAHThqWrlDngfTDuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qXA5KvPS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1743BC2BC86
+	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 02:52:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772679146;
+	bh=02fIQkRhxEYW6dcEHiMxZAUWzpvF05ukxv85t9Jzd+Y=;
+	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
+	b=qXA5KvPSQzJIIWLPLJ96R6w5kHhq5MbDYgov+/4fVtPDJPnYbVf4yIrAl6ssp8jpr
+	 5l3VNR8Q/wdSytoRHnsfVgpgF7+4b0ZlYhJi3oVr8cIrnx54lMEjwvHRB8hL/Y4DmL
+	 9PjDB5cUzWu2fitmFQmrTN/rRWhChY16EchnyDS+67xhGyxIaF4z+6f5jaXKgfP7ge
+	 g/2fiuZdJ4gRgrvyfI4Drx7pgwxh+SR9GR7Gp6FOHYGjuuC2a+bFk70RbElmyspASS
+	 XxI1taANAY3SS0XtSU7oNa8VjORrqqKYMvYEKQixqI4fOReX6GCrfv+HMAT1R7Ur6B
+	 8SRO8G3cjIyRA==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-38a2e62b893so17965511fa.1
+        for <linux-pm@vger.kernel.org>; Wed, 04 Mar 2026 18:52:26 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW0s1eeouCa6vXttaoi2ZHHcfGZqvXnpKAMSjgbySh5EDJIumXM3umSppUqDUjSnjgHU5G7LH5F/w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywq3XNnFnyLPg0s8XNHhvjSXjQKFUJa9b13TzcCKtQjnsedh8ki
+	eENLKZMPIraRq0zIvwovb9Xt78ba5S69brXfEWyzRcbA8OgdB2Zo7jST1vPr15KJ1SuVwFGqEyZ
+	Rj6Lv5LXjr2oUcUdRhpZa266G1nfPbuo=
+X-Received: by 2002:a05:651c:b2c:b0:38a:2fea:ba2 with SMTP id
+ 38308e7fff4ca-38a2fea0e1cmr20133451fa.32.1772679144245; Wed, 04 Mar 2026
+ 18:52:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 10/14] watchdog: convert the Kconfig dependency on OF_GPIO
- to OF
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Alexey Brodkin <abrodkin@synopsys.com>, Vineet Gupta <vgupta@kernel.org>,
- Scott Wood <oss@buserror.net>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
- Russell King <linux@armlinux.org.uk>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>,
- Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sebastian Reichel <sre@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-amlogic@lists.infradead.org, linux-leds@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
- linux-pm@vger.kernel.org
-References: <20260304-gpio-of-kconfig-v1-0-d597916e79e7@oss.qualcomm.com>
- <20260304-gpio-of-kconfig-v1-10-d597916e79e7@oss.qualcomm.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260304-gpio-of-kconfig-v1-10-d597916e79e7@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: EECF620994D
+References: <20260304-b4-pck600-a733-v1-0-2f54efdb8cc2@gmail.com>
+ <20260304-b4-pck600-a733-v1-2-2f54efdb8cc2@gmail.com> <CAGb2v64n_8RyWDieUKvbpkTikipB9ZvqEscYRRLowe+rvaJKCQ@mail.gmail.com>
+ <aajLNxYvDrpT-qqC@c67c70be8272>
+In-Reply-To: <aajLNxYvDrpT-qqC@c67c70be8272>
+Reply-To: wens@kernel.org
+From: Chen-Yu Tsai <wens@kernel.org>
+Date: Thu, 5 Mar 2026 11:52:11 +0900
+X-Gmail-Original-Message-ID: <CAGb2v64uXxYYv=+3BVcwDWF247nUqs2EJY81HGsmdPVMdx7e3w@mail.gmail.com>
+X-Gm-Features: AaiRm51B2kVDtM7bVFXZG0Lk1v7ZAfduJLHvMt3hmZ_YUmknvYKrQ94jheC8D5g
+Message-ID: <CAGb2v64uXxYYv=+3BVcwDWF247nUqs2EJY81HGsmdPVMdx7e3w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] pmdomain: sunxi: Add support for A733 to Allwinner
+ PCK600 driver
+To: Yuanshen Cao <alex.caoys@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, Ulf Hansson <ulf.hansson@linaro.org>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: E588320A578
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43634-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43635-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[oss.qualcomm.com,arm.com,kernel.org,synopsys.com,buserror.net,linux.ibm.com,ellerman.id.au,gmail.com,lunn.ch,armlinux.org.uk,davemloft.net,google.com,redhat.com,linaro.org,baylibre.com,googlemail.com,tibbo.com,linux-watchdog.org,linuxfoundation.org];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[roeck-us.net];
-	RCPT_COUNT_TWELVE(0.00)[46];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,sholland.org,linaro.org,vger.kernel.org,lists.infradead.org,lists.linux.dev];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	HAS_REPLYTO(0.00)[wens@kernel.org];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linux@roeck-us.net,linux-pm@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-pm];
-	MID_RHS_MATCH_FROM(0.00)[];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[wens@kernel.org,linux-pm@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On 3/4/26 01:02, Bartosz Golaszewski wrote:
-> OF_GPIO is selected automatically on all OF systems. Any symbols it
-> controls also provide stubs so there's really no reason to select it
-> explicitly. We could simply remove the dependency but in order to avoid
-> a new symbol popping up for everyone in make config - just convert it to
-> requiring CONFIG_OF.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+On Thu, Mar 5, 2026 at 9:15=E2=80=AFAM Yuanshen Cao <alex.caoys@gmail.com> =
+wrote:
+>
+> On Wed, Mar 04, 2026 at 10:33:23PM +0900, Chen-Yu Tsai wrote:
+> > On Wed, Mar 4, 2026 at 12:44=E2=80=AFPM Yuanshen Cao <alex.caoys@gmail.=
+com> wrote:
+> > >
+> > > The Allwinner A733 PCK600, similar to A523 PCK600, is likely a
+> > > customized version of ARM PCK-600 power controller. It shares
+> > > the same BSP driver with A523. According to the BSP provided
+> > > by Radxa, unlike A523, it doesn't require reset.
+> > >
+> > > Make reset optional in the sunxi pck600 driver and add support
+> > > for A733.
+> > >
+> > > Signed-off-by: Yuanshen Cao <alex.caoys@gmail.com>
+> > > ---
+> > >  drivers/pmdomain/sunxi/sun55i-pck600.c | 53 ++++++++++++++++++++++++=
+++++++----
+> > >  1 file changed, 48 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/drivers/pmdomain/sunxi/sun55i-pck600.c b/drivers/pmdomai=
+n/sunxi/sun55i-pck600.c
+> > > index c7ab51514531..8f9fdc3915bd 100644
+> > > --- a/drivers/pmdomain/sunxi/sun55i-pck600.c
+> > > +++ b/drivers/pmdomain/sunxi/sun55i-pck600.c
+> > > @@ -52,6 +52,7 @@ struct sunxi_pck600_desc {
+> > >         u32 logic_power_switch0_delay;
+> > >         u32 logic_power_switch1_delay;
+> > >         u32 off2on_delay;
+> > > +       bool has_rst_clk;
+> > >  };
+> > >
+> > >  struct sunxi_pck600_pd {
+> > > @@ -151,9 +152,11 @@ static int sunxi_pck600_probe(struct platform_de=
+vice *pdev)
+> > >         if (IS_ERR(base))
+> > >                 return PTR_ERR(base);
+> > >
+> > > -       rst =3D devm_reset_control_get_exclusive_released(dev, NULL);
+> > > -       if (IS_ERR(rst))
+> > > -               return dev_err_probe(dev, PTR_ERR(rst), "failed to ge=
+t reset control\n");
+> > > +       if (desc->has_rst_clk) {
+> > > +               rst =3D devm_reset_control_get_exclusive_released(dev=
+, NULL);
+> > > +               if (IS_ERR(rst))
+> > > +                       return dev_err_probe(dev, PTR_ERR(rst), "fail=
+ed to get reset control\n");
+> > > +       }
+> > >
+> > >         clk =3D devm_clk_get_enabled(dev, NULL);
+> > >         if (IS_ERR(clk))
+> > > @@ -193,7 +196,14 @@ static int sunxi_pck600_probe(struct platform_de=
+vice *pdev)
+> > >  }
+> > >
+> > >  static const char * const sun55i_a523_pck600_pd_names[] =3D {
+> > > -       "VE", "GPU", "VI", "VO0", "VO1", "DE", "NAND", "PCIE"
+> > > +       "VE",
+> > > +       "GPU",
+> > > +       "VI",
+> > > +       "VO0",
+> > > +       "VO1",
+> > > +       "DE",
+> > > +       "NAND",
+> > > +       "PCIE",
+> >
+> > No need to change this part.
+> >
+>
+> Yes, I agree. But since A733 has more pd_names, that line will be too
+> long if we stick with one line. And we also used this format in
+> sun20i-ppu. It might make more sense if we align with ppu. Please let
+> me know what you think. Thanks!
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I prefer fewer lines. And you can have more than one line even if you
+put multiple names per line. The ppu driver is a different file, so I
+didn't bother changing that one.
 
-> ---
->   drivers/watchdog/Kconfig | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index dc78729ba2a5d6e035ed3cbe5c2b631d11b76b20..ef200339a22a6f9c51a46c9c0b8466add74313e2 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -250,7 +250,7 @@ config DA9062_WATCHDOG
->   
->   config GPIO_WATCHDOG
->   	tristate "Watchdog device controlled through GPIO-line"
-> -	depends on OF_GPIO
-> +	depends on OF
->   	select WATCHDOG_CORE
->   	help
->   	  If you say yes here you get support for watchdog device
-> 
+ChenYu
 
+> > >  };
+> > >
+> > >  static const struct sunxi_pck600_desc sun55i_a523_pck600_desc =3D {
+> > > @@ -206,7 +216,36 @@ static const struct sunxi_pck600_desc sun55i_a52=
+3_pck600_desc =3D {
+> > >         .device_ctrl1_delay =3D 0xffff,
+> > >         .logic_power_switch0_delay =3D 0x8080808,
+> > >         .logic_power_switch1_delay =3D 0x808,
+> > > -       .off2on_delay =3D 0x8
+> > > +       .off2on_delay =3D 0x8,
+> > > +       .has_rst_clk =3D true,
+> > > +};
+> > > +
+> > > +static const char * const sun60i_a733_pck600_pd_names[] =3D {
+> > > +       "VI",
+> > > +       "DE_SYS",
+> > > +       "VE_DEC",
+> > > +       "VE_ENC",
+> > > +       "NPU",
+> > > +       "GPU_TOP",
+> > > +       "GPU_CORE",
+> > > +       "PCIE",
+> > > +       "USB2",
+> > > +       "VO",
+> > > +       "VO1",
+> > > +};
+> > > +
+> > > +static const struct sunxi_pck600_desc sun60i_a733_pck600_desc =3D {
+> > > +       .pd_names =3D sun60i_a733_pck600_pd_names,
+> > > +       .num_domains =3D ARRAY_SIZE(sun60i_a733_pck600_pd_names),
+> > > +       .logic_power_switch0_delay_offset =3D 0xc00,
+> > > +       .logic_power_switch1_delay_offset =3D 0xc04,
+> > > +       .off2on_delay_offset =3D 0xc10,
+> > > +       .device_ctrl0_delay =3D 0x1f1f1f,
+> > > +       .device_ctrl1_delay =3D 0x1f1f,
+> > > +       .logic_power_switch0_delay =3D 0x8080808,
+> > > +       .logic_power_switch1_delay =3D 0x808,
+> > > +       .off2on_delay =3D 0x8,
+> > > +       .has_rst_clk =3D false,
+> > >  };
+> > >
+> > >  static const struct of_device_id sunxi_pck600_of_match[] =3D {
+> > > @@ -214,6 +253,10 @@ static const struct of_device_id sunxi_pck600_of=
+_match[] =3D {
+> > >                 .compatible     =3D "allwinner,sun55i-a523-pck-600",
+> > >                 .data           =3D &sun55i_a523_pck600_desc,
+> > >         },
+> > > +       {
+> > > +               .compatible     =3D "allwinner,sun60i-a733-pck-600",
+> > > +               .data           =3D &sun60i_a733_pck600_desc,
+> > > +       },
+> > >         {}
+> > >  };
+> > >  MODULE_DEVICE_TABLE(of, sunxi_pck600_of_match);
+> > >
+> > > --
+> > > 2.53.0
+> > >
+>
 
