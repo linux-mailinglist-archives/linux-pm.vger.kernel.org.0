@@ -1,143 +1,183 @@
-Return-Path: <linux-pm+bounces-43685-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43686-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ABhxK6CbqWnGAwEAu9opvQ
-	(envelope-from <linux-pm+bounces-43685-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 16:05:04 +0100
+	id 8MqZBXeaqWlxAwEAu9opvQ
+	(envelope-from <linux-pm+bounces-43686-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 16:00:07 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCD94214217
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 16:05:03 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B2C42140D3
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 16:00:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 3E41D3090DDF
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 14:48:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2546A31CEDD1
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 14:54:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB0443ACA50;
-	Thu,  5 Mar 2026 14:47:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA7813B4EB0;
+	Thu,  5 Mar 2026 14:54:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oBndz/oO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tCFQtb24"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A681C3ACA45
-	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 14:47:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E4A3B3C0A
+	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 14:54:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772722032; cv=none; b=sQNGboG+aArn0JWy2IV7ilISFU+2ViFcwgJZ8HZttqrw6ne9tvelEaIZTfY4KHeX+JggxPrcHMLPlBRZiSXTQDjSg5Jk8HBg+yvi8e30UFAZbF7eG2BExUVtVoe7g1/rbeO1/kFbuL6PmEBsU1+YuEb31QGwPQR3+ypCutg7Z3M=
+	t=1772722468; cv=none; b=nmcSYlwk5XxSedOiAQStPKmivBsHVyFE+A6Ys6sKxGJ/CNZXTn4E9CLAo1bbnKJ6ph3UW/4uoPzcKN7MGETNcbQdCFlh6ePk8UHzKgVxTs6B/vgHN6QlEnhKT02yW52jhumKEI1vc5XbB35a046m7RYeS7o2RHJG32v1Gwg8b/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772722032; c=relaxed/simple;
-	bh=haCCzeM16uqa0idk+B4jKGHTSfi3L+3y6kmR8mUCc9g=;
+	s=arc-20240116; t=1772722468; c=relaxed/simple;
+	bh=SPbv6etCW5Xl2VcRo/t3JbV86BiTlFol56ZJtfc8ntU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IIi2PLKKZHFhubjz2QUj0GV7XzhONRXMlQBplRfs1lGBOHh5Vf/EyKbBWtxxLGOHzUG+x7xEtdeWiYvRyRKbcJCN12ODlLbcP5G9xSOCuP6WYwX4rYDDzFoIChUd23LYYyB6qZFsI2ef7PBQH1EuhYWDWuAN0iZZ8ZZuOJRy+/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oBndz/oO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88920C2BCB2
-	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 14:47:12 +0000 (UTC)
+	 To:Cc:Content-Type; b=SzSVPrjsvvbPI4VGlJlCOpwJI+eOsIvVkExk1lAtcckaCHapm5DNs7ehHYQbWvtaR8pDE7rBgH29Pk3vMDtadChSauzZWZ+VaP3TDGxYiV+VFlH2OrabuZiD5CDPkJjSsY3Y2+qkhCGn78YapLsftvbnWlesfvHvXUicM7+YZps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tCFQtb24; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C10BC2BCB2
+	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 14:54:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772722032;
-	bh=haCCzeM16uqa0idk+B4jKGHTSfi3L+3y6kmR8mUCc9g=;
+	s=k20201202; t=1772722468;
+	bh=SPbv6etCW5Xl2VcRo/t3JbV86BiTlFol56ZJtfc8ntU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=oBndz/oO9YJz3C2h/DrlaUde1irljv4/50pD5l2sEiA4ANMNAQK8ut71a5+QwIPb6
-	 uE3QRCzDp6pzylsMNDrV0kFxVl/Dl2WqJ7PFN6Lor1oQiayJoGuPJTcVbANxQ5z5//
-	 /+IRbX6jMT4fnUgulrd9wZ/NVW/j5UXsz802D/ta8lJGXHiqEiusdOcXzqlrglo5Mv
-	 rTmmKxTdo+tC6deQK0RAoIDkcZxbsNElj+nTPr7VHM6nyksjXeQU9zplq2LOuqBtO8
-	 bwh+ZXetzblmlrUqSsoIMnQ2l+/j7nU5nhfN8QIMn+RSucuVXk3cBl0McPc2vWVK7x
-	 HgEaRGhPdWBNA==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-40946982a78so1327343fac.2
-        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2026 06:47:12 -0800 (PST)
-X-Gm-Message-State: AOJu0YzgcjU1H6zhmR24iwPGGmX0DIQFZZSe9zo/fbbfYNWJ3pps9Wji
-	MHyNL/PMllLIySWsByX9DiO/H5La/+REYKok6JEqjtgOq7aFmkj7ViCRuoLKpsUA7gjpbdxx6Vv
-	rzfj3Gzf2Ty7XyZ0/mUH876ymzRYQO2k=
-X-Received: by 2002:a05:6870:92c7:b0:40e:fd1b:b74b with SMTP id
- 586e51a60fabf-416aba434a8mr3719347fac.27.1772722031597; Thu, 05 Mar 2026
- 06:47:11 -0800 (PST)
+	b=tCFQtb24yCUc6Llx+HLtjOwtmoj3qsabefZ9uQ6H6Jgqo8SIEOux+SA5c2WMPWDeg
+	 eBhEO3BzJEFMxgMx0KxP7t9WzgNN997+4hj7nSbO4dEi84/kACgyeChQCzePjWvHCp
+	 h+RHRFX2p/6TjDp4ROLiiARmR7d9LlXEUY8uzWeC1cdNUXIZbqgKEozYsn5+8YEv+Z
+	 6bYDh5PBkwLaM1RYDZUxNlOM2lPNcdp2QuTJumQrW38jzjcNMPXhmDC4hy2xSF6Bjo
+	 JPzP2rTVAzCuOUHUENPhxvIO5Ke/HUGLxHLCVzjhEuOEywNZxh8b6cphwjQDDGhr86
+	 a8Lnyk2DJHrow==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-4138136f02eso2506376fac.2
+        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2026 06:54:28 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU5L02Hg+jWOlQsqaCyD951IWL/Eq9iAx40Q7V+zpCH3lB8ECQkDyMh1Sg5Mh79ePurUHc0bGG3WQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzY1W4fWe1celKYhUyM3wTUJZqAE8GbyF7XbDwSUazQe2uJMyMK
+	dyIi/oqO4frCqJ3EdHN3ticLjkXI2rAbPSWxm73caM0d98M5MBDJvrCPt1k397eqkQdMA9pu+OL
+	VJtpUtlqs5VKCcOUnY+ecoe3p3tbAAxo=
+X-Received: by 2002:a05:6870:b3d5:b0:416:93e1:28dc with SMTP id
+ 586e51a60fabf-416ab611a45mr3014464fac.23.1772722467208; Thu, 05 Mar 2026
+ 06:54:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260129121813.3874516-1-zhangpengjie2@huawei.com> <ezppyby2fs2k2njwcty4dpaf4637g24kzmemjm5sedeerl6ihw@brxxfglbitxc>
-In-Reply-To: <ezppyby2fs2k2njwcty4dpaf4637g24kzmemjm5sedeerl6ihw@brxxfglbitxc>
+References: <20260212233044.329790-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20260212233044.329790-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 5 Mar 2026 15:47:00 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hkRc2UCVAHt8XjYsspBd=r-TFjnTWeQuxzYJ-niBuPeA@mail.gmail.com>
-X-Gm-Features: AaiRm52wBp5o_YAVDwyW3vxWcHMWMcyEmcC7KUFjRzA5k19MNWf_VMgGw7XyVMQ
-Message-ID: <CAJZ5v0hkRc2UCVAHt8XjYsspBd=r-TFjnTWeQuxzYJ-niBuPeA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: Add debug print for current frequency in __cpufreq_driver_target()
-To: Viresh Kumar <viresh.kumar@linaro.org>, Pengjie Zhang <zhangpengjie2@huawei.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	zhanjie9@hisilicon.com, zhenglifeng1@huawei.com, lihuisong@huawei.com, 
-	yubowen8@huawei.com, linhongye@h-partners.com, linuxarm@huawei.com, 
-	jonathan.cameron@huawei.com, wangzhi12@huawei.com
+Date: Thu, 5 Mar 2026 15:54:14 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0ggpCRtf-uk2UbSCByZkkKZxXKrbZ7-yRipsM-LvJ99PQ@mail.gmail.com>
+X-Gm-Features: AaiRm51tJVEp3BfnT0IthuAxamNTeUb1b_Abg9_PKpyEPGUUKS3FD0ZmRvrRO3s
+Message-ID: <CAJZ5v0ggpCRtf-uk2UbSCByZkkKZxXKrbZ7-yRipsM-LvJ99PQ@mail.gmail.com>
+Subject: Re: [PATCH v2 00/12] Move RAPL defaults to interface drivers
+To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: BCD94214217
+X-Rspamd-Queue-Id: 6B2C42140D3
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43685-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43686-lists,linux-pm=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,mail.gmail.com:mid,huawei.com:email,linaro.org:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Fri, Jan 30, 2026 at 7:27=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
+On Fri, Feb 13, 2026 at 12:30=E2=80=AFAM Kuppuswamy Sathyanarayanan
+<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
 >
-> On 29-01-26, 20:18, Pengjie Zhang wrote:
-> > Include policy->cur in the debug message to explicitly show the frequen=
-cy
-> > transition (from current to target).
-> >
-> > Signed-off-by: Pengjie Zhang <zhangpengjie2@huawei.com>
-> > ---
-> >  drivers/cpufreq/cpufreq.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 4472bb1ec83c..b3d2d2e0c864 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -2361,8 +2361,8 @@ int __cpufreq_driver_target(struct cpufreq_policy=
- *policy,
-> >       target_freq =3D __resolve_freq(policy, target_freq, policy->min,
-> >                                    policy->max, relation);
-> >
-> > -     pr_debug("target for CPU %u: %u kHz, relation %u, requested %u kH=
-z\n",
-> > -              policy->cpu, target_freq, relation, old_target_freq);
-> > +     pr_debug("CPU %u: cur %u kHz -> target %u kHz (req %u kHz, rel %u=
-)\n",
-> > +             policy->cpu, policy->cur, target_freq, old_target_freq, r=
-elation);
-> >
-> >       /*
-> >        * This might look like a redundant call as we are checking it ag=
-ain
+> Hi All,
 >
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> The Intel RAPL common driver has accumulated a significant amount of
+> interface-specific logic over time. There is very little common code
+> shared across the MSR, TPMI, and MMIO interface-specific defaults.
+> Keeping these interface-specific defaults in the common layer therefore
+> provides no real benefit and instead increases complexity and
+> maintenance burden.
+>
+> As a first step toward cleaning this up, this series moves
+> rapl_defaults ownership from the common driver into the individual
+> interface drivers and allows each interface to provide its own defaults
+> directly. Additional interface-specific cleanups in the RAPL common
+> driver will be addressed in follow-up work. This series is a
+> continuation of the earlier cleanup and refactoring effort initiated
+> by Zhang Rui.
+>
+> Patch Summary:
+>
+> Patch 1-7/12: Preparatory patches that do code cleanups in intel_rapl_com=
+mon
+>              driver.
+> Patch 8/12: Preparatory patch that renames/declares the common functions.
+> Patch 9/12: Move TPMI default settings from the common driver into the
+>            TPMI interface driver.
+>
+> Patch 10/12: Move MMIO default settings from the common driver into the
+>            MMIO interface driver.
+>
+> Patch 11/12: Register the PM notifier only when a RAPL package exists.
+>
+> Patch 12/12: Move MSR default settings from the common driver into the MS=
+R
+>            interface driver.
+>
+> No functional changes are intended across the series. This is strictly a
+> structural refactoring to simplify the common RAPL code and prepare it
+> for further cleanups.
+>
+> Changes since v1:
+>  * Removed BIT(val) usage in divisions (David Laight).
+>  * Divided the cleanup patch into 4 patches for clarity.
+>  * Added Acked-by tag from Srinivas.
+>
+> Kuppuswamy Sathyanarayanan (12):
+>   powercap: intel_rapl: Add a symbol namespace for intel_rapl exports
+>   powercap: intel_rapl: Cleanup coding style
+>   powercap: intel_rapl: Remove unused TIME_WINDOW macros
+>   powercap: intel_rapl: Simplify rapl_compute_time_window_atom()
+>   powercap: intel_rapl: Use shifts for power-of-2 operations
+>   powercap: intel_rapl: Use GENMASK() and BIT() macros
+>   powercap: intel_rapl: Use unit conversion macros from units.h
+>   powercap: intel_rapl: Allow interface drivers to configure
+>     rapl_defaults
+>   powercap: intel_rapl: Move TPMI default settings into TPMI interface
+>     driver
+>   thermal: intel: int340x: processor: Move RAPL defaults to MMIO driver
+>   powercap: intel_rapl: Register PM notifier only when RAPL package
+>     exists
+>   powercap: intel_rapl: Move MSR default settings into MSR interface
+>     driver
+>
+>  drivers/powercap/intel_rapl_common.c          | 757 ++++++------------
+>  drivers/powercap/intel_rapl_msr.c             | 251 +++++-
+>  drivers/powercap/intel_rapl_tpmi.c            |  48 ++
+>  .../int340x_thermal/processor_thermal_rapl.c  |   9 +
+>  include/linux/intel_rapl.h                    |  17 +-
+>  include/linux/units.h                         |   3 +
+>  6 files changed, 562 insertions(+), 523 deletions(-)
+>
+> --
 
-Applied as 7.1 material, thanks!
+Whole series applied as 7.1 material, thanks!
 
