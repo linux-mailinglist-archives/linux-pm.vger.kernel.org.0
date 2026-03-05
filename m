@@ -1,97 +1,98 @@
-Return-Path: <linux-pm+bounces-43684-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43685-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8ONMIAyYqWlKAgEAu9opvQ
-	(envelope-from <linux-pm+bounces-43684-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 15:49:48 +0100
+	id ABhxK6CbqWnGAwEAu9opvQ
+	(envelope-from <linux-pm+bounces-43685-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 16:05:04 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C971213D5C
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 15:49:43 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCD94214217
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 16:05:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6642F30F62CD
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 14:43:12 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3E41D3090DDF
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 14:48:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2D9F3AE187;
-	Thu,  5 Mar 2026 14:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB0443ACA50;
+	Thu,  5 Mar 2026 14:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NbNAcvQ7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oBndz/oO"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9773ACA74
-	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 14:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A681C3ACA45
+	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 14:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772721740; cv=none; b=nYHPHk0goVmDaFCZmv3L2PxivtRrhRuxAnQnjmF+skifPGPw5M5MHCFIBwgdXvpZ+1Tx4Op4/mIV7DQVXT1qzGYRJT0MrMMvYb2UXv8Hi1uGSg8IqCfZGch4yu79pu/yTNG9X3ziW8nbm+ih9L2G93ZpIlskkeCmy0ArjCmE/Es=
+	t=1772722032; cv=none; b=sQNGboG+aArn0JWy2IV7ilISFU+2ViFcwgJZ8HZttqrw6ne9tvelEaIZTfY4KHeX+JggxPrcHMLPlBRZiSXTQDjSg5Jk8HBg+yvi8e30UFAZbF7eG2BExUVtVoe7g1/rbeO1/kFbuL6PmEBsU1+YuEb31QGwPQR3+ypCutg7Z3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772721740; c=relaxed/simple;
-	bh=w6XvGW5Stu4dvffYOrtvNHkfdROlqzsFvMiQSuCyn8g=;
+	s=arc-20240116; t=1772722032; c=relaxed/simple;
+	bh=haCCzeM16uqa0idk+B4jKGHTSfi3L+3y6kmR8mUCc9g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rLPk1UdQq2wTYS3f4C2GzOeJ70v1k++uHV+clYmDZdHwvEU/vDESawEgX1N5fZK4oqPKuQQh7dhqwOUSdBEVATwocG1xOpIxkrcOHVPjmZQ2sdjjgd6/M8ucWP6bg9emjWnOA3AIC2Zj6F42QYdjXhJkTRyvER2SI7SFHCVGLx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NbNAcvQ7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE76C19423
-	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 14:42:20 +0000 (UTC)
+	 To:Cc:Content-Type; b=IIi2PLKKZHFhubjz2QUj0GV7XzhONRXMlQBplRfs1lGBOHh5Vf/EyKbBWtxxLGOHzUG+x7xEtdeWiYvRyRKbcJCN12ODlLbcP5G9xSOCuP6WYwX4rYDDzFoIChUd23LYYyB6qZFsI2ef7PBQH1EuhYWDWuAN0iZZ8ZZuOJRy+/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oBndz/oO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88920C2BCB2
+	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 14:47:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772721740;
-	bh=w6XvGW5Stu4dvffYOrtvNHkfdROlqzsFvMiQSuCyn8g=;
+	s=k20201202; t=1772722032;
+	bh=haCCzeM16uqa0idk+B4jKGHTSfi3L+3y6kmR8mUCc9g=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=NbNAcvQ7kPpxZoPq1w+BhzfXSwbtKaNlSroextmp8BmI0Y5AazkxjTXvrIKxwMmOA
-	 WXBJ5AVGvGmXAJ8U8J6jc7nvOi+ggWBXCEhg6/AmaLQiT2961eIV0o2GHsOW9sMjUR
-	 L8iw+rAzmUJ8RcS/9rFCXVU6OVKyE7/gF7jB0kQ7wITJShB6zXNVeJXkSRlIKGjHaq
-	 ayGfUW+TpTcD2LX1OMA4LkDzUIvczE2+3Rb9LXwLm2I2xjtbNjzarVkxOJMUBsQRzn
-	 +Tud0qTzsxPYHkvmDVu+aVy3SlIFwbNHtPQpoH5lR0VUXRc8q1s8UqiwmA5UZSk2BZ
-	 kwU3HGWCE2Scg==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-40ea611d1a4so1271670fac.2
-        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2026 06:42:20 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX0jMpK6sFPj8uzgnbgFgEHlTCu0WnZ5dBmYeoyawmDH6e7aQanB7BeqgSg1nPbfKN2ZbwAOnu5Eg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqPMguldo0Qa+CefMlgurD5e5RISi0jPqBSNzm+d8uYQsAZ57E
-	RoASGkeX86Cv64idF/cOxXeD0BpG5ZvvBuH1erUqlL6DZ4jj9s/m+ANEzPrgX0eCogpyXAfNi+9
-	bS+La2tiWjglMbZu7bCAd/kEf4rGF4aQ=
-X-Received: by 2002:a05:6870:ad09:b0:3e8:983c:c8a with SMTP id
- 586e51a60fabf-416abb3d153mr3859578fac.37.1772721739436; Thu, 05 Mar 2026
- 06:42:19 -0800 (PST)
+	b=oBndz/oO9YJz3C2h/DrlaUde1irljv4/50pD5l2sEiA4ANMNAQK8ut71a5+QwIPb6
+	 uE3QRCzDp6pzylsMNDrV0kFxVl/Dl2WqJ7PFN6Lor1oQiayJoGuPJTcVbANxQ5z5//
+	 /+IRbX6jMT4fnUgulrd9wZ/NVW/j5UXsz802D/ta8lJGXHiqEiusdOcXzqlrglo5Mv
+	 rTmmKxTdo+tC6deQK0RAoIDkcZxbsNElj+nTPr7VHM6nyksjXeQU9zplq2LOuqBtO8
+	 bwh+ZXetzblmlrUqSsoIMnQ2l+/j7nU5nhfN8QIMn+RSucuVXk3cBl0McPc2vWVK7x
+	 HgEaRGhPdWBNA==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-40946982a78so1327343fac.2
+        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2026 06:47:12 -0800 (PST)
+X-Gm-Message-State: AOJu0YzgcjU1H6zhmR24iwPGGmX0DIQFZZSe9zo/fbbfYNWJ3pps9Wji
+	MHyNL/PMllLIySWsByX9DiO/H5La/+REYKok6JEqjtgOq7aFmkj7ViCRuoLKpsUA7gjpbdxx6Vv
+	rzfj3Gzf2Ty7XyZ0/mUH876ymzRYQO2k=
+X-Received: by 2002:a05:6870:92c7:b0:40e:fd1b:b74b with SMTP id
+ 586e51a60fabf-416aba434a8mr3719347fac.27.1772722031597; Thu, 05 Mar 2026
+ 06:47:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260223190420.874853-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20260223190420.874853-1-srinivas.pandruvada@linux.intel.com>
+References: <20260129121813.3874516-1-zhangpengjie2@huawei.com> <ezppyby2fs2k2njwcty4dpaf4637g24kzmemjm5sedeerl6ihw@brxxfglbitxc>
+In-Reply-To: <ezppyby2fs2k2njwcty4dpaf4637g24kzmemjm5sedeerl6ihw@brxxfglbitxc>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 5 Mar 2026 15:42:07 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0ju7V3EaUgwxpUZV2LN2YBaduEd4hpoOJsL-LRmSJ1pvA@mail.gmail.com>
-X-Gm-Features: AaiRm50mPtFS9bdvsp6P7AGSOJPMn_J8WMWzSSwvA8CYPtHkJEg3f7x7Dqh689s
-Message-ID: <CAJZ5v0ju7V3EaUgwxpUZV2LN2YBaduEd4hpoOJsL-LRmSJ1pvA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: int340x: Read DDR data rate for Nova Lake
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Thu, 5 Mar 2026 15:47:00 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hkRc2UCVAHt8XjYsspBd=r-TFjnTWeQuxzYJ-niBuPeA@mail.gmail.com>
+X-Gm-Features: AaiRm52wBp5o_YAVDwyW3vxWcHMWMcyEmcC7KUFjRzA5k19MNWf_VMgGw7XyVMQ
+Message-ID: <CAJZ5v0hkRc2UCVAHt8XjYsspBd=r-TFjnTWeQuxzYJ-niBuPeA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Add debug print for current frequency in __cpufreq_driver_target()
+To: Viresh Kumar <viresh.kumar@linaro.org>, Pengjie Zhang <zhangpengjie2@huawei.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	zhanjie9@hisilicon.com, zhenglifeng1@huawei.com, lihuisong@huawei.com, 
+	yubowen8@huawei.com, linhongye@h-partners.com, linuxarm@huawei.com, 
+	jonathan.cameron@huawei.com, wangzhi12@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 5C971213D5C
+X-Rspamd-Queue-Id: BCD94214217
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43684-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43685-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
@@ -99,82 +100,44 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-pm];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,intel.com:email,mail.gmail.com:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,mail.gmail.com:mid,huawei.com:email,linaro.org:email]
 X-Rspamd-Action: no action
 
-On Mon, Feb 23, 2026 at 8:05=E2=80=AFPM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Fri, Jan 30, 2026 at 7:27=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
 >
-> Add support for reading DDR data rate from PCI config offset.
-> The register details are:
-> CFG Offset : 0xE0
-> Bits       : 11:2
+> On 29-01-26, 20:18, Pengjie Zhang wrote:
+> > Include policy->cur in the debug message to explicitly show the frequen=
+cy
+> > transition (from current to target).
+> >
+> > Signed-off-by: Pengjie Zhang <zhangpengjie2@huawei.com>
+> > ---
+> >  drivers/cpufreq/cpufreq.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 4472bb1ec83c..b3d2d2e0c864 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -2361,8 +2361,8 @@ int __cpufreq_driver_target(struct cpufreq_policy=
+ *policy,
+> >       target_freq =3D __resolve_freq(policy, target_freq, policy->min,
+> >                                    policy->max, relation);
+> >
+> > -     pr_debug("target for CPU %u: %u kHz, relation %u, requested %u kH=
+z\n",
+> > -              policy->cpu, target_freq, relation, old_target_freq);
+> > +     pr_debug("CPU %u: cur %u kHz -> target %u kHz (req %u kHz, rel %u=
+)\n",
+> > +             policy->cpu, policy->cur, target_freq, old_target_freq, r=
+elation);
+> >
+> >       /*
+> >        * This might look like a redundant call as we are checking it ag=
+ain
 >
-> DDR Data rate is in 33.33 MTPS units.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  .../int340x_thermal/processor_thermal_rfim.c     | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim=
-.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-> index 314fbc1f490f..2e834a175471 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-> @@ -402,6 +402,11 @@ static ssize_t rfi_restriction_show(struct device *d=
-ev,
->         return sysfs_emit(buf, "%llu\n", resp);
->  }
->
-> + /* ddr_data_rate */
-> +static const struct mmio_reg nvl_ddr_data_rate_reg =3D { 1, 0xE0, 10, 0x=
-3FF, 2};
-> +
-> +static const struct mmio_reg *ddr_data_rate_reg;
-> +
->  static ssize_t ddr_data_rate_show(struct device *dev,
->                                   struct device_attribute *attr,
->                                   char *buf)
-> @@ -410,10 +415,20 @@ static ssize_t ddr_data_rate_show(struct device *de=
-v,
->         u64 resp;
->         int ret;
->
-> +       if (ddr_data_rate_reg) {
-> +               u16 reg_val;
-> +
-> +               pci_read_config_word(to_pci_dev(dev), ddr_data_rate_reg->=
-offset, &reg_val);
-> +               resp =3D (reg_val >> ddr_data_rate_reg->shift) & ddr_data=
-_rate_reg->mask;
-> +               resp =3D (resp * 3333) / 100;
-> +               goto ret_resp;
-> +       }
-> +
->         ret =3D processor_thermal_send_mbox_read_cmd(to_pci_dev(dev), id,=
- &resp);
->         if (ret)
->                 return ret;
->
-> +ret_resp:
->         return sysfs_emit(buf, "%llu\n", resp);
->  }
->
-> @@ -461,6 +476,7 @@ int proc_thermal_rfim_add(struct pci_dev *pdev, struc=
-t proc_thermal_device *proc
->                 case PCI_DEVICE_ID_INTEL_NVL_H_THERMAL:
->                 case PCI_DEVICE_ID_INTEL_NVL_S_THERMAL:
->                         dlvr_mmio_regs_table =3D nvl_dlvr_mmio_regs;
-> +                       ddr_data_rate_reg =3D &nvl_ddr_data_rate_reg;
->                         break;
->                 default:
->                         dlvr_mmio_regs_table =3D dlvr_mmio_regs;
-> --
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Applied as 7.1 material, but I rearranged it to avoid using goto and
-declare local vars where they are needed, please see:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/patch/?=
-id=3D6d3e2ce6f10107c2e5870e9dce7c2e1d03a6be72
+Applied as 7.1 material, thanks!
 
