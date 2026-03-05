@@ -1,209 +1,260 @@
-Return-Path: <linux-pm+bounces-43632-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43633-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +Ek/Bly8qGlbwwAAu9opvQ
-	(envelope-from <linux-pm+bounces-43632-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 00:12:28 +0100
+	id wPBCJT/LqGlBxQAAu9opvQ
+	(envelope-from <linux-pm+bounces-43633-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 01:15:59 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D000208E3C
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 00:12:27 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 360672095F5
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 01:15:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4E772301AD10
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2026 23:08:45 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9EE373020A72
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 00:15:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E031A38C2BC;
-	Wed,  4 Mar 2026 23:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B762A8003D;
+	Thu,  5 Mar 2026 00:15:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ApdlUjOo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J5YJ/04Z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E2DD361DD0;
-	Wed,  4 Mar 2026 23:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98E93368B7
+	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 00:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772665723; cv=none; b=pW3bePlzdqAM3NCy+S65YaeqJbDPgtpj4GSg31eft5bCNp8LGyyoIaEEtPTQbCp2sVgNFqyIdMcZekPhYI+7Yoh2F3fVcx8nDMSrTeM2lzlN+uTZlsAeNOIEbpMiKQNXuY1WCd3R45ZA1LThyR0H1TBnKYIGvJZAgRI2aWcjl0w=
+	t=1772669757; cv=none; b=XhIo+t90d0tOplb0I/IAarm/hKRxA0+LV3F71OI13RWitfeq8RVEcj6LVLRVRymO3986GOT29jPLXXw8i9vDB9FQjlrwuzvw01puQVc2E4AFL9/62YaNfMVsSH7JqfyomuTgRxaPUg1/ezWXm7w9f4qYeMBcTF2FUabAZLqP+LY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772665723; c=relaxed/simple;
-	bh=gDZUAt2PKJk5mvudI8hISeOmReKHFAbTfQcoGPt+tFo=;
+	s=arc-20240116; t=1772669757; c=relaxed/simple;
+	bh=4mR/9KpKWoTBbNEf/LhaL2JbInadCOam1v9oY17Zitw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RMFSIINrdILzBT2gtPVZw6F8yPIspFoRddaEPtC4lQeWQ3eLpEJ6+kssLaDLqpOItCtokFIaqZV3nduIYQZUurne64GbLXkfmNyuVOzFYynhu5ydWrLpnT/DeANd/TbMu+k2i+Y3FnV7cBHU27dO6IR0ieJNjVZETrre7I/ysGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ApdlUjOo; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772665723; x=1804201723;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gDZUAt2PKJk5mvudI8hISeOmReKHFAbTfQcoGPt+tFo=;
-  b=ApdlUjOo81/Ge6VEFsMtKFZgvRaKnTjTLD2x3snQbmqY2io3qwAqm88Y
-   wixsgtGzHG54k/kZh93XrDhQSjFD1UAEDhBYYPICXpJiQ6mTN8O/ZpvtO
-   8jOQifokund6PqDanPV6g46/JczmK3AyUMxtVmSnKISWDQSEujTMyIy3P
-   XZxiA+9+dwDiSRQo97YOgp2Ap47nccDYBVuxyls96WMywOGTQNbZ0iJdR
-   C2wtLGK2Xi8DS5pp07h0Vdjx39P41opv1yAw+ur2kxydikDSFDN87s36U
-   w+wDCrE4lf3O6ImKKONOdrP+CVv/u8f21RM4wjDn1EUsUxJX1YQWc+t2E
-   A==;
-X-CSE-ConnectionGUID: 3EyZaiogRxWtupL8VNd3WQ==
-X-CSE-MsgGUID: rRr9qKoQS+SJu0jxJBn8ug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11719"; a="73647859"
-X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="73647859"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 15:08:43 -0800
-X-CSE-ConnectionGUID: uCLVVyR/QuCbdhfcyoAb+A==
-X-CSE-MsgGUID: u56QrKi5QgGMR/285TOgzw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,324,1763452800"; 
-   d="scan'208";a="222632136"
-Received: from lkp-server01.sh.intel.com (HELO f27a57aa7a36) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 04 Mar 2026 15:08:41 -0800
-Received: from kbuild by f27a57aa7a36 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vxvKY-000000004et-0uLl;
-	Wed, 04 Mar 2026 23:08:38 +0000
-Date: Thu, 5 Mar 2026 07:07:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pengpeng Hou <pengpeng.hou@isrc.iscas.ac.cn>,
-	"Rafael J . Wysocki" <rafael@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Pengpeng Hou <pengpeng.hou@isrc.iscas.ac.cn>
-Subject: Re: [PATCH] PM: Move to_device() out of CONFIG_PM_SLEEP protection
-Message-ID: <202603050624.gml2vPY4-lkp@intel.com>
-References: <20260302105456.4134882-1-pengpeng.hou@isrc.iscas.ac.cn>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PQipIZzznYs7lDCvqcpT+X3Hi4X75d0xQVIQokXk/Ko9aR0ECg/BAURXUhtY9x7zqwHDT+NA/jhpIOhtOBx1TxXn5ypAvpSumtAsk1MxUp4SCiPichZUspslUXzpBNWRFA+zRiXx3ziMDBDKshT2d/8aVMq1dYyYILs4lnNAYXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J5YJ/04Z; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-8cb513e860cso763698185a.2
+        for <linux-pm@vger.kernel.org>; Wed, 04 Mar 2026 16:15:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772669755; x=1773274555; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=g0JXk9p5V1fGz1+f2197Ws9DW9uXumXoOAEt9xBTer0=;
+        b=J5YJ/04ZV0DVUt7NtuoiFsjDd58ejJZ6SIYDsX9PAVxaUL31KvT+9lGEbu2/dKzuzz
+         NjaUqO+HlMqZ/TjCmBvQN+wmvXjkLtM7FUKeGOvc8zQ9avlRVOujsroiL96jOME2+cjl
+         qvyQf2MiL5M6saUpkhnAjPF98k05zZ2ERO0ryxdXjqsoOLE2vKs4gVyu+AfN/ztxy7IC
+         nDZMIcMLSoiyAZQbhGBiUuywsjTRxWW0xr2QwPoUCHiwuTMcUIkPojtcwS9WKkORm8j5
+         VwITGrNqZstle9yvLncG2mISQ4gFPmsMyCye21UoRM1LgjlPl7yyAwar8iS8Ia4xV64b
+         iI7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772669755; x=1773274555;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g0JXk9p5V1fGz1+f2197Ws9DW9uXumXoOAEt9xBTer0=;
+        b=HE08NSTm4UyNL7w8676SEOmOTGam3C54HTAhXX8sgkiII/8q32cW5XXfSBiqJ8m4ZV
+         ZY8Rg6cg+zHlBhbPJoIT/As3vK5CS43l58ON83Z/7By1q/cm5ggbc/71bbxmKylAVLKC
+         687X1Se7wwO+EO0I6K8fDxEQwEKuFhBpc+PdTZvw+9katMf2sojBJAJNSKM3EW7lvWfh
+         bSXAK1UZpCeEzrh3XMs1JBrbwrawY/NupAzZNKudeKRwFrLj5MFUbFbWPwsx2NTfnLdN
+         Mm4e3sGbq/sfyF3LerhD6FnGx/7MKP7xPyN5CReP4+lipYAhXfbwjpGb8LQPmeCK3rlN
+         Bj8g==
+X-Forwarded-Encrypted: i=1; AJvYcCVIhCqRYiv0+mZOaMy5xvemsuk+qxNeS1OKdKPIoAaOB8vNY+iOrRkHF1kHE60l4hkExGtpdXbrhQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/VtMGNyGzDASdTpMb5t+aK0ff2qIprSEZqygrRv6GnrD5lNt2
+	qaCpJy2IE+D/0NVdt0noee6GaYOMOrCrJouM87TsxYzgNJTcKoi7Ewp8
+X-Gm-Gg: ATEYQzyJHYoS2to2Ov3m0xt5sNg9foAuSh1koJq6/WtvyifavUAxPmVSxWHlc9GINBg
+	z73MUNYop2l4pX1EO2en8Q/sY76v14+I8/rcSFmRKO20iaX2gv+q25My4PM2z4mrpGpqjHafiAj
+	yysE5kX9MNA9zsqKFnlbmXwZ8IrzqehqTBk49GR57zw358lmuAHqOivRfTbzH6YOSQm8FXIH5J+
+	N1nXwbe2CcpVcqoea2YQnrP8JiHz7sVPYe4Jz4T+u0w0dTPRlH3iDGW2OPvetYbTH+KhEnZiGh+
+	Qi1jsclRIVsjCWPOi9vTsT5K0ZETgeVfPFvTaxd4iAVJPrmlO3sUFDi3RtV6dxr1cAIKcOD3DDG
+	FzgA8h0pgebzi69RRQahT3eAerOlWLal2pe64m5QW5rHfTlQMBMltFYvay0nLQtc4FPG44pKMi4
+	/f7hXFyd2AtsvaM5uMsY23KHaA00o=
+X-Received: by 2002:a05:620a:4405:b0:8c7:fdc:e872 with SMTP id af79cd13be357-8cd5aef1d4fmr466089985a.19.1772669754629;
+        Wed, 04 Mar 2026 16:15:54 -0800 (PST)
+Received: from c67c70be8272 ([134.128.219.200])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cbbf7319bdsm1775385585a.43.2026.03.04.16.15.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 16:15:54 -0800 (PST)
+Date: Thu, 5 Mar 2026 00:15:51 +0000
+From: Yuanshen Cao <alex.caoys@gmail.com>
+To: Chen-Yu Tsai <wens@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/2] pmdomain: sunxi: Add support for A733 to Allwinner
+ PCK600 driver
+Message-ID: <aajLNxYvDrpT-qqC@c67c70be8272>
+References: <20260304-b4-pck600-a733-v1-0-2f54efdb8cc2@gmail.com>
+ <20260304-b4-pck600-a733-v1-2-2f54efdb8cc2@gmail.com>
+ <CAGb2v64n_8RyWDieUKvbpkTikipB9ZvqEscYRRLowe+rvaJKCQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260302105456.4134882-1-pengpeng.hou@isrc.iscas.ac.cn>
-X-Rspamd-Queue-Id: 8D000208E3C
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGb2v64n_8RyWDieUKvbpkTikipB9ZvqEscYRRLowe+rvaJKCQ@mail.gmail.com>
+X-Rspamd-Queue-Id: 360672095F5
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43632-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43633-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,sholland.org,linaro.org,vger.kernel.org,lists.infradead.org,lists.linux.dev];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-pm];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alexcaoys@gmail.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,git-scm.com:url,intel.com:dkim,intel.com:email,intel.com:mid,01.org:url]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Hi Pengpeng,
+On Wed, Mar 04, 2026 at 10:33:23PM +0900, Chen-Yu Tsai wrote:
+> On Wed, Mar 4, 2026 at 12:44 PM Yuanshen Cao <alex.caoys@gmail.com> wrote:
+> >
+> > The Allwinner A733 PCK600, similar to A523 PCK600, is likely a
+> > customized version of ARM PCK-600 power controller. It shares
+> > the same BSP driver with A523. According to the BSP provided
+> > by Radxa, unlike A523, it doesn't require reset.
+> >
+> > Make reset optional in the sunxi pck600 driver and add support
+> > for A733.
+> >
+> > Signed-off-by: Yuanshen Cao <alex.caoys@gmail.com>
+> > ---
+> >  drivers/pmdomain/sunxi/sun55i-pck600.c | 53 ++++++++++++++++++++++++++++++----
+> >  1 file changed, 48 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/pmdomain/sunxi/sun55i-pck600.c b/drivers/pmdomain/sunxi/sun55i-pck600.c
+> > index c7ab51514531..8f9fdc3915bd 100644
+> > --- a/drivers/pmdomain/sunxi/sun55i-pck600.c
+> > +++ b/drivers/pmdomain/sunxi/sun55i-pck600.c
+> > @@ -52,6 +52,7 @@ struct sunxi_pck600_desc {
+> >         u32 logic_power_switch0_delay;
+> >         u32 logic_power_switch1_delay;
+> >         u32 off2on_delay;
+> > +       bool has_rst_clk;
+> >  };
+> >
+> >  struct sunxi_pck600_pd {
+> > @@ -151,9 +152,11 @@ static int sunxi_pck600_probe(struct platform_device *pdev)
+> >         if (IS_ERR(base))
+> >                 return PTR_ERR(base);
+> >
+> > -       rst = devm_reset_control_get_exclusive_released(dev, NULL);
+> > -       if (IS_ERR(rst))
+> > -               return dev_err_probe(dev, PTR_ERR(rst), "failed to get reset control\n");
+> > +       if (desc->has_rst_clk) {
+> > +               rst = devm_reset_control_get_exclusive_released(dev, NULL);
+> > +               if (IS_ERR(rst))
+> > +                       return dev_err_probe(dev, PTR_ERR(rst), "failed to get reset control\n");
+> > +       }
+> >
+> >         clk = devm_clk_get_enabled(dev, NULL);
+> >         if (IS_ERR(clk))
+> > @@ -193,7 +196,14 @@ static int sunxi_pck600_probe(struct platform_device *pdev)
+> >  }
+> >
+> >  static const char * const sun55i_a523_pck600_pd_names[] = {
+> > -       "VE", "GPU", "VI", "VO0", "VO1", "DE", "NAND", "PCIE"
+> > +       "VE",
+> > +       "GPU",
+> > +       "VI",
+> > +       "VO0",
+> > +       "VO1",
+> > +       "DE",
+> > +       "NAND",
+> > +       "PCIE",
+> 
+> No need to change this part.
+> 
 
-kernel test robot noticed the following build errors:
+Yes, I agree. But since A733 has more pd_names, that line will be too
+long if we stick with one line. And we also used this format in
+sun20i-ppu. It might make more sense if we align with ppu. Please let
+me know what you think. Thanks!
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge amd-pstate/linux-next amd-pstate/bleeding-edge linus/master v7.0-rc2 next-20260304]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Pengpeng-Hou/PM-Move-to_device-out-of-CONFIG_PM_SLEEP-protection/20260302-190351
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20260302105456.4134882-1-pengpeng.hou%40isrc.iscas.ac.cn
-patch subject: [PATCH] PM: Move to_device() out of CONFIG_PM_SLEEP protection
-config: sh-se7751_defconfig (https://download.01.org/0day-ci/archive/20260305/202603050624.gml2vPY4-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 15.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260305/202603050624.gml2vPY4-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603050624.gml2vPY4-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/bits.h:30,
-                    from include/linux/ioport.h:14,
-                    from include/linux/acpi.h:13,
-                    from drivers/base/core.c:11:
-   drivers/base/power/power.h: In function 'to_device':
->> drivers/base/power/power.h:163:56: error: 'struct dev_pm_info' has no member named 'entry'
-     163 |         return container_of(entry, struct device, power.entry);
-         |                                                        ^
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:21:9: note: in expansion of macro 'static_assert'
-      21 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:21:23: note: in expansion of macro '__same_type'
-      21 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   drivers/base/power/power.h:163:16: note: in expansion of macro 'container_of'
-     163 |         return container_of(entry, struct device, power.entry);
-         |                ^~~~~~~~~~~~
-   include/linux/compiler_types.h:617:27: error: expression in static assertion is not an integer
-     617 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:21:9: note: in expansion of macro 'static_assert'
-      21 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:21:23: note: in expansion of macro '__same_type'
-      21 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   drivers/base/power/power.h:163:16: note: in expansion of macro 'container_of'
-     163 |         return container_of(entry, struct device, power.entry);
-         |                ^~~~~~~~~~~~
-   In file included from include/uapi/linux/posix_types.h:5,
-                    from include/uapi/linux/types.h:14,
-                    from include/linux/types.h:5,
-                    from include/linux/kasan-checks.h:5,
-                    from include/asm-generic/rwonce.h:26,
-                    from ./arch/sh/include/generated/asm/rwonce.h:1,
-                    from include/linux/compiler.h:372,
-                    from include/linux/cleanup.h:5,
-                    from include/linux/acpi.h:11:
->> include/linux/stddef.h:16:33: error: 'struct dev_pm_info' has no member named 'entry'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                 ^~~~~~~~~~~~~~~~~~
-   include/linux/container_of.h:24:28: note: in expansion of macro 'offsetof'
-      24 |         ((type *)(__mptr - offsetof(type, member))); })
-         |                            ^~~~~~~~
-   drivers/base/power/power.h:163:16: note: in expansion of macro 'container_of'
-     163 |         return container_of(entry, struct device, power.entry);
-         |                ^~~~~~~~~~~~
-
-
-vim +163 drivers/base/power/power.h
-
-   160	
-   161	static inline struct device *to_device(struct list_head *entry)
-   162	{
- > 163		return container_of(entry, struct device, power.entry);
-   164	}
-   165	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> >  };
+> >
+> >  static const struct sunxi_pck600_desc sun55i_a523_pck600_desc = {
+> > @@ -206,7 +216,36 @@ static const struct sunxi_pck600_desc sun55i_a523_pck600_desc = {
+> >         .device_ctrl1_delay = 0xffff,
+> >         .logic_power_switch0_delay = 0x8080808,
+> >         .logic_power_switch1_delay = 0x808,
+> > -       .off2on_delay = 0x8
+> > +       .off2on_delay = 0x8,
+> > +       .has_rst_clk = true,
+> > +};
+> > +
+> > +static const char * const sun60i_a733_pck600_pd_names[] = {
+> > +       "VI",
+> > +       "DE_SYS",
+> > +       "VE_DEC",
+> > +       "VE_ENC",
+> > +       "NPU",
+> > +       "GPU_TOP",
+> > +       "GPU_CORE",
+> > +       "PCIE",
+> > +       "USB2",
+> > +       "VO",
+> > +       "VO1",
+> > +};
+> > +
+> > +static const struct sunxi_pck600_desc sun60i_a733_pck600_desc = {
+> > +       .pd_names = sun60i_a733_pck600_pd_names,
+> > +       .num_domains = ARRAY_SIZE(sun60i_a733_pck600_pd_names),
+> > +       .logic_power_switch0_delay_offset = 0xc00,
+> > +       .logic_power_switch1_delay_offset = 0xc04,
+> > +       .off2on_delay_offset = 0xc10,
+> > +       .device_ctrl0_delay = 0x1f1f1f,
+> > +       .device_ctrl1_delay = 0x1f1f,
+> > +       .logic_power_switch0_delay = 0x8080808,
+> > +       .logic_power_switch1_delay = 0x808,
+> > +       .off2on_delay = 0x8,
+> > +       .has_rst_clk = false,
+> >  };
+> >
+> >  static const struct of_device_id sunxi_pck600_of_match[] = {
+> > @@ -214,6 +253,10 @@ static const struct of_device_id sunxi_pck600_of_match[] = {
+> >                 .compatible     = "allwinner,sun55i-a523-pck-600",
+> >                 .data           = &sun55i_a523_pck600_desc,
+> >         },
+> > +       {
+> > +               .compatible     = "allwinner,sun60i-a733-pck-600",
+> > +               .data           = &sun60i_a733_pck600_desc,
+> > +       },
+> >         {}
+> >  };
+> >  MODULE_DEVICE_TABLE(of, sunxi_pck600_of_match);
+> >
+> > --
+> > 2.53.0
+> >
 
