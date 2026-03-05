@@ -1,249 +1,190 @@
-Return-Path: <linux-pm+bounces-43696-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43695-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2C14CXa4qWlEDAEAu9opvQ
-	(envelope-from <linux-pm+bounces-43696-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 18:08:06 +0100
+	id eHEQC0m4qWlEDAEAu9opvQ
+	(envelope-from <linux-pm+bounces-43695-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 18:07:21 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70CAD215DBA
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 18:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 82D91215DAA
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 18:07:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 61A2A30AD181
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 17:07:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0AF09304A6C8
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 17:07:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B88303DEAC1;
-	Thu,  5 Mar 2026 17:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 101E63DEAFD;
+	Thu,  5 Mar 2026 17:07:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="a4bEybrX";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Typ50wuy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mckz3k4F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D97F3DFC89
-	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 17:07:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC8D3DEAD2
+	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 17:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772730431; cv=none; b=C9U7QsLW8Npwi5tpKL1iK7QWG8iEzvO1gVq3InsMvMUhlhUASXtiKi3xM46Otz5woKBosoZ7mtLcw3WbTemP8SA7SxZTkK6OADytcYm7jRhR7RcCCMNkhlr4hYPI8d0dk+G9z3Tr2KnIjzX7BQ11uNt2ihyA/6/TDbnwomhWzkU=
+	t=1772730427; cv=none; b=brDB6fDeuKYA9A3qwo3KUWkhuBam+4+Kal7dq+rs6W85D+AmPHEmV0fCbcnwnAxj1HypmfHe1CTtB7pr+v/a9PAUb+wyAX16hBfQq/M75pJ6ZRy7MH1bWfJCcq/c+hfAy2u42ngJIxrD3fMXqnD9KWmJe/cEeX/ermRCpqxL47k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772730431; c=relaxed/simple;
-	bh=pgP0q4kVsHFcrHbvYtzYON7ox6KLWsq/00U7ee8fSJk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZhOZObzr3THUNsHfwmyOTAZV/8xNg/eQ3qLW2cV5wVYcShcVygR+awYGKxg/0uXBbOV6gkoPfWujdY9KKs8idHgn924rd8ewKIGfLU+c3o3aQKa+hZl/SfOKCHVLG4mkWwWgnYAYXZ94W6TezpK4rFIcUohHUMJ9TikJPsX3rYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=a4bEybrX; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Typ50wuy; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 625AG4ni936997
-	for <linux-pm@vger.kernel.org>; Thu, 5 Mar 2026 17:07:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	P9amGm3yXPjWRedkzMCt3rIna/u2e58sR65tEMjLkZI=; b=a4bEybrXskoGZv0G
-	azDDjfpL2IOffTbrcBuFG67SPotuiTOys4t+8fwGZFuXAThGyia+MdFPamiAnnkT
-	StMJYJp2iyF90+1NwpdnGs78OqSctI1r60JSwVcog+/aLGd44RS4ysAda3s0lxqQ
-	klZ/sO1w1Uec0bLVnGgh6xrBTPw+tZmyopB25LlZvQYB2mG8SUoS8GLMK2bU/NhQ
-	rkuJpbieG8FfRmrqYDDqq6vEH8BYNzpwVSjJnvkgwkebOqqiUpqe8dejBshev8NJ
-	zAVC02J3kIE3bAHpvFLVsT3d+xAg1u+TQF6Dx4lQFS98Wr+QdvpIbr1K+gr5ovi1
-	Z9rqYg==
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cq04u2yfm-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2026 17:07:09 +0000 (GMT)
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-35449510446so7769921a91.0
-        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2026 09:07:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1772730428; x=1773335228; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P9amGm3yXPjWRedkzMCt3rIna/u2e58sR65tEMjLkZI=;
-        b=Typ50wuySwlOR5roqdDNG8zr4zyB9KbOQ2f6J0KTSizJM/A2Q/ROXAJ7E3O40STX6z
-         Uh9x8ego73/dseTIQTtNIK5nAmHfYtcEnCKQGoR88KwmmFXrQjmZCjmxToGCW2IE8AjE
-         05LPO8y7WEuEffHzoDzgSmNLnmwW4PWlF4ahpu/D+5q0owd09V7rnKr3Io9HP/YSBOcK
-         DXSiDJ0yyoerM1gATDTBOpShW0nFTsxySPjDX69tkEtfnGLvHsfJ/3bqIHcSNMV0hwx9
-         DKspq49g62iIXIXYC5yubTDWMal2E/KG1l2gxse7hNAocGJmTQzRcbnucf22d2yxjWLK
-         SpBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772730428; x=1773335228;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P9amGm3yXPjWRedkzMCt3rIna/u2e58sR65tEMjLkZI=;
-        b=PZFZ72IYOf6KDqnqs84JLjoUdPwWO+fysv9nRgxvTBqTo7cD5Gc3KYC6bzbsVOjtuw
-         D85UqdHwFEckhnWb+aX5nT0XqJUBKl2WJP6m5Xo4vuMSl0tFe9Fn0FNzgW0pwomluvrY
-         gVqUpSQmDuq0ljYDtGjwI4iAoPBL6nxLjKPoCpBj3EMcXIeLYp8XSUvrJXM2hc5Ql5zZ
-         1Xi1xnCgcz8DwK6WcOm/gok7YZNn8EyDS4H/i/Te3sW+KuuNS7jEcjvUqB86kao4OM+p
-         Q7Y3MIdZ+Byb03RN9bv+TZGpqEDuELngy2M5/PvY8TO2AbmLvbPwJFbjFgzt2sQ8CXOd
-         jAiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV4DJXKypqozc8deXEPLIMophxR7huMhfomFn+PoTwYzuCs5cikHkvCLhHkEgMOdFBB/Lr7JqE3kQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOH4MERcORYgNXSaKAo9igwWS0Jl3UKhYFnQr/D1a9ahug8uFx
-	wiJNB4BxdJ7+ao0JXM0xhxmYn+KSKytDMQjH1wol9dkLGKxaiy0OgcNx8XkWOD5zbws/bZxgosY
-	pWQnvpOLISzXypT6HRnw9RAuVfEHwW4sVxM8Eaa9DbiFjnaB/va9dbSc7qUTtkg==
-X-Gm-Gg: ATEYQzz8VwlsFVA7m+yTN2cXU1ON/ZRTpM/rAM43kzE6X4pwCpPLQUZG2mX2SgG3QRV
-	lIT41kdrMpXp+NikRR3ELxpw7cbBzdgNdo5qpwpPA3WGhQOX/TpEgM30cSjg71u/YqgZ1elxMSh
-	J9ScYFlXPmRN3ddONbnXfboBJKAVA7aTcnhd/VZxjgJFv23TX5aiz4/CXgyGLNPNQ/OPKMoB0vD
-	m9jmbsULhMZmjkzcBoOZ0Nw6fcnB64WcgLNscuBQFFCptPfwP02yEmqtKQrptjD7AzVFP79jgOM
-	fGHbZVXHCHLIAC3VLHR2ziimQbLQZDP5P4wi2wU6KSb0SGfomaySzCZW3SF1vDNhv8i6vHKG2jH
-	cLvEDylzlK1n2mMgP68S8u6iWuSdLvITKjIZVtGHbg494571zOHati+Y=
-X-Received: by 2002:a17:90b:3e4c:b0:359:2d1c:9206 with SMTP id 98e67ed59e1d1-359bb45b0b8mr219554a91.33.1772730427631;
-        Thu, 05 Mar 2026 09:07:07 -0800 (PST)
-X-Received: by 2002:a17:90b:3e4c:b0:359:2d1c:9206 with SMTP id 98e67ed59e1d1-359bb45b0b8mr219498a91.33.1772730426982;
-        Thu, 05 Mar 2026 09:07:06 -0800 (PST)
-Received: from [192.168.29.31] ([49.43.226.5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-359aa2c02casm1708265a91.8.2026.03.05.09.06.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Mar 2026 09:07:06 -0800 (PST)
-Message-ID: <1f75b250-c3b5-45da-bc82-aeadf44dfea4@oss.qualcomm.com>
-Date: Thu, 5 Mar 2026 22:36:26 +0530
+	s=arc-20240116; t=1772730427; c=relaxed/simple;
+	bh=cHXbdYTccSGkPhP6wpFZMciZSsoHmfSiWvXXcyOpSeA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=vAiSQ9PvzEP79zehiHGebft99dDOwnIm1e6jqobfd9y8tPodbeZ7VsEjmBYGZBDRKWPS+7X91LLydZh+veZGWiPTPeDDp6AOZgcj+zorCkgLOM4FQRx3rQOWP10JkHWP/5X3mjeaqMrE0Z7g3GyNkrWh9e2XgDntx3dghsPPw5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mckz3k4F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27F33C2BCAF
+	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 17:07:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772730427;
+	bh=cHXbdYTccSGkPhP6wpFZMciZSsoHmfSiWvXXcyOpSeA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Mckz3k4F/pEBCgYvaKXxmo+eEOsZmIpVvmcNbbrZFad1yMbbCLwTY49+g6X9vafnO
+	 ZgTu+vLeHu0UXrCnIUnV2sGrpL4weSitOFec/i+wi9ol7CVY38GTJ3gZr7FJ9ktt+b
+	 Z/2spFPyelrLQGdZVyxlJN2Jv5DH7jK3m1dCT2O8Pqr7jyfmVwxh9F6H/WHKtAGaK7
+	 jcRE/tWVthcyDu699+LMUX9O3NF3LJil77LbEwj8XoE4b7VYIuOoPbYRuyDpvc/0H8
+	 R89YUjqCGuUD/VwCyM1frmhSj0h98bfMligGSZJOc6Fkn44lOmaGaIrRQgcEM9rRe6
+	 z2JkNSpnWchvQ==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-415c8a4d2e6so1319965fac.0
+        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2026 09:07:07 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU/JAa9E6YNjs653MJGaJ3skk3My/MqShQKw0iUhfAY52k+qWW3l1abQ078A9Wn2Y3ltM0s4QZutA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjxDHPZJi83/3qRztmj1DG9caJDKnftCeZxqUpZsuS9l8mUHCo
+	ogW01VSlUHbJWWI+mUHkRZh99JJiYgkE4RR+5NA5X9MhLGlDn5NQRUkaPK7g3UrkMJm+363AiEf
+	jhj7ebGJSsar4q9Oi80h1YNVUEiwP1gI=
+X-Received: by 2002:a05:6871:72c:b0:409:6ea8:5f7f with SMTP id
+ 586e51a60fabf-416ab595928mr3507225fac.20.1772730426159; Thu, 05 Mar 2026
+ 09:07:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v20 06/10] power: reset: Add psci-reboot-mode driver
-To: Bartosz Golaszewski <brgl@kernel.org>
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
-        Andre Draszik <andre.draszik@linaro.org>,
-        Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, Srinivas Kandagatla <srini@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Yan
- <andy.yan@rock-chips.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        John Stultz
- <john.stultz@linaro.org>,
-        Moritz Fischer <moritz.fischer@ettus.com>,
-        Sudeep Holla <sudeep.holla@kernel.org>
-References: <20260304-arm-psci-system_reset2-vendor-reboots-v20-0-cf7d346b8372@oss.qualcomm.com>
- <20260304-arm-psci-system_reset2-vendor-reboots-v20-6-cf7d346b8372@oss.qualcomm.com>
- <CAMRc=MewwLTsaHCOR2iVYZRM6kWptQfZuTe=2i_pfpTwjFKEpQ@mail.gmail.com>
-Content-Language: en-US
-From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-In-Reply-To: <CAMRc=MewwLTsaHCOR2iVYZRM6kWptQfZuTe=2i_pfpTwjFKEpQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: RGQj5LWvkNNq9vuKYo23JOA2TwRkUa45
-X-Authority-Analysis: v=2.4 cv=eqTSD4pX c=1 sm=1 tr=0 ts=69a9b83d cx=c_pps
- a=RP+M6JBNLl+fLTcSJhASfg==:117 a=mvMbtr4cKWCpcPtdaitTtQ==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=yOCtJkima9RkubShWh1s:22
- a=EUspDBNiAAAA:8 a=xSGJYzCLABdN7Qz2ucIA:9 a=QEXdDO2ut3YA:10
- a=iS9zxrgQBfv6-_F4QbHw:22
-X-Proofpoint-ORIG-GUID: RGQj5LWvkNNq9vuKYo23JOA2TwRkUa45
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA1MDEzOSBTYWx0ZWRfXxAJNWz6dNL1C
- BgcoJPW0St/GCjqCT/mOG+BdOvci/eEPW6BZMhbp9Z7g5cvL4ngpgKY9r86+vr4tdFGHwZDNUAG
- bMMke6nHnqoajLAbzwt88BC4hFAn+jlFyIyOyuifoPzWeInEXa3GqD3aBevt/9+jW4paXyQpvYe
- zXIUvkQy73Jr98j8rp8Be2EQoZU7j16h1k81vW6jyuOLsQWEpNUOlzi1YhKs+6RHZD8mnWaxDZU
- kVs4Unnt1uoA6VtzUaZ2I11bR0IyfOIYmAGLzLGdRSN000vGejk75NxD7UY/QT/cIcFoVw17t0m
- tiR+png7EwYFZl4uFEdzkcXCMbAkbKv/vpAiuLXD92b4TiVcOaemwdHY5Y5OBxUwn6SLhwiYu65
- 1BnTCE/qzdAL/Odzl44lrHufUMGm0HOQvB3TUqSys7gJQ8C8Oib1HGkpevUyihrmSeiyZpA9sJb
- 9l/GuEy2ZZvKAezhh+g==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-05_04,2026-03-04_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 bulkscore=0 clxscore=1015 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 spamscore=0 impostorscore=0 adultscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603050139
-X-Rspamd-Queue-Id: 70CAD215DBA
+References: <20260216185005.1131593-1-aboorvad@linux.ibm.com>
+ <20260216185005.1131593-2-aboorvad@linux.ibm.com> <37ab17cd-0488-44bd-9e03-1ba3c0757e8f@roeck-us.net>
+In-Reply-To: <37ab17cd-0488-44bd-9e03-1ba3c0757e8f@roeck-us.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 5 Mar 2026 18:06:53 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hKAcAqWuR41bwjjpQuhs6poHrNFwQABeGz1w3j3b6Pww@mail.gmail.com>
+X-Gm-Features: AaiRm50w-DhhtUCA12_myPVvf3_l_3tVDRtwhMRuhY3VHHAfMxkv46010ONk_58
+Message-ID: <CAJZ5v0hKAcAqWuR41bwjjpQuhs6poHrNFwQABeGz1w3j3b6Pww@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] cpuidle: Skip governor when only one idle state is available
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Aboorva Devarajan <aboorvad@linux.ibm.com>, rafael@kernel.org, christian.loehle@arm.com, 
+	daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 82D91215DAA
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[broadcom.com,kernel.org,oss.qualcomm.com,linaro.org,vger.kernel.org,lists.infradead.org,arndb.de,arm.com,rock-chips.com,gmail.com,ettus.com];
-	TAGGED_FROM(0.00)[bounces-43696-lists,linux-pm=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,qualcomm.com:dkim,qualcomm.com:email,oss.qualcomm.com:dkim,oss.qualcomm.com:mid];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[28];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[shivendra.pratap@oss.qualcomm.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43695-lists,linux-pm=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,roeck-us.net:email]
 X-Rspamd-Action: no action
 
+On Thu, Mar 5, 2026 at 5:53=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+>
+> Hi,
+>
+> On Tue, Feb 17, 2026 at 12:20:02AM +0530, Aboorva Devarajan wrote:
+> > On certain platforms (PowerNV systems without a power-mgt DT node),
+> > cpuidle may register only a single idle state. In cases where that
+> > single state is a polling state (state 0), the ladder governor may
+> > incorrectly treat state 1 as the first usable state and pass an
+> > out-of-bounds index. This can lead to a NULL enter callback being
+> > invoked, ultimately resulting in a system crash.
+> >
+> > [   13.342636] cpuidle-powernv : Only Snooze is available
+> > [   13.351854] Faulting instruction address: 0x00000000
+> > [   13.376489] NIP [0000000000000000] 0x0
+> > [   13.378351] LR  [c000000001e01974] cpuidle_enter_state+0x2c4/0x668
+> >
+> > Fix this by adding a bail-out in cpuidle_select() that returns state 0
+> > directly when state_count <=3D 1, bypassing the governor and keeping th=
+e
+> > tick running.
+> >
+> > Fixes: dc2251bf98c6 ("cpuidle: Eliminate the CPUIDLE_DRIVER_STATE_START=
+ symbol")
+> > Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+> > ---
+> >  drivers/cpuidle/cpuidle.c | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> > index c7876e9e024f..65fbb8e807b9 100644
+> > --- a/drivers/cpuidle/cpuidle.c
+> > +++ b/drivers/cpuidle/cpuidle.c
+> > @@ -359,6 +359,16 @@ noinstr int cpuidle_enter_state(struct cpuidle_dev=
+ice *dev,
+> >  int cpuidle_select(struct cpuidle_driver *drv, struct cpuidle_device *=
+dev,
+> >                  bool *stop_tick)
+> >  {
+> > +     /*
+> > +      * If there is only a single idle state (or none), there is nothi=
+ng
+> > +      * meaningful for the governor to choose. Skip the governor and
+> > +      * always use state 0 with the tick running.
+> > +      */
+> > +     if (drv->state_count <=3D 1) {
+> > +             *stop_tick =3D false;
+> > +             return 0;
+> > +     }
+> > +
+>
+> An experimental AI review agent provided the following feedback:
+>
+>  Does this unconditionally keep the tick running on systems that only hav=
+e a
+>  single non-polling idle state (like basic ARM systems that only support =
+WFI)?
+>
+>  Before this patch, governors like menu would check CPUIDLE_FLAG_POLLING =
+before
+>  deciding to keep the tick running. Could this change effectively disable
+>  NO_HZ_IDLE on these systems, causing higher power consumption?
+>
+> I don't know scheduling well enough to understand if this is a real probl=
+em,
+> but I thought it is worth mentioning it.
+>
+> Please let me know if the problem is real or not so I can feed it back in=
+to
+> the agent.
 
+On bare metal, this isn't a problem at least in practice because the
+only available idle state cannot be too deep anyway, so stopping the
+tick doesn't improve energy efficiency too much and it adds overhead.
 
-On 05-03-2026 15:32, Bartosz Golaszewski wrote:
-> On Wed, 4 Mar 2026 19:03:06 +0100, Shivendra Pratap
-> <shivendra.pratap@oss.qualcomm.com> said:
->> PSCI supports different types of resets like COLD reset, ARCH WARM
->> reset, vendor-specific resets. Currently there is no common driver that
->> handles all supported psci resets at one place. Additionally, there is
+On virt, it may be a problem if the tick that runs in the VM
+effectively prevents the host from using deep idle states, but that
+would only matter for VMs running on systems that have deep enough
+idle state in configurations where the VM has only one idle state.
 
-[snip..]
-
->> +static int psci_reboot_mode_register_device(struct faux_device *fdev)
->> +{
->> +	struct reboot_mode_driver *reboot;
->> +	int ret;
->> +
->> +	reboot = devm_kzalloc(&fdev->dev, sizeof(*reboot), GFP_KERNEL);
-> 
-> Have you verified that the faux device is actually getting bound? This is not
-> probe(), you don't supply any faux operations when calling faux_device_create().
-
-yes. It was verified. faux device got created like below and the 
-end-to-end use-cases are also working fine.
-
-few logs from device:
---
-# find / -name psci-reboot-mode
-/sys/devices/faux/psci-reboot-mode
-/sys/bus/faux/devices/psci-reboot-mode
-/sys/bus/faux/drivers/faux_driver/psci-reboot-mode
-
-# ls ./sys/devices/faux/psci-reboot-mode
-driver     subsystem  uevent
-
---
-
-> 
-> You should pass the address of this function in faux_device_ops instead of
-> calling it directly.
-
-In last patch, we were using a probe function. As faux_device_create, 
-calls the probe from its internal operations, "of_node" can only be 
-assigned from inside of faux device probe.
-
-As our primary requirement is to assign reboot-mode of_node to the faux 
-device, thought to make it this way. (As we did not want to assign it 
-inside the faux device probe).
-
-thanks,
-Shivendra
+This is kind of under discussion in a separate thread here:
+https://lore.kernel.org/lkml/20260301192915.171574741@kernel.org/#r
 
