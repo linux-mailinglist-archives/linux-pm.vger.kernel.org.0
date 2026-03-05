@@ -1,248 +1,320 @@
-Return-Path: <linux-pm+bounces-43669-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43668-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cHInMpVWqWkh5wAAu9opvQ
-	(envelope-from <linux-pm+bounces-43669-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 11:10:29 +0100
+	id aFiKGXhVqWng5gAAu9opvQ
+	(envelope-from <linux-pm+bounces-43668-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 11:05:44 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8984320F738
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 11:10:29 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 473ED20F564
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Mar 2026 11:05:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 841F2306341B
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 10:03:58 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B5A6C3072C1C
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2026 10:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8350537D102;
-	Thu,  5 Mar 2026 10:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7C9F3803F4;
+	Thu,  5 Mar 2026 10:02:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="GYU207FK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kc38H1iA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011070.outbound.protection.outlook.com [40.107.130.70])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD7337CD40;
-	Thu,  5 Mar 2026 10:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772704954; cv=fail; b=Ieiw2r5b2WfzkXJFZm1vP4U/cW0D0j20vqy/nSDw+nnLNgig6y1vEAfaUcjqnJ6/HKBVJqzOn3Bnu651NUSxMhboRSNaXDdO/BEGpitaxqS1mDIZMXWZ7E93YlDieQK6CTrokLAXzZ8rjP/QG+CYYQmj9h9uK8DNqMFSj66srD0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772704954; c=relaxed/simple;
-	bh=MDBsyEtM8OlONxnNmxyHJU6z1qFmcveHZflsGaGUvbI=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=V2tKZLW+zw5AFHNghP4FivxeFqyf5XvVa0tQAoICZ3g46GgTJnqxlGGqi2JDsunbw6cMAHBZ9KZfAmQZRPt5KadgsxDVaMn56uPwmHjmVjsAY5VBusaHJuROqjSc/lTk9STgekGm1KjaMImIboHpEhPyL0BVARAUbU+Hk+D+Roc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=GYU207FK; arc=fail smtp.client-ip=40.107.130.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OgUi76d4zCuBOSCX4cZQVawoMFuoUWhSsDk3iLuGUunlMaYIr4ENIXFCXH+jjyQgHeQoInGYPj9RodOMI25vqvIBvLCQXxGOLPkDFyWOt260xIYJtuu28jQdoHIVsKjv9IW2xCbJVFZ9vaeKYp1c2gFO8eRrg7tya9uNzcxhH5Kbar8Rml8mcZXIUxkny9xXjnySy+ftS9y+x8q6uk2eJit1pJ75kud4zxmwwoVb6OId3cAFtEzw7gACB1RWPQ8eA+EJSbSDejfOOmPKq7pTBlVM3YxPPmTM+fnSqLHWUqF3/jm2MhZsXj5LMOWrNkZD+ISgoPYnUb3U4eS1fuqL3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xhLI8nUAaEAPVC5o5dn95EO8aPRidblJeZgYVfyjJEk=;
- b=gEh0zUJJ/dy1mP7Btol0xpkfR2n7+Cdvw1fcnVdVXtN+9C2YOWOw4Vphi6btj3T8VVLe1HR1FWpZtMGbVjGsjrJ6GwwBgWd0ZJnttgBbnk9XZWgXQF6k59bHBW6qGaUcyP40bKUJGKjAp/8uyJk7JGmBEtpj20ip0fmm41j62jKRSjH53M4cI3AKfgs6gg1uVcoabNmhmpkdJZCDLNAKLrrki76TyAEMr7RM0fDlMeTuFX7BnER92w0Dofs9WWITfOxZwwcQm/kc5ZWsgsqxvHw4oXUdV+AuVrBh9QARGN5SPbRX2sImGHiBPqaYBTyGeFz3SG9o0JqlpxK4spCahA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xhLI8nUAaEAPVC5o5dn95EO8aPRidblJeZgYVfyjJEk=;
- b=GYU207FKrZhSBTGDmOhpn0Kd4I8dqiEIPDabxMb4emjgpNytTV3p5xwRqWZDK60P9V3ppA6vv90QOM3v+dmMGMFMOQQ3dqRhSEZwEDhRMHDAd74VkYNjfqYCU/pl6CaxihagOFsxBbCRqlu00ULjB2nxIdSzUUxd0aa+hGjSo9EePkWew5K0sO/lAihJGePoEJwV6zu1TWmuKZvcezi3UFt6bbFUOikGn8itTIgGLZvz0pblb8uDRNTSu47SR0tT5nG1q31AOmyVr2C55IxOJJDMrn3i4g8olUloKN+YDJ3RAh11cAhHrEaPjysbX6DrCNJsT9USPoF+q+ZL4gPRRw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PAXPR04MB8254.eurprd04.prod.outlook.com (2603:10a6:102:1cd::24)
- by AS8PR04MB9128.eurprd04.prod.outlook.com (2603:10a6:20b:44b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.18; Thu, 5 Mar
- 2026 10:02:28 +0000
-Received: from PAXPR04MB8254.eurprd04.prod.outlook.com
- ([fe80::20db:4017:28ea:911b]) by PAXPR04MB8254.eurprd04.prod.outlook.com
- ([fe80::20db:4017:28ea:911b%4]) with mapi id 15.20.9678.017; Thu, 5 Mar 2026
- 10:02:28 +0000
-From: ming.qian@oss.nxp.com
-To: linux-media@vger.kernel.org
-Cc: mchehab@kernel.org,
-	hverkuil-cisco@xs4all.nl,
-	nicolas@ndufresne.ca,
-	benjamin.gaignard@collabora.com,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	p.zabel@pengutronix.de,
-	sebastian.fricke@collabora.com,
-	shawnguo@kernel.org,
-	ulf.hansson@linaro.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	m.felsch@pengutronix.de,
-	fra.schnyder@gmail.com,
-	linux-imx@nxp.com,
-	l.stach@pengutronix.de,
-	Frank.li@nxp.com,
-	peng.fan@nxp.com,
-	eagle.zhou@nxp.com,
-	devicetree@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2] media: verisilicon: Fix kernel panic due to __initconst misuse
-Date: Thu,  5 Mar 2026 18:01:48 +0800
-Message-ID: <20260305100149.722-1-ming.qian@oss.nxp.com>
-X-Mailer: git-send-email 2.48.1.windows.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MA5P287CA0015.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:179::15) To PAXPR04MB8254.eurprd04.prod.outlook.com
- (2603:10a6:102:1cd::24)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B388037CD43
+	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 10:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772704949; cv=none; b=F3cUh4YxVfsNLXOuX3R4POlOc5IGvsZydNynL7jnQFEm4LaZNFOVSuwAC5yIwvhgq57xjffiIz7WmEvHByvWENt0NUWxoB4LXkc4VZkYUvsvRv4DkV4AhxYCZd0mlFhQKjX5d1uWsA0FUuOm1iQVrLE/e4LUm2iiCWixT6ypet4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772704949; c=relaxed/simple;
+	bh=qancUPGQlWGf8hQxZmA2OZYFGJe2twK4fVy4hczDVK8=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Adz+iycrsXW4lHoIQzeVpElVX+z2A+xTbdckVUjNwSLuOt107RX5Om5SCWslmBQcP++xYsxiI7whyK3cfLoZiK1ETU76J/9piYtxHri1GzY69WwEEJuMwf6pdyvb5wIZEfyIS4TH8XpXKbLuE/Lz5tPjVc4iT7XA1Rkb2YzAVpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kc38H1iA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 909EBC19425
+	for <linux-pm@vger.kernel.org>; Thu,  5 Mar 2026 10:02:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772704949;
+	bh=qancUPGQlWGf8hQxZmA2OZYFGJe2twK4fVy4hczDVK8=;
+	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
+	b=Kc38H1iAv9fLqRNrQYjFQV/jfuvCSyDroN7z6gupuUQ2S33kswfJalFOuU/xd3vZN
+	 uiRd1zMshnhrfwemnIHd8aW8Y3c2miVrw6/MYstXe/f6Z7jN7ttOK589C9RhQjRG2u
+	 X5sZFUcrkutBve7vN5bXPCaTl6W8kU9Se+AW5CrQB599KuLDMMXuyvMgD2q30iXbNc
+	 +OjCKpcCWhNzARCiCwIQuk6H8V1HIeTNyH82u6uT1rvoUMj/QqcLlLhRSrx73bFsL6
+	 YDKFSFVd4TGkglXomapJE+IcAz4luQ3qAPuBwJig1EIpIPGU6Ph0KDAz51iyGqocRO
+	 mtU176lxxg7UQ==
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5a13323ba85so624421e87.3
+        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2026 02:02:29 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVk3zqKwkXh06piJ1wg5cBnBE6oN8Foy1IAjEV9Vf0khOuD24a0uApNgsyq1wNvPrGOMlBXjE1W+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyjx47hahawcv45aEgL77nvjr1NgR3rdKRAN+iFc1uOdiBPfSWy
+	0ck1/3lxNWXfTm4UznlsQEdnrsq0yKKzoEKEBUresKsHX1suAePdxdTA6BnLKZb3hcT8hjdlIpz
+	iX8KlEGjYLxZwxTWJC8bcEkH+T+UNhz2v+ZvpxKM4Vw==
+X-Received: by 2002:a05:6512:24c4:20b0:5a1:2f0d:f31b with SMTP id
+ 2adb3069b0e04-5a12f0df52cmr468009e87.21.1772704946649; Thu, 05 Mar 2026
+ 02:02:26 -0800 (PST)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 5 Mar 2026 02:02:25 -0800
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 5 Mar 2026 02:02:24 -0800
+From: Bartosz Golaszewski <brgl@kernel.org>
+In-Reply-To: <20260304-arm-psci-system_reset2-vendor-reboots-v20-6-cf7d346b8372@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8254:EE_|AS8PR04MB9128:EE_
-X-MS-Office365-Filtering-Correlation-Id: b3efc4fb-7e00-442c-d8a0-08de7a9e4eaa
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|19092799006|7416014|52116014|376014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	8uuzn7jfqaoiBZn2InAnGq/UKEvCvPF+hlNyQsD8p/WRZTvpqJUaH+dQoo7ds+3ebYjoz4xDWZkKOiaQteMS/ZFt3uDSkto2GKe9D5UH2BPm920450iacQSenCWw6MSCq11+1r9+OhEmYKtHCphwctFdoyX2tKmjBNH6aLnlIh6gTqVt21EEpEsmBuTykbLxbQ+fSaZoPhikLg8LZWKlcbJt2oG0ZNt5Syv9Hq0vpbhwS5hPPnAMmoVGtjbpnb7ET4XTCl2p+/RJ1+ug6qqQP4Hw7on8dMn2KIdBImCKNh3gkjF6IymRmCVgNXxRwW/nNMrLkwMZPAcRU2zgxU9iwcoKLRZ3qwi5EMr1g4nrjedy5HVOtoh3YmS60R5MeOeTIIE9EoWU8miUmzRDMkvg4ATkbvfSsJm11QUS+XnOs2cFjTtDkRnZdRhv4Q11DXS3vFOgnRy9hWD/v5FmNCKLKC6EN0vBQCOxG9v6dOUzk9V36HwGIouZmJ8XmKRlR+Ex0iUW/IDAnN9a+4SypYDXlQzx9cAIv4g/pMGy8h5ScaqMb1RSitY8obOdG++N5OhazCLEAeRKcjl57PImMvQQi3qdxAmMd8xKGil0Ov4HsvseLBaGh962o5HKlRyKuLgsJ2QaXEHii0waZXPN91Ca95s4/z5FGx2f9Xn9WQzf+0i7HwIMDTqSzM1XwXaaLDS0pKGNl0b1p1iNrAWahxuDONkgccP6FY+oUq990/bSyWh+iZkDYFgoOQ/6PI3ZCY7rGbW+XT6g9rskubGHsIpPEu8CTavS0XVJIszsE3kthM8=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8254.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(19092799006)(7416014)(52116014)(376014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?U+QVKa+j8T5XLIKEBOjO1c+sYSLRaNZThXsxG8j6XsCYeFKCB4iFroiwZbUT?=
- =?us-ascii?Q?CjSKqtbia+VjzXWLRitQOK3+79dboQpxhPE+wuJgGJ68WcwOy93LzXZCw3jM?=
- =?us-ascii?Q?T6TTHNwCuAOyCIwIAdaEjdhdNRPe/VBnimJtjlvqFz8OoilFTZ0Va1u9JB/o?=
- =?us-ascii?Q?gi1Sjd2m1nWkG4H36eN7ATnRaXeDGWWVBBFqjZruftIK0vB2waIfzWF40aA+?=
- =?us-ascii?Q?BXA0mvOkhmWogjwZGrWXfYagDVSOR0ff3wx6Qj73K4806XrHatuRsgS1qOgB?=
- =?us-ascii?Q?fCHAGpUR4e/UOfWLArHkuSLqYCAyCe9erT5rDfXAwCqWSGmB3YO5p7z4vb5W?=
- =?us-ascii?Q?ZXvUSjaFvh+7mQxou9B6o4NTD95W/BgSwGMeNN+rcodAdcel1rw1pGuElL9I?=
- =?us-ascii?Q?vIq2UVDGY9+xkSHQHsTq7LcfkRy9+XeeRg+3EFZQSJWU+VRxb2X5wAmnfG50?=
- =?us-ascii?Q?Hcw3lhQvtkUFmluEeXMUkO5bFvpuJcj+aLdCBocdb2aI9nerakck+tj3svwg?=
- =?us-ascii?Q?TEJocCTf72qmSGxFXYYwWut5RmOaZUksCcqpQ9J35CaNYU3P5Eoxny35jWBq?=
- =?us-ascii?Q?xKnPqaBDZGquIquUMiha7Xpn7pp8B0p4hQ3k49oChqgPQPyteJYUUnOJY01u?=
- =?us-ascii?Q?T/Ob18JHbqxpl3L2DcJ4EPo3gyuRg9PQ/p9pkBDxBuAZ118KJP3Ph5toNPzg?=
- =?us-ascii?Q?ebLqnJLyhokQ+P60F2MheTdTfLrRZ9x88ml9wcuswBRoAp/FZgMuylPKV7k+?=
- =?us-ascii?Q?LKZdaUyrim2cJDg+s56QLToNrz9ARg0yfjAQu5uDBGrAxygTiqYnsjSlo5lx?=
- =?us-ascii?Q?v6GyDuohOcNXQYf+fTI1//O+1MK1r4g17UX46QuwECJWxOTwvc4KDFYMKSJJ?=
- =?us-ascii?Q?Comlr1UVhsK6HajS4mzTLjO5ctRF+HqYd8qtiFmxIl4Iz1m4FSVWZKCjI7du?=
- =?us-ascii?Q?G/kjnIacoDbrhOLL8sQKCrKldKDW89VZSKS1qhTjUNEIu7JV4GBHfyDeAGri?=
- =?us-ascii?Q?MOVGyIQiDDRAOrwq18U+No2ic4uEaLvPl8ScRXFeipg76N3RlxGDNUs5LbVj?=
- =?us-ascii?Q?dLvxkNXOU5R0odfJ4QS22pTTSKXt3+0Ds8q3D6ESaoUspAKs3GwC+wnxa4JR?=
- =?us-ascii?Q?99EHyCqTCIvO5grixrqmqUtJaHKrasHAgrVBxB4zvb2bvt4B64pYTVdD22dk?=
- =?us-ascii?Q?f6jToxHFyZSHtCVHxUOn6Qyty/B1KekyNmLTS5B6aMrp5l33Kvgul12hliQB?=
- =?us-ascii?Q?/ZZBnhiAZGWO3Cil7GJxSaVHP8BIEQ7JEDuHXeTyayjq7QBnzgTdoHigti0w?=
- =?us-ascii?Q?Yjo8fPfKivDFmBWv/7UiuAu2LWJklbhT76s+ENfWH6gKTvwNHKRDLwPWkdCK?=
- =?us-ascii?Q?TAhsGJ7iSBNtP6XEbQLoy713W5hBvlL8FgCInqER0Z2zByZfXPh7IxzXCSXK?=
- =?us-ascii?Q?xDucB3EFrqjOO5rDX8TrDBdh8qLR7HD+0J3MwWma5N2+GfN5mcf4miI2gncT?=
- =?us-ascii?Q?KDE2vO+VXiPqkYgF+64QFm2FYdL8oIGlv80rZ6UXn4TCf4Ommj/w+6voPMK7?=
- =?us-ascii?Q?+MakKJANNkEUGlwOZWPXXDpt6Q6tiNAofqt/7x1knW1yiEqoj8H4SlHuwa0e?=
- =?us-ascii?Q?pac86EhhY4OdTw8c4d5W0va54Rd86HOU2DCmxh8I4jLjHwgBT94fxWD3Ka2D?=
- =?us-ascii?Q?r29xDq3aRJ19wkijqON0WXdtqIYFtm0tCXlne3e6UmKK8Wlt0YRYU7EXj21o?=
- =?us-ascii?Q?aLWYDNvG+g=3D=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3efc4fb-7e00-442c-d8a0-08de7a9e4eaa
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8254.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2026 10:02:28.0097
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NPMQCLI+E1Q5SMGH0+2vJlwoDMIQ3XPb/vmmCQL4WJnBOfvuvZjBhIwkYL1Y1sYXk1gu5qOuVFl4hvY663OPHQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9128
-X-Rspamd-Queue-Id: 8984320F738
+References: <20260304-arm-psci-system_reset2-vendor-reboots-v20-0-cf7d346b8372@oss.qualcomm.com>
+ <20260304-arm-psci-system_reset2-vendor-reboots-v20-6-cf7d346b8372@oss.qualcomm.com>
+Date: Thu, 5 Mar 2026 02:02:24 -0800
+X-Gmail-Original-Message-ID: <CAMRc=MewwLTsaHCOR2iVYZRM6kWptQfZuTe=2i_pfpTwjFKEpQ@mail.gmail.com>
+X-Gm-Features: AaiRm50EHWCJJDWv4SLBavCKeEqVwYW6a5qLRhI6LypsfduB5BiXJsaabZSs-7g
+Message-ID: <CAMRc=MewwLTsaHCOR2iVYZRM6kWptQfZuTe=2i_pfpTwjFKEpQ@mail.gmail.com>
+Subject: Re: [PATCH v20 06/10] power: reset: Add psci-reboot-mode driver
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, Andre Draszik <andre.draszik@linaro.org>, 
+	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	Srinivas Kandagatla <srini@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Souvik Chakravarty <Souvik.Chakravarty@arm.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Andy Yan <andy.yan@rock-chips.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Conor Dooley <conor+dt@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, John Stultz <john.stultz@linaro.org>, 
+	Moritz Fischer <moritz.fischer@ettus.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Sudeep Holla <sudeep.holla@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Rspamd-Queue-Id: 473ED20F564
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [3.44 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[NXP1.onmicrosoft.com:s=selector1-NXP1-onmicrosoft-com];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[nxp.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,xs4all.nl,ndufresne.ca,collabora.com,pengutronix.de,linaro.org,gmail.com,nxp.com,vger.kernel.org,lists.linux.dev,lists.infradead.org];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-43668-lists,linux-pm=lfdr.de];
+	FREEMAIL_CC(0.00)[broadcom.com,kernel.org,oss.qualcomm.com,linaro.org,vger.kernel.org,lists.infradead.org,arndb.de,arm.com,rock-chips.com,gmail.com,ettus.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,mail.gmail.com:mid,qualcomm.com:email];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43669-lists,linux-pm=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[27];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[29];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ming.qian@oss.nxp.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[NXP1.onmicrosoft.com:+];
-	TO_DN_NONE(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
+	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	FROM_NO_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[toradex.com:email,nxp.com:email,pengutronix.de:email,oss.nxp.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,checkpatch.pl:url]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Action: no action
 
-From: Ming Qian <ming.qian@oss.nxp.com>
+On Wed, 4 Mar 2026 19:03:06 +0100, Shivendra Pratap
+<shivendra.pratap@oss.qualcomm.com> said:
+> PSCI supports different types of resets like COLD reset, ARCH WARM
+> reset, vendor-specific resets. Currently there is no common driver that
+> handles all supported psci resets at one place. Additionally, there is
+> no common mechanism to issue the supported psci resets from userspace.
+>
+> Add a PSCI reboot mode driver and define two types of PSCI resets in the
+> driver as reboot-modes: predefined resets controlled by Linux
+> reboot_mode and customizable resets defined by SoC vendors in their
+> device tree under the psci:reboot-mode node.
+>
+> Register the driver with the reboot-mode framework to interface these
+> resets to userspace. When userspace initiates a supported command, pass
+> the reset arguments to the PSCI driver to enable command-based reset.
+>
+> This change allows userspace to issue supported PSCI reset commands
+> using the standard reboot system calls while enabling SoC vendors to
+> define their specific resets for PSCI.
+>
+> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+> ---
+>  drivers/power/reset/Kconfig            |  10 +++
+>  drivers/power/reset/Makefile           |   1 +
+>  drivers/power/reset/psci-reboot-mode.c | 119 +++++++++++++++++++++++++++++++++
+>  3 files changed, 130 insertions(+)
+>
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index f6c1bcbb57deff3568d6b1b326454add3b3bbf06..529d6c7d3555601f7b7e6199acd29838030fcef2 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -348,6 +348,16 @@ config NVMEM_REBOOT_MODE
+>  	  then the bootloader can read it and take different
+>  	  action according to the mode.
+>
+> +config PSCI_REBOOT_MODE
+> +	bool "PSCI reboot mode driver"
+> +	depends on OF && ARM_PSCI_FW
+> +	select REBOOT_MODE
+> +	help
+> +	  Say y here will enable PSCI reboot mode driver. This gets
+> +          the PSCI reboot mode arguments and passes them to psci
+> +	  driver. psci driver uses these arguments for issuing
+> +	  device reset into different boot states.
+> +
+>  config POWER_MLXBF
+>  	tristate "Mellanox BlueField power handling driver"
+>  	depends on (GPIO_MLXBF2 || GPIO_MLXBF3) && ACPI
+> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+> index 0e4ae6f6b5c55729cf60846d47e6fe0fec24f3cc..49774b42cdf61fd57a5b70f286c65c9d66bbc0cb 100644
+> --- a/drivers/power/reset/Makefile
+> +++ b/drivers/power/reset/Makefile
+> @@ -40,4 +40,5 @@ obj-$(CONFIG_REBOOT_MODE) += reboot-mode.o
+>  obj-$(CONFIG_SYSCON_REBOOT_MODE) += syscon-reboot-mode.o
+>  obj-$(CONFIG_POWER_RESET_SC27XX) += sc27xx-poweroff.o
+>  obj-$(CONFIG_NVMEM_REBOOT_MODE) += nvmem-reboot-mode.o
+> +obj-$(CONFIG_PSCI_REBOOT_MODE) += psci-reboot-mode.o
+>  obj-$(CONFIG_POWER_MLXBF) += pwr-mlxbf.o
+> diff --git a/drivers/power/reset/psci-reboot-mode.c b/drivers/power/reset/psci-reboot-mode.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..86bef195228b0924704c2936b99f6801c14ff1b1
+> --- /dev/null
+> +++ b/drivers/power/reset/psci-reboot-mode.c
+> @@ -0,0 +1,119 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+> + */
+> +
+> +#include <linux/device/faux.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/of.h>
+> +#include <linux/psci.h>
+> +#include <linux/reboot.h>
+> +#include <linux/reboot-mode.h>
+> +#include <linux/types.h>
+> +
+> +/*
+> + * Predefined reboot-modes are defined as per the values
+> + * of enum reboot_mode defined in the kernel: reboot.c.
+> + */
+> +static struct mode_info psci_resets[] = {
+> +	{ .mode = "warm", .magic = REBOOT_WARM},
+> +	{ .mode = "soft", .magic = REBOOT_SOFT},
+> +	{ .mode = "cold", .magic = REBOOT_COLD},
+> +};
+> +
+> +static void psci_reboot_mode_set_predefined_modes(struct reboot_mode_driver *reboot)
+> +{
+> +	INIT_LIST_HEAD(&reboot->predefined_modes);
+> +	for (u32 i = 0; i < ARRAY_SIZE(psci_resets); i++) {
+> +		/* Prepare the magic with arg1 as 0 and arg2 as per pre-defined mode */
+> +		psci_resets[i].magic = REBOOT_MODE_MAGIC(0, psci_resets[i].magic);
+> +		INIT_LIST_HEAD(&psci_resets[i].list);
+> +		list_add_tail(&psci_resets[i].list, &reboot->predefined_modes);
+> +	}
+> +}
+> +
+> +/*
+> + * arg1 is reset_type(Low 32 bit of magic).
+> + * arg2 is cookie(High 32 bit of magic).
+> + * If reset_type is 0, cookie will be used to decide the reset command.
+> + */
+> +static int psci_reboot_mode_write(struct reboot_mode_driver *reboot, u64 magic)
+> +{
+> +	u32 reset_type = REBOOT_MODE_ARG1(magic);
+> +	u32 cookie = REBOOT_MODE_ARG2(magic);
+> +
+> +	if (reset_type == 0) {
+> +		if (cookie == REBOOT_WARM || cookie == REBOOT_SOFT)
+> +			psci_set_reset_cmd(true, 0, 0);
+> +		else
+> +			psci_set_reset_cmd(false, 0, 0);
+> +	} else {
+> +		psci_set_reset_cmd(true, reset_type, cookie);
+> +	}
+> +
+> +	return NOTIFY_DONE;
+> +}
+> +
+> +static int psci_reboot_mode_register_device(struct faux_device *fdev)
+> +{
+> +	struct reboot_mode_driver *reboot;
+> +	int ret;
+> +
+> +	reboot = devm_kzalloc(&fdev->dev, sizeof(*reboot), GFP_KERNEL);
 
-Fix a kernel panic when probing the driver as a module:
+Have you verified that the faux device is actually getting bound? This is not
+probe(), you don't supply any faux operations when calling faux_device_create().
 
-  Unable to handle kernel paging request at virtual address
-  ffffd9c18eb05000
-  of_find_matching_node_and_match+0x5c/0x1a0
-  hantro_probe+0x2f4/0x7d0 [hantro_vpu]
+You should pass the address of this function in faux_device_ops instead of
+calling it directly.
 
-The imx8mq_vpu_shared_resources array is referenced by variant
-structures through their shared_devices field. When built as a
-module, __initconst causes this data to be freed after module
-init, but it's later accessed during probe, causing a page fault.
+Bartosz
 
-The imx8mq_vpu_shared_resources is referenced from non-init code,
-so keeping __initconst or __initconst_or_module here is wrong.
-
-Drop the __initconst annotation and let it live in the normal .rodata
-section.
-
-Fixes: e0203ddf9af7 ("media: verisilicon: Avoid G2 bus error while decoding H.264 and HEVC")
-Reported-by: Franz Schnyder <franz.schnyder@toradex.com>
-Closes: https://lore.kernel.org/all/n3qmcb62tepxltoskpf7ws6yiirc2so62ia23b42rj3wlmpl67@rvkbuirx7kkp/
-Suggested-by: Marco Felsch <m.felsch@pengutronix.de>
-Signed-off-by: Ming Qian <ming.qian@oss.nxp.com>
----
-v2
-- Remove __initconst
-- Add missing Reported-by tag
-- Add missing Suggested-by tag
-- Remove comments of sentinel to pass checkpatch.pl
-
- drivers/media/platform/verisilicon/imx8m_vpu_hw.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-index 6f8e43b7f157..6fbe3c581032 100644
---- a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-+++ b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-@@ -343,10 +343,10 @@ const struct hantro_variant imx8mq_vpu_variant = {
- 	.num_regs = ARRAY_SIZE(imx8mq_reg_names)
- };
- 
--static const struct of_device_id imx8mq_vpu_shared_resources[] __initconst = {
-+static const struct of_device_id imx8mq_vpu_shared_resources[] = {
- 	{ .compatible = "nxp,imx8mq-vpu-g1", },
- 	{ .compatible = "nxp,imx8mq-vpu-g2", },
--	{ /* sentinel */ }
-+	{}
- };
- 
- const struct hantro_variant imx8mq_vpu_g1_variant = {
--- 
-2.52.0
-
+> +	if (!reboot)
+> +		return -ENOMEM;
+> +
+> +	psci_reboot_mode_set_predefined_modes(reboot);
+> +	reboot->write = psci_reboot_mode_write;
+> +	reboot->dev = &fdev->dev;
+> +
+> +	ret = devm_reboot_mode_register(&fdev->dev, reboot);
+> +	if (ret) {
+> +		dev_err_probe(&fdev->dev, ret, "devm_reboot_mode_register failed %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int __init psci_reboot_mode_init(void)
+> +{
+> +	struct device_node *psci_np;
+> +	struct faux_device *fdev;
+> +	struct device_node *np;
+> +	int ret;
+> +
+> +	psci_np = of_find_compatible_node(NULL, NULL, "arm,psci-1.0");
+> +	if (!psci_np)
+> +		return -ENODEV;
+> +	/*
+> +	 * Look for reboot-mode in the psci node. Even if the reboot-mode
+> +	 * node is not defined in psci, continue to register with the
+> +	 * reboot-mode driver and let the dev.ofnode be set as NULL.
+> +	 */
+> +	np = of_find_node_by_name(psci_np, "reboot-mode");
+> +
+> +	fdev = faux_device_create("psci-reboot-mode", NULL, NULL);
+> +	if (!fdev) {
+> +		ret = -ENODEV;
+> +		goto error;
+> +	}
+> +
+> +	device_set_node(&fdev->dev, of_fwnode_handle(np));
+> +	ret = psci_reboot_mode_register_device(fdev);
+> +	if (ret)
+> +		goto error;
+> +
+> +	return 0;
+> +
+> +error:
+> +	of_node_put(np);
+> +	if (fdev) {
+> +		device_set_node(&fdev->dev, NULL);
+> +		faux_device_destroy(fdev);
+> +	}
+> +
+> +	return ret;
+> +}
+> +device_initcall(psci_reboot_mode_init);
+>
+> --
+> 2.34.1
+>
+>
 
