@@ -1,393 +1,169 @@
-Return-Path: <linux-pm+bounces-43744-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43745-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yGYZK2Z6qmkqSQEAu9opvQ
-	(envelope-from <linux-pm+bounces-43744-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 07:55:34 +0100
+	id sOvGFfR7qmkqSQEAu9opvQ
+	(envelope-from <linux-pm+bounces-43745-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 08:02:12 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAAB021C339
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 07:55:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2AB321C400
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 08:02:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BC6BE3011534
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 06:55:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C4460304C7EA
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 07:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E866371D07;
-	Fri,  6 Mar 2026 06:55:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3D09372B55;
+	Fri,  6 Mar 2026 07:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q79/OmxY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vCm3L4LM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7FB371D00
-	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 06:55:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C1F37267E
+	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 07:01:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772780127; cv=none; b=r3e6+0rfYlskoYOn/1Jk8AhHLbxwfL/ebEE/WgX8Avg455Pg2hu704aspvoC8dyQl+2jVCLvQ6K7a/9jyBGuUre7EnoDkK4HIvPl557l/fZCIMevptK09wYWub2BTPhJdIwYZ3a/uUVscfqiYdbGm+jDd0w6lpWUo6olTfULVV0=
+	t=1772780514; cv=none; b=qMKZcdQJFB273yE5ty4MGyLLzcZf84YCE90A9J5yvo+9JU7K52tWDm+Y21MNVH19yYBCwCEBWb2IQ/Alyh2orvPCugrroZ5V4Zt514QRFXZnx87wLnKZ+2K7fsj7rGWr/Tjm7B+iZ3n1yeOmfVfvDEOSbJJHf39OwpvOG7Q1RVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772780127; c=relaxed/simple;
-	bh=yHP/NYIbCCLTWuIe4vFzOVhL0C1U0S/OpzVwTdv/CSc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mtd6uIQZErYO97K7a+xeaFlxVd0U2Vrz6jLaIyivgBtAOPSH/rv8LdutrcGy/XxDCpswVIKMeBUSm1WUW+MczXFjueOUCrgEBwjK6TOphQZXJdSqF7ku9nN8ipr2ZNIOdEH0Qg6sBBDflLH5lJ6yMWnnPbTteZql4syWs7HVp+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q79/OmxY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80347C2BCB2
-	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 06:55:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772780127;
-	bh=yHP/NYIbCCLTWuIe4vFzOVhL0C1U0S/OpzVwTdv/CSc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Q79/OmxY6Eo1PNX+yKu1uI3WtN+QTyKGjOifmXhz/c1Dlwica4bw/DDJGqdvbDRGd
-	 MKWXIzGu5jn01darBCGMT7o9QwAG31wMqnzU//kn6lcUR1ik/+CD5VfUy5W5g0IgOU
-	 zRw1Jv+ohuq2g2yjWSDROGyRrhPo99BZIUF+zWGRd796N6p+8JHDAHt+X9KB0sQTkY
-	 Tx3EUzyCdIryBVYqKDSfkatFjaA2cqEYhULFr2Pltyz/MgYdxvuCTMOTp/yGsF41W8
-	 yHfM6iH0U0MRON9m+M213qRVUY/5vIzCuYYM0WRkoHtpq1DIOgqQ4JRGedcQ4/oe1n
-	 tYRE9EkhzfSLw==
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-64ca6595c8aso8682265d50.0
-        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2026 22:55:27 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUXDVSkIhmQssCaUmNrLn29Y0qD4UgbH/NEmdKNI2qmEnhPJQm3ULxzSOfhtS+kkNOJGQLjr5A40A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoVGger+ry1hxT2votDTZBwaQ8YrcoNThMRRD9Ux7f0RYVmzKl
-	YhQPQbZXnXquMDfg32lhMznZg1CoJR3jpE1r6fN2pvPNFYS1fsEaRl2qjzaxxbs7KeozsZwYt2z
-	XDzlaGIyC80bRZqonz+vF2vQliqu03l1iiXpMzj/+5A==
-X-Received: by 2002:a53:ee57:0:b0:64c:f4fa:4030 with SMTP id
- 956f58d0204a3-64d14147f3emr933485d50.25.1772780126658; Thu, 05 Mar 2026
- 22:55:26 -0800 (PST)
+	s=arc-20240116; t=1772780514; c=relaxed/simple;
+	bh=U5ovtFZGT6J0/COcDYCmDClaijQmWD3Zbr+hgB175wI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mfxcszviyKtUMtN+wEPT1b7azAbxz1swbw4nUhv3lRlquDLNe7hFSeJDYuizDIlC1a+Bz0Hq8xSGTwsKBnDUvTKXhpGyL9FXyq/4XoLpDgcx16y6VrXOG/98QSR38dh7sALvAfFBujhEq1CYWxbdDyXgGfMD2eKvjnP52Qwax6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vCm3L4LM; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-439af00d33cso5667439f8f.1
+        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2026 23:01:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1772780511; x=1773385311; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=g/Izo1I7P2lYa0tqmXpdAdhxEzYAi9jVGmrjmB9VLPo=;
+        b=vCm3L4LMiKmftf3eRWD9P1SVpACC++c85cqWIBuhJKFxk2R2zmxiR8x2RBCcchKeXF
+         u4opsiONqqzqO1DnRd7toRGZ7MhKr6XHHQGjFlzAtGZw8mSFRD6hRMqkkidgpEU5fZQ+
+         fX/KxhHH0kuHlk00afeFbBhOuLsqKXFihxqy2M1MA7cemHWI4aYqT+4mCXSG1Ervy60m
+         Lh09GYHO+5TUMRV2uKzLwA9c1a/NT0aV6IkaLMbbzoqIx61XltFO3eFRBHayyf+CP/Kw
+         G3ZdJoEdGp5kYsJbKLtktfB8+2xTkiN0hHT1yguewNMZk+i4qdaKAv5D9+l9ZVw12BF5
+         sChg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772780511; x=1773385311;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g/Izo1I7P2lYa0tqmXpdAdhxEzYAi9jVGmrjmB9VLPo=;
+        b=DBIH/N+CZ2pALa/E0dDKezzYK4lcIqGRgVtAhE1wmE80OtLxIuEUzhf8SDXrb97jHA
+         FqWB6IRTQzk9WyBxwSbhKN77wSKrJrIUEiNP++flpEWfJ5ONcZc9/CBXCDxippejm0he
+         Mn0CDKjpgWKtNG255QaLiS8j1ugRD1ToTG1kqxKEXGNbC6nLMVyCPvrzZBVXIF/Bkn6o
+         auBq5SjCR/d8xr8N9G1HItJwNSll/bSVjdTMuhHncVf5qoQXr+qdS7sc3xauK0LDNMc+
+         b7PVsckWcmJS366Ntm0PmylmjxdZ9p5e/v72ZV66b7rOGOtWtNn3/FP6EqE1gajo9iKs
+         Be8g==
+X-Forwarded-Encrypted: i=1; AJvYcCVvXR8euTvZaGBABlFWUdxRx9phM/PNOV5DI0oLgCNJ6wblUBdhXTxtwqCHduDUFBLJfC8lI/9lIw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnNQgL/pDY07858KBuk0XXMaPhit3UJnDH9nhqId+yZAsc1La6
+	BumDh46EuYqjOOkxiWCF8Kn6dvquWQzTilplYY/RQUTtf/CWj+gtWDe+watj/peTZB8=
+X-Gm-Gg: ATEYQzw/0BfEwF4IwJPtx6/AnwYj5/9GJ/1lNHLmgjzqfQqwnwx1cJSKdvTRvbZdVld
+	gDJuwl50N59tcnxC/F6rFVNpngdOxg56MKbpwG3Zz/A9s94yhtGi8oip/gWbG9L8zw4SVavh2ak
+	wD3ETuFqLhfAGXHLFcCO32gkUqw1VW83myef2ZRk1KCJll+yIIMRDw5ol/qAhPdhYoVSsr5SVsF
+	IsI9Zad+e/iPRoZyoA6GoUJze7d/kFcd9R3mqLSaCphhpNF5pijFO9WJm/lfYlG6anlcoYI18Rr
+	Q5tZ3+Kle02Ab5kNwSmtGN8/K8sQg8s4tZ+1aAEvouRClVl9u3/e3Pe5yxgnmwDVPXI+/xBET8W
+	fb2FOtxqwo3Kv73UdhHzWPZ3FNWXhKoD9GbudIHR99ziEq/+Z6d2DzASlIOJ/tKLgs2QICfJFZT
+	S4HM3Pz1N2YwuiqT6A7471PMw1IZsq
+X-Received: by 2002:a05:6000:2c03:b0:439:bd70:610f with SMTP id ffacd0b85a97d-439da890077mr1657657f8f.44.1772780509950;
+        Thu, 05 Mar 2026 23:01:49 -0800 (PST)
+Received: from draszik.lan ([212.129.78.78])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439dae2ba06sm1713784f8f.24.2026.03.05.23.01.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Mar 2026 23:01:49 -0800 (PST)
+Message-ID: <198f569078f4a6e3b4e8ad080a94cd336c1e39bf.camel@linaro.org>
+Subject: Re: [PATCH v3 07/13] mfd: sec: set DMA coherent mask
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Kaustabh Chakraborty <kauschluss@disroot.org>, Lee Jones
+ <lee@kernel.org>,  Pavel Machek <pavel@kernel.org>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor Dooley
+ <conor+dt@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, Chanwoo
+ Choi	 <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, Jonathan Corbet	 <corbet@lwn.net>, Shuah
+ Khan <skhan@linuxfoundation.org>, Nam Tran	 <trannamatk@gmail.com>
+Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Date: Fri, 06 Mar 2026 07:03:10 +0000
+In-Reply-To: <20260225-s2mu005-pmic-v3-7-b4afee947603@disroot.org>
+References: <20260225-s2mu005-pmic-v3-0-b4afee947603@disroot.org>
+	 <20260225-s2mu005-pmic-v3-7-b4afee947603@disroot.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-2+build4 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260306024608.1720991-1-youngjun.park@lge.com>
-In-Reply-To: <20260306024608.1720991-1-youngjun.park@lge.com>
-From: Chris Li <chrisl@kernel.org>
-Date: Thu, 5 Mar 2026 22:55:15 -0800
-X-Gmail-Original-Message-ID: <CACePvbXVvPp_a89UFztZo5nGawpFea9t=NRisf468VcxHgkX7A@mail.gmail.com>
-X-Gm-Features: AaiRm52ieeZPwVrniCvpmKfN24wjM0j1i-6iz_fJBunHQl3H8TI9XOCSfg6Tl1U
-Message-ID: <CACePvbXVvPp_a89UFztZo5nGawpFea9t=NRisf468VcxHgkX7A@mail.gmail.com>
-Subject: Re: [RFC PATCH v2] mm/swap, PM: hibernate: hold swap device reference
- across swap operation
-To: Youngjun Park <youngjun.park@lge.com>
-Cc: rafael@kernel.org, akpm@linux-foundation.org, kasong@tencent.com, 
-	pavel@kernel.org, shikemeng@huaweicloud.com, nphamcs@gmail.com, 
-	bhe@redhat.com, baohua@kernel.org, usama.arif@linux.dev, 
-	linux-pm@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: AAAB021C339
+X-Rspamd-Queue-Id: F2AB321C400
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43744-lists,linux-pm=lfdr.de];
-	FREEMAIL_CC(0.00)[kernel.org,linux-foundation.org,tencent.com,huaweicloud.com,gmail.com,redhat.com,linux.dev,vger.kernel.org,kvack.org];
+	TAGGED_FROM(0.00)[bounces-43745-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[disroot.org,kernel.org,samsung.com,bootlin.com,lwn.net,linuxfoundation.org,gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	RCPT_COUNT_TWELVE(0.00)[21];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
+	DKIM_TRACE(0.00)[linaro.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chrisl@kernel.org,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[andre.draszik@linaro.org,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,mail.gmail.com:mid,lge.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,disroot.org:email,linaro.org:dkim,linaro.org:mid]
 X-Rspamd-Action: no action
 
-On Thu, Mar 5, 2026 at 6:46=E2=80=AFPM Youngjun Park <youngjun.park@lge.com=
-> wrote:
->
-> Currently, in the uswsusp path, only the swap type value is retrieved at
-> lookup time without holding a reference. If swapoff races after the type
-> is acquired, subsequent slot allocations operate on a stale swap device.
-
-Just from you above description, I am not sure how the bug is actually
-triggered yet. That sounds possible. I want more detail.
-
-Can you show me which code path triggered this bug?
-e.g. Thread A wants to suspend, with this back trace call graph.
-Then in this function foo() A grabs the swap device without holding a refer=
-ence.
-Meanwhile, thread B is performing a swap off while A is at function foo().
-
-> Additionally, grabbing and releasing the swap device reference on every
-> slot allocation is inefficient across the entire hibernation swap path.
-
-If the swap entry is already allocated by the suspend code on that
-swap device, the follow up allocation does not need to grab the
-reference again because the swap device's swapped count will not drop
-to zero until resume.
-
-> Address these issues by holding the swap device reference from the point
-> the swap device is looked up, and releasing it once at each exit path.
-> This ensures the device remains valid throughout the operation and
-> removes the overhead of per-slot reference counting.
-
-I want to understand how to trigger the buggy code path first. It
-might be obvious to you. It is not obvious to me yet.
-
-> Signed-off-by: Youngjun Park <youngjun.park@lge.com>
+On Wed, 2026-02-25 at 00:45 +0530, Kaustabh Chakraborty wrote:
+> Kernel logs are filled with "DMA mask not set" messages for every
+> sub-device. The device does not use DMA for communication, so these
+> messages are useless. Disable the coherent DMA mask for the PMIC device,
+> which is also propagated to sub-devices.
+>=20
+> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
 > ---
-> Hi,
->
-> This is a simple RFC quality patch to verify if this approach is suitable=
-.
-> Per Usama Arif's feedback regarding git bisectability,
-> I have squashed the previous commits into this single patch.
->
-> base-commit: ec96cb7e4c12ff5b474cf9ab66f2e9767953e448 (mm-new)
->
-> RFC v1: https://lore.kernel.org/linux-mm/20260305202413.1888499-1-usama.a=
-rif@linux.dev/T/#m3693d45180f14f441b6951984f4b4bfd90ec0c9d
->
->  include/linux/swap.h |  1 +
->  kernel/power/swap.c  | 12 +++++++---
->  kernel/power/user.c  |  9 +++++++-
->  mm/swapfile.c        | 55 ++++++++++++++++++++++----------------------
->  4 files changed, 45 insertions(+), 32 deletions(-)
->
-> diff --git a/include/linux/swap.h b/include/linux/swap.h
-> index 7a09df6977a5..37bf7cf21594 100644
-> --- a/include/linux/swap.h
-> +++ b/include/linux/swap.h
-> @@ -442,6 +442,7 @@ extern bool swap_entry_swapped(struct swap_info_struc=
-t *si, swp_entry_t entry);
->  extern int swp_swapcount(swp_entry_t entry);
->  struct backing_dev_info;
->  extern struct swap_info_struct *get_swap_device(swp_entry_t entry);
-> +extern void put_swap_device_by_type(int type);
->  sector_t swap_folio_sector(struct folio *folio);
->
->  /*
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 2e64869bb5a0..c230b0fa5a5f 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -350,9 +350,10 @@ static int swsusp_swap_check(void)
->
->         hib_resume_bdev_file =3D bdev_file_open_by_dev(swsusp_resume_devi=
-ce,
->                         BLK_OPEN_WRITE, NULL, NULL);
-> -       if (IS_ERR(hib_resume_bdev_file))
-> +       if (IS_ERR(hib_resume_bdev_file)) {
-> +               put_swap_device_by_type(root_swap);
->                 return PTR_ERR(hib_resume_bdev_file);
-> -
-> +       }
->         return 0;
->  }
->
-> @@ -418,6 +419,7 @@ static int get_swap_writer(struct swap_map_handle *ha=
-ndle)
->  err_rel:
->         release_swap_writer(handle);
->  err_close:
-> +       put_swap_device_by_type(root_swap);
->         swsusp_close();
->         return ret;
->  }
-> @@ -480,8 +482,11 @@ static int swap_writer_finish(struct swap_map_handle=
- *handle,
->                 flush_swap_writer(handle);
->         }
->
-> -       if (error)
-> +       if (error) {
->                 free_all_swap_pages(root_swap);
-> +               put_swap_device_by_type(root_swap);
-> +       }
+> =C2=A0drivers/mfd/sec-i2c.c | 3 +++
+> =C2=A01 file changed, 3 insertions(+)
+>=20
+> diff --git a/drivers/mfd/sec-i2c.c b/drivers/mfd/sec-i2c.c
+> index d8609886fcc80..9fa1449a4f6eb 100644
+> --- a/drivers/mfd/sec-i2c.c
+> +++ b/drivers/mfd/sec-i2c.c
+> @@ -177,6 +177,9 @@ static int sec_pmic_i2c_probe(struct i2c_client *clie=
+nt)
+> =C2=A0		return dev_err_probe(&client->dev, PTR_ERR(regmap_pmic),
+> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0 "regmap init failed\n");
+> =C2=A0
+> +	client->dev.coherent_dma_mask =3D 0;
+> +	client->dev.dma_mask =3D &client->dev.coherent_dma_mask;
 > +
->         release_swap_writer(handle);
->         swsusp_close();
->
-> @@ -1647,6 +1652,7 @@ int swsusp_unmark(void)
->          * We just returned from suspend, we don't need the image any mor=
-e.
->          */
->         free_all_swap_pages(root_swap);
-> +       put_swap_device_by_type(root_swap);
->
->         return error;
->  }
-> diff --git a/kernel/power/user.c b/kernel/power/user.c
-> index 4401cfe26e5c..9cb6c24d49ea 100644
-> --- a/kernel/power/user.c
-> +++ b/kernel/power/user.c
-> @@ -90,8 +90,11 @@ static int snapshot_open(struct inode *inode, struct f=
-ile *filp)
->                         data->free_bitmaps =3D !error;
->                 }
->         }
-> -       if (error)
-> +       if (error) {
->                 hibernate_release();
-> +               if (data->swap >=3D 0)
-> +                       put_swap_device_by_type(data->swap);
-> +       }
->
->         data->frozen =3D false;
->         data->ready =3D false;
-> @@ -115,6 +118,8 @@ static int snapshot_release(struct inode *inode, stru=
-ct file *filp)
->         data =3D filp->private_data;
->         data->dev =3D 0;
->         free_all_swap_pages(data->swap);
-> +       if (data->swap >=3D 0)
-> +               put_swap_device_by_type(data->swap);
->         if (data->frozen) {
->                 pm_restore_gfp_mask();
->                 free_basic_memory_bitmaps();
-> @@ -235,6 +240,8 @@ static int snapshot_set_swap_area(struct snapshot_dat=
-a *data,
->                 offset =3D swap_area.offset;
->         }
->
-> +       if (data->swap >=3D 0)
-> +               put_swap_device_by_type(data->swap);
->         /*
->          * User space encodes device types as two-byte values,
->          * so we need to recode them
-> diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index 915bc93964db..f505dd1f7571 100644
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -1860,6 +1860,10 @@ struct swap_info_struct *get_swap_device(swp_entry=
-_t entry)
->         return NULL;
->  }
->
-> +void put_swap_device_by_type(int type)
-> +{
-> +       percpu_ref_put(&swap_info[type]->users);
-> +}
->  /*
->   * Free a set of swap slots after their swap count dropped to zero, or w=
-ill be
->   * zero after putting the last ref (saves one __swap_cluster_put_entry c=
-all).
-> @@ -2085,30 +2089,28 @@ swp_entry_t swap_alloc_hibernation_slot(int type)
->                 goto fail;
->
->         /* This is called for allocating swap entry, not cache */
-> -       if (get_swap_device_info(si)) {
-> -               if (si->flags & SWP_WRITEOK) {
-> -                       /*
-> -                        * Try the local cluster first if it matches the =
-device. If
-> -                        * not, try grab a new cluster and override local=
- cluster.
-> -                        */
-> -                       local_lock(&percpu_swap_cluster.lock);
-> -                       pcp_si =3D this_cpu_read(percpu_swap_cluster.si[0=
-]);
-> -                       pcp_offset =3D this_cpu_read(percpu_swap_cluster.=
-offset[0]);
-> -                       if (pcp_si =3D=3D si && pcp_offset) {
-> -                               ci =3D swap_cluster_lock(si, pcp_offset);
-> -                               if (cluster_is_usable(ci, 0))
-> -                                       offset =3D alloc_swap_scan_cluste=
-r(si, ci, NULL, pcp_offset);
-> -                               else
-> -                                       swap_cluster_unlock(ci);
-> -                       }
-> -                       if (!offset)
-> -                               offset =3D cluster_alloc_swap_entry(si, N=
-ULL);
-> -                       local_unlock(&percpu_swap_cluster.lock);
-> -                       if (offset)
-> -                               entry =3D swp_entry(si->type, offset);
-> +       if (si->flags & SWP_WRITEOK) {
-> +               /*
-> +                * Try the local cluster first if it matches the device. =
-If
-> +                * not, try grab a new cluster and override local cluster=
-.
-> +                */
-> +               local_lock(&percpu_swap_cluster.lock);
-> +               pcp_si =3D this_cpu_read(percpu_swap_cluster.si[0]);
-> +               pcp_offset =3D this_cpu_read(percpu_swap_cluster.offset[0=
-]);
-> +               if (pcp_si =3D=3D si && pcp_offset) {
-> +                       ci =3D swap_cluster_lock(si, pcp_offset);
-> +                       if (cluster_is_usable(ci, 0))
-> +                               offset =3D alloc_swap_scan_cluster(si, ci=
-, NULL, pcp_offset);
-> +                       else
-> +                               swap_cluster_unlock(ci);
->                 }
-> -               put_swap_device(si);
-> +               if (!offset)
-> +                       offset =3D cluster_alloc_swap_entry(si, NULL);
-> +               local_unlock(&percpu_swap_cluster.lock);
-> +               if (offset)
-> +                       entry =3D swp_entry(si->type, offset);
->         }
-> +
->  fail:
->         return entry;
->  }
-> @@ -2116,14 +2118,10 @@ swp_entry_t swap_alloc_hibernation_slot(int type)
->  /* Free a slot allocated by swap_alloc_hibernation_slot */
->  void swap_free_hibernation_slot(swp_entry_t entry)
->  {
-> -       struct swap_info_struct *si;
-> +       struct swap_info_struct *si =3D __swap_entry_to_info(entry);
->         struct swap_cluster_info *ci;
->         pgoff_t offset =3D swp_offset(entry);
->
-> -       si =3D get_swap_device(entry);
-> -       if (WARN_ON(!si))
-> -               return;
-> -
->         ci =3D swap_cluster_lock(si, offset);
->         __swap_cluster_put_entry(ci, offset % SWAPFILE_CLUSTER);
->         __swap_cluster_free_entries(si, ci, offset % SWAPFILE_CLUSTER, 1)=
-;
-> @@ -2131,7 +2129,6 @@ void swap_free_hibernation_slot(swp_entry_t entry)
->
->         /* In theory readahead might add it to the swap cache by accident=
- */
->         __try_to_reclaim_swap(si, offset, TTRS_ANYWAY);
-> -       put_swap_device(si);
->  }
->
->  /*
-> @@ -2160,6 +2157,7 @@ int swap_type_of(dev_t device, sector_t offset)
->                         struct swap_extent *se =3D first_se(sis);
->
->                         if (se->start_block =3D=3D offset) {
-> +                               get_swap_device_info(sis);
 
-The function name swap_type_of() does not suggest that the function
-should take a reference.  This is just about function naming. I am not
-commenting on the function logic yet.
+This should probably move into sec-common.c as it should apply to all
+transports.
 
->                                 spin_unlock(&swap_lock);
->                                 return type;
->                         }
-> @@ -2180,6 +2178,7 @@ int find_first_swap(dev_t *device)
->                 if (!(sis->flags & SWP_WRITEOK))
->                         continue;
->                 *device =3D sis->bdev->bd_dev;
-> +               get_swap_device_info(sis);
-You might consider moving this one line up.The typical usage pattern
-is get the reference then operate on the stuff protected by the
-reference count. Here the order does not really matter due to the
-swap_lock protection.
+Cheers,
+A.
 
-Waiting for details on how to trigger the bug.
-
-Chris
 
