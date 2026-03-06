@@ -1,142 +1,200 @@
-Return-Path: <linux-pm+bounces-43821-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43822-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IIA+FzzZqmnmXgEAu9opvQ
-	(envelope-from <linux-pm+bounces-43821-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 14:40:12 +0100
+	id 4MwhBKHbqmkZXwEAu9opvQ
+	(envelope-from <linux-pm+bounces-43822-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 14:50:25 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id E16AE221E6C
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 14:40:11 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F7372221BC
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 14:50:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7FA5F30371B5
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 13:39:31 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 49F9D303A62B
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 13:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB3230146C;
-	Fri,  6 Mar 2026 13:39:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uEvm5BoX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C945A33B97B;
+	Fri,  6 Mar 2026 13:49:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77AA32FB97B;
-	Fri,  6 Mar 2026 13:39:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA0873A4503;
+	Fri,  6 Mar 2026 13:49:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772804369; cv=none; b=fKdKu6WkVtThTCzmeTFrvsYxV/JTVXdL2pThsJ3poa6USYU49SA5fJG3zBkMnGjUfDD0ueJVOAUaQmd2T9XaJ/UgG/EejxbN96exfvjBvwWs3Zxv2HCC8gej8TcWAaAcg6U5F5TlLRvuKZmGWnRCIOBo0wkTZQOMvNI/kuahU2k=
+	t=1772804957; cv=none; b=BT0YN3dcZVZL65EXYtoA91paQwMRQCaYZhvP4OfC6AHw+szM+Ich26p3iHnjT2EMKgMsGF2ODXfKNpNALf8udxpQnJWCYMlZgKmyJDP4+qX437VuqEx+kKuchMKwRNrbvnHiH/R0BmQaNucJydXYL8o1gp7KYUeGNLhXJtSWHn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772804369; c=relaxed/simple;
-	bh=yp9JKJwekBl3X/p7vYFCWBZxq4g0m+lKe535L/neXTM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=etZnYy+lFF5YtSD6xSPT5Wd/E5JEEgX/PzqPJ4YVODi8SWJAWozZ3UeLEv5Xxbg6XCOvcpETpuMu801z9nijvig37BUYH+qtje9fPzjWJHhOHTR3OsKs0Db+YRjVVxaqoUCRCdjIIBN9yIiBd3w2GAqTCniKeGctZGld69SyfnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uEvm5BoX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F157C4CEF7;
-	Fri,  6 Mar 2026 13:39:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772804369;
-	bh=yp9JKJwekBl3X/p7vYFCWBZxq4g0m+lKe535L/neXTM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uEvm5BoXyv/LFpQT3n5YUNgujXHbWvoak0Eiet3hdhpm00WSIEDG49yVSCT2WkKaR
-	 AehUdHpIQL8uh2CLiSi7fR0mZi+WMfwjZZ6Es9gYkWq7PTrSDKzDdp3CbtyT6ZadGW
-	 VSYO9xmxDqa5fbayjbTq4t1fmRAhjjuXFa1utH6I1xl0Ae1eFWpwMsHSld8wsFzh7c
-	 uf2sfi/BTgUB6bO1MXDlNFSqcRWDA8I41Da/AAf8M7swlkB1V6uGym9eIcyHuhX54B
-	 CR4NdVWZsCNUFK9UYM2yrDrvBc9qWgFjv9UyvEX36AxxGPWBsJL1YHHpZur9IuE52Y
-	 qvpDitPo+KKVQ==
-Date: Fri, 6 Mar 2026 13:39:22 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v3 1/6] regulator: dt-binding: regulator-max77620:
- convert to DT schema
-Message-ID: <785a137c-2d8f-41ef-b537-4c330abc7e1d@sirena.org.uk>
-References: <20260306133351.31589-1-clamor95@gmail.com>
- <20260306133351.31589-2-clamor95@gmail.com>
+	s=arc-20240116; t=1772804957; c=relaxed/simple;
+	bh=HYEuHYxowuESD5sIfkldKpJ9nDTALWN8xtSskq3KQsc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NMlOBbyFEvBV0JRCxfgEiYwA1YWVgOoOPqe1KdyxhptZpGP90EqAFEhWrYFJT2B6XJKyKIxXcMVEQ+hjt+8AGPGhDoi5Ry3ZPNcoKobG1FYSoLydSb1rXFhHet9sFS9OL1B7A3Or/5oatldyAgvLaxwATD3XCUkyEwlGN3Dq+HM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F895497;
+	Fri,  6 Mar 2026 05:49:04 -0800 (PST)
+Received: from [10.57.11.75] (unknown [10.57.11.75])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D153C3F836;
+	Fri,  6 Mar 2026 05:49:09 -0800 (PST)
+Message-ID: <245c2251-9661-4d49-b2a7-df3027059df5@arm.com>
+Date: Fri, 6 Mar 2026 13:49:21 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="WcxGa8/M4I7S4FLg"
-Content-Disposition: inline
-In-Reply-To: <20260306133351.31589-2-clamor95@gmail.com>
-X-Cookie: A nuclear war can ruin your whole day.
-X-Rspamd-Queue-Id: E16AE221E6C
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/1] thermal/of: Add OF node address to output message
+To: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Zhang Rui <rui.zhang@intel.com>, Daniel Lezcano <daniel.lezcano@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20260305163508.2643106-1-alexander.stein@ew.tq-group.com>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20260305163508.2643106-1-alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 8F7372221BC
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43821-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,intel.com,arm.com,samsung.com,bootlin.com,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-43822-lists,linux-pm=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[broonie@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[lukasz.luba@arm.com,linux-pm@vger.kernel.org];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,sirena.org.uk:mid]
+	NEURAL_HAM(-0.00)[-0.969];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,arm.com:mid,arm.com:email,tq-group.com:email,1c:email,1b:email]
 X-Rspamd-Action: no action
 
 
---WcxGa8/M4I7S4FLg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Fri, Mar 06, 2026 at 03:33:46PM +0200, Svyatoslav Ryhel wrote:
-> Convert regulator-max77620 devicetree bindings for the MAX77620 PMIC from
-> TXT to YAML format. This patch does not change any functionality; the
-> bindings remain the same.
+On 3/5/26 16:35, Alexander Stein wrote:
+> Temperature sensors are supposed to have the DT node name
+> temperature-sensors. Having multiple ones the node name alone isn't very
+> helpful. Add the node address to make them more distinguishable.
+> 
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> Old error messages:
+> thermal_sys: Failed to find thermal zone for temperature-sensor id=0
+> thermal_sys: Failed to find thermal zone for temperature-sensor id=0
+> 
+> New error messages:
+> thermal_sys: Failed to find thermal zone for temperature-sensor@1c id=0
+> thermal_sys: Failed to find thermal zone for temperature-sensor@1b id=0
+> 
+>   drivers/thermal/thermal_of.c | 20 ++++++++++----------
+>   1 file changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 6ebb83cb70b2f..99085c806a1f6 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -144,7 +144,7 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
+>   		count = of_count_phandle_with_args(child, "thermal-sensors",
+>   						   "#thermal-sensor-cells");
+>   		if (count <= 0) {
+> -			pr_err("%pOFn: missing thermal sensor\n", child);
+> +			pr_err("%pOFP: missing thermal sensor\n", child);
+>   			return ERR_PTR(-EINVAL);
+>   		}
+>   
+> @@ -156,14 +156,14 @@ static struct device_node *of_thermal_zone_find(struct device_node *sensor, int
+>   							 "#thermal-sensor-cells",
+>   							 i, &sensor_specs);
+>   			if (ret < 0) {
+> -				pr_err("%pOFn: Failed to read thermal-sensors cells: %d\n", child, ret);
+> +				pr_err("%pOFP: Failed to read thermal-sensors cells: %d\n", child, ret);
+>   				return ERR_PTR(ret);
+>   			}
+>   
+>   			of_node_put(sensor_specs.np);
+>   			if ((sensor == sensor_specs.np) && id == (sensor_specs.args_count ?
+>   								  sensor_specs.args[0] : 0)) {
+> -				pr_debug("sensor %pOFn id=%d belongs to %pOFn\n", sensor, id, child);
+> +				pr_debug("sensor %pOFP id=%d belongs to %pOFP\n", sensor, id, child);
+>   				return no_free_ptr(child);
+>   			}
+>   		}
+> @@ -180,7 +180,7 @@ static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdel
+>   	if (ret == -EINVAL) {
+>   		*pdelay = 0;
+>   	} else if (ret < 0) {
+> -		pr_err("%pOFn: Couldn't get polling-delay-passive: %d\n", np, ret);
+> +		pr_err("%pOFP: Couldn't get polling-delay-passive: %d\n", np, ret);
+>   		return ret;
+>   	}
+>   
+> @@ -188,7 +188,7 @@ static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdel
+>   	if (ret == -EINVAL) {
+>   		*delay = 0;
+>   	} else if (ret < 0) {
+> -		pr_err("%pOFn: Couldn't get polling-delay: %d\n", np, ret);
+> +		pr_err("%pOFP: Couldn't get polling-delay: %d\n", np, ret);
+>   		return ret;
+>   	}
+>   
+> @@ -380,23 +380,23 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
+>   	np = of_thermal_zone_find(sensor, id);
+>   	if (IS_ERR(np)) {
+>   		if (PTR_ERR(np) != -ENODEV)
+> -			pr_err("Failed to find thermal zone for %pOFn id=%d\n", sensor, id);
+> +			pr_err("Failed to find thermal zone for %pOFP id=%d\n", sensor, id);
+>   		return ERR_CAST(np);
+>   	}
+>   
+>   	trips = thermal_of_trips_init(np, &ntrips);
+>   	if (IS_ERR(trips)) {
+> -		pr_err("Failed to parse trip points for %pOFn id=%d\n", sensor, id);
+> +		pr_err("Failed to parse trip points for %pOFP id=%d\n", sensor, id);
+>   		ret = PTR_ERR(trips);
+>   		goto out_of_node_put;
+>   	}
+>   
+>   	if (!trips)
+> -		pr_info("No trip points found for %pOFn id=%d\n", sensor, id);
+> +		pr_info("No trip points found for %pOFP id=%d\n", sensor, id);
+>   
+>   	ret = thermal_of_monitor_init(np, &delay, &pdelay);
+>   	if (ret) {
+> -		pr_err("Failed to initialize monitoring delays from %pOFn\n", np);
+> +		pr_err("Failed to initialize monitoring delays from %pOFP\n", np);
+>   		goto out_kfree_trips;
+>   	}
+>   
+> @@ -417,7 +417,7 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
+>   						     pdelay, delay);
+>   	if (IS_ERR(tz)) {
+>   		ret = PTR_ERR(tz);
+> -		pr_err("Failed to register thermal zone %pOFn: %d\n", np, ret);
+> +		pr_err("Failed to register thermal zone %pOFP: %d\n", np, ret);
+>   		goto out_kfree_trips;
+>   	}
+>   
 
-Acked-by: Mark Brown <broonie@kernel.org>
 
---WcxGa8/M4I7S4FLg
-Content-Type: application/pgp-signature; name="signature.asc"
+Thank you for the patch, LGTM.
+Please add the tag and send the v2
 
------BEGIN PGP SIGNATURE-----
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmq2QkACgkQJNaLcl1U
-h9BTpAf/VQhTXep1Z1EZxraHM79qPPijBRsRSB/oeV1gK4szOZuDLChY0Y+NnWFN
-HiEjSfxi/0H5uzm9n4igEyugcvZnqEDgpFC/vy9+pnlzSSCi3UfR2VXtaopB7R55
-60MFQXvPuANz8eHssk8J0tQNLmeWPwTQKwAl4CSw0xknE541I+8JKIIwzqLhl4wX
-YAY0Qv8eM1LkgPLRj17PO4tCLFa1ZYZLtT+SWW/7tLyuKco6U+dU4TnkZgWVUSTR
-0uMqydmzgpsolDV+YSHndMxnL0g8qe8iJHxpKkmwWBNE+9dYs8dg0hsOrhjmQjSN
-1iBpwcWCk5gut4X4zLPcK7//VixyBw==
-=EW9n
------END PGP SIGNATURE-----
-
---WcxGa8/M4I7S4FLg--
 
