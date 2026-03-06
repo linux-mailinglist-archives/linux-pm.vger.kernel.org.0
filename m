@@ -1,168 +1,130 @@
-Return-Path: <linux-pm+bounces-43794-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43795-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EJ/HGl2uqmluVQEAu9opvQ
-	(envelope-from <linux-pm+bounces-43794-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:37:17 +0100
+	id sGJhO2OwqmnZVQEAu9opvQ
+	(envelope-from <linux-pm+bounces-43795-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:45:55 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20DDC21EDEF
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:37:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9277421F16D
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:45:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 873C0300B1B4
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 10:37:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 03B2430DDBDE
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 10:43:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C74CC2EAB61;
-	Fri,  6 Mar 2026 10:37:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8147C37C0E5;
+	Fri,  6 Mar 2026 10:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="IIPRPf/V"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="lkmJ02CS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A17637C104
-	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 10:37:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF3E35B12B;
+	Fri,  6 Mar 2026 10:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772793433; cv=none; b=Ph6WrHKIm3g2nq+xGjU7O4HnETjZaYyOJUuoK7FKByZMDVgVZtgQF+8KFUbu/s59G3r0fYhCzqWrrD2TQ5JafopnH8GAlZiXV1tiNGWAngPTxt95fg7ZtblBssOCkMqsiicgjRumTCzyP9iC9SYIQfyqRTvyaDQHpdbjp1xnHk4=
+	t=1772793828; cv=none; b=i1KSXyG83uzUxFrIUwDzvyIdvZ/56DVekEjXLrpXlXXRFHRCakEPsW5Cv7xgJxTZUiViqX7rl9yV3Xu8rFJjP1hBZW1Rma7bURWBkMWAbvYsPJhXMxgGwCT19ui1g/XmSGE2+K9pd89xaHnvOlzPrP1ycH8Dp4tGK2GPMeZdivo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772793433; c=relaxed/simple;
-	bh=9mQW205gegUibeTid/1e5hyvVPikyOjbbJTshSUvqqE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=ti0TEgtyH/XFcB+6qm9bAPDB3EcYHzfXd4KEKlEIoCOqs7IX6GnaG0il1vQV9flyuBjOX2EdE/xiFsN8g0owl9E3gQoT5zooX8usMitpwwNealp0WEiPVNdrNTKUtPHNryAQEOazygtduVGcNBTRzDKogVm4QQ0dW0nUYHuBDPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=IIPRPf/V; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b936331786dso984128866b.3
-        for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2026 02:37:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1772793429; x=1773398229; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9mQW205gegUibeTid/1e5hyvVPikyOjbbJTshSUvqqE=;
-        b=IIPRPf/VjAEUXK8IyQI6dB7AJahg7RWN0BIknY7cs1Al2aaH1qimHs6i7pawIGUrqX
-         aBc1Nslf7Kg9oY+W2vanwvTGk3ltaRcuCiCopK8wVNr8zNYLxxk4meZJPXmk9utElSw8
-         F41of/pPfqErHw2h00WlD4cOll990+Tze/4WHyv7MeabOpmirywwPV/uhtInqJkH0CFa
-         AOqTCp4ibA+NSsget7w2J3A683K91Rnzv9I5FxK9jwggUTGeUo8/lyxTzPUluFcavX+g
-         YuamSImqSprJnKZTqCh2xY094YPt5lgYF0eI498QHjdNiqLKSMboazlBT/PPI8hVjVbo
-         44Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772793429; x=1773398229;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9mQW205gegUibeTid/1e5hyvVPikyOjbbJTshSUvqqE=;
-        b=XCr/r+wiUdzUqlmm4TC1HMUi7sWKO88a0rQdHVqVb1cSdDJyYAfGQuwFi0gdi6we3D
-         smw/jWQBt4CFlrimTfq1Cx9r7+Xt/bMPMd4/eIkP6jtD9hCTVV3saLaykuIPwI8oCbzN
-         Ds9CycFp/hmv3vJkZw3Itv7LK10V1V7BLsivg/qvhx8sS2AZPo51pyRJeh+6rBgQZuo4
-         /a3DSZE/mkQRcVqPTG/ZMctkOjabtcO370m28clF+2hneb6l7b94y5skhWVJdbNnXMrj
-         b4JjAKryEuVbKVwNvDeSo/t/wJHNrgOkFY3StJR4k0e49adczjvmPiun4cttj6EBhFAj
-         jtWw==
-X-Forwarded-Encrypted: i=1; AJvYcCWA93PuWi/AjoaTLFIW9IFGp594/iS9Og4ksiZ+42H7tzTJuGMecnuiwA4UU8G3SWYS8/SJaX+NCg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1VZHQiZYxaJDakXY4BSa8k93smOJSaXMPBtjGTKFmI/7AofAZ
-	Blty6cNELbI6/DiSoxiuco6M9I070rDBERBf1ctIlxVM3+KOKMi3xIm9VFKtDiOEa+Y=
-X-Gm-Gg: ATEYQzznfBX4NHrZQVY+ry9xWcmcXs/jArtrrmIkqDE/5+l3L/J87Wj+Z2lvJwEm0dl
-	F7gfePUib8Jn+iNlstiOgT7fqzIMPABzSuEgXNLX2T1Z0tw8PjttlVP3syTuY4slm0bc3Aejo9A
-	1yuu/Tb9OYC2nFgStgVOGIyIvej96T9T++ocMHV0XNjDYOmsCxAOEXuTQlj4Ws5iUkmG/ff+v+t
-	aNcAbF8zdS64A65uTePqLRHw1lnY0k3tpJYXYFqeGAJv90B6Xm6o/YAwi+AbgjRvfJ9KM8fY8Wj
-	GW4iMm1TYg1m/q6QUmOqP8j+4Q0wsJsJr31HHWE488NfUmI+tkkoIhQs5CmZEMyYBCNXvOeJw7m
-	m9BMX+RV9a41/LOz/p+VzJv4STrhizyyIR0xacAdG+E+Y/w2rEJqdSuHsfgTMEK3+NYv16laUF7
-	Lz5wUV67mpUoHrTYf44GYqEJMF4FW+PgMAzHq4iqhijOl3W2ZxOiQCWtnMwrrylXobUT6S
-X-Received: by 2002:a17:907:9486:b0:b73:572d:3b07 with SMTP id a640c23a62f3a-b942dfb4369mr108342766b.28.1772793429277;
-        Fri, 06 Mar 2026 02:37:09 -0800 (PST)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b942ef8ad0fsm46007966b.19.2026.03.06.02.37.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Mar 2026 02:37:08 -0800 (PST)
+	s=arc-20240116; t=1772793828; c=relaxed/simple;
+	bh=eGd6oj6eBIJhCQ4hhxjgQ1C4d87ZI9NBj93FtlNey1M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SyX+LyRtaiTlmYnPK4GSmXoOsfmK/j1RqnFCMuxk/h90Pt9ytvhoFl1BJDNffigHwI0whT7zy59AYJquTORk3+iozvhcXkKvUycMWBgOMgh0vxByIGzWoY36icUW95IMF55pT4aroAk/GXD+zNgDBNlmIXw1AB5+Vo26ehU50Mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=lkmJ02CS; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
+	bh=++ucNMjBOa630Tlk3DsPoQqLDeAf1p8NVy9HyGd5DO0=; b=lkmJ02CSN+PDutmGJj0dHUPOy2
+	uZQU5+5epoMNlbbufR1KtbjJCNQ4NnefOwfhM4UK4hnIs0Wwe2nLUcl+uXrPXNH4hRokv7XTt+fMd
+	JJGT+Wp70sUys55MRh1dkB8BnYFdcLOaYKywgsZ+sMokbx8abw0K+13FAyuL/FUt7yzaXGXOCPgbj
+	YHakj/kgeZUxITPjAx0W1TVGVBYVeT4HXbg0ApWCIDylR6ukHe0E2krwmXI0UPVRv86nlgy+ftO6l
+	IcN0c/9uJtWsWKTk6b2GwV/cCCBSzHV2Wn7dcpZM1HuguiC36IkKBnjQf6sPmsk0WvBhnh9RAz3NC
+	BF8r/TgQ==;
+From: Heiko Stuebner <heiko@sntech.de>
+To: Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Shawn Lin <shawn.lin@rock-chips.com>
+Cc: linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ devicetree@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>
+Subject: Re: [PATCH 0/3] Add shaping support for Rockchip platforms
+Date: Fri, 06 Mar 2026 11:43:13 +0100
+Message-ID: <4490342.ejJDZkT8p0@phil>
+In-Reply-To: <1772782832-216867-1-git-send-email-shawn.lin@rock-chips.com>
+References: <1772782832-216867-1-git-send-email-shawn.lin@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 06 Mar 2026 11:37:08 +0100
-Message-Id: <DGVMTLXR7VVA.3UCTHBGDDIKL7@fairphone.com>
-To: "Konrad Dybcio" <konrad.dybcio@oss.qualcomm.com>, "Krzysztof Kozlowski"
- <krzk@kernel.org>, "Luca Weiss" <luca.weiss@fairphone.com>, "Taniya Das"
- <taniya.das@oss.qualcomm.com>
-Cc: "Georgi Djakov" <djakov@kernel.org>, "Bjorn Andersson"
- <andersson@kernel.org>, "Michael Turquette" <mturquette@baylibre.com>,
- "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley"
- <conor+dt@kernel.org>, <~postmarketos/upstreaming@lists.sr.ht>,
- <phone-devel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
- <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 2/5] dt-bindings: clock: qcom,milos-camcc: Document
- interconnect path
-From: "Luca Weiss" <luca.weiss@fairphone.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260116-milos-camcc-icc-v1-0-400b7fcd156a@fairphone.com>
- <20260116-milos-camcc-icc-v1-2-400b7fcd156a@fairphone.com>
- <20260117-efficient-fractal-sloth-aaf7c2@quoll>
- <59d9f7ff-4111-4304-a76c-40f4000545f5@oss.qualcomm.com>
- <9f8619d4-43ac-4bc0-9598-c498d59a27b8@oss.qualcomm.com>
-In-Reply-To: <9f8619d4-43ac-4bc0-9598-c498d59a27b8@oss.qualcomm.com>
-X-Rspamd-Queue-Id: 20DDC21EDEF
+Content-Type: text/plain; charset="utf-8"
+X-Rspamd-Queue-Id: 9277421F16D
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[fairphone.com,quarantine];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[fairphone.com:s=fair];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[sntech.de,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[sntech.de:s=gloria202408];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-43795-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[3];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43794-lists,linux-pm=lfdr.de];
-	DKIM_TRACE(0.00)[fairphone.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[luca.weiss@fairphone.com,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[heiko@sntech.de,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[sntech.de:+];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[27f06088:email,sntech.de:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Hi Taniya,
+Hi Shawn,
 
-On Mon Jan 19, 2026 at 11:28 AM CET, Konrad Dybcio wrote:
-> On 1/19/26 11:20 AM, Konrad Dybcio wrote:
->> On 1/17/26 12:46 PM, Krzysztof Kozlowski wrote:
->>> On Fri, Jan 16, 2026 at 02:17:21PM +0100, Luca Weiss wrote:
->>>> Document an interconnect path for camcc that's required to enable
->>>> the CAMSS_TOP_GDSC power domain.
->>>
->>> I find it confusing. Enabling GDSC power domains is done via power
->>> domains, not via interconnects. Do not represent power domains as
->>> interconnects, it's something completely different.
->>=20
->> The name of the power domains is CAMSS_TOP_GDSC (seems you misread)
->>=20
->> For the power domain to successfully turn on, the MNoC needs to be
->> turned on (empirical evidence). The way to do it is to request a
->> nonzero vote on this interconnect path
->>=20
->> (presumably because the GDSC or its invisible providers require
->> something connected over that bus to carry out their enable sequences).
+Am Freitag, 6. M=C3=A4rz 2026, 08:40:29 Mitteleurop=C3=A4ische Normalzeit s=
+chrieb Shawn Lin:
+> pm_shaping is introduced for some platforms to throttle the outstanding
+> burst requests of each IP to prevent bus monopolization. It should be
+> saved and restored along with the on/off of pmdomain, the same as pm_qos.
+> This patchset adds support for it.
 
-Do you have any details you can share for this discussion?
+Can we get some more descriptive naming for the feature please?
+In the commit messages, dt-binding and also node-names in the soc dtsi.
+Because anyone glancing at either the binding or dtsi will not understand
+what this is, and would even need to consult the git history for any
+explanation.
 
-Regards
-Luca
+The full interconnect is not part of the TRM I have, but the bits and
+pieces in other parts of the TRM speak of traffic-shaping.
+
+So for the node I'd go for:
+	shaping_vepu1: traffic-shaping@27f06088
+
+and in the binding something like:
+	rockchip,pm-traffic-shaping =3D <....>
+
+I think the whole pm_qos thing is an oversight of the past, because:
+
+=2D properties should use dashes "-" not underscores
+=2D the property name is Rockchip specific, so should likely get a prefix
+
+
+Heiko
+
+
+
 
