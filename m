@@ -1,63 +1,64 @@
-Return-Path: <linux-pm+bounces-43776-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43777-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +A8dMMimqmlTVAEAu9opvQ
-	(envelope-from <linux-pm+bounces-43776-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:04:56 +0100
+	id iLyHC9GmqmlTVAEAu9opvQ
+	(envelope-from <linux-pm+bounces-43777-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:05:05 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A7F021E694
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A448B21E69B
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:05:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BD2253021E72
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 09:58:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5D24630675B7
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 09:59:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 757D235028C;
-	Fri,  6 Mar 2026 09:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8348135504D;
+	Fri,  6 Mar 2026 09:58:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Upejq1zB"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="LNKc26Cm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010001.outbound.protection.outlook.com [52.101.201.1])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012033.outbound.protection.outlook.com [40.93.195.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B252134E774;
-	Fri,  6 Mar 2026 09:58:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D29350A3A;
+	Fri,  6 Mar 2026 09:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.33
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772791121; cv=fail; b=Jooqev2NTAz1s2CXAXFYEIXcUmdxreyIc7EjAcqpkggzhZCYwMh7z78dPsCWE863KwedOnugRCWjZ7vIBbHVKzsghcEGKO6V68Fn11YxJZVxAOP5nnmd39y5tEnmTOzzKmOkhbMXBrp2cjhsNemRYntFO4uBJhuLCUk7ah5c6/E=
+	t=1772791123; cv=fail; b=YJ/0AvwbfSqP2ud17GtzZ+JD/zrFgcI4kBNKHJAD+uVgoVD0ao9SvrDjlqYQYomnTYH3RdbRYoUxDC2eSOOpN1X+iA2HPRT3SUN1ML9TZqPd9+5OgBUFC2SDxWRWq9R2Iy6NTxUdJvk2W4Eq66yeXuYi7JKZ3XOXisEDQHdUF4s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772791121; c=relaxed/simple;
-	bh=0wM50v0UHttvLdspQ9ODHhE5GH8ywheOpk4hmAKfjTU=;
+	s=arc-20240116; t=1772791123; c=relaxed/simple;
+	bh=A1yHnhB/IYVOd2+W3u/SqDV3u1aRzkm3Sb8Rxq9owic=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LRa9uyGm+OEFP47nkF6Jl0NBHDEkgIgmarr03geTZPm8r3xOQvIuuIKvdA7UvM0oQlAFBziAW1Eg0kURWv0yWAERx8i6usghh4UDyc8ddVcrCLIr9GjB54Xe7nnkAZaaS7+yX0ornzT1ixfdpJ+y77RdsYDv+ma8d4+xdfXZsac=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Upejq1zB; arc=fail smtp.client-ip=52.101.201.1
+	 MIME-Version:Content-Type; b=Eo0QmPYj5+HQnZ3vqdwd8/o5o/e+KABtwjg10ZZ93lFm1Jkxq8YiccxLZAQtE+ld4uyYumjocDP7sYgatQmtSP9odJQuBo6JysMGT+LHpq1XpJIlhb9KHcFkdaax7s8r9unmrYCtke6WEN9KWXmKn7gVRoAfefQ/RngmhfymVV8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=LNKc26Cm; arc=fail smtp.client-ip=40.93.195.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tBbcktfgyb3mbx+KCD0egBQgyldMrasojA70as0DAH/ZOBclGdWtRFNC67MT6ZfXR58hpKT9L3sUF4EMW0lA/ZkpfDa9qd7CX+Lr2hBwdzBlyd7qAf4iLGMy6G0IQGFNMXbLcA4ZQjTdE7N6iNgPkhwSReULcLpQwT4ABzRMuhj68d+AW/bbr8nUm8T/WhSr2kEFbD9ZTTsjE+oKmiAB4Ja7Iy8ghQDxYdJptC9tAm6JlCMjAVg2Jrqx/jfq8EEbMBPW+28ZpiFSAFDGmxdUJXOos8BkK+hCYeHz9x85bT82gDSNjs9xmIGQERrm79YzBQKXEgKgJ9T5nqhjli5ufA==
+ b=DwtZMVfHxChz4hpkykra/iNSBuH0bSw9G4QYsGGU4yJM764kW9LFLce4ojYd8a+w8WwNxfwaElorOrYw8UCtSf0qFk52zNOtzQJF5Rs2X577ooAi7++YF0opKrEIrWvHEut0ZHk5acOPTG5EvD76lW3m3Uk8yOJ/2gxArAk6SrLh5M9TcjJseSUq8ttVxOCJkuWdACJNtswXGp3gySCeeSl/RmQtTdQHJpG5LSkVCVjx4fR8Qls9o/V1OAhP61zVj8XV0U99YJwq/tFwWFvFtpiUdR82Y4fzQDY4NTiYJFZUHhHqEpJfz8S3MSK65BEYa/bRlBtroTDIzlvYxG29rQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lLjRio8MWE75N+XGdkoUrfXYz8aO5pRvJhoPg1aFtK4=;
- b=nAKJoQP4UDtrmRkC//mmNe7b7bAACuNjsHzrnyE8MhOHuLTnw43RF+lLbVDtIzOQfFRtFRKiVKXqWssq1bYLA7moI5V9m7htxnPizH1tsSqO6kAN99GdZ/Mv+E7GMwJJcT+J+VyCyWbYUKgXIAjiDbfV4BIyWzbZZgXh53N2oJuzzQcWdY1XiPUc+k9dMJWaWocn/Ikr8I9Qbq8c37/fFnZJuKxjlN/LGre94QkTT6RD2UhfbrUGQVQLlXlT+Wv8P1gyyEVKJCbl8mwGmEHjcjyP4DecRbR+rFPOUca49Amno4X3gDEnMyzA3asbUi3jsUYv2CqRfsSEbAK7QRtAuw==
+ bh=n0pDnujbxihaJ9jacUUeRsP4e8AtFNDFw9OChWnL/PY=;
+ b=XtvDshIR2ADcB8nUgEf00gfbuD9Uog4uSRuBim4GJc95tFo0Hxs4MBBOYZfrcIqnfdHGy99wOy0BfJPZXZl7Uya53k2G0nDDVRcHl92vcVGnTjffRp6GGbhi8mdr07GO5eeyF+moy2M/3mOkocsQaykwLkcde4NMnBxSQ5U9kjYP8f3J793QTKJ0krSdceXmQ53fzaG7EgqPo8cfCzdXrND1a9xxie8SOKf/n1uSQ4qeW2MtT1pRVpfNGVAi9yXxVL/KnYqxORTenULDXBWtVL5umGP0LnFRxU3sjP0zkGkkjeUKHH1Yg0Tql8IPN2THvNJSTBn1DHbCzGNvL72Kag==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lLjRio8MWE75N+XGdkoUrfXYz8aO5pRvJhoPg1aFtK4=;
- b=Upejq1zBoblwnHb6HJGQOsbp9tPQ2LGY0qGgk3JY4wrb+ktyPXJtnAqogeeW3xwZ9EC2A8xYQryG5BLbEP6u3xudPcpbmIHDh4qABJyR0n72TPbpaXwymGc0F7291c2k7c92g0ydt5QOqq77JkPyKt6EyNxszR4PN5YR11Nsbaw=
-Received: from BN1PR13CA0007.namprd13.prod.outlook.com (2603:10b6:408:e2::12)
- by DS7PR12MB8289.namprd12.prod.outlook.com (2603:10b6:8:d8::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9700.5; Fri, 6 Mar 2026 09:58:36 +0000
-Received: from BN2PEPF0000449F.namprd02.prod.outlook.com
- (2603:10b6:408:e2:cafe::39) by BN1PR13CA0007.outlook.office365.com
- (2603:10b6:408:e2::12) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9678.18 via Frontend Transport; Fri,
- 6 Mar 2026 09:58:36 +0000
+ bh=n0pDnujbxihaJ9jacUUeRsP4e8AtFNDFw9OChWnL/PY=;
+ b=LNKc26CmpGljKyipKQLTqlDd3B+sGjY0g3A7i8+rvghr2lVqeLGtH2OEHbG1uwFRG78Ts4FHAS5wKgaYLTRpFk9l3XDl/dpCW01BeeAMXrXl4FYhB/snXkGNs/PXtttbcSdPADC0X2Kyzv6m0eqFmSPfSSsAwmuu/SxeeruEm3I=
+Received: from BN0PR03CA0001.namprd03.prod.outlook.com (2603:10b6:408:e6::6)
+ by IA1PR12MB9531.namprd12.prod.outlook.com (2603:10b6:208:596::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.5; Fri, 6 Mar
+ 2026 09:58:39 +0000
+Received: from BN2PEPF000044A4.namprd02.prod.outlook.com
+ (2603:10b6:408:e6:cafe::23) by BN0PR03CA0001.outlook.office365.com
+ (2603:10b6:408:e6::6) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.22 via Frontend Transport; Fri,
+ 6 Mar 2026 09:58:39 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,22 +66,23 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
 Received: from satlexmb07.amd.com (165.204.84.17) by
- BN2PEPF0000449F.mail.protection.outlook.com (10.167.243.150) with Microsoft
+ BN2PEPF000044A4.mail.protection.outlook.com (10.167.243.155) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9678.18 via Frontend Transport; Fri, 6 Mar 2026 09:58:36 +0000
+ 15.20.9678.18 via Frontend Transport; Fri, 6 Mar 2026 09:58:38 +0000
 Received: from BLRRASHENOY1.amd.com (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Fri, 6 Mar
- 2026 03:58:33 -0600
+ 2026 03:58:36 -0600
 From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
 To: Mario Limonciello <mario.limonciello@amd.com>, "Rafael J . Wysocki"
 	<rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, K Prateek Nayak
 	<kprateek.nayak@amd.com>
 CC: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>, "Gautham R.
- Shenoy" <gautham.shenoy@amd.com>
-Subject: [PATCH 7/9] amd-pstate: Introduce a tracepoint trace_amd_pstate_cppc_req2()
-Date: Fri, 6 Mar 2026 15:27:51 +0530
-Message-ID: <20260306095753.17155-8-gautham.shenoy@amd.com>
+ Shenoy" <gautham.shenoy@amd.com>, Jonathan Corbet <corbet@lwn.net>, "Shuah
+ Khan" <skhan@linuxfoundation.org>
+Subject: [PATCH 8/9] Documentation/amd-pstate: List prefcore related sysfs files
+Date: Fri, 6 Mar 2026 15:27:52 +0530
+Message-ID: <20260306095753.17155-9-gautham.shenoy@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260306095753.17155-1-gautham.shenoy@amd.com>
 References: <20260306095753.17155-1-gautham.shenoy@amd.com>
@@ -96,31 +98,31 @@ X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
  (10.181.42.216)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF0000449F:EE_|DS7PR12MB8289:EE_
-X-MS-Office365-Filtering-Correlation-Id: a78c5ebe-67e7-468f-1cf8-08de7b66ef5b
+X-MS-TrafficTypeDiagnostic: BN2PEPF000044A4:EE_|IA1PR12MB9531:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5f0e62c6-df25-4935-61df-08de7b66f0ce
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700016;
 X-Microsoft-Antispam-Message-Info:
-	cYstSXAyb4fgdNTCh/J9ELw9bH7zGR8UM3KGEZ8tn5krhjRCzdxKxDx6Zpkf0Ht4Cb3m5X1hDLsJYiT5ecRkR1oRDq9fZI2zghYuaL71HsG3SM1TTfJ98uaIPyNvcWX4bbL/cTDMuFS2Y58ozAcBdRkvrtnba2XO6ycisiMa3j3QFH/8NFBWthYD4gcllXOSBuMP/K+58vbRDe+NFxmcJXoM9G9xeH24q5sFmGnGKtG4iyka8icalMizK5DKld+ZroMxUyiEFQf6dTT9l623ZLjE1cuqDafBsTP57Uc0MrbEAacZ4HMZi0OyE5GNp3lBMyib9woBHQsoA2/FQ5SkBD2leF1nBFR28qyhl0wCv5Bm1uOKO3lKeH/VJDWFAWmoAAVOEiBUVENi0WGhpN+b6Mi8tdyGChmH+vXmTPp0WTHXGSDJY7WFFu1YoGOsLVQ3triUsbdn+T3nNgIj9Snhyyw2ZBfYPxPJMuKUeuN1hjVg9pE57SvXkfCqhFGVMrqNXp7QfkXpbpVe7x6mB5UDY9eJc0IDSP13RAjk7ZGkSSJjsyR5ww4yKCM/lzVxzmPh3Xi2lwuQ3RK3DMMd/QmPq/+sZz77akEAsFCxAwSbxJHG3j1jAJMSTqpDkeks3W0gUi0gtgGav0bmV3Ac+yFbcPxBlZxSvtqoX1qDZngkmyRcsjvqnFDRUN5OtZ+/qy1dG4BgQDefKd6EPi203TD7guesSfKfuQ29LyGLXaMOirGzRr9P/ungqHM6TyBu528ZC1oNvL9npTLGr4WGL83x0Q==
+	CJYx1k9GEF5peKRE3o3M2nS761zaxq261EYQf1CrQi6om3EOCrVJgOrtFYL+SIHzjyuVto3L0zfO8ZV0SKvv2PFlQsOUFaIC6/qC9uqu4Z7t8yVH7NCZuA3guv8txmwvjIpkSIIqCVBlrR/WTuN8cUiezLi6xXNGM6UQzfrLdT5Wi4sgdsaf13kXR9JO6qDVowCfoVJycV8GBUoOdg1hZheq+cc1Fae2kVSlB5GXqBnQ/XmPywV1E8CmGYnFF5H6DrX/BHViTEUjPqRvP3OLp/4gd67UqN8FdOpfxEz2QfIpVSdVmpauGBfpO0CyiVHYM6zUoUfdArt0jrn2yu3Pb4pkkFI/JSVlVzbhOJHz78LiDBTTlf8Fy7cC/ihsmlC1tlOjELkozwi8f6KgDy1OveFgH/z70GAtO6QB+JjJ8Z3XFVkA7ESUW0d0VZBsfKwv4cEd+GfgrjPzh/TGsKhuRhXewTPKPlODHoickPF7mFwU1AeEKztajDHqMh2xkd+0AR/+ix78wDVGi6OOPmQDcZFW2IXriVBYpSJ/y1iOKgZU5dOxduLcgM2fnuiDDKGXDiqCVELnTCZ4oiy9TvR2VGEyU5IE/gOyHS2ms9loolZjBJv4mHEp4y2ElQDX3tjAnjSuBmvSuAmtDljYzy5Rrdefef2VChzsi1Z3/bTm0Dur5ctUhDBCuNCm9U3krHWB+3qAjwhVBDTsxBHLIYGMdbkM8UIG7Jqaz7seUz3VvCGuc3l+PiFdJ97yxgHDRKsAnR0hTo0Kor/7WQNQQE2Hfw==
 X-Forefront-Antispam-Report:
 	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700016);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	8+wbcdMZoTKO9ZulYTxNBG/sR+meg9x2r3NxVENaXA4zFMMBAHz+H8CcV29WOl1GEF7t+XcXnqXboVjBe6hA2F5sLgOG6A+uE422V1xmFNY263dXEuBtGqQkkr633L9vDOwIuqM+nmGK+WkH3GwaQ5js2WC2WLRM3I8Ge/9QLGfCjp8SV+fFQkotMuk6za/Lq3XD1+GNWcFPbWy82Qj7wrLUfSBe1TfHWjJUQJMeA5XQBAhRh0Vq0KB/ZBVmHdp3JzO7LYOjJ4FLt0Cb466HNVYxccZb+6dY+7xKyMWngg3SCniCSW6fM8uOjehJDQUnIWuHtbpKWJzyQQeCSk1Hv1uYI/07zdZQNjvgPCc5S02U3g9cGpCgXQ4MWC+OWY+RLozfoga0mRsGjBoE1z8y+Dd41hJ3pu//bzfIM3K9erZz5Yp5uoDXOjdOPxfwnylO
+	eMGXYcZELVeGAAg6zX0SG0NMJcehJUjW4hqyR686+hW/92WmgBAB2GRrUyzSqd5KUP21NkQ4nCsI1tOu/yyVDcX4QwTqlU/T7xoDg7+xl0GWjcBPMYNkPklPN7Xclg13DAhgKKavXB8two0yTDopB/UgwmKlGBhlA1k3FFRond9FmmabsMpe0wuNDdIcOlxqt5pb9K+ZOtNqO+xsV8KLfHp8K4SnEvMAmHepxPKvlGOT5LQdIXshzEOMdPtGPsDrBB5T02JcZGI9Pk4rAbZeD9aR55oDzsJbbvGrpbMNtFE4lhQfTkzriCznDjwP6mp5sfDPz4Sn0GnvJ4zDKOkTzVMKn9x+oyF9XfDl5CIn/9/ukUObwhjXr4ikac5Fh7YklCpjvWA1c8XWuck84w6m0zkLgSY9pskO2aSF5q6EIPrJQCNKjfwP3WR+aQ3pKS6D
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2026 09:58:36.5371
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2026 09:58:38.9690
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a78c5ebe-67e7-468f-1cf8-08de7b66ef5b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f0e62c6-df25-4935-61df-08de7b66f0ce
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF0000449F.namprd02.prod.outlook.com
+	BN2PEPF000044A4.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8289
-X-Rspamd-Queue-Id: 3A7F021E694
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB9531
+X-Rspamd-Queue-Id: A448B21E69B
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.34 / 15.00];
 	ARC_REJECT(1.00)[cv is fail on i=2];
@@ -135,7 +137,7 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43776-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43777-lists,linux-pm=lfdr.de];
 	DKIM_TRACE(0.00)[amd.com:+];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
@@ -143,109 +145,58 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-pm];
 	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Action: no action
 
-Introduce a new tracepoint trace_amd_pstate_cppc_req2() to track
-updates to MSR_AMD_CPPC_REQ2.
+Add the missing amd_pstate_hw_prefcore and amd_pstate_prefcore_ranking
+filenames in the sysfs listing example leading to the descriptions of
+these parameters.
 
-Invoke this while changing the Floor Perf.
-
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 ---
- drivers/cpufreq/amd-pstate-trace.h | 35 ++++++++++++++++++++++++++++++
- drivers/cpufreq/amd-pstate.c       | 14 +++++++++---
- 2 files changed, 46 insertions(+), 3 deletions(-)
+ Documentation/admin-guide/pm/amd-pstate.rst | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/cpufreq/amd-pstate-trace.h b/drivers/cpufreq/amd-pstate-trace.h
-index 32e1bdc588c52..91fa073b2be48 100644
---- a/drivers/cpufreq/amd-pstate-trace.h
-+++ b/drivers/cpufreq/amd-pstate-trace.h
-@@ -133,6 +133,41 @@ TRACE_EVENT(amd_pstate_epp_perf,
- 		 )
- );
+diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+index e1771f2225d5f..f566fea6613e6 100644
+--- a/Documentation/admin-guide/pm/amd-pstate.rst
++++ b/Documentation/admin-guide/pm/amd-pstate.rst
+@@ -239,8 +239,10 @@ control its functionality at the system level. They are located in the
  
-+TRACE_EVENT(amd_pstate_cppc_req2,
-+
-+	TP_PROTO(unsigned int cpu_id,
-+		 u8 floor_perf,
-+		 bool changed,
-+		 int err_code
-+		 ),
-+
-+	TP_ARGS(cpu_id,
-+		floor_perf,
-+		changed,
-+		err_code),
-+
-+	TP_STRUCT__entry(
-+		__field(unsigned int, cpu_id)
-+		__field(u8, floor_perf)
-+		__field(bool, changed)
-+		__field(int, err_code)
-+		),
-+
-+	TP_fast_assign(
-+		__entry->cpu_id = cpu_id;
-+		__entry->floor_perf = floor_perf;
-+		__entry->changed = changed;
-+		__entry->err_code = err_code;
-+		),
-+
-+	TP_printk("cpu%u: floor_perf=%u, changed=%u (error = %d)",
-+		  __entry->cpu_id,
-+		  __entry->floor_perf,
-+		  __entry->changed,
-+		  __entry->err_code
-+		 )
-+);
-+
- #endif /* _AMD_PSTATE_TRACE_H */
+  root@hr-test1:/home/ray# ls /sys/devices/system/cpu/cpufreq/policy0/*amd*
+  /sys/devices/system/cpu/cpufreq/policy0/amd_pstate_highest_perf
++ /sys/devices/system/cpu/cpufreq/policy0/amd_pstate_hw_prefcore
+  /sys/devices/system/cpu/cpufreq/policy0/amd_pstate_lowest_nonlinear_freq
+  /sys/devices/system/cpu/cpufreq/policy0/amd_pstate_max_freq
++ /sys/devices/system/cpu/cpufreq/policy0/amd_pstate_prefcore_ranking
  
- /* This part must be outside protection */
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index a0bc80a7d3f15..632e87b700b14 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -333,6 +333,7 @@ static int amd_pstate_set_floor_perf(struct cpufreq_policy *policy, u8 perf)
- {
- 	struct amd_cpudata *cpudata = policy->driver_data;
- 	u64 value, prev;
-+	bool changed;
- 	int ret;
  
- 	if (!cpu_feature_enabled(X86_FEATURE_CPPC_PERF_PRIO))
-@@ -341,17 +342,24 @@ static int amd_pstate_set_floor_perf(struct cpufreq_policy *policy, u8 perf)
- 	value = prev = READ_ONCE(cpudata->cppc_req2_cached);
- 	FIELD_MODIFY(AMD_CPPC_FLOOR_PERF_MASK, &value, perf);
+ ``amd_pstate_highest_perf / amd_pstate_max_freq``
+@@ -264,14 +266,17 @@ This attribute is read-only.
  
--	if (value == prev)
--		return 0;
-+	changed = value != prev;
-+	if (!changed) {
-+		ret = 0;
-+		goto out_trace;
-+	}
+ ``amd_pstate_hw_prefcore``
  
- 	ret = wrmsrq_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ2, value);
- 	if (ret) {
-+		changed = false;
- 		pr_err("failed to set CPPC REQ2 value. Error (%d)\n", ret);
--		return ret;
-+		goto out_trace;
- 	}
+-Whether the platform supports the preferred core feature and it has been
+-enabled. This attribute is read-only.
++Whether the platform supports the preferred core feature and it has
++been enabled. This attribute is read-only. This file is only visible
++on platforms which support the preferred core feature.
  
- 	WRITE_ONCE(cpudata->cppc_req2_cached, value);
+ ``amd_pstate_prefcore_ranking``
  
-+out_trace:
-+	if (trace_amd_pstate_cppc_req2_enabled())
-+		trace_amd_pstate_cppc_req2(cpudata->cpu, perf, changed, ret);
- 	return ret;
- }
+-The performance ranking of the core. This number doesn't have any unit, but
+-larger numbers are preferred at the time of reading. This can change at
+-runtime based on platform conditions. This attribute is read-only.
++The performance ranking of the core. This number doesn't have any
++unit, but larger numbers are preferred at the time of reading. This
++can change at runtime based on platform conditions. This attribute is
++read-only.  This file is only visible on platforms which support the
++preferred core feature.
+ 
+ ``energy_performance_available_preferences``
  
 -- 
 2.34.1
