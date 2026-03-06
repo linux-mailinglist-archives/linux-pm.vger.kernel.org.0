@@ -1,68 +1,103 @@
-Return-Path: <linux-pm+bounces-43854-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43855-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SGgOMh0Iq2k/ZgEAu9opvQ
-	(envelope-from <linux-pm+bounces-43854-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 18:00:13 +0100
+	id aI+hJUETq2kRZwEAu9opvQ
+	(envelope-from <linux-pm+bounces-43855-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 18:47:45 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAE00225994
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 18:00:12 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBFBF2266BD
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 18:47:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0E632300F293
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 16:53:59 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CC0393037F0F
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 17:47:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 230293A1E96;
-	Fri,  6 Mar 2026 16:53:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9D4A41B344;
+	Fri,  6 Mar 2026 17:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k7/Ah/9A"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="gc5bfsfg";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="YfzrkU7r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D92336C0AA;
-	Fri,  6 Mar 2026 16:53:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A866B3B582A
+	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 17:47:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772816038; cv=none; b=d8a1wprMmG10mGr6oTp5NC905NVS8Be/qQEH50fv3QONITxycMHk93NnZ4zFxiWHsx6WIlBo8Whpd257wETXTHQayorxDU5osSZrbyY1S5bCfOeUmjEFdR/t4bF6R4zb5BEZQMZO1T4R+EtiRoMsql4Vv3Jhh/AMZuPiIe97AqQ=
+	t=1772819261; cv=none; b=oLgoVbJu6KkB3Xj/UeYI8bP9ZMxzkAJyAPBSdIo28MeRADhM8PXy0gysKIAj5fzLxv8mmQ/GysaGThtbilGoaSQvHPw3AfsoNESttuuzgK3rVhqeQF7pXj5rhJI96pKgVOeURCmC0Il6e0kSf9h1wYADQha5T5B5H5qHLukFwEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772816038; c=relaxed/simple;
-	bh=UxvDbFBGv9QgfcOx7y2B3JzBHpom2uaBOEnuzRuVfXI=;
+	s=arc-20240116; t=1772819261; c=relaxed/simple;
+	bh=MZoj1Zp4UcUKrCppYKZk7u6NI7JYXHrxsT/T7X3Se1M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X1ES4hsYHeruz9/192MZEBW0FcAkc5uKEXm+SMSyiMfgCR3XNk96IbkFWjdnV90YG/GSuIs1pHw0FAp4AxE0sDAxDoBAdjm15qZ2Du/cewHQXC3OUxIZXuJVUTAZcFA9IsOw3A3KuGYs3oUfBwmQdYiK8SZ6FlhbnEJY9qoQgJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k7/Ah/9A; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772816036; x=1804352036;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=UxvDbFBGv9QgfcOx7y2B3JzBHpom2uaBOEnuzRuVfXI=;
-  b=k7/Ah/9AX9QdgoNDvOI0zMYyfo+kF6LC44sj0vBOds2EiKBN4ZX4lp1i
-   dE21Doe5higOyQcapd2vSyeum2o7nsSvjD2r5cwLo9RDuZkL0/rEeEejw
-   rRj3Hldv2Vh6YOnSMrjaI3211GvPfWrrvvAwM24Ce/Ek1+nUADM+Ur5tO
-   jiAp140sPhNGu6JtZxdEUU2azuVNp5FNbGptdeksdp9yzLnT+DI4Mk0wy
-   aqDnqTnT+NcG4geIF1EBTlCNt340jlCgZCbsISuolBOzu7nGlI+FbuWjK
-   RFzYEMdeF6zO0KlJkutWosvQbCTO0ei1BFZFuElWzSc4RkfrUuSu3P43E
-   A==;
-X-CSE-ConnectionGUID: gZmWM1ZpSf60TfxCvIsi6Q==
-X-CSE-MsgGUID: KIh/7enBS5eZjGi/yY9PDA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11721"; a="85403313"
-X-IronPort-AV: E=Sophos;i="6.23,105,1770624000"; 
-   d="scan'208";a="85403313"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 08:53:55 -0800
-X-CSE-ConnectionGUID: Ndh+n2SPQeqwS9+sN39mDQ==
-X-CSE-MsgGUID: ktFp3dtgQlSEmgYK/dgL/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,105,1770624000"; 
-   d="scan'208";a="218293106"
-Received: from gabaabhi-mobl2.amr.corp.intel.com (HELO [10.125.109.91]) ([10.125.109.91])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 08:53:55 -0800
-Message-ID: <ffb7e798-e8c7-4728-b699-6c885be61136@intel.com>
-Date: Fri, 6 Mar 2026 08:54:03 -0800
+	 In-Reply-To:Content-Type; b=tN/q9ikChDrRjJhm4q392bKKS5GiYTyMo7HhrJwsgDOjsPijcmVaWvwwE/5/qGEgp5KwJ5zn3KOk6BNtqzXG9kIb0Sh5ewyKtw//eYEH1g1JytLMyLhDorU8Tc19MlhChSc4IXaEfNe5Ebd7J8D7IOhPKNOi/wJD4ANwGs3LWhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=gc5bfsfg; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=YfzrkU7r; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 626H2R93742790
+	for <linux-pm@vger.kernel.org>; Fri, 6 Mar 2026 17:47:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	GU4wXuq9kpZDHUDCo2D0RU4Kuhjlasu2wJX3TFoVNQk=; b=gc5bfsfgYiG7Wkfm
+	bRjuAPqorP0C9wEN3tOXowtI+ySd0nhYc1OIGWOrXVaTFx+9xBjI4i2puRjpC+m3
+	7r8EXYbge/cGRTkcUTlYva776J6PwxdjaWLlABUGND6CwkY76lnnIzPGW3ArTy5g
+	nzjFsyC8LAwB+bhaZ2eB2NL8T6yAatMEWvV7lRsBbnOwWJoidj8iJMlkG7wc3ETx
+	eFRbODG/kMIjBcD23uhEFr7hO8vQq7vEAKFFV4sRXPeyiI7aaO51lqWgBcRMyGsW
+	N2h4MxvBpPTVka+T+IggBaUoDxdOfgEvDnIqwfW5FRVB8rrie9xSBP8nO5b7yaZD
+	mBqVYw==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cqpxdttbg-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2026 17:47:38 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8cb6291d95aso1741267785a.1
+        for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2026 09:47:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1772819258; x=1773424058; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GU4wXuq9kpZDHUDCo2D0RU4Kuhjlasu2wJX3TFoVNQk=;
+        b=YfzrkU7rKAr2EkMP4o+oiT5WKUBFlQiTzt6MFnnITwasOcrs+K476lPLTNl+CdDnsT
+         RGAlG/mfghdNUVszev9A1uUat0D63YEYwlYcjFivwvy9YdZPI3TuWmA1NfLL66qMVEa4
+         MjLrTgb6CYTcWUSMm4rAZKOHxOJSRg95QID9gd6IB7bZ7Ywe/IckCxR/skEnti9Cb9ul
+         Tp/IONqdcZ6Uw4rHu38ofBtkgyoLSQUBWcktH650fUQNn3euS5wIq+kdAoGhYK3nCfur
+         BLDDs5jWTrbuwlIlmYj+i9H4WOAajxUQ17ml7KlOQWb4jaXpIvwkIEc2+lJ8GmxmegpS
+         JM7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772819258; x=1773424058;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GU4wXuq9kpZDHUDCo2D0RU4Kuhjlasu2wJX3TFoVNQk=;
+        b=SyBIT3jJgLfE6K/0UhCJgMFkH6h1sPjXz1pGAbrftk7Z9vTNP+WV2gnqMaopemUQn6
+         KrV25wMNREB545K2BB3+iCJhedQwoccShqQXxs+5ocZZfAwbYeIYfLzNe1DZk8B8WHdv
+         H7Qw1w58TZveT+Iyl81FfOyKQczSytPd5MVtKqyt6ocAjs+P89PD4BTNqDpd6L4lJ4u3
+         SGKXPGK+CepCCMbJmXkNNnXYpT4H7mQe0td/ypYIspxlLK4CGy61u7ICcA8d7g9P6/o9
+         52+kD4Z0oaoplEoJJ+ubPLHxCO+vNDqihtxcFNUPyV5yx9J86rTHLZm3CPeye2kjVNv4
+         64Kg==
+X-Gm-Message-State: AOJu0YzF8helW4FRQpheKRQ+3xkDqKQQq7CNBr1tw/9QKys4Wio7ojBg
+	LdFFwHEm++6HWE8BTc3oLb5XWJQQaFm2v6yghhOFq0V9WK2RqK2X0QkiMyE3oF67w3IZtPyorgs
+	he4r4ZQlqRuOsiw5zdnIuXzWM9V+1KZbs1Y794NVq3fFJQUzhqtlWO8yXD/je8w==
+X-Gm-Gg: ATEYQzwds7UUxYLVhxxQdWMsAn6lQzCMgq9jP++/cUc86r+HXQL8iaB266hlxQP6iEP
+	7Xb9sJejej1uQlMFzgIjEDYCcZUxHmwiljBGafKue3jDi9ZjDbNw/KvF17HWzb1rHBVV9v63pUO
+	d8EUbk6N+jvNZ5U2fTF948IG+H915y5HkGVFnSldVBVOMIOaq+Ed4MD1GN95hslkH0J0FzNfv77
+	0PvM4bcWIp4pHgdaJ3Nm9wrWx8YQG6edAoZR8IyuwENqsSs/5x9tvMI+RQtIx+fL9ph3WXPARM6
+	7kzy2urVpLtzS+mtJMRh1pcqZUaAFleX4pxfiCIBmi4TJNYFIMmCS45NzaWTs6sJpVyGMcRSDpC
+	e2nd0vYMMHULXgf3pBh0IbjfMmUOipE8cFQulyccHJxzuR8Cg86DTndCL/vc+tZHA/wXklQ==
+X-Received: by 2002:a05:620a:444b:b0:8c5:2dbc:624b with SMTP id af79cd13be357-8cd6d4cc1d5mr371111085a.46.1772819257837;
+        Fri, 06 Mar 2026 09:47:37 -0800 (PST)
+X-Received: by 2002:a05:620a:444b:b0:8c5:2dbc:624b with SMTP id af79cd13be357-8cd6d4cc1d5mr371108285a.46.1772819257436;
+        Fri, 06 Mar 2026 09:47:37 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:1265:158c:17d1:c76e? ([2a05:6e02:1041:c10:1265:158c:17d1:c76e])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851fad27e6sm149170015e9.3.2026.03.06.09.47.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Mar 2026 09:47:36 -0800 (PST)
+Message-ID: <0e318331-73b5-41c0-ada5-46e38c74cbf7@oss.qualcomm.com>
+Date: Fri, 6 Mar 2026 18:47:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -70,179 +105,80 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] x86/cpu/intel: Add EIST workaround for Lightning
- Mountain.
-To: Martin Schiller <ms@dev.tdt.de>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Florian Eckert <fe@dev.tdt.de>
-References: <20260306-cpufreq_lgm-v1-0-47f104aed7c2@dev.tdt.de>
- <20260306-cpufreq_lgm-v1-2-47f104aed7c2@dev.tdt.de>
-From: Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH 1/1] thermal/of: Add OF node address to output message
+To: Alexander Stein <alexander.stein@ew.tq-group.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260305163508.2643106-1-alexander.stein@ew.tq-group.com>
 Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <20260306-cpufreq_lgm-v1-2-47f104aed7c2@dev.tdt.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: CAE00225994
+From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+In-Reply-To: <20260305163508.2643106-1-alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: Jnt9ug2G0hLEFmn1a5jguXl8aUBZJk3P
+X-Authority-Analysis: v=2.4 cv=E83AZKdl c=1 sm=1 tr=0 ts=69ab133a cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=yOCtJkima9RkubShWh1s:22 a=8f9FM25-AAAA:8
+ a=Xhz3KCuwslOUG7yFF-0A:9 a=QEXdDO2ut3YA:10 a=PEH46H7Ffwr30OY-TuGO:22
+ a=uSNRK0Bqq4PXrUp6LDpb:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA2MDE2OCBTYWx0ZWRfX2wtWtmx/VWwe
+ 9pu4wKkTI0Njne/7edEc43278SR/60/t0N20mn4htx5I51ZeLDjCf35peUoLjq6Qpxl2/ypfyxq
+ rCQshuecm7TMnuJzl3coHLRIrEvA+M2P0+C1QJ4MQsf4vHpxrMJu87bRM5z2dwo+GZdp/n6DCzw
+ CypUSvYCIEXt1mgnth7qaYSrwrsfhwsTWyHQNBEJwPs9rW3aE4NXJ2MFXdRSxi/XaRVBrYXSUxl
+ Q41+GY/lfQjklyj8bAYgz6Mp7DcAuX9uKXateMypyBRtbtTYGHqrVj7IeDW9VvAF1/6zOUMtMpe
+ +yTnQmdyRKDrbBHT6SDRnDKVVnFMKvoHXUpX+lQAvmpA8YhlasetsTLGexBn4Z29WkK60gHagkS
+ vLW3x0D6oMV/UbttU4dG2Xx9wemcoNtyCk3TgAJXk36mpy24jzOWiTaGYAyLd8ijQz4XrshUatp
+ lLpwiOPqrXBMbRDX6zQ==
+X-Proofpoint-GUID: Jnt9ug2G0hLEFmn1a5jguXl8aUBZJk3P
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-06_05,2026-03-06_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 suspectscore=0 bulkscore=0 phishscore=0 impostorscore=0
+ adultscore=0 lowpriorityscore=0 priorityscore=1501 malwarescore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603060168
+X-Rspamd-Queue-Id: EBFBF2266BD
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	TAGGED_FROM(0.00)[bounces-43854-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,oss.qualcomm.com:dkim,oss.qualcomm.com:mid];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43855-lists,linux-pm=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	FROM_NEQ_ENVFROM(0.00)[daniel.lezcano@oss.qualcomm.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dave.hansen@intel.com,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.956];
-	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	NEURAL_HAM(-0.00)[-0.948];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Action: no action
 
-So what's weird about these systems? Do they not have a "normal" BIOS
-based on the Intel reference one?
+On 3/5/26 17:35, Alexander Stein wrote:
+> Temperature sensors are supposed to have the DT node name
+> temperature-sensors. Having multiple ones the node name alone isn't very
+> helpful. Add the node address to make them more distinguishable.
+> 
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
 
-I don't know much about this specific feature, but this patch is doing
-some unusual things. I'll elaborate below:
+Applied, thanks
 
-> diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-> index 98ae4c37c93eccf775d5632acf122603a19918a8..e49df04e8d491158cc48f8d8bef824c434256d09 100644
-> --- a/arch/x86/kernel/cpu/intel.c
-> +++ b/arch/x86/kernel/cpu/intel.c
-> @@ -466,6 +466,29 @@ static void intel_workarounds(struct cpuinfo_x86 *c)
->  #else
->  static void intel_workarounds(struct cpuinfo_x86 *c)
->  {
-> +	u64 misc_enable;
-> +
-> +	/*
-> +	 * Intel / MaxLinear Lightning Mountain workaround to enable Enhanced
-> +	 * Intel SpeedStep Technology (EIST) for each cpu. Otherwise, the
-> +	 * frequency on some cpus is locked to the minimum value of 624 MHz.
-> +	 * This usually would be the job of the BIOS / bootloader, but U-Boot
-> +	 * only enables it on the cpu on which it is running.
-> +	 */
-> +	if (c->x86_vfm == INTEL_ATOM_AIRMONT_NP) {
-
-Model checks area kinda a last resort. A quick search in the SDM found:
-
-CPUID.01H:ECX[7]: If 1, supports Enhanced Intel SpeedStep® technology.
-
-But there's other chit chat in the "Runtime Mutable CPUID Fields"
-section that makes it seem that it's not a really feature enumeration
-bit, but a flag to tell if the BIOS enabled it:
-
-	CPUID.01H:ECX[7] -- This feature flag reflects the setting in
-			    IA32_MISC_ENABLE[16]
-
-But the plot thickens because the *existing* code does this:
-
-static int centrino_cpu_init(struct cpufreq_policy *policy)
-{
-...
-        /* Only Intel makes Enhanced Speedstep-capable CPUs */
-        if (cpu->x86_vendor != X86_VENDOR_INTEL ||
-            !cpu_has(cpu, X86_FEATURE_EST))
-                return -ENODEV;
-...
-        if (!(l & MSR_IA32_MISC_ENABLE_ENHANCED_SPEEDSTEP)) {
-
-Which, again, makes it seem like X86_FEATURE_EST (aka. CPUID.01H:ECX[7])
-tells you if the MSR bit is supported, not whether it is enabled.
-
-I'd tend to trust the existing kernel code over quibbling with the SDM
-wording in general. It's also possible the old code was just confused or
-something was buggy.
-
-> +		rdmsrq(MSR_IA32_MISC_ENABLE, misc_enable);
-> +		if (!(misc_enable & MSR_IA32_MISC_ENABLE_ENHANCED_SPEEDSTEP)) {
-> +			misc_enable |= MSR_IA32_MISC_ENABLE_ENHANCED_SPEEDSTEP;
-> +			wrmsrq(MSR_IA32_MISC_ENABLE, misc_enable);
-> +
-> +			/* check to see if it was enabled successfully */
-> +			rdmsrq(MSR_IA32_MISC_ENABLE, misc_enable);
-> +			if (!(misc_enable & MSR_IA32_MISC_ENABLE_ENHANCED_SPEEDSTEP)) {
-> +				pr_info("CPU%d: Can't enable Enhanced SpeedStep\n",
-> +					c->cpu_index);
-> +			}
-> +		}
-> +	}
->  }
-
-
-This is also not written in the normal kernel style which minimizes
-indentation. For instance, the function should have opened with:
-
-	if (c->x86_vfm != INTEL_ATOM_AIRMONT_NP)
-		return;
-
-It also needs to be reconciled with centrino_cpu_init() (at least).
-Having *a* single place to go in and say "If this CPU supports 'EST',
-turn it on" would be a minimal refactoring that could be shared by your
-new workaround and the old centrino code.
-
-centrino_cpu_init() does look gated on X86_FEATURE_EST already, though
-because of the centrino_ids[]. So, you still need to figure out the
-interaction with X86_FEATURE_EST for when you call the workaround.
 
