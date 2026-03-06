@@ -1,74 +1,64 @@
-Return-Path: <linux-pm+bounces-43725-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43726-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gOgYGvckqmkPMAEAu9opvQ
-	(envelope-from <linux-pm+bounces-43725-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 01:51:03 +0100
+	id EM9NLaMmqmkPMAEAu9opvQ
+	(envelope-from <linux-pm+bounces-43726-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 01:58:11 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 221E021A003
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 01:51:03 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6649321A121
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 01:58:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 89C70301DD6D
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 00:51:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 600423012CD7
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 00:58:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC0852EC09B;
-	Fri,  6 Mar 2026 00:50:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A88E2F12CF;
+	Fri,  6 Mar 2026 00:58:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uY0qC/VE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OoOHHlN2"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975952DC334;
-	Fri,  6 Mar 2026 00:50:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077718460;
+	Fri,  6 Mar 2026 00:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772758259; cv=none; b=ZNXyAS5Q2Q6ncOkWCztU90Ud2ilG2E5oMQdFsDMh9zjrXISsG/1AvpQJIGVmWiYMdTk1G1YJe2JKygRv/0sgpfbJBIJ3RBNfYxkL6/u11X4QYGqWytr4LPwCzzHxXA1dEcvWCajv7acqBLFer1TXMjuM3t0/8oKh3+DXGUlsmo0=
+	t=1772758689; cv=none; b=TPfwrOVAoKk5BCGAm4LwNKJhBNS9kuidUaPCcAfF0qzPLyxI0Sk+0zBEOhF8o4hSBtqPPVFEIfdbwNON2lkQ+vPCurZ3+Kpsh+HW+iWRsvM2mul4IFepnCUMvppYOBtmrgoxmc+0AEaSUpOace7XK5bP0COhAfdpOYvs/26gYak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772758259; c=relaxed/simple;
-	bh=rqLpQNdsN3bFAosqutwLfQ4hCid22S/GwXAsl9MyJZM=;
+	s=arc-20240116; t=1772758689; c=relaxed/simple;
+	bh=5e5Gf2h2zDHX7apPUfsiiaIYOEsHOzeJp7URjsOvOeo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jea0qfDnToc9J76JmSTXlR5KEuHXvSxOlwiPAr87apujv4OBPcrXuIgk3ugDieYZMnPsRbPDVaI4E245LZecHL7RkR8rRaPNasBR/UI5H8WWwf8CcD4kXdEpo+J1zWBKgW3sGIQpkFTJfQOADq0HouO0/pOZLu7l+RgLn8rbCog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uY0qC/VE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12201C116C6;
-	Fri,  6 Mar 2026 00:50:59 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=EZSz/KsaNA1iOVn5X6gX8ywSkLcZcwWOUoXkCcVnvCeXU8OI0MnGt3iVlYRWtYZ1PWwuKLWWTKPMGQe4jWbB0uNQJ9B0gHnj2XQKgt8LZvtQiyyTnftoMmD2hmFUZwnKV6vHyRQLFKuqRlEGGjJKyA1nfnqnlaTCdiWiNXKYkB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OoOHHlN2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BA50C116C6;
+	Fri,  6 Mar 2026 00:58:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772758259;
-	bh=rqLpQNdsN3bFAosqutwLfQ4hCid22S/GwXAsl9MyJZM=;
+	s=k20201202; t=1772758688;
+	bh=5e5Gf2h2zDHX7apPUfsiiaIYOEsHOzeJp7URjsOvOeo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uY0qC/VEaN2Yqj1KTuKX/T0rVcCP9sTMbZJLJcUIIJszbR0nY3u6B1L3MwV12ChyX
-	 WkL1GK89L321Qcg0iCrR6sm7KnFtj4Xg89RZdSHcawcPti/JfT54MAPjjXtU/IzgXN
-	 8m4vR/khFxXs+3ooRBtTS3STo+s4VyaJE5/Rii25vLOOPgc3zwTsYJLGlYMyny8XmA
-	 chvmRzjueyfwpsuwXekgT5+T1FX4LAaz4W+SdYFr1ENULxcUR9rOONHWWQGYeQKYVI
-	 PsbtdKYo8ceI9e6hBaOTt9jTKWBSLCwP5EHxrEVl0Injyq1Ywcp6SiQoYIgo0tO2Ne
-	 oI8x+badEIpcw==
-Date: Thu, 5 Mar 2026 18:50:57 -0600
-From: Rob Herring <robh@kernel.org>
-To: Kaustabh Chakraborty <kauschluss@disroot.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
+	b=OoOHHlN2mmz7PSHA3p3oT4sfYJRXhl6mYzO85N5WRXjS4mwci81iI7CezfIdqJybH
+	 oajV1VIWMEvPk3k9SeJvJrhLCZptoaE5Zxe2/vpH4YGY6iJm8BDCljtGKd4Bur4+qk
+	 F3FvKSvA1kVLle6rvIo15DFhtSNiI0vHN2uQlpRk4PmRYN55qIALKD/brslMcdOEwS
+	 cVUOoYa/c/8hoxPScmhyBvmcQ4+8hUL2WzQ9lmmnO2YFLAHg1fi1uLLU808n/pMu/o
+	 PUCfgdu/Vt0BmICoDowB5bFoNO2ytUEY6Yb83YhmbMNm6MpvUlIFqdNm1ewOgliObX
+	 dd5N4bVm8K+4w==
+Date: Thu, 5 Mar 2026 18:58:07 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Badhri Jagan Sridharan <badhri@google.com>
+Cc: Amit Sunil Dhamne <amitsd@google.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Nam Tran <trannamatk@gmail.com>, linux-leds@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 04/13] dt-bindings: power: supply: document Samsung
- S2M series PMIC charger device
-Message-ID: <20260306005057.GA877725-robh@kernel.org>
-References: <20260225-s2mu005-pmic-v3-0-b4afee947603@disroot.org>
- <20260225-s2mu005-pmic-v3-4-b4afee947603@disroot.org>
- <20260225-secret-amusing-cuttlefish-d3bee5@quoll>
- <DGPTBRX09EU5.1D1ZSR7EUV7AT@disroot.org>
+	Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 1/3] dt-bindings: connector: Add SPR AVS Sink APDO
+ definitions
+Message-ID: <177275868690.887629.16208159676173007840.robh@kernel.org>
+References: <20260226055311.2591357-1-badhri@google.com>
+ <20260226055311.2591357-2-badhri@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,8 +67,8 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DGPTBRX09EU5.1D1ZSR7EUV7AT@disroot.org>
-X-Rspamd-Queue-Id: 221E021A003
+In-Reply-To: <20260226055311.2591357-2-badhri@google.com>
+X-Rspamd-Queue-Id: 6649321A121
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -86,62 +76,44 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-43725-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-43726-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Fri, Feb 27, 2026 at 07:56:58PM +0530, Kaustabh Chakraborty wrote:
-> On 2026-02-25 11:44 +01:00, Krzysztof Kozlowski wrote:
-> > On Wed, Feb 25, 2026 at 12:45:06AM +0530, Kaustabh Chakraborty wrote:
-> >> +
-> >> +  This is a part of device tree bindings for S2M and S5M family of Power
-> >> +  Management IC (PMIC).
-> >> +
-> >> +  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
-> >> +  additional information and example.
-> >> +
-> >> +allOf:
-> >> +  - $ref: power-supply.yaml#
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    enum:
-> >> +      - samsung,s2mu005-charger
-> >
-> > Review from v1 still applies. I think you ignored several reviews, so I
-> > will mark entire patchset as changes requested.
-> 
-> Somehow I missed this one... anyways I address them here:
-> 
->   Why do you need a dedicated child node for this? It's got one property,
->   other than the compatible, that you're using. It could easily just go
->   in the parent without a dedicated node etc.
-> 
-> The dt node also references a simple-battery node, that's why it's
-> required.
 
-That can go in the parent.
+On Thu, 26 Feb 2026 05:53:09 +0000, Badhri Jagan Sridharan wrote:
+> USB Power Delivery 3.2 introduces a new power supply type SPR AVS.
+> Add macro definitions for the USB Power Delivery (PD)
+> Standard Power Range (SPR) Adjustable Voltage Supply (AVS) as a
+> Sink Augmented Power Data Object (APDO) in the device tree bindings.
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> ---
+>  .../bindings/connector/usb-connector.yaml      |  5 +++--
+>  include/dt-bindings/usb/pd.h                   | 18 ++++++++++++++++++
+>  2 files changed, 21 insertions(+), 2 deletions(-)
+> 
 
-Rob
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
+
 
