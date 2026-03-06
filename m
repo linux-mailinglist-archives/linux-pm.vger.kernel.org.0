@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-43773-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43774-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iGx7K7umqmlTVAEAu9opvQ
-	(envelope-from <linux-pm+bounces-43773-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:04:43 +0100
+	id 4OsRLMOmqmlTVAEAu9opvQ
+	(envelope-from <linux-pm+bounces-43774-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:04:51 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 026AC21E67F
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5379821E68D
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:04:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 27B2A3135358
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 09:58:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B6C263136892
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 09:58:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CF8E34E743;
-	Fri,  6 Mar 2026 09:58:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D1FC34F47C;
+	Fri,  6 Mar 2026 09:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="3MlSD4sw"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="SNHReig0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013039.outbound.protection.outlook.com [40.93.201.39])
+Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012040.outbound.protection.outlook.com [40.107.200.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 051E634D905;
-	Fri,  6 Mar 2026 09:58:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.39
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE46E34D4EA;
+	Fri,  6 Mar 2026 09:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.40
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772791115; cv=fail; b=K0dnxdgLcMzCf5Lc3BWus1jdtinbAM3Hznw9KG3bqNjqUcEUBpg/dMkgBXqLG6g8STtl+G9kLGggX/4G8V7cj4JLEsPOddM21JKaGO9z0ljCpT6bMbwxfS7PM5IGNtpj86je8nPxO8cy+WNJ4pgSlpn1Ii3yiUhkwoUyoybEep8=
+	t=1772791118; cv=fail; b=LWqYEKGp/JbTg8x78eKtp57b8vs5QA7A2ORaf8N955Ba2PcO156bmic0VBOO755WUftXTNmihuyRUnPjnCtj2XxiF02Ikfw64hcUFoAJ9owqbDJIvOZhgakfhwdOA8jd+XG57oewYpBa6aBunlbQqk1B1xb938aF7jNgYIgP84A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772791115; c=relaxed/simple;
-	bh=cmXFmMBQZY4pDsHdKE7krPPNQzFJ4EkH4YIqCx4YWx0=;
+	s=arc-20240116; t=1772791118; c=relaxed/simple;
+	bh=/RCr6D/qJU+hSLD0TYfli//axvBTKquVQb+wfedg3bk=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rQL8Muew7HNIgQmrkP25abK0BQmqTA2Ds8KVB/tEIGy4gzx1Rsxm6CpjCJ06H/EWoGF6SYTCV6ZCr2d/JgC6y5AmnD3msdQsBdz+97cdjrAo+0DbhaQoMSqNEIVGlN/+enkiyolEkIa9o+YXQS1zXyktkPQMnsr/4rhdQzMaSnY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=3MlSD4sw; arc=fail smtp.client-ip=40.93.201.39
+	 MIME-Version:Content-Type; b=Ser/i8QGMMfFwqtSg4bRpfjxLxO/NYVdpvjnzo/0OfTk5o89zMFWCZgZRvVXfCFvRaC0tpd4X93ThR/Vab1LLmTW9nkR3Nk+Z61CwJBKbm3/6QWZIDVAwhafgCLyulKKRDs7oj7xERGSCV4/PNM5iuhQssS8u53tUoxgzAyOizg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=SNHReig0; arc=fail smtp.client-ip=40.107.200.40
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JWiF2F/VMdvs64AmqWCvSPL10TCJksYBYZSmbDnZiRvhBl/tKtJueH9luUMvlu5TpPoF7NNAn1VU0lBFSdoDI/NKxW27req7vUOzmwMAJAwKJxaSIKOWxySotiydVY+vbbAtE2xfQSIQq+bhbEnYnW19ixYFGFx2mGEYnmWM03e/UYCmcZ7zlgalN55rSpEOu57thYNbcgir3w19L6k0cZthhMB1tCJib4genujDbl77nJFXl+NPEmgAp+4kwH2rHjI4iewjvSZh7GAgGH+jjq9cYF+XC8ncWuNF1V5vy04Ddxb9FebkFayMr/s6n8aOni5sSsRx9r97/kCpDEzNDQ==
+ b=KG/QQbe8aSpKqNFRyCV1yt4sZmXby3A+BnH0eq1/Hc23Z+rLOjK9ZK1VNC+8Uw+fgdOt6sXb71GYubCNfJPn+6VK9GihS7vzEBKbOyxG4RH9ZWPWqkKsrUJ0jTZYPCPuU70buQQ0y70le4gXOkuQ/tGs78cKr0r31wbNCyXhdoOYm9Ej1pHsqxhVojoNq6Iv95IS3Jiem0m1RveLjKqpzks3XwmioItYzZtvtKtQIqCCWT49AroLZqTaSfA4Rhv+F8INqX+cnAfs/PGNBBV04iGr9pivaXciNdxyBhj4XRHnq818FLOkaHnR3GSzekazIjxFWc6u5UnfpyDFUQF0yg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MhAXrTiULSqCL7nlE68RWQlrJaXreztSsEPR6GT4514=;
- b=lfNEMpOe469aJ17Xq53yo/dVftww/lJZSwED2SicyzODNEPVIkRdLQ/RewCidBYhKgRPC6zEIja+jFlepbkR2jFRNzZz8Qn1Wvz6TzR3T1eNGLbGx9xrYBIGjWUTFJLMJNgzNaoG+Ijm7AX2vCG+p4zD8Bw/WsadwhWp1cY5cRch5jT9uVAhsFsD68He6rDM1qu3EBZQRRrLUHM7anXzVuFHundwmK6E1aln3ZiPVFZtEYkd0Ht0kERiS0iV76hIHYSdQa0LOBrFa4zWsSixYEnoUT9r8TKHQSiYHVCpEKMKsFkEGzwjk8HJDfZNJvmQHvENXtcajawAlttt/t+K3Q==
+ bh=HQ6GIC9EaHMRKIeft9r4Va0MveDQnflH3XMGGbFpNFo=;
+ b=I80ys3TnqDWBMxzl9CTo0yYjw9Q+F+qlTbWNUJRDk1FmHc4mGSdMno9UizpJFw8fEUqBI19wrts591+NAMlwU2XmTx+5WOX/Fsg8lSb4HhVD4t5p+7UiexaOpCcAU5oU4NOAmQEBBqHAJve23PVpAK0ix7fvTANZYglLQ9bJCnpOpFpJQiDPh3xUS7XjdWBfw6HUz1U7ENcMWFaogc7pvFbOB7Eizk8Orj5ZHKcyy9OaviFJRHRZhyV6DmjY1689XlKmV+fkRxheGs7q5mBvY83/HrLPV6Rskfo8MGIprfOLvwtWWB/L2CO3WMmUJ/yLFov+vDx4jGz6IK/t7D+wXg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MhAXrTiULSqCL7nlE68RWQlrJaXreztSsEPR6GT4514=;
- b=3MlSD4swFzubPLDFYXR4mG6QsKFxIVdjH8ScuV6jdS+cS2Fd74vYWnOgfZtwjXdhs5dO/1UAUkS4OPuJrUWhoW/6xQBZYOKu0TyUnM6J5Uce+oyxsn4wjLXELt7bjRLUnFHcUrY/43xxLcVzOQ4t8l4RuXfjjvkLj63H3W1b5vc=
-Received: from BN1PR10CA0030.namprd10.prod.outlook.com (2603:10b6:408:e0::35)
- by MN2PR12MB4454.namprd12.prod.outlook.com (2603:10b6:208:26c::18) with
+ bh=HQ6GIC9EaHMRKIeft9r4Va0MveDQnflH3XMGGbFpNFo=;
+ b=SNHReig0AJ0rpf/I6gu67g7gDwh7drXrtk8reyE8EXTkj/nZKxpl2P0x1m1s8BYyPPseleXhs+KS25aOMZs4piUx5oeSKP43DK+mWlACSFGFlxL5oYqWyE+jPq6RYGfJscR/IcvLd5wEHsYn13ngO+V6NLjPkl5GAqebLhJwq2U=
+Received: from BN0PR03CA0024.namprd03.prod.outlook.com (2603:10b6:408:e6::29)
+ by BY5PR12MB4258.namprd12.prod.outlook.com (2603:10b6:a03:20d::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.17; Fri, 6 Mar
- 2026 09:58:29 +0000
-Received: from BN2PEPF0000449D.namprd02.prod.outlook.com
- (2603:10b6:408:e0:cafe::e4) by BN1PR10CA0030.outlook.office365.com
- (2603:10b6:408:e0::35) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9678.18 via Frontend Transport; Fri,
- 6 Mar 2026 09:58:29 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.18; Fri, 6 Mar
+ 2026 09:58:32 +0000
+Received: from BN2PEPF000044A4.namprd02.prod.outlook.com
+ (2603:10b6:408:e6:cafe::91) by BN0PR03CA0024.outlook.office365.com
+ (2603:10b6:408:e6::29) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.22 via Frontend Transport; Fri,
+ 6 Mar 2026 09:58:31 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -66,24 +66,22 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
 Received: from satlexmb07.amd.com (165.204.84.17) by
- BN2PEPF0000449D.mail.protection.outlook.com (10.167.243.148) with Microsoft
+ BN2PEPF000044A4.mail.protection.outlook.com (10.167.243.155) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9678.18 via Frontend Transport; Fri, 6 Mar 2026 09:58:29 +0000
+ 15.20.9678.18 via Frontend Transport; Fri, 6 Mar 2026 09:58:31 +0000
 Received: from BLRRASHENOY1.amd.com (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Fri, 6 Mar
- 2026 03:58:25 -0600
+ 2026 03:58:29 -0600
 From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
 To: Mario Limonciello <mario.limonciello@amd.com>, "Rafael J . Wysocki"
 	<rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, K Prateek Nayak
 	<kprateek.nayak@amd.com>
 CC: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>, "Gautham R.
- Shenoy" <gautham.shenoy@amd.com>, "H. Peter Anvin" <hpa@zytor.com>, "Borislav
- Petkov" <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "Thomas
- Gleixner" <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, <x86@kernel.org>
-Subject: [PATCH 4/9] x86/cpufeatures: Add AMD CPPC Performance Priority feature.
-Date: Fri, 6 Mar 2026 15:27:48 +0530
-Message-ID: <20260306095753.17155-5-gautham.shenoy@amd.com>
+ Shenoy" <gautham.shenoy@amd.com>
+Subject: [PATCH 5/9] amd-pstate: Add support for CPPC_REQ2 and FLOOR_PERF
+Date: Fri, 6 Mar 2026 15:27:49 +0530
+Message-ID: <20260306095753.17155-6-gautham.shenoy@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260306095753.17155-1-gautham.shenoy@amd.com>
 References: <20260306095753.17155-1-gautham.shenoy@amd.com>
@@ -99,35 +97,35 @@ X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
  (10.181.42.216)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF0000449D:EE_|MN2PR12MB4454:EE_
-X-MS-Office365-Filtering-Correlation-Id: dadc753d-93b6-4671-e2ee-08de7b66eafa
+X-MS-TrafficTypeDiagnostic: BN2PEPF000044A4:EE_|BY5PR12MB4258:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4b09c043-c218-4c68-ae3e-08de7b66ec5d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|36860700016|82310400026;
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700016|376014|13003099007;
 X-Microsoft-Antispam-Message-Info:
-	IObXAOXniIN834kGQtEL95uLFfBuvHlWAWWRDM67wsVlhBs3pV3odf6k4L4BH90WfQTsToZFPR4Ig9seHuwJkjZxjJpzlfSXVVjDzOR8Qiys+w16utUTed2Q8Q1rD9pr6DRWFgpNRqrCeyF1014HoJFfdmdIqhiOhO24xsmlNRBQJSZCa2mZ0mjo9B6gaypIWiyan06HcmDs69XQr2VSDpHGU20jLkpi4UW2Yp24XUcmEfV1fCZG/Ky49TQ22eJvvR8r3usmMkc7HaU/ddy1MGulLgMqy126rNhjs04CjfPA5GFEadEJ63P4w2nNvTlq2pz5u8zRH5jjfc8YjS1CH7iNnEYKnp3aGL2/zjzWXlgjVZuIArD/XavRChIsVfBHitHxJ3vLvi/DxzgPcpW5mMi6y9iEyOZBQe4OjOh0/9u8YWfuA4VhGyC4o+CGqfbsA52/0pS555eNbvP1ckPRvyWFhLk+Ny8V4tIeO4RvuaFF6HNo4103dvcjAinUHycWcEeW2rAAymf2lZYM5N+2TiVE9BRN1NznDaV7zSRhZD5iWAgDjB9fxP44Mc5Jn0KyYXx1gFTsBNGX1yv34aHBd/qG7/nUHJz/dDM9SQE+/CggCAazhTkTMyoEGVAoGiiHRq2qezAo86praE3hC6/j/Av5JLMUDekCMi5XQw00aRDu82gVTGFs7Qx+4Rm8c9VKq+4DMvqV1zapAfdzjczqZvyAyTg+Q2B15mtf1SqrN0JJlpqP+6TwaX4yYVwjFKNHGMPA8EbIBupSv2t8LUK15mK7ZSuAY1iz029jI0J/Y44=
+	URjGGezuC3ghq5RTvOGEoLFpyrpfXMzpM+L9xqkz25Qh/BKUH+Wm6gnGoNyUeAyTn13ow6/SxJGtpNo8r8b5L91UBMFkQjcZemYpHDGPQarGe8rxD3IJig5bEdn37iv2HcmU5KrPFMNZwvuTSl3Iijq/5rnSPmv7t+A4G62V138+5zaW6TsEcU853rZtLmf+GLKb1WFgF8EIQXKsguoi9IDqpLq18isMb2zmk86ROXQXiz/1UqwIGeOc+oFwyothjMCa09PoN6HzULUYMQZ0tTckCvKEaQhBn2WUvY6AWHttidkk8wnXHZSe76WHBgT0tVnYdyF6RpKdFnjvtD6PqT6DxP+Tpm/hl85MJxDptyUpZ7iVch38D0I0hERMkW5F4wKSNICfWGrWpRRHgeFS0zpSIPhQ3U6AbDBsXYId50zvOlcbwe6fsqNtAaRNbJS7IPG/UIBp8HE86YduoiecvGDxarlQvI8GAVPhGNCdpB6Fs9srjA8Vg7dgoVvxuH83pT/hXC5zm276/bp6mi+ZtFrVeKqGiiVAWecbOz3s5jNNi0l5Pu6VvnSUbnXc33HIZDVCm2nQEagUIz+q/5rEK3T1IpHx14riOR1SttR9UG+bnv12MBzIMYKmqgTdeyG4zPzx4HOk6x7YZjGQcWWeGl7cGv85owhYKRZfcRCycCQ+vIjlMof74twgjko3nKPlstfz+BBGlILNpBfvGZrNHSCp4EmkRo1jmptE5MeoPNcGAAn0YxSBHYCvlWQV0eIwvYryG4QWFlIVrsYWBicn4Q==
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(36860700016)(82310400026);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700016)(376014)(13003099007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	iDKc7hrbbfytlrBv05W6XOzxwdOf56I6tGr4OT8SXG9HS/rz1UDRyM73UOYa4AO0c/7j9SjTDYsTESI0sUJgtl4ygwaRtcOD3NruNorNVRRsY++fajMZz8NGlFDBJD519rMvoEyFoSwl3P+WoEW/LrnQxaelPSmp33wyh+WRGfiHeVDysN+qIglDFLXLRD34FzOAvk4rk8FEf81DiGY7sUd4HXh+RzDbXdlC1LtqwYP0KMo2knKYiYZ7ktuLBASfAHWJLmrtXWENmUXpBU6Rve5kqE5QZRB8Lt6ZIqFEkztpUu+HXSSm/f0tlOENkhjMHTXUOB3EI2fDdE6QZQ2PxcWh7AKTSRzKh1f8uIiiDD8JkjZHaV6kRhQ0LtBi4R17VKC5MoDXa0ASTN3sklZa4TR4lCGpvUfxErftEoi2fv2k3MSUZvLrbjuqNd0sdSRb
+	b4w4W0bIVzujojeVZjsdVXVfmt+LUmGPzCwZdRtYVGiYlqOMhchkenokXkQFDewJXLP35FTtCW9lqtLl/7QjuesdbMzO/kcNRFuanj/H/PsOIqOcpb9nH3EFWPnQDH/UVFYtOvGZRhzbbvZ5FZaxUME7+WN+I3zP+MTqW5XFd+eSJiNT4PQBfPq7NGOtaYzw464aZ7EsbYAPs1HOC5dojoPUY7+Ial0zQZGpwkZCdHbX2uGrqd8gkY9yYfs+A3oSlsjING3z+l/y1THnNnkzGulWnZ1Ft5II4gwDruMAtTIYkd17um7W4IIX3Txl0AsnDk1IeXa2+zePGUX0s+FoJlV2SvFdcmVmhvgVmny20P/xJO/gQ2i2iQTTC9pzmxNd7ezVgNJLqWYyQc8EMmzBrfy6ojI4SCZfJMfArnJBqnbDn42kPifiPt0Z5tpldVUK
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2026 09:58:29.1952
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2026 09:58:31.5205
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dadc753d-93b6-4671-e2ee-08de7b66eafa
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b09c043-c218-4c68-ae3e-08de7b66ec5d
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF0000449D.namprd02.prod.outlook.com
+	BN2PEPF000044A4.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4454
-X-Rspamd-Queue-Id: 026AC21E67F
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4258
+X-Rspamd-Queue-Id: 5379821E68D
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.34 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
@@ -136,19 +134,19 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	TAGGED_FROM(0.00)[bounces-43773-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43774-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[amd.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[gautham.shenoy@amd.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[amd.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm];
 	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Action: no action
 
@@ -162,56 +160,201 @@ indicated by bit 16 of the EDX register for CPUID leaf
 Collaborative Processor Performance Control (CPPC) Performance
 Priority" Revision 1.10.
 
-Define a new feature bit named X86_FEATURE_CPPC_PERF_PRIO to map to
-CPUID 0x80000007.EDX[16].
+The number of distinct floor performance levels supported on the
+platform will be advertised through the bits 32:39 of the
+MSR_AMD_CPPC_CAP1. Bits 0:7 of a new MSR MSR_AMD_CPPC_REQ2
+(0xc00102b5) will be used to specify the desired floor performance
+level for that CPU.
+
+Add support for the aforementioned MSR_AMD_CPPC_REQ2, and macros for
+parsing and updating the relevant bits from MSR_AMD_CPPC_CAP1 and
+MSR_AMD_CPPC_REQ2.
+
+On boot if the default value of the MSR_AMD_CPPC_REQ2[7:0] (Floor
+Perf) is lower than CPPC.lowest_perf, and thus invalid, initialize it
+to MSR_AMD_CPPC_CAP1.nominal_perf which is a sane default value.
 
 Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 ---
 Link to AMD publication describing this feature: https://docs.amd.com/v/u/en-US/69206_1.10_AMD64_CPPC_PUB
 
- arch/x86/include/asm/cpufeatures.h       | 2 +-
- arch/x86/kernel/cpu/scattered.c          | 1 +
- tools/arch/x86/include/asm/cpufeatures.h | 2 +-
- 3 files changed, 3 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/msr-index.h |  5 ++
+ drivers/cpufreq/amd-pstate.c     | 81 ++++++++++++++++++++++++++++++++
+ drivers/cpufreq/amd-pstate.h     |  5 ++
+ 3 files changed, 91 insertions(+)
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index dbe104df339b8..86d17b195e794 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -415,7 +415,7 @@
-  */
- #define X86_FEATURE_OVERFLOW_RECOV	(17*32+ 0) /* "overflow_recov" MCA overflow recovery support */
- #define X86_FEATURE_SUCCOR		(17*32+ 1) /* "succor" Uncorrectable error containment and recovery */
--
-+#define X86_FEATURE_CPPC_PERF_PRIO	(17*32+ 2) /* CPPC Floor Perf support */
- #define X86_FEATURE_SMCA		(17*32+ 3) /* "smca" Scalable MCA */
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index da5275d8eda63..60547dcf47d0f 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -762,12 +762,14 @@
+ #define MSR_AMD_CPPC_CAP2		0xc00102b2
+ #define MSR_AMD_CPPC_REQ		0xc00102b3
+ #define MSR_AMD_CPPC_STATUS		0xc00102b4
++#define MSR_AMD_CPPC_REQ2		0xc00102b5
  
- /* Intel-defined CPU features, CPUID level 0x00000007:0 (EDX), word 18 */
-diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
-index 42c7eac0c387b..837d6a4b0c282 100644
---- a/arch/x86/kernel/cpu/scattered.c
-+++ b/arch/x86/kernel/cpu/scattered.c
-@@ -52,6 +52,7 @@ static const struct cpuid_bit cpuid_bits[] = {
- 	{ X86_FEATURE_CPB,			CPUID_EDX,  9, 0x80000007, 0 },
- 	{ X86_FEATURE_PROC_FEEDBACK,		CPUID_EDX, 11, 0x80000007, 0 },
- 	{ X86_FEATURE_AMD_FAST_CPPC,		CPUID_EDX, 15, 0x80000007, 0 },
-+	{ X86_FEATURE_CPPC_PERF_PRIO,		CPUID_EDX, 16, 0x80000007, 0 },
- 	{ X86_FEATURE_MBA,			CPUID_EBX,  6, 0x80000008, 0 },
- 	{ X86_FEATURE_X2AVIC_EXT,		CPUID_ECX,  6, 0x8000000a, 0 },
- 	{ X86_FEATURE_COHERENCY_SFW_NO,		CPUID_EBX, 31, 0x8000001f, 0 },
-diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
-index c3b53beb13007..1f1aeeb151337 100644
---- a/tools/arch/x86/include/asm/cpufeatures.h
-+++ b/tools/arch/x86/include/asm/cpufeatures.h
-@@ -414,7 +414,7 @@
-  */
- #define X86_FEATURE_OVERFLOW_RECOV	(17*32+ 0) /* "overflow_recov" MCA overflow recovery support */
- #define X86_FEATURE_SUCCOR		(17*32+ 1) /* "succor" Uncorrectable error containment and recovery */
--
-+#define X86_FEATURE_CPPC_PERF_PRIO	(17*32+ 2) /* CPPC Floor Perf support */
- #define X86_FEATURE_SMCA		(17*32+ 3) /* "smca" Scalable MCA */
+ /* Masks for use with MSR_AMD_CPPC_CAP1 */
+ #define AMD_CPPC_LOWEST_PERF_MASK	GENMASK(7, 0)
+ #define AMD_CPPC_LOWNONLIN_PERF_MASK	GENMASK(15, 8)
+ #define AMD_CPPC_NOMINAL_PERF_MASK	GENMASK(23, 16)
+ #define AMD_CPPC_HIGHEST_PERF_MASK	GENMASK(31, 24)
++#define AMD_CPPC_FLOOR_PERF_CNT_MASK	GENMASK(39, 32)
  
- /* Intel-defined CPU features, CPUID level 0x00000007:0 (EDX), word 18 */
+ /* Masks for use with MSR_AMD_CPPC_REQ */
+ #define AMD_CPPC_MAX_PERF_MASK		GENMASK(7, 0)
+@@ -775,6 +777,9 @@
+ #define AMD_CPPC_DES_PERF_MASK		GENMASK(23, 16)
+ #define AMD_CPPC_EPP_PERF_MASK		GENMASK(31, 24)
+ 
++/* Masks for use with MSR_AMD_CPPC_REQ2 */
++#define AMD_CPPC_FLOOR_PERF_MASK	GENMASK(7, 0)
++
+ /* AMD Performance Counter Global Status and Control MSRs */
+ #define MSR_AMD64_PERF_CNTR_GLOBAL_STATUS	0xc0000300
+ #define MSR_AMD64_PERF_CNTR_GLOBAL_CTL		0xc0000301
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index fb5d7bb320c15..fdc1c102a873c 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -329,6 +329,74 @@ static inline int amd_pstate_set_epp(struct cpufreq_policy *policy, u8 epp)
+ 	return static_call(amd_pstate_set_epp)(policy, epp);
+ }
+ 
++static int amd_pstate_set_floor_perf(struct cpufreq_policy *policy, u8 perf)
++{
++	struct amd_cpudata *cpudata = policy->driver_data;
++	u64 value, prev;
++	int ret;
++
++	if (!cpu_feature_enabled(X86_FEATURE_CPPC_PERF_PRIO))
++		return 0;
++
++	value = prev = READ_ONCE(cpudata->cppc_req2_cached);
++	FIELD_MODIFY(AMD_CPPC_FLOOR_PERF_MASK, &value, perf);
++
++	if (value == prev)
++		return 0;
++
++	ret = wrmsrq_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ2, value);
++	if (ret) {
++		pr_err("failed to set CPPC REQ2 value. Error (%d)\n", ret);
++		return ret;
++	}
++
++	WRITE_ONCE(cpudata->cppc_req2_cached, value);
++
++	return ret;
++}
++
++static int amd_pstate_cache_cppc_req2(struct cpufreq_policy *policy)
++{
++	struct amd_cpudata *cpudata = policy->driver_data;
++	u64 value;
++	int ret;
++
++	if (!cpu_feature_enabled(X86_FEATURE_CPPC_PERF_PRIO))
++		return 0;
++
++	ret = rdmsrq_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ2, &value);
++	if (ret) {
++		pr_err("failed to read CPPC REQ2 value. Error (%d)\n", ret);
++		return ret;
++	}
++
++	WRITE_ONCE(cpudata->cppc_req2_cached, value);
++	return 0;
++}
++
++static int amd_pstate_init_floor_perf(struct cpufreq_policy *policy)
++{
++	struct amd_cpudata *cpudata = policy->driver_data;
++	u8 floor_perf;
++	int ret;
++
++	if (!cpu_feature_enabled(X86_FEATURE_CPPC_PERF_PRIO))
++		return 0;
++
++	ret = amd_pstate_cache_cppc_req2(policy);
++	if (ret)
++		return ret;
++
++	floor_perf = FIELD_GET(AMD_CPPC_FLOOR_PERF_MASK,
++			       cpudata->cppc_req2_cached);
++
++	/* Don't overwrite a sane value initialized by the platform firmware */
++	if (floor_perf > cpudata->perf.lowest_perf)
++		return 0;
++
++	return amd_pstate_set_floor_perf(policy, cpudata->perf.nominal_perf);
++}
++
+ static int shmem_set_epp(struct cpufreq_policy *policy, u8 epp)
+ {
+ 	struct amd_cpudata *cpudata = policy->driver_data;
+@@ -426,6 +494,7 @@ static int msr_init_perf(struct amd_cpudata *cpudata)
+ 	perf.lowest_perf = FIELD_GET(AMD_CPPC_LOWEST_PERF_MASK, cap1);
+ 	WRITE_ONCE(cpudata->perf, perf);
+ 	WRITE_ONCE(cpudata->prefcore_ranking, FIELD_GET(AMD_CPPC_HIGHEST_PERF_MASK, cap1));
++	WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
+ 
+ 	return 0;
+ }
+@@ -1036,6 +1105,12 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+ 	if (cpu_feature_enabled(X86_FEATURE_CPPC))
+ 		policy->fast_switch_possible = true;
+ 
++	ret = amd_pstate_init_floor_perf(policy);
++	if (ret) {
++		dev_err(dev, "Failed to initialize Floor Perf (%d)\n", ret);
++		goto free_cpudata1;
++	}
++
+ 	ret = freq_qos_add_request(&policy->constraints, &cpudata->req[0],
+ 				   FREQ_QOS_MIN, FREQ_QOS_MIN_DEFAULT_VALUE);
+ 	if (ret < 0) {
+@@ -1597,6 +1672,12 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
+ 	if (ret)
+ 		goto free_cpudata1;
+ 
++	ret = amd_pstate_init_floor_perf(policy);
++	if (ret) {
++		dev_err(dev, "Failed to initialize Floor Perf (%d)\n", ret);
++		goto free_cpudata1;
++	}
++
+ 	current_pstate_driver->adjust_perf = NULL;
+ 
+ 	return 0;
+diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
+index cb45fdca27a6c..0c587ca200199 100644
+--- a/drivers/cpufreq/amd-pstate.h
++++ b/drivers/cpufreq/amd-pstate.h
+@@ -62,9 +62,12 @@ struct amd_aperf_mperf {
+  * @cpu: CPU number
+  * @req: constraint request to apply
+  * @cppc_req_cached: cached performance request hints
++ * @cppc_req2_cached: cached value of MSR_AMD_CPPC_REQ2
+  * @perf: cached performance-related data
+  * @prefcore_ranking: the preferred core ranking, the higher value indicates a higher
+  * 		  priority.
++ * @floor_perf_cnt: Cached value of the number of distinct floor
++ *                  performance levels supported
+  * @min_limit_freq: Cached value of policy->min (in khz)
+  * @max_limit_freq: Cached value of policy->max (in khz)
+  * @nominal_freq: the frequency (in khz) that mapped to nominal_perf
+@@ -87,10 +90,12 @@ struct amd_cpudata {
+ 
+ 	struct	freq_qos_request req[2];
+ 	u64	cppc_req_cached;
++	u64	cppc_req2_cached;
+ 
+ 	union perf_cached perf;
+ 
+ 	u8	prefcore_ranking;
++	u8	floor_perf_cnt;
+ 	u32	min_limit_freq;
+ 	u32	max_limit_freq;
+ 	u32	nominal_freq;
 -- 
 2.34.1
 
