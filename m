@@ -1,472 +1,181 @@
-Return-Path: <linux-pm+bounces-43764-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43765-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0GUUAaacqmnPUQEAu9opvQ
-	(envelope-from <linux-pm+bounces-43764-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 10:21:42 +0100
+	id eOl+Hz6dqmnPUQEAu9opvQ
+	(envelope-from <linux-pm+bounces-43765-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 10:24:14 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 577C121DD08
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 10:21:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD9F721DD8E
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 10:24:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 03BCB301B731
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 09:19:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 12236300A622
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 09:21:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ECFD340A57;
-	Fri,  6 Mar 2026 09:19:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27D5733A9D3;
+	Fri,  6 Mar 2026 09:21:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="IztSesDh";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="LWuErZMQ"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="MYAS18R1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA89333CE92
-	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 09:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A02F8479;
+	Fri,  6 Mar 2026 09:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772788762; cv=none; b=DcQL05/RLJeTBwlmw6tHEemnfREGiiJpN/ONyOnwUm98BBQgaWi1BNrr74VEON20zPPp4wcBCHCrr5LI3RRTXVfhzFCECeFCnbDeXbAzsIJCU/brkkt9bBsDfzyRpOnOVvfMAhR/dLAXrP37O1Bdv3Zgnh6vOGiq9Fmf6YZBnuI=
+	t=1772788903; cv=none; b=Orkv5FN2oYiN+v9uzfVmaO9tQrGWxLSRMDxcNI+szSv4oJQfsEz0euq1XmtG8ciLGbzgMJfbK5aG8O4c8YXyhxWAME2lgEue4MKBrAgxa9IL83RSLTi6sfeomBzbyP0o9q43VTRqOZOpzfraeSHJ25Lju3LtuXkqn3DUjyvujD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772788762; c=relaxed/simple;
-	bh=nRsjqy8MOrUMx5ehRpdvcGpiNDJEMEnbib726qs0XV8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a1Z2VvS5giS/J/v5gU01u4sIJ4bC25HlCEp08HoAzynacrPRtFdyMNTPAXraK9t8hYBt8wAX/PJvv72Lq03k/se8FPlgV3PWCNHcLDzgWpdOd52WDUCddtXgdxoQgdgon1uOjsiXHKAiuQFiLkPloztJ3EwyI6pqA3YwwtNu7Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=IztSesDh; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=LWuErZMQ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6264aWcD2483249
-	for <linux-pm@vger.kernel.org>; Fri, 6 Mar 2026 09:19:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=cSOe56YMTANQI6CN7wP4dAFU
-	5aYEbdGuAmKaMtM1SpU=; b=IztSesDhDYU4LZzWEknhPECzGzLjVHYP5t+lqkyj
-	NJnHYVrqLYfgpyS+AZUzcCnDysZYWaA6nHIWZgeU2sg9TQfdE7s7d5IbSJHxI7w/
-	Vnwe+cqsW384a7RY+R1CrEWu+9sutjbim15PrPiClcH5xOH4+hpca0btzViJelfu
-	QttX9vEjHs8/MyaoX1nw2Z4GBwBTOIWnlwJtPnv/CAF84tLYWahGjpjDhwNoL8tw
-	SHXKg8MZzhRE2g89RMXEC0psjVkg1rKvIebMb0xVMADZXGfhUArCjIwJJpDfpgK1
-	ZHHlRHkPfgSe22Bdvua4zetRFdMaHI0ijsFrK06gaBfzWA==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cq84wc2c0-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2026 09:19:19 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8c71655aa11so7284956885a.3
-        for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2026 01:19:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1772788759; x=1773393559; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cSOe56YMTANQI6CN7wP4dAFU5aYEbdGuAmKaMtM1SpU=;
-        b=LWuErZMQDP5U6NLjfs848j3Q0ICKFuOhqTxQfiNvMW8QwlIqQy2Gneg3BtYkPFlx/r
-         iuaNg4cxgqJx4iECJYLF7ZNTnOyVjblNCm6EcIUwCGjqd2rAyC9O8hlMqm9QXIHddXVK
-         ghgaoOaFfFmYutYt2gizQ5d4xS8rICnCvbT3txWRDhT9dQbGn1N6gZcYJ4GhublgCf+h
-         RB2rwL/c+KgJjGjh7GUtgMG2d6rxonJPDGxE4lC85TKNk8cAnFnV2oiSnOzGrNBGUiy5
-         9YsTRAPBL7xj2FCcwT+bbT2tEaPugAPu7VkX/u+enFQoaW6EVQzu73CTdDo3y/HP/Dwm
-         Hq7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772788759; x=1773393559;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cSOe56YMTANQI6CN7wP4dAFU5aYEbdGuAmKaMtM1SpU=;
-        b=EBjPbVsl1WoVAUdfRPdeTVKCn8jXrhh6VXjChaGAdih5GmUqcP6gPFg3TAk4zSgFeT
-         fMc8chO2cShtb5cpqcPtTqkuCS8lVTPQr8OFY2NbO9SpDMTt+DVdJ+mo1RaOv4zhsv+l
-         8DkL/aI3ZCOOZQDs7MbNW7TPAYgyi0OLERWXhEJQPC6LfYvf1ojRzj99DOFHCSpjV60V
-         YwNnxqHVNYm02EcW5uC54DMxZ6A90vQk4G6qkqqu/w0F4O/GHIxMtFxj+usbMbUyqvz3
-         iktKCA71zZXpwge8l4y2EkNmMaQVRJgvD205VPH6amwhKkC6M7t+WIJ9E18aQrhvHkIy
-         q0zA==
-X-Forwarded-Encrypted: i=1; AJvYcCWxLI45wQlsIvMeRWR/SWffOoxH9zIt1WRR0YYaXczYe7dEmRtmLSXmTVNaFhiAIMGnyXDI8VMrNg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywtj9YDLSi6ALxd9hNVI41cK3ottzpCbsDIZSxsk3XC8ATiIkbC
-	QWfX1hYTVnxbQxca3jUJAEarF1mLxgAAKWSd9UTmowU7vEIdRbjdZVociZSZEs6DWfJv+AcJ+js
-	n5fDTpe2vhTD2NpcE4iUDkYoJhy4IPSVGd8bmUi4bvfXeaydLBn7FuB8hUSB2sg==
-X-Gm-Gg: ATEYQzwOJtpvIFP3jhrm52b83pqrTHr5OC2b5kp31nRYELxYHUPuWRa6YkCfjOeb//I
-	02C36ID+OXwCBFOn100hqUuELqw0u7/qlKND4rbChvmdJh3n5zV/ZNkSXrv3V7bZ6B76ma82kSH
-	K/xcqCtw+9s4mdvrRUEv4+LPGX/w1J24Cmzfe5xjWwNvzezBJwvk4kHMbvYGjzvdee8lN4tYiz3
-	++INC+JuJGHta6QguzFWKHdbEyShiqHqQNFuqQDke5VB4dXlm/o/vp6memNxLYYLjt/5tS1wdxX
-	6kawYs1EpWKd73KrOU9WW1sEx/ZNQ0S/kJJfCLIwGVi8LHo+6i/kP2wmd2B+0+SvnlJvbGkd5ZZ
-	6A1VqCB4bvIuF+hxSuBiqIY07kvPd
-X-Received: by 2002:a05:620a:c4d:b0:8c7:1643:c1c4 with SMTP id af79cd13be357-8cd6d4a731emr167494485a.72.1772788758905;
-        Fri, 06 Mar 2026 01:19:18 -0800 (PST)
-X-Received: by 2002:a05:620a:c4d:b0:8c7:1643:c1c4 with SMTP id af79cd13be357-8cd6d4a731emr167492385a.72.1772788758416;
-        Fri, 06 Mar 2026 01:19:18 -0800 (PST)
-Received: from mai.linaro.org ([2a05:6e02:1041:c10:1265:158c:17d1:c76e])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4852470c258sm11935725e9.30.2026.03.06.01.19.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 01:19:17 -0800 (PST)
-Date: Fri, 6 Mar 2026 10:19:15 +0100
-From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-To: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-Cc: andersson@kernel.org, mathieu.poirier@linaro.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, rui.zhang@intel.com,
-        lukasz.luba@arm.com, konradybcio@kernel.org, mani@kernel.org,
-        casey.connolly@linaro.org, amit.kucheria@oss.qualcomm.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        manaf.pallikunhi@oss.qualcomm.com
-Subject: Re: [PATCH v2 1/8] thermal: Add Remote Proc cooling driver
-Message-ID: <aaqcE5jk-JCoBVG7@mai.linaro.org>
-References: <20260127155722.2797783-1-gaurav.kohli@oss.qualcomm.com>
- <20260127155722.2797783-2-gaurav.kohli@oss.qualcomm.com>
+	s=arc-20240116; t=1772788903; c=relaxed/simple;
+	bh=UJimAI6MpCPZRXpsGNMkGh2U7w9l7SJBEU5HYIMCLT4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Syf5HOQfdvRiqnm9IBkJy6B4Ea+hgjtHK2tvfdteT+LcEmChV0iWYr775uehOHU8spTRFHfev4f9z9QNtlMscPieP4K2UsSzOBZ0SXcV4xk+fE8krC/bjb/Tjc2TqiO/Fzmkx84RsKYxYi2I19GYQoEiiFAjLq8aVDP2z/u0lbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=MYAS18R1; arc=none smtp.client-ip=113.46.200.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=thjf5LS0d0/tsenwyiZ3DkOlfTBMesq+nQklXQnMHPw=;
+	b=MYAS18R13QfJXJ5ijJQ+d7n6dhbDE2QD/Frii3kKwfCfSQkvdm+KLAB45848VPF1sBLBUwMNQ
+	kLU+4cNByA7m+YlreSglA5s+MDeoQxYxBDjuw3WjkIxV0xkY8PbcS92AdKD1HfMWTbPUyaTKUHM
+	L8c7+9ROt1FQV8wNESn8Q08=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fS14V6R26zKm9v;
+	Fri,  6 Mar 2026 17:16:42 +0800 (CST)
+Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
+	by mail.maildlp.com (Postfix) with ESMTPS id CE0F24055B;
+	Fri,  6 Mar 2026 17:21:35 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
+ (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 6 Mar
+ 2026 17:21:35 +0800
+Message-ID: <541a8677-7482-4463-9463-21d7410f65b1@huawei.com>
+Date: Fri, 6 Mar 2026 17:21:34 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260127155722.2797783-2-gaurav.kohli@oss.qualcomm.com>
-X-Proofpoint-ORIG-GUID: rD3OcB5IVq-_ef_yUbZ76T0uJqJJVTDf
-X-Proofpoint-GUID: rD3OcB5IVq-_ef_yUbZ76T0uJqJJVTDf
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA2MDA4NyBTYWx0ZWRfX0NFOOpRhomTx
- s3pakMa1SWm2NcAvC9UDLBvmHkijbwc8XXFCRp8jqoAzvZf8D7foygvMwQLvYLqTQ2y02p/ZSqM
- CXIfNXQ3yuK4ofVGSj+KEOyOG8Dk3+14bcAz2ceMf0OdPNrtTtehim7ZMNACOR4/KYZq6hZkrB3
- WIwG+U8Bwbw328pkzYf7iSgh5OhGUvQFB4g0fXKaOWkPAfXeKfwVfbOZXa3RJCrNXTUyCq0q5XW
- 6xJuE4i/VuyN1f4QWtkMiSdN/f33Pl3J2JAHkAehJRsxB62kWrKku17J41iMoAPR6qkQ153IhwZ
- M7ALDdJNpYjuRWS7G8UXqddFsOn7H5piTv+M2LMOu2bCEvlNftJN290+XFIn4wQp9L/WpSdZ9Bd
- deMuTTdgNI4tazHIvT2zQ89t4vVhCBVne1aRpm6dZoOySAgeIWUbuhNawmcpxlOUGKKr+IRlWwg
- yL6tne4WCy3yuGFLSMg==
-X-Authority-Analysis: v=2.4 cv=N64k1m9B c=1 sm=1 tr=0 ts=69aa9c17 cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22 a=EUspDBNiAAAA:8
- a=VwQbUJbxAAAA:8 a=7CQSdrXTAAAA:8 a=D6nbwq-aYW_yfCsrQPgA:9 a=CjuIK1q_8ugA:10
- a=PEH46H7Ffwr30OY-TuGO:22 a=a-qgeE7W1pNrGK8U0ZQC:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-06_03,2026-03-04_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1011 adultscore=0
- suspectscore=0 spamscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603060087
-X-Rspamd-Queue-Id: 577C121DD08
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] cpufreq: governor: Apply limits with target_freq
+ instead of policy->cur
+To: Jie Zhan <zhanjie9@hisilicon.com>, <rafael@kernel.org>,
+	<viresh.kumar@linaro.org>, <mingo@redhat.com>, <peterz@infradead.org>,
+	<juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
+CC: <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>, <bsegall@google.com>,
+	<mgorman@suse.de>, <vschneid@redhat.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+	<jonathan.cameron@huawei.com>, <lihuisong@huawei.com>, <yubowen8@huawei.com>,
+	<zhangpengjie2@huawei.com>, <wangzhi12@huawei.com>,
+	<linhongye@h-partners.com>
+References: <20260210115458.3493646-1-zhenglifeng1@huawei.com>
+ <8f50fe29-c2f6-465a-b04a-6eac79ed49dd@hisilicon.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <8f50fe29-c2f6-465a-b04a-6eac79ed49dd@hisilicon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemf200001.china.huawei.com (7.202.181.227)
+X-Rspamd-Queue-Id: CD9F721DD8E
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43764-lists,linux-pm=lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,qualcomm.com:dkim,qualcomm.com:email,mai.linaro.org:mid];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	TAGGED_FROM(0.00)[bounces-43765-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[daniel.lezcano@oss.qualcomm.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[huawei.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zhenglifeng1@huawei.com,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_FIVE(0.00)[6];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,huawei.com:dkim,huawei.com:mid]
 X-Rspamd-Action: no action
 
-On Tue, Jan 27, 2026 at 09:27:15PM +0530, Gaurav Kohli wrote:
-> Add a new generic driver for thermal cooling devices that control
-> remote processors (modem, DSP, etc.) through various communication
-> channels.
+On 3/5/2026 8:19 PM, Jie Zhan wrote:
 > 
-> This driver provides an abstraction layer between the thermal
-> subsystem and vendor-specific remote processor communication
-> mechanisms.
+> On 2/10/2026 7:54 PM, Lifeng Zheng wrote:
+>> The motivation for this patchset cames from a test on our platform:
+>>
+>> With conservative governor and some pressure on CPU, the frequency rapidly
+>> reach the max supported frequency, such as 2GHz.
+>>
+>> Later, some frequency division strategies on our platform were triggered
+>> and the actual frequency become 500MHz -- 1/4 of the OS distribution
+>> frequency.
+>>
+>> At that time, if someone excecutes 'cat cpuinfo_cur_freq', the actual
+>> frequency will become 250MHz -- 1/4 of the min supported frequency.
+>>
+>> After the platform recovering from the frequency division, the frequency
+>> will stay on 1GHz, until the pressure disappear.
+>>
+>> The reason this happens is that in cpufreq_verify_current_freq(), if
+>> policy->cur != new_freq, policy->update will be queued, which will
+>> ultimately lead to a call to cpufreq_policy_apply_limits(), and update the
+>> target frequency to policy->min. And then in cs_dbs_update(), since the
+>> pressure never vanish, it will always hit the following branches:
+>>
+>> 	if (load > dbs_data->up_threshold) {
+>> 		dbs_info->down_skip = 0;
+>>
+>> 		/* if we are already at full speed then break out early */
+>> 		if (requested_freq == policy->max)
+>> 			goto out;
+>>
+>> Therefore, the target frequency will always remain at the lowest frequency.
+> I feel like this is a common issue that some special handling in the
+> governor should happen when the frequency limits changes, i.e.
+> governor->limits() gets called.  See 'limits_changed' or 'need_freq_update'
+> in the schedutil governor.
 > 
-> Advantage of this to avoid duplicating vendor-specific logic
-> in the thermal subsystem and make it easier for different vendors
-> to plug in their own cooling mechanisms via callbacks.
+> Do you think it's reasonable to mark such a flag in 'cpufreq_policy' when
+> its limits changes, and any governor can use that for their own code?
 
-These changes add a layer on top of another existing without bringing
-a real benefit. At the first glance, it appears to be an ops calling
-an ops with an extra unneeded lock.
+Yes. This is why I said 'The branching conditions in cs_dbs_update() may
+not be strict enough'. However, using policy->cur to decide the target freq
+is unreasonable to me. So this patch set is still meaningful I think.
 
-IMO, a remote proc cooling device should at least group all common
-rproc calls found in the different SoC doing the same thing. Otherwise
-it is not worth to add it.
-
-> Suggested-by: Amit Kucheria <amit.kucheria@oss.qualcomm.com>
-> Signed-off-by: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-> ---
->  MAINTAINERS                          |   7 ++
->  drivers/thermal/Kconfig              |  10 ++
->  drivers/thermal/Makefile             |   2 +
->  drivers/thermal/remoteproc_cooling.c | 143 +++++++++++++++++++++++++++
->  include/linux/remoteproc_cooling.h   |  52 ++++++++++
->  5 files changed, 214 insertions(+)
->  create mode 100644 drivers/thermal/remoteproc_cooling.c
->  create mode 100644 include/linux/remoteproc_cooling.h
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 414f44093269..5ebc7819d2cf 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -26169,6 +26169,13 @@ F:	drivers/thermal/cpufreq_cooling.c
->  F:	drivers/thermal/cpuidle_cooling.c
->  F:	include/linux/cpu_cooling.h
->  
-> +THERMAL/REMOTEPROC_COOLING
-> +M:	Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-> +L:	linux-pm@vger.kernel.org
-> +S:	Supported
-> +F:	drivers/thermal/remoteproc_cooling.c
-> +F:	include/linux/remoteproc_cooling.h
-> +
->  THERMAL/POWER_ALLOCATOR
->  M:	Lukasz Luba <lukasz.luba@arm.com>
->  L:	linux-pm@vger.kernel.org
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index b10080d61860..dfc52eed64de 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -229,6 +229,16 @@ config PCIE_THERMAL
->  
->  	  If you want this support, you should say Y here.
->  
-> +config REMOTEPROC_THERMAL
-> +	tristate "Remote processor cooling support"
-> +	help
-> +	  This implements a generic cooling mechanism for remote processors
-> +	  (modem, DSP, etc.) that allows vendor-specific implementations to
-> +	  register thermal cooling devices and provide callbacks for thermal
-> +	  mitigation.
-> +
-> +	  If you want this support, you should say Y here.
-> +
->  config THERMAL_EMULATION
->  	bool "Thermal emulation mode support"
->  	help
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index bb21e7ea7fc6..ae747dde54fe 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -34,6 +34,8 @@ thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
->  
->  thermal_sys-$(CONFIG_PCIE_THERMAL) += pcie_cooling.o
->  
-> +thermal_sys-$(CONFIG_REMOTEPROC_THERMAL) += remoteproc_cooling.o
-> +
->  obj-$(CONFIG_K3_THERMAL)	+= k3_bandgap.o k3_j72xx_bandgap.o
->  # platform thermal drivers
->  obj-y				+= broadcom/
-> diff --git a/drivers/thermal/remoteproc_cooling.c b/drivers/thermal/remoteproc_cooling.c
-> new file mode 100644
-> index 000000000000..f958efa691b3
-> --- /dev/null
-> +++ b/drivers/thermal/remoteproc_cooling.c
-> @@ -0,0 +1,143 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Remote Processor Cooling Device
-> + *
-> + * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/export.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/of.h>
-> +#include <linux/slab.h>
-> +#include <linux/thermal.h>
-> +
-> +#define REMOTEPROC_PREFIX		"rproc_"
-> +
-> +struct remoteproc_cooling_ops {
-> +	int (*get_max_level)(void *devdata, unsigned long *level);
-> +	int (*get_cur_level)(void *devdata, unsigned long *level);
-> +	int (*set_cur_level)(void *devdata, unsigned long level);
-> +};
-> +
-> +/**
-> + * struct remoteproc_cdev - Remote processor cooling device
-> + * @cdev: Thermal cooling device handle
-> + * @ops: Vendor-specific operation callbacks
-> + * @devdata: Private data for vendor implementation
-> + * @np: Device tree node associated with this cooling device
-> + * @lock: Mutex to protect cooling device operations
-> + */
-> +struct remoteproc_cdev {
-> +	struct thermal_cooling_device *cdev;
-> +	const struct remoteproc_cooling_ops *ops;
-> +	void *devdata;
-> +	struct mutex lock;
-> +};
-> +
-> +/* Thermal cooling device callbacks */
-> +
-> +static int remoteproc_get_max_state(struct thermal_cooling_device *cdev,
-> +				    unsigned long *state)
-> +{
-> +	struct remoteproc_cdev *rproc_cdev = cdev->devdata;
-> +	int ret;
-> +
-> +	mutex_lock(&rproc_cdev->lock);
-> +	ret = rproc_cdev->ops->get_max_level(rproc_cdev->devdata, state);
-> +	mutex_unlock(&rproc_cdev->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int remoteproc_get_cur_state(struct thermal_cooling_device *cdev,
-> +				    unsigned long *state)
-> +{
-> +	struct remoteproc_cdev *rproc_cdev = cdev->devdata;
-> +	int ret;
-> +
-> +	mutex_lock(&rproc_cdev->lock);
-> +	ret = rproc_cdev->ops->get_cur_level(rproc_cdev->devdata, state);
-> +	mutex_unlock(&rproc_cdev->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int remoteproc_set_cur_state(struct thermal_cooling_device *cdev,
-> +				    unsigned long state)
-> +{
-> +	struct remoteproc_cdev *rproc_cdev = cdev->devdata;
-> +	int ret;
-> +
-> +	mutex_lock(&rproc_cdev->lock);
-> +	ret = rproc_cdev->ops->set_cur_level(rproc_cdev->devdata, state);
-> +	mutex_unlock(&rproc_cdev->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct thermal_cooling_device_ops remoteproc_cooling_ops = {
-> +	.get_max_state = remoteproc_get_max_state,
-> +	.get_cur_state = remoteproc_get_cur_state,
-> +	.set_cur_state = remoteproc_set_cur_state,
-> +};
-> +
-> +struct remoteproc_cdev *
-> +remoteproc_cooling_register(struct device_node *np,
-> +			    const char *name, const struct remoteproc_cooling_ops *ops,
-> +			     void *devdata)
-> +{
-> +	struct remoteproc_cdev *rproc_cdev;
-> +	struct thermal_cooling_device *cdev;
-> +	int ret;
-> +
-> +	if (!name || !ops)
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	rproc_cdev = kzalloc(sizeof(*rproc_cdev), GFP_KERNEL);
-> +	if (!rproc_cdev)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	rproc_cdev->ops = ops;
-> +	rproc_cdev->devdata = devdata;
-> +	mutex_init(&rproc_cdev->lock);
-> +
-> +	char *rproc_name __free(kfree) =
-> +		kasprintf(GFP_KERNEL, REMOTEPROC_PREFIX "%s", name);
-> +	/* Register with thermal framework */
-> +	if (np)
-> +		cdev = thermal_of_cooling_device_register(np, rproc_name, rproc_cdev,
-> +							  &remoteproc_cooling_ops);
-> +	else
-> +		cdev = thermal_cooling_device_register(rproc_name, rproc_cdev,
-> +						       &remoteproc_cooling_ops);
-> +
-> +	if (IS_ERR(cdev)) {
-> +		ret = PTR_ERR(cdev);
-> +		goto free_rproc_cdev;
-> +	}
-> +
-> +	rproc_cdev->cdev = cdev;
-> +
-> +	return rproc_cdev;
-> +
-> +free_rproc_cdev:
-> +	kfree(rproc_cdev);
-> +	return ERR_PTR(ret);
-> +}
-> +EXPORT_SYMBOL_GPL(remoteproc_cooling_register);
-> +
-> +void remoteproc_cooling_unregister(struct remoteproc_cdev *rproc_cdev)
-> +{
-> +	if (!rproc_cdev)
-> +		return;
-> +
-> +	thermal_cooling_device_unregister(rproc_cdev->cdev);
-> +	mutex_destroy(&rproc_cdev->lock);
-> +	kfree(rproc_cdev);
-> +}
-> +EXPORT_SYMBOL_GPL(remoteproc_cooling_unregister);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Remote Processor Cooling Device");
-> diff --git a/include/linux/remoteproc_cooling.h b/include/linux/remoteproc_cooling.h
-> new file mode 100644
-> index 000000000000..721912d1a5ec
-> --- /dev/null
-> +++ b/include/linux/remoteproc_cooling.h
-> @@ -0,0 +1,52 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Remote Processor Cooling Device
-> + *
-> + * Copyright (c) 2025, Qualcomm Innovation Center
-> + */
-> +
-> +#ifndef __REMOTEPROC_COOLING_H__
-> +#define __REMOTEPROC_COOLING_H__
-> +
-> +#include <linux/thermal.h>
-> +
-> +struct device;
-> +struct device_node;
-> +
-> +struct remoteproc_cooling_ops {
-> +	int (*get_max_level)(void *devdata, unsigned long *level);
-> +	int (*get_cur_level)(void *devdata, unsigned long *level);
-> +	int (*set_cur_level)(void *devdata, unsigned long level);
-> +};
-> +
-> +struct remoteproc_cdev;
-> +
-> +#ifdef CONFIG_REMOTEPROC_THERMAL
-> +
-> +struct remoteproc_cdev *
-> +remoteproc_cooling_register(struct device_node *np,
-> +			    const char *name,
-> +			     const struct remoteproc_cooling_ops *ops,
-> +			     void *devdata);
-> +
-> +void remoteproc_cooling_unregister(struct remoteproc_cdev *rproc_cdev);
-> +
-> +#else /* !CONFIG_REMOTEPROC_THERMAL */
-> +
-> +static inline struct remoteproc_cdev *
-> +remoteproc_cooling_register(struct device_node *np,
-> +			    const char *name,
-> +			     const struct remoteproc_cooling_ops *ops,
-> +			     void *devdata)
-> +{
-> +	return ERR_PTR(-EINVAL);
-> +}
-> +
-> +static inline void
-> +remoteproc_cooling_unregister(struct remoteproc_cdev *rproc_cdev)
-> +{
-> +}
-> +
-> +#endif /* CONFIG_REMOTEPROC_THERMAL */
-> +
-> +#endif /* __REMOTEPROC_COOLING_H__ */
-> -- 
-> 2.34.1
-> 
+> Jie
+>>
+>> The branching conditions in cs_dbs_update() may not be strict enough, but
+>> the root cause of this problem is that the target frequency was updated
+>> when querying cpuinfo_cur_freq. For ondemand and schedutil governor,
+>> although the frequency will not always remain at the lowest level without
+>> rising, will still be min_freq in a short period of time when the query
+>> action occurs.
+>>
+>> Using the freq requested by the governor to decide whether to update the
+>> target frequency is more reasonable in cpufreq_policy_apply_limits().
+>>
+>> Lifeng Zheng (2):
+>>   cpufreq: governor: Move requested_freq to policy_dbs_info
+>>   cpufreq: governor: Apply limits with requested_freq or next_freq
+>>
+>>  drivers/cpufreq/cpufreq_conservative.c | 14 ++++----------
+>>  drivers/cpufreq/cpufreq_governor.c     |  3 ++-
+>>  drivers/cpufreq/cpufreq_governor.h     | 12 ++++++++++++
+>>  drivers/cpufreq/cpufreq_ondemand.c     | 10 +++++-----
+>>  include/linux/cpufreq.h                |  7 ++++---
+>>  kernel/sched/cpufreq_schedutil.c       |  4 ++--
+>>  6 files changed, 29 insertions(+), 21 deletions(-)
+>>
 
--- 
 
