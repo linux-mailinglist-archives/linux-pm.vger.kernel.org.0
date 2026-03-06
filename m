@@ -1,253 +1,375 @@
-Return-Path: <linux-pm+bounces-43882-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43883-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UDPUNCQ9q2n7bQEAu9opvQ
-	(envelope-from <linux-pm+bounces-43882-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 21:46:28 +0100
+	id mNx5EVRFq2nJbgEAu9opvQ
+	(envelope-from <linux-pm+bounces-43883-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 22:21:24 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB6622279D5
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 21:46:27 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95449227E8C
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 22:21:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id AB0EB30095C3
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 20:46:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3F297305D1DE
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 21:21:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D4B48164C;
-	Fri,  6 Mar 2026 20:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76CAD33065C;
+	Fri,  6 Mar 2026 21:21:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b="phk0fw+J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WzzbHgMl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5BDA35E942
-	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 20:46:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5491C3093C3;
+	Fri,  6 Mar 2026 21:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772829983; cv=none; b=roiKvizaMJCy320gRxt0GSgeiEK1oWCppRZKMINYDH51rqCQaKj+0/dwY+IO3isMlWSCRdw7Te2D/Tao3974cdQ/+UtzbzdT6QIzL8fDa1J1dfh4zoK7uftfO4xnwarEUV033TZs/VH8IAoMqL4YBvLcJv4v/fRq39xRUxt/jyk=
+	t=1772832081; cv=none; b=HSYrl4cL/Zrm/vWGQZeFOirnzBVG1r26Dd/XB6P8Upsgzaqo7wR5RZFJ9TwQcBato2lHBjDAkOWDhf8dwhZsT4RxaL5qCCEASbyClvJL6bmTXxLo8sQc6ueUGkHksAT9ZFdQMcXaHOrWwa4xN597fuH+mfgWTxYQUNSibUO2d7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772829983; c=relaxed/simple;
-	bh=YR03A36g/qiuwB5XBPpJJN25fkqroyaXGPCRgXfTigE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fOhdx+E6awUYQ1vTrCnzGOw78Ty3vjzfGTSHjC9rKwsq93+Dkvttob9g6Ez3M2Uuejr47lC3wQ+kkQVC8TWtZRGW08x1+IoO13FjsGeheQ8CcnJPikN9ojp+63stmFeaoUWEGldgWn3VLdW+7ODpUC+wJviXT1Y7BQQSjizrdo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=phk0fw+J; arc=none smtp.client-ip=185.67.36.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.de
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id 5FC44240103
-	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 21:46:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.de; s=2017;
-	t=1772829980; bh=2iaC+pQxbZxpQoXRMUqKToJTmZXkRZTNoMlTI0V8Hnw=;
-	h=Message-ID:Subject:From:To:Cc:Date:Autocrypt:Content-Type:
-	 MIME-Version:OpenPGP:From;
-	b=phk0fw+J2DkqY919TIIAsyR+a+Rtz4/lr1nuk/ouG3opB6VJdC8rzSClPyt+8vQN4
-	 i1JBf/paRzFBWcL3jwYwhValdnSWIqcm/1jFQSPNh0LQZ0dcHz0xXganj1ZGKOC9On
-	 0uEyYF0rZz9miXFNJiWl65+O91yLCTdcFfLo4jF/WDlAxCWDCPYqKSX/x5eXJsFgdl
-	 5PObe5/dzLfp+N3MZER89yroJWHeGlYy/u+aJiDAcx7Nwkbymz9c2H5vUrocePsg6H
-	 NoDUpfYqG2M/iv/eh4huzkktUvkkgEjmPWqhld0A0VCfVMvhfUNuViCgn0AZsnlTFI
-	 RmM+pU8lnW/7w==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4fSJN963Qyz6twG;
-	Fri,  6 Mar 2026 21:46:17 +0100 (CET)
-Message-ID: <ecb158925934c38bf044adcbacadb920300d35dc.camel@posteo.de>
-Subject: Re: [PATCH v2 3/4] rust: add basic serial device bus abstractions
-From: Markus Probst <markus.probst@posteo.de>
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Greg Kroah-Hartman	
- <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, Miguel
- Ojeda	 <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?ISO-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin
- <lossin@kernel.org>, Andreas Hindborg	 <a.hindborg@kernel.org>, Alice Ryhl
- <aliceryhl@google.com>, Trevor Gross	 <tmgross@umich.edu>, Kari Argillander
- <kari.argillander@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Boqun Feng <boqun@kernel.org>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- linux-serial@vger.kernel.org, 	linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org, 	linux-pm@vger.kernel.org,
- driver-core@lists.linux.dev, 	dri-devel@lists.freedesktop.org
-Date: Fri, 06 Mar 2026 20:46:19 +0000
-In-Reply-To: <DGVZNDKJ7RAG.A66CR0EV9T3P@kernel.org>
-References: <20260306-rust_serdev-v2-0-e9b23b42b255@posteo.de>
-	 <20260306-rust_serdev-v2-3-e9b23b42b255@posteo.de>
-	 <DGVZNDKJ7RAG.A66CR0EV9T3P@kernel.org>
-Autocrypt: addr=markus.probst@posteo.de; prefer-encrypt=mutual;
- keydata=mQINBGiDvXgBEADAXUceKafpl46S35UmDh2wRvvx+UfZbcTjeQOlSwKP7YVJ4JOZrVs93
- qReNLkOWguIqPBxR9blQ4nyYrqSCV+MMw/3ifyXIm6Pw2YRUDg+WTEOjTixRCoWDgUj1nOsvJ9tVA
- m76Ww+/pAnepVRafMID0rqEfD9oGv1YrfpeFJhyE2zUw3SyyNLIKWD6QeLRhKQRbSnsXhGLFBXCqt
- 9k5JARhgQof9zvztcCVlT5KVvuyfC4H+HzeGmu9201BVyihJwKdcKPq+n/aY5FUVxNTgtI9f8wIbm
- fAjaoT1pjXSp+dszakA98fhONM98pOq723o/1ZGMZukyXFfsDGtA3BB79HoopHKujLGWAGskzClwT
- jRQxBqxh/U/lL1pc+0xPWikTNCmtziCOvv0KA0arDOMQlyFvImzX6oGVgE4ksKQYbMZ3Ikw6L1Rv1
- J+FvN0aNwOKgL2ztBRYscUGcQvA0Zo1fGCAn/BLEJvQYShWKeKqjyncVGoXFsz2AcuFKe1pwETSsN
- 6OZncjy32e4ktgs07cWBfx0v62b8md36jau+B6RVnnodaA8++oXl3FRwiEW8XfXWIjy4umIv93tb8
- 8ekYsfOfWkTSewZYXGoqe4RtK80ulMHb/dh2FZQIFyRdN4HOmB4FYO5sEYFr9YjHLmDkrUgNodJCX
- CeMe4BO4iaxUQARAQABtCdNYXJrdXMgUHJvYnN0IDxtYXJrdXMucHJvYnN0QHBvc3Rlby5kZT6JAl
- QEEwEIAD4CGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQSCdBjE9KxY53IwxHM0dh/4561
- D0gUCaIZ9HQIZAQAKCRA0dh/4561D0pKmD/92zsCfbD+SrvBpNWtbit7J9wFBNr9qSFFm2n/65qen
- NNWKDrCzDsjRbALMHSO8nigMWzjofbVjj8Nf7SDcdapRjrMCnidS0DuW3pZBo6W0sZqV/fLx+AzgQ
- 7PAr6jtBbUoKW/GCGHLLtb6Hv+zjL17KGVO0DdQeoHEXMa48mJh8rS7VlUzVtpbxsWbb1wRZJTD88
- ALDOLTWGqMbCTFDKFfGcqBLdUT13vx706Q29wrDiogmQhLGYKc6fQzpHhCLNhHTl8ZVLuKVY3wTT+
- f9TzW1BDzFTAe3ZXsKhrzF+ud7vr6ff9p1Zl+Nujz94EDYHi/5Yrtp//+N/ZjDGDmqZOEA86/Gybu
- 6XE/v4S85ls0cAe37WTqsMCJjVRMP52r7Y1AuOONJDe3sIsDge++XFhwfGPbZwBnwd4gEVcdrKhnO
- ntuP9TvBMFWeTvtLqlWJUt7n8f/ELCcGoO5acai1iZ59GC81GLl2izObOLNjyv3G6hia/w50Mw9MU
- dAdZQ2MxM6k+x4L5XeysdcR/2AydVLtu2LGFOrKyEe0M9XmlE6OvziWXvVVwomvTN3LaNUmaINhr7
- pHTFwDiZCSWKnwnvD2+jA1trKq1xKUQY1uGW9XgSj98pKyixHWoeEpydr+alSTB43c3m0351/9rYT
- TTi4KSk73wtapPKtaoIR3rOFHLQXbWFya3VzLnByb2JzdEBwb3N0ZW8uZGWJAlEEEwEIADsWIQSCd
- BjE9KxY53IwxHM0dh/4561D0gUCaIO9eAIbAwULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgAAKCR
- A0dh/4561D0oHZEACEmk5Ng9+OXoVxJJ+c9slBI2lYxyBO84qkWjoJ/0GpwoHk1IpyL+i+kF1Bb7y
- Hx9Tiz8ENYX7xIPTZzS8hXs1ksuo76FQUyD6onA/69xZIrYZ0NSA5HUo62qzzMSZL7od5e12R6OPR
- lR0PIuc4ecOGCEq3BLRPfZSYrL54tiase8HubXsvb6EBQ8jPI8ZUlr96ZqFEwrQZF/3ihyV6LILLk
- geExgwlTzo5Wv3piOXPTITBuzuFhBJqEnT25q2j8OumGQ+ri8oVeAzx24g1kc11pwpR0sowfa5MvZ
- WrrBcaIL7uJfR/ig7FyGnTQ1nS3btf3p0v8A3fc4eUu/K2No3l2huJp3+LHhCmpmeykOhSB63Mj3s
- 3Q87LD0HE0HBkTEMwp+sD97ZRpO67H5shzJRanUaDTb/mREfzpJmRT1uuec0X2zItL7a6itgMJvYI
- KG29aJLX3fTzzVzFGPgzVZYEdhu4y53p0qEGrrC1JtKR6DRPE1hb/OdWOkjmJ75+PPLD9U5IuRd6y
- sHJWsEBR1F0wkMPkEofWsvMYJzWXx/rvTWO8N4D6HigTgBXAXNgbc3IHpHlkvKoBJptv6DRVRtIrz
- 0G0cfBY0Sm7he4N2IYDWWdGnPBZ3rlLSdj5EiBU2YWgIgtLrb8ZNJ3ZlhYluGnBJDGRqy2jC9s1jY
- 66sLA9rQZMHhJTzMyIDwweGlvMzJAcG9zdGVvLmV1PokCbQQTAQgAVxYhBIJ0GMT0rFjncjDEczR2
- H/jnrUPSBQJpa71VGxSAAAAAAAQADm1hbnUyLDIuNSsxLjExLDIsMgIbAwULCQgHAgIiAgYVCgkIC
- wIEFgIDAQIeBwIXgAAKCRA0dh/4561D0gKJD/9uOQKYlsDoQX65Gd0LiMT0C+5vXgr3VI0PHDOwcv
- 51fJ3A1vNyPZRFPGrz8+mDEXUQOF/INfnz5Tu1QHwf+iYcWcTGAN/FHgVR6ET6VBNU2hJaKhu+Ggo
- kjYyJTOvyX+3yNRUfSny0GjTjIPuPTErjqmHF+BtjXslpgwqnNMznf3lRIuUjRORupos6p3k1DndE
- 5vzUTmXSvMyXyOD2KhBl/kL76k0bHYyAQytZPag12pltrtFbA/r2phDGN2si8PooDT99bSTJjaM45
- MTAAHbHKJfvgfK41bNFD5mMtpWpL195XRtS0Nrxdg3PaYBxN5gtTG0RyZfpYRlkdEhm+jj/8RxuSG
- i/qdhRdbiI7K2IELWeQVHSNDi9JabR/UzlR4NSnhfAjRIVlRM+eFbUl8XwxwVrAkojF5IraH2qRvg
- VCmuFsHUW07FUlrDrzpjXsD73cKppoFGDCdDR0BHJepXbFLS9+AqkT+guRJlnCTg2p+TQtnbwPgKp
- Vj98JixovCl99zRYTsL2bRNU5+q8iET65VMJ1ydyNanvLd5vI/NqDkXhlXLsGmdaDTtu4R21PkToX
- dQNGrZ91M9nlIBKw8Y7c7xZ4098qX2b8JX/CxD+gC1r4C8vuA3GkhFLx+KlkON7LyiJPkrePp6Qky
- jfGillcaQOqFZ3WwVqyzG1BUfTow==
-Content-Type: multipart/signed; micalg="pgp-sha256";
-	protocol="application/pgp-signature"; boundary="=-o/KXAoogandmA1L4aMdF"
+	s=arc-20240116; t=1772832081; c=relaxed/simple;
+	bh=Tw0L1IU0pBFMhrxP6ztC/mb1rm00uwCb3K5hsG69Glo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HeWVs7FhaSGpzWiAV+4NxBE/fm1/WbKJnxZvkzT0W5KJPhnOKZqQue2leQUZE+hvHh0foff6Xss/5BG4wVdxO0ARNx6YAD2i1UOfrOtJUHMAH4hY3Hcd46sp0K+oskbNd6fi7fDWdiX+QC3d5/qgYeXLHHFuaenlcq0p+yxNJ1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WzzbHgMl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54AF7C4CEF7;
+	Fri,  6 Mar 2026 21:21:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772832080;
+	bh=Tw0L1IU0pBFMhrxP6ztC/mb1rm00uwCb3K5hsG69Glo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=WzzbHgMljkqzzNEdb/r1+2faxnHkENayaXJYraAjaN7FSyr+mS7dOk7h6Q35P5SFg
+	 Uf8eW8DGFMgifbi9MrC9J/nqtKm+QoThLHgxC5XQzvJ4GIG3mYxZ300IH8Z429i8o8
+	 cLAa8QsxN6dNHB5pOSHZjVh+SK0ExOwnKp6fB0fuyHdGzyGL7FS5+UpYF6kJfCSZ0O
+	 S+jCeG38rLmdTsDCa8pXXDnLmY+8NJ80aXqdr9IxVJr03kOZQ0hSfwz5HpKapmAvEa
+	 J4q+ZoPSjnRhoO/8KWPMwRaS79Gs30rMjLASQhhliiQCHzVwdnqlAS89zyH+vxI2uI
+	 IGULnvirtZrIA==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Qais Yousef <qyousef@layalina.io>,
+ Christian Loehle <christian.loehle@arm.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [patch 2/2] sched/idle: Make default_idle_call() NOHZ aware
+Date: Fri, 06 Mar 2026 22:21:17 +0100
+Message-ID: <6250711.lOV4Wx5bFT@rafael.j.wysocki>
+Organization: Linux Kernel Development
+In-Reply-To: <20260304030306.uk5c63xw4oqvjffb@airbuntu>
+References:
+ <20260301191959.406218221@kernel.org>
+ <CAJZ5v0h-bGU34d9OnhYqdzz+5UiKV1rBEB9NS-TL4=sK2jf-LQ@mail.gmail.com>
+ <20260304030306.uk5c63xw4oqvjffb@airbuntu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-OpenPGP: url=https://posteo.de/keys/markus.probst@posteo.de.asc; preference=encrypt
-X-Rspamd-Queue-Id: DB6622279D5
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Rspamd-Queue-Id: 95449227E8C
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[posteo.de,none];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[posteo.de:s=2017];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,linuxfoundation.org,garyguo.net,protonmail.com,google.com,umich.edu,gmail.com,linaro.org,ffwll.ch,vger.kernel.org,lists.linux.dev,lists.freedesktop.org];
-	TAGGED_FROM(0.00)[bounces-43882-lists,linux-pm=lfdr.de];
+	TO_DN_ALL(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43883-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	DKIM_TRACE(0.00)[posteo.de:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	HAS_ORG_HEADER(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-0.992];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[markus.probst@posteo.de,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.991];
-	TAGGED_RCPT(0.00)[linux-pm];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,posteo.de:dkim,posteo.de:mid]
+	TAGGED_RCPT(0.00)[linux-pm];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,arm.com:email]
 X-Rspamd-Action: no action
 
-
---=-o/KXAoogandmA1L4aMdF
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, 2026-03-06 at 21:40 +0100, Danilo Krummrich wrote:
-> On Fri Mar 6, 2026 at 8:35 PM CET, Markus Probst wrote:
-> > +    extern "C" fn receive_buf_callback(
-> > +        sdev: *mut bindings::serdev_device,
-> > +        buf: *const u8,
-> > +        length: usize,
-> > +    ) -> usize {
-> > +        // SAFETY: The serial device bus only ever calls the receive b=
-uf callback with a valid
-> > +        // pointer to a `struct serdev_device`.
-> > +        //
-> > +        // INVARIANT: `sdev` is valid for the duration of `receive_buf=
-_callback()`.
-> > +        let sdev =3D unsafe { &*sdev.cast::<Device<device::CoreInterna=
-l>>() };
-> > +
-> > +        // SAFETY: `receive_buf_callback` is only ever called after a =
-successful call to
-> > +        // `probe_callback`, hence it's guaranteed that `Device::set_d=
-rvdata()` has been called
-> > +        // and stored a `Pin<KBox<T>>`.
-> > +        let data =3D unsafe { sdev.as_ref().drvdata_borrow::<T>() };
-> > +
-> > +        // SAFETY:
-> > +        // - The serial device bus only ever calls the receive buf cal=
-lback with a valid pointer to
-> > +        //   a `struct serdev_device`.
-> > +        // - `receive_buf_callback` is only ever called after a succes=
-sful call to
-> > +        //   `probe_callback`, hence it's guaranteed that `sdev.privat=
-e_data` is a pointer
-> > +        //   to a valid `PrivateData`.
-> > +        let private_data =3D unsafe { &*(*sdev.as_raw()).private_data.=
-cast::<PrivateData>() };
-> > +
-> > +        private_data.probe_complete.complete_all();
+On Wednesday, March 4, 2026 4:03:06 AM CET Qais Yousef wrote:
+> On 03/02/26 22:25, Rafael J. Wysocki wrote:
+> > On Mon, Mar 2, 2026 at 12:04=E2=80=AFPM Christian Loehle
+> > <christian.loehle@arm.com> wrote:
+> > >
+> > > On 3/1/26 19:30, Thomas Gleixner wrote:
+> > > > Guests fall back to default_idle_call() as there is no cpuidle driv=
+er
+> > > > available to them by default. That causes a problem in fully loaded
+> > > > scenarios where CPUs go briefly idle for a couple of microseconds:
+> > > >
+> > > > tick_nohz_idle_stop_tick() is invoked unconditionally which means u=
+nless
+> > > > there is timer pending in the next tick, the tick is stopped and a =
+couple
+> > > > of microseconds later when the idle condition goes away restarted. =
+That
+> > > > requires to program the clockevent device twice which implies a VM =
+exit for
+> > > > each reprogramming.
+> > > >
+> > > > It was suggested to remove the tick_nohz_idle_stop_tick() invocatio=
+n from
+> > > > the default idle code, but would be counterproductive. It would not=
+ allow
+> > > > the host to go into deeper idle states when the guest CPU is fully =
+idle as
+> > > > it has to maintain the periodic tick.
+> > > >
+> > > > Cure this by implementing a trivial moving average filter which kee=
+ps track
+> > > > of the recent idle recidency time and only stop the tick when the a=
+verage
+> > > > is larger than a tick.
+> > > >
+> > > > Signed-off-by: Thomas Gleixner <tglx@kernel.org>
+> > > > ---
+> > > >  kernel/sched/idle.c |   65 +++++++++++++++++++++++++++++++++++++++=
+++++++-------
+> > > >  1 file changed, 57 insertions(+), 8 deletions(-)
+> > > >
+> > > > --- a/kernel/sched/idle.c
+> > > > +++ b/kernel/sched/idle.c
+> > > > @@ -105,12 +105,7 @@ static inline void cond_tick_broadcast_e
+> > > >  static inline void cond_tick_broadcast_exit(void) { }
+> > > >  #endif /* !CONFIG_GENERIC_CLOCKEVENTS_BROADCAST_IDLE */
+> > > >
+> > > > -/**
+> > > > - * default_idle_call - Default CPU idle routine.
+> > > > - *
+> > > > - * To use when the cpuidle framework cannot be used.
+> > > > - */
+> > > > -static void __cpuidle default_idle_call(void)
+> > > > +static void __cpuidle __default_idle_call(void)
+> > > >  {
+> > > >       instrumentation_begin();
+> > > >       if (!current_clr_polling_and_test()) {
+> > > > @@ -130,6 +125,61 @@ static void __cpuidle default_idle_call(
+> > > >       instrumentation_end();
+> > > >  }
+> > > >
+> > > > +#ifdef CONFIG_NO_HZ_COMMON
+> > > > +
+> > > > +/* Limit to 4 entries so it fits in a cache line */
+> > > > +#define IDLE_DUR_ENTRIES     4
+> > > > +#define IDLE_DUR_MASK                (IDLE_DUR_ENTRIES - 1)
+> > > > +
+> > > > +struct idle_nohz_data {
+> > > > +     u64             duration[IDLE_DUR_ENTRIES];
+> > > > +     u64             entry_time;
+> > > > +     u64             sum;
+> > > > +     unsigned int    idx;
+> > > > +};
+> > > > +
+> > > > +static DEFINE_PER_CPU_ALIGNED(struct idle_nohz_data, nohz_data);
+> > > > +
+> > > > +/**
+> > > > + * default_idle_call - Default CPU idle routine.
+> > > > + *
+> > > > + * To use when the cpuidle framework cannot be used.
+> > > > + */
+> > > > +static void default_idle_call(void)
+> > > > +{
+> > > > +     struct idle_nohz_data *nd =3D this_cpu_ptr(&nohz_data);
+> > > > +     unsigned int idx =3D nd->idx;
+> > > > +     s64 delta;
+> > > > +
+> > > > +     /*
+> > > > +      * If the CPU spends more than a tick on average in idle, try=
+ to stop
+> > > > +      * the tick.
+> > > > +      */
+> > > > +     if (nd->sum > TICK_NSEC * IDLE_DUR_ENTRIES)
+> > > > +             tick_nohz_idle_stop_tick();
+> > > > +
+> > > > +     __default_idle_call();
+> > > > +
+> > > > +     /*
+> > > > +      * Build a moving average of the time spent in idle to preven=
+t stopping
+> > > > +      * the tick on a loaded system which only goes idle briefly.
+> > > > +      */
+> > > > +     delta =3D max(sched_clock() - nd->entry_time, 0);
+> > > > +     nd->sum +=3D delta - nd->duration[idx];
+> > > > +     nd->duration[idx] =3D delta;
+> > > > +     nd->idx =3D (idx + 1) & IDLE_DUR_MASK;
+> > > > +}
+> > > > +
+> > > > +static void default_idle_enter(void)
+> > > > +{
+> > > > +     this_cpu_write(nohz_data.entry_time, sched_clock());
+> > > > +}
+> > > > +
+> > > > +#else  /* CONFIG_NO_HZ_COMMON */
+> > > > +static inline void default_idle_call(void { __default_idle_call();=
+ }
+> > > > +static inline void default_idle_enter(void) { }
+> > > > +#endif /* !CONFIG_NO_HZ_COMMON */
+> > > > +
+> > > >  static int call_cpuidle_s2idle(struct cpuidle_driver *drv,
+> > > >                              struct cpuidle_device *dev,
+> > > >                              u64 max_latency_ns)
+> > > > @@ -186,8 +236,6 @@ static void cpuidle_idle_call(void)
+> > > >       }
+> > > >
+> > > >       if (cpuidle_not_available(drv, dev)) {
+> > > > -             tick_nohz_idle_stop_tick();
+> > > > -
+> > > >               default_idle_call();
+> > > >               goto exit_idle;
+> > > >       }
+> > > > @@ -276,6 +324,7 @@ static void do_idle(void)
+> > > >
+> > > >       __current_set_polling();
+> > > >       tick_nohz_idle_enter();
+> > > > +     default_idle_enter();
+> > > >
+> > > >       while (!need_resched()) {
+> > > >
+> > > >
+> > >
+> > > How does this work? We don't stop the tick until the average idle tim=
+e is larger,
+> > > but if we don't stop the tick how is that possible?
+> > >
+> > > Why don't we just require one or two consecutive tick wakeups before =
+stopping?
+> >=20
+> > Exactly my thought and I think one should be sufficient.
 >=20
-> Will do a full review pass later on, but one quick question in advance:
->=20
-> What is this used for? It is completed here and in probe(), but I don't s=
-ee it ever
-> being used to actually wait.
-Uh, thats a typo. It is supposed to wait here in receive_buf_callback.
+> I concur. From our experience with TEO util threshold these averages can
+> backfire. I think one tick is sufficient delay to not be obviously broken.
 
-Thanks
-- Markus Probst
+So if I'm not mistaken, it would be something like the appended prototype
+(completely untested, but it builds for me).
 
->=20
-> > +
-> > +        // SAFETY: No one has exclusive access to `private_data.error`=
-.
-> > +        if unsafe { *private_data.error.get() } {
-> > +            return length;
-> > +        }
-> > +
-> > +        // SAFETY: `buf` is guaranteed to be non-null and has the size=
- of `length`.
-> > +        let buf =3D unsafe { core::slice::from_raw_parts(buf, length) =
-};
-> > +
-> > +        T::receive(sdev, data, buf)
-> > +    }
-> > +}
+=2D--
+ drivers/cpuidle/cpuidle.c |   10 ----------
+ kernel/sched/idle.c       |   32 ++++++++++++++++++++++++--------
+ 2 files changed, 24 insertions(+), 18 deletions(-)
 
---=-o/KXAoogandmA1L4aMdF
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
+=2D-- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -359,16 +359,6 @@ noinstr int cpuidle_enter_state(struct c
+ int cpuidle_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+ 		   bool *stop_tick)
+ {
+=2D	/*
+=2D	 * If there is only a single idle state (or none), there is nothing
+=2D	 * meaningful for the governor to choose. Skip the governor and
+=2D	 * always use state 0 with the tick running.
+=2D	 */
+=2D	if (drv->state_count <=3D 1) {
+=2D		*stop_tick =3D false;
+=2D		return 0;
+=2D	}
+=2D
+ 	return cpuidle_curr_governor->select(drv, dev, stop_tick);
+ }
+=20
+=2D-- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -161,6 +161,14 @@ static int call_cpuidle(struct cpuidle_d
+ 	return cpuidle_enter(drv, dev, next_state);
+ }
+=20
++static void idle_call_stop_or_retain_tick(bool stop_tick)
++{
++	if (stop_tick || tick_nohz_tick_stopped())
++		tick_nohz_idle_stop_tick();
++	else
++		tick_nohz_idle_retain_tick();
++}
++
+ /**
+  * cpuidle_idle_call - the main idle function
+  *
+@@ -170,7 +178,7 @@ static int call_cpuidle(struct cpuidle_d
+  * set, and it returns with polling set.  If it ever stops polling, it
+  * must clear the polling bit.
+  */
+=2Dstatic void cpuidle_idle_call(void)
++static void cpuidle_idle_call(bool got_tick)
+ {
+ 	struct cpuidle_device *dev =3D cpuidle_get_device();
+ 	struct cpuidle_driver *drv =3D cpuidle_get_cpu_driver(dev);
+@@ -186,7 +194,7 @@ static void cpuidle_idle_call(void)
+ 	}
+=20
+ 	if (cpuidle_not_available(drv, dev)) {
+=2D		tick_nohz_idle_stop_tick();
++		idle_call_stop_or_retain_tick(!got_tick);
+=20
+ 		default_idle_call();
+ 		goto exit_idle;
+@@ -221,7 +229,7 @@ static void cpuidle_idle_call(void)
+=20
+ 		next_state =3D cpuidle_find_deepest_state(drv, dev, max_latency_ns);
+ 		call_cpuidle(drv, dev, next_state);
+=2D	} else {
++	} else if (drv->state_count > 1) {
+ 		bool stop_tick =3D true;
+=20
+ 		/*
+@@ -229,16 +237,22 @@ static void cpuidle_idle_call(void)
+ 		 */
+ 		next_state =3D cpuidle_select(drv, dev, &stop_tick);
+=20
+=2D		if (stop_tick || tick_nohz_tick_stopped())
+=2D			tick_nohz_idle_stop_tick();
+=2D		else
+=2D			tick_nohz_idle_retain_tick();
++		idle_call_stop_or_retain_tick(stop_tick);
+=20
+ 		entered_state =3D call_cpuidle(drv, dev, next_state);
+ 		/*
+ 		 * Give the governor an opportunity to reflect on the outcome
+ 		 */
+ 		cpuidle_reflect(dev, entered_state);
++	} else {
++		/*
++		 * If there is only a single idle state (or none), there is
++		 * nothing meaningful for the governor to choose.  Skip the
++		 * governor and always use state 0.
++		 */
++		idle_call_stop_or_retain_tick(!got_tick);
++
++		call_cpuidle(drv, dev, 0);
+ 	}
+=20
+ exit_idle:
+@@ -259,6 +273,7 @@ exit_idle:
+ static void do_idle(void)
+ {
+ 	int cpu =3D smp_processor_id();
++	bool got_tick =3D false;
+=20
+ 	/*
+ 	 * Check if we need to update blocked load
+@@ -329,8 +344,9 @@ static void do_idle(void)
+ 			tick_nohz_idle_restart_tick();
+ 			cpu_idle_poll();
+ 		} else {
+=2D			cpuidle_idle_call();
++			cpuidle_idle_call(got_tick);
+ 		}
++		got_tick =3D tick_nohz_idle_got_tick();
+ 		arch_cpu_idle_exit();
+ 	}
+=20
 
------BEGIN PGP SIGNATURE-----
 
-iQJPBAABCAA5FiEEgnQYxPSsWOdyMMRzNHYf+OetQ9IFAmmrPRcbFIAAAAAABAAO
-bWFudTIsMi41KzEuMTEsMiwyAAoJEDR2H/jnrUPSWVEP/1ag22PV+effqCIXNtIi
-ojhUChzfy4ZFNQt7RTYHSrKwzWk0LWTMbCrEH2S818Rbhhwb8xVGLKFOujTKFx/0
-RhnYaiCBCa5LmYRcSLIvp4cf9DLR547L9kAIQEbqZ0UaXyINt1sIKm9A17R28Zo8
-JKu+Z57BkfSEn65N0E5w9xcHpzlBx7dK1zp0vLCWT/6GM1uXLwJQ5RYIP0ejcVpc
-xWKbwcLjPY6Wc35tIHOgTW4kJyQOBfNkO7flQn4kZvvnnVqwJz/bVl6TWH93s94H
-np6fggCna/m1JmOklY4MQVPLnLrDAAOSEWVZTytEXH6gYnOCbpYqwIdKiDrbTQKz
-Hki4V/ytUtSvoCtsoj53rPqawbTGP1dBCgcnNZwOf64h4HqY1UGqWGfriRFvczB+
-DuHAndPRI/doaHzm7u/jXmVKjhHIfq1QByvF5n2JEii0YtqvFFqJ/+IOcQLewugx
-p8DUTAhPTLsXwfsuy/D4hgfpJVayXdnGxA7L8IUMbFyMnNS+8qwGSn0OkIfZbQIi
-1zpi2P2FUwAB+YpEGxoI9r9cDSl0TckIoTny8BZskbzb6ZCZP9mB2Ie095UJbP3s
-BauRToFJ+KZi67Z8V4ooNgREBKEECBlxxs4aVPCo2lIHvW8aftj2riSq5Gy4hIgD
-rznZ+gd+0JDfXZFuGhtCi5SM
-=HjzS
------END PGP SIGNATURE-----
 
---=-o/KXAoogandmA1L4aMdF--
 
