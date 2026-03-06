@@ -1,143 +1,195 @@
-Return-Path: <linux-pm+bounces-43813-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43814-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AD+7KJ7XqmnyXgEAu9opvQ
-	(envelope-from <linux-pm+bounces-43813-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 14:33:18 +0100
+	id SL3aH9/XqmnmXgEAu9opvQ
+	(envelope-from <linux-pm+bounces-43814-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 14:34:23 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3873D221B59
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 14:33:17 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B2B8221BBE
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 14:34:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5C0C93020225
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 13:33:09 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 281963016EE6
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 13:34:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA293002B9;
-	Fri,  6 Mar 2026 13:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 406C03002B9;
+	Fri,  6 Mar 2026 13:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZOkFqN3r"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F0+11BaZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2982FFF9D
-	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 13:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24682F9D83
+	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 13:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772803982; cv=none; b=Xxgt3GIOHsBADjwJttMQ97Ka3PbaC/ufBZmM7BRTiZw0xJSVhFJf5+RKEn9LUWcinWxy/lNhF52o6PfriGDlG+xHq0Rh92/0v7gzJ8FjqXo9LQy37Ax3DCRGBqXnkpgi6Hrn7NKhnAy0Lg+DLpH0Wnl6bS1jHEpJTGKQsu+Ut68=
+	t=1772804058; cv=none; b=WEl0tfh7Ny4kPhbPEUxFxiMwFth1Vs+3gF1+7ddexn6Dw5iQyoBifRm1jh+F6xFWwXXQe3syxkmSqq8GMzczdoWl5dMYlu/J2LlYWJ4gVP/V2M8omxaWi+Tp2v1zRZ1Jk5ThmxQaFPohRXCN8EXNryCqq18YtTnU5wrG3pREJoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772803982; c=relaxed/simple;
-	bh=1nuGL5zzw0zKNjB/h9iN2OowlI7SEPx+4e4uFF+OfJU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g+WoB0HQQHYt+pfSczBhoHVH7Ypn5pdY94cNtU+h40bBenWXdgDPNo9gkzJIJxmZ8o8ZMxeoHUpoDkyFtyqW22Kbu2tSDDBCe1jm8I2Zrr6xXb1lvGDo3/7xsySXmvgxKHO/AeBmTOuuRk8uZ0ZrNFilbfWbe9Pu2xun90OO/Lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZOkFqN3r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 222D0C2BC86
-	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 13:33:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772803982;
-	bh=1nuGL5zzw0zKNjB/h9iN2OowlI7SEPx+4e4uFF+OfJU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ZOkFqN3rpM5FnQzuj/wxXFi57BTVISDoLMfjaJj58zDSCpJXEZYyWDen1ceKY1QGK
-	 Msd2uF0kfk4ECoZ9TJrO/sKOCT11Tbu1dpp/HC7ox1qtuPQZ3uar7ATaWy4xt+CwcS
-	 0+4oRzooeVmFpY9SaEXVJigmuuLdBrvLp8/z4aavzNEs9Lh15R49xh1xi4h/M/+x2J
-	 unruUlkS+Yxb8evZPRyaZrcpnS3UOtb74sI22OdpcBx1GcGySdfbW9a7cnPaAWTqvK
-	 ktPPomfr2hpGBQrmorFCtHqqLIcwG4N+vGLkebfAJkNuZEUBhaNc5fJmzuvgpvLc7J
-	 AhaFAtdoAFX4A==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5a126c8aab9so2930345e87.0
-        for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2026 05:33:02 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU8yrsAlXnmzzU9gEWh0lXZh/8d1rt8/MXn1V4axmfYPS5xuULE57WLTBxwJlhAB3C2zly8J3iZlQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXUq0tCWIAbhKSNf0atwM0h2GhadHAKsWbDvzZUoWbfyIWYu7t
-	b8E0rlcXQq0LwxnVQQzYl9pI6hJNHvmz6py4WGhTAL4S5wQycTLf2Yi07oT1PyZF+vxPtqTyDQ0
-	sxFXYQEhZ4/Ge3IdGFFgpVuEhidSJK96k0LSrBo7CmQ==
-X-Received: by 2002:a05:6512:3048:b0:5a1:1d47:76fa with SMTP id
- 2adb3069b0e04-5a13caae7c0mr631136e87.9.1772803980252; Fri, 06 Mar 2026
- 05:33:00 -0800 (PST)
+	s=arc-20240116; t=1772804058; c=relaxed/simple;
+	bh=QmVZnymuKZyt+jas88ZdM1RSMSq6eliSCZ7w1JjExYU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dy1G0aXiNdCzZ1SPWemxnl57Eo+9hkP+0u7do3cAUKZ7imsbmJOqzbGn84MV+RG/GyPfYdtoNX/Xack+uSWmWJX5WNBCTYO5nt0OvKy3iHb4YVaFy8whOFa/Re4+QZyVDYS9GVj+QLbI/kTwkG8iEmTVvhJJEEhdGZ3++/SzfM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F0+11BaZ; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-439aeed8a5bso6359116f8f.3
+        for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2026 05:34:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772804054; x=1773408854; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xHL/Lpt5xGEmKGDVXqkxWpU21U0hJ9K+23Ta0DfsIv0=;
+        b=F0+11BaZ8qBHF2H/cKlbTEPjYC+zLmLRvOE7tfV007hWEmdMYXmydf0JnkG3H3IGX+
+         BH4fChB6RPelbTSY4mjiavkOvNFHyEWqTLcjCEU89GNc0ANsZ6997aohUsveQAnv2UfY
+         VZKG7wGs9QV4J0mTNyxMxqOgUiDvTuIh5c98VL8FKe4BG3XELH3/fHFSOdwYeLoM5UUN
+         fFldh15iRLQlYSsX6Vl+rjUj2o14Ro0qTk6bhmJtuYPoG7krpy8eFPVGQoXGUVfZaOZd
+         nBu8GviveTKThgUI1Sd6u9kwLMWKRotLTCTTyxLHrSkKYCQBVPwy8orv6OI9OlBJhIcl
+         2Cyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772804054; x=1773408854;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xHL/Lpt5xGEmKGDVXqkxWpU21U0hJ9K+23Ta0DfsIv0=;
+        b=ub6aY3A1o0c6eaJYw7GWB03unnMvvcaJ+HP7Z7qrwLSjgQSjPxjoUuzNZhtxGxQ+w3
+         BNFCVBQsZ6ZlI7E3NVuSvLOvONoUHqC1PVas/jKh1QVY/Rzdlrndf0I8GvBGNJRmmDC3
+         lc2ptYYdGBn8KRVT6kiIEMfPAbAIwxST06Eoyw30oka3tqtUrSPJm2wwlVT8KFkmPT53
+         DZw17vHMKTdHLFst3EeOl0YHs7ZTW7eZjzjVAL3uIPh0Ohbcf6U6JVBGAXDbH/kmvy9l
+         l3VXy1KPTBlQz+mRKn+1M9JJsZDNRiuvEUH07VmGMoJT/OPmlm8uIbxV4ES6hIN3+JaR
+         tRBw==
+X-Forwarded-Encrypted: i=1; AJvYcCUjmSeKNCyA+ucxGRxcm3s/7vS/zJ6mljVJJf0SRro/fqRc/TIsUmAu8eEtgKc1CfDyird88V32SQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbDj4+WpufE33Jp1M/1ZhFqik/4B5/joATuODBuGGXERUQYCVe
+	cGnkM5CQ5Q+qNVuW9z9MfY+ZyqyPsoFRqD7fENyuoqhOdL+FxdE3A97c
+X-Gm-Gg: ATEYQzw6Lk6Xy/O1PS8wa7frHZlsWm5sD1inrDE4iSlx2BFHS6j4gcClZeXpjFaiMoP
+	DrYrgTSXmTnnFvuXiSK83kprWXu0CBPNQcqMnyrbpWfa6b7F2VqqeU9K2Qt4hNRQGm4kH0ekRAx
+	7NEBjRanjtyI3Il/tJfG9+7MtwXBJmPSpjjam7vhW2Bbd9pOee94htMKf8kM691PhPn5BqtFf2U
+	ln34U29MMaogouW6pZxaOpvgcMVWGYHSHGgbVhateGMeon6bYXkZUUSkLby+lyJjRJfWm3mWKqD
+	2+A1mHC2HE82pM83XH/4qSMCU3Cq7wr5WOZWLcr2kCrjZ9zqhcb5dAiZlqg2EGxbmD3YCMZ1CKs
+	hiM20N/gdADIQ6q0IVbFOgt65vITOKYq3dO3abjfZoOXelQ3c/H6vMopISTMqFwhcnNakRw4rC5
+	joC4dDc9gBGlYn
+X-Received: by 2002:a05:600c:a013:b0:485:17a7:b9cc with SMTP id 5b1f17b1804b1-48526958835mr32628385e9.18.1772804053745;
+        Fri, 06 Mar 2026 05:34:13 -0800 (PST)
+Received: from xeon ([188.163.112.72])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48527681a3esm80856735e9.4.2026.03.06.05.34.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Mar 2026 05:34:13 -0800 (PST)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: linux-gpio@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: [PATCH v3 0/6] rtc: max77686: convert to i2c_new_ancillary_device
+Date: Fri,  6 Mar 2026 15:33:45 +0200
+Message-ID: <20260306133351.31589-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260304-arm-psci-system_reset2-vendor-reboots-v20-0-cf7d346b8372@oss.qualcomm.com>
- <20260304-arm-psci-system_reset2-vendor-reboots-v20-6-cf7d346b8372@oss.qualcomm.com>
- <CAMRc=MewwLTsaHCOR2iVYZRM6kWptQfZuTe=2i_pfpTwjFKEpQ@mail.gmail.com> <1f75b250-c3b5-45da-bc82-aeadf44dfea4@oss.qualcomm.com>
-In-Reply-To: <1f75b250-c3b5-45da-bc82-aeadf44dfea4@oss.qualcomm.com>
-From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Fri, 6 Mar 2026 14:32:46 +0100
-X-Gmail-Original-Message-ID: <CAMRc=McUdboG0ziWmUf+h9mUiuGesaFk2v27z_Opbw-AF33C0g@mail.gmail.com>
-X-Gm-Features: AaiRm50duFLHMSGqN_XTEZwDEkS1OZDEz-KXG7iHPD2r1Opb3JkLo4OLChEHr30
-Message-ID: <CAMRc=McUdboG0ziWmUf+h9mUiuGesaFk2v27z_Opbw-AF33C0g@mail.gmail.com>
-Subject: Re: [PATCH v20 06/10] power: reset: Add psci-reboot-mode driver
-To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, Andre Draszik <andre.draszik@linaro.org>, 
-	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	Srinivas Kandagatla <srini@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Souvik Chakravarty <Souvik.Chakravarty@arm.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Andy Yan <andy.yan@rock-chips.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Conor Dooley <conor+dt@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, John Stultz <john.stultz@linaro.org>, 
-	Moritz Fischer <moritz.fischer@ettus.com>, Sudeep Holla <sudeep.holla@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 3873D221B59
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 6B2B8221BBE
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43813-lists,linux-pm=lfdr.de];
-	FREEMAIL_CC(0.00)[broadcom.com,kernel.org,oss.qualcomm.com,linaro.org,vger.kernel.org,lists.infradead.org,arndb.de,arm.com,rock-chips.com,gmail.com,ettus.com];
-	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[28];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brgl@kernel.org,linux-pm@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-43814-lists,linux-pm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	FREEMAIL_TO(0.00)[kernel.org,gmail.com,intel.com,arm.com,samsung.com,bootlin.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,mail.gmail.com:mid,qualcomm.com:email]
+	NEURAL_HAM(-0.00)[-0.999];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Thu, Mar 5, 2026 at 6:07=E2=80=AFPM Shivendra Pratap
-<shivendra.pratap@oss.qualcomm.com> wrote:
->
-> >
-> > You should pass the address of this function in faux_device_ops instead=
- of
-> > calling it directly.
->
-> In last patch, we were using a probe function. As faux_device_create,
-> calls the probe from its internal operations, "of_node" can only be
-> assigned from inside of faux device probe.
->
-> As our primary requirement is to assign reboot-mode of_node to the faux
-> device, thought to make it this way. (As we did not want to assign it
-> inside the faux device probe).
->
+Convert RTC I2C device creation from devm_i2c_new_dummy_device() to
+i2c_new_ancillary_device() to enable the use of a device tree-specified
+RTC address instead of a hardcoded value. If the device tree does not
+provide an address, use hardcoded values as a fallback.
 
-TBH This sounds like a limitation of the faux device API. I'll Cc you
-on a patch proposing to extend it with the ability of using a firmware
-node to describe the device. If it works for you, you can integrate it
-into your series and use it.
+This addresses an issue with the MAX77663 PMIC, which can have the RTC at
+different I2C positions (either 0x48, like the MAX77714, or 0x68, like
+the MAX77620). The MAX77620 value is used as the default. The I2C position
+of the MAX77663 is factory-set and cannot be detected from the chip
+itself.
 
-Bart
+I have tested this patch on LG Optimus Vu P895 with max77663 PMIC and
+non-default RTC position. RTC is registered correctly.
+
+---
+Changes in v3
+- max77620 files converted to DT schema.
+
+Changes in v2
+- dropped patch that changes max77686 and adjusted max77620 where max77663
+  is described.
+---
+
+Svyatoslav Ryhel (6):
+  regulator: dt-binding: regulator-max77620: convert to DT schema
+  dt-binding: pinctrl: pinctrl-max77620: convert to DT schema
+  dt-bindings: gpio: trivial-gpio: remove max77620 compatible
+  dt-bindings: mfd: max77620: convert to DT schema
+  dt-bindings: mfd: max77620: document optional RTC address for MAX77663
+  rtc: max77686: convert to i2c_new_ancillary_device
+
+ .../bindings/gpio/trivial-gpio.yaml           |   2 -
+ .../devicetree/bindings/mfd/max77620.txt      | 162 -------
+ .../bindings/mfd/maxim,max77620.yaml          | 442 ++++++++++++++++++
+ .../pinctrl/maxim,max77620-pinctrl.yaml       |  97 ++++
+ .../bindings/pinctrl/pinctrl-max77620.txt     | 127 -----
+ .../regulator/maxim,max77620-regulator.yaml   |  99 ++++
+ .../bindings/regulator/regulator-max77620.txt | 222 ---------
+ .../bindings/thermal/max77620_thermal.txt     |  70 ---
+ drivers/rtc/rtc-max77686.c                    |  14 +-
+ 9 files changed, 650 insertions(+), 585 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mfd/max77620.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77620.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/maxim,max77620-pinctrl.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/pinctrl-max77620.txt
+ create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max77620-regulator.yaml
+ delete mode 100644 Documentation/devicetree/bindings/regulator/regulator-max77620.txt
+ delete mode 100644 Documentation/devicetree/bindings/thermal/max77620_thermal.txt
+
+-- 
+2.51.0
+
 
