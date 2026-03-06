@@ -1,258 +1,331 @@
-Return-Path: <linux-pm+bounces-43876-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43877-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aDFvKb81q2lPbAEAu9opvQ
-	(envelope-from <linux-pm+bounces-43876-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 21:14:55 +0100
+	id KLoMINw3q2mkbAEAu9opvQ
+	(envelope-from <linux-pm+bounces-43877-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 21:23:56 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34D022276DB
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 21:14:54 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DF45227796
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 21:23:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CDEC5303DF6A
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 20:14:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 187F1304606F
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 20:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBBCE399019;
-	Fri,  6 Mar 2026 20:14:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8509943CED7;
+	Fri,  6 Mar 2026 20:23:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b="Dfx63eBY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h2igWcDu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D16C37648E
-	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 20:14:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B2C31B830;
+	Fri,  6 Mar 2026 20:23:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772828091; cv=none; b=q34qpSRFqWxH0sFZrDE/Xqv/EjTTJHgmYeAhAr8fK/Qkj7Hj89RHtH9kM79CnROlwpgWYVw41ZqbMMRCFTYfqafvw+d7CBleXAs2Ub2W0iF0Vz+sigMfCdva6J2r0P2YwmLXkEbtz1608WMeEgxUIed/hzXhOJRMGoXU4NSwQpg=
+	t=1772828633; cv=none; b=tw+sASTE0AjFfvj94ExNrPLKwNLE8Gr/UBAgMp9K0mvY8eYCJVt7fOUHCO+hL6l1oPhb+220DenpGgw7eTJSutbr+e+Yfz72TZyR33g82qYPtWvAvJmgLq/ngnXNLtKZ5hRLqdIneiT5juLvS1FooR9NbalXt8aVo3OxJ+Fg08Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772828091; c=relaxed/simple;
-	bh=k6mKC+XBaSUQQ7rGXKVuP80dOmUOJUKDWxFRjBI7aio=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JfJpg6mlEyh6f4LVs6YRP5qevhw2w1jmH2q2Jknb3Db0A8OQZUY2VeWc+tVud+idNsBH/Ydgj9xJYhV/vS+ux/KI8AVK3ekheDPK5fToY0kQTlVhOlGi/wQt1SXRkhx4wNU2mfQDNOUBo2wv+IN78bXz6uu/yBZsAjhop/KPkfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=Dfx63eBY; arc=none smtp.client-ip=185.67.36.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.de
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout01.posteo.de (Postfix) with ESMTPS id 80883240029
-	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 21:14:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.de; s=2017;
-	t=1772828087; bh=lHq/GDpYQJsqvr0Wo/pN4wfYJnQQpU3mHGi4u+WMRm4=;
-	h=Message-ID:Subject:From:To:Cc:Date:Autocrypt:Content-Type:
-	 MIME-Version:OpenPGP:From;
-	b=Dfx63eBYelLh0263Mf5stw/sZFs5aMQxlJzOb/H6gku8VMor5NLtstFdYSJs5ovDz
-	 uXBwtYJDD1+MVdFUIR3XAcJcXm6aSBh7HzdtIryGDW1mvQ1SRR+lSOSeKAfKW2epR+
-	 EoI2vlRbZ7GxlWaHsDxolwiRQa2YC1N5ev7QCABp19PhHe2L814hy0Fbe+Sj1Ma0KC
-	 4L6BeWTojVadzW3Ri7JfVhdO9EURpZRJ6fOfvmTT+6OW5qo1N1P1nABhQN6DvUe9FL
-	 vg3n6vpXHIYCgWbylyA4B7JK59qeLRFTK8JhehU7M3GPqgECZ02zXtF0J2HIrI+XOM
-	 VSjTmbgcI4TFg==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4fSHgl34wKz9rxG;
-	Fri,  6 Mar 2026 21:14:43 +0100 (CET)
-Message-ID: <11da7a1b29146ede059cf6ce6a383c6bdd930f44.camel@posteo.de>
-Subject: Re: [PATCH v2 2/4] serdev: add private data to serdev_device
-From: Markus Probst <markus.probst@posteo.de>
-To: Randy Dunlap <rdunlap@infradead.org>, Rob Herring <robh@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
- <jirislaby@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,  Gary Guo
- <gary@garyguo.net>, =?ISO-8859-1?Q?Bj=F6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>,  Benno Lossin <lossin@kernel.org>, Andreas
- Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Kari
- Argillander	 <kari.argillander@gmail.com>, "Rafael J. Wysocki"
- <rafael@kernel.org>,  Viresh Kumar <viresh.kumar@linaro.org>, Boqun Feng
- <boqun@kernel.org>, David Airlie <airlied@gmail.com>,  Simona Vetter
- <simona@ffwll.ch>
-Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-pm@vger.kernel.org, 
-	driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org
-Date: Fri, 06 Mar 2026 20:14:46 +0000
-In-Reply-To: <934ca1e6-dfee-411e-890a-083dcfc9f6b1@infradead.org>
-References: <20260306-rust_serdev-v2-0-e9b23b42b255@posteo.de>
-	 <20260306-rust_serdev-v2-2-e9b23b42b255@posteo.de>
-	 <934ca1e6-dfee-411e-890a-083dcfc9f6b1@infradead.org>
-Autocrypt: addr=markus.probst@posteo.de; prefer-encrypt=mutual;
- keydata=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
- jfGillcaQOqFZ3WwVqyzG1BUfTow==
-Content-Type: multipart/signed; micalg="pgp-sha256";
-	protocol="application/pgp-signature"; boundary="=-aBym8UsBbPNnHXvAhiGC"
+	s=arc-20240116; t=1772828633; c=relaxed/simple;
+	bh=enRpREDLJQ2WdpmAT0RahcTiH9UVBCBVCKB6WpDUnRs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mBJTn66lvyg0Gs+UUtQDDSg5+XvxFgwhcokbSYfrF0B/o9tva1TBmZXucEg4GQt4UoQp9IHvuyUj1ZdpIPRXsXOdjGLse+LpzwM6H+ojr0HuXKUt8+rHlAFdB/n1iTPSLVeZ69L/XUN16xre9zbsjPL0qRsXhxtHkYMbZZE9a9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h2igWcDu; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772828632; x=1804364632;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=enRpREDLJQ2WdpmAT0RahcTiH9UVBCBVCKB6WpDUnRs=;
+  b=h2igWcDu/d8AdfG1tTQ2SL2ZsXe1V8ZVn9VU1GazEdV8mFz7Mi8OV03R
+   nAZAS4uOObq61A+L0kFSenBqADUAxBRBGTSkETpVu5ttY+cITP6/gkp0W
+   V2jZEdQjDe3otUA7Vw5vVT5sGXzvVdVWQFF6dmyr1aMu/5gw9w2Jfs2zH
+   ge7p00nMJbnJEynfsiuquHZOoVGQZVnVp8YhYXY8AmnJyph01UVeruwj7
+   UX7k5+60GzPOchIGKti7Nvq3U3xxkWItIvV3AgKlHIu6TMl2uPSMPSjCQ
+   gPSQ9FoTbMri7Spc55/wssSQAY9jPqLLmN4c72zUcwNsuPB7/uprbWGTk
+   A==;
+X-CSE-ConnectionGUID: tOIiLSzKSuG8mYY/0pxz1A==
+X-CSE-MsgGUID: zWNgtnkdSce9eLMeZOhb0Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11721"; a="73912146"
+X-IronPort-AV: E=Sophos;i="6.23,105,1770624000"; 
+   d="scan'208";a="73912146"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 12:23:51 -0800
+X-CSE-ConnectionGUID: 0smXMhmoRK6VwxKaCKYvTA==
+X-CSE-MsgGUID: kNn4qMNTTDSPVwteu2WRIg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,105,1770624000"; 
+   d="scan'208";a="217306901"
+Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 06 Mar 2026 12:23:48 -0800
+Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vybi5-000000001Lx-0W9V;
+	Fri, 06 Mar 2026 20:23:45 +0000
+Date: Sat, 7 Mar 2026 04:22:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	K Prateek Nayak <kprateek.nayak@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	"Gautham R. Shenoy" <gautham.shenoy@amd.com>
+Subject: Re: [PATCH 5/9] amd-pstate: Add support for CPPC_REQ2 and FLOOR_PERF
+Message-ID: <202603070431.ykswVnpp-lkp@intel.com>
+References: <20260306095753.17155-6-gautham.shenoy@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-OpenPGP: url=https://posteo.de/keys/markus.probst@posteo.de.asc; preference=encrypt
-X-Rspamd-Queue-Id: 34D022276DB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260306095753.17155-6-gautham.shenoy@amd.com>
+X-Rspamd-Queue-Id: 5DF45227796
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[posteo.de,none];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[posteo.de:s=2017];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43876-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[infradead.org,kernel.org,linuxfoundation.org,garyguo.net,protonmail.com,google.com,umich.edu,gmail.com,linaro.org,ffwll.ch];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[24];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	DKIM_TRACE(0.00)[posteo.de:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[markus.probst@posteo.de,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	TAGGED_FROM(0.00)[bounces-43877-lists,linux-pm=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.967];
-	TAGGED_RCPT(0.00)[linux-pm];
-	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,posteo.de:dkim,posteo.de:email,posteo.de:mid]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	NEURAL_HAM(-0.00)[-0.975];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,intel.com:mid,01.org:url,git-scm.com:url]
 X-Rspamd-Action: no action
 
+Hi Gautham,
 
---=-aBym8UsBbPNnHXvAhiGC
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build warnings:
 
-On Fri, 2026-03-06 at 11:49 -0800, Randy Dunlap wrote:
-> Hi--
->=20
-> On 3/6/26 11:35 AM, Markus Probst wrote:
-> > Add private data to `struct serdev_device`, as it is required by the
-> > rust abstraction added in the following commit
-> > (rust: add basic serial device bus abstractions).
-> >=20
-> > Signed-off-by: Markus Probst <markus.probst@posteo.de>
-> > ---
-> >  include/linux/serdev.h | 14 ++++++++------
-> >  1 file changed, 8 insertions(+), 6 deletions(-)
-> >=20
-> > diff --git a/include/linux/serdev.h b/include/linux/serdev.h
-> > index 5654c58eb73c..b591af23faf0 100644
-> > --- a/include/linux/serdev.h
-> > +++ b/include/linux/serdev.h
-> > @@ -33,12 +33,13 @@ struct serdev_device_ops {
-> > =20
-> >  /**
-> >   * struct serdev_device - Basic representation of an serdev device
-> > - * @dev:	Driver model representation of the device.
-> > - * @nr:		Device number on serdev bus.
-> > - * @ctrl:	serdev controller managing this device.
-> > - * @ops:	Device operations.
-> > - * @write_comp	Completion used by serdev_device_write() internally
-> > - * @write_lock	Lock to serialize access when writing data
-> > + * @dev:	 Driver model representation of the device.
-> > + * @nr:		 Device number on serdev bus.
-> > + * @ctrl:	 serdev controller managing this device.
-> > + * @ops:	 Device operations.
-> > + * @write_comp	 Completion used by serdev_device_write() internally
-> > + * @write_lock	 Lock to serialize access when writing data
-> > + * @private_data Private data for the device driver.
-> >   */
->=20
-> I don't quite get why each changed line has an extra tab added to it. ?
-So all the fields have the same indentation.
-Otherwise the description of private_data, because of its length, would
-be 1 character more to the right.
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on rafael-pm/bleeding-edge tip/x86/core amd-pstate/linux-next amd-pstate/bleeding-edge linus/master v7.0-rc2 next-20260306]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Also, struct member names in kernel-doc should with a colon  (':'), e.g.,
->=20
->  * @private_data: Private data for the device driver.
->=20
-> Please correct that and the 2 lines above it also.
-> And maybe test it to check for warnings.
-I can do that.
+url:    https://github.com/intel-lab-lkp/linux/commits/Gautham-R-Shenoy/amd-pstate-Fix-memory-leak-in-amd_pstate_epp_cpu_init/20260306-180651
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20260306095753.17155-6-gautham.shenoy%40amd.com
+patch subject: [PATCH 5/9] amd-pstate: Add support for CPPC_REQ2 and FLOOR_PERF
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20260307/202603070431.ykswVnpp-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260307/202603070431.ykswVnpp-lkp@intel.com/reproduce)
 
->=20
-> >  struct serdev_device {
-> >  	struct device dev;
-> > @@ -47,6 +48,7 @@ struct serdev_device {
-> >  	const struct serdev_device_ops *ops;
-> >  	struct completion write_comp;
-> >  	struct mutex write_lock;
-> > +	void *private_data;
-> >  };
-> > =20
-> >  static inline struct serdev_device *to_serdev_device(struct device *d)
-> >=20
->=20
-> thanks.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603070431.ykswVnpp-lkp@intel.com/
 
-Thanks
-- Markus Probst
+All warnings (new ones prefixed by >>):
+
+>> drivers/cpufreq/amd-pstate.c:497:48: warning: shift count >= width of type [-Wshift-count-overflow]
+     497 |         WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/msr-index.h:772:38: note: expanded from macro 'AMD_CPPC_FLOOR_PERF_CNT_MASK'
+     772 | #define AMD_CPPC_FLOOR_PERF_CNT_MASK    GENMASK(39, 32)
+         |                                         ^
+   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
+      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
+         |                                 ^
+   include/linux/bits.h:48:20: note: expanded from macro 'GENMASK_TYPE'
+      48 |              (type_max(t) << (l) &                              \
+         |                           ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:686:9: note: expanded from macro '__compiletime_assert'
+     686 |                 if (!(condition))                                       \
+         |                       ^
+   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
+      61 |         __WRITE_ONCE(x, val);                                           \
+         |         ~~~~~~~~~~~~~~~~^~~~
+   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
+      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
+         |                                        ^~~
+>> drivers/cpufreq/amd-pstate.c:497:48: warning: shift count >= width of type [-Wshift-count-overflow]
+     497 |         WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/msr-index.h:772:38: note: expanded from macro 'AMD_CPPC_FLOOR_PERF_CNT_MASK'
+     772 | #define AMD_CPPC_FLOOR_PERF_CNT_MASK    GENMASK(39, 32)
+         |                                         ^
+   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
+      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
+         |                                 ^
+   include/linux/bits.h:49:20: note: expanded from macro 'GENMASK_TYPE'
+      49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
+         |                           ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:686:9: note: expanded from macro '__compiletime_assert'
+     686 |                 if (!(condition))                                       \
+         |                       ^
+   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
+      61 |         __WRITE_ONCE(x, val);                                           \
+         |         ~~~~~~~~~~~~~~~~^~~~
+   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
+      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
+         |                                        ^~~
+>> drivers/cpufreq/amd-pstate.c:497:48: warning: shift count >= width of type [-Wshift-count-overflow]
+     497 |         WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/msr-index.h:772:38: note: expanded from macro 'AMD_CPPC_FLOOR_PERF_CNT_MASK'
+     772 | #define AMD_CPPC_FLOOR_PERF_CNT_MASK    GENMASK(39, 32)
+         |                                         ^
+   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
+      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
+         |                                 ^
+   include/linux/bits.h:48:20: note: expanded from macro 'GENMASK_TYPE'
+      48 |              (type_max(t) << (l) &                              \
+         |                           ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:686:9: note: expanded from macro '__compiletime_assert'
+     686 |                 if (!(condition))                                       \
+         |                       ^
+   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
+      61 |         __WRITE_ONCE(x, val);                                           \
+         |         ~~~~~~~~~~~~~~~~^~~~
+   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
+      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
+         |                                        ^~~
+>> drivers/cpufreq/amd-pstate.c:497:48: warning: shift count >= width of type [-Wshift-count-overflow]
+     497 |         WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/msr-index.h:772:38: note: expanded from macro 'AMD_CPPC_FLOOR_PERF_CNT_MASK'
+     772 | #define AMD_CPPC_FLOOR_PERF_CNT_MASK    GENMASK(39, 32)
+         |                                         ^
+   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
+      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
+         |                                 ^
+   include/linux/bits.h:49:20: note: expanded from macro 'GENMASK_TYPE'
+      49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
+         |                           ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:686:9: note: expanded from macro '__compiletime_assert'
+     686 |                 if (!(condition))                                       \
+         |                       ^
+   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
+      61 |         __WRITE_ONCE(x, val);                                           \
+         |         ~~~~~~~~~~~~~~~~^~~~
+   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
+      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
+         |                                        ^~~
+>> drivers/cpufreq/amd-pstate.c:497:48: warning: shift count >= width of type [-Wshift-count-overflow]
+     497 |         WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/msr-index.h:772:38: note: expanded from macro 'AMD_CPPC_FLOOR_PERF_CNT_MASK'
+     772 | #define AMD_CPPC_FLOOR_PERF_CNT_MASK    GENMASK(39, 32)
+         |                                         ^
+   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
+      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
+         |                                 ^
+   include/linux/bits.h:48:20: note: expanded from macro 'GENMASK_TYPE'
+      48 |              (type_max(t) << (l) &                              \
+         |                           ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:686:9: note: expanded from macro '__compiletime_assert'
+     686 |                 if (!(condition))                                       \
+         |                       ^
+   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
+      61 |         __WRITE_ONCE(x, val);                                           \
+         |         ~~~~~~~~~~~~~~~~^~~~
+   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
+      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
+         |                                        ^~~
+>> drivers/cpufreq/amd-pstate.c:497:48: warning: shift count >= width of type [-Wshift-count-overflow]
+     497 |         WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/msr-index.h:772:38: note: expanded from macro 'AMD_CPPC_FLOOR_PERF_CNT_MASK'
+     772 | #define AMD_CPPC_FLOOR_PERF_CNT_MASK    GENMASK(39, 32)
+         |                                         ^
+   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
+      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
+         |                                 ^
+   include/linux/bits.h:49:20: note: expanded from macro 'GENMASK_TYPE'
+      49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
+         |                           ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:686:9: note: expanded from macro '__compiletime_assert'
+     686 |                 if (!(condition))                                       \
+         |                       ^
+   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
+      61 |         __WRITE_ONCE(x, val);                                           \
+         |         ~~~~~~~~~~~~~~~~^~~~
+   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
+      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
+         |                                        ^~~
+   6 warnings generated.
 
 
---=-aBym8UsBbPNnHXvAhiGC
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
+vim +497 drivers/cpufreq/amd-pstate.c
 
------BEGIN PGP SIGNATURE-----
+   457	
+   458	static int msr_init_perf(struct amd_cpudata *cpudata)
+   459	{
+   460		union perf_cached perf = READ_ONCE(cpudata->perf);
+   461		u64 cap1, numerator, cppc_req;
+   462		u8 min_perf;
+   463	
+   464		int ret = rdmsrq_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
+   465					     &cap1);
+   466		if (ret)
+   467			return ret;
+   468	
+   469		ret = amd_get_boost_ratio_numerator(cpudata->cpu, &numerator);
+   470		if (ret)
+   471			return ret;
+   472	
+   473		ret = rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, &cppc_req);
+   474		if (ret)
+   475			return ret;
+   476	
+   477		WRITE_ONCE(cpudata->cppc_req_cached, cppc_req);
+   478		min_perf = FIELD_GET(AMD_CPPC_MIN_PERF_MASK, cppc_req);
+   479	
+   480		/*
+   481		 * Clear out the min_perf part to check if the rest of the MSR is 0, if yes, this is an
+   482		 * indication that the min_perf value is the one specified through the BIOS option
+   483		 */
+   484		cppc_req &= ~(AMD_CPPC_MIN_PERF_MASK);
+   485	
+   486		if (!cppc_req)
+   487			perf.bios_min_perf = min_perf;
+   488	
+   489		perf.highest_perf = numerator;
+   490		perf.max_limit_perf = numerator;
+   491		perf.min_limit_perf = FIELD_GET(AMD_CPPC_LOWEST_PERF_MASK, cap1);
+   492		perf.nominal_perf = FIELD_GET(AMD_CPPC_NOMINAL_PERF_MASK, cap1);
+   493		perf.lowest_nonlinear_perf = FIELD_GET(AMD_CPPC_LOWNONLIN_PERF_MASK, cap1);
+   494		perf.lowest_perf = FIELD_GET(AMD_CPPC_LOWEST_PERF_MASK, cap1);
+   495		WRITE_ONCE(cpudata->perf, perf);
+   496		WRITE_ONCE(cpudata->prefcore_ranking, FIELD_GET(AMD_CPPC_HIGHEST_PERF_MASK, cap1));
+ > 497		WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
+   498	
+   499		return 0;
+   500	}
+   501	
 
-iQJPBAABCAA5FiEEgnQYxPSsWOdyMMRzNHYf+OetQ9IFAmmrNa8bFIAAAAAABAAO
-bWFudTIsMi41KzEuMTEsMiwyAAoJEDR2H/jnrUPSq1YP/28JYsd8iwZ3XvLX0auV
-ABTuvvfUP5s/CN951XT/JYNqTA1xt0IZpF28MTOJiqFbu1ZkiX0UzXT1IXnkmXpb
-fB6R9ALauEj3gbbudo3IiY4iS+N0XGNHYtMa8nrSGx8Y/GQ/PcYeAL5PpxG0ISgA
-/pDFjAUGYHb/8bhKuGoX+JJnUVmgYjraurLS0Z6SReaZ13qEll4u/8E35CfpIao8
-pgjRahC7ZdoxiW4xSjtZgw47aPi8E6PnQ00cz5UTHe15Qh5R415wH8vC1kqH+nyr
-eaE4GDHNWHLO4p8QEp589G6b/HTBMMV+83jYaxHJLpMJ1ZMnIPC1lLL0SjaMCUsp
-zZMwsezKMIMHv8Hukn/iqErIlFA2g/aBq+R0/3r2JJwl/cB6sA9aJSwamPmebiPl
-Xk/aKvMQUKE4QxRAYTVRQv131SlT8U88TQsawem/F2NPnBTCmS0thujfymuFkeyT
-D8046dh+7krCDD+mYyq3LJR0i+r/pz9HVjPcGMLMiGDlzfB7zssSMPSlQUND5nqc
-LlmYSeuM5exH7fuZLE5farIDElQV2Uvq8Cu5sB0tGND8lfzaTesG7TFgROb+zdIB
-9ALdpzXbeFlkl4fOHjcHc+flVKf1toZ0aX/hUQtFi53fp3mxlXUjvHv25TRtd1xq
-5hcI/dH5n+E2PLW4G/2tw/Aq
-=k64Y
------END PGP SIGNATURE-----
-
---=-aBym8UsBbPNnHXvAhiGC--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
