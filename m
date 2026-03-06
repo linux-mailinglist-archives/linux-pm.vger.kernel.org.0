@@ -1,331 +1,169 @@
-Return-Path: <linux-pm+bounces-43877-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43878-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KLoMINw3q2mkbAEAu9opvQ
-	(envelope-from <linux-pm+bounces-43877-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 21:23:56 +0100
+	id AJLxNUQ5q2nZbAEAu9opvQ
+	(envelope-from <linux-pm+bounces-43878-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 21:29:56 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DF45227796
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 21:23:55 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6FF722781A
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 21:29:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 187F1304606F
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 20:23:54 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 26D8C3010602
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 20:29:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8509943CED7;
-	Fri,  6 Mar 2026 20:23:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4849047CC7C;
+	Fri,  6 Mar 2026 20:29:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h2igWcDu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DT6udhdE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B2C31B830;
-	Fri,  6 Mar 2026 20:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 207C547CC68;
+	Fri,  6 Mar 2026 20:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772828633; cv=none; b=tw+sASTE0AjFfvj94ExNrPLKwNLE8Gr/UBAgMp9K0mvY8eYCJVt7fOUHCO+hL6l1oPhb+220DenpGgw7eTJSutbr+e+Yfz72TZyR33g82qYPtWvAvJmgLq/ngnXNLtKZ5hRLqdIneiT5juLvS1FooR9NbalXt8aVo3OxJ+Fg08Y=
+	t=1772828995; cv=none; b=dgyKyVr8EPubEkYS4Z+pKKCFjiVuL8dgOjij4M4i3z/9+68ASspFbkco7g31DvPFcMzP9PFLZTP89XLvI8InqhOjdHRALal97sKFe2w7RByux18Ejx9fp0FgyBjTwBf0zUiv0XeUQzHJ/rpdm+gNRcb1+P0evfwohSEKlZKIQ7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772828633; c=relaxed/simple;
-	bh=enRpREDLJQ2WdpmAT0RahcTiH9UVBCBVCKB6WpDUnRs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mBJTn66lvyg0Gs+UUtQDDSg5+XvxFgwhcokbSYfrF0B/o9tva1TBmZXucEg4GQt4UoQp9IHvuyUj1ZdpIPRXsXOdjGLse+LpzwM6H+ojr0HuXKUt8+rHlAFdB/n1iTPSLVeZ69L/XUN16xre9zbsjPL0qRsXhxtHkYMbZZE9a9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h2igWcDu; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772828632; x=1804364632;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=enRpREDLJQ2WdpmAT0RahcTiH9UVBCBVCKB6WpDUnRs=;
-  b=h2igWcDu/d8AdfG1tTQ2SL2ZsXe1V8ZVn9VU1GazEdV8mFz7Mi8OV03R
-   nAZAS4uOObq61A+L0kFSenBqADUAxBRBGTSkETpVu5ttY+cITP6/gkp0W
-   V2jZEdQjDe3otUA7Vw5vVT5sGXzvVdVWQFF6dmyr1aMu/5gw9w2Jfs2zH
-   ge7p00nMJbnJEynfsiuquHZOoVGQZVnVp8YhYXY8AmnJyph01UVeruwj7
-   UX7k5+60GzPOchIGKti7Nvq3U3xxkWItIvV3AgKlHIu6TMl2uPSMPSjCQ
-   gPSQ9FoTbMri7Spc55/wssSQAY9jPqLLmN4c72zUcwNsuPB7/uprbWGTk
-   A==;
-X-CSE-ConnectionGUID: tOIiLSzKSuG8mYY/0pxz1A==
-X-CSE-MsgGUID: zWNgtnkdSce9eLMeZOhb0Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11721"; a="73912146"
-X-IronPort-AV: E=Sophos;i="6.23,105,1770624000"; 
-   d="scan'208";a="73912146"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 12:23:51 -0800
-X-CSE-ConnectionGUID: 0smXMhmoRK6VwxKaCKYvTA==
-X-CSE-MsgGUID: kNn4qMNTTDSPVwteu2WRIg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,105,1770624000"; 
-   d="scan'208";a="217306901"
-Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 06 Mar 2026 12:23:48 -0800
-Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vybi5-000000001Lx-0W9V;
-	Fri, 06 Mar 2026 20:23:45 +0000
-Date: Sat, 7 Mar 2026 04:22:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	K Prateek Nayak <kprateek.nayak@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>
-Subject: Re: [PATCH 5/9] amd-pstate: Add support for CPPC_REQ2 and FLOOR_PERF
-Message-ID: <202603070431.ykswVnpp-lkp@intel.com>
-References: <20260306095753.17155-6-gautham.shenoy@amd.com>
+	s=arc-20240116; t=1772828995; c=relaxed/simple;
+	bh=nw+Pw4hNc3wnNMmLgdRw5pKtliePPxGsNsPNNNI9154=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=NFRNyJfZVDfUZmKsC7VcYsD7giIblDBPWwCwZoQyUSfvTXXySzU44KUnPr93kMudmi4VIvfN94kwO89/FLQOLCwNuGgJRtAI0VFnIiobDUFS+NkWmVhUPALh7MvfGisxOdKLYnlpHSUzsllIf23IRFLil2w597hGtppgVbQ10uU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DT6udhdE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF436C4CEF7;
+	Fri,  6 Mar 2026 20:29:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772828994;
+	bh=nw+Pw4hNc3wnNMmLgdRw5pKtliePPxGsNsPNNNI9154=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=DT6udhdEfjFSJxbNZYMAAaFgjgq3iUadKJFHSNKvvhKJWKINFRqT1IkW0ayW/C8Wc
+	 SPg3iD1/qh7c9V13lHrdPkWvhN1RkDfnb1YM7kG4vpZerf+PXFkHH/3eIp3VwGQJVZ
+	 zJTiADESMMXyeriapiK0pPNYhM357332X6ZY0PYAphipf4I166qSGrtcMtuLSa2Jr4
+	 nint6XA//f6aHfCNIGyxZ9bzleDsKNHtiHUlrpTL9IrwkSfK4qrKWbm63KZO2AxESG
+	 +Levw1Hpq/GURssTb4/M/iK1pNPZQVQDXcwPCEOwkSNmetrym8lyXWSOOMrXA15WcQ
+	 OURpb62mjXZgA==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260306095753.17155-6-gautham.shenoy@amd.com>
-X-Rspamd-Queue-Id: 5DF45227796
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 06 Mar 2026 21:29:47 +0100
+Message-Id: <DGVZFDLUCD1K.2L6EG0GJ4LWX7@kernel.org>
+Subject: Re: [PATCH v2 2/4] serdev: add private data to serdev_device
+Cc: "Rob Herring" <robh@kernel.org>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Jiri Slaby" <jirislaby@kernel.org>, "Miguel
+ Ojeda" <ojeda@kernel.org>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
+ <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
+ Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Kari
+ Argillander" <kari.argillander@gmail.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>, "Boqun Feng"
+ <boqun@kernel.org>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
+ <simona@ffwll.ch>, <linux-serial@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <linux-pm@vger.kernel.org>, <driver-core@lists.linux.dev>,
+ <dri-devel@lists.freedesktop.org>
+To: "Markus Probst" <markus.probst@posteo.de>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20260306-rust_serdev-v2-0-e9b23b42b255@posteo.de>
+ <20260306-rust_serdev-v2-2-e9b23b42b255@posteo.de>
+In-Reply-To: <20260306-rust_serdev-v2-2-e9b23b42b255@posteo.de>
+X-Rspamd-Queue-Id: C6FF722781A
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43878-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	TAGGED_FROM(0.00)[bounces-43877-lists,linux-pm=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,linuxfoundation.org,garyguo.net,protonmail.com,google.com,umich.edu,gmail.com,linaro.org,ffwll.ch,vger.kernel.org,lists.linux.dev,lists.freedesktop.org];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	NEURAL_HAM(-0.00)[-0.975];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dakr@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-0.981];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,intel.com:mid,01.org:url,git-scm.com:url]
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[posteo.de:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Hi Gautham,
+On Fri Mar 6, 2026 at 8:35 PM CET, Markus Probst wrote:
+> Add private data to `struct serdev_device`, as it is required by the
+> rust abstraction added in the following commit
+> (rust: add basic serial device bus abstractions).
+>
+> Signed-off-by: Markus Probst <markus.probst@posteo.de>
+> ---
+>  include/linux/serdev.h | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+>
+> diff --git a/include/linux/serdev.h b/include/linux/serdev.h
+> index 5654c58eb73c..b591af23faf0 100644
+> --- a/include/linux/serdev.h
+> +++ b/include/linux/serdev.h
+> @@ -33,12 +33,13 @@ struct serdev_device_ops {
+> =20
+>  /**
+>   * struct serdev_device - Basic representation of an serdev device
+> - * @dev:	Driver model representation of the device.
+> - * @nr:		Device number on serdev bus.
+> - * @ctrl:	serdev controller managing this device.
+> - * @ops:	Device operations.
+> - * @write_comp	Completion used by serdev_device_write() internally
+> - * @write_lock	Lock to serialize access when writing data
+> + * @dev:	 Driver model representation of the device.
+> + * @nr:		 Device number on serdev bus.
+> + * @ctrl:	 serdev controller managing this device.
+> + * @ops:	 Device operations.
+> + * @write_comp	 Completion used by serdev_device_write() internally
+> + * @write_lock	 Lock to serialize access when writing data
+> + * @private_data Private data for the device driver.
 
-kernel test robot noticed the following build warnings:
+I think this is a bit misleading, as the driver's device private data is st=
+ored
+in the embedded struct device. This seems to be more about having a place t=
+o
+store private data of the Rust abstraction.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge tip/x86/core amd-pstate/linux-next amd-pstate/bleeding-edge linus/master v7.0-rc2 next-20260306]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+So, you may want to name this something along the lines of rust_private_dat=
+a.
+Additionally, you should make it very clear that this field must not be use=
+d by
+drivers directly (i.e. C drivers could easily be tempted to abuse this).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gautham-R-Shenoy/amd-pstate-Fix-memory-leak-in-amd_pstate_epp_cpu_init/20260306-180651
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20260306095753.17155-6-gautham.shenoy%40amd.com
-patch subject: [PATCH 5/9] amd-pstate: Add support for CPPC_REQ2 and FLOOR_PERF
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20260307/202603070431.ykswVnpp-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260307/202603070431.ykswVnpp-lkp@intel.com/reproduce)
+>   */
+>  struct serdev_device {
+>  	struct device dev;
+> @@ -47,6 +48,7 @@ struct serdev_device {
+>  	const struct serdev_device_ops *ops;
+>  	struct completion write_comp;
+>  	struct mutex write_lock;
+> +	void *private_data;
+>  };
+> =20
+>  static inline struct serdev_device *to_serdev_device(struct device *d)
+>
+> --=20
+> 2.52.0
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603070431.ykswVnpp-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/cpufreq/amd-pstate.c:497:48: warning: shift count >= width of type [-Wshift-count-overflow]
-     497 |         WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/msr-index.h:772:38: note: expanded from macro 'AMD_CPPC_FLOOR_PERF_CNT_MASK'
-     772 | #define AMD_CPPC_FLOOR_PERF_CNT_MASK    GENMASK(39, 32)
-         |                                         ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   include/linux/bits.h:48:20: note: expanded from macro 'GENMASK_TYPE'
-      48 |              (type_max(t) << (l) &                              \
-         |                           ^
-   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:686:9: note: expanded from macro '__compiletime_assert'
-     686 |                 if (!(condition))                                       \
-         |                       ^
-   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
-      61 |         __WRITE_ONCE(x, val);                                           \
-         |         ~~~~~~~~~~~~~~~~^~~~
-   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |                                        ^~~
->> drivers/cpufreq/amd-pstate.c:497:48: warning: shift count >= width of type [-Wshift-count-overflow]
-     497 |         WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/msr-index.h:772:38: note: expanded from macro 'AMD_CPPC_FLOOR_PERF_CNT_MASK'
-     772 | #define AMD_CPPC_FLOOR_PERF_CNT_MASK    GENMASK(39, 32)
-         |                                         ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   include/linux/bits.h:49:20: note: expanded from macro 'GENMASK_TYPE'
-      49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
-         |                           ^
-   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:686:9: note: expanded from macro '__compiletime_assert'
-     686 |                 if (!(condition))                                       \
-         |                       ^
-   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
-      61 |         __WRITE_ONCE(x, val);                                           \
-         |         ~~~~~~~~~~~~~~~~^~~~
-   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |                                        ^~~
->> drivers/cpufreq/amd-pstate.c:497:48: warning: shift count >= width of type [-Wshift-count-overflow]
-     497 |         WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/msr-index.h:772:38: note: expanded from macro 'AMD_CPPC_FLOOR_PERF_CNT_MASK'
-     772 | #define AMD_CPPC_FLOOR_PERF_CNT_MASK    GENMASK(39, 32)
-         |                                         ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   include/linux/bits.h:48:20: note: expanded from macro 'GENMASK_TYPE'
-      48 |              (type_max(t) << (l) &                              \
-         |                           ^
-   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:686:9: note: expanded from macro '__compiletime_assert'
-     686 |                 if (!(condition))                                       \
-         |                       ^
-   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
-      61 |         __WRITE_ONCE(x, val);                                           \
-         |         ~~~~~~~~~~~~~~~~^~~~
-   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |                                        ^~~
->> drivers/cpufreq/amd-pstate.c:497:48: warning: shift count >= width of type [-Wshift-count-overflow]
-     497 |         WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/msr-index.h:772:38: note: expanded from macro 'AMD_CPPC_FLOOR_PERF_CNT_MASK'
-     772 | #define AMD_CPPC_FLOOR_PERF_CNT_MASK    GENMASK(39, 32)
-         |                                         ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   include/linux/bits.h:49:20: note: expanded from macro 'GENMASK_TYPE'
-      49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
-         |                           ^
-   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:686:9: note: expanded from macro '__compiletime_assert'
-     686 |                 if (!(condition))                                       \
-         |                       ^
-   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
-      61 |         __WRITE_ONCE(x, val);                                           \
-         |         ~~~~~~~~~~~~~~~~^~~~
-   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |                                        ^~~
->> drivers/cpufreq/amd-pstate.c:497:48: warning: shift count >= width of type [-Wshift-count-overflow]
-     497 |         WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/msr-index.h:772:38: note: expanded from macro 'AMD_CPPC_FLOOR_PERF_CNT_MASK'
-     772 | #define AMD_CPPC_FLOOR_PERF_CNT_MASK    GENMASK(39, 32)
-         |                                         ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   include/linux/bits.h:48:20: note: expanded from macro 'GENMASK_TYPE'
-      48 |              (type_max(t) << (l) &                              \
-         |                           ^
-   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:686:9: note: expanded from macro '__compiletime_assert'
-     686 |                 if (!(condition))                                       \
-         |                       ^
-   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
-      61 |         __WRITE_ONCE(x, val);                                           \
-         |         ~~~~~~~~~~~~~~~~^~~~
-   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |                                        ^~~
->> drivers/cpufreq/amd-pstate.c:497:48: warning: shift count >= width of type [-Wshift-count-overflow]
-     497 |         WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/msr-index.h:772:38: note: expanded from macro 'AMD_CPPC_FLOOR_PERF_CNT_MASK'
-     772 | #define AMD_CPPC_FLOOR_PERF_CNT_MASK    GENMASK(39, 32)
-         |                                         ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   include/linux/bits.h:49:20: note: expanded from macro 'GENMASK_TYPE'
-      49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
-         |                           ^
-   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:686:9: note: expanded from macro '__compiletime_assert'
-     686 |                 if (!(condition))                                       \
-         |                       ^
-   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
-      61 |         __WRITE_ONCE(x, val);                                           \
-         |         ~~~~~~~~~~~~~~~~^~~~
-   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |                                        ^~~
-   6 warnings generated.
-
-
-vim +497 drivers/cpufreq/amd-pstate.c
-
-   457	
-   458	static int msr_init_perf(struct amd_cpudata *cpudata)
-   459	{
-   460		union perf_cached perf = READ_ONCE(cpudata->perf);
-   461		u64 cap1, numerator, cppc_req;
-   462		u8 min_perf;
-   463	
-   464		int ret = rdmsrq_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
-   465					     &cap1);
-   466		if (ret)
-   467			return ret;
-   468	
-   469		ret = amd_get_boost_ratio_numerator(cpudata->cpu, &numerator);
-   470		if (ret)
-   471			return ret;
-   472	
-   473		ret = rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, &cppc_req);
-   474		if (ret)
-   475			return ret;
-   476	
-   477		WRITE_ONCE(cpudata->cppc_req_cached, cppc_req);
-   478		min_perf = FIELD_GET(AMD_CPPC_MIN_PERF_MASK, cppc_req);
-   479	
-   480		/*
-   481		 * Clear out the min_perf part to check if the rest of the MSR is 0, if yes, this is an
-   482		 * indication that the min_perf value is the one specified through the BIOS option
-   483		 */
-   484		cppc_req &= ~(AMD_CPPC_MIN_PERF_MASK);
-   485	
-   486		if (!cppc_req)
-   487			perf.bios_min_perf = min_perf;
-   488	
-   489		perf.highest_perf = numerator;
-   490		perf.max_limit_perf = numerator;
-   491		perf.min_limit_perf = FIELD_GET(AMD_CPPC_LOWEST_PERF_MASK, cap1);
-   492		perf.nominal_perf = FIELD_GET(AMD_CPPC_NOMINAL_PERF_MASK, cap1);
-   493		perf.lowest_nonlinear_perf = FIELD_GET(AMD_CPPC_LOWNONLIN_PERF_MASK, cap1);
-   494		perf.lowest_perf = FIELD_GET(AMD_CPPC_LOWEST_PERF_MASK, cap1);
-   495		WRITE_ONCE(cpudata->perf, perf);
-   496		WRITE_ONCE(cpudata->prefcore_ranking, FIELD_GET(AMD_CPPC_HIGHEST_PERF_MASK, cap1));
- > 497		WRITE_ONCE(cpudata->floor_perf_cnt, FIELD_GET(AMD_CPPC_FLOOR_PERF_CNT_MASK, cap1));
-   498	
-   499		return 0;
-   500	}
-   501	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
