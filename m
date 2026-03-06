@@ -1,218 +1,168 @@
-Return-Path: <linux-pm+bounces-43793-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43794-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aJQEBAGuqmluVQEAu9opvQ
-	(envelope-from <linux-pm+bounces-43793-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:35:45 +0100
+	id EJ/HGl2uqmluVQEAu9opvQ
+	(envelope-from <linux-pm+bounces-43794-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:37:17 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 621DC21ED8C
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:35:44 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20DDC21EDEF
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 11:37:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 13B2C314AB3E
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 10:31:24 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 873C0300B1B4
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 10:37:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3C5737C10E;
-	Fri,  6 Mar 2026 10:30:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C74CC2EAB61;
+	Fri,  6 Mar 2026 10:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="LftkTYlB";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="632EUAM7";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="LftkTYlB";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="632EUAM7"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="IIPRPf/V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4361E37B014
-	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 10:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A17637C104
+	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 10:37:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772793052; cv=none; b=r9JRKbEY8S+c0jRJuR7njXqTmV/ukqK7nZ4KYdBzbJIyDhVzpWIcK9PIVPj1s5E1525serWGKLanXwVbWWiZosPEtEI9EV1Fz+uJ/+Lb//aUHG1X+jy1F+gFH84vrNnB+e85mo9ZWFBKQmes4S0l7iim0kQf9QGvwmHQs1HrKbU=
+	t=1772793433; cv=none; b=Ph6WrHKIm3g2nq+xGjU7O4HnETjZaYyOJUuoK7FKByZMDVgVZtgQF+8KFUbu/s59G3r0fYhCzqWrrD2TQ5JafopnH8GAlZiXV1tiNGWAngPTxt95fg7ZtblBssOCkMqsiicgjRumTCzyP9iC9SYIQfyqRTvyaDQHpdbjp1xnHk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772793052; c=relaxed/simple;
-	bh=QiSdDIOvoXERoUmCtI5O4kN9vMdE+uj5QAfoVBroZ5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iWDjFeioglIrGgepfKbTZa0fZ2+f7H4ZMSyVBIaqV9aqdcpM9Py7kCIA/PwxwGKxYb00vT4HR9ObsNB6Lzyazw6y7uuff5ZAgRvO26tzgzJCGJJt8K/drxhV9ehT3YNZOiOejZpGEFb9Qrp1xzMtxZNnH/QUNFpjJNWj6F31UFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=LftkTYlB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=632EUAM7; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=LftkTYlB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=632EUAM7; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 875923FA7A;
-	Fri,  6 Mar 2026 10:30:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1772793042; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vAQr6SkqV3zjssVR9rZd0gIGba+OVvVWyTtFYxHG1Tw=;
-	b=LftkTYlB+zrmExZCM0xNBcZqm2VBg2WGKqZdbGMSrzXN1qHzs8jIT7z9P1neGQNTtOxaS3
-	49tsqrFGpbUs1Bkcp3+4aYxaZ/oFlZbu8N5kZJVAVVOKRJIbNWHOmefLgDzGEG5KtChk+i
-	udYkR76rHLSYTOgXKupZhCjazdHoYc8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1772793042;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vAQr6SkqV3zjssVR9rZd0gIGba+OVvVWyTtFYxHG1Tw=;
-	b=632EUAM7/SbLKijbGlqOzTmYmkiz+gXT9KFcaSSq/c1yD7DQL4ilODdzxNyo+UYamNPbrK
-	aDxOVrBsk59Dp/Cg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=LftkTYlB;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=632EUAM7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1772793042; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vAQr6SkqV3zjssVR9rZd0gIGba+OVvVWyTtFYxHG1Tw=;
-	b=LftkTYlB+zrmExZCM0xNBcZqm2VBg2WGKqZdbGMSrzXN1qHzs8jIT7z9P1neGQNTtOxaS3
-	49tsqrFGpbUs1Bkcp3+4aYxaZ/oFlZbu8N5kZJVAVVOKRJIbNWHOmefLgDzGEG5KtChk+i
-	udYkR76rHLSYTOgXKupZhCjazdHoYc8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1772793042;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vAQr6SkqV3zjssVR9rZd0gIGba+OVvVWyTtFYxHG1Tw=;
-	b=632EUAM7/SbLKijbGlqOzTmYmkiz+gXT9KFcaSSq/c1yD7DQL4ilODdzxNyo+UYamNPbrK
-	aDxOVrBsk59Dp/Cg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C4A063EA75;
-	Fri,  6 Mar 2026 10:30:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id WNGxLNCsqmn+NQAAD6G6ig
-	(envelope-from <pfalcato@suse.de>); Fri, 06 Mar 2026 10:30:40 +0000
-Date: Fri, 6 Mar 2026 10:30:39 +0000
-From: Pedro Falcato <pfalcato@suse.de>
-To: Dmitry Ilvokhin <d@ilvokhin.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, 
-	Oscar Salvador <osalvador@suse.de>, Qi Zheng <zhengqi.arch@bytedance.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: Re: [PATCH v4 4/5] mm: rename zone->lock to zone->_lock
-Message-ID: <nn6xirm5sa3mf63gcq5mlthk3nrrdig6zpv2mj4vqnsl27nsxe@2si2t2l6pgex>
-References: <cover.1772206930.git.d@ilvokhin.com>
- <d61500c5784c64e971f4d328c57639303c475f81.1772206930.git.d@ilvokhin.com>
+	s=arc-20240116; t=1772793433; c=relaxed/simple;
+	bh=9mQW205gegUibeTid/1e5hyvVPikyOjbbJTshSUvqqE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=ti0TEgtyH/XFcB+6qm9bAPDB3EcYHzfXd4KEKlEIoCOqs7IX6GnaG0il1vQV9flyuBjOX2EdE/xiFsN8g0owl9E3gQoT5zooX8usMitpwwNealp0WEiPVNdrNTKUtPHNryAQEOazygtduVGcNBTRzDKogVm4QQ0dW0nUYHuBDPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=IIPRPf/V; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b936331786dso984128866b.3
+        for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2026 02:37:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1772793429; x=1773398229; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9mQW205gegUibeTid/1e5hyvVPikyOjbbJTshSUvqqE=;
+        b=IIPRPf/VjAEUXK8IyQI6dB7AJahg7RWN0BIknY7cs1Al2aaH1qimHs6i7pawIGUrqX
+         aBc1Nslf7Kg9oY+W2vanwvTGk3ltaRcuCiCopK8wVNr8zNYLxxk4meZJPXmk9utElSw8
+         F41of/pPfqErHw2h00WlD4cOll990+Tze/4WHyv7MeabOpmirywwPV/uhtInqJkH0CFa
+         AOqTCp4ibA+NSsget7w2J3A683K91Rnzv9I5FxK9jwggUTGeUo8/lyxTzPUluFcavX+g
+         YuamSImqSprJnKZTqCh2xY094YPt5lgYF0eI498QHjdNiqLKSMboazlBT/PPI8hVjVbo
+         44Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772793429; x=1773398229;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9mQW205gegUibeTid/1e5hyvVPikyOjbbJTshSUvqqE=;
+        b=XCr/r+wiUdzUqlmm4TC1HMUi7sWKO88a0rQdHVqVb1cSdDJyYAfGQuwFi0gdi6we3D
+         smw/jWQBt4CFlrimTfq1Cx9r7+Xt/bMPMd4/eIkP6jtD9hCTVV3saLaykuIPwI8oCbzN
+         Ds9CycFp/hmv3vJkZw3Itv7LK10V1V7BLsivg/qvhx8sS2AZPo51pyRJeh+6rBgQZuo4
+         /a3DSZE/mkQRcVqPTG/ZMctkOjabtcO370m28clF+2hneb6l7b94y5skhWVJdbNnXMrj
+         b4JjAKryEuVbKVwNvDeSo/t/wJHNrgOkFY3StJR4k0e49adczjvmPiun4cttj6EBhFAj
+         jtWw==
+X-Forwarded-Encrypted: i=1; AJvYcCWA93PuWi/AjoaTLFIW9IFGp594/iS9Og4ksiZ+42H7tzTJuGMecnuiwA4UU8G3SWYS8/SJaX+NCg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1VZHQiZYxaJDakXY4BSa8k93smOJSaXMPBtjGTKFmI/7AofAZ
+	Blty6cNELbI6/DiSoxiuco6M9I070rDBERBf1ctIlxVM3+KOKMi3xIm9VFKtDiOEa+Y=
+X-Gm-Gg: ATEYQzznfBX4NHrZQVY+ry9xWcmcXs/jArtrrmIkqDE/5+l3L/J87Wj+Z2lvJwEm0dl
+	F7gfePUib8Jn+iNlstiOgT7fqzIMPABzSuEgXNLX2T1Z0tw8PjttlVP3syTuY4slm0bc3Aejo9A
+	1yuu/Tb9OYC2nFgStgVOGIyIvej96T9T++ocMHV0XNjDYOmsCxAOEXuTQlj4Ws5iUkmG/ff+v+t
+	aNcAbF8zdS64A65uTePqLRHw1lnY0k3tpJYXYFqeGAJv90B6Xm6o/YAwi+AbgjRvfJ9KM8fY8Wj
+	GW4iMm1TYg1m/q6QUmOqP8j+4Q0wsJsJr31HHWE488NfUmI+tkkoIhQs5CmZEMyYBCNXvOeJw7m
+	m9BMX+RV9a41/LOz/p+VzJv4STrhizyyIR0xacAdG+E+Y/w2rEJqdSuHsfgTMEK3+NYv16laUF7
+	Lz5wUV67mpUoHrTYf44GYqEJMF4FW+PgMAzHq4iqhijOl3W2ZxOiQCWtnMwrrylXobUT6S
+X-Received: by 2002:a17:907:9486:b0:b73:572d:3b07 with SMTP id a640c23a62f3a-b942dfb4369mr108342766b.28.1772793429277;
+        Fri, 06 Mar 2026 02:37:09 -0800 (PST)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b942ef8ad0fsm46007966b.19.2026.03.06.02.37.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Mar 2026 02:37:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d61500c5784c64e971f4d328c57639303c475f81.1772206930.git.d@ilvokhin.com>
-X-Spam-Flag: NO
-X-Spam-Score: -4.01
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 621DC21ED8C
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 06 Mar 2026 11:37:08 +0100
+Message-Id: <DGVMTLXR7VVA.3UCTHBGDDIKL7@fairphone.com>
+To: "Konrad Dybcio" <konrad.dybcio@oss.qualcomm.com>, "Krzysztof Kozlowski"
+ <krzk@kernel.org>, "Luca Weiss" <luca.weiss@fairphone.com>, "Taniya Das"
+ <taniya.das@oss.qualcomm.com>
+Cc: "Georgi Djakov" <djakov@kernel.org>, "Bjorn Andersson"
+ <andersson@kernel.org>, "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, <~postmarketos/upstreaming@lists.sr.ht>,
+ <phone-devel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+ <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 2/5] dt-bindings: clock: qcom,milos-camcc: Document
+ interconnect path
+From: "Luca Weiss" <luca.weiss@fairphone.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260116-milos-camcc-icc-v1-0-400b7fcd156a@fairphone.com>
+ <20260116-milos-camcc-icc-v1-2-400b7fcd156a@fairphone.com>
+ <20260117-efficient-fractal-sloth-aaf7c2@quoll>
+ <59d9f7ff-4111-4304-a76c-40f4000545f5@oss.qualcomm.com>
+ <9f8619d4-43ac-4bc0-9598-c498d59a27b8@oss.qualcomm.com>
+In-Reply-To: <9f8619d4-43ac-4bc0-9598-c498d59a27b8@oss.qualcomm.com>
+X-Rspamd-Queue-Id: 20DDC21EDEF
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[suse.de,none];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[fairphone.com,quarantine];
+	MV_CASE(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[fairphone.com:s=fair];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43793-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43794-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[fairphone.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_TWELVE(0.00)[29];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pfalcato@suse.de,linux-pm@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-pm];
+	FROM_NEQ_ENVFROM(0.00)[luca.weiss@fairphone.com,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[]
 X-Rspamd-Action: no action
 
-On Fri, Feb 27, 2026 at 04:00:26PM +0000, Dmitry Ilvokhin wrote:
-> This intentionally breaks direct users of zone->lock at compile time so
-> all call sites are converted to the zone lock wrappers. Without the
-> rename, present and future out-of-tree code could continue using
-> spin_lock(&zone->lock) and bypass the wrappers and tracing
-> infrastructure.
-> 
-> No functional change intended.
-> 
-> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: Dmitry Ilvokhin <d@ilvokhin.com>
-> Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
-> Acked-by: SeongJae Park <sj@kernel.org>
-> ---
->  include/linux/mmzone.h      |  7 +++++--
->  include/linux/mmzone_lock.h | 12 ++++++------
->  mm/compaction.c             |  4 ++--
->  mm/internal.h               |  2 +-
->  mm/page_alloc.c             | 16 ++++++++--------
->  mm/page_isolation.c         |  4 ++--
->  mm/page_owner.c             |  2 +-
->  7 files changed, 25 insertions(+), 22 deletions(-)
-> 
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index 3e51190a55e4..32bca655fce5 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -1009,8 +1009,11 @@ struct zone {
->  	/* zone flags, see below */
->  	unsigned long		flags;
->  
-> -	/* Primarily protects free_area */
-> -	spinlock_t		lock;
-> +	/*
-> +	 * Primarily protects free_area. Should be accessed via zone_lock_*
-> +	 * helpers.
-> +	 */
-> +	spinlock_t		_lock;
+Hi Taniya,
 
-I really don't like this uglification.
-Suggestion:
-	spinlock_t __private	lock;
+On Mon Jan 19, 2026 at 11:28 AM CET, Konrad Dybcio wrote:
+> On 1/19/26 11:20 AM, Konrad Dybcio wrote:
+>> On 1/17/26 12:46 PM, Krzysztof Kozlowski wrote:
+>>> On Fri, Jan 16, 2026 at 02:17:21PM +0100, Luca Weiss wrote:
+>>>> Document an interconnect path for camcc that's required to enable
+>>>> the CAMSS_TOP_GDSC power domain.
+>>>
+>>> I find it confusing. Enabling GDSC power domains is done via power
+>>> domains, not via interconnects. Do not represent power domains as
+>>> interconnects, it's something completely different.
+>>=20
+>> The name of the power domains is CAMSS_TOP_GDSC (seems you misread)
+>>=20
+>> For the power domain to successfully turn on, the MNoC needs to be
+>> turned on (empirical evidence). The way to do it is to request a
+>> nonzero vote on this interconnect path
+>>=20
+>> (presumably because the GDSC or its invisible providers require
+>> something connected over that bus to carry out their enable sequences).
 
->  
->  	/* Pages to be freed when next trylock succeeds */
->  	struct llist_head	trylock_free_pages;
-> diff --git a/include/linux/mmzone_lock.h b/include/linux/mmzone_lock.h
-> index a1cfba8408d6..62e34d500078 100644
-> --- a/include/linux/mmzone_lock.h
-> +++ b/include/linux/mmzone_lock.h
-> @@ -7,32 +7,32 @@
->  
->  static inline void zone_lock_init(struct zone *zone)
->  {
-> -	spin_lock_init(&zone->lock);
+Do you have any details you can share for this discussion?
 
-and then ACCESS_PRIVATE() all over these helpers. This will not make a
-difference to the compiler, but it will work with sparse.
-
-It's not that I don't understand what you're doing, but we're going to need
-to look to this code and refer to this code 20 years from now, I would rather
-not refer to zone->_lock :)
-
--- 
-Pedro
+Regards
+Luca
 
