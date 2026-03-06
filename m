@@ -1,238 +1,248 @@
-Return-Path: <linux-pm+bounces-43853-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43854-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uGSBKuv5qmmcZAEAu9opvQ
-	(envelope-from <linux-pm+bounces-43853-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 16:59:39 +0100
+	id SGgOMh0Iq2k/ZgEAu9opvQ
+	(envelope-from <linux-pm+bounces-43854-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 18:00:13 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 291332246BA
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 16:59:38 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAE00225994
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Mar 2026 18:00:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7167E303F064
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 15:51:45 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 0E632300F293
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2026 16:53:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4818D3E51F9;
-	Fri,  6 Mar 2026 15:51:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 230293A1E96;
+	Fri,  6 Mar 2026 16:53:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jJN1hOtd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k7/Ah/9A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C31B836C58A
-	for <linux-pm@vger.kernel.org>; Fri,  6 Mar 2026 15:51:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772812304; cv=pass; b=YY4RHM11eShjri5a1m/B+N87wBxHrj+PV8upbzXqpU/9a/9W748IJaqqFy9RVnK2fEYGAsaMs8mClqQoCFmTSeM+gngn4HboR60641DYaCz+sqlI1daDx+q1S08Y2jGKabbOUFKCUTLXvXuLFs//0rUX33CwRck4xUsUibwfAXQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772812304; c=relaxed/simple;
-	bh=zt/0UNt3uP18aJxtk0eoO7x0Py6Ek1ZFUdGvve+hz54=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QakIGHwS9pR0zqTaGxc2RtSeOMeDJOuetDYYkxQi6dq/ELxyXsbKcKWpitN5pg9ff0h+8Gwre+CFtl90Mt5JLvVLDE4V9i8S/etLP60VWHaMVApdou3idf/l+TtA0ayPN18K5uQPrEGkLKXeXyQCpeFKVxnLeOUju9I2KdrRNG4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jJN1hOtd; arc=pass smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6610bd5f322so5000232a12.1
-        for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2026 07:51:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772812301; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Ha402MU02pxlSG4T1E9sVO73br4kHf2Ls4fDSSBTJyWFkYDYyQqdj2bUhfwZH6DGzi
-         dBvZZ9EHCkYcPwUIGyX5dEC+lTUKA9yWGd4BawaUfeXn1YeBvOBcJyZuLrE4auhcJxNo
-         kRpPu4ai7QJQcsgEnGQ1oxCEOWkG+Rao0gDIwFiimcPCRAGcl5eyvCrAYaaT8tR4mUzO
-         Z0zJ/xjq2eLOkD6isGhX7k/hJz2ht1ygf+kxPxjinBBG0+nI7hpOWK5HSW7ZQsBpOpDz
-         NHYKZdkzXNfRuOuOeKhYGyO05C1jw4368OvhrmQuIwzhJt40XmFYdsUhffEmbaG7a7o5
-         x9vw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=xzcKbGMLVorHlsZLyV1rvqs6i8R7J8sRM6aIMH0+nN8=;
-        fh=R4pr5pDjkNrsx/g+eFc9fmXtaMnLxXGKHSK9YYDqZkc=;
-        b=XxIBVMXEIbu5B7gcEFn925ZsxNbhjVU4m3kkGco7EQEFxorzi0jZ2ChSMdL5xnbzEY
-         fgAWFjj8S0PwLBAkEKIlgYxmq1r8mqIMngOR0dPst6SqqQni0diJUhxUNRiSiF7UphD8
-         7UXOeYv6X0/MJfQlXHv3zhc6UZw+t4HzNkasPAFhRUqb/gHakI8cOYAyIgIAyE4pTZeR
-         N7mdlKITfdRGgILvXWaaa8fdYRRrn0O3pa+j5Y1n8WNXbfwbQWMX54qwsrhca7DR6nej
-         eeHpUSSE1ds+l8iRLnD/n2juaBLYtx91ML9948dJYxUQtg29zlXmdQ4m4PT0pilmNLWx
-         /k4g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1772812301; x=1773417101; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xzcKbGMLVorHlsZLyV1rvqs6i8R7J8sRM6aIMH0+nN8=;
-        b=jJN1hOtdwsskWc1pefnfQcjLiGmjUKNymGSXkMS2DHIWWFDik2mp7S6FwL709lcD6L
-         eMeMJBQDT0wtlGsDv5f8F49DsbENS1Opqgw53IG0OVKThm515JIcdl6oyJTftzgaJAK3
-         eOJF/TWqggjJm4GLS0g7KI7BvMKGDWP1q1Sg/jfUy01z1RpaT56xlp0FBkDJUwo0t2Ba
-         HrPG0/QvWEnDvrkdMmzKFSocqXwg7c8RrBZWOa1AE+r1hpt1zBDPUykT0wqh4t3yTvDf
-         LOJWgdtin9gyfeivQ1lWmTM+fq7uamU+J5+Z7W13xEX2I70ywKrS4kNL6p5lwkbIilfC
-         +XYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772812301; x=1773417101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xzcKbGMLVorHlsZLyV1rvqs6i8R7J8sRM6aIMH0+nN8=;
-        b=sYIG/eFRO06QA7Ypz/S70J3MsE92/tq4bu//fffOtaZfPVsHiSg5illWjnna+RaJf6
-         iOhQHkU+eySdhtn1Blrb8Oo1CsuaDRwgzIwJHcv65MkYmagbXJBoy7mShQ8k/gh9Vv2p
-         QjzowZe77l2CuDMy8/yDEJkp1L20C3r0/mhNIk2XdMqAvaqJhQRhVypGCbGtcI43qhEV
-         tBL22DRXLm85X/Zq1veSXScxtTLtZVdrN6WfSYYNB6TPL9TK1a2Z3/3+SbCgUOn/4VyS
-         9Cck+uL06BA44wVaI/RHFOxXqQ4qd3ijlRwbqHAzWOx4T3zRx0HV3fkFYrbzEpdK8Nuo
-         ph2w==
-X-Forwarded-Encrypted: i=1; AJvYcCUo7YwvSpKnLNl8/xfDVDYtKMWH84VjwPyTHSgGMM0EK3qhyl8i/ChsdWGmfU0pkEM/+oroFn9zXQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQFD4kg3Fbt6f2/34uMuR69E5Zp0vfsPCOt0b6P2cmUzud6yMj
-	2Rbcy/tfCHT/RSOO1R7ZSoJdcYn5ygWoye2hohlL1bkFCE3hdsG5GN7j0cs8Bf92ja75NG4L0/P
-	AAdn+FDei2heNRPGioIXVAZJiI6huGn9JI7uMAGAbag==
-X-Gm-Gg: ATEYQzwT90bewTA5v+HekPnJ2UFx/cZSD6FmTC5EKxPEb65tv6iIf0aDFoFhjnteKIC
-	uoYkOQFHiShY/VoxGe6hnX5pUo4X6+b5FkFfUFHcKiys0YqQiWL///vGDJtVtdnxXjZpiQf86Zf
-	njLYYe6EgbpJeF3h3cWiFGGZaBOPqMHdSkYUAsU7pulrNqPHDnBlNzRcm6U9sv3j70RkP1QFyNG
-	oy5BEEhdyK+SW4mLaI1jkPcbwjn0sMDETawNgAalF8AgAPbLisdRbl+9ADO1MVvMddA9ntBwvr8
-	+GhDdYlAyy7jCGL4lE3NAw3lhEkSqdRBRqHJQx7txg==
-X-Received: by 2002:a05:6402:440b:b0:65c:354e:94f0 with SMTP id
- 4fb4d7f45d1cf-6619d467bf2mr1553000a12.8.1772812301052; Fri, 06 Mar 2026
- 07:51:41 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D92336C0AA;
+	Fri,  6 Mar 2026 16:53:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772816038; cv=none; b=d8a1wprMmG10mGr6oTp5NC905NVS8Be/qQEH50fv3QONITxycMHk93NnZ4zFxiWHsx6WIlBo8Whpd257wETXTHQayorxDU5osSZrbyY1S5bCfOeUmjEFdR/t4bF6R4zb5BEZQMZO1T4R+EtiRoMsql4Vv3Jhh/AMZuPiIe97AqQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772816038; c=relaxed/simple;
+	bh=UxvDbFBGv9QgfcOx7y2B3JzBHpom2uaBOEnuzRuVfXI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X1ES4hsYHeruz9/192MZEBW0FcAkc5uKEXm+SMSyiMfgCR3XNk96IbkFWjdnV90YG/GSuIs1pHw0FAp4AxE0sDAxDoBAdjm15qZ2Du/cewHQXC3OUxIZXuJVUTAZcFA9IsOw3A3KuGYs3oUfBwmQdYiK8SZ6FlhbnEJY9qoQgJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k7/Ah/9A; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772816036; x=1804352036;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UxvDbFBGv9QgfcOx7y2B3JzBHpom2uaBOEnuzRuVfXI=;
+  b=k7/Ah/9AX9QdgoNDvOI0zMYyfo+kF6LC44sj0vBOds2EiKBN4ZX4lp1i
+   dE21Doe5higOyQcapd2vSyeum2o7nsSvjD2r5cwLo9RDuZkL0/rEeEejw
+   rRj3Hldv2Vh6YOnSMrjaI3211GvPfWrrvvAwM24Ce/Ek1+nUADM+Ur5tO
+   jiAp140sPhNGu6JtZxdEUU2azuVNp5FNbGptdeksdp9yzLnT+DI4Mk0wy
+   aqDnqTnT+NcG4geIF1EBTlCNt340jlCgZCbsISuolBOzu7nGlI+FbuWjK
+   RFzYEMdeF6zO0KlJkutWosvQbCTO0ei1BFZFuElWzSc4RkfrUuSu3P43E
+   A==;
+X-CSE-ConnectionGUID: gZmWM1ZpSf60TfxCvIsi6Q==
+X-CSE-MsgGUID: KIh/7enBS5eZjGi/yY9PDA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11721"; a="85403313"
+X-IronPort-AV: E=Sophos;i="6.23,105,1770624000"; 
+   d="scan'208";a="85403313"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 08:53:55 -0800
+X-CSE-ConnectionGUID: Ndh+n2SPQeqwS9+sN39mDQ==
+X-CSE-MsgGUID: ktFp3dtgQlSEmgYK/dgL/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,105,1770624000"; 
+   d="scan'208";a="218293106"
+Received: from gabaabhi-mobl2.amr.corp.intel.com (HELO [10.125.109.91]) ([10.125.109.91])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 08:53:55 -0800
+Message-ID: <ffb7e798-e8c7-4728-b699-6c885be61136@intel.com>
+Date: Fri, 6 Mar 2026 08:54:03 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260306-gs101-pd-v7-0-03f7c7965ba5@linaro.org> <20260306-gs101-pd-v7-6-03f7c7965ba5@linaro.org>
-In-Reply-To: <20260306-gs101-pd-v7-6-03f7c7965ba5@linaro.org>
-From: Peter Griffin <peter.griffin@linaro.org>
-Date: Fri, 6 Mar 2026 15:51:29 +0000
-X-Gm-Features: AaiRm50XSyJAhZxudj29YJ-AfLARk18pjf_9-ZTH2qd-aJZzO76tWKTXAR6KLlw
-Message-ID: <CADrjBPqB60UtWpZjBdsGtijw+OSq76vfBaiKoJg8We2na-ixhQ@mail.gmail.com>
-Subject: Re: [PATCH v7 06/10] pmdomain: samsung: don't hard-code offset for
- registers to 0 and 4
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Juan Yescas <jyescas@google.com>, 
-	Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Marek Szyprowski <m.szyprowski@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 291332246BA
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] x86/cpu/intel: Add EIST workaround for Lightning
+ Mountain.
+To: Martin Schiller <ms@dev.tdt.de>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Florian Eckert <fe@dev.tdt.de>
+References: <20260306-cpufreq_lgm-v1-0-47f104aed7c2@dev.tdt.de>
+ <20260306-cpufreq_lgm-v1-2-47f104aed7c2@dev.tdt.de>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20260306-cpufreq_lgm-v1-2-47f104aed7c2@dev.tdt.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: CAE00225994
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43853-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	TAGGED_FROM(0.00)[bounces-43854-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	FREEMAIL_CC(0.00)[kernel.org,samsung.com,linaro.org,gmail.com,google.com,android.com,lists.infradead.org,vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[peter.griffin@linaro.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	NEURAL_HAM(-0.00)[-0.992];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:dkim,linaro.org:email,mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,samsung.com:email]
+	FROM_NEQ_ENVFROM(0.00)[dave.hansen@intel.com,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.956];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Fri, 6 Mar 2026 at 10:29, Andr=C3=A9 Draszik <andre.draszik@linaro.org> =
-wrote:
->
-> On platforms such as Google gs101, direct mmio register access to the
-> PMU registers doesn't necessarily work and access must happen via a
-> regmap created by the PMU driver instead.
->
-> When such a regmap is used it will cover the complete PMU memory region
-> rather than individual power domains. This means the register offsets
-> for the configuration and status registers will have to take the power
-> domain offsets into account, rather than unconditionally hard-coding 0
-> and 4 respectively.
->
-> Update the code to allow that.
->
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
-> ---
+So what's weird about these systems? Do they not have a "normal" BIOS
+based on the Intel reference one?
 
-Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
+I don't know much about this specific feature, but this patch is doing
+some unusual things. I'll elaborate below:
 
->  drivers/pmdomain/samsung/exynos-pm-domains.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdom=
-ain/samsung/exynos-pm-domains.c
-> index 3bcba7d38ac1..8df46b41f9bc 100644
-> --- a/drivers/pmdomain/samsung/exynos-pm-domains.c
-> +++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
-> @@ -30,6 +30,8 @@ struct exynos_pm_domain {
->         struct regmap *regmap;
->         struct generic_pm_domain pd;
->         u32 local_pwr_cfg;
-> +       u32 configuration_reg;
-> +       u32 status_reg;
->  };
->
->  static int exynos_pd_power(struct generic_pm_domain *domain, bool power_=
-on)
-> @@ -41,7 +43,7 @@ static int exynos_pd_power(struct generic_pm_domain *do=
-main, bool power_on)
->         pd =3D container_of(domain, struct exynos_pm_domain, pd);
->
->         pwr =3D power_on ? pd->local_pwr_cfg : 0;
-> -       err =3D regmap_write(pd->regmap, 0, pwr);
-> +       err =3D regmap_write(pd->regmap, pd->configuration_reg, pwr);
->         if (err) {
->                 pr_err("Regmap write for power domain %s %sable failed: %=
-d\n",
->                        domain->name, power_on ? "en" : "dis", err);
-> @@ -53,7 +55,7 @@ static int exynos_pd_power(struct generic_pm_domain *do=
-main, bool power_on)
->         while (timeout-- > 0) {
->                 unsigned int val;
->
-> -               err =3D regmap_read(pd->regmap, 0x4, &val);
-> +               err =3D regmap_read(pd->regmap, pd->status_reg, &val);
->                 if (err || ((val & pd->local_pwr_cfg) !=3D pwr)) {
->                         cpu_relax();
->                         usleep_range(80, 100);
-> @@ -164,6 +166,8 @@ static int exynos_pd_probe(struct platform_device *pd=
-ev)
->         pd->pd.power_off =3D exynos_pd_power_off;
->         pd->pd.power_on =3D exynos_pd_power_on;
->         pd->local_pwr_cfg =3D pm_domain_cfg->local_pwr_cfg;
-> +       pd->configuration_reg +=3D 0;
-> +       pd->status_reg +=3D 4;
->
->         /*
->          * Some Samsung platforms with bootloaders turning on the splash-=
-screen
-> @@ -174,7 +178,7 @@ static int exynos_pd_probe(struct platform_device *pd=
-ev)
->             of_device_is_compatible(np, "samsung,exynos4210-pd"))
->                 exynos_pd_power_off(&pd->pd);
->
-> -       ret =3D regmap_read(pd->regmap, 0x4, &val);
-> +       ret =3D regmap_read(pd->regmap, pd->status_reg, &val);
->         if (ret)
->                 return dev_err_probe(dev, ret, "failed to read status");
->
->
-> --
-> 2.53.0.473.g4a7958ca14-goog
->
+> diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+> index 98ae4c37c93eccf775d5632acf122603a19918a8..e49df04e8d491158cc48f8d8bef824c434256d09 100644
+> --- a/arch/x86/kernel/cpu/intel.c
+> +++ b/arch/x86/kernel/cpu/intel.c
+> @@ -466,6 +466,29 @@ static void intel_workarounds(struct cpuinfo_x86 *c)
+>  #else
+>  static void intel_workarounds(struct cpuinfo_x86 *c)
+>  {
+> +	u64 misc_enable;
+> +
+> +	/*
+> +	 * Intel / MaxLinear Lightning Mountain workaround to enable Enhanced
+> +	 * Intel SpeedStep Technology (EIST) for each cpu. Otherwise, the
+> +	 * frequency on some cpus is locked to the minimum value of 624 MHz.
+> +	 * This usually would be the job of the BIOS / bootloader, but U-Boot
+> +	 * only enables it on the cpu on which it is running.
+> +	 */
+> +	if (c->x86_vfm == INTEL_ATOM_AIRMONT_NP) {
+
+Model checks area kinda a last resort. A quick search in the SDM found:
+
+CPUID.01H:ECX[7]: If 1, supports Enhanced Intel SpeedStep® technology.
+
+But there's other chit chat in the "Runtime Mutable CPUID Fields"
+section that makes it seem that it's not a really feature enumeration
+bit, but a flag to tell if the BIOS enabled it:
+
+	CPUID.01H:ECX[7] -- This feature flag reflects the setting in
+			    IA32_MISC_ENABLE[16]
+
+But the plot thickens because the *existing* code does this:
+
+static int centrino_cpu_init(struct cpufreq_policy *policy)
+{
+...
+        /* Only Intel makes Enhanced Speedstep-capable CPUs */
+        if (cpu->x86_vendor != X86_VENDOR_INTEL ||
+            !cpu_has(cpu, X86_FEATURE_EST))
+                return -ENODEV;
+...
+        if (!(l & MSR_IA32_MISC_ENABLE_ENHANCED_SPEEDSTEP)) {
+
+Which, again, makes it seem like X86_FEATURE_EST (aka. CPUID.01H:ECX[7])
+tells you if the MSR bit is supported, not whether it is enabled.
+
+I'd tend to trust the existing kernel code over quibbling with the SDM
+wording in general. It's also possible the old code was just confused or
+something was buggy.
+
+> +		rdmsrq(MSR_IA32_MISC_ENABLE, misc_enable);
+> +		if (!(misc_enable & MSR_IA32_MISC_ENABLE_ENHANCED_SPEEDSTEP)) {
+> +			misc_enable |= MSR_IA32_MISC_ENABLE_ENHANCED_SPEEDSTEP;
+> +			wrmsrq(MSR_IA32_MISC_ENABLE, misc_enable);
+> +
+> +			/* check to see if it was enabled successfully */
+> +			rdmsrq(MSR_IA32_MISC_ENABLE, misc_enable);
+> +			if (!(misc_enable & MSR_IA32_MISC_ENABLE_ENHANCED_SPEEDSTEP)) {
+> +				pr_info("CPU%d: Can't enable Enhanced SpeedStep\n",
+> +					c->cpu_index);
+> +			}
+> +		}
+> +	}
+>  }
+
+
+This is also not written in the normal kernel style which minimizes
+indentation. For instance, the function should have opened with:
+
+	if (c->x86_vfm != INTEL_ATOM_AIRMONT_NP)
+		return;
+
+It also needs to be reconciled with centrino_cpu_init() (at least).
+Having *a* single place to go in and say "If this CPU supports 'EST',
+turn it on" would be a minimal refactoring that could be shared by your
+new workaround and the old centrino code.
+
+centrino_cpu_init() does look gated on X86_FEATURE_EST already, though
+because of the centrino_ids[]. So, you still need to figure out the
+interaction with X86_FEATURE_EST for when you call the workaround.
 
