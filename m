@@ -1,112 +1,113 @@
-Return-Path: <linux-pm+bounces-43898-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43899-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mNDHLoAlrGnnlwEAu9opvQ
-	(envelope-from <linux-pm+bounces-43898-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sat, 07 Mar 2026 14:17:52 +0100
+	id 8E7gCH4orGlSmAEAu9opvQ
+	(envelope-from <linux-pm+bounces-43899-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sat, 07 Mar 2026 14:30:38 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF30B22BE4B
-	for <lists+linux-pm@lfdr.de>; Sat, 07 Mar 2026 14:17:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B621022BF6D
+	for <lists+linux-pm@lfdr.de>; Sat, 07 Mar 2026 14:30:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C67A7301AFC4
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Mar 2026 13:17:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 435093021B09
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Mar 2026 13:30:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E49D924503F;
-	Sat,  7 Mar 2026 13:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFE3321CC5B;
+	Sat,  7 Mar 2026 13:30:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cZ+3V2Ul"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bUFOnMi4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A7B23D291
-	for <linux-pm@vger.kernel.org>; Sat,  7 Mar 2026 13:17:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FA91C3BF7
+	for <linux-pm@vger.kernel.org>; Sat,  7 Mar 2026 13:30:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772889466; cv=pass; b=kdVdS/cPozV/pbeeTGrPZwNlSGH79YSkgRqdmFokLj298bFbqU6vdjLdV0JCiUgrkPc+hRJ7mqDr1lHw65A9ouQ6jmvOMxi3Jh+qdaM9xP//h/vOkXUzW688yTOrci8TcedxLF8s9Jt4ab2/NbUUVpogqZr93A+lcZ/Vq453JOw=
+	t=1772890235; cv=pass; b=e5212nxtgiLr3jHtb+zsI/i4tCHLcGekl6hFlEQ4a8dgmx8opShWZzsfXej+i4V7qPQwAjAdoMJ+xKDKXHfKMTdXlI5B7YAW+cPI0XcOc7gKGnNjvqaWnkaWJWxYtlwtfo70UkVlUNFKaCeCDshU/+DbJtRRUncSDzG0kDN5hSU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772889466; c=relaxed/simple;
-	bh=BGH5fw1KTyI0IIpta/ctbnM5IMYss8VocaP1z86Flns=;
+	s=arc-20240116; t=1772890235; c=relaxed/simple;
+	bh=G6kNegQKBFYwnygE7hIWLaa6frsBBELEiBKJ771TxG0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CVt7fwWGly4xBDU7hGhfNrOigNdBw45TQUYBtgKSU8YGcqPv766efyLER9JBJBAKqrQkUo4b6iZc6IAprmr8kIU3KKyIUbauMUSL87bT7rT3emuUjgq8JwkSBrrJShW5WgfhFz4WsLYGHJRoPxxDGpo5b0oROTEeD4sIt7vWOYg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cZ+3V2Ul; arc=pass smtp.client-ip=209.85.221.49
+	 To:Cc:Content-Type; b=E9mPQBgc/ycV4otXoe/GlhMLYZ0l3oN87idvBLTJc93si+rcmfrVJPpcSs/qso93xY3cvqMRYxvDLKPL28EPU+2TvXmvxlk8uD7aPu9Ej84mrnJNvSqqH3VguFm4eRHh8RwmuCqyJq1VDVuxbXwrLEVUCEycuvEojp7Hx3bmJAQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bUFOnMi4; arc=pass smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-439a89b6fd0so6789378f8f.2
-        for <linux-pm@vger.kernel.org>; Sat, 07 Mar 2026 05:17:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772889464; cv=none;
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-439aeed8a5bso7358187f8f.3
+        for <linux-pm@vger.kernel.org>; Sat, 07 Mar 2026 05:30:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772890233; cv=none;
         d=google.com; s=arc-20240605;
-        b=KAy7ABLBPKeZPCthxpJFHnaBlKrxVcYhR872k4BuDjTTHJNh5pVmO71j8szYvo2zqi
-         5XFIYiuC0I7/+8cN1CkP//frNRjDNQO6gG4tiimaGLBo49veDhcRIG70is3rAbD9xqO0
-         WafwiW72j5qvGR8MAm1zs5+PhdO65moaaAIfhARwwYs69GV9YX3UWlnTsn1cz+C7B7h3
-         WIHBqA/nONRScEgTxXboBLShP/a4S6nN1iU6okBn/FtrV9gp/27LVZkL4cM3B49WZNFf
-         T1Vc7k8X1z8Q1L3ZNDHW4qI9MB+YII5jVtq5iDS9HhEuJ+JdmT5w5/W+YsqY+tg55PEC
-         aP/w==
+        b=hDH+Pzu7NQcMI3ZmkamUybdD4RBmxp6V5Jt4TJNZ8n936dIJq0coUlITSmmMlk9r4v
+         ZWlWphL/qNAP1YeOJHw8RT4FAAoufvqE8xNFytN86pITO8G2Diuld6rqmNmK4Qcw5vTA
+         SY2d/NHvQays40Qh71sGY7ILBonfbA94cW3j73gxU9ae1bwQxDawOHKvlb8/W4ZmqFAp
+         6ofciJaSidpwpEAAJLEwiYd9FVxvdSqwpO9gv1OfzDRVu/WQCmURsHHaDDiEDkme69wM
+         WLa2pmK0Ti5iGzTZcHSlOuYvII50dPS5W9S/Sv27vNbm3hhOldUidLjwJEXIByjXu1u7
+         aoHw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=GjwpvT6wtYJv8QceRQPyk3jFj/BRY6zuY97whk5Cwg0=;
-        fh=u3KR9X+4LK3nbgesSih+1OOmCqOtkYKrju7Vn9GnnTs=;
-        b=Q3FNB1h6PVZvxLuznAJL6NTuZZxkmpy0E8+votMINbcOPETbzKf+77O0jyZtWN39+f
-         T6lldbPu3vKhDz5TUZlHWSgccxRli+jXzODSk5IwGvgZrIy7GKhKtUxZO4gkbp/WKpuh
-         fb7YsiU6K1wX6oT6PyK0nl+YPVZXy9GluR20DaQSPKoZs7HLX3YEeru/T/qIZkW/YR9V
-         MhH/b+oAqrwdVAnLB4sCJo05nG2pYCxvGlYOcEK0PCfcTXs/LKGsv1N/zQxDcSZQaBEd
-         J4PdidbGxAZXVmfPPJyCuYNiZas00bJBoHfyxp+0qHVHcEeeZ3zDlrHZutcqpTk37qqC
-         CI9Q==;
+        bh=9vxg1zKKw5eRGATryRLQmdjvykX+/jqWfKws1Yp5Hqk=;
+        fh=prYY11oVeEg1sds/VnwYzd635b4qvb13VRBms/Yrqdw=;
+        b=fKo9W8cH+em1w7zwNg/TTgkRhrUJjah5zflWhQOhlk3TtCIdmZ4SUmk9U++A3XrdMz
+         UTx4PSgWT5BmtVMbVtkt7pVJlJLUkWVSOA/kU0P+gtrnOYFZ9fBjqSWLqsGvlKLxFQug
+         EUmvUyhasG9b5PqdSKk/WV7Xbp96ZhVaYlIrRnU6/nfSMeYviY+1ciJc+h0rfwHvt9y6
+         A+rr93Od1HGzhWfX86+B5JghASi8nqAyYICCVDVte484woPgy7F8pVF1bhZq02s3UvB2
+         PSimXXl4jGRDjkAetolj4Sj1vH7o3uYV+yKcciPHwTk9DEfmdP8egjsuvVd+M+2aumJZ
+         UzWQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772889464; x=1773494264; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772890233; x=1773495033; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GjwpvT6wtYJv8QceRQPyk3jFj/BRY6zuY97whk5Cwg0=;
-        b=cZ+3V2UlBKXkxskZn/S5bW2/UthLRJU36cWn8UpQOyqj6mYbssGEBjAhD44JwZfqjK
-         nAlhV/x3iY5cZ8UhRDe1OPcd2zrcq+4C8nz6AwfLDG5HcfAxhhJzbvet7W9VYa6wFbKi
-         sl4EPnb7ROE9cUHk1WDUh2XwlBILsoHr0lHPuOxMkeb7bJxwZX5wAvG8ABocP+Y7Ty/K
-         kPHjk0lN/3H/7YKIbT6VBPumPusLYSGyYXPANg+bDLLVyNyyuGV7aa4kxy9ImXY3+uzs
-         dqMQWjaFRi41vJwdNbfQqAIf9gfeuvGznpfZAfYHFwvg/2GBCyBYDMvd8g2NBnYTHUsr
-         aJJA==
+        bh=9vxg1zKKw5eRGATryRLQmdjvykX+/jqWfKws1Yp5Hqk=;
+        b=bUFOnMi4MPR0wHADjkPGTcwezfzOOsx+6SCp2Za8p3WQjIt5a4Oq+XyPyShsvwGpvX
+         DbGdbetRlaLjmlOJotLVmgcG9P91aOyDc9hZ6Z/RwHDEYhnPIv4cf+O05uMMCaIZjPgj
+         kbwIwzTNPexvfFvWSbO0U2xfjg/0x8m7/3KT1JofDa2oDCO3LmxSsyFZSnyAEigVijFK
+         pvKiA8aUGTRTReF8+pLJ9A5wefMh22YNwtBB/ucjBZDyMbb9tUPnyNmb32qDbAwO8Pvi
+         V/tHHd9VpG83ILVzeUg6Bf+CCC3jn/MIu2bWbZpl2qF7MzwiIaWukANBRUY/WhRldufQ
+         68JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772889464; x=1773494264;
+        d=1e100.net; s=20230601; t=1772890233; x=1773495033;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=GjwpvT6wtYJv8QceRQPyk3jFj/BRY6zuY97whk5Cwg0=;
-        b=KunUzDLcrBva/2/P0bwl8rcplwmCY0tXhcPxLWMsixQHtj78SqGoPg37oezX9UjxSI
-         0rmG+akxkizoUNHQueg+kht/Mov/fUM2QEOD/+q8sydBCuuY4PJJjBLYSOMrWiT2waxM
-         ftRQgNl6LyjyDPXh9FzuJnSFr6wBX0rmWejV/qcPbzDg/B+7UqtJGHv6tVucPWTbU4+J
-         3PBb57zwnMcn6e1kjaRxCz06NXwzOG7fGOTCdMWrLVOjlnvo57iGPkFt3YAfv30Jd15L
-         HMeTJxxjII5g6AJfHyoFKt0tyXNKVG7ULi07bU39zcGmZLHJqPZl0Ti5o6wcDNgfeIOv
-         HfeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXg9a6Q5PQf1SlzOoTtmMxPGTNe5vZ0h+WJWEGFGu1WDe44a3NilbEpb9NSnW2RhhXgz1vC2xDaKQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+NjEOwVctsac5UDVtWZLJrJB7LNbMQeTShkPvhPe8QJTUl/uW
-	adT496RDSc/iNIFG0vHNhsLsXWH99Y6jsCvuJShQtDwFz7MHFNDnEtAQ91qb/B4B8qUMBjglE0N
-	SIcvxdWiJCmTixIhH4zepXTDzm/m3ucY=
-X-Gm-Gg: ATEYQzwwDqAlUVAOObvGcqPiRlFUaBTNyWzp09OUEln0GbmQ9EFTJRarfHCNTZ0BWuF
-	X1zJ92lD+YU1g+WX6MbW0AG+L0ox2vgHxFfFKGMsYGB9TdrowkFGrWS/Enq8rs9sVfYkGnEI3AZ
-	yuiOzq8U3bpTrlFs6qc2s7ls3z9m/QALooCpY4L/Fn4ltgrw+YFk96MA636AS7LN9sJGLSwrJNB
-	TyhTAq1wrwZYnox8yrrftEhBh6IVlUMTTXfukqPwJhkNjTc2xyEs+bIFS9g63CKh+Nd2qGpXejh
-	+c+Nv+bH
-X-Received: by 2002:a05:6000:2509:b0:439:b7c9:2eee with SMTP id
- ffacd0b85a97d-439da656ae8mr9474585f8f.13.1772889463755; Sat, 07 Mar 2026
- 05:17:43 -0800 (PST)
+        bh=9vxg1zKKw5eRGATryRLQmdjvykX+/jqWfKws1Yp5Hqk=;
+        b=FodZ0uLS1Msw67q2AaQ7DXCZsYaedyGleCvyh26qorhxw1n8787ucQFhUwAv1g46Oj
+         GxhwLfVuX0Fh7kvvTOkG2hqoyD+gq8yMngNfunkrpoIb3z8L5tZRGjK6QeGPMcc9N5zY
+         JoAHdlrnr3I99rUYZK1s6UUWUvlEM0shIYW1IOifGWXgzea3TEmeQmXGyi6Ax/UgMC5P
+         Gzo0L6FLFMCtNJScf2k/d/Cj9DnFCu8su79dK93TFN6AIJgOnfQMqHZY0JIac7mrMhvd
+         fr78ZLpbMqq7eMKEWgo+y58u4Tt0jiO8ONxNexD6DKsGOcEwM99ubmR2k/8ZkSeyHORZ
+         +N5w==
+X-Forwarded-Encrypted: i=1; AJvYcCVFmOHzSQIQ6qd9S+8ylr8DVfU9fa0SqxK3Bv3cz+iY3yZXMMO2SU4yqj6Pd3iGYoQekb+CAsRp3Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzvdy7FjpZ1/93Uufad/8JhCGtygWIXqEvx9iePw0JMtqLPWouz
+	R8gf+5QFYql+EHbZ5ZLkvpNJn1N1K2pWPPQegwojhTm0Y6J3JLBVJgSXzQBO/JzKEU5MKSLDNL5
+	9W99/SV74RJcqHRnb0QFR7TBvHQbrclc=
+X-Gm-Gg: ATEYQzzpd1Al3WyKVTK7A26yRtNqHfFdXyHz0JzG3DQ6y1mUuemVswLRZGUjQ80cPBV
+	aPOHMsL7XiMvb1eLHO4OlLQLYRJq661l28HGyUyqEz0Iysd6Zv8uzkqGtUTrk1VzOP1Vk+w82IN
+	MExm4BgajuyA53m1B71SVflG93bVi71DqdUTOSzCwjDXKY6gDTQMwgYIoW89dLwq65kiV6jDuwq
+	0wEu5ZUifIHM52878QSclV5HiT4KfySvWWEdB7EldYqJzpTceYuMBZXo65anxze4OPGGd+r7iud
+	vOIJmJJ7
+X-Received: by 2002:a5d:5c8a:0:b0:439:be82:1fd9 with SMTP id
+ ffacd0b85a97d-439da555622mr9640492f8f.12.1772890232456; Sat, 07 Mar 2026
+ 05:30:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260306133351.31589-1-clamor95@gmail.com> <20260306133351.31589-5-clamor95@gmail.com>
- <20260307-huge-excellent-tench-0afefc@quoll>
-In-Reply-To: <20260307-huge-excellent-tench-0afefc@quoll>
+References: <20260306133351.31589-1-clamor95@gmail.com> <20260306133351.31589-3-clamor95@gmail.com>
+ <20260307-smiling-coyote-of-economy-317afe@quoll>
+In-Reply-To: <20260307-smiling-coyote-of-economy-317afe@quoll>
 From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Sat, 7 Mar 2026 15:17:32 +0200
-X-Gm-Features: AaiRm50GLCk_SOmhHd2bvwAI0azWxfEbywfHqltNh_WJ56961YJKr2R5TU7KTzo
-Message-ID: <CAPVz0n0Mfzt_rXKxQisrOmNqiEaZKE19yXFqJbgCWzcrFpHwAA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] dt-bindings: mfd: max77620: convert to DT schema
+Date: Sat, 7 Mar 2026 15:30:21 +0200
+X-Gm-Features: AaiRm52hvDWp-hTuU970bgp3X7ZySQtnac9bE5SZT5ZlBfWPeg_o_bRZtEnvaRs
+Message-ID: <CAPVz0n2QXSFnrkLPFVDbUjNAkp2_dTumeXh4EsB11ca0jHEC-g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/6] dt-binding: pinctrl: pinctrl-max77620: convert to
+ DT schema
 To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
@@ -119,19 +120,19 @@ Cc: Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, Ro
 	linux-rtc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: AF30B22BE4B
+X-Rspamd-Queue-Id: B621022BF6D
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43898-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43899-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
@@ -141,103 +142,86 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FREEMAIL_CC(0.00)[kernel.org,gmail.com,intel.com,arm.com,samsung.com,bootlin.com,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.990];
+	NEURAL_HAM(-0.00)[-0.976];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-pm@vger.kernel.org];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,mail.gmail.com:mid,3c:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[devicetree.org:url,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-=D1=81=D0=B1, 7 =D0=B1=D0=B5=D1=80. 2026=E2=80=AF=D1=80. =D0=BE 14:46 Krzys=
+=D1=81=D0=B1, 7 =D0=B1=D0=B5=D1=80. 2026=E2=80=AF=D1=80. =D0=BE 14:48 Krzys=
 ztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
 >
-> On Fri, Mar 06, 2026 at 03:33:49PM +0200, Svyatoslav Ryhel wrote:
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    #include <dt-bindings/mfd/max77620.h>
+> On Fri, Mar 06, 2026 at 03:33:47PM +0200, Svyatoslav Ryhel wrote:
+> > Convert pinctrl-max77620 devicetree bindings for the MAX77620 PMIC from
+> > TXT to YAML format. This patch does not change any functionality; the
+> > bindings remain the same.
+> >
+> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> > ---
+> >  .../pinctrl/maxim,max77620-pinctrl.yaml       |  97 +++++++++++++
+> >  .../bindings/pinctrl/pinctrl-max77620.txt     | 127 ------------------
+> >  2 files changed, 97 insertions(+), 127 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/pinctrl/maxim,max=
+77620-pinctrl.yaml
+> >  delete mode 100644 Documentation/devicetree/bindings/pinctrl/pinctrl-m=
+ax77620.txt
+> >
+> > diff --git a/Documentation/devicetree/bindings/pinctrl/maxim,max77620-p=
+inctrl.yaml b/Documentation/devicetree/bindings/pinctrl/maxim,max77620-pinc=
+trl.yaml
+> > new file mode 100644
+> > index 000000000000..7364a8bdd7d3
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/pinctrl/maxim,max77620-pinctrl.=
+yaml
+> > @@ -0,0 +1,97 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/pinctrl/maxim,max77620-pinctrl.yaml=
+#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > > +
-> > +    i2c {
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
+> > +title: Pinmux controller function for Maxim MAX77620 Power management =
+IC
 > > +
-> > +        pmic@3c {
-> > +            compatible =3D "maxim,max77620";
-> > +            reg =3D <0x3c>;
+> > +maintainers:
+> > +  - Svyatoslav Ryhel <clamor95@gmail.com>
 > > +
-> > +            interrupts =3D <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
+> > +description:
+> > +  Device has 8 GPIO pins which can be configured as GPIO as well as th=
+e
+> > +  special IO functions.
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/pinctrl/pincfg-node.yaml
+> > +  - $ref: /schemas/pinctrl/pinmux-node.yaml
+> > +
+> > +patternProperties:
+> > +  "^(pin_gpio|gpio)[0-7_]+$":
 >
-> This is odd interrupt. It's I2C device, so how can it be GIC?
->
-
-I have used layout from Tegra device. I will switch to smth simpler.
-
-> > +            #interrupt-cells =3D <2>;
-> > +            interrupt-controller;
-> > +
-> > +            #gpio-cells =3D <2>;
-> > +            gpio-controller;
-> > +
-> > +            #thermal-sensor-cells =3D <0>;
-> > +
-> > +            system-power-controller;
-> > +
-> > +            pinctrl-names =3D "default";
-> > +            pinctrl-0 =3D <&max77620_default>;
-> > +
-> > +            max77620_default: pinmux {
-> > +                gpio0 {
-> > +                    pins =3D "gpio0";
-> > +                    function =3D "gpio";
-> > +                };
-> > +
-> > +                gpio1 {
-> > +                    pins =3D "gpio1";
-> > +                    function =3D "fps-out";
-> > +                    maxim,active-fps-source =3D <MAX77620_FPS_SRC_0>;
-> > +        };
->
-> Messed indentation.
->
-
-Acknowledged.
-
-> > +
-> > +                gpio2 {
-> > +                    pins =3D "gpio2";
-> > +                    function =3D "fps-out";
-> > +                    maxim,active-fps-source =3D <MAX77620_FPS_SRC_1>;
-> > +                };
-> > +
-> > +                gpio3 {
-> > +                    pins =3D "gpio3";
-> > +                    function =3D "gpio";
-> > +                };
-> > +
-> > +                gpio4 {
-> > +                    pins =3D "gpio4";
-> > +                    function =3D "32k-out1";
-> > +                };
-> > +
-> > +                gpio5_6 {
->
-> No underscoers in node names. Use hyphen.
+> Underscores are not allowed in general, so pattern needs fixes. Does
+> anything actually rely on this name? Is this ABI? I don't see old
+> binding and driver using the name, thus this should be just ^pin-[0-7]$
+> (+ is also not correct if you have max 8 gpios)
 >
 
-Acknowledged.
+Old txt schema uses pin_gpio[0-7] hence it is here, but greping trees
+did not reveal use of pin_gpio so it may be dropped.
 
-> > +                    pins =3D "gpio5", "gpio6";
-> > +                    function =3D "gpio";
-> > +                    drive-push-pull =3D <1>;
-> > +                };
-> > +
-> > +                gpio7 {
-> > +                    pins =3D "gpio7";
-> > +                    function =3D "gpio";
-> > +                };
-> > +            };
+No this is not ABI, name may be any. Including gpio0-1-2-3, gpio2-4
+etc which is why + is there. or maybe you know better way to cover
+those names?
+
+There are device trees which use gpio5_6 with the underscore
+(tegra210-smaug.dts; tegra210-p2894.dtsi for example). Should the
+schema account for those?
+
 >
 > Best regards,
 > Krzysztof
