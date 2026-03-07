@@ -1,289 +1,165 @@
-Return-Path: <linux-pm+bounces-43908-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43909-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sD40BZdRrGnDogEAu9opvQ
-	(envelope-from <linux-pm+bounces-43908-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sat, 07 Mar 2026 17:25:59 +0100
+	id IBEpKOhbrGldpAEAu9opvQ
+	(envelope-from <linux-pm+bounces-43909-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sat, 07 Mar 2026 18:10:00 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BC1922CAB3
-	for <lists+linux-pm@lfdr.de>; Sat, 07 Mar 2026 17:25:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07CBE22CD6F
+	for <lists+linux-pm@lfdr.de>; Sat, 07 Mar 2026 18:09:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 91297302A04F
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Mar 2026 16:25:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2B6023018BEB
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Mar 2026 17:09:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26DA52BEFED;
-	Sat,  7 Mar 2026 16:25:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A091F334C39;
+	Sat,  7 Mar 2026 17:09:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lLqwp2ZE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a7eih2Oe"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0394419AD8B;
-	Sat,  7 Mar 2026 16:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CBCE330D58;
+	Sat,  7 Mar 2026 17:09:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772900755; cv=none; b=Cab5VmpRtO5FFlZE220gKUXOaZoAqRBAALgL3QKc1382T4IAuuhJwuy38jRIpzz+tAMa1lKI3YsM/Gp2VHHPt2AOsMhfjiKUGSydVXDJ3lSM7b5sVQ51cqB69k4Oa5zvWrAOHLn63eUD0mvVfyaR4B4jPKHlcAxb2JYtrMis6HM=
+	t=1772903388; cv=none; b=kL59fkAXs89RDXNzXZ0Zn2OE2uD8C/vc8NOrtOEB7Oa9WlR++/cSlbFI9V2d/k5aUSxJCxAe59HJbYUIfNiXQeXRzCZVoVqnHgMgTZA7Ubxse4S92ZXJljFR4wzQy+N+v217g3M+H0PrRodOO6JMPpznrfQf63uI5t1jJKZ1NhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772900755; c=relaxed/simple;
-	bh=DEPxnXVH4WZtKYE7uINGmeZxntzUeUcbFx5qO3vCxuI=;
+	s=arc-20240116; t=1772903388; c=relaxed/simple;
+	bh=4IxBPKKn4evJJtdNJSN8E6aqj/2UG4QKdCiEcgJfsKU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NjXov2AkfbYm0yUvH51sW/YSVVZNRwRNriONDLCRH/RugVxxloRU3ONM85j33n8JDS+pomUy5BtM8dwiqZ9mgh5zakI6otWRfJTcyOe5j02QP/kuTrYor0ow/lUUtEeb7POe0VF9yfHcPOA5PPufEId24dyyor3Uhd2+90LvW1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lLqwp2ZE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0165C19422;
-	Sat,  7 Mar 2026 16:25:52 +0000 (UTC)
+	 MIME-Version; b=TvZTCX5pKcsZkFW+Ghu0X/5eGVYGHzuiwAB8TFHj+GmEbBjM1PJR9qPAsQOS67eEE1D+ryAE3n/V+CVEAATChkzq1GEDL3iIsZyRgd0NBbjiTsa7+bPBhX0/puYK3L4691xERJrPKYpjjWNt2lvRbuSPIwtOpFwUAF+9G22FGGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a7eih2Oe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB3EDC19422;
+	Sat,  7 Mar 2026 17:09:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772900754;
-	bh=DEPxnXVH4WZtKYE7uINGmeZxntzUeUcbFx5qO3vCxuI=;
+	s=k20201202; t=1772903388;
+	bh=4IxBPKKn4evJJtdNJSN8E6aqj/2UG4QKdCiEcgJfsKU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lLqwp2ZEAlzRDvf79AyZBRDDH+1zlo+AtZseJJMBpcr8VaohA7WdgqDA3UArstuPl
-	 nVbw5jY3TZvXy2izpCTgf8mJnLsRlY0mDQBF1JaMYcovZePZKn8hy7tmbanEKYuCew
-	 H6J3ilcQJtuPGV41nk+/vxLtl5V9+B8woA7CBhsJfjCSz0o4Ki4IMEDf1RSu3H4bSC
-	 T1Vdh1tFOoymQ/WcBglk4fDrIa2S9/RjZ2AErMbdIqDDsqINZRztFQ+AWtI9ZOvc0E
-	 BqinRC6czumOXp/BJhCIKKnwkGXFk6lqZOL/qLioEvnUf+yD4v5rRW6GianbiHAWcX
-	 +uzhGdSfsJcew==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Qais Yousef <qyousef@layalina.io>,
- Christian Loehle <christian.loehle@arm.com>
-Cc: Thomas Gleixner <tglx@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [patch 2/2] sched/idle: Make default_idle_call() NOHZ aware
-Date: Sat, 07 Mar 2026 17:25:50 +0100
-Message-ID: <2409653.ElGaqSPkdT@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To:
- <CAJZ5v0jb7wJFQEfP_-JRv4mwh3qveq+VPoy8k9dmtmigoSyKhg@mail.gmail.com>
-References:
- <20260301191959.406218221@kernel.org> <6250711.lOV4Wx5bFT@rafael.j.wysocki>
- <CAJZ5v0jb7wJFQEfP_-JRv4mwh3qveq+VPoy8k9dmtmigoSyKhg@mail.gmail.com>
+	b=a7eih2OeNA8aD5t7CYyIdfCBqsbluM+pMKH1e6DM2wuOIBl1BlQ0P4MIwPa5Ctw1k
+	 f3ivvrFaGIj6D01oxXhGfap4FYXLkoA5Xs7vP/fBa7FSlzMSIJEbewR2X1gzzqYC3c
+	 A5YHUlnoaTVwikS6RcCjrdyJGzLVQHgWU/UyZitpmL6QuVn3ECKDpI1o7Hafju3fF0
+	 Naz/tnlIFymkk7zSZnKbSw3odKnwySbTcsOptVOqK2uf30/REChvd7rNTL/CzvsxI2
+	 5aAGbIIZ0uVTmnxCDl0QKvUx1yvahoQ2X8EgBzAIylDT957y3JQVeSuqEDOYQy0ZWR
+	 D539uM2LmijDg==
+From: Miguel Ojeda <ojeda@kernel.org>
+To: miguel.ojeda.sandonis@gmail.com
+Cc: a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	bjorn3_gh@protonmail.com,
+	boqun@kernel.org,
+	dakr@kernel.org,
+	gary@garyguo.net,
+	jhubbard@nvidia.com,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	lossin@kernel.org,
+	ojeda@kernel.org,
+	rafael@kernel.org,
+	rust-for-linux@vger.kernel.org,
+	tmgross@umich.edu,
+	viresh.kumar@linaro.org
+Subject: [RFC PATCH] rust: kbuild: support global per-version flags
+Date: Sat,  7 Mar 2026 18:09:29 +0100
+Message-ID: <20260307170929.153892-1-ojeda@kernel.org>
+In-Reply-To: <CANiq72mWdFU11GcCZRchzhy0Gi1QZShvZtyRkHV2O+WA2uTdVQ@mail.gmail.com>
+References: <CANiq72mWdFU11GcCZRchzhy0Gi1QZShvZtyRkHV2O+WA2uTdVQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 5BC1922CAB3
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 07CBE22CD6F
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_ALL(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43908-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[kernel.org,google.com,protonmail.com,garyguo.net,nvidia.com,vger.kernel.org,umich.edu,linaro.org];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	HAS_ORG_HEADER(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43909-lists,linux-pm=lfdr.de];
 	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.992];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	PRECEDENCE_BULK(0.00)[];
+	TO_DN_NONE(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ojeda@kernel.org,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-0.996];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[rafael.j.wysocki:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	RCPT_COUNT_TWELVE(0.00)[16];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Friday, March 6, 2026 10:31:49 PM CET Rafael J. Wysocki wrote:
-> On Fri, Mar 6, 2026 at 10:21=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
-> > On Wednesday, March 4, 2026 4:03:06 AM CET Qais Yousef wrote:
-> > > On 03/02/26 22:25, Rafael J. Wysocki wrote:
-> > > > On Mon, Mar 2, 2026 at 12:04=E2=80=AFPM Christian Loehle
+Sometimes it is useful to gate global Rust flags per compiler version.
+For instance, we may want to disable a lint that has false positives in
+a single version [1].
 
-[cut]
+We already had helpers like `rustc-min-version` for that, which we use
+elsewhere, but we cannot currently use them for `rust_common_flags`,
+which contains the global flags for all Rust code (kernel and host),
+because `rustc-min-version` depends on `CONFIG_RUSTC_VERSION`, which
+does not exist when `rust_common_flags` is defined.
 
-> > > > >
-> > > > > Why don't we just require one or two consecutive tick wakeups bef=
-ore stopping?
-> > > >
-> > > > Exactly my thought and I think one should be sufficient.
-> > >
-> > > I concur. From our experience with TEO util threshold these averages =
-can
-> > > backfire. I think one tick is sufficient delay to not be obviously br=
-oken.
-> >
-> > So if I'm not mistaken, it would be something like the appended prototy=
-pe
-> > (completely untested, but it builds for me).
-> >
-> > ---
-> >  drivers/cpuidle/cpuidle.c |   10 ----------
-> >  kernel/sched/idle.c       |   32 ++++++++++++++++++++++++--------
-> >  2 files changed, 24 insertions(+), 18 deletions(-)
-> >
-> > --- a/drivers/cpuidle/cpuidle.c
-> > +++ b/drivers/cpuidle/cpuidle.c
-> > @@ -359,16 +359,6 @@ noinstr int cpuidle_enter_state(struct c
-> >  int cpuidle_select(struct cpuidle_driver *drv, struct cpuidle_device *=
-dev,
-> >                    bool *stop_tick)
-> >  {
-> > -       /*
-> > -        * If there is only a single idle state (or none), there is not=
-hing
-> > -        * meaningful for the governor to choose. Skip the governor and
-> > -        * always use state 0 with the tick running.
-> > -        */
-> > -       if (drv->state_count <=3D 1) {
-> > -               *stop_tick =3D false;
-> > -               return 0;
-> > -       }
-> > -
-> >         return cpuidle_curr_governor->select(drv, dev, stop_tick);
-> >  }
-> >
-> > --- a/kernel/sched/idle.c
-> > +++ b/kernel/sched/idle.c
-> > @@ -161,6 +161,14 @@ static int call_cpuidle(struct cpuidle_d
-> >         return cpuidle_enter(drv, dev, next_state);
-> >  }
-> >
-> > +static void idle_call_stop_or_retain_tick(bool stop_tick)
-> > +{
-> > +       if (stop_tick || tick_nohz_tick_stopped())
-> > +               tick_nohz_idle_stop_tick();
-> > +       else
-> > +               tick_nohz_idle_retain_tick();
-> > +}
-> > +
-> >  /**
-> >   * cpuidle_idle_call - the main idle function
-> >   *
-> > @@ -170,7 +178,7 @@ static int call_cpuidle(struct cpuidle_d
-> >   * set, and it returns with polling set.  If it ever stops polling, it
-> >   * must clear the polling bit.
-> >   */
-> > -static void cpuidle_idle_call(void)
-> > +static void cpuidle_idle_call(bool got_tick)
-> >  {
-> >         struct cpuidle_device *dev =3D cpuidle_get_device();
-> >         struct cpuidle_driver *drv =3D cpuidle_get_cpu_driver(dev);
-> > @@ -186,7 +194,7 @@ static void cpuidle_idle_call(void)
-> >         }
-> >
-> >         if (cpuidle_not_available(drv, dev)) {
-> > -               tick_nohz_idle_stop_tick();
-> > +               idle_call_stop_or_retain_tick(!got_tick);
->=20
-> Oh, I got this backwards (here and below).
->=20
-> The tick should be stopped if we've got the tick previously, but you
-> get the idea.
+Thus, to support that, introduce `rust_common_flags_per_version`,
+defined after the `include/config/auto.conf` inclusion (where
+`CONFIG_RUSTC_VERSION` becomes available), and append it to
+`rust_common_flags`, `KBUILD_HOSTRUSTFLAGS` and `KBUILD_RUSTFLAGS`.
 
-In the meantime I realized that if the .select() governor
-callback is skipped, its .reflect() callback should be skipped
-either, so I've posted this:
+An alternative is moving all those three down, but that would mean
+separating them from the other `KBUILD_*` variables.
 
-https://lkml.org/lkml/2026/3/7/569
+Link: https://lore.kernel.org/rust-for-linux/CANiq72mWdFU11GcCZRchzhy0Gi1QZShvZtyRkHV2O+WA2uTdVQ@mail.gmail.com/ [1]
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+---
+> Doing it globally for certain versions (i.e. `rust_common_flags`, not
+> just `KBUILD_RUSTFLAGS`) requires a bit of reorganization,
 
-and here's a fixed version of the last patch on top of the above (for
-completeness):
+If we wanted to go for a per-version global one, we we would need
+something like this patch -- sending it here so that it gets archived
+in case we need it.
 
-=2D--
- kernel/sched/idle.c |   25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+ Makefile | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-=2D-- a/kernel/sched/idle.c
-+++ b/kernel/sched/idle.c
-@@ -161,6 +161,14 @@ static int call_cpuidle(struct cpuidle_d
- 	return cpuidle_enter(drv, dev, next_state);
- }
-=20
-+static void idle_call_stop_or_retain_tick(bool stop_tick)
-+{
-+	if (stop_tick || tick_nohz_tick_stopped())
-+		tick_nohz_idle_stop_tick();
-+	else
-+		tick_nohz_idle_retain_tick();
-+}
+diff --git a/Makefile b/Makefile
+index 2446085983f7..a49cddb0599b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -833,6 +833,14 @@ endif # CONFIG_TRACEPOINTS
+
+ export WARN_ON_UNUSED_TRACEPOINTS
+
++# Per-version Rust flags. These are like `rust_common_flags`, but may
++# depend on the Rust compiler version (e.g. using `rustc-min-version`).
++rust_common_flags_per_version :=
 +
- /**
-  * cpuidle_idle_call - the main idle function
-  *
-@@ -170,7 +178,7 @@ static int call_cpuidle(struct cpuidle_d
-  * set, and it returns with polling set.  If it ever stops polling, it
-  * must clear the polling bit.
-  */
-=2Dstatic void cpuidle_idle_call(void)
-+static void cpuidle_idle_call(bool stop_tick)
- {
- 	struct cpuidle_device *dev =3D cpuidle_get_device();
- 	struct cpuidle_driver *drv =3D cpuidle_get_cpu_driver(dev);
-@@ -186,7 +194,7 @@ static void cpuidle_idle_call(void)
- 	}
-=20
- 	if (cpuidle_not_available(drv, dev)) {
-=2D		tick_nohz_idle_stop_tick();
-+		idle_call_stop_or_retain_tick(stop_tick);
-=20
- 		default_idle_call();
- 		goto exit_idle;
-@@ -222,17 +230,14 @@ static void cpuidle_idle_call(void)
- 		next_state =3D cpuidle_find_deepest_state(drv, dev, max_latency_ns);
- 		call_cpuidle(drv, dev, next_state);
- 	} else if (drv->state_count > 1) {
-=2D		bool stop_tick =3D true;
-+		stop_tick =3D true;
-=20
- 		/*
- 		 * Ask the cpuidle framework to choose a convenient idle state.
- 		 */
- 		next_state =3D cpuidle_select(drv, dev, &stop_tick);
-=20
-=2D		if (stop_tick || tick_nohz_tick_stopped())
-=2D			tick_nohz_idle_stop_tick();
-=2D		else
-=2D			tick_nohz_idle_retain_tick();
-+		idle_call_stop_or_retain_tick(stop_tick);
-=20
- 		entered_state =3D call_cpuidle(drv, dev, next_state);
- 		/*
-@@ -240,7 +245,7 @@ static void cpuidle_idle_call(void)
- 		 */
- 		cpuidle_reflect(dev, entered_state);
- 	} else {
-=2D		tick_nohz_idle_retain_tick();
-+		idle_call_stop_or_retain_tick(stop_tick);
-=20
- 		/*
- 		 * If there is only a single idle state (or none), there is
-@@ -268,6 +273,7 @@ exit_idle:
- static void do_idle(void)
- {
- 	int cpu =3D smp_processor_id();
-+	bool got_tick =3D false;
-=20
- 	/*
- 	 * Check if we need to update blocked load
-@@ -338,8 +344,9 @@ static void do_idle(void)
- 			tick_nohz_idle_restart_tick();
- 			cpu_idle_poll();
- 		} else {
-=2D			cpuidle_idle_call();
-+			cpuidle_idle_call(got_tick);
- 		}
-+		got_tick =3D tick_nohz_idle_got_tick();
- 		arch_cpu_idle_exit();
- 	}
-=20
++rust_common_flags += $(rust_common_flags_per_version)
++KBUILD_HOSTRUSTFLAGS += $(rust_common_flags_per_version)
++KBUILD_RUSTFLAGS += $(rust_common_flags_per_version)
++
+ include $(srctree)/arch/$(SRCARCH)/Makefile
 
+ ifdef need-config
 
-
+base-commit: 11439c4635edd669ae435eec308f4ab8a0804808
+--
+2.53.0
 
