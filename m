@@ -1,194 +1,196 @@
-Return-Path: <linux-pm+bounces-43912-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43913-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cMlTCXT6rGk1wwEAu9opvQ
-	(envelope-from <linux-pm+bounces-43912-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sun, 08 Mar 2026 05:26:28 +0100
+	id wIKjCs0GrWm7xQEAu9opvQ
+	(envelope-from <linux-pm+bounces-43913-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sun, 08 Mar 2026 06:19:09 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B060E22E76A
-	for <lists+linux-pm@lfdr.de>; Sun, 08 Mar 2026 05:26:27 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94C2422E951
+	for <lists+linux-pm@lfdr.de>; Sun, 08 Mar 2026 06:19:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4DC48301C3CC
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Mar 2026 04:26:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4C96A3014428
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Mar 2026 05:18:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CCF0286D4B;
-	Sun,  8 Mar 2026 04:26:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88A282BEC30;
+	Sun,  8 Mar 2026 05:18:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="as2W/YBR"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="Eke5bygl";
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="kZQKc6Pi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883961C84A6;
-	Sun,  8 Mar 2026 04:26:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8A92C0F97;
+	Sun,  8 Mar 2026 05:18:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772943984; cv=none; b=ZZKY7G8GME6nYXmoOfpJCp8R/VmZymX0opP+Cem/EyT9gFAg8U/XCS6DqM276dUg000dEklAp56MyB+k/ey18fKO1RunCQjuVO5dCmXjVpNF5nU3+e768PEJh7eAhV56hTiWp1BqHrFpMPns7619PClEYeU5I1zfFedeMJ9BM4M=
+	t=1772947106; cv=none; b=Zk5aPExZrGp2v/909We3GMPMeNYuvTlqVl/31Zl0z9S3TovMfIbvZm8QzGxwhKlAeMdLKsfZNUG34SdCysRcrDAOGBmD42r0qdjoUFJN5xrE5kdWyt44g56SP1LXtvIFlLeJtxkLpjl3HfOwSwppNeUcgjS0HDfIYTyEH3F5vMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772943984; c=relaxed/simple;
-	bh=XNY0rSi3p70citvBmYhhGSIYumaAqYRRuG37tYjCdLc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N76C1MoncKN8FOB0taHh5nXl5vT1/uZ1/gYtck4At6jcYHXUO06n+zATaSffwF6kCm3vPkzOR74IQShH8BM+IwCVk4cUfdY08uDewQbjGMmRyI1Rlf8CW81PmycR/KWcpOJJwubRVOjno2IrGSFqLeIiJr3A/usOYd5Z/iLiIcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=as2W/YBR; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772943983; x=1804479983;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XNY0rSi3p70citvBmYhhGSIYumaAqYRRuG37tYjCdLc=;
-  b=as2W/YBRXIf4kXFMoD1LWVZo4wb92WkThoRDdX8gX5O+gL5zu05IwA6c
-   9+yytYT7PUVjxheoLoNqvc/qfkUpM1IoGldWAy8kMBdIerMhcyoxulhdy
-   QvFlOyMlKpIXi3ttfHHUM45Y5vt+75boJVoST4JU8ZlGrRtiX5thftVuS
-   EZcawW1KwoM4udWjhVWfmonRa5ZPLVFau/M6P1wxLHylZnsiIQb4vV56e
-   C0dUFtuRIMvDgaTICQnmUBGU5LJA4TX9Hax6eHoPzcTj1Vt0izJ7LMgVt
-   9V7WkR5Sqi/LUxuR1FuCcbPiN8gmaRliwXmHxhcgrf1jdZe886JOW5adW
-   A==;
-X-CSE-ConnectionGUID: GI/vjLJTST6gKjiehJcMMA==
-X-CSE-MsgGUID: evUqcZVBSVWIv6cu9gi2gA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11722"; a="73701735"
-X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
-   d="scan'208";a="73701735"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2026 20:26:22 -0800
-X-CSE-ConnectionGUID: YtqTOBL+Q0SlQGRJRDLbAQ==
-X-CSE-MsgGUID: HFSeOeqFTFm7wTBYtMyoBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
-   d="scan'208";a="217074682"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by fmviesa007.fm.intel.com with ESMTP; 07 Mar 2026 20:26:16 -0800
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vz5iY-000000002cz-1hcE;
-	Sun, 08 Mar 2026 04:26:14 +0000
-Date: Sun, 8 Mar 2026 05:25:50 +0100
-From: kernel test robot <lkp@intel.com>
-To: Aaron Tomlin <atomlin@atomlin.com>, rafael@kernel.org, dakr@kernel.org,
-	pavel@kernel.org, lenb@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, zhongqiu.han@oss.qualcomm.com,
-	akpm@linux-foundation.org, bp@alien8.de, pmladek@suse.com,
-	rdunlap@infradead.org, feng.tang@linux.alibaba.com,
-	pawan.kumar.gupta@linux.intel.com, kees@kernel.org,
-	elver@google.com, arnd@arndb.de, fvdl@google.com,
-	lirongqing@baidu.com, bhelgaas@google.com, neelx@suse.com,
-	sean@ashe.io, mproche@gmail.com, chjohnst@gmail.com,
-	nick.lange@gmail.com, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3] PM: QoS: Introduce boot parameter
- pm_qos_resume_latency_us
-Message-ID: <202603080526.A162fF4D-lkp@intel.com>
-References: <20260307200736.4192234-1-atomlin@atomlin.com>
+	s=arc-20240116; t=1772947106; c=relaxed/simple;
+	bh=jkMSpeyiXMumeCgs7R3LeudHrmmiyPYo7I0sKbUDMdo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Wl0rbNub+1t2V4rTsmOWDt1KajEUJNe/qqgQ6flxr9PugRXWy2uIxWjmLfpBdX43n7U+Yar1wUIHGCNqlobXJpS09keBWI6JlcMd46+RvThJKctYU4h4ULGNK2kp3Zd86ah1m8EafGYRLb23m3GBqiIp9ppg6swv24ecWq9lmg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=Eke5bygl; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=kZQKc6Pi; arc=none smtp.client-ip=80.241.56.161
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4fT7hR4T1Pz9tcd;
+	Sun,  8 Mar 2026 06:18:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1772947095;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=0TE+7A2kmuKkKWE6ucMW8ur0y2V3+9v8BXKbbsXZtiI=;
+	b=Eke5byglpJoybzZexXW6CuxnwDdIUQsu04QfrjTdBdR3rhrFiUFolpgqtczTojHb9TPEbF
+	nep9f1EvQrVA/AMxj4y1vvcA4Q3iPQyJtxPUzeH/+UxbquTi8ASQ+GnZW3ByRMkmlwiFEK
+	zPCZY6Um1R/M7AUsU8hs+swJMQ4OHMYF1OluOYFwobTcMbeoYBLItPPpVTq7hv2Mu5hXp1
+	K69svMqxl8ZRgUi4hHGzNjsFFLZFG/hS1gXJZWI6HTHkdGI44yYhF0a6+UXD2iAsMQs/rL
+	CkDM91Zv/xftzUCL1O/0QGqCzI0h2K80OBEME8cEcoMN41pSwTTV4DIPigx1IA==
+From: Shuwei Wu <shuwei.wu@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1772947093;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=0TE+7A2kmuKkKWE6ucMW8ur0y2V3+9v8BXKbbsXZtiI=;
+	b=kZQKc6PilSaJml360PU2s6sIsSjaLz0jsecj3ld0mS2Beovyj9UYs4u1wgZIpAfLIcixwm
+	825LZMLnGXtc26Nk0M1BBJp10NHUjkt640Oz3U3erm+W+JSw6Az8pCg7bfdm2+5TRHFa/a
+	oWm8NuE9YxfZtz17aY0N9nckKlo4TolOCszzTa82sS26ZmMthx75g1+agOmhm48EgxsmQY
+	Pa5o8FzlcgPjQe9RKbdvekF3ts1+R9p2NGr/swbIrP6c22RqEVUyfdwWkei3ypwDa+iNmZ
+	yWKQc8znOFVZibuHRk9fmXkDiGEiBYCgbVJvKO0q520vLKunirjz2uvTu8mFMw==
+Subject: [PATCH 0/2] cpufreq: spacemit: Add cpufreq support for K1 SoC
+Date: Sun, 08 Mar 2026 13:17:38 +0800
+Message-Id: <20260308-shadow-deps-v1-0-0ceb5c7c07eb@mailbox.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260307200736.4192234-1-atomlin@atomlin.com>
-X-Rspamd-Queue-Id: B060E22E76A
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHMGrWkC/22Oy27CMBREfyXyuhf5kWs7UVXxHxULP67BgpDUT
+ ikS4t/rhm2XM9KcOQ9WqWSqbOwerNAt1zxfWxBvHQsndz0S5Ngyk1xqrriBenJx/oFISwWFVjp
+ jnTOoWVsshVK+b7TPwysX+vpu0PVVssWt4dSQ7QF7H/tkJA+EXGNE6wdrI9kkjZLc+L5HI+mPO
+ 1GtblMZu/fNRHINdXGBprzCIuDWAweb9IBxUFYI2pdcQ11d2YV5+vgfojjCWUC4nKFpw02AAOe
+ Dsxg1Sa33k8sXP993czluCO8qQeO107FDoXsaEJu6ShG5bUM3oEKhpEpohI7JNyF2eD5/Aax2d
+ T9nAQAA
+X-Change-ID: 20260307-shadow-deps-3582a78aa756
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, Yixun Lan <dlan@gentoo.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Paul Walmsley <pjw@kernel.org>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
+ devicetree@vger.kernel.org, Shuwei Wu <shuwei.wu@mailbox.org>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772947080; l=2292;
+ i=shuwei.wu@mailbox.org; s=20251125; h=from:subject:message-id;
+ bh=jkMSpeyiXMumeCgs7R3LeudHrmmiyPYo7I0sKbUDMdo=;
+ b=RQaAAJGU1ge1++GAza+Fbqk1kkbMrqJ90icGN/P4rTL6Er2uFx4fFtXtrMOZPllFaCmmZIfXI
+ iR3tl0U5obuBFUNHQuURrbCZiQ+FHhNl+zgsq96/sQVDPnvMlAm/Tgm
+X-Developer-Key: i=shuwei.wu@mailbox.org; a=ed25519;
+ pk=qZs6i2UZnXkmjUrwO5HJxcfpCvgSNrR4dcU5cjtfTSk=
+X-MBO-RS-META: xaggukirckx879mdesfjst8tnpxrc4ao
+X-MBO-RS-ID: a621523f8cf1d5fdc33
+X-Rspamd-Queue-Id: 94C2422E951
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[mailbox.org,reject];
+	R_DKIM_ALLOW(-0.20)[mailbox.org:s=mail20150812];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[27];
-	FREEMAIL_CC(0.00)[lists.linux.dev,oss.qualcomm.com,linux-foundation.org,alien8.de,suse.com,infradead.org,linux.alibaba.com,linux.intel.com,kernel.org,google.com,arndb.de,baidu.com,ashe.io,gmail.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-43912-lists,linux-pm=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43913-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	NEURAL_HAM(-0.00)[-0.991];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[git-scm.com:url,intel.com:dkim,intel.com:email,intel.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.962];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[shuwei.wu@mailbox.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[mailbox.org:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,mailbox.org:dkim,mailbox.org:email,mailbox.org:mid,riscstar.com:email]
 X-Rspamd-Action: no action
 
-Hi Aaron,
+This series enables dynamic voltage and frequency scaling (DVFS) for
+the SpacemiT K1 SoC using the generic cpufreq-dt driver.
 
-kernel test robot noticed the following build errors:
+Tested on OrangePi-RV2, the execution time scales as expected
+across different CPU frequencies:
 
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus rafael-pm/linux-next rafael-pm/bleeding-edge akpm-mm/mm-everything linus/master v6.16-rc1 next-20260306]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+~ # echo userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Tomlin/PM-QoS-Introduce-boot-parameter-pm_qos_resume_latency_us/20260308-040909
-base:   driver-core/driver-core-testing
-patch link:    https://lore.kernel.org/r/20260307200736.4192234-1-atomlin%40atomlin.com
-patch subject: [PATCH v3] PM: QoS: Introduce boot parameter pm_qos_resume_latency_us
-config: i386-allnoconfig-bpf (https://download.01.org/0day-ci/archive/20260308/202603080526.A162fF4D-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260308/202603080526.A162fF4D-lkp@intel.com/reproduce)
+~ # echo 1600000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed
+~ # time awk 'BEGIN{for(i=0;i<1000000;i++){}}'
+real    0m 1.07s
+user    0m 1.07s
+sys     0m 0.00s
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603080526.A162fF4D-lkp@intel.com/
+~ # echo 1228800 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed
+~ # time awk 'BEGIN{for(i=0;i<1000000;i++){}}'
+real    0m 1.40s
+user    0m 1.40s
+sys     0m 0.00s
 
-All errors (new ones prefixed by >>):
+~ # echo 1000000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed
+~ # time awk 'BEGIN{for(i=0;i<1000000;i++){}}'
+real    0m 1.72s
+user    0m 1.72s
+sys     0m 0.00s
 
->> kernel/power/qos.c:344:5: error: redefinition of 'pm_qos_get_boot_cpu_latency_limit'
-     344 | s32 pm_qos_get_boot_cpu_latency_limit(unsigned int cpu)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/power/qos.c:25:
-   ./include/linux/pm_qos.h:222:19: note: previous definition of 'pm_qos_get_boot_cpu_latency_limit' with type 's32(unsigned int)' {aka 'int(unsigned int)'}
-     222 | static inline s32 pm_qos_get_boot_cpu_latency_limit(unsigned int cpu)
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ # echo 819000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed
+~ # time awk 'BEGIN{for(i=0;i<1000000;i++){}}'
+real    0m 2.10s
+user    0m 2.10s
+sys     0m 0.00s
 
+~ # echo 614400 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed
+~ # time awk 'BEGIN{for(i=0;i<1000000;i++){}}'
+real    0m 2.80s
+user    0m 2.80s
+sys     0m 0.00s
 
-vim +/pm_qos_get_boot_cpu_latency_limit +344 kernel/power/qos.c
+Signed-off-by: Shuwei Wu <shuwei.wu@mailbox.org>
+---
+Shuwei Wu (2):
+      cpufreq: dt-platdev: Add SpacemiT K1 SoC to the allowlist
+      riscv: dts: spacemit: Add cpu scaling for K1 SoC
 
-   332	
-   333	/**
-   334	 * pm_qos_get_boot_cpu_latency_limit - Get boot-time latency limit for a CPU.
-   335	 * @cpu: Logical CPU number to check.
-   336	 *
-   337	 * Checks the read-only boot-time constraints list to see if a specific
-   338	 * PM QoS latency override was requested for this CPU via the kernel
-   339	 * command line.
-   340	 *
-   341	 * Return: The latency limit in microseconds if a constraint exists,
-   342	 * or PM_QOS_RESUME_LATENCY_NO_CONSTRAINT if no boot override applies.
-   343	 */
- > 344	s32 pm_qos_get_boot_cpu_latency_limit(unsigned int cpu)
-   345	{
-   346		struct pm_qos_boot_entry *entry;
-   347	
-   348		if (list_empty(&pm_qos_boot_list))
-   349			return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
-   350	
-   351		list_for_each_entry(entry, &pm_qos_boot_list, node) {
-   352			if (cpumask_test_cpu(cpu, &entry->mask))
-   353				return entry->latency;
-   354		}
-   355	
-   356		return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
-   357	}
-   358	EXPORT_SYMBOL_GPL(pm_qos_get_boot_cpu_latency_limit);
-   359	
+ arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts | 34 +++++++++-
+ arch/riscv/boot/dts/spacemit/k1.dtsi            | 86 +++++++++++++++++++++++++
+ drivers/cpufreq/cpufreq-dt-platdev.c            |  1 +
+ 3 files changed, 120 insertions(+), 1 deletion(-)
+---
+base-commit: 5164e95565d3fd508ca8a95351323f5716dfb695
+change-id: 20260307-shadow-deps-3582a78aa756
+prerequisite-patch-id: 154bd4f720ce5065d58b988de8f273207b44572e
+prerequisite-message-id: <20260206-spacemit-p1-v4-0-8f695d93811e@riscstar.com>
+prerequisite-patch-id: 5da3e75b18291a5540d4f66d7a0600fb8975ef62
+prerequisite-patch-id: bcf41917414ecef8cf743095d130f6004c32f6a5
+prerequisite-patch-id: cfe3800f8c791ec4c63e070af9628e88e0fc31b9
+prerequisite-message-id: <20260305-k1-clk-fix-v1-1-abca85d6e266@mailbox.org>
+prerequisite-patch-id: 7c7fb9f87dba019ece4c97c45750349a7cd28f3a
 
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Shuwei Wu <shuwei.wu@mailbox.org>
+
 
