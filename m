@@ -1,233 +1,240 @@
-Return-Path: <linux-pm+bounces-43934-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43935-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uDO2JkaTrmmmGQIAu9opvQ
-	(envelope-from <linux-pm+bounces-43934-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 10:30:46 +0100
+	id WNM6DYmWrmnRGQIAu9opvQ
+	(envelope-from <linux-pm+bounces-43935-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 10:44:41 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A91B2362F6
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 10:30:45 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A4B02366C8
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 10:44:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BD747301A50C
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 09:30:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id BD37B30095D7
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 09:43:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCE330F927;
-	Mon,  9 Mar 2026 09:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9336637AA93;
+	Mon,  9 Mar 2026 09:43:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=temperror (0-bit key) header.d=dev.tdt.de header.i=@dev.tdt.de header.b="N9REWVPV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pi6uSJTd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD41029B781;
-	Mon,  9 Mar 2026 09:30:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.37.255.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7080E36BCE6;
+	Mon,  9 Mar 2026 09:43:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773048643; cv=none; b=TJLRZydx/25y+OrJQ1wFF+pwYchHJ4yQUTQeiP4J3DuF4ztdFFnzpUdZVvERqtEBLBBPXCKtn7ionfcQreKFOPuKDTS8sM32gUTPnkZ01HQvG7xETqaCoQy6s0n1y0TD0lxMTzvSQ2BFsYKJorLh845a6BxhGG2+2VydSohkW/c=
+	t=1773049412; cv=none; b=aA1wV4LqwSzbvYKCXQFkmRcpew2nMfmpI03EDZn9MWtaDxXGwrSyYNo5IIR8bQfOEPhmNax4HaQXsdq0q1DQFxJkcuior+62NkD7tECP/BtQ+24P3BaWS7csHAiRpLqoyxDpKTHYwp76m+RBeso+AS+zFbXxGMEIeNre5nepTJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773048643; c=relaxed/simple;
-	bh=LfXiAGYAS1UFUbtHFhsqKW50BwyTvgo3D/H4jH3qHsg=;
-	h=MIME-Version:Content-Type:Date:From:To:Cc:Subject:In-Reply-To:
-	 References:Message-ID; b=Erk8C467+MBrRIJHuhbUmaDzOzjNa6LZvoCNt3nwaF5IBr0grV472ocrrjW7iWUJeccVgOwC9Bzd/GlvF9SUh1c2x91/3dV8GLkXFlVvVDd1V6RhO/uPD0wLfVLx6jf7CvmnSuisHHbnLrirwNoC7hjrT9KlCjoXMfmPze4Uokw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dev.tdt.de; spf=pass smtp.mailfrom=dev.tdt.de; dkim=temperror (0-bit key) header.d=dev.tdt.de header.i=@dev.tdt.de header.b=N9REWVPV; arc=none smtp.client-ip=194.37.255.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dev.tdt.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dev.tdt.de
-Received: from [194.37.255.9] (helo=mxout.expurgate.net)
-	by relay.expurgate.net with smtp (Exim 4.92)
-	(envelope-from <prvs=5542c7fda1=ms@dev.tdt.de>)
-	id 1vzWwc-00FOxB-92; Mon, 09 Mar 2026 10:30:34 +0100
-Received: from [195.243.126.94] (helo=securemail.tdt.de)
-	by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ms@dev.tdt.de>)
-	id 1vzWwb-00CUOE-NA; Mon, 09 Mar 2026 10:30:33 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dev.tdt.de;
-	s=z1-selector1; t=1773048633;
-	bh=8tcP9tvNZED+wwwnP5t4F7XTNySr9VR/Gz86McrrXNg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=N9REWVPVX8BPemzJIHiNoSOTJLMEypkt5358LiBx52oHMrzvm34BV9U6LJMWYLjiE
-	 TC4jhFGTFZ0VKhwEk+SwSKLxz0vcQN7LxVE/yBojYi7kFqJ8XzfM+Ofqw7KyRLL83L
-	 t4wB2IkleZbLtOPK6mXd+34i3IWhMhnlGg9ZPKpF+vRxZzimrWId4E+Zc1Wt2SYBE5
-	 hetcFHPWk8miC4nIev7Ee+YrFwNg/fekmXY64S8etVpsBWS42cAaO8eNGfyaL4Vcq2
-	 6qlI9/0e/zRDC6HRAXLvVx5BHnPBv/pYR9O+mBkoeXPgp4kj81fTodoXJv5hzY697u
-	 K/5ik+OKb0usQ==
-Received: from securemail.tdt.de (localhost [127.0.0.1])
-	by securemail.tdt.de (Postfix) with ESMTP id 48FF9240041;
-	Mon,  9 Mar 2026 10:30:33 +0100 (CET)
-Received: from mail.dev.tdt.de (unknown [10.2.4.42])
-	by securemail.tdt.de (Postfix) with ESMTP id 2DF65240036;
-	Mon,  9 Mar 2026 10:30:33 +0100 (CET)
-Received: from mail.dev.tdt.de (localhost [IPv6:::1])
-	by mail.dev.tdt.de (Postfix) with ESMTP id B64ED22A28;
-	Mon,  9 Mar 2026 10:30:24 +0100 (CET)
+	s=arc-20240116; t=1773049412; c=relaxed/simple;
+	bh=2lGo3t1RntZTSXyLwgxBc8rDVEWOtf0wRiWH5p0NqEY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cCRv0KoJXOZPEiOVla+w+bnNWhbC9/FsXNB4yKaUNb+CKVxXUfFkhCmqY2Ce/1gvJUlrMgxAcjBdbn3S4FdFRBIoJeM1Y043EzWa0YQEIMVxuDura4S20dXjtVRskHmH3se9zADV77cswhxKNssOm8HWXEJMdvBcVktiX4Z9QFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pi6uSJTd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA2AC4CEF7;
+	Mon,  9 Mar 2026 09:43:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773049412;
+	bh=2lGo3t1RntZTSXyLwgxBc8rDVEWOtf0wRiWH5p0NqEY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pi6uSJTdeVJsjuruAOk6ckUNvZwU3AXUYiYYYsSIhq6opeYHnuE4gmuquMR0cztRC
+	 nqRC6Nc4GX3YqCXsk4+LDu5O8cSqWyxa5w0fGkan6fcfvpN1m7+rozTfLyZQo7p1TK
+	 kiB+oUtdGmqD2+jeRMBSCA7fAcdsTDGaLUPSvjbTJk0AT3ZMpGngJXhNICQJhEK78h
+	 GfvXcXwopHYTxuIJWxDjnWeuZOjYGAlJ1C7Kix6np6FgK1kYHs5PKlDvQH/XKv6lXY
+	 ypyFQ/amMNOemvj5SRkTKHLdIQf53sPwLCdI1PupnY/u/abcZ2olOEWqkzv00NtF06
+	 brit18q6B1LkA==
+Date: Mon, 9 Mar 2026 09:43:27 +0000
+From: Sudeep Holla <sudeep.holla@kernel.org>
+To: Philip Radford <philip.radford@arm.com>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Sudeep Holla <sudeep.holla@kernel.org>, arm-scmi@vger.kernel.org,
+	linux-pm@vger.kernel.org, james.quinlan@broadcom.com,
+	f.fainelli@gmail.com, vincent.guittot@linaro.org,
+	etienne.carriere@st.com, peng.fan@oss.nxp.com, michal.simek@amd.com,
+	quic_sibis@quicinc.com, dan.carpenter@linaro.org, d-gole@ti.com,
+	souvik.chakravarty@arm.com, cristian.marussi@arm.com
+Subject: Re: [PATCH v2 5/9] firmware: arm_scmi: Add SCMIv4.0 Powercap FCs
+ support
+Message-ID: <20260309-jade-salmon-of-education-7c901c@sudeepholla>
+References: <20260204111950.3648160-1-philip.radford@arm.com>
+ <20260204111950.3648160-6-philip.radford@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Date: Mon, 09 Mar 2026 10:30:24 +0100
-From: Martin Schiller <ms@dev.tdt.de>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Florian Eckert <fe@dev.tdt.de>
-Subject: Re: [PATCH 2/2] x86/cpu/intel: Add EIST workaround for Lightning
- Mountain.
-Organization: TDT AG
-In-Reply-To: <ffb7e798-e8c7-4728-b699-6c885be61136@intel.com>
-References: <20260306-cpufreq_lgm-v1-0-47f104aed7c2@dev.tdt.de>
- <20260306-cpufreq_lgm-v1-2-47f104aed7c2@dev.tdt.de>
- <ffb7e798-e8c7-4728-b699-6c885be61136@intel.com>
-Message-ID: <de11475f9544847664dcce44747c5b50@dev.tdt.de>
-X-Sender: ms@dev.tdt.de
-User-Agent: Roundcube Webmail/1.3.17
-Content-Transfer-Encoding: quoted-printable
-X-purgate-type: clean
-X-purgate-ID: 151534::1773048634-F2710836-29C281B2/0/0
-X-purgate: clean
-X-Rspamd-Queue-Id: 1A91B2362F6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260204111950.3648160-6-philip.radford@arm.com>
+X-Rspamd-Queue-Id: 3A4B02366C8
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[tdt.de,none];
-	R_DKIM_ALLOW(-0.20)[dev.tdt.de:s=z1-selector1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	DKIM_TRACE(0.00)[dev.tdt.de:+];
-	TAGGED_FROM(0.00)[bounces-43934-lists,linux-pm=lfdr.de];
-	HAS_ORG_HEADER(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43935-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,dev.tdt.de:dkim,dev.tdt.de:mid];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ms@dev.tdt.de,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.995];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,kernel.org,broadcom.com,gmail.com,linaro.org,st.com,oss.nxp.com,amd.com,quicinc.com,ti.com,arm.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.987];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sudeep.holla@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-pm];
-	RCVD_COUNT_SEVEN(0.00)[8]
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,arm.com:email]
 X-Rspamd-Action: no action
 
-On 2026-03-06 17:54, Dave Hansen wrote:
-> So what's weird about these systems? Do they not have a "normal" BIOS
-> based on the Intel reference one?
+On Wed, Feb 04, 2026 at 11:19:46AM +0000, Philip Radford wrote:
+> From: Cristian Marussi <cristian.marussi@arm.com>
+> 
+> Add support for new SCMIv4.0 Powercap Fastchannels.
+> 
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> [Philip: removed reference to old versioning logic]
+> Signed-off-by: Philip Radford <philip.radford@arm.com>
+> ---
+> V1->V2
+> - Removed creation of pi powercap_info struct due to legacy code
+>   change
+> ---
+>  drivers/firmware/arm_scmi/powercap.c | 323 ++++++++++++++++++---------
+>  1 file changed, 221 insertions(+), 102 deletions(-)
+> 
+> diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
+> index 3291bde78367..22bf8e480450 100644
+> --- a/drivers/firmware/arm_scmi/powercap.c
+> +++ b/drivers/firmware/arm_scmi/powercap.c
+>  
 
-That's right, the Lightning Mountain SoC is an x86 (Atom) system, but
-it doesn't have a classic BIOS.
+[...]
 
+> @@ -1019,37 +1092,77 @@ static const struct scmi_powercap_proto_ops powercap_proto_ops = {
+>  };
+>  
+>  static void scmi_powercap_domain_init_fc(const struct scmi_protocol_handle *ph,
+> -					 u32 domain, struct scmi_fc_info **p_fc)
+> +					 struct scmi_powercap_info *dom_info)
+>  {
+> -	struct scmi_fc_info *fc;
+> -
+> -	fc = devm_kcalloc(ph->dev, POWERCAP_FC_MAX, sizeof(*fc), GFP_KERNEL);
+> -	if (!fc)
+> -		return;
+> -
+> -	ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
+> -				   POWERCAP_CAP_SET, 4, domain, NULL,
+> -				   &fc[POWERCAP_FC_CAP].set_addr,
+> -				   &fc[POWERCAP_FC_CAP].set_db,
+> -				   &fc[POWERCAP_FC_CAP].rate_limit);
+> -
+> -	ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
+> -				   POWERCAP_CAP_GET, 4, domain, NULL,
+> -				   &fc[POWERCAP_FC_CAP].get_addr, NULL,
+> -				   &fc[POWERCAP_FC_CAP].rate_limit);
+> -
+> -	ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
+> -				   POWERCAP_PAI_SET, 4, domain, NULL,
+> -				   &fc[POWERCAP_FC_PAI].set_addr,
+> -				   &fc[POWERCAP_FC_PAI].set_db,
+> -				   &fc[POWERCAP_FC_PAI].rate_limit);
+> -
+> -	ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
+> -				   POWERCAP_PAI_GET, 4, domain, NULL,
+> -				   &fc[POWERCAP_FC_PAI].get_addr, NULL,
+> -				   &fc[POWERCAP_FC_PAI].rate_limit);
+> -
+> -	*p_fc = fc;
+> +	for (int id = 0; id < dom_info->num_cpli; id++) {
+> +		struct scmi_fc_info *fc;
+> +		u32 *cpl_id, zero_cpl_id = 0;
+> +
+> +		fc = devm_kcalloc(ph->dev, POWERCAP_FC_MAX, sizeof(*fc), GFP_KERNEL);
+> +		if (!fc)
+> +			return;
+> +
+> +		/* NOTE THAT when num_cpli == 1 the arg *cpl_id is 0 */
+> +		cpl_id = (PROTOCOL_REV_MAJOR(ph->version) >= 0x3) ? &id : NULL;
+> +
+> +		ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
+> +					   POWERCAP_CAP_SET, 4, dom_info->id,
+> +					   cpl_id,
+> +					   &fc[POWERCAP_FC_CAP].set_addr,
+> +					   &fc[POWERCAP_FC_CAP].set_db,
+> +					   &fc[POWERCAP_FC_CAP].rate_limit);
+> +
+> +		ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
+> +					   POWERCAP_CAP_GET, 4, dom_info->id,
+> +					   cpl_id,
+> +					   &fc[POWERCAP_FC_CAP].get_addr, NULL,
+> +					   &fc[POWERCAP_FC_CAP].rate_limit);
+> +
+> +		if (PROTOCOL_REV_MAJOR(ph->version) < 0x3) {
+> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
+> +						   POWERCAP_PAI_SET, 4,
+> +						   dom_info->id, NULL,
+> +						   &fc[POWERCAP_FC_XAI].set_addr,
+> +						   &fc[POWERCAP_FC_XAI].set_db,
+> +						   &fc[POWERCAP_FC_XAI].rate_limit);
+> +
+> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
+> +						   POWERCAP_PAI_GET, 4,
+> +						   dom_info->id, NULL,
+> +						   &fc[POWERCAP_FC_XAI].get_addr, NULL,
+> +						   &fc[POWERCAP_FC_XAI].rate_limit);
+> +		} else {
+> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
+> +						   POWERCAP_CAI_SET, 4,
+> +						   dom_info->id, &id,
+> +						   &fc[POWERCAP_FC_XAI].set_addr,
+> +						   &fc[POWERCAP_FC_XAI].set_db,
+> +						   &fc[POWERCAP_FC_XAI].rate_limit);
+> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
+> +						   POWERCAP_CAI_GET, 4,
+> +						   dom_info->id, &id,
+> +						   &fc[POWERCAP_FC_XAI].get_addr, NULL,
+> +						   &fc[POWERCAP_FC_XAI].rate_limit);
 
-> I don't know much about this specific feature, but this patch is doing
-> some unusual things. I'll elaborate below:
->=20
->> diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
->> index=20
->> 98ae4c37c93eccf775d5632acf122603a19918a8..e49df04e8d491158cc48f8d8bef8=
-24c434256d09=20
->> 100644
->> --- a/arch/x86/kernel/cpu/intel.c
->> +++ b/arch/x86/kernel/cpu/intel.c
->> @@ -466,6 +466,29 @@ static void intel_workarounds(struct cpuinfo_x86=20
->> *c)
->>  #else
->>  static void intel_workarounds(struct cpuinfo_x86 *c)
->>  {
->> +	u64 misc_enable;
->> +
->> +	/*
->> +	 * Intel / MaxLinear Lightning Mountain workaround to enable=20
->> Enhanced
->> +	 * Intel SpeedStep Technology (EIST) for each cpu. Otherwise, the
->> +	 * frequency on some cpus is locked to the minimum value of 624 MHz.
->> +	 * This usually would be the job of the BIOS / bootloader, but=20
->> U-Boot
->> +	 * only enables it on the cpu on which it is running.
->> +	 */
->> +	if (c->x86_vfm =3D=3D INTEL_ATOM_AIRMONT_NP) {
->=20
-> Model checks area kinda a last resort. A quick search in the SDM found:
->=20
-> CPUID.01H:ECX[7]: If 1, supports Enhanced Intel SpeedStep=C2=AE technol=
-ogy.
->=20
-> But there's other chit chat in the "Runtime Mutable CPUID Fields"
-> section that makes it seem that it's not a really feature enumeration
-> bit, but a flag to tell if the BIOS enabled it:
->=20
-> 	CPUID.01H:ECX[7] -- This feature flag reflects the setting in
-> 			    IA32_MISC_ENABLE[16]
->=20
-> But the plot thickens because the *existing* code does this:
->=20
-> static int centrino_cpu_init(struct cpufreq_policy *policy)
-> {
-> ...
->         /* Only Intel makes Enhanced Speedstep-capable CPUs */
->         if (cpu->x86_vendor !=3D X86_VENDOR_INTEL ||
->             !cpu_has(cpu, X86_FEATURE_EST))
->                 return -ENODEV;
-> ...
->         if (!(l & MSR_IA32_MISC_ENABLE_ENHANCED_SPEEDSTEP)) {
->=20
-> Which, again, makes it seem like X86_FEATURE_EST (aka.=20
-> CPUID.01H:ECX[7])
-> tells you if the MSR bit is supported, not whether it is enabled.
->=20
-> I'd tend to trust the existing kernel code over quibbling with the SDM
-> wording in general. It's also possible the old code was just confused=20
-> or
-> something was buggy.
->=20
->> +		rdmsrq(MSR_IA32_MISC_ENABLE, misc_enable);
->> +		if (!(misc_enable & MSR_IA32_MISC_ENABLE_ENHANCED_SPEEDSTEP)) {
->> +			misc_enable |=3D MSR_IA32_MISC_ENABLE_ENHANCED_SPEEDSTEP;
->> +			wrmsrq(MSR_IA32_MISC_ENABLE, misc_enable);
->> +
->> +			/* check to see if it was enabled successfully */
->> +			rdmsrq(MSR_IA32_MISC_ENABLE, misc_enable);
->> +			if (!(misc_enable & MSR_IA32_MISC_ENABLE_ENHANCED_SPEEDSTEP)) {
->> +				pr_info("CPU%d: Can't enable Enhanced SpeedStep\n",
->> +					c->cpu_index);
->> +			}
->> +		}
->> +	}
->>  }
->=20
->=20
-> This is also not written in the normal kernel style which minimizes
-> indentation. For instance, the function should have opened with:
->=20
-> 	if (c->x86_vfm !=3D INTEL_ATOM_AIRMONT_NP)
-> 		return;
->=20
-> It also needs to be reconciled with centrino_cpu_init() (at least).
-> Having *a* single place to go in and say "If this CPU supports 'EST',
-> turn it on" would be a minimal refactoring that could be shared by your
-> new workaround and the old centrino code.
->=20
-> centrino_cpu_init() does look gated on X86_FEATURE_EST already, though
-> because of the centrino_ids[]. So, you still need to figure out the
-> interaction with X86_FEATURE_EST for when you call the workaround.
+Can the above "&id" changed to cpl_id like the first 2 instance for consistency
+unless I am reading it wrong.
 
-As you already noted, EIST is also enabled in the Intel Enhanced
-SpeedStep (deprecated) "speedstep-centrino.c" driver. It is also
-enabled in the VIA C7 Enhanced PowerSaver driver "e_powersaver.c".
+> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
+> +						   POWERCAP_MAI_SET, 4,
+> +						   dom_info->id, &zero_cpl_id,
+> +						   &fc[POWERCAP_FC_MAI].set_addr,
+> +						   &fc[POWERCAP_FC_MAI].set_db,
+> +						   &fc[POWERCAP_FC_MAI].rate_limit);
+> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
+> +						   POWERCAP_MAI_GET, 4,
+> +						   dom_info->id, &zero_cpl_id,
+> +						   &fc[POWERCAP_FC_MAI].get_addr, NULL,
+> +						   &fc[POWERCAP_FC_MAI].rate_limit);
+> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
+> +						   POWERCAP_MEASUREMENTS_GET, 4,
+> +						   dom_info->id, &zero_cpl_id,
+> +						   &fc[POWERCAP_FC_MEASUREMENT].get_addr, NULL,
+> +						   &fc[POWERCAP_FC_MEASUREMENT].rate_limit);
 
-The question now is whether and where this is best handled centrally.
+Also why should the above 3 as well as the NULL cpl_id calls be inside this
+loop ?
+
+-- 
+Regards,
+Sudeep
 
