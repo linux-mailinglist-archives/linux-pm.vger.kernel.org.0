@@ -1,201 +1,182 @@
-Return-Path: <linux-pm+bounces-43929-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43930-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +PxeKel5rmm2FAIAu9opvQ
-	(envelope-from <linux-pm+bounces-43929-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 08:42:33 +0100
+	id sPZoE+R5rmm2FAIAu9opvQ
+	(envelope-from <linux-pm+bounces-43930-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 08:42:28 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA584234EC2
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 08:42:32 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F086234EB3
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 08:42:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1968B3055DF6
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 07:39:22 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B75733004600
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 07:42:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BA8B366DB7;
-	Mon,  9 Mar 2026 07:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="MofstRi3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472FC368966;
+	Mon,  9 Mar 2026 07:42:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lgeamrelo03.lge.com (lgeamrelo03.lge.com [156.147.51.102])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A42367F27
-	for <linux-pm@vger.kernel.org>; Mon,  9 Mar 2026 07:39:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773041961; cv=pass; b=BrE2oF22UBiZAWM+GPgH9YX/+EX+6Vg9QITe+vBCDI4VuEikadi7aXNI6Tq53iXjG6asQQDtou/TVwsn2dijkgvt7cySMniCtrKn5YoklbwIRfsbeuZ3hzOI0ZWjirTVCAeXzPgfdzlZACw1aPO/PprveuI91epKTodQBJpZr90=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773041961; c=relaxed/simple;
-	bh=QeN6GpIdj1+GFkHjKmwA1WMLMo+3lnYFbA/ivhvcUqE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kqILLpASlHFb/QffcUAKdYIA7XdhJrXZViI00rFnImg1onyuWgU1fUgh3PBuqWlKwLA4h+AaRQwIeOCoVdHgi3391FYYFUp/o6nnllvOobE12am/FjyjZkHcmdax7KWJJgprEbFPfSRfDx0H75YxEfgxZYymTNFi/GWhv7edu+I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=MofstRi3; arc=pass smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b966a7b1908so185850666b.1
-        for <linux-pm@vger.kernel.org>; Mon, 09 Mar 2026 00:39:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773041958; cv=none;
-        d=google.com; s=arc-20240605;
-        b=X36H4R+E/XcEj3mZZsaF8NcL4kiWntcQ26JtO3yNAGfh/1/rAVBfGuGP84xF2+wo83
-         Q0s6cGelOdq88whGLn/mU1GFw962U+Zv5kqyvz4slpVLMik1seg8QjpRufknbsa4SNYE
-         Tt0lgiXqAAEiv+Tm/ow/23gk8H/vDs44y8iKsY8p7dYYUrOagQ6Tp/O6R5r10XGfii4j
-         J+NtLV/lFUx4RAQIwqhA04dkyLmIadWtSvPZ94SCbrD25eXinUX8R6IaiBH6hWKEHeIP
-         hhDBI9L2J9cU/nq/h9Nsg1a4Yo41tZvoP9MX2KPxGYVvWjSHzAJ3rPpYobkLpuigJiQd
-         KYIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZZxQV4lJDzLHey1T0g/ZUdvj0+WObWIH2mF1XtFb9lI=;
-        fh=7n7mH1mr6hIKrb14HODCFXOwhIj//OaLSzXEUmdXPqE=;
-        b=dBYOZSp92S4zF/fagVPbSaRWK8hzZ4Q9EMG99sFa/TjAKeR3uZU46VYiaSWZf/D2ee
-         sBXwvkPptPIcYTs0E5hYQTCiaMFZJibLUQdVZGT6EQS0op8KFDQEHdtfAjNZCqT3cXkZ
-         GHEsVJjzZAsAooFvbiOu9+X+6qM5ojYIDFx+Ew6Wphb3vxRvGZo7MPwoHcLD9B7jm1CQ
-         FYZOpoZn+QIwfdHOkP44NFTkutvh1lO38I62nugeUUwQ2aoNy1ViyUgV9qlMSop9gHgE
-         g3pnX6uZnqpdcVULWFY6vboOkNo+1KTuOl4hUHuR6YOgzvKTon47XZkBdzLH0WKuyb5E
-         Hc+A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flipper.net; s=google; t=1773041958; x=1773646758; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZZxQV4lJDzLHey1T0g/ZUdvj0+WObWIH2mF1XtFb9lI=;
-        b=MofstRi3xZEecv4sJ9DYgAjCDV6SD99KcdA8dHw8EITCPPImilk6deTafpyCk2Qp9k
-         CvQUL6R4OV8BkD2/2mvtXz9KRARnIv76fzNvApPhtk1Y9coSvlAGmg85VD1mMEQO/Nyj
-         EDOmzTZK3w0OX+gbRuz72PLzSjrvB8WmqE/2KodLotXV8cDh4vSng8gypK0MsZcTV0xo
-         +WeWa6QxsYharQ6AYrc0CdAG5i9fcvNkDPvGcsT42cJJ7ZN72DlcTbmD2BTlYK5HINN5
-         9l8o/WjHXmkNV9FHHgqsQ+Zn3tKnNcjjQ0n6EAp0DRT3NJ0s9Qy0ACz8EmkqlKSBLOW6
-         v9Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773041958; x=1773646758;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZZxQV4lJDzLHey1T0g/ZUdvj0+WObWIH2mF1XtFb9lI=;
-        b=jC5J5q/wy5yDUu5dyfl1psNViGoaJFgiELX1CUnAX692S15cEPqkUqEOMGRTiGMkVA
-         32JfatC9kOSQSE8QQIIORPcdPbwKsPbfoKPysiKm8f8PnaGGfvhwGzDNgOKdhfKnE0qB
-         fI7pipaMCqCpQM6DAfzZ8Do4PCq3Ufiqi+M+peL4sa8xXcwfKyez9lls5e04i8ByAQH2
-         Q5UakqA672fN48vfkfuryVsR8GQ3VvNXLq5aq9WoSrDxe8cpw1kQmj5gRfCjrFRjXi9Y
-         m9fHNMD6Q3KtQPZ6vYwGdEo7TWklBBMiMwyQo5yhfVxvoLqlVevN6R+deyzpcnlSJbKd
-         IrHw==
-X-Forwarded-Encrypted: i=1; AJvYcCXQJpRLruOhHzlyCdRKqrFWotB+ftB0liqTyMv935MUSy8Mua+C7nk6u+c1TZH2aUG9t2dnIMX1XQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVvukgH/Pg0PPNKdSFfZUOP686DutWl9KImqz7DXUJXSABtV2n
-	HHaqrMI4hj2MDydhyHGC+CrXGTapk7MShO7raIV5WKWIUz+2EWgnJBt7B5rVE0D0HXZt6KIDkip
-	e8tXF4Oq4hD8TJDpMWSexzE2UliDBHOh9+SslbMntMg==
-X-Gm-Gg: ATEYQzycq+xpIyWVrpjDuKMrC0qrb1sOC8NPbcvfHLK2Ug8sb78K3cH50+mxdqAX3re
-	RQhtqkELuJEPeBY878ryXp1jFThKbBfeliF8UmGhPYrYcZXfS6t6lAzM/9Gq/6t4zvJL/UEzSmM
-	Y3sHAYCOtsC00irxg2OBr3lvaLJeioVat9kq1oeY4TTNwp6ZmqDL1p2i29NGFrEcWSMI+ShzLju
-	l3UEQ2O4xWKjPezwuMBYdbJuQMLolW5dv3Blu/qeObnofpOyIkfdE/fdAI0NFkwYYh+Cdo8LH5/
-	jxXOevnFdUHKZg3BXg==
-X-Received: by 2002:a17:906:9f88:b0:b93:722b:f7c5 with SMTP id
- a640c23a62f3a-b942df7eb6cmr627858666b.29.1773041958288; Mon, 09 Mar 2026
- 00:39:18 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8C39368954
+	for <linux-pm@vger.kernel.org>; Mon,  9 Mar 2026 07:42:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.147.51.102
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773042144; cv=none; b=Gm5A9OefKlMwNjStDc/5VtqoChBKaEoBNNIunTbyB5BxwI3nJL4AbRLTKOfkQyTcfTiwajNb1Vpv3Aeoh0aj+fFNIOsgX7/ig5mjJWplllHXLDJhV8TgDNxodYI1eMgeERMG41W6wAta67YH3LwkT85tejns3/1vLNT+0qXYSps=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773042144; c=relaxed/simple;
+	bh=fs59aU4OalyXt+No0G2D8PynjL7MyccA1AVhyRkLYqQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kh8N75/3aAkvqmEoToFUaOZbdi2duA6LRLUdcxqKlqkDn+cxbsZv1iBohDWFGFDLVX2PkMMS4c3jqKfS58JeG2zUhdo+SYv9oMi7LVhMlaYE7T4By0tyAX1mLs2KVroNRJ4SSmJcn/YfVP3G24P2EaOXhF1ipU8BgvE/KWMTwDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lge.com; spf=pass smtp.mailfrom=lge.com; arc=none smtp.client-ip=156.147.51.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lge.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lge.com
+Received: from unknown (HELO yjaykim-PowerEdge-T330) (10.177.112.156)
+	by 156.147.51.102 with ESMTP; 9 Mar 2026 16:42:13 +0900
+X-Original-SENDERIP: 10.177.112.156
+X-Original-MAILFROM: youngjun.park@lge.com
+Date: Mon, 9 Mar 2026 16:42:13 +0900
+From: YoungJun Park <youngjun.park@lge.com>
+To: Chris Li <chrisl@kernel.org>
+Cc: rafael@kernel.org, akpm@linux-foundation.org, kasong@tencent.com,
+	pavel@kernel.org, shikemeng@huaweicloud.com, nphamcs@gmail.com,
+	bhe@redhat.com, baohua@kernel.org, usama.arif@linux.dev,
+	linux-pm@vger.kernel.org, linux-mm@kvack.org, hyungjun.cho@lge.com,
+	youngjun.park@lge.com
+Subject: Re: [RFC PATCH v2] mm/swap, PM: hibernate: hold swap device
+ reference across swap operation
+Message-ID: <aa551UFgiq+gUl/T@yjaykim-PowerEdge-T330>
+References: <20260306024608.1720991-1-youngjun.park@lge.com>
+ <CACePvbXVvPp_a89UFztZo5nGawpFea9t=NRisf468VcxHgkX7A@mail.gmail.com>
+ <aaqKJQeO8wLQL7Zn@yjaykim-PowerEdge-T330>
+ <CACePvbVp=9PM=LUdL=aq8G2Svy+v04pBnf3ygRY+xW3WEHNm9A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260303-bq25792-v1-0-e6e5e0033458@flipper.net>
- <20260303-bq25792-v1-9-e6e5e0033458@flipper.net> <20260306141541.GP183676@google.com>
-In-Reply-To: <20260306141541.GP183676@google.com>
-From: Alexey Charkov <alchark@flipper.net>
-Date: Mon, 9 Mar 2026 11:39:10 +0400
-X-Gm-Features: AaiRm5104XhGOW-J_13frBQZh5T5BSocJtleW8XWylE3jcKvvEUsQUPIIi1o86U
-Message-ID: <CAKTNdwHq=XQmTwVwU6U0q4uqTx5dXd+0ET1EizQOVR8izo6FRA@mail.gmail.com>
-Subject: Re: [PATCH 09/11] mfd: bq257xx: Add BQ25792 support
-To: Lee Jones <lee@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Chris Morgan <macromorgan@hotmail.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: EA584234EC2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACePvbVp=9PM=LUdL=aq8G2Svy+v04pBnf3ygRY+xW3WEHNm9A@mail.gmail.com>
+X-Rspamd-Queue-Id: 9F086234EB3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[flipper.net,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[flipper.net:s=google];
+X-Spamd-Result: default: False [-0.86 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[lge.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43929-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	FREEMAIL_CC(0.00)[kernel.org,hotmail.com,gmail.com,vger.kernel.org,collabora.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43930-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[kernel.org,linux-foundation.org,tencent.com,huaweicloud.com,gmail.com,redhat.com,linux.dev,vger.kernel.org,kvack.org,lge.com];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alchark@flipper.net,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[flipper.net:+];
-	NEURAL_HAM(-0.00)[-0.991];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,mail.gmail.com:mid]
+	FROM_NEQ_ENVFROM(0.00)[youngjun.park@lge.com,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.118];
+	TAGGED_RCPT(0.00)[linux-pm];
+	R_DKIM_NA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Fri, Mar 6, 2026 at 6:15=E2=80=AFPM Lee Jones <lee@kernel.org> wrote:
->
-> On Tue, 03 Mar 2026, Alexey Charkov wrote:
->
-> > Add register definitions and a new 'type' enum to be passed in MFD
-> > platform data to support the BQ25792, which is a newer variant of the
-> > BQ257xx family.
+On Sun, Mar 08, 2026 at 11:43:20PM -0700, Chris Li wrote:
+
+> Agree. That place needs fixing. We will make two patches.
+> 
+> Patch 1. Fix the swap off  racing between lookup and first allocation
+> on suspend.
+> swap_type_of() is very tricky for the device swap because of the
+> conditional lookup of the si->start_block matching the offset or not.
+> That make this patch very complex.
+> 
+> One idea to brainstorm:
+> 
+> So we can get the reference count on during snapshot_open(), after
+> checking "root_swap" still points to valid swsusp_resume_device.
+> Then we release the reference count on "root_swap" during snapshot_release().
+> 
+> That might side step the complexity of  swap_type_of() doing the
+> si->start_block checking.
+> 
+> It should fix the bug you described here more simply.
+
+While that approach would be great as a minimal fix, I think we still
+cannot avoid the following situation.
+
+Until the first swap offset is allocated, we cannot guarantee that swapoff
+won't happen. To be safe, I think it is difficult to prevent swapoff
+without holding the swap_lock.
+
+So, to stick to the minimal fix principle and only address the currently
+possible bug in uswsusp, we could consider:
+
+1) Creating a separate function to grab the reference for uswsusp, and
+   put it in snapshot_close().
+2) Adding a parameter to swap_type_of() to decide whether to acquire the
+   reference or not, and put it in swsusp_close() 
+
+On all strategies, we do not grab the
+reference when taking an in-kernel snapshot, and do not add alloc/free
+get/put.
+
+> > My proposal is to grab the reference at the lookup point to close this
+> > initial race.
+> 
+> That is my suggested patch 1.
+> 
+> > If we do that, I believe we can remove the per-slot
+> > get/put calls entirely, as the initial reference is sufficient to keep the
+> 
+> I suggest that as the patch 2. It is an optimization to eliminate the
+> get/put pairs. It is optional. without it is fine in terms of
+> correctness. Might not worth the trouble for patch 2.
+
+Yes, I agree. I will split the patch into two as you suggested and think
+about it further.
+
+> > device alive until the operation completes.
 > >
-> > BQ25792 shares similar logic of operation with the already supported
-> > BQ25703A but has a completely different register map and different
-> > electrical constraints.
+> > Regarding the reference release strategy in this patch:
 > >
-> > Signed-off-by: Alexey Charkov <alchark@flipper.net>
-> > ---
-> >  drivers/mfd/bq257xx.c       |  60 ++++++-
-> >  include/linux/mfd/bq257xx.h | 417 ++++++++++++++++++++++++++++++++++++=
-++++++++
-> >  2 files changed, 472 insertions(+), 5 deletions(-)
+> > 1. uswsusp: The reference is released when the snapshot device file
+> >    is closed(snapshot_release) and error paths.
+> > 2. not uswsusp`: I only added reference release in the error paths.
+> 
+> That part makes this patch complex and harder to review. Need to
+> carefully check whether we take the reference count or not.
+> 
 > >
-> > diff --git a/drivers/mfd/bq257xx.c b/drivers/mfd/bq257xx.c
-> > index e9d49dac0a16..a6776c8c94f2 100644
-> > --- a/drivers/mfd/bq257xx.c
-> > +++ b/drivers/mfd/bq257xx.c
+> > About 2.. I conclude that on a successful resume, the system state reverts to
 
-[...]
+> > the snapshot point, making an explicit release unnecessary. However,
+> > I am not 100% certain if this holds true for the swap reference
+> > context.
+> 
+> That is the part I try to avoid: the very fragmented error condition
+> for reference counting.
+> Hopefully, with patch 1 idea we don't need that complexity.
 
-> >  static int bq257xx_probe(struct i2c_client *client)
-> >  {
-> > +     const struct bq257xx_match_data *md =3D device_get_match_data(&cl=
-ient->dev);
-> > +     const struct mfd_cell cells[] =3D {
-> > +             MFD_CELL_BASIC("bq257xx-regulator", NULL, &md->plat, size=
-of(md->plat), 0),
-> > +             MFD_CELL_BASIC("bq257xx-charger", NULL, &md->plat, sizeof=
-(md->plat), 0),
->
-> Please keep these out of the functions.
->
-> IOW, please put them back where you found them.
+I agree with you.
+But, I believe it can be a safe modification that can be sufficiently
+verified through review.
 
-Thanks Lee, will address in v3.
+I would love to hear the thoughts of the hibernation maintainers and other
+reviewers on this. Although there are some complex parts, I think this
+modification has clear benefits.
 
-Out of curiosity, are there lifecycle implications here, or is it more
-of a convention to keep them out of functions? I've been thinking
-that, given they are only accessed during the initial probe, it would
-be neat to keep them const and initialize once, when the matched
-variant is known. It works in my testing, but I can't vouch I've put
-it through every possible corner case, especially various
-built-in/module combinations or probe deferrals.
+Thanks
 
 Best regards,
-Alexey
+Youngjun Park
 
