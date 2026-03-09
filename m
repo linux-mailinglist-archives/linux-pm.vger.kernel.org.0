@@ -1,391 +1,177 @@
-Return-Path: <linux-pm+bounces-43922-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43923-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wEDYA5c0rmkuAgIAu9opvQ
-	(envelope-from <linux-pm+bounces-43922-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 03:46:47 +0100
+	id 4EqhFXU4rmlyAgIAu9opvQ
+	(envelope-from <linux-pm+bounces-43923-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 04:03:17 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D2582335C0
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 03:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C4C0A2336EA
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 04:03:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 44FA4301B93B
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 02:46:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AB0AA3009511
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 03:02:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA4D42010EE;
-	Mon,  9 Mar 2026 02:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9DDD258EFF;
+	Mon,  9 Mar 2026 03:02:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="EXmgdsAa"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EyjJwkFV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26756217659;
-	Mon,  9 Mar 2026 02:46:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE54187FE4
+	for <linux-pm@vger.kernel.org>; Mon,  9 Mar 2026 03:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773024382; cv=none; b=Y9F8PR9e1a9NX/QDGS3zkdAKU1oy5VreL29uP3gB1nxBh4rCiXVkfN5ow/LFnYYc5nO3w0SoAvpiRRg289Id2ajX+KT3NIr2m6a/HjdmyxNhjtm6MpLw5jS44sfmWWYqFzbGxXrncdSCH/0B1T/bSs5hGGEwbIUilo91yU894tM=
+	t=1773025374; cv=none; b=imrM2t4L8r1NwNcR9BsLTuL+4UPCvCkPKu4z4LUwP0cTjhNk1jHuPO4x1gA9s+57I13/i0O2HLtHbmXhT4FJnOHX/LQT74yrC5EnNg33SuDGUygenBxh1M5M+SG6rXjBVrdeU6dab4ByHwKnbnr6f7e5tJmmd0nBrQq+ijQ3/e4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773024382; c=relaxed/simple;
-	bh=o+ARsR8chCtiW/jAcIZoAmTru8DDd/CefzS85Y9zhrc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=LshqyCjdSGd+5XBxfSOwS3rb5crPZ7xsV5/d1bFg0NQqYpWHSgbm27yqP8sNCeBIKaTb/BlXa235AVHkMFfMLb3YTwLt9VJyOELrl2c0zaCGWI32Qzg7kX/jUmrK5Yl8boTOiP8NPB7hSgp+7UfkBShvXRN3YbW73qkqrGf+vIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=EXmgdsAa; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4fThGT6SsVz9tYN;
-	Mon,  9 Mar 2026 03:46:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1773024370;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=M1BjM0rf2n3gTAxYcEyrznxi8WA9wRDhAUvOuuf5WIM=;
-	b=EXmgdsAajz8XB2ziZCvpNjOlSNjG0zxQUN48lyeA/eoR6QGJzpXx5qV5AL2SN7wolcquBj
-	3kPK1BCdzmDv8ANZ7JKlG9ZIgK9A7env/8uoGypAiNN2RpSDjHfDxH4liEDKmc4I9L6jfm
-	H8DNsIe2knW8NQzbG/rogB43MCvGYj7pEbM/jo+D0rpJR5F0ix/vkxNwy/18xyIksRTVc/
-	r0R+FhwpIdBQOrFZqbrAB33cS7nnwcRw3tC33ZPJYSDUqH1T0aD0PjT5pas60TLxN6NSmD
-	2GmEX+fOUnyyYDcl8eDYJ/C9aik+tk/K5G+rXKRC41OUhvJCMsQfs/bm6qKBow==
+	s=arc-20240116; t=1773025374; c=relaxed/simple;
+	bh=BGjkXwXFeJle68octNDMR19EHMWwrZil3s7gHM3J0bg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jWxWnOxJeP+eW7K6L/RTaG+0oxrczAtdUjA2lLpvjAhif1DBawRlR91MwmotVqE9UxOCMDWxO7MBNJE9sOmdOlEOHqxuPuGruk+kYriaZxvC2gKXeuFvo2YB3wj5Y3opVML19HoblH5eMmcaiDI1rfqVLqXUMycJaGuh3wrOIb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EyjJwkFV; arc=none smtp.client-ip=74.125.224.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-64c9c8f8783so11460488d50.1
+        for <linux-pm@vger.kernel.org>; Sun, 08 Mar 2026 20:02:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773025373; x=1773630173; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DRC/SSBoLNJpBv7w3HXObuyQkJlK3e7PgCYEr0NFv4U=;
+        b=EyjJwkFVWzJNjMAd6yOjTRBmZI7d9gOhHIWC21TOHKITr6YTn9n4l80Xu7Pv18+KyU
+         kfWBI6ymCmL4PPjGirEcqKsY4XEHfQ+nt2VQwUr5YItaGNOJNOpIzLggBVIP4zMt5Exy
+         gt0gHwPViT7fTLnvyFaqp80/4bj6v3USQOkZr3LbykPGuBMqRF5NSX+IZerO/8k1qPrM
+         wph0+noQ0rCJyoiBOpuaE1cEaGDY3fDA0Fh7DCydJN4afYBApqo080AIjY7REwMFbghg
+         YPZAmb7nF1afmRviKdDmGihbZWLeodHLdKmQSrywDUC1oea6A9eyaDCXwYVmWvcuwSEw
+         3WNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773025373; x=1773630173;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DRC/SSBoLNJpBv7w3HXObuyQkJlK3e7PgCYEr0NFv4U=;
+        b=gccdlHXQcx2wSu1nD88uzOOqjo0mYIEXvGguUkeAkxtgZhqwRTtpcqCtkVSh0FichN
+         OHoL/YXWw1gA43oP6+hOlZGvvf70LDbSqhXFL+uPUhiOnkRfhb3D3pKdEVA8zLxj2Q/p
+         u6nWfOXDkyOFgx4D3iZ++DYf9VeWYpBFcEjSf9eHUp2TagV/PySvHcb7Ti8Sr/EPPf85
+         uMonK72analWv4/+hgWRCOJO3R4OrbT8Qk6qg5p+UskBM5ih2hBssLQquFrZ9GJWoUhB
+         Ch2WdkucNi+RwtkjDugE8/gue+pvndA+NCUtPb98aVzHAkVfQMZcUNfh50srgNnCOHbb
+         vsbw==
+X-Forwarded-Encrypted: i=1; AJvYcCUn7oEI5N83DZ24FaURh00c9XwzKpERYW+f6W05tIRizW3AZ4b0lGk/YdTqP6JMM3C4VoQFt6eMqw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwznQO/864dRNT9mcnb0e8HUWX/e2SohcZ3jf5/aDbPR/fUGQEc
+	WiREZEESEdyOqGpcL16EogAYFyrnd37c+6VVZwm4bWhZCGHhzHz0CG53TzqAFB/8Xw==
+X-Gm-Gg: ATEYQzyVDey9XIZGPbWCSNopkxpvB9A2/RkmyA1bJdpLUGCdA03BzOkE+ISCYuO5L35
+	eYnLJvhGFNsRG/REBdwQU8ERs9SrXzi9ez2xDWhw3Y/SCCqF8Tn/s1f3cv9ZENJEUrBKhGO542t
+	s5fYDjzTTWbINPTjaMMmxYbNmHZMR34n1Mdg0/uL+UpJDRnUKeNvtETB8WEA0ZuyLiOQGISHDfY
+	UkAt9v9RvE2fAATXeQ/6X7nSCR3Fnk52dTpqOrV8UQ/VKAEvCg6MlDcaguMUJotgycia+C4zA3u
+	2g9ru4Th54Kr4+Iwl+4TVq9gpvKZlexbNk2LGMt1zJmZ88FuUNyUT4E0AdsbmmAraay9NCaY+SZ
+	AS2hvE/SNk0QP3bg1Q0omIriJNXN66OHWZ7pO1nuVsSLI8Q0EsAsM8VVMjtd5DyDXjmY6ASHj6x
+	w+LeH84t3nPrcDcqXT3yL22wynD+v/5koPezeAyZkCvbpM1CZGvM7o4BvxPZsyddkzpBCfu3M=
+X-Received: by 2002:a05:690e:1186:b0:64a:7bf2:3afa with SMTP id 956f58d0204a3-64d0715a07dmr12447389d50.28.1773025372369;
+        Sun, 08 Mar 2026 20:02:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:4570:89a0:3329:ea09:3c41:e7ec? ([2600:1700:4570:89a0:3329:ea09:3c41:e7ec])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64d176c59dbsm4094408d50.11.2026.03.08.20.02.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 Mar 2026 20:02:51 -0700 (PDT)
+Message-ID: <103a2828-c567-4b95-8583-e2358ccfc1f6@google.com>
+Date: Sun, 8 Mar 2026 20:02:42 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 3/6] mfd: max77759: add register bitmasks and modify
+ irq configs for charger
+To: Lee Jones <lee@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Mark Brown <broonie@kernel.org>,
+ Matti Vaittinen <mazziesaccount@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
+ Kyle Tso <kyletso@google.com>
+References: <20260224-max77759-charger-v8-0-eb86bd570e9c@google.com>
+ <20260224-max77759-charger-v8-3-eb86bd570e9c@google.com>
+ <20260306130031.GK183676@google.com>
+From: Amit Sunil Dhamne <amitsd@google.com>
+Content-Language: en-US
+In-Reply-To: <20260306130031.GK183676@google.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 09 Mar 2026 10:45:49 +0800
-Message-Id: <DGXWODJ8CGUN.KZFJ9JDJMEM3@mailbox.org>
-Cc: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-riscv@lists.infradead.org>, <spacemit@lists.linux.dev>,
- <devicetree@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- "Viresh Kumar" <viresh.kumar@linaro.org>, "Yixun Lan" <dlan@gentoo.org>,
- "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
- <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Paul Walmsley"
- <pjw@kernel.org>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou"
- <aou@eecs.berkeley.edu>, "Alexandre Ghiti" <alex@ghiti.fr>
-Subject: Re: [PATCH 2/2] riscv: dts: spacemit: Add cpu scaling for K1 SoC
-From: "Shuwei Wu" <shuwei.wu@mailbox.org>
-To: "Samuel Holland" <samuel.holland@sifive.com>
-References: <20260308-shadow-deps-v1-0-0ceb5c7c07eb@mailbox.org>
- <20260308-shadow-deps-v1-2-0ceb5c7c07eb@mailbox.org>
- <610da0d3-1dc0-4f4f-afb4-869d3ed81321@sifive.com>
-In-Reply-To: <610da0d3-1dc0-4f4f-afb4-869d3ed81321@sifive.com>
-X-MBO-RS-ID: 4718965d707e9392835
-X-MBO-RS-META: w3n6rf7qzhqwy6xkdx5zhxepjgn57kz8
-X-Rspamd-Queue-Id: 7D2582335C0
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: C4C0A2336EA
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[mailbox.org,reject];
-	R_DKIM_ALLOW(-0.20)[mailbox.org:s=mail20150812];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43922-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,linaro.org,linuxfoundation.org,google.com,linux.intel.com,samsung.com,gmail.com,linux-foundation.org,vger.kernel.org,lists.infradead.org];
 	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[google.com:+];
+	TAGGED_FROM(0.00)[bounces-43923-lists,linux-pm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[mailbox.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[shuwei.wu@mailbox.org,linux-pm@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[amitsd@google.com,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.990];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
-	NEURAL_HAM(-0.00)[-0.950];
-	RCPT_COUNT_TWELVE(0.00)[16];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[]
 X-Rspamd-Action: no action
 
-Hi Samuel,
+Hi Lee,
 
-On Mon Mar 9, 2026 at 1:59 AM CST, Samuel Holland wrote:
-> Hi Shuwei,
+On 3/6/26 5:00 AM, Lee Jones wrote:
+> On Tue, 24 Feb 2026, Amit Sunil Dhamne via B4 Relay wrote:
 >
-> On 2026-03-07 11:17 PM, Shuwei Wu wrote:
->> Add Operating Performance Points (OPP) tables and CPU clock properties
->> for the two clusters in the SpacemiT K1 SoC.
->>=20
->> Also assign the CPU power supply (cpu-supply) for the Banana Pi BPI-F3
->> board to fully enable CPU DVFS.
->>=20
->> Signed-off-by: Shuwei Wu <shuwei.wu@mailbox.org>
+>> From: Amit Sunil Dhamne <amitsd@google.com>
+>>
+>> Add register bitmasks for charger function.
+>> In addition split the charger IRQs further such that each bit represents
+>> an IRQ downstream of charger regmap irq chip. In addition populate the
+>> ack_base to offload irq ack to the regmap irq chip framework.
+>>
+>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>> Reviewed-by: André Draszik <andre.draszik@linaro.org>
 >> ---
->>  arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts | 34 +++++++++-
->>  arch/riscv/boot/dts/spacemit/k1.dtsi            | 86 ++++++++++++++++++=
-+++++++
->>  2 files changed, 119 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts b/arch/risc=
-v/boot/dts/spacemit/k1-bananapi-f3.dts
->> index 444c3b1e6f44..b87bf9d51cb1 100644
->> --- a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
->> +++ b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
->> @@ -86,6 +86,38 @@ &combo_phy {
->>  	status =3D "okay";
->>  };
->> =20
->> +&cpu_0 {
->> +	cpu-supply =3D <&buck1_3v45>;
->> +};
->> +
->> +&cpu_1 {
->> +	cpu-supply =3D <&buck1_3v45>;
->> +};
->> +
->> +&cpu_2 {
->> +	cpu-supply =3D <&buck1_3v45>;
->> +};
->> +
->> +&cpu_3 {
->> +	cpu-supply =3D <&buck1_3v45>;
->> +};
->> +
->> +&cpu_4 {
->> +	cpu-supply =3D <&buck1_3v45>;
->> +};
->> +
->> +&cpu_5 {
->> +	cpu-supply =3D <&buck1_3v45>;
->> +};
->> +
->> +&cpu_6 {
->> +	cpu-supply =3D <&buck1_3v45>;
->> +};
->> +
->> +&cpu_7 {
->> +	cpu-supply =3D <&buck1_3v45>;
->> +};
->> +
->>  &emmc {
->>  	bus-width =3D <8>;
->>  	mmc-hs400-1_8v;
->> @@ -201,7 +233,7 @@ pmic@41 {
->>  		dldoin2-supply =3D <&buck5>;
->> =20
->>  		regulators {
->> -			buck1 {
->> +			buck1_3v45: buck1 {
->>  				regulator-min-microvolt =3D <500000>;
->>  				regulator-max-microvolt =3D <3450000>;
->>  				regulator-ramp-delay =3D <5000>;
->> diff --git a/arch/riscv/boot/dts/spacemit/k1.dtsi b/arch/riscv/boot/dts/=
-spacemit/k1.dtsi
->> index 529ec68e9c23..5c7bb5d85fc0 100644
->> --- a/arch/riscv/boot/dts/spacemit/k1.dtsi
->> +++ b/arch/riscv/boot/dts/spacemit/k1.dtsi
->> @@ -54,6 +54,8 @@ cpu_0: cpu@0 {
->>  			compatible =3D "spacemit,x60", "riscv";
->>  			device_type =3D "cpu";
->>  			reg =3D <0>;
->> +			clocks =3D <&syscon_apmu CLK_CPU_C0_CORE>;
->> +			operating-points-v2 =3D <&cluster0_opp_table>;
->>  			riscv,isa =3D "rv64imafdcbv_zicbom_zicbop_zicboz_zicntr_zicond_zicsr=
-_zifencei_zihintpause_zihpm_zfh_zba_zbb_zbc_zbs_zkt_zvfh_zvkt_sscofpmf_sstc=
-_svinval_svnapot_svpbmt";
->>  			riscv,isa-base =3D "rv64i";
->>  			riscv,isa-extensions =3D "i", "m", "a", "f", "d", "c", "b", "v", "zi=
-cbom",
->> @@ -84,6 +86,8 @@ cpu_1: cpu@1 {
->>  			compatible =3D "spacemit,x60", "riscv";
->>  			device_type =3D "cpu";
->>  			reg =3D <1>;
->> +			clocks =3D <&syscon_apmu CLK_CPU_C0_CORE>;
->> +			operating-points-v2 =3D <&cluster0_opp_table>;
->>  			riscv,isa =3D "rv64imafdcbv_zicbom_zicbop_zicboz_zicntr_zicond_zicsr=
-_zifencei_zihintpause_zihpm_zfh_zba_zbb_zbc_zbs_zkt_zvfh_zvkt_sscofpmf_sstc=
-_svinval_svnapot_svpbmt";
->>  			riscv,isa-base =3D "rv64i";
->>  			riscv,isa-extensions =3D "i", "m", "a", "f", "d", "c", "b", "v", "zi=
-cbom",
->> @@ -114,6 +118,8 @@ cpu_2: cpu@2 {
->>  			compatible =3D "spacemit,x60", "riscv";
->>  			device_type =3D "cpu";
->>  			reg =3D <2>;
->> +			clocks =3D <&syscon_apmu CLK_CPU_C0_CORE>;
->> +			operating-points-v2 =3D <&cluster0_opp_table>;
->>  			riscv,isa =3D "rv64imafdcbv_zicbom_zicbop_zicboz_zicntr_zicond_zicsr=
-_zifencei_zihintpause_zihpm_zfh_zba_zbb_zbc_zbs_zkt_zvfh_zvkt_sscofpmf_sstc=
-_svinval_svnapot_svpbmt";
->>  			riscv,isa-base =3D "rv64i";
->>  			riscv,isa-extensions =3D "i", "m", "a", "f", "d", "c", "b", "v", "zi=
-cbom",
->> @@ -144,6 +150,8 @@ cpu_3: cpu@3 {
->>  			compatible =3D "spacemit,x60", "riscv";
->>  			device_type =3D "cpu";
->>  			reg =3D <3>;
->> +			clocks =3D <&syscon_apmu CLK_CPU_C0_CORE>;
->> +			operating-points-v2 =3D <&cluster0_opp_table>;
->>  			riscv,isa =3D "rv64imafdcbv_zicbom_zicbop_zicboz_zicntr_zicond_zicsr=
-_zifencei_zihintpause_zihpm_zfh_zba_zbb_zbc_zbs_zkt_zvfh_zvkt_sscofpmf_sstc=
-_svinval_svnapot_svpbmt";
->>  			riscv,isa-base =3D "rv64i";
->>  			riscv,isa-extensions =3D "i", "m", "a", "f", "d", "c", "b", "v", "zi=
-cbom",
->> @@ -174,6 +182,8 @@ cpu_4: cpu@4 {
->>  			compatible =3D "spacemit,x60", "riscv";
->>  			device_type =3D "cpu";
->>  			reg =3D <4>;
->> +			clocks =3D <&syscon_apmu CLK_CPU_C1_CORE>;
->> +			operating-points-v2 =3D <&cluster1_opp_table>;
->>  			riscv,isa =3D "rv64imafdcbv_zicbom_zicbop_zicboz_zicntr_zicond_zicsr=
-_zifencei_zihintpause_zihpm_zfh_zba_zbb_zbc_zbs_zkt_zvfh_zvkt_sscofpmf_sstc=
-_svinval_svnapot_svpbmt";
->>  			riscv,isa-base =3D "rv64i";
->>  			riscv,isa-extensions =3D "i", "m", "a", "f", "d", "c", "b", "v", "zi=
-cbom",
->> @@ -204,6 +214,8 @@ cpu_5: cpu@5 {
->>  			compatible =3D "spacemit,x60", "riscv";
->>  			device_type =3D "cpu";
->>  			reg =3D <5>;
->> +			clocks =3D <&syscon_apmu CLK_CPU_C1_CORE>;
->> +			operating-points-v2 =3D <&cluster1_opp_table>;
->>  			riscv,isa =3D "rv64imafdcbv_zicbom_zicbop_zicboz_zicntr_zicond_zicsr=
-_zifencei_zihintpause_zihpm_zfh_zba_zbb_zbc_zbs_zkt_zvfh_zvkt_sscofpmf_sstc=
-_svinval_svnapot_svpbmt";
->>  			riscv,isa-base =3D "rv64i";
->>  			riscv,isa-extensions =3D "i", "m", "a", "f", "d", "c", "b", "v", "zi=
-cbom",
->> @@ -234,6 +246,8 @@ cpu_6: cpu@6 {
->>  			compatible =3D "spacemit,x60", "riscv";
->>  			device_type =3D "cpu";
->>  			reg =3D <6>;
->> +			clocks =3D <&syscon_apmu CLK_CPU_C1_CORE>;
->> +			operating-points-v2 =3D <&cluster1_opp_table>;
->>  			riscv,isa =3D "rv64imafdcbv_zicbom_zicbop_zicboz_zicntr_zicond_zicsr=
-_zifencei_zihintpause_zihpm_zfh_zba_zbb_zbc_zbs_zkt_zvfh_zvkt_sscofpmf_sstc=
-_svinval_svnapot_svpbmt";
->>  			riscv,isa-base =3D "rv64i";
->>  			riscv,isa-extensions =3D "i", "m", "a", "f", "d", "c", "b", "v", "zi=
-cbom",
->> @@ -264,6 +278,8 @@ cpu_7: cpu@7 {
->>  			compatible =3D "spacemit,x60", "riscv";
->>  			device_type =3D "cpu";
->>  			reg =3D <7>;
->> +			clocks =3D <&syscon_apmu CLK_CPU_C1_CORE>;
->> +			operating-points-v2 =3D <&cluster1_opp_table>;
->>  			riscv,isa =3D "rv64imafdcbv_zicbom_zicbop_zicboz_zicntr_zicond_zicsr=
-_zifencei_zihintpause_zihpm_zfh_zba_zbb_zbc_zbs_zkt_zvfh_zvkt_sscofpmf_sstc=
-_svinval_svnapot_svpbmt";
->>  			riscv,isa-base =3D "rv64i";
->>  			riscv,isa-extensions =3D "i", "m", "a", "f", "d", "c", "b", "v", "zi=
-cbom",
->> @@ -339,6 +355,76 @@ osc_32k: clock-32k {
->>  		};
->>  	};
->> =20
->> +	cluster0_opp_table: opp-table-cluster0 {
->> +		compatible =3D "operating-points-v2";
->> +		opp-shared;
->> +
->> +		opp-614400000 {
->> +			opp-hz =3D /bits/ 64 <614400000>;
->> +			opp-microvolt =3D <950000>;
->> +			clock-latency-ns =3D <200000>;
->> +		};
->> +
->> +		opp-819000000 {
->> +			opp-hz =3D /bits/ 64 <819000000>;
->> +			opp-microvolt =3D <950000>;
->> +			clock-latency-ns =3D <200000>;
->> +		};
->> +
->> +		opp-1000000000 {
->> +			opp-hz =3D /bits/ 64 <1000000000>;
->> +			opp-microvolt =3D <950000>;
->> +			clock-latency-ns =3D <200000>;
->> +		};
->> +
->> +		opp-1228800000 {
->> +			opp-hz =3D /bits/ 64 <1228800000>;
->> +			opp-microvolt =3D <950000>;
->> +			clock-latency-ns =3D <200000>;
->> +		};
->> +
->> +		opp-1600000000 {
->> +			opp-hz =3D /bits/ 64 <1600000000>;
->> +			opp-microvolt =3D <1050000>;
->> +			clock-latency-ns =3D <200000>;
->> +		};
->> +	};
->> +
->> +	cluster1_opp_table: opp-table-cluster1 {
->> +		compatible =3D "operating-points-v2";
->> +		opp-shared;
->> +
->> +		opp-614400000 {
->> +			opp-hz =3D /bits/ 64 <614400000>;
->> +			opp-microvolt =3D <950000>;
->> +			clock-latency-ns =3D <200000>;
->> +		};
->> +
->> +		opp-819000000 {
->> +			opp-hz =3D /bits/ 64 <819000000>;
->> +			opp-microvolt =3D <950000>;
->> +			clock-latency-ns =3D <200000>;
->> +		};
->> +
->> +		opp-1000000000 {
->> +			opp-hz =3D /bits/ 64 <1000000000>;
->> +			opp-microvolt =3D <950000>;
->> +			clock-latency-ns =3D <200000>;
->> +		};
->> +
->> +		opp-1228800000 {
->> +			opp-hz =3D /bits/ 64 <1228800000>;
->> +			opp-microvolt =3D <950000>;
->> +			clock-latency-ns =3D <200000>;
->> +		};
->> +
->> +		opp-1600000000 {
->> +			opp-hz =3D /bits/ 64 <1600000000>;
->> +			opp-microvolt =3D <1050000>;
->> +			clock-latency-ns =3D <200000>;
+>>  drivers/mfd/max77759.c       |  91 ++++++++++++++++++++--
+>>  include/linux/mfd/max77759.h | 176 ++++++++++++++++++++++++++++++++++++-------
+>>  2 files changed, 230 insertions(+), 37 deletions(-)
+> Does this patch have any dependents or dependencies?
 >
-> What is the initial voltage set by firmware before Linux boots? If it is =
-1.05V,
-> this is fine, but if the default is 950mV, then you cannot enable the OPP=
- table
-> in the SoC .dtsi file. Boards other than the BananaPi F3 are missing the
-> cpu-supply property, so they won't raise the CPU voltage before switching=
- to the
-> higher frequency. The usual solution is to put the OPP table (or at least=
- the
-> OPPs that require a higher voltage) in a separate .dtsi file, and only in=
-clude
-> that file from boards that provide the cpu-supply.
->
-> Regards,
-> Samuel
+This patch does not depend on any other patch.
 
-Thanks for the suggestion!
-I confirmed the firmware sets the initial voltage to 1.05V at the default b=
-oot
-frequency before any scaling occurs:
+The patch that depends on this one is:
+https://lore.kernel.org/all/20260224-max77759-charger-v8-5-eb86bd570e9c@google.com/
 
-~ # cat /sys/class/regulator/regulator.4/name
-buck1
-~ # cat /sys/class/regulator/regulator.4/microvolts
-1050000
 
-But I agree that moving the OPP tables to a separate .dtsi is a much safer
-and more robust approach for boards without cpu-supply.
-I will implement this in v2.
+Thanks,
 
-Best regards,
---=20
-Shuwei Wu
+Amit
+
+
 
