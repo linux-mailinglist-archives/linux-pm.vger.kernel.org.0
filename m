@@ -1,233 +1,180 @@
-Return-Path: <linux-pm+bounces-43953-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43954-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kCSsNWvermm/JQIAu9opvQ
-	(envelope-from <linux-pm+bounces-43953-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 15:51:23 +0100
+	id KF2LA3birmmoJgIAu9opvQ
+	(envelope-from <linux-pm+bounces-43954-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 16:08:38 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8059E23AEA4
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 15:51:23 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EF5823B4BA
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 16:08:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 820EF303A6C0
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 14:49:55 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 68F21305F4A6
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 15:01:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1383D5246;
-	Mon,  9 Mar 2026 14:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D568A3D4100;
+	Mon,  9 Mar 2026 15:01:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3sKnSn8Y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783E33B8D7B;
-	Mon,  9 Mar 2026 14:49:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773067795; cv=none; b=kGCFLkx5dl3TKo8JyvgumgUqcfgM7rHa0jsOFx94TuIiNFTALx8GFC5vqa2uObGMfyvxK4Ns0aK2b2G6NzGqLfIKZFEce7Zssj5mLGfgaJG7U1UHu8wPkUFh8sDuBE/BmQ/QG/MZ/6l/eKsWJ220rpDSPxvr2xt5MNdUlHnoisM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773067795; c=relaxed/simple;
-	bh=aY/nndyQ2qNi5ZjInb2yW37UH6h8yddkng1a0uSlcrE=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VSREEgjdHmHUy9DfPxBxCs3qz+YW9YWaaZHrTTNbxSNAkxB4OXVncZkqQKVPIBhuDt843RtQNZymhWYLL9Ue2a3zxT8C0hklltpQuxPUg8P6xnWSIpxkXKW/OY6XEi/+9Nw+p0Z0vQYVRhck5/7Eyk8n6YQEeGBdNge8ZJYz6HI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.83])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fV0KN4LXqzHnGfH;
-	Mon,  9 Mar 2026 22:49:44 +0800 (CST)
-Received: from dubpeml500005.china.huawei.com (unknown [7.214.145.207])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7C38140572;
-	Mon,  9 Mar 2026 22:49:48 +0800 (CST)
-Received: from localhost (10.203.177.15) by dubpeml500005.china.huawei.com
- (7.214.145.207) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 9 Mar
- 2026 14:49:46 +0000
-Date: Mon, 9 Mar 2026 14:49:45 +0000
-From: Jonathan Cameron <jonathan.cameron@huawei.com>
-To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-CC: <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, Ard Biesheuvel <ardb@kernel.org>, "Alison
- Schofield" <alison.schofield@intel.com>, Vishal Verma
-	<vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan Williams
-	<dan.j.williams@intel.com>, Yazen Ghannam <yazen.ghannam@amd.com>, "Dave
- Jiang" <dave.jiang@intel.com>, Davidlohr Bueso <dave@stgolabs.net>, "Matthew
- Wilcox" <willy@infradead.org>, Jan Kara <jack@suse.cz>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek
-	<pavel@kernel.org>, Li Ming <ming.li@zohomail.com>, Jeff Johnson
-	<jeff.johnson@oss.qualcomm.com>, Ying Huang <huang.ying.caritas@gmail.com>,
-	Yao Xingtao <yaoxt.fnst@fujitsu.com>, "Peter Zijlstra"
-	<peterz@infradead.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nathan Fontenot <nathan.fontenot@amd.com>, Terry Bowman
-	<terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>, Benjamin Cheatham
-	<benjamin.cheatham@amd.com>, Zhijian Li <lizhijian@fujitsu.com>, Borislav
- Petkov <bp@alien8.de>, Tomasz Wolski <tomasz.wolski@fujitsu.com>
-Subject: Re: [PATCH v6 7/9] dax: Add deferred-work helpers for dax_hmem and
- dax_cxl coordination
-Message-ID: <20260309144945.00006d98@huawei.com>
-In-Reply-To: <20260210064501.157591-8-Smita.KoralahalliChannabasappa@amd.com>
-References: <20260210064501.157591-1-Smita.KoralahalliChannabasappa@amd.com>
-	<20260210064501.157591-8-Smita.KoralahalliChannabasappa@amd.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8763B893B
+	for <linux-pm@vger.kernel.org>; Mon,  9 Mar 2026 15:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773068515; cv=pass; b=sec+sN5DElWR84gUtMDZOXOnXARWPrW72xG2ZtYc+hoAZdMID2f2Gy1pic49Vvfb8n4KtMncAh5Pq60izLS/y9IXjRtySkdDVzgMMwl1k8H1GO9XdzCy8+sW6vZ1EV+3djJvct6swZeIflMO30+CyplR7T+zWh+XoEfSicmuaeY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773068515; c=relaxed/simple;
+	bh=h7EtG2/RFdznJ5bMZa7pTtYgXQVo9msnCEtSwoMGrSA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VlipT8/V02DS6MySmil+yPK85bNdlovOp4mfjUo3iWi973XfYThktaNVcl4t05TE+wvTjLFCepDY/o3I4kLYLsVb3Sjarv1638cLXgIUoPnm2dtdvD0ep7K6aCw3IIVPdnOrLjSIsuU0ur8Rqis9J/2vdN//OuGyxwigTNOmcgc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3sKnSn8Y; arc=pass smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-509069a7a7fso879831cf.0
+        for <linux-pm@vger.kernel.org>; Mon, 09 Mar 2026 08:01:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773068513; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WVh2qqeuVDqjzG1qpIMqbazbfuMneGI1AT01Mt/NS09TA/hY1p09MvQHOGCnUvTJm4
+         aYt62C1BSQ8y7x7i+VUQYu9gQ0rX/nquMHvAVqG/5xSSx7eu8En/Ak0inuhtprgHGltA
+         9cR4rGkiGgSOtyIlFBPqN4XUS8aHoroB6hhrG2NOWufqyG3zFR45C2oA0SaH2BnVcysw
+         MsulozgOyRW17nCwOdOjXzL+OVriw5jcesTCnKkvN/0pb50JjILpp0h/cXe6Ikq1EV3b
+         YaMty1ib4FN5QdxJgkoowxPp5rTG3Mye3czupsWHuhONWHAXcIetCYRRNocHsyqOH+Hp
+         ghpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7wNihs39Jd5FXbkJdZd8OCVVLXOnq/532xtOBop5fKc=;
+        fh=BNhqLGSAw2r9vopT74OnjSWJhk5IwwZbEmrClba7/WE=;
+        b=OdtAOpNzXrfLV/lnR2BZm3Z4DXb3JYwd5Wu/tjxFw0c5ABkiLcq5t46Abi/NnAZHl9
+         5ObUehIOY120kYijDPO1FZ/FFhQbBjhmGk3yVTYyGjwDk8bPkRPkoJfqkTTvRBOIiUqi
+         pmOBvik1mJvhaZHuJGEg1MI89IstOBxv9Zj2eKhOi8Z+Jx7Jvq8iTW+twj0D9dfw81IB
+         FnYtYDfBAlY0Mg4xALMeuhpiMLMMpQ/dYjnZfo/2DoUEiyUT9DqW9nmf9pU8y4Rpg+3L
+         Xiz/lSiszREL78s48m2jTHfHc23wK4R8PJwZP6qmwdsEyQvL9yeiR4jicFM5BhkqtPc5
+         V6AQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773068513; x=1773673313; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7wNihs39Jd5FXbkJdZd8OCVVLXOnq/532xtOBop5fKc=;
+        b=3sKnSn8Yl/VHcMj3QjI7I+CF6SJAhrZhxwCb8jBeUKUgaoIW7sUHgoeUYJdvDkPxuC
+         cMOm2151tLbyxOqJleE6zmpCkRbO5ssHNtjwacX+s8LKI8nKz/9hsIvnzskr5H6AG/tj
+         UmEneFT3CMSREXPKlQv1Bj2xwMd59weVrV+uLla/VYJIwHStJZ6m4TdUBemjBL34pT7N
+         89prFirXkHZMMH8u+FeXt0oC14tSjt94OCvnRqCNBkPL9HJ2V+JF1NdID3TWH2sGNmei
+         cvmj9RHcUV+SqcrUUz008iMw1dNZpcFv62ic1zRIrsElKOspTnGLoTUezQSL5LnkYHbw
+         Cv1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773068513; x=1773673313;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7wNihs39Jd5FXbkJdZd8OCVVLXOnq/532xtOBop5fKc=;
+        b=TIpx08UHCQhMd0H4JASTAYTrRYRFrDK7R6WL7T811x/Jz4FPUdZuJUer0KXo2lxqHl
+         W04QL9YCjIgHQ7vT3ce11+ZjtEpmJ6bAJopTYM7Pzb8Z0WiGdKyAG7iL5x5JuzMbx1GE
+         fnf+FPXar9+xpb+p09fai5eg6vDbKL2ZACQpN/NLoTeTb8gvNbZCSt1kELCvAApFZ6LW
+         ttCyahli5B16+xraFHPbiy66C1+LuOMaUFaVmevDO5yNmGEdOWtOd/u90kw2shlzRuQ5
+         kM+zvd81L7AkxM8VvFXZxvSmhvmirghvuDEYrup6meW7umUH7lrktg+ImdHarlGz3ENS
+         kRdg==
+X-Forwarded-Encrypted: i=1; AJvYcCV+nk6wTvMYUbUL9mkqk5ayI56gL3iy8oIfhGADKDW/rjZ1jkeG8N4ukn5+ithcEWebAsE0MtKxwA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzExLtQA9M/je5TrPOlgbCmD4ERQkD+poLmykbkRgO3fU2UIIP0
+	w1C6jb+yUxDxyVSl3blwrIN6qefoFeuepUln7OLtADCJpAeQUwWxandwFiDnYKlFc1rNRmu4qe4
+	7lMywT7PbweXZMw5IJpgHINNaRl1Ff2LX2ViDLUKH
+X-Gm-Gg: ATEYQzzSnvcOpqmxstIkEH3rPfCj/H9yQp8t9wmGl+hi3FDQJeKJAl9ApCwT3fGAl45
+	dkuDuer0ncrdzPaL4elObuMEGRKcRRq94UkZenreGbO2/7wITJbm+Hdevx+P/1hQo5xjk/5qyc6
+	W5ohO8tUY1qFEg0lCmphRMEBzPJ7iN+8GwF4c7FSp3mayAgPLqJR0deYX7TL/OW+zDKD5byDfXG
+	bXGeQPRTYYMhY+3Xd70eIA/8k8ig1swJoqQOLN1jOzwbT43pQn2TylJI1SdYxJGT5Fch3i26xF7
+	8fDKW1ECtoZgFsqiw45qisGTibWEgIMjOMyAballcFvLcE0boarFXL/FtTY+Ds4MPpMZG2uy9IX
+	R4OaqWN6ze4MM4yQfxuA3Eivc
+X-Received: by 2002:ac8:5715:0:b0:501:19b9:42e9 with SMTP id
+ d75a77b69052e-50900e74842mr25555001cf.4.1773068512221; Mon, 09 Mar 2026
+ 08:01:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500011.china.huawei.com (7.191.174.215) To
- dubpeml500005.china.huawei.com (7.214.145.207)
-X-Rspamd-Queue-Id: 8059E23AEA4
+References: <20260309001250.192841-1-berto@igalia.com> <aa6uYoVKegcac2Kq@igalia.com>
+In-Reply-To: <aa6uYoVKegcac2Kq@igalia.com>
+From: Brian Geffon <bgeffon@google.com>
+Date: Mon, 9 Mar 2026 11:01:15 -0400
+X-Gm-Features: AaiRm51bJne4rROP3TY442ehb60lEM1a0fykgGPZBoPTa_bst6Nk_VgasAAnsDc
+Message-ID: <CADyq12z_mhjY9S1_jawX8UuviyYf-ozXn6Q6yB4dHxopD7JmTg@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: Drain trailing zero pages on userspace restore
+To: Alberto Garcia <berto@igalia.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 7EF5823B4BA
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.54 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,kernel.org,intel.com,amd.com,stgolabs.net,infradead.org,suse.cz,zohomail.com,oss.qualcomm.com,gmail.com,fujitsu.com,linuxfoundation.org,alien8.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[32];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-43953-lists,linux-pm=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43954-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jonathan.cameron@huawei.com,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.894];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_DKIM_NA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bgeffon@google.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
+	NEURAL_HAM(-0.00)[-0.964];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,amd.com:email]
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,mail.gmail.com:mid,igalia.com:email]
 X-Rspamd-Action: no action
 
-On Tue, 10 Feb 2026 06:44:59 +0000
-Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> wrote:
+On Mon, Mar 9, 2026 at 7:26=E2=80=AFAM Alberto Garcia <berto@igalia.com> wr=
+ote:
+>
+> On Mon, Mar 09, 2026 at 01:12:50AM +0100, Alberto Garcia wrote:
+> >       case SNAPSHOT_ATOMIC_RESTORE:
+> > +             /*
+> > +              * We need to call snapshot_write_next() one last time
+> > +              * before finalizing in order to process any trailing
+> > +              * zero pages.
+> > +              */
+> > +             error =3D snapshot_write_next(&data->handle);
+> > +             if (error < 0)
+> > +                     break;
+>
+> I realized that this patch assumes that userspace calls
+> SNAPSHOT_ATOMIC_RESTORE only after having written the full image,
+> but if that happens earlier I'm not sure that it's safe to call
+> snapshot_write_next().
+>
+> An alternative solution would be to do it at the beginning of
+> snapshot_write_finalize() if handle->cur > nr_meta_pages + 1.
 
-> Add helpers to register, queue and flush the deferred work.
-> 
-> These helpers allow dax_hmem to execute ownership resolution outside the
-> probe context before dax_cxl binds.
-> 
-> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+I think this makes sense, but if snapshot_write_next() returns
+PAGE_SIZE then we need to indicate some error (eg. -ENODATA) in that
+the kernel was still expecting another copy page.
 
-The sanity checks on valid inputs to me seem excessive for something
-that is intended to have a very narrow usecase. I'm also not sure it's
-harmful to just not bother with the parameter checking.
+Also it appears that the kernel restore path and the userspace restore
+path return two different error codes for !snapshot_image_loaded(),
+the former does -ENODATA and the latter -EPERM.
 
-Otherwise seems fine to me.
-
-> ---
->  drivers/dax/bus.c | 58 +++++++++++++++++++++++++++++++++++++++++++++++
->  drivers/dax/bus.h |  7 ++++++
->  2 files changed, 65 insertions(+)
-> 
-> diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
-> index 5f387feb95f0..92b88952ede1 100644
-> --- a/drivers/dax/bus.c
-> +++ b/drivers/dax/bus.c
-> @@ -25,6 +25,64 @@ DECLARE_RWSEM(dax_region_rwsem);
->   */
->  DECLARE_RWSEM(dax_dev_rwsem);
->  
-> +static DEFINE_MUTEX(dax_hmem_lock);
-> +static dax_hmem_deferred_fn hmem_deferred_fn;
-> +static void *dax_hmem_data;
-> +
-> +static void hmem_deferred_work(struct work_struct *work)
-> +{
-> +	dax_hmem_deferred_fn fn;
-> +	void *data;
-> +
-> +	scoped_guard(mutex, &dax_hmem_lock) {
-> +		fn = hmem_deferred_fn;
-> +		data = dax_hmem_data;
-> +	}
-> +
-> +	if (fn)
-> +		fn(data);
-> +}
-> +
-> +static DECLARE_WORK(dax_hmem_work, hmem_deferred_work);
-> +
-> +int dax_hmem_register_work(dax_hmem_deferred_fn fn, void *data)
-> +{
-> +	guard(mutex)(&dax_hmem_lock);
-> +
-> +	if (hmem_deferred_fn)
-> +		return -EINVAL;
-What happens if we drop the check and therefore need to return int
-from these + handle errors?
-
-The worst that happens is hmem_deferred_fn == NULL and we set the
-data (might also be NULL, we don't care).
-To me that looks harmless.
-
-> +
-> +	hmem_deferred_fn = fn;
-> +	dax_hmem_data = data;
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(dax_hmem_register_work);
-> +
-> +int dax_hmem_unregister_work(dax_hmem_deferred_fn fn, void *data)
-> +{
-> +	guard(mutex)(&dax_hmem_lock);
-> +
-> +	if (hmem_deferred_fn != fn || dax_hmem_data != data)
-> +		return -EINVAL;
-
-Do we need the sanity check?  I'd just unconditionally clear them
-both.
-
-> +
-> +	hmem_deferred_fn = NULL;
-> +	dax_hmem_data = NULL;
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(dax_hmem_unregister_work);
-> +
-> +void dax_hmem_queue_work(void)
-> +{
-> +	queue_work(system_long_wq, &dax_hmem_work);
-> +}
-> +EXPORT_SYMBOL_GPL(dax_hmem_queue_work);
-> +
-> +void dax_hmem_flush_work(void)
-> +{
-> +	flush_work(&dax_hmem_work);
-> +}
-> +EXPORT_SYMBOL_GPL(dax_hmem_flush_work);
-> +
->  #define DAX_NAME_LEN 30
->  struct dax_id {
->  	struct list_head list;
-> diff --git a/drivers/dax/bus.h b/drivers/dax/bus.h
-> index cbbf64443098..b58a88e8089c 100644
-> --- a/drivers/dax/bus.h
-> +++ b/drivers/dax/bus.h
-> @@ -41,6 +41,13 @@ struct dax_device_driver {
->  	void (*remove)(struct dev_dax *dev);
->  };
->  
-> +typedef void (*dax_hmem_deferred_fn)(void *data);
-> +
-> +int dax_hmem_register_work(dax_hmem_deferred_fn fn, void *data);
-> +int dax_hmem_unregister_work(dax_hmem_deferred_fn fn, void *data);
-> +void dax_hmem_queue_work(void);
-> +void dax_hmem_flush_work(void);
-> +
->  int __dax_driver_register(struct dax_device_driver *dax_drv,
->  		struct module *module, const char *mod_name);
->  #define dax_driver_register(driver) \
-
+>
+> If you think that's a better idea I can send v2 of the patch.
+>
+> Regards,
+>
+> Berto
 
