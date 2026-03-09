@@ -1,150 +1,201 @@
-Return-Path: <linux-pm+bounces-43928-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43929-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aLSMJHhyrmkCEgIAu9opvQ
-	(envelope-from <linux-pm+bounces-43928-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 08:10:48 +0100
+	id +PxeKel5rmm2FAIAu9opvQ
+	(envelope-from <linux-pm+bounces-43929-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 08:42:33 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03B1E234AAA
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 08:10:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA584234EC2
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 08:42:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 788E63037D56
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 07:10:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1968B3055DF6
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 07:39:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08072364959;
-	Mon,  9 Mar 2026 07:10:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BA8B366DB7;
+	Mon,  9 Mar 2026 07:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=temperror (0-bit key) header.d=dev.tdt.de header.i=@dev.tdt.de header.b="tN9kpjlo"
+	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="MofstRi3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout70.expurgate.net (mxout70.expurgate.net [91.198.224.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F4A718DF9D
-	for <linux-pm@vger.kernel.org>; Mon,  9 Mar 2026 07:10:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.198.224.70
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773040214; cv=none; b=NMt5GEDYJKoKJ05yO4C2HOrdoE6yORFATQsNkgfyZrRcJB2+QiOsxT2sWsfkeywv9LbWaqxn/cBN8go7PiRSKYJFuHNwsTrddP1o95cTCuCe6L2whNPyg97jh9HpZ24jYT6fu8mafkGFCW2jIZ5CXerbGMb6nU/iV+5rC/NsV1E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773040214; c=relaxed/simple;
-	bh=rXp1QS8moIqf607l9ilW8xjJYZWHhpzj0szdx0XiLqo=;
-	h=MIME-Version:Content-Type:Date:From:To:Cc:Subject:In-Reply-To:
-	 References:Message-ID; b=mjNtS6wrGVhf6WHEcMUf4L96EhBjG/bsvt7W48/C0hmfqNoJFJ1xs7kpRhoN1X5muXb4ovscAbd/GSGZzrdbpfNW3L1x5YOCwlXVl8wuTGF4KFBu9YccID7Hb4suSE8MXZ5RklZJN8WqVh23kUjhdWsrUebE0jZxBlbCKjKgwt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dev.tdt.de; spf=pass smtp.mailfrom=dev.tdt.de; dkim=temperror (0-bit key) header.d=dev.tdt.de header.i=@dev.tdt.de header.b=tN9kpjlo; arc=none smtp.client-ip=91.198.224.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dev.tdt.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dev.tdt.de
-Received: from [194.37.255.9] (helo=mxout.expurgate.net)
-	by relay.expurgate.net with smtp (Exim 4.92)
-	(envelope-from <prvs=5542c7fda1=ms@dev.tdt.de>)
-	id 1vzUUv-007aoX-6C; Mon, 09 Mar 2026 07:53:49 +0100
-Received: from [195.243.126.94] (helo=securemail.tdt.de)
-	by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ms@dev.tdt.de>)
-	id 1vzUUu-00GFJG-Ia; Mon, 09 Mar 2026 07:53:48 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dev.tdt.de;
-	s=z1-selector1; t=1773039224;
-	bh=rXp1QS8moIqf607l9ilW8xjJYZWHhpzj0szdx0XiLqo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=tN9kpjloDHZAc/5OxWBkcwGN6vBbOyZCNEonmfhGP6cNXxxE5eRXCTheinGrtRn/6
-	 mMUrXnkShH7jvMtSk2Il9RX0QhCEBxzcYtvwbK8DqqwJ1YRHCAw8WlQblg9mAlmkgn
-	 BQOjNRHqYlNQi44sBouI8GjIzj5FsnXLk2jDtsdwCbdTYviXRHgIrUTIg6O/upS11p
-	 z58y3MhWk31GiIeweXahZAI+WUvGq8CWgPcuNsHpEDpnM2eKie9EQlNMuvco53NPNP
-	 sWWOhcdQFRtBToY5oe+WD/3UR8xkMgJ1Ahyc/8Tcmi1dMLSqLnQ0xrfG7PIDGko38s
-	 WQWRUMCwBKuyw==
-Received: from securemail.tdt.de (localhost [127.0.0.1])
-	by securemail.tdt.de (Postfix) with ESMTP id 7DBF4240041;
-	Mon,  9 Mar 2026 07:53:44 +0100 (CET)
-Received: from mail.dev.tdt.de (unknown [10.2.4.42])
-	by securemail.tdt.de (Postfix) with ESMTP id 6495D240036;
-	Mon,  9 Mar 2026 07:53:44 +0100 (CET)
-Received: from mail.dev.tdt.de (localhost [IPv6:::1])
-	by mail.dev.tdt.de (Postfix) with ESMTP id 85AE423431;
-	Mon,  9 Mar 2026 07:53:40 +0100 (CET)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A42367F27
+	for <linux-pm@vger.kernel.org>; Mon,  9 Mar 2026 07:39:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773041961; cv=pass; b=BrE2oF22UBiZAWM+GPgH9YX/+EX+6Vg9QITe+vBCDI4VuEikadi7aXNI6Tq53iXjG6asQQDtou/TVwsn2dijkgvt7cySMniCtrKn5YoklbwIRfsbeuZ3hzOI0ZWjirTVCAeXzPgfdzlZACw1aPO/PprveuI91epKTodQBJpZr90=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773041961; c=relaxed/simple;
+	bh=QeN6GpIdj1+GFkHjKmwA1WMLMo+3lnYFbA/ivhvcUqE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kqILLpASlHFb/QffcUAKdYIA7XdhJrXZViI00rFnImg1onyuWgU1fUgh3PBuqWlKwLA4h+AaRQwIeOCoVdHgi3391FYYFUp/o6nnllvOobE12am/FjyjZkHcmdax7KWJJgprEbFPfSRfDx0H75YxEfgxZYymTNFi/GWhv7edu+I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=MofstRi3; arc=pass smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b966a7b1908so185850666b.1
+        for <linux-pm@vger.kernel.org>; Mon, 09 Mar 2026 00:39:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773041958; cv=none;
+        d=google.com; s=arc-20240605;
+        b=X36H4R+E/XcEj3mZZsaF8NcL4kiWntcQ26JtO3yNAGfh/1/rAVBfGuGP84xF2+wo83
+         Q0s6cGelOdq88whGLn/mU1GFw962U+Zv5kqyvz4slpVLMik1seg8QjpRufknbsa4SNYE
+         Tt0lgiXqAAEiv+Tm/ow/23gk8H/vDs44y8iKsY8p7dYYUrOagQ6Tp/O6R5r10XGfii4j
+         J+NtLV/lFUx4RAQIwqhA04dkyLmIadWtSvPZ94SCbrD25eXinUX8R6IaiBH6hWKEHeIP
+         hhDBI9L2J9cU/nq/h9Nsg1a4Yo41tZvoP9MX2KPxGYVvWjSHzAJ3rPpYobkLpuigJiQd
+         KYIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZZxQV4lJDzLHey1T0g/ZUdvj0+WObWIH2mF1XtFb9lI=;
+        fh=7n7mH1mr6hIKrb14HODCFXOwhIj//OaLSzXEUmdXPqE=;
+        b=dBYOZSp92S4zF/fagVPbSaRWK8hzZ4Q9EMG99sFa/TjAKeR3uZU46VYiaSWZf/D2ee
+         sBXwvkPptPIcYTs0E5hYQTCiaMFZJibLUQdVZGT6EQS0op8KFDQEHdtfAjNZCqT3cXkZ
+         GHEsVJjzZAsAooFvbiOu9+X+6qM5ojYIDFx+Ew6Wphb3vxRvGZo7MPwoHcLD9B7jm1CQ
+         FYZOpoZn+QIwfdHOkP44NFTkutvh1lO38I62nugeUUwQ2aoNy1ViyUgV9qlMSop9gHgE
+         g3pnX6uZnqpdcVULWFY6vboOkNo+1KTuOl4hUHuR6YOgzvKTon47XZkBdzLH0WKuyb5E
+         Hc+A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flipper.net; s=google; t=1773041958; x=1773646758; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZZxQV4lJDzLHey1T0g/ZUdvj0+WObWIH2mF1XtFb9lI=;
+        b=MofstRi3xZEecv4sJ9DYgAjCDV6SD99KcdA8dHw8EITCPPImilk6deTafpyCk2Qp9k
+         CvQUL6R4OV8BkD2/2mvtXz9KRARnIv76fzNvApPhtk1Y9coSvlAGmg85VD1mMEQO/Nyj
+         EDOmzTZK3w0OX+gbRuz72PLzSjrvB8WmqE/2KodLotXV8cDh4vSng8gypK0MsZcTV0xo
+         +WeWa6QxsYharQ6AYrc0CdAG5i9fcvNkDPvGcsT42cJJ7ZN72DlcTbmD2BTlYK5HINN5
+         9l8o/WjHXmkNV9FHHgqsQ+Zn3tKnNcjjQ0n6EAp0DRT3NJ0s9Qy0ACz8EmkqlKSBLOW6
+         v9Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773041958; x=1773646758;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ZZxQV4lJDzLHey1T0g/ZUdvj0+WObWIH2mF1XtFb9lI=;
+        b=jC5J5q/wy5yDUu5dyfl1psNViGoaJFgiELX1CUnAX692S15cEPqkUqEOMGRTiGMkVA
+         32JfatC9kOSQSE8QQIIORPcdPbwKsPbfoKPysiKm8f8PnaGGfvhwGzDNgOKdhfKnE0qB
+         fI7pipaMCqCpQM6DAfzZ8Do4PCq3Ufiqi+M+peL4sa8xXcwfKyez9lls5e04i8ByAQH2
+         Q5UakqA672fN48vfkfuryVsR8GQ3VvNXLq5aq9WoSrDxe8cpw1kQmj5gRfCjrFRjXi9Y
+         m9fHNMD6Q3KtQPZ6vYwGdEo7TWklBBMiMwyQo5yhfVxvoLqlVevN6R+deyzpcnlSJbKd
+         IrHw==
+X-Forwarded-Encrypted: i=1; AJvYcCXQJpRLruOhHzlyCdRKqrFWotB+ftB0liqTyMv935MUSy8Mua+C7nk6u+c1TZH2aUG9t2dnIMX1XQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVvukgH/Pg0PPNKdSFfZUOP686DutWl9KImqz7DXUJXSABtV2n
+	HHaqrMI4hj2MDydhyHGC+CrXGTapk7MShO7raIV5WKWIUz+2EWgnJBt7B5rVE0D0HXZt6KIDkip
+	e8tXF4Oq4hD8TJDpMWSexzE2UliDBHOh9+SslbMntMg==
+X-Gm-Gg: ATEYQzycq+xpIyWVrpjDuKMrC0qrb1sOC8NPbcvfHLK2Ug8sb78K3cH50+mxdqAX3re
+	RQhtqkELuJEPeBY878ryXp1jFThKbBfeliF8UmGhPYrYcZXfS6t6lAzM/9Gq/6t4zvJL/UEzSmM
+	Y3sHAYCOtsC00irxg2OBr3lvaLJeioVat9kq1oeY4TTNwp6ZmqDL1p2i29NGFrEcWSMI+ShzLju
+	l3UEQ2O4xWKjPezwuMBYdbJuQMLolW5dv3Blu/qeObnofpOyIkfdE/fdAI0NFkwYYh+Cdo8LH5/
+	jxXOevnFdUHKZg3BXg==
+X-Received: by 2002:a17:906:9f88:b0:b93:722b:f7c5 with SMTP id
+ a640c23a62f3a-b942df7eb6cmr627858666b.29.1773041958288; Mon, 09 Mar 2026
+ 00:39:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Date: Mon, 09 Mar 2026 07:53:40 +0100
-From: Martin Schiller <ms@dev.tdt.de>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Len Brown <lenb@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Florian Eckert <fe@dev.tdt.de>
-Subject: Re: [PATCH 0/2] x86/cpu: P-state support for Lightning Mountain
-Organization: TDT AG
-In-Reply-To: <CAJZ5v0jR0eVu2oCD+c0x9MERfYvdPfNi2T9YZrO9RLQf-+iH3A@mail.gmail.com>
-References: <20260306-cpufreq_lgm-v1-0-47f104aed7c2@dev.tdt.de>
- <CAJZ5v0jR0eVu2oCD+c0x9MERfYvdPfNi2T9YZrO9RLQf-+iH3A@mail.gmail.com>
-Message-ID: <3e828b47bacf84ca8d19a024ac71778c@dev.tdt.de>
-X-Sender: ms@dev.tdt.de
-User-Agent: Roundcube Webmail/1.3.17
+References: <20260303-bq25792-v1-0-e6e5e0033458@flipper.net>
+ <20260303-bq25792-v1-9-e6e5e0033458@flipper.net> <20260306141541.GP183676@google.com>
+In-Reply-To: <20260306141541.GP183676@google.com>
+From: Alexey Charkov <alchark@flipper.net>
+Date: Mon, 9 Mar 2026 11:39:10 +0400
+X-Gm-Features: AaiRm5104XhGOW-J_13frBQZh5T5BSocJtleW8XWylE3jcKvvEUsQUPIIi1o86U
+Message-ID: <CAKTNdwHq=XQmTwVwU6U0q4uqTx5dXd+0ET1EizQOVR8izo6FRA@mail.gmail.com>
+Subject: Re: [PATCH 09/11] mfd: bq257xx: Add BQ25792 support
+To: Lee Jones <lee@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Chris Morgan <macromorgan@hotmail.com>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-purgate-type: clean
-X-purgate: clean
-X-purgate-ID: 151534::1773039228-E651E769-73B51FFA/0/0
-X-Rspamd-Queue-Id: 03B1E234AAA
+X-Rspamd-Queue-Id: EA584234EC2
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[tdt.de,none];
-	R_DKIM_ALLOW(-0.20)[dev.tdt.de:s=z1-selector1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[flipper.net,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[flipper.net:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	DKIM_TRACE(0.00)[dev.tdt.de:+];
-	TAGGED_FROM(0.00)[bounces-43928-lists,linux-pm=lfdr.de];
-	HAS_ORG_HEADER(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43929-lists,linux-pm=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FREEMAIL_CC(0.00)[kernel.org,hotmail.com,gmail.com,vger.kernel.org,collabora.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,dev.tdt.de:dkim,dev.tdt.de:mid,tdt.de:email];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ms@dev.tdt.de,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.994];
-	TAGGED_RCPT(0.00)[linux-pm];
-	RCVD_COUNT_SEVEN(0.00)[8]
+	FROM_NEQ_ENVFROM(0.00)[alchark@flipper.net,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[flipper.net:+];
+	NEURAL_HAM(-0.00)[-0.991];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,mail.gmail.com:mid]
 X-Rspamd-Action: no action
 
-On 2026-03-06 18:59, Rafael J. Wysocki wrote:
-> On Fri, Mar 6, 2026 at 9:27=E2=80=AFAM Martin Schiller <ms@dev.tdt.de> =
-wrote:
->>=20
->> This patch set contains 2 commits to get P-state support for Intel /
->> MaxLinear Lightning Mountain. The first adds the needed code to the
->> intel_pstate driver. The second adds a workaround to the x86/cpu
->> subsystem to enable EIST on all cpus.
->=20
-> Can you please combine the patches?
->=20
-> Or does the first one work just fine without the second one?
+On Fri, Mar 6, 2026 at 6:15=E2=80=AFPM Lee Jones <lee@kernel.org> wrote:
+>
+> On Tue, 03 Mar 2026, Alexey Charkov wrote:
+>
+> > Add register definitions and a new 'type' enum to be passed in MFD
+> > platform data to support the BQ25792, which is a newer variant of the
+> > BQ257xx family.
+> >
+> > BQ25792 shares similar logic of operation with the already supported
+> > BQ25703A but has a completely different register map and different
+> > electrical constraints.
+> >
+> > Signed-off-by: Alexey Charkov <alchark@flipper.net>
+> > ---
+> >  drivers/mfd/bq257xx.c       |  60 ++++++-
+> >  include/linux/mfd/bq257xx.h | 417 ++++++++++++++++++++++++++++++++++++=
+++++++++
+> >  2 files changed, 472 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/mfd/bq257xx.c b/drivers/mfd/bq257xx.c
+> > index e9d49dac0a16..a6776c8c94f2 100644
+> > --- a/drivers/mfd/bq257xx.c
+> > +++ b/drivers/mfd/bq257xx.c
 
-Well, the first patch can basically be applied without the second one,
-but then frequency stepping will only work on the first cpu core.
+[...]
 
-I split the two changes because they apply to different parts of the
-kernel sources.
+> >  static int bq257xx_probe(struct i2c_client *client)
+> >  {
+> > +     const struct bq257xx_match_data *md =3D device_get_match_data(&cl=
+ient->dev);
+> > +     const struct mfd_cell cells[] =3D {
+> > +             MFD_CELL_BASIC("bq257xx-regulator", NULL, &md->plat, size=
+of(md->plat), 0),
+> > +             MFD_CELL_BASIC("bq257xx-charger", NULL, &md->plat, sizeof=
+(md->plat), 0),
+>
+> Please keep these out of the functions.
+>
+> IOW, please put them back where you found them.
 
-But you're probably right, and it makes sense to combine the two
-patches.
+Thanks Lee, will address in v3.
 
+Out of curiosity, are there lifecycle implications here, or is it more
+of a convention to keep them out of functions? I've been thinking
+that, given they are only accessed during the initial probe, it would
+be neat to keep them const and initialize once, when the matched
+variant is known. It works in my testing, but I can't vouch I've put
+it through every possible corner case, especially various
+built-in/module combinations or probe deferrals.
 
-BTW: The original code from the MaxLinear SDK enables EIST in the
-intel_pstate driver, but I don't think that's the right place for it.
+Best regards,
+Alexey
 
