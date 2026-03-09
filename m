@@ -1,261 +1,240 @@
-Return-Path: <linux-pm+bounces-43944-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43945-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oCVBOsPArmmRIgIAu9opvQ
-	(envelope-from <linux-pm+bounces-43944-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 13:44:51 +0100
+	id gGdIIDnCrmmRIgIAu9opvQ
+	(envelope-from <linux-pm+bounces-43945-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 13:51:05 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2178D239120
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 13:44:51 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CBBA2392CE
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 13:51:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9FC0E3019FCB
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 12:32:48 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B36C53001F8D
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 12:44:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23F173B3C18;
-	Mon,  9 Mar 2026 12:32:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FCB23A900B;
+	Mon,  9 Mar 2026 12:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ki33jdWM"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gWmicFp4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A905D3B3BE2
-	for <linux-pm@vger.kernel.org>; Mon,  9 Mar 2026 12:32:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1080738B7AB;
+	Mon,  9 Mar 2026 12:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773059563; cv=none; b=VGxeIGM1H951By/kvVH6WhywcAxkmVCR+cnlsoXAfd+meXsfCfw72R0Xk+yxwOXW/MdgCO+A4EnKxyRkkJXU6vScAH3vt9+pf9tZCGr/SyiXl9Lci2+dwlInu4mZDB2Fh9YuJmqUgZZsX0vlx1f8rbh2260Ub6Rvt2mfa7GL/ao=
+	t=1773060268; cv=none; b=MLyAfuhaMukMpPODUAEA7mzX9tVZ6W7s9FkL05GGZzrB+O8PVgVjwHEW6/nIcm1nExxC+AT6D6GwzSnZWXAztx+NEJA9PhG9KuX3uf5pJ1FDHG+l3GFaY5wpZPGqmD5+Uxdr2fH3I65RoKdjIW0B4R+aUOGTbs2OlvWpgYiogQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773059563; c=relaxed/simple;
-	bh=0t9PL769plo69GiPNoeP8XmsLvwzogYcoHd0DNiVT7M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b+U/zDHvz7HYG9JvIqjviAlCHKYp6Iq7H006RFYzsFfFetGm+SZQ2V7jM5XKk/3nHNS0noMnlH0OpeN2SV0l/ZqT+Wilq0VQG5WAK7dUSDWyBA3LG4uctLboAM6wusFfvWB/mOUdblHt6jPlL1FCRD6m5b1XFQs0IPLRhCbp2PE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ki33jdWM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE3AC4AF09
-	for <linux-pm@vger.kernel.org>; Mon,  9 Mar 2026 12:32:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773059563;
-	bh=0t9PL769plo69GiPNoeP8XmsLvwzogYcoHd0DNiVT7M=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ki33jdWM8JX+s5hiIJCTvjNgcYmQhNXLAseLSupj6jZq3MrPSLUyuEkfzUMZNXies
-	 fnRZ8Q8goGz18osoVYefFD/CwLvdSbzuS5PCDOwS637JyCqHG689uT72NlFaEzPK/P
-	 9oAMN/HksOCs81xBVOQinKdzR6M5skyppZPFY8tYL+dc/pIVBUNs6PA8acVLgDENgw
-	 frtRdejtHbitnvxUM+hfo+ay75n833FY3qU8yijT/+ZqkCgxUtB3ZFtyWjtxnpayBS
-	 hPcwicsRDR9gvvU+/wSElnKhjeGlrED3vyzUYzIEp/RVTRGFxOwDZjhypeuxs4GCdX
-	 2RuyQg80OpUSA==
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-67ba58c0220so1123383eaf.0
-        for <linux-pm@vger.kernel.org>; Mon, 09 Mar 2026 05:32:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUgZhUkprltzKB8vkD+4MCF5uNqFG19v0NZ7EkbfbXt7Qtf3JJOYif7qxyYDvVb6YocWSxZSEQ6Rg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/EdoXlahW+gdBu0BkSACMbr6M8qjDXdu2Lqk2y8F3EFkYqtDG
-	J0fdHyxvK8jc8ycBEpBTv1dO4dqmcWlf0gnW5w099Az1nZrKxW/VXa2lz4yH8NcB98OjdEjRKLk
-	F4ML3f727ml7DkvU3MCjv08JWY+vIePc=
-X-Received: by 2002:a05:6820:178b:b0:67b:abc9:9c7a with SMTP id
- 006d021491bc7-67babc9ab2cmr3935314eaf.14.1773059561833; Mon, 09 Mar 2026
- 05:32:41 -0700 (PDT)
+	s=arc-20240116; t=1773060268; c=relaxed/simple;
+	bh=fq652Rvi77S5uemnWQ3EvcHvuY1ulZFhUvcc5f+vdfQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=t7vmxoLaTPAFhKO5nA9WsAUSu1O9kffMsqJPeDbxhocslJMU4MXXtBCnYrxvkNPc3CZhuSGWcgsEb9ZhfvpMN5O6r0d1yhPNAFU5YZHBd9HEZnGzp5i6+7eClprbcXqZjQxdOjjfIxCO+Bjkm9D3L48WqAMUUvfnFR0dReSb2/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gWmicFp4; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 629CWNFA512979;
+	Mon, 9 Mar 2026 12:44:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=QiqoG4
+	BC0uPELLC3dEq1E9PYw3Gkjn1RjSkdWrdOp8A=; b=gWmicFp4PvopN4RwYkuEB6
+	AmIVSswA9Xfrn1TXQVnJxoZgdNLZQ7GMBQIw0o915pzxNIa3LSeNha3mSzA22RJR
+	u47KcH1TGTui42mX6zM0akHwUTXWK7PzeTaIGqX/25vfslzN3Gw4Vq9SI609QWQr
+	FzPfv1M23xZXl5Y5eTZPK14Q+j0KZf2DvacZJISQgYz77+XS/tCI4znJAOYQvqsW
+	yl7I4Rv/3PLif4OwTzAlHVP45BltSicc6bjvNYFmiP23UW/keA05wcJC/CF5wL0W
+	VXdQE5Hytqn67ME7eVJdpUWqs5GysKoUZ9IAyk4X1UHDQTDKidh1bkP7NFCV7deQ
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4crd1me9ba-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Mar 2026 12:44:13 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6298iJXa029359;
+	Mon, 9 Mar 2026 12:44:13 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4csp6uhjhv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Mar 2026 12:44:13 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 629CiBma53936452
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 9 Mar 2026 12:44:11 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5233F20043;
+	Mon,  9 Mar 2026 12:44:11 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A3A1B20040;
+	Mon,  9 Mar 2026 12:44:08 +0000 (GMT)
+Received: from aboo.ibm.com (unknown [9.43.43.220])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  9 Mar 2026 12:44:08 +0000 (GMT)
+Message-ID: <76613552dbe7e7d82100edb06225069964f13014.camel@linux.ibm.com>
+Subject: Re: [PATCH v1] sched: idle: Make skipping governor callbacks more
+ consistent
+From: Aboorva Devarajan <aboorvad@linux.ibm.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM
+ <linux-pm@vger.kernel.org>
+Cc: Qais Yousef <qyousef@layalina.io>,
+        Christian Loehle
+	 <christian.loehle@arm.com>,
+        Thomas Gleixner <tglx@kernel.org>,
+        LKML
+	 <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker
+	 <frederic@kernel.org>
+Date: Mon, 09 Mar 2026 18:14:07 +0530
+In-Reply-To: <12857700.O9o76ZdvQC@rafael.j.wysocki>
+References: <20260301191959.406218221@kernel.org>
+	 <CAJZ5v0h-bGU34d9OnhYqdzz+5UiKV1rBEB9NS-TL4=sK2jf-LQ@mail.gmail.com>
+	 <20260304030306.uk5c63xw4oqvjffb@airbuntu>
+	 <12857700.O9o76ZdvQC@rafael.j.wysocki>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260210115458.3493646-1-zhenglifeng1@huawei.com> <javy6tllyw7pcnri3s6s2gnpv3kewe2b4zkyoz3vj3jzmfu6c5@nikhlydadvcc>
-In-Reply-To: <javy6tllyw7pcnri3s6s2gnpv3kewe2b4zkyoz3vj3jzmfu6c5@nikhlydadvcc>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 9 Mar 2026 13:32:30 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0h1FHH0Cvn0CQ8gMk9Zzt=bcA-RUfya4hYH4Em3nDzm7w@mail.gmail.com>
-X-Gm-Features: AaiRm50ucsOkpJ1e7GgfyGiHSA_clP0ot-KQtQ-ueNeQWt6fpV4UZpOZM3Oo61s
-Message-ID: <CAJZ5v0h1FHH0Cvn0CQ8gMk9Zzt=bcA-RUfya4hYH4Em3nDzm7w@mail.gmail.com>
-Subject: Re: [PATCH 0/2] cpufreq: governor: Apply limits with target_freq
- instead of policy->cur
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: rafael@kernel.org, Lifeng Zheng <zhenglifeng1@huawei.com>, mingo@redhat.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, vincent.guittot@linaro.org, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
-	mgorman@suse.de, vschneid@redhat.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linuxarm@huawei.com, 
-	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com, lihuisong@huawei.com, 
-	yubowen8@huawei.com, zhangpengjie2@huawei.com, wangzhi12@huawei.com, 
-	linhongye@h-partners.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 2178D239120
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=ds3Wylg4 c=1 sm=1 tr=0 ts=69aec09e cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=QyXUC8HyAAAA:8
+ a=VnNF1IyMAAAA:8 a=D-ap4ctOF62sSQj1xwMA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA5MDExNSBTYWx0ZWRfX4QrExJTIQKM3
+ cfbNtzH0wbzOS/T1x0wh3aB/IEtiac7puOFa4dYye6Y0kzvijK6Hwrm8ors5sXgzc19N8nB9g8p
+ R5jzWYInsh3ocolNfmJ3tvCuDSqujF/bGUDZeSIFIQPb7HBFRYm518478Ez3grcFrjJ9MszyBKC
+ lhfBf3+qdbhqrAK3J6Qi7C1weP4i8Pit+vj4PNna3RLzn9pOwLAVOiG3SJqMApiONWAzCc+6lRc
+ xvF3h8J2VUwm6qjpKmoRx5PeE5+9l5Id9oa3Gd7BMKVfpqT4SbNEZiaoZ58QrEu/lvZ+axXX1jT
+ wxhqINl7xJLwbHvIO2EhaQDGBeKUWpF4xTNW8et+EfUthrErguFxbPhz+k9mtrol2djs4X1IWzG
+ MKrEe8dlmY/9O4Fh8dyfTiPTO6S7gLi0076t/W1FBN9Tc5KPuNJ9AtJrZzz5/bVdtEryxR/FQ7u
+ UFhC2oKfaMH28TAUHQQ==
+X-Proofpoint-GUID: QkRYEINMspQ1OUxXgRVq1C8rV2GoF0mY
+X-Proofpoint-ORIG-GUID: QkRYEINMspQ1OUxXgRVq1C8rV2GoF0mY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-09_03,2026-03-06_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 phishscore=0 clxscore=1011 impostorscore=0 suspectscore=0
+ priorityscore=1501 lowpriorityscore=0 malwarescore=0 adultscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603090115
+X-Rspamd-Queue-Id: 9CBBA2392CE
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43944-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_TWELVE(0.00)[22];
-	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[ibm.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_ALL(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43945-lists,linux-pm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,linux.ibm.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo];
 	TAGGED_RCPT(0.00)[linux-pm];
-	NEURAL_HAM(-0.00)[-0.944];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,linaro.org:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	FROM_NEQ_ENVFROM(0.00)[aboorvad@linux.ibm.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	PRECEDENCE_BULK(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.960];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_COUNT_SEVEN(0.00)[11]
 X-Rspamd-Action: no action
 
-On Mon, Mar 9, 2026 at 9:27=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
-g> wrote:
->
-> On 10-02-26, 19:54, Lifeng Zheng wrote:
-> > The motivation for this patchset cames from a test on our platform:
-> >
-> > With conservative governor and some pressure on CPU, the frequency rapi=
-dly
-> > reach the max supported frequency, such as 2GHz.
-> >
-> > Later, some frequency division strategies on our platform were triggere=
-d
-> > and the actual frequency become 500MHz -- 1/4 of the OS distribution
-> > frequency.
-> >
-> > At that time, if someone excecutes 'cat cpuinfo_cur_freq', the actual
-> > frequency will become 250MHz -- 1/4 of the min supported frequency.
-> >
-> > After the platform recovering from the frequency division, the frequenc=
-y
-> > will stay on 1GHz, until the pressure disappear.
-> >
-> > The reason this happens is that in cpufreq_verify_current_freq(), if
-> > policy->cur !=3D new_freq, policy->update will be queued, which will
-> > ultimately lead to a call to cpufreq_policy_apply_limits(), and update =
-the
-> > target frequency to policy->min. And then in cs_dbs_update(), since the
-> > pressure never vanish, it will always hit the following branches:
-> >
-> >       if (load > dbs_data->up_threshold) {
-> >               dbs_info->down_skip =3D 0;
-> >
-> >               /* if we are already at full speed then break out early *=
-/
-> >               if (requested_freq =3D=3D policy->max)
-> >                       goto out;
-> >
-> > Therefore, the target frequency will always remain at the lowest freque=
-ncy.
-> >
-> > The branching conditions in cs_dbs_update() may not be strict enough, b=
-ut
-> > the root cause of this problem is that the target frequency was updated
-> > when querying cpuinfo_cur_freq. For ondemand and schedutil governor,
-> > although the frequency will not always remain at the lowest level witho=
-ut
-> > rising, will still be min_freq in a short period of time when the query
-> > action occurs.
-> >
-> > Using the freq requested by the governor to decide whether to update th=
+On Sat, 2026-03-07 at 17:12 +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>=20
+> If the cpuidle governor .select() callback is skipped because there
+> is only one idle state in the cpuidle driver, the .reflect() callback
+> should be skipped as well, at least for consistency (if not for
+> correctness), so do it.
+>=20
+> Fixes: e5c9ffc6ae1b ("cpuidle: Skip governor when only one idle state
+> is available")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> =C2=A0drivers/cpuidle/cpuidle.c |=C2=A0=C2=A0 10 ----------
+> =C2=A0kernel/sched/idle.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=
+=A0 11 ++++++++++-
+> =C2=A02 files changed, 10 insertions(+), 11 deletions(-)
+>=20
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -359,16 +359,6 @@ noinstr int cpuidle_enter_state(struct c
+> =C2=A0int cpuidle_select(struct cpuidle_driver *drv, struct cpuidle_devic=
 e
-> > target frequency is more reasonable in cpufreq_policy_apply_limits().
->
-> I think I understand the problem now. We are tracking the current
-> frequency state via two cached values, policy->cur and requested_freq
-> and a mismatch (because of your hardware specific quirks/features)
-> between them is making things tricky.
->
-> Rafael, will this break anything we can think about ?
-
-I can't recall, but the new code is simpler, so unless anyone has a
-particular heartburn with it, go for it.
-
-> diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpu=
-freq_conservative.c
-> index e0e847764511..c69577e4f941 100644
-> --- a/drivers/cpufreq/cpufreq_conservative.c
-> +++ b/drivers/cpufreq/cpufreq_conservative.c
-> @@ -14,7 +14,6 @@
->  struct cs_policy_dbs_info {
->         struct policy_dbs_info policy_dbs;
->         unsigned int down_skip;
-> -       unsigned int requested_freq;
->  };
->
->  static inline struct cs_policy_dbs_info *to_dbs_info(struct policy_dbs_i=
-nfo *policy_dbs)
-> @@ -59,10 +58,10 @@ static unsigned int cs_dbs_update(struct cpufreq_poli=
-cy *policy)
->  {
->         struct policy_dbs_info *policy_dbs =3D policy->governor_data;
->         struct cs_policy_dbs_info *dbs_info =3D to_dbs_info(policy_dbs);
-> -       unsigned int requested_freq =3D dbs_info->requested_freq;
->         struct dbs_data *dbs_data =3D policy_dbs->dbs_data;
->         struct cs_dbs_tuners *cs_tuners =3D dbs_data->tuners;
->         unsigned int load =3D dbs_update(policy);
-> +       unsigned int requested_freq =3D policy->cur;
->         unsigned int freq_step;
->
->         /*
-> @@ -72,16 +71,6 @@ static unsigned int cs_dbs_update(struct cpufreq_polic=
-y *policy)
->         if (cs_tuners->freq_step =3D=3D 0)
->                 goto out;
->
-> -       /*
-> -        * If requested_freq is out of range, it is likely that the limit=
-s
-> -        * changed in the meantime, so fall back to current frequency in =
-that
-> -        * case.
-> -        */
-> -       if (requested_freq > policy->max || requested_freq < policy->min)=
- {
-> -               requested_freq =3D policy->cur;
-> -               dbs_info->requested_freq =3D requested_freq;
-> -       }
+> *dev,
+> =C2=A0		=C2=A0=C2=A0 bool *stop_tick)
+> =C2=A0{
+> -	/*
+> -	 * If there is only a single idle state (or none), there is
+> nothing
+> -	 * meaningful for the governor to choose. Skip the governor
+> and
+> -	 * always use state 0 with the tick running.
+> -	 */
+> -	if (drv->state_count <=3D 1) {
+> -		*stop_tick =3D false;
+> -		return 0;
+> -	}
 > -
->         freq_step =3D get_freq_step(cs_tuners, policy);
->
->         /*
-> @@ -113,7 +102,6 @@ static unsigned int cs_dbs_update(struct cpufreq_poli=
-cy *policy)
->
->                 __cpufreq_driver_target(policy, requested_freq,
->                                         CPUFREQ_RELATION_HE);
-> -               dbs_info->requested_freq =3D requested_freq;
->                 goto out;
->         }
->
-> @@ -137,7 +125,6 @@ static unsigned int cs_dbs_update(struct cpufreq_poli=
-cy *policy)
->
->                 __cpufreq_driver_target(policy, requested_freq,
->                                         CPUFREQ_RELATION_LE);
-> -               dbs_info->requested_freq =3D requested_freq;
->         }
->
->   out:
-> @@ -310,7 +297,6 @@ static void cs_start(struct cpufreq_policy *policy)
->         struct cs_policy_dbs_info *dbs_info =3D to_dbs_info(policy->gover=
-nor_data);
->
->         dbs_info->down_skip =3D 0;
-> -       dbs_info->requested_freq =3D policy->cur;
->  }
->
->  static struct dbs_governor cs_governor =3D {
->
-> -------------------------8<-------------------------
->
-> This always pick the next freq based on policy->cur instead of the
-> real last request. The two can differ if:
-> - the hardware plays with current frequency, as is the case here.
-> - or the limits change and that changes the current frequency (in
->   which case we will be at policy->min/max anyway).
->
-> --
-> viresh
+> =C2=A0	return cpuidle_curr_governor->select(drv, dev, stop_tick);
+> =C2=A0}
+> =C2=A0
+> --- a/kernel/sched/idle.c
+> +++ b/kernel/sched/idle.c
+> @@ -221,7 +221,7 @@ static void cpuidle_idle_call(void)
+> =C2=A0
+> =C2=A0		next_state =3D cpuidle_find_deepest_state(drv, dev,
+> max_latency_ns);
+> =C2=A0		call_cpuidle(drv, dev, next_state);
+> -	} else {
+> +	} else if (drv->state_count > 1) {
+> =C2=A0		bool stop_tick =3D true;
+> =C2=A0
+> =C2=A0		/*
+> @@ -239,6 +239,15 @@ static void cpuidle_idle_call(void)
+> =C2=A0		 * Give the governor an opportunity to reflect on
+> the outcome
+> =C2=A0		 */
+> =C2=A0		cpuidle_reflect(dev, entered_state);
+> +	} else {
+> +		tick_nohz_idle_retain_tick();
+> +
+> +		/*
+> +		 * If there is only a single idle state (or none),
+> there is
+> +		 * nothing meaningful for the governor to choose.=C2=A0
+> Skip the
+> +		 * governor and always use state 0.
+> +		 */
+> +		call_cpuidle(drv, dev, 0);
+> =C2=A0	}
+> =C2=A0
+> =C2=A0exit_idle:
+>=20
+>=20
+
+Hi Rafael,
+
+Thanks for fixing this, sorry I missed it earlier.
+
+Reviewed-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+
+Regards,
+Aboorva
 
