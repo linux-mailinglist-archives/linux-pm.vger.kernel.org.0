@@ -1,79 +1,83 @@
-Return-Path: <linux-pm+bounces-43957-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43958-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yMuaKx3trmnGKQIAu9opvQ
-	(envelope-from <linux-pm+bounces-43957-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 16:54:05 +0100
+	id 6LI5A3LvrmlcKgIAu9opvQ
+	(envelope-from <linux-pm+bounces-43958-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 17:04:02 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E4F123C2A3
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 16:54:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DE7023C636
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 17:04:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E8D3330A7245
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 15:49:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1035B30DFF02
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 15:57:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4985E3DFC85;
-	Mon,  9 Mar 2026 15:48:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECAA93DA7DA;
+	Mon,  9 Mar 2026 15:57:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SdGYZDhX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b/Lp6mwm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1FE23DAC13;
-	Mon,  9 Mar 2026 15:48:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2DF3DA5A7;
+	Mon,  9 Mar 2026 15:57:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773071336; cv=none; b=ZnPXopDSdESiQOaGIyxSEAQpjTMG9jOgoyi4XfAXnAJzOyUwerl8HI0Pyzoz8VF4sAGQB5cBd8D152MLsTdTHEkxR9s1mEMRsjAZ+8bTIsJgR1fgE1OzMamTV8R7/oweshw1TMRhKztjKuEbVCVPmJtwwAWY2GcnDuPtELGi/nk=
+	t=1773071835; cv=none; b=tlaNIJtWxjCEz+OX9c6oNQHQFKuf7ihPbjp1B01LUrmM4C/KJlbTPp12D2GSYr0v6cePTBxeyxp1LcI3xtYzlzMxQs26mTWzzPzTHxg+ji9Y2CPKHZo93jCfaoHUCfkNreqNC76z2WoAL12Eqpn5zXgvK942puznvC0CGuWvImo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773071336; c=relaxed/simple;
-	bh=lubI6HsFSbUUMRyFA3LiWu77g1i3512iwiTFbEzKz+M=;
+	s=arc-20240116; t=1773071835; c=relaxed/simple;
+	bh=WkP8D/+DmWa2bPrWBRz+P4aEOSxGB9ZAWYEQjedEVU4=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=U3ErlEasV9ftEtTKW9/kyefk13mHiLITHl8hA8DShJjbw2gEGJLJgtln5p1rc/aL7PMJ+nWKCLWB7P33IybJCRjC0onW2bi3m+8XQhgKHeUzzrbii6q4XR7klq2n8OAw3fQorkVFzCt89VN+Nw+AH7PzBe2t+gsdtDkmS/dvbi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SdGYZDhX; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:MIME-Version; b=HzMuq5sjNmeAGBp7rxmBeQ9rxTUQtlxOwYziSB0ztyfs8A4Nyke0qgir+rLDfeUZEUfd+O3+UAzaQbJ/YanMxhNlA2t8zGfNwb2APw/hllc3bRrpBEq5gYeKWoiPDEmgD+ThAR5/rVzuzMRXG8vgfBJOnNic/RajKiGk2a2PlDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b/Lp6mwm; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773071334; x=1804607334;
+  t=1773071835; x=1804607835;
   h=message-id:subject:from:to:cc:date:in-reply-to:
    references:content-transfer-encoding:mime-version;
-  bh=lubI6HsFSbUUMRyFA3LiWu77g1i3512iwiTFbEzKz+M=;
-  b=SdGYZDhXZ+SLgv7o6WjHKZ4emDmnJMBzdPox1vePOe0/F8DQcPMlTPC3
-   Eq+9/elBgds8DFc79XUf91TRNGG95sl+sWIiuFOf6VHMFY1qo+7yWkzBX
-   5vcTIdhu8EJXkHTnvdqZSawbds72aKjeKKZnkTyOFDs2JcveHSATz6rtR
-   S+qJvqstkafzzLWtKlMR6soOnD9sQ+k6tV9xI4rjV1PZXqSza0SRiQIFb
-   aHhsV0fDhujQKzaM5aF7qdY54TfCAIByXeilTI5MJrjele06E4wDgfg+/
-   +Rd2hawkEC37sRemZFTD1I3uv82CALZf4AdfFfEL5e9nGOhQLyrqG/R8R
+  bh=WkP8D/+DmWa2bPrWBRz+P4aEOSxGB9ZAWYEQjedEVU4=;
+  b=b/Lp6mwmTszZuiJeapqBRQceblC0fTW6Q1fXTb6SV+FlZAB6C5CTYcqg
+   maLD9MtoJb43CJ6DWUWop0DlQVRap94aMSU3Ey0RYCh0hpFSIEd9lsG9d
+   n7Pj0KdRciDn2dy4Pi2QWHoZfEOBOHHorEcLovCvRPAhuPum6AAWMVDYk
+   zeJzBBXc4Ghd22MkzFwCe1Z6o4CSKAL/+G4V1F7PCyilMy6TgaOIonvN6
+   TENAaa2ctjXWMgZ+cUeEThRkzJ5xsz9tFq4O0EQE7cZY6Ocal/aUAVdli
+   zbnw6PrPLoSVSfetLn4/+Lsfa0xCX2qilWUFtvyCo1QL6Pw0crJhfBebR
    A==;
-X-CSE-ConnectionGUID: WabmDERRRQee2otZSrg3Pg==
-X-CSE-MsgGUID: AoPEXgzJQMGJIRGCPp6zAw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11723"; a="84425744"
+X-CSE-ConnectionGUID: SWs17jaHQsmUBziJvh7vRQ==
+X-CSE-MsgGUID: dU+iBjeVR+GDWbzeGYPhEA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11723"; a="73977314"
 X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
-   d="scan'208";a="84425744"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 08:48:54 -0700
-X-CSE-ConnectionGUID: jvQkVSMiTF27gDoJ7/l2rQ==
-X-CSE-MsgGUID: EwIyU1wBRNmJ/xU4TE4YEw==
+   d="scan'208";a="73977314"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 08:57:13 -0700
+X-CSE-ConnectionGUID: Jlxx9/t9T9OUujXdfVpxRA==
+X-CSE-MsgGUID: ZlRHbHJETdqLt8KLfzsrIw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
-   d="scan'208";a="219767903"
+   d="scan'208";a="219937234"
 Received: from spandruv-desk2.jf.intel.com ([10.88.27.176])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 08:48:54 -0700
-Message-ID: <80e78e2b4d1ef4158f0065b5e1fdb0dd5ef754f9.camel@linux.intel.com>
-Subject: Re: [PATCH] thermal: intel: int340x: Read DDR data rate for Nova
- Lake
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 08:57:13 -0700
+Message-ID: <42e71412208dcb6fc75bf5b606bd2ec0f0eaa21e.camel@linux.intel.com>
+Subject: Re: [PATCH 0/2] x86/cpu: P-state support for Lightning Mountain
 From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Mon, 09 Mar 2026 08:48:54 -0700
-In-Reply-To: <CAJZ5v0ju7V3EaUgwxpUZV2LN2YBaduEd4hpoOJsL-LRmSJ1pvA@mail.gmail.com>
-References: <20260223190420.874853-1-srinivas.pandruvada@linux.intel.com>
-	 <CAJZ5v0ju7V3EaUgwxpUZV2LN2YBaduEd4hpoOJsL-LRmSJ1pvA@mail.gmail.com>
+To: Martin Schiller <ms@dev.tdt.de>, "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+ Thomas Gleixner	 <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>,  Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, Florian Eckert	
+ <fe@dev.tdt.de>
+Date: Mon, 09 Mar 2026 08:57:13 -0700
+In-Reply-To: <3e828b47bacf84ca8d19a024ac71778c@dev.tdt.de>
+References: <20260306-cpufreq_lgm-v1-0-47f104aed7c2@dev.tdt.de>
+	 <CAJZ5v0jR0eVu2oCD+c0x9MERfYvdPfNi2T9YZrO9RLQf-+iH3A@mail.gmail.com>
+	 <3e828b47bacf84ca8d19a024ac71778c@dev.tdt.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -81,94 +85,69 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 3E4F123C2A3
+X-Rspamd-Queue-Id: 5DE7023C636
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.06 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	TAGGED_FROM(0.00)[bounces-43957-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-43958-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DKIM_TRACE(0.00)[intel.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[srinivas.pandruvada@linux.intel.com,linux-pm@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	NEURAL_HAM(-0.00)[-0.956];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,linux.intel.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,intel.com:dkim,linux.intel.com:mid]
 X-Rspamd-Action: no action
 
-T24gVGh1LCAyMDI2LTAzLTA1IGF0IDE1OjQyICswMTAwLCBSYWZhZWwgSi4gV3lzb2NraSB3cm90
-ZToKPiBPbiBNb24sIEZlYiAyMywgMjAyNiBhdCA4OjA14oCvUE0gU3Jpbml2YXMgUGFuZHJ1dmFk
-YQo+IDxzcmluaXZhcy5wYW5kcnV2YWRhQGxpbnV4LmludGVsLmNvbT4gd3JvdGU6Cj4gPiAKPiA+
-IEFkZCBzdXBwb3J0IGZvciByZWFkaW5nIEREUiBkYXRhIHJhdGUgZnJvbSBQQ0kgY29uZmlnIG9m
-ZnNldC4KPiA+IFRoZSByZWdpc3RlciBkZXRhaWxzIGFyZToKPiA+IENGRyBPZmZzZXQgOiAweEUw
-Cj4gPiBCaXRzwqDCoMKgwqDCoMKgIDogMTE6Mgo+ID4gCj4gPiBERFIgRGF0YSByYXRlIGlzIGlu
-IDMzLjMzIE1UUFMgdW5pdHMuCj4gPiAKPiA+IFNpZ25lZC1vZmYtYnk6IFNyaW5pdmFzIFBhbmRy
-dXZhZGEKPiA+IDxzcmluaXZhcy5wYW5kcnV2YWRhQGxpbnV4LmludGVsLmNvbT4KPiA+IC0tLQo+
-ID4gwqAuLi4vaW50MzQweF90aGVybWFsL3Byb2Nlc3Nvcl90aGVybWFsX3JmaW0uY8KgwqDCoMKg
-IHwgMTYKPiA+ICsrKysrKysrKysrKysrKysKPiA+IMKgMSBmaWxlIGNoYW5nZWQsIDE2IGluc2Vy
-dGlvbnMoKykKPiA+IAo+ID4gZGlmZiAtLWdpdAo+ID4gYS9kcml2ZXJzL3RoZXJtYWwvaW50ZWwv
-aW50MzQweF90aGVybWFsL3Byb2Nlc3Nvcl90aGVybWFsX3JmaW0uYwo+ID4gYi9kcml2ZXJzL3Ro
-ZXJtYWwvaW50ZWwvaW50MzQweF90aGVybWFsL3Byb2Nlc3Nvcl90aGVybWFsX3JmaW0uYwo+ID4g
-aW5kZXggMzE0ZmJjMWY0OTBmLi4yZTgzNGExNzU0NzEgMTAwNjQ0Cj4gPiAtLS0KPiA+IGEvZHJp
-dmVycy90aGVybWFsL2ludGVsL2ludDM0MHhfdGhlcm1hbC9wcm9jZXNzb3JfdGhlcm1hbF9yZmlt
-LmMKPiA+ICsrKwo+ID4gYi9kcml2ZXJzL3RoZXJtYWwvaW50ZWwvaW50MzQweF90aGVybWFsL3By
-b2Nlc3Nvcl90aGVybWFsX3JmaW0uYwo+ID4gQEAgLTQwMiw2ICs0MDIsMTEgQEAgc3RhdGljIHNz
-aXplX3QgcmZpX3Jlc3RyaWN0aW9uX3Nob3coc3RydWN0Cj4gPiBkZXZpY2UgKmRldiwKPiA+IMKg
-wqDCoMKgwqDCoMKgIHJldHVybiBzeXNmc19lbWl0KGJ1ZiwgIiVsbHVcbiIsIHJlc3ApOwo+ID4g
-wqB9Cj4gPiAKPiA+ICsgLyogZGRyX2RhdGFfcmF0ZSAqLwo+ID4gK3N0YXRpYyBjb25zdCBzdHJ1
-Y3QgbW1pb19yZWcgbnZsX2Rkcl9kYXRhX3JhdGVfcmVnID0geyAxLCAweEUwLAo+ID4gMTAsIDB4
-M0ZGLCAyfTsKPiA+ICsKPiA+ICtzdGF0aWMgY29uc3Qgc3RydWN0IG1taW9fcmVnICpkZHJfZGF0
-YV9yYXRlX3JlZzsKPiA+ICsKPiA+IMKgc3RhdGljIHNzaXplX3QgZGRyX2RhdGFfcmF0ZV9zaG93
-KHN0cnVjdCBkZXZpY2UgKmRldiwKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgZGV2aWNlX2F0dHJpYnV0
-ZSAqYXR0ciwKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjaGFyICpidWYpCj4gPiBAQCAtNDEwLDEwICs0MTUsMjAg
-QEAgc3RhdGljIHNzaXplX3QgZGRyX2RhdGFfcmF0ZV9zaG93KHN0cnVjdAo+ID4gZGV2aWNlICpk
-ZXYsCj4gPiDCoMKgwqDCoMKgwqDCoCB1NjQgcmVzcDsKPiA+IMKgwqDCoMKgwqDCoMKgIGludCBy
-ZXQ7Cj4gPiAKPiA+ICvCoMKgwqDCoMKgwqAgaWYgKGRkcl9kYXRhX3JhdGVfcmVnKSB7Cj4gPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB1MTYgcmVnX3ZhbDsKPiA+ICsKPiA+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBjaV9yZWFkX2NvbmZpZ193b3JkKHRvX3BjaV9kZXYo
-ZGV2KSwKPiA+IGRkcl9kYXRhX3JhdGVfcmVnLT5vZmZzZXQsICZyZWdfdmFsKTsKPiA+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJlc3AgPSAocmVnX3ZhbCA+PiBkZHJfZGF0YV9yYXRl
-X3JlZy0+c2hpZnQpICYKPiA+IGRkcl9kYXRhX3JhdGVfcmVnLT5tYXNrOwo+ID4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVzcCA9IChyZXNwICogMzMzMykgLyAxMDA7Cj4gPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBnb3RvIHJldF9yZXNwOwo+ID4gK8KgwqDCoMKgwqDC
-oCB9Cj4gPiArCj4gPiDCoMKgwqDCoMKgwqDCoCByZXQgPSBwcm9jZXNzb3JfdGhlcm1hbF9zZW5k
-X21ib3hfcmVhZF9jbWQodG9fcGNpX2RldihkZXYpLAo+ID4gaWQsICZyZXNwKTsKPiA+IMKgwqDC
-oMKgwqDCoMKgIGlmIChyZXQpCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0
-dXJuIHJldDsKPiA+IAo+ID4gK3JldF9yZXNwOgo+ID4gwqDCoMKgwqDCoMKgwqAgcmV0dXJuIHN5
-c2ZzX2VtaXQoYnVmLCAiJWxsdVxuIiwgcmVzcCk7Cj4gPiDCoH0KPiA+IAo+ID4gQEAgLTQ2MSw2
-ICs0NzYsNyBAQCBpbnQgcHJvY190aGVybWFsX3JmaW1fYWRkKHN0cnVjdCBwY2lfZGV2ICpwZGV2
-LAo+ID4gc3RydWN0IHByb2NfdGhlcm1hbF9kZXZpY2UgKnByb2MKPiA+IMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCBjYXNlIFBDSV9ERVZJQ0VfSURfSU5URUxfTlZMX0hfVEhFUk1BTDoK
-PiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjYXNlIFBDSV9ERVZJQ0VfSURfSU5U
-RUxfTlZMX1NfVEhFUk1BTDoKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgZGx2cl9tbWlvX3JlZ3NfdGFibGUgPSBudmxfZGx2cl9tbWlvX3JlZ3M7Cj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZGRyX2RhdGFf
-cmF0ZV9yZWcgPSAmbnZsX2Rkcl9kYXRhX3JhdGVfcmVnOwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiA+IMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCBkZWZhdWx0Ogo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCBkbHZyX21taW9fcmVnc190YWJsZSA9IGRsdnJfbW1pb19yZWdzOwo+
-ID4gLS0KPiAKPiBBcHBsaWVkIGFzIDcuMSBtYXRlcmlhbCwgYnV0IEkgcmVhcnJhbmdlZCBpdCB0
-byBhdm9pZCB1c2luZyBnb3RvIGFuZAo+IGRlY2xhcmUgbG9jYWwgdmFycyB3aGVyZSB0aGV5IGFy
-ZSBuZWVkZWQsIHBsZWFzZSBzZWU6CgpMb29rcyBnb29kLgoKVGhhbmtzLApTcmluaXZhcwoKPiAK
-PiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9yYWZhZWwv
-bGludXgtcG0uZ2l0L3BhdGNoLz9pZD02ZDNlMmNlNmYxMDEwN2MyZTU4NzBlOWRjZTdjMmUxZDAz
-YTZiZTcyCg==
+On Mon, 2026-03-09 at 07:53 +0100, Martin Schiller wrote:
+> On 2026-03-06 18:59, Rafael J. Wysocki wrote:
+> > On Fri, Mar 6, 2026 at 9:27=E2=80=AFAM Martin Schiller <ms@dev.tdt.de>
+> > wrote:
+> > >=20
+> > > This patch set contains 2 commits to get P-state support for
+> > > Intel /
+> > > MaxLinear Lightning Mountain. The first adds the needed code to
+> > > the
+> > > intel_pstate driver. The second adds a workaround to the x86/cpu
+> > > subsystem to enable EIST on all cpus.
+> >=20
+> > Can you please combine the patches?
+> >=20
+> > Or does the first one work just fine without the second one?
+>=20
+> Well, the first patch can basically be applied without the second
+> one,
+> but then frequency stepping will only work on the first cpu core.
+>=20
+> I split the two changes because they apply to different parts of the
+> kernel sources.
+>=20
+> But you're probably right, and it makes sense to combine the two
+> patches.
+>=20
+>=20
+> BTW: The original code from the MaxLinear SDK enables EIST in the
+> intel_pstate driver, but I don't think that's the right place for it.
 
+This is a special case. But intel_pstate driver can be disabled from
+kernel command line to use acpi cpufreq driver. So in that case
+enabling in intel_pstate will not help.
+
+Thanks,
+Srinivas
 
