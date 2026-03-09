@@ -1,288 +1,167 @@
-Return-Path: <linux-pm+bounces-43948-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43949-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gGRuObjNrmnEIwIAu9opvQ
-	(envelope-from <linux-pm+bounces-43948-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 14:40:08 +0100
+	id UMZbEIvXrmlhJAIAu9opvQ
+	(envelope-from <linux-pm+bounces-43949-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 15:22:03 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 790DA239E03
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 14:40:08 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7FD823A6F0
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 15:22:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 4A355301E5D3
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 13:40:04 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B8222301DEFB
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 14:22:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 355073CE491;
-	Mon,  9 Mar 2026 13:39:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FAC03D3012;
+	Mon,  9 Mar 2026 14:21:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Kjo+SFQV"
+	dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b="pyKkhJWQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010064.outbound.protection.outlook.com [52.101.193.64])
+Received: from mail.ilvokhin.com (mail.ilvokhin.com [178.62.254.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E59E38E5ED;
-	Mon,  9 Mar 2026 13:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.64
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773063572; cv=fail; b=Pkf1Gw9yKf/a7F6PeEZl6K4o8WQAnW5Iwxn4ulNd/0tuwUINd73RHUTVC9s1kzQ4AOIDFy2pkYWCrkT6rWuPy7gWFkMmfzTNF9Msj2cTmhXM3LCusS/S+FZm1pHqqc07GYu+zIu0qizAYN1Wu5MAh3jVX7oMnukZyPvSAQ3DUr4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773063572; c=relaxed/simple;
-	bh=KmGiNTGmcB18G5yhTQG5sD4cTkQUsn3K5VM1SCUUFHo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=d4vrOS1OD8rChgVXJ5ZWRxUhxs2XnJ30fZM9dyZGdaA6wshTSy8SpwumNqkVvQHFAAL3EBWRCT3UKwohBJkkSlZOxRwcSr2NogQyKDdkfY2l/6VIA7mpI+Z71NSYRhl02oEj7wIiRE77J1HgSQi3Cq/sbiVtALJjPS9NeG14UVo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Kjo+SFQV; arc=fail smtp.client-ip=52.101.193.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Zo9wUOOf5MK3XILPnqM+s27sbweHxcJoBIC4Uw3Y7QPEh7Elb/7GMb8iCwaDahnZ/A/qkqhYJ6HEL1G/RU4IQz4ScFiz1PFScBxIP3SWZKegMflh5vOQgCbtZk+vgZdVmhVj7uACcQlWIxSv09u3wqpwQosZ/5hyK/btnD9Tw7IIb0N5si1J/ECZsegcnkvBIIhZdMDw8JPXDqKU0QcabwuA0+SKUbA7hV5TBocP3nCy6rjw2AAo4WmVVDETsf2inI+wMWPg+jQAmsn7ozWKf2d3rgxH1fIDmQqFARukGRFUrMnx5kLAxhllfDjkVVCc5wLHU5QXC4K44zfrsCtTNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MHB7E9rvIK3PIs7krEYIUdRpKD6Ij8/0f1N99mop3Nw=;
- b=ABWVQqomxSyo0nv5eT1n+nDSwzRZKvajl6z7oDnBEGdM95o9gQm+mwaowsdQBA/bq+JtvJxETVuwZItBHUNZeBfXQn64OEKqxJMYJQdt49Pvo1mQwG1WB/xDrJPq+2SbTmaab5Nyb3xNzSW6IeCYx8nisfaA/TL9QI5FyPl/rSTcO+mZ8LUlBTtawYDSEwRpeYRIcaRj87iAQRztAF/jRLuEVnAwHYzm3VJt4+leKOMjiseYnzJKUNBPaZ5Xn/CGOaxExMzhEOTPOn9wcb9w4scLpCb5533hbwpfBdQE8L1rg6jXrUAzSnGp69pP+OS2dXGPNUImAuFxWd3X5Z5GpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.23.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MHB7E9rvIK3PIs7krEYIUdRpKD6Ij8/0f1N99mop3Nw=;
- b=Kjo+SFQVyDdLqYCLWRj1X6T8+liFszL2Kgw9jBneRjhEP+g3e6PmqQuRYUjXrTh3iBebaA8cVnwBjKjYANE1VLCzBY7+OYuASFNAqmhaGrplm73gNT00NCaECJhU/vExEEm6rv4/wY4dKCUjW3ngAua9Ge9qwX0uy4EUAS7NVKM=
-Received: from DM6PR08CA0013.namprd08.prod.outlook.com (2603:10b6:5:80::26) by
- SJ0PR10MB4749.namprd10.prod.outlook.com (2603:10b6:a03:2da::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.25; Mon, 9 Mar
- 2026 13:39:24 +0000
-Received: from CY4PEPF0000EE31.namprd05.prod.outlook.com
- (2603:10b6:5:80:cafe::fd) by DM6PR08CA0013.outlook.office365.com
- (2603:10b6:5:80::26) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9678.25 via Frontend Transport; Mon,
- 9 Mar 2026 13:39:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.194)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
-Received: from lewvzet200.ext.ti.com (198.47.23.194) by
- CY4PEPF0000EE31.mail.protection.outlook.com (10.167.242.37) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9678.18 via Frontend Transport; Mon, 9 Mar 2026 13:39:23 +0000
-Received: from DLEE204.ent.ti.com (157.170.170.84) by lewvzet200.ext.ti.com
- (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 9 Mar
- 2026 08:39:23 -0500
-Received: from DLEE205.ent.ti.com (157.170.170.85) by DLEE204.ent.ti.com
- (157.170.170.84) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 9 Mar
- 2026 08:39:18 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE205.ent.ti.com
- (157.170.170.85) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Mon, 9 Mar 2026 08:39:18 -0500
-Received: from [10.249.42.149] ([10.249.42.149])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 629DdHNi1182586;
-	Mon, 9 Mar 2026 08:39:18 -0500
-Message-ID: <512c8f92-f56e-4bb7-a6c4-aef7c4120bce@ti.com>
-Date: Mon, 9 Mar 2026 08:39:17 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8AC39E176;
+	Mon,  9 Mar 2026 14:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.62.254.231
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773066114; cv=none; b=MexLiNg3y8VsSn5gGSnuSxycgISmfNjT4DOtuFVRaLonZr7gHhC4LpmcsyX299JzH3lCeA8XcTJ21I1YELmK1acNSYfPt4CG1Cqv2TZixzT3nckz9ebsJCOLec/IQlBKhX7fj+JKNUhjT8tKlCV6MHeICulMxhUIRoOIvQRMZyY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773066114; c=relaxed/simple;
+	bh=ZzA6HzHga9tzIo7rugFYD6/RsDh4dugF1CPijud6ro8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LCGPKnguvwu5VE5uc4Op+WVsSM80sNQRiharkYtfB1SuEj+WW3hfe7PuCT/9iY4j7NrpQwegLfqmlAC19SoQSnBN8Brk39h7dbJGLP9o3yNk6UMLjLt27eTenIMTP0fAxXqjLaUqM8m9f9kMUPA80MYni2vySrIAh8rv7boY7ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com; spf=pass smtp.mailfrom=ilvokhin.com; dkim=pass (1024-bit key) header.d=ilvokhin.com header.i=@ilvokhin.com header.b=pyKkhJWQ; arc=none smtp.client-ip=178.62.254.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ilvokhin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ilvokhin.com
+Received: from shell.ilvokhin.com (shell.ilvokhin.com [138.68.190.75])
+	(Authenticated sender: d@ilvokhin.com)
+	by mail.ilvokhin.com (Postfix) with ESMTPSA id 9317AB36CF;
+	Mon, 09 Mar 2026 14:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ilvokhin.com;
+	s=mail; t=1773066105;
+	bh=89Q59i3cmlvIuCaU6IMXcnS9oldz7qFt8v/vCBuKyH4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=pyKkhJWQnjig5kCqeP6hPYZL4qkV2wpdupo53NVcZ3mea6inhIPXBmcwS67BHdur+
+	 nSuzcghck0UixFHftToE/hLhexverWNxCN53oAJfLOtGCAJR3ozlthcuBtJqj1LMx4
+	 cdrhLDyOjnTT0nroLki1F7MdfAr3DvANC4ja6Tfo=
+Date: Mon, 9 Mar 2026 14:21:42 +0000
+From: Dmitry Ilvokhin <d@ilvokhin.com>
+To: Matthew Wilcox <willy@infradead.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Qi Zheng <zhengqi.arch@bytedance.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 0/5] mm: zone lock tracepoint instrumentation
+Message-ID: <aa7XdpIVtLFS3FIu@shell.ilvokhin.com>
+References: <cover.1772206930.git.d@ilvokhin.com>
+ <aa7G1nD7Rd9F4eBH@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] ti: sci: Drop fake 'const' on handle pointer
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, Nishanth Menon
-	<nm@ti.com>, Tero Kristo <kristo@kernel.org>, Santosh Shilimkar
-	<ssantosh@kernel.org>, Michael Turquette <mturquette@baylibre.com>, "Stephen
- Boyd" <sboyd@kernel.org>, Peter Ujfalusi <peter.ujfalusi@gmail.com>, "Vinod
- Koul" <vkoul@kernel.org>, Frank Li <Frank.Li@kernel.org>, Thomas Gleixner
-	<tglx@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Bjorn Andersson
-	<andersson@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>,
-	"Philipp Zabel" <p.zabel@pengutronix.de>, Dave Gerlach <d-gerlach@ti.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-clk@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
-CC: <stable@vger.kernel.org>
-References: <20260223202426.566958-2-krzysztof.kozlowski@oss.qualcomm.com>
- <195cc8dc-8642-481c-8bdd-f5409ab8f5b5@ti.com>
- <5b6a4284-4766-424c-9171-feaa08c52ad1@oss.qualcomm.com>
- <2d852f07-0bd9-4076-b0dd-93425ed237f4@ti.com>
- <c768706e-f063-44bd-92cd-f3984ad3bfbc@oss.qualcomm.com>
- <aa2899ff-a8d9-4740-b256-266f7073f0a9@ti.com>
- <7aa1e643-a557-439c-a337-20575adf1e35@oss.qualcomm.com>
-Content-Language: en-US
-From: Andrew Davis <afd@ti.com>
-In-Reply-To: <7aa1e643-a557-439c-a337-20575adf1e35@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE31:EE_|SJ0PR10MB4749:EE_
-X-MS-Office365-Filtering-Correlation-Id: d717b4b3-0775-4cad-2cf4-08de7de14674
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|1800799024|82310400026|376014|7416014|921020;
-X-Microsoft-Antispam-Message-Info:
-	4r6gJI54oASuTREFVtD5zQzAStqRMfRzWIO5+2FOQef9MFsTRwPjBhrE2U7hFOlLhRPrRG3rg8bZqUscgc27yW+ZR8TnwlrL/iPRZjcWSED5K0f39RafBizsODKl4l3qaJsWiQWn77ssLhunxOqLF45cnQ1fUmccT3e/WpHOaSrY8XuHRb9WHnpm7dEumSauGYeidDr+h9LhipQWCSo3WA4Xax5s6rh2zu7wRg6hLjr3xqhcPs5t1Xv0yfuwmPWqLxkNHHd5+EiAYQsoUIKsx9h0kYOrBp6LsGAHTGenU8p0+r+DdMI8itClxs3nMQ9CSp0Za32M02ABOb7dV0JBHk5J4M1lzLCZAVKEiA0ZZhiCAgTZSVgWQ7zcx7eezyQzy+EKK0cdCeb+odQxqoKiSL+zVBM7ZAQmHb7l/t1C6nqQAAbuFRPsDVLkV1BwWitFwzyL66hMMAi5kuq7Q8xG2G1UpWdZx0meISEuym7wTD0CNf567hdmLnhy7nBDz0Ier9TFh6l1dwTC0QYrwzLGuir3gWfLPjJz+Izm7sjlq7AzYGiOZFmnNHtZTIFgeiEJivWD6LpHL8pWuQMWVzoOgC91i7chbxcK+CyJ+uuRTK6OCIeX7ir9SCFGDfhNvUaS9S2Cj59Vi0rtJVURwEYCo8ioPhitSz1RxDyPKe2Yg7Wr1XeJWLA1pu4+T9Og8b2nZPz0na8IpwjatTKrFLeVuCcVgFuZ/jM5uUW45BJYPxcECwG13OKKpxp2VdDvkvf30cXw5aED3M5FCbHEcWfwNwalxSz3BqoFljp0iOVsHhB3KaxPrDNbm30ZhqiXzjHN
-X-Forefront-Antispam-Report:
-	CIP:198.47.23.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet200.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(1800799024)(82310400026)(376014)(7416014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	5j+x3jwTJvfMeRrTLYr6h1qr6lXnOTzmUccfV0AoKrOLUCLzjYlJ76OBhsZv3lN/R1UZOxa2gm2BPlGcrlEJqG6++FMLrSrCtkRJ+0dlNcYx//UNUGxx+OvNbqJYvtAN66N9ghk+bNCDEOpun1d7mUfjXLH/hS3pLBR0MafeUYp0Ffk19atfgFiBHZmTBn9eXkCH6hhLAJrV/HiP+TghzVHq+z+fETOB0dDj0yXOriIFdjtFJCBeO5naFfKlo5vqUdZb5k36oRV+0HeIRvBOPRoKYVhhM4YdpXl4QNVsKCk/wtboCvioolZMCADDzCwZYIrJQyapa1I8b3PLynXx6qz+flFcBY9ZWracT7iXDOSd+81erXhbWbZyb5Rbw7Sp0Ii5ikbn/uEnDknSImO5PQaud4HzngFSiwZ87kS2kIoaI39AEmPlZAUU9Jh8tuwL
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2026 13:39:23.5522
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d717b4b3-0775-4cad-2cf4-08de7de14674
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.194];Helo=[lewvzet200.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EE31.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4749
-X-Rspamd-Queue-Id: 790DA239E03
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aa7G1nD7Rd9F4eBH@casper.infradead.org>
+X-Rspamd-Queue-Id: D7FD823A6F0
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[ti.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[ti.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[ilvokhin.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[ilvokhin.com:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43948-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[oss.qualcomm.com,ti.com,kernel.org,baylibre.com,gmail.com,linaro.org,pengutronix.de,lists.infradead.org,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-43949-lists,linux-pm=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[22];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,ti.com:dkim,ti.com:mid];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	DKIM_TRACE(0.00)[ilvokhin.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.918];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[afd@ti.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[ti.com:+];
-	NEURAL_HAM(-0.00)[-0.983];
+	FROM_NEQ_ENVFROM(0.00)[d@ilvokhin.com,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[10]
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,ilvokhin.com:dkim]
 X-Rspamd-Action: no action
 
-On 3/5/26 1:49 PM, Krzysztof Kozlowski wrote:
-> On 05/03/2026 19:44, Andrew Davis wrote:
->> On 3/5/26 9:59 AM, Krzysztof Kozlowski wrote:
->>> On 05/03/2026 16:52, Andrew Davis wrote:
->>>>>>> The code is not correct logically, either, because functions like
->>>>>>> ti_sci_get_handle() and ti_sci_put_handle() are meant to modify the
->>>>>>> handle reference counting, thus they must modify the handle.
->>>>>>
->>>>>> The reference counting is handled outside of the ti_sci_handle struct,
->>>>>> the contents of the handle are never modified after it is created.
->>>>>>
->>>>>> The const is only added by functions return a handle to consumers.
->>>>>> We cannot return non-const to consumer drivers or then they would
->>>>>> be able to modify the content without a compiler warning, which would
->>>>>> be a real problem.
->>>>>
->>>>> This is the same argument as making pointer to const the pointer freed
->>>>> via kfree() (or free() in userspace). kfree() does not modify the
->>>>> contents of the pointer, right? The same as getting putting handle does
->>>>> not modify the handle...
->>>>>
->>>>
->>>> In that argument, if we wanted the consumer of the pointer to not free()
->>>> it we would return a const pointer, free()'ing that would result in the
->>>> warning we want (discards const qualifier).
->>>>
->>>> If you could somehow malloc() from a const area in memory then free()
->>>> doesn't modify the pointed to values, only the non-const record keeping
->>>> which would be stored outside of the const memory. So even in this analogy
->>>> there isn't a problem.
->>>
->>> I am not saying about malloc. I am saying about free() which does not
->>> modify the freed memory.
->>>
->>
->> And if you look, kfree() in Linux takes a const pointer. We also do not
+On Mon, Mar 09, 2026 at 01:10:46PM +0000, Matthew Wilcox wrote:
+> On Fri, Feb 27, 2026 at 04:00:22PM +0000, Dmitry Ilvokhin wrote:
+> > Zone lock contention can significantly impact allocation and
+> > reclaim latency, as it is a central synchronization point in
+> > the page allocator and reclaim paths. Improved visibility into
+> > its behavior is therefore important for diagnosing performance
+> > issues in memory-intensive workloads.
+> > 
+> > On some production workloads at Meta, we have observed noticeable
+> > zone lock contention. Deeper analysis of lock holders and waiters
+> > is currently difficult with existing instrumentation.
+> > 
+> > While generic lock contention_begin/contention_end tracepoints
+> > cover the slow path, they do not provide sufficient visibility
+> > into lock hold times. In particular, the lack of a release-side
+> > event makes it difficult to identify long lock holders and
+> > correlate them with waiters. As a result, distinguishing between
+> > short bursts of contention and pathological long hold times
+> > requires additional instrumentation.
+> > 
+> > This patch series adds dedicated tracepoint instrumentation to
+> > zone lock, following the existing mmap_lock tracing model.
 > 
-> The slub, but that's the only implementation being I believe frowned
-> upon. The mistake made long time ago...
-> 
->> modify the content of the pointer we are given either, so we should
->> be okay using const by the same reasoning.
-> 
-> That's a mistake so you cannot use the same reasoning. It's bogus and
-> bugfree to take a pointer to const for any kfree(). Just poke MM folks...
-> 
+> I don't like this at all.  We have CONFIG_LOCK_STAT.  That should be
+> improved insted of coming up with one-offs for every single lock
+> that someone deems "special".
 
-Don't act like I'm trying to trick you by picking some bad example, you
-picked kfree() and it just happened to showcase my point.
+Thanks for the feedback, Matthew.
 
-> 
->>
->>>>
->>>>> The point is that storing the reference counter outside of handle does
->>>>> not make the argument correct. Logically when you get a reference, you
->>>>> increase the counter, so it is not a pointer to const. And the code
->>>>> agrees, because you must drop the const.
->>>>>
->>>>
->>>> The record keeping memory is not const and can be modified.
->>>>
->>>> And where do we drop the const? The outer "struct ti_sci_info" was never
->>>> const to begin with, so no dropped const.
->>>
->>> We discuss about different points. I did not say the outer memory is
->>> const. I said that you drop the const - EXPLICITLY - from the pointer to
->>> handle.
->>>
->>
->> Only because container_of() forces the const to be dropped, that is out
->> of our control. But we never modify handle though the non-const parent
->> struct.
-> 
-> That is not true. You could use container_of_const() if you wanted to
-> have const. You explicitly drop the const, code would not work without
-> dropping the const and this is the problem.
-> 
+CONFIG_LOCK_STAT provides useful statistics, but it is primarily a
+debug facility and is generally too heavyweight for the production
+environments.
 
-There is no dropping the const, the parent struct was never const in
-the first place. Only the handle inside the parent struct is const and
-it can stay const and nothing would stop working in any API function.
+The motivation for this series was to provide lightweight observability
+for the zone lock in production workloads.
 
->>
->>> And that API which gets a handle (increases reference count) via pointer
->>> to const is completely illogical, because increasing refcnt is already
->>> modifying it. Just because you store the refcnt outside, does not change
->>> the fact that API is simply confusing.
->>>
->>
->> If the refcnt is not inside the const struct, then the contents are not
->> changed, therefor const is still correct. Even if the content of handle
->> were in fixed ROM, nothing would break here.
-> 
-> I am talking about API and again you go into memory correctness. So
-> again, very simple: any refcnt get taking const data is bogus.
-> 
+I agree that improving generic lock instrumentation would be preferable.
+I did consider whether something similar could be done generically for
+spinlocks, but the unlock path there is typically just a single atomic
+store, so adding generic lightweight instrumentation without affecting
+the fast path is difficult.
 
-Modifying a refcnt stored *inside* a const struct is bogus. Keeping an
-external refcnt about a bit of const data is perfectly sane. When the
-refcnt goes to 0 nothing happens, it's not like we go an free() the
-const data or anything. The refcnt exists just to print a warning if the
-count goes negative, nothing else.
+In parallel, I've been experimenting with improving observability for
+sleepable locks by adding a contended_release tracepoint, which would
+allow correlating lock holders and waiters in a more generic way. I've
+posted an RFC here:
 
-Andrew
+https://lore.kernel.org/all/cover.1772642407.git.d@ilvokhin.com/
 
-> 
-> Best regards,
-> Krzysztof
-
+I'd appreciate feedback on whether that direction makes sense for
+improving the generic lock tracing infrastructure.
 
