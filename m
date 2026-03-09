@@ -1,207 +1,165 @@
-Return-Path: <linux-pm+bounces-43951-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43952-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EBYQJKLcrmm/JQIAu9opvQ
-	(envelope-from <linux-pm+bounces-43951-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 15:43:46 +0100
+	id ICN1BqXermm/JQIAu9opvQ
+	(envelope-from <linux-pm+bounces-43952-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 15:52:21 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6A6523AC89
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 15:43:45 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 270AA23AEE0
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 15:52:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EE2A63068267
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 14:37:53 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id DB20F3007B35
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 14:47:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F041038B7C4;
-	Mon,  9 Mar 2026 14:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FC143D5227;
+	Mon,  9 Mar 2026 14:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lB/uQ5QS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5463C3C3C00;
-	Mon,  9 Mar 2026 14:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA6E345757;
+	Mon,  9 Mar 2026 14:47:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773067072; cv=none; b=Y3DxzIAuAWbWYr+WVNuyskRWjmLua/xpHFJ3eVrf0tH2lWDbT8gG0sF9IFRoUgzDE1ZEwvOpttS8X8gN0u3laqKTcHCTmaqVUx2cHVL9Ox6FYdKWDfg6bWJ+0cZX7HkOMPvRAHRBQ6FC597JAXA1fBQwjVubJvSgnIa861Fwcxk=
+	t=1773067670; cv=none; b=YfYY4fO6KGkOwr3ykIXfjJN9YJSahEUGbE3DtA/r5DyKxO2OT8mGV4OKNJLq82jau7vuvnEL4qixu0R1QalHoWTf5c++Y7J0Bm1akUz65RNvOG2lxSeK1lrqKfcIaFW0JoeBMTJ+Nl6B9EhaGnMyk/zkgZs6ENt/DB06Jz6asC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773067072; c=relaxed/simple;
-	bh=9zZLfNMC2c49UfYD8f5c65mEQnz14cRh4NmSK0J6fBA=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=biTe2sioUHui+6/nIPugUraY0/loLfaYYqLr9rYzN2fTj6D5bL/mSo9mjLUq1g8xkNW1RhmqiHFmi8wl3zfU4hWBL6aBlmwavjaWnGBQY9mrReAMF/+L9bprS6BMG7xP6B47UprCXy5Ll+WoaZxFx4Mt4d4lyGsK3Nkuw7I2mNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.83])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fV02n5Nt0zJ46F6;
-	Mon,  9 Mar 2026 22:37:05 +0800 (CST)
-Received: from dubpeml500005.china.huawei.com (unknown [7.214.145.207])
-	by mail.maildlp.com (Postfix) with ESMTPS id C860840086;
-	Mon,  9 Mar 2026 22:37:48 +0800 (CST)
-Received: from localhost (10.203.177.15) by dubpeml500005.china.huawei.com
- (7.214.145.207) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 9 Mar
- 2026 14:37:47 +0000
-Date: Mon, 9 Mar 2026 14:37:46 +0000
-From: Jonathan Cameron <jonathan.cameron@huawei.com>
-To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-CC: <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, Ard Biesheuvel <ardb@kernel.org>, "Alison
- Schofield" <alison.schofield@intel.com>, Vishal Verma
-	<vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan Williams
-	<dan.j.williams@intel.com>, Yazen Ghannam <yazen.ghannam@amd.com>, "Dave
- Jiang" <dave.jiang@intel.com>, Davidlohr Bueso <dave@stgolabs.net>, "Matthew
- Wilcox" <willy@infradead.org>, Jan Kara <jack@suse.cz>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek
-	<pavel@kernel.org>, Li Ming <ming.li@zohomail.com>, Jeff Johnson
-	<jeff.johnson@oss.qualcomm.com>, Ying Huang <huang.ying.caritas@gmail.com>,
-	Yao Xingtao <yaoxt.fnst@fujitsu.com>, "Peter Zijlstra"
-	<peterz@infradead.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nathan Fontenot <nathan.fontenot@amd.com>, Terry Bowman
-	<terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>, Benjamin Cheatham
-	<benjamin.cheatham@amd.com>, Zhijian Li <lizhijian@fujitsu.com>, Borislav
- Petkov <bp@alien8.de>, Tomasz Wolski <tomasz.wolski@fujitsu.com>
-Subject: Re: [PATCH v6 5/9] dax: Track all dax_region allocations under a
- global resource tree
-Message-ID: <20260309143746.000047ee@huawei.com>
-In-Reply-To: <20260210064501.157591-6-Smita.KoralahalliChannabasappa@amd.com>
-References: <20260210064501.157591-1-Smita.KoralahalliChannabasappa@amd.com>
-	<20260210064501.157591-6-Smita.KoralahalliChannabasappa@amd.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1773067670; c=relaxed/simple;
+	bh=eXyRneHTsvpE0EveC8TOOVKjhFZ5Y6t4ydNgChoLuik=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M6WDNwMqoFTaFsf0nHiZcKaZZF+DKPIPAmcHJBsgzZfLQvrZQd69uhv8Js/GadxMIfNF2M02v+L0idAEh0ykmkEjQBds7zJNPXNo4JPV6Qcvmmxy23ieK5orOSMb9QhnCgmBj5dZKtHgjJ8H43eRJ1oAkK2NZqKaFoEh+lfQaNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lB/uQ5QS; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=Nnj4k+XehaMxifjpCjHJ3TnczqL5sK8JKePas2gKMrs=; b=lB/uQ5QSLsq6gH+kR+l86+yhw5
+	FbuQvAXOsHCyim+YF0hTYAJW0G999xN9zFVOfpoCYd9npU8AV4L+txlNyjDxtjir0wUVDz9TJVj/h
+	SLdO+/BelNCrkIxgc5/tKbKH7TvdKEZkthv/TljmV+H91v2wnZt6T0V0lYd9DdF9KvopEZIb0/2p9
+	jnI6nwp4w76mtod5tTZKWu03pCo3W9USscMLbZ9LGRGeb0hRaXEceePsbUInZHyMmJAT7DjHGE/2J
+	iw1Bq6KCXTRZyMkKs504FvSuHJQhsO4ev1bqdTIl+EMVppbjDl/ThQ6KNnuZiUIEU2RrG2f88TpwF
+	NZkyISzA==;
+Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vzbtK-000000066Hk-0pLi;
+	Mon, 09 Mar 2026 14:47:30 +0000
+Date: Mon, 9 Mar 2026 14:47:29 +0000
+From: Matthew Wilcox <willy@infradead.org>
+To: Dmitry Ilvokhin <d@ilvokhin.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Qi Zheng <zhengqi.arch@bytedance.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 0/5] mm: zone lock tracepoint instrumentation
+Message-ID: <aa7dgQDMEz34eadj@casper.infradead.org>
+References: <cover.1772206930.git.d@ilvokhin.com>
+ <aa7G1nD7Rd9F4eBH@casper.infradead.org>
+ <aa7XdpIVtLFS3FIu@shell.ilvokhin.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
- dubpeml500005.china.huawei.com (7.214.145.207)
-X-Rspamd-Queue-Id: C6A6523AC89
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aa7XdpIVtLFS3FIu@shell.ilvokhin.com>
+X-Rspamd-Queue-Id: 270AA23AEE0
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.54 / 15.00];
-	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[infradead.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[infradead.org:s=casper.20170209];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,kernel.org,intel.com,amd.com,stgolabs.net,infradead.org,suse.cz,zohomail.com,oss.qualcomm.com,gmail.com,fujitsu.com,linuxfoundation.org,alien8.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[32];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-43951-lists,linux-pm=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-43952-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	DKIM_TRACE(0.00)[infradead.org:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jonathan.cameron@huawei.com,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.891];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_DKIM_NA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[willy@infradead.org,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.942];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,huawei.com:mid]
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[infradead.org:dkim,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Tue, 10 Feb 2026 06:44:57 +0000
-Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> wrote:
-
-> Introduce a global "DAX Regions" resource root and register each
-> dax_region->res under it via request_resource(). Release the resource on
-> dax_region teardown.
+On Mon, Mar 09, 2026 at 02:21:42PM +0000, Dmitry Ilvokhin wrote:
+> On Mon, Mar 09, 2026 at 01:10:46PM +0000, Matthew Wilcox wrote:
+> > On Fri, Feb 27, 2026 at 04:00:22PM +0000, Dmitry Ilvokhin wrote:
+> > > This patch series adds dedicated tracepoint instrumentation to
+> > > zone lock, following the existing mmap_lock tracing model.
+> > 
+> > I don't like this at all.  We have CONFIG_LOCK_STAT.  That should be
+> > improved insted of coming up with one-offs for every single lock
+> > that someone deems "special".
 > 
-> By enforcing a single global namespace for dax_region allocations, this
-> ensures only one of dax_hmem or dax_cxl can successfully register a
-> dax_region for a given range.
+> Thanks for the feedback, Matthew.
 > 
-> Co-developed-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+> CONFIG_LOCK_STAT provides useful statistics, but it is primarily a
+> debug facility and is generally too heavyweight for the production
+> environments.
 
-One question inline about the locking.
+Yes, agreed.  I think that is what needs to change.
 
-Is intent to serialize beyond this new resource tree?  If it's just
-the resource tree the write_lock(&resource_lock); in the request
-and release_resource() should be sufficient.  
+> The motivation for this series was to provide lightweight observability
+> for the zone lock in production workloads.
 
-> ---
->  drivers/dax/bus.c | 23 ++++++++++++++++++++---
->  1 file changed, 20 insertions(+), 3 deletions(-)
+I read that.  But first it was the mmap lock.  Now it's the zone lock.
+Which lock will be next?  This is too heavyweight a procedure to
+follow for each lock of interest.
+
+> I agree that improving generic lock instrumentation would be preferable.
+> I did consider whether something similar could be done generically for
+> spinlocks, but the unlock path there is typically just a single atomic
+> store, so adding generic lightweight instrumentation without affecting
+> the fast path is difficult.
+
+This is why we have tracepoint_enabled() and friends.  But ... LOCK_STAT
+doesn't affect the unlock path at all.  It only changes the acquire side
+to call lock_acquired() (and lock_contended() if the trylock failed).
+
+> In parallel, I've been experimenting with improving observability for
+> sleepable locks by adding a contended_release tracepoint, which would
+> allow correlating lock holders and waiters in a more generic way. I've
+> posted an RFC here:
 > 
-> diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
-> index fde29e0ad68b..5f387feb95f0 100644
-> --- a/drivers/dax/bus.c
-> +++ b/drivers/dax/bus.c
-> @@ -10,6 +10,7 @@
->  #include "dax-private.h"
->  #include "bus.h"
->  
-> +static struct resource dax_regions = DEFINE_RES_MEM_NAMED(0, -1, "DAX Regions");
->  static DEFINE_MUTEX(dax_bus_lock);
->  
->  /*
-> @@ -625,6 +626,8 @@ static void dax_region_unregister(void *region)
->  {
->  	struct dax_region *dax_region = region;
->  
-> +	scoped_guard(rwsem_write, &dax_region_rwsem)
-> +		release_resource(&dax_region->res);
+> https://lore.kernel.org/all/cover.1772642407.git.d@ilvokhin.com/
+> 
+> I'd appreciate feedback on whether that direction makes sense for
+> improving the generic lock tracing infrastructure.
 
-Do we need the locking? resource stuff all runs under the global
-resource_lock so if aim is just to serialize adds and removes that should
-be enough. Maybe there is a justification in that being an internal
-implementation detail.
-
-
-
->  	sysfs_remove_groups(&dax_region->dev->kobj,
->  			dax_region_attribute_groups);
->  	dax_region_put(dax_region);
-> @@ -635,6 +638,7 @@ struct dax_region *alloc_dax_region(struct device *parent, int region_id,
->  		unsigned long flags)
->  {
->  	struct dax_region *dax_region;
-> +	int rc;
->  
->  	/*
->  	 * The DAX core assumes that it can store its private data in
-> @@ -667,14 +671,27 @@ struct dax_region *alloc_dax_region(struct device *parent, int region_id,
->  		.flags = IORESOURCE_MEM | flags,
->  	};
->  
-> -	if (sysfs_create_groups(&parent->kobj, dax_region_attribute_groups)) {
-> -		kfree(dax_region);
-> -		return NULL;
-> +	scoped_guard(rwsem_write, &dax_region_rwsem)
-> +		rc = request_resource(&dax_regions, &dax_region->res);
-> +	if (rc) {
-> +		dev_dbg(parent, "dax_region resource conflict for %pR\n",
-> +			&dax_region->res);
-> +		goto err_res;
->  	}
->  
-> +	if (sysfs_create_groups(&parent->kobj, dax_region_attribute_groups))
-> +		goto err_sysfs;
-> +
->  	if (devm_add_action_or_reset(parent, dax_region_unregister, dax_region))
->  		return NULL;
->  	return dax_region;
-> +
-> +err_sysfs:
-> +	scoped_guard(rwsem_write, &dax_region_rwsem)
-> +		release_resource(&dax_region->res);
-> +err_res:
-> +	kfree(dax_region);
-> +	return NULL;
->  }
->  EXPORT_SYMBOL_GPL(alloc_dax_region);
->  
-
+It seems fine to me, but I don't have the depth in the locking code to
+give it the thorough review it deserves.
 
