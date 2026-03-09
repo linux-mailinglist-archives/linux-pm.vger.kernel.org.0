@@ -1,165 +1,233 @@
-Return-Path: <linux-pm+bounces-43952-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43953-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ICN1BqXermm/JQIAu9opvQ
-	(envelope-from <linux-pm+bounces-43952-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 15:52:21 +0100
+	id kCSsNWvermm/JQIAu9opvQ
+	(envelope-from <linux-pm+bounces-43953-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 15:51:23 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 270AA23AEE0
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 15:52:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8059E23AEA4
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 15:51:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id DB20F3007B35
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 14:47:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 820EF303A6C0
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 14:49:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FC143D5227;
-	Mon,  9 Mar 2026 14:47:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lB/uQ5QS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1383D5246;
+	Mon,  9 Mar 2026 14:49:55 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA6E345757;
-	Mon,  9 Mar 2026 14:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783E33B8D7B;
+	Mon,  9 Mar 2026 14:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773067670; cv=none; b=YfYY4fO6KGkOwr3ykIXfjJN9YJSahEUGbE3DtA/r5DyKxO2OT8mGV4OKNJLq82jau7vuvnEL4qixu0R1QalHoWTf5c++Y7J0Bm1akUz65RNvOG2lxSeK1lrqKfcIaFW0JoeBMTJ+Nl6B9EhaGnMyk/zkgZs6ENt/DB06Jz6asC8=
+	t=1773067795; cv=none; b=kGCFLkx5dl3TKo8JyvgumgUqcfgM7rHa0jsOFx94TuIiNFTALx8GFC5vqa2uObGMfyvxK4Ns0aK2b2G6NzGqLfIKZFEce7Zssj5mLGfgaJG7U1UHu8wPkUFh8sDuBE/BmQ/QG/MZ/6l/eKsWJ220rpDSPxvr2xt5MNdUlHnoisM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773067670; c=relaxed/simple;
-	bh=eXyRneHTsvpE0EveC8TOOVKjhFZ5Y6t4ydNgChoLuik=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M6WDNwMqoFTaFsf0nHiZcKaZZF+DKPIPAmcHJBsgzZfLQvrZQd69uhv8Js/GadxMIfNF2M02v+L0idAEh0ykmkEjQBds7zJNPXNo4JPV6Qcvmmxy23ieK5orOSMb9QhnCgmBj5dZKtHgjJ8H43eRJ1oAkK2NZqKaFoEh+lfQaNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lB/uQ5QS; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Nnj4k+XehaMxifjpCjHJ3TnczqL5sK8JKePas2gKMrs=; b=lB/uQ5QSLsq6gH+kR+l86+yhw5
-	FbuQvAXOsHCyim+YF0hTYAJW0G999xN9zFVOfpoCYd9npU8AV4L+txlNyjDxtjir0wUVDz9TJVj/h
-	SLdO+/BelNCrkIxgc5/tKbKH7TvdKEZkthv/TljmV+H91v2wnZt6T0V0lYd9DdF9KvopEZIb0/2p9
-	jnI6nwp4w76mtod5tTZKWu03pCo3W9USscMLbZ9LGRGeb0hRaXEceePsbUInZHyMmJAT7DjHGE/2J
-	iw1Bq6KCXTRZyMkKs504FvSuHJQhsO4ev1bqdTIl+EMVppbjDl/ThQ6KNnuZiUIEU2RrG2f88TpwF
-	NZkyISzA==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vzbtK-000000066Hk-0pLi;
-	Mon, 09 Mar 2026 14:47:30 +0000
-Date: Mon, 9 Mar 2026 14:47:29 +0000
-From: Matthew Wilcox <willy@infradead.org>
-To: Dmitry Ilvokhin <d@ilvokhin.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Qi Zheng <zhengqi.arch@bytedance.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 0/5] mm: zone lock tracepoint instrumentation
-Message-ID: <aa7dgQDMEz34eadj@casper.infradead.org>
-References: <cover.1772206930.git.d@ilvokhin.com>
- <aa7G1nD7Rd9F4eBH@casper.infradead.org>
- <aa7XdpIVtLFS3FIu@shell.ilvokhin.com>
+	s=arc-20240116; t=1773067795; c=relaxed/simple;
+	bh=aY/nndyQ2qNi5ZjInb2yW37UH6h8yddkng1a0uSlcrE=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VSREEgjdHmHUy9DfPxBxCs3qz+YW9YWaaZHrTTNbxSNAkxB4OXVncZkqQKVPIBhuDt843RtQNZymhWYLL9Ue2a3zxT8C0hklltpQuxPUg8P6xnWSIpxkXKW/OY6XEi/+9Nw+p0Z0vQYVRhck5/7Eyk8n6YQEeGBdNge8ZJYz6HI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.224.83])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fV0KN4LXqzHnGfH;
+	Mon,  9 Mar 2026 22:49:44 +0800 (CST)
+Received: from dubpeml500005.china.huawei.com (unknown [7.214.145.207])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7C38140572;
+	Mon,  9 Mar 2026 22:49:48 +0800 (CST)
+Received: from localhost (10.203.177.15) by dubpeml500005.china.huawei.com
+ (7.214.145.207) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 9 Mar
+ 2026 14:49:46 +0000
+Date: Mon, 9 Mar 2026 14:49:45 +0000
+From: Jonathan Cameron <jonathan.cameron@huawei.com>
+To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+CC: <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, Ard Biesheuvel <ardb@kernel.org>, "Alison
+ Schofield" <alison.schofield@intel.com>, Vishal Verma
+	<vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan Williams
+	<dan.j.williams@intel.com>, Yazen Ghannam <yazen.ghannam@amd.com>, "Dave
+ Jiang" <dave.jiang@intel.com>, Davidlohr Bueso <dave@stgolabs.net>, "Matthew
+ Wilcox" <willy@infradead.org>, Jan Kara <jack@suse.cz>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek
+	<pavel@kernel.org>, Li Ming <ming.li@zohomail.com>, Jeff Johnson
+	<jeff.johnson@oss.qualcomm.com>, Ying Huang <huang.ying.caritas@gmail.com>,
+	Yao Xingtao <yaoxt.fnst@fujitsu.com>, "Peter Zijlstra"
+	<peterz@infradead.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nathan Fontenot <nathan.fontenot@amd.com>, Terry Bowman
+	<terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>, Benjamin Cheatham
+	<benjamin.cheatham@amd.com>, Zhijian Li <lizhijian@fujitsu.com>, Borislav
+ Petkov <bp@alien8.de>, Tomasz Wolski <tomasz.wolski@fujitsu.com>
+Subject: Re: [PATCH v6 7/9] dax: Add deferred-work helpers for dax_hmem and
+ dax_cxl coordination
+Message-ID: <20260309144945.00006d98@huawei.com>
+In-Reply-To: <20260210064501.157591-8-Smita.KoralahalliChannabasappa@amd.com>
+References: <20260210064501.157591-1-Smita.KoralahalliChannabasappa@amd.com>
+	<20260210064501.157591-8-Smita.KoralahalliChannabasappa@amd.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aa7XdpIVtLFS3FIu@shell.ilvokhin.com>
-X-Rspamd-Queue-Id: 270AA23AEE0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500011.china.huawei.com (7.191.174.215) To
+ dubpeml500005.china.huawei.com (7.214.145.207)
+X-Rspamd-Queue-Id: 8059E23AEA4
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [1.54 / 15.00];
+	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[infradead.org,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[infradead.org:s=casper.20170209];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-43952-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,kernel.org,intel.com,amd.com,stgolabs.net,infradead.org,suse.cz,zohomail.com,oss.qualcomm.com,gmail.com,fujitsu.com,linuxfoundation.org,alien8.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[28];
-	DKIM_TRACE(0.00)[infradead.org:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[willy@infradead.org,linux-pm@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[32];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-43953-lists,linux-pm=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.942];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jonathan.cameron@huawei.com,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.894];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[infradead.org:dkim,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,amd.com:email]
 X-Rspamd-Action: no action
 
-On Mon, Mar 09, 2026 at 02:21:42PM +0000, Dmitry Ilvokhin wrote:
-> On Mon, Mar 09, 2026 at 01:10:46PM +0000, Matthew Wilcox wrote:
-> > On Fri, Feb 27, 2026 at 04:00:22PM +0000, Dmitry Ilvokhin wrote:
-> > > This patch series adds dedicated tracepoint instrumentation to
-> > > zone lock, following the existing mmap_lock tracing model.
-> > 
-> > I don't like this at all.  We have CONFIG_LOCK_STAT.  That should be
-> > improved insted of coming up with one-offs for every single lock
-> > that someone deems "special".
+On Tue, 10 Feb 2026 06:44:59 +0000
+Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> wrote:
+
+> Add helpers to register, queue and flush the deferred work.
 > 
-> Thanks for the feedback, Matthew.
+> These helpers allow dax_hmem to execute ownership resolution outside the
+> probe context before dax_cxl binds.
 > 
-> CONFIG_LOCK_STAT provides useful statistics, but it is primarily a
-> debug facility and is generally too heavyweight for the production
-> environments.
+> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 
-Yes, agreed.  I think that is what needs to change.
+The sanity checks on valid inputs to me seem excessive for something
+that is intended to have a very narrow usecase. I'm also not sure it's
+harmful to just not bother with the parameter checking.
 
-> The motivation for this series was to provide lightweight observability
-> for the zone lock in production workloads.
+Otherwise seems fine to me.
 
-I read that.  But first it was the mmap lock.  Now it's the zone lock.
-Which lock will be next?  This is too heavyweight a procedure to
-follow for each lock of interest.
-
-> I agree that improving generic lock instrumentation would be preferable.
-> I did consider whether something similar could be done generically for
-> spinlocks, but the unlock path there is typically just a single atomic
-> store, so adding generic lightweight instrumentation without affecting
-> the fast path is difficult.
-
-This is why we have tracepoint_enabled() and friends.  But ... LOCK_STAT
-doesn't affect the unlock path at all.  It only changes the acquire side
-to call lock_acquired() (and lock_contended() if the trylock failed).
-
-> In parallel, I've been experimenting with improving observability for
-> sleepable locks by adding a contended_release tracepoint, which would
-> allow correlating lock holders and waiters in a more generic way. I've
-> posted an RFC here:
+> ---
+>  drivers/dax/bus.c | 58 +++++++++++++++++++++++++++++++++++++++++++++++
+>  drivers/dax/bus.h |  7 ++++++
+>  2 files changed, 65 insertions(+)
 > 
-> https://lore.kernel.org/all/cover.1772642407.git.d@ilvokhin.com/
-> 
-> I'd appreciate feedback on whether that direction makes sense for
-> improving the generic lock tracing infrastructure.
+> diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
+> index 5f387feb95f0..92b88952ede1 100644
+> --- a/drivers/dax/bus.c
+> +++ b/drivers/dax/bus.c
+> @@ -25,6 +25,64 @@ DECLARE_RWSEM(dax_region_rwsem);
+>   */
+>  DECLARE_RWSEM(dax_dev_rwsem);
+>  
+> +static DEFINE_MUTEX(dax_hmem_lock);
+> +static dax_hmem_deferred_fn hmem_deferred_fn;
+> +static void *dax_hmem_data;
+> +
+> +static void hmem_deferred_work(struct work_struct *work)
+> +{
+> +	dax_hmem_deferred_fn fn;
+> +	void *data;
+> +
+> +	scoped_guard(mutex, &dax_hmem_lock) {
+> +		fn = hmem_deferred_fn;
+> +		data = dax_hmem_data;
+> +	}
+> +
+> +	if (fn)
+> +		fn(data);
+> +}
+> +
+> +static DECLARE_WORK(dax_hmem_work, hmem_deferred_work);
+> +
+> +int dax_hmem_register_work(dax_hmem_deferred_fn fn, void *data)
+> +{
+> +	guard(mutex)(&dax_hmem_lock);
+> +
+> +	if (hmem_deferred_fn)
+> +		return -EINVAL;
+What happens if we drop the check and therefore need to return int
+from these + handle errors?
 
-It seems fine to me, but I don't have the depth in the locking code to
-give it the thorough review it deserves.
+The worst that happens is hmem_deferred_fn == NULL and we set the
+data (might also be NULL, we don't care).
+To me that looks harmless.
+
+> +
+> +	hmem_deferred_fn = fn;
+> +	dax_hmem_data = data;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(dax_hmem_register_work);
+> +
+> +int dax_hmem_unregister_work(dax_hmem_deferred_fn fn, void *data)
+> +{
+> +	guard(mutex)(&dax_hmem_lock);
+> +
+> +	if (hmem_deferred_fn != fn || dax_hmem_data != data)
+> +		return -EINVAL;
+
+Do we need the sanity check?  I'd just unconditionally clear them
+both.
+
+> +
+> +	hmem_deferred_fn = NULL;
+> +	dax_hmem_data = NULL;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(dax_hmem_unregister_work);
+> +
+> +void dax_hmem_queue_work(void)
+> +{
+> +	queue_work(system_long_wq, &dax_hmem_work);
+> +}
+> +EXPORT_SYMBOL_GPL(dax_hmem_queue_work);
+> +
+> +void dax_hmem_flush_work(void)
+> +{
+> +	flush_work(&dax_hmem_work);
+> +}
+> +EXPORT_SYMBOL_GPL(dax_hmem_flush_work);
+> +
+>  #define DAX_NAME_LEN 30
+>  struct dax_id {
+>  	struct list_head list;
+> diff --git a/drivers/dax/bus.h b/drivers/dax/bus.h
+> index cbbf64443098..b58a88e8089c 100644
+> --- a/drivers/dax/bus.h
+> +++ b/drivers/dax/bus.h
+> @@ -41,6 +41,13 @@ struct dax_device_driver {
+>  	void (*remove)(struct dev_dax *dev);
+>  };
+>  
+> +typedef void (*dax_hmem_deferred_fn)(void *data);
+> +
+> +int dax_hmem_register_work(dax_hmem_deferred_fn fn, void *data);
+> +int dax_hmem_unregister_work(dax_hmem_deferred_fn fn, void *data);
+> +void dax_hmem_queue_work(void);
+> +void dax_hmem_flush_work(void);
+> +
+>  int __dax_driver_register(struct dax_device_driver *dax_drv,
+>  		struct module *module, const char *mod_name);
+>  #define dax_driver_register(driver) \
+
 
