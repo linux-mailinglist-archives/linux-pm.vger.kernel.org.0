@@ -1,64 +1,71 @@
-Return-Path: <linux-pm+bounces-43935-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-43936-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WNM6DYmWrmnRGQIAu9opvQ
-	(envelope-from <linux-pm+bounces-43935-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 10:44:41 +0100
+	id 2C7kMlyvrmkSHwIAu9opvQ
+	(envelope-from <linux-pm+bounces-43936-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 12:30:36 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A4B02366C8
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 10:44:40 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DABD237F2B
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Mar 2026 12:30:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BD37B30095D7
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 09:43:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5AB443005D2C
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2026 11:26:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9336637AA93;
-	Mon,  9 Mar 2026 09:43:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DEB2393DF0;
+	Mon,  9 Mar 2026 11:26:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pi6uSJTd"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="FEZK8iXQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7080E36BCE6;
-	Mon,  9 Mar 2026 09:43:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CEC539B488
+	for <linux-pm@vger.kernel.org>; Mon,  9 Mar 2026 11:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773049412; cv=none; b=aA1wV4LqwSzbvYKCXQFkmRcpew2nMfmpI03EDZn9MWtaDxXGwrSyYNo5IIR8bQfOEPhmNax4HaQXsdq0q1DQFxJkcuior+62NkD7tECP/BtQ+24P3BaWS7csHAiRpLqoyxDpKTHYwp76m+RBeso+AS+zFbXxGMEIeNre5nepTJY=
+	t=1773055598; cv=none; b=N5J5DgMGxWxQ5Z4m7/Y7AZI67XPGrLJdS92UMnDqNTBuwx+7jVFQTENIh2Ea1prOWs/yfcGbORz2rLt+wQh8GsGgJZFbZ/nOwGpa+40XvVNPa+hTZNrQktqtzNkE+5anrOZLdnYGVGdDWZ5wBLmEv/Lhd/Ulqd1Xw1DHQYlHK8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773049412; c=relaxed/simple;
-	bh=2lGo3t1RntZTSXyLwgxBc8rDVEWOtf0wRiWH5p0NqEY=;
+	s=arc-20240116; t=1773055598; c=relaxed/simple;
+	bh=gnXgtcRDW1An3EMD9lZV+RY4VCeU4JYE7FSnMdn11SU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cCRv0KoJXOZPEiOVla+w+bnNWhbC9/FsXNB4yKaUNb+CKVxXUfFkhCmqY2Ce/1gvJUlrMgxAcjBdbn3S4FdFRBIoJeM1Y043EzWa0YQEIMVxuDura4S20dXjtVRskHmH3se9zADV77cswhxKNssOm8HWXEJMdvBcVktiX4Z9QFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pi6uSJTd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA2AC4CEF7;
-	Mon,  9 Mar 2026 09:43:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773049412;
-	bh=2lGo3t1RntZTSXyLwgxBc8rDVEWOtf0wRiWH5p0NqEY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pi6uSJTdeVJsjuruAOk6ckUNvZwU3AXUYiYYYsSIhq6opeYHnuE4gmuquMR0cztRC
-	 nqRC6Nc4GX3YqCXsk4+LDu5O8cSqWyxa5w0fGkan6fcfvpN1m7+rozTfLyZQo7p1TK
-	 kiB+oUtdGmqD2+jeRMBSCA7fAcdsTDGaLUPSvjbTJk0AT3ZMpGngJXhNICQJhEK78h
-	 GfvXcXwopHYTxuIJWxDjnWeuZOjYGAlJ1C7Kix6np6FgK1kYHs5PKlDvQH/XKv6lXY
-	 ypyFQ/amMNOemvj5SRkTKHLdIQf53sPwLCdI1PupnY/u/abcZ2olOEWqkzv00NtF06
-	 brit18q6B1LkA==
-Date: Mon, 9 Mar 2026 09:43:27 +0000
-From: Sudeep Holla <sudeep.holla@kernel.org>
-To: Philip Radford <philip.radford@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Sudeep Holla <sudeep.holla@kernel.org>, arm-scmi@vger.kernel.org,
-	linux-pm@vger.kernel.org, james.quinlan@broadcom.com,
-	f.fainelli@gmail.com, vincent.guittot@linaro.org,
-	etienne.carriere@st.com, peng.fan@oss.nxp.com, michal.simek@amd.com,
-	quic_sibis@quicinc.com, dan.carpenter@linaro.org, d-gole@ti.com,
-	souvik.chakravarty@arm.com, cristian.marussi@arm.com
-Subject: Re: [PATCH v2 5/9] firmware: arm_scmi: Add SCMIv4.0 Powercap FCs
- support
-Message-ID: <20260309-jade-salmon-of-education-7c901c@sudeepholla>
-References: <20260204111950.3648160-1-philip.radford@arm.com>
- <20260204111950.3648160-6-philip.radford@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nrsHTODPPUXhC5zEh+mYFqEAa5BcSfoyky2xIBOYH9nwgXRpu8dqzXi36bSvCvx1Wr8yoXUYtRF1zUsq8R0Y0/Y6lz50WXAImIO+KAvHVbXDdy5tztFowRCIZBD/CAhFGHsWL1nIPTFRv+BSidDP2Yj6insqgTvLdN8PVQ3a7tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=FEZK8iXQ; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=zlAE7xmA5OnbHDKhIFMGKCO1OAvPjP7zrw3FZsOeoz4=; b=FEZK8iXQecNdX97sbiEgzothBL
+	fOWv6K2Wdtb9bJikc5C+qjHa0XbMqHgn6OjuTnBJp0h6tJjokmkEyTrDxph+ZZ2HywjgNNoBE7JAr
+	KlDH2vH+irWhcZzUF44v6rvuOD0/IXwOGoNTfEFAQyRx0Sx+e+1Y25bNhXmo+Z0/yl4yaMT4mM5eP
+	NxPDooC2+MXbyTXCBzXhCN5+54mBZy3bhmXD1ISAyGs+Gjw/EA4yWB29isZ9aXDjtv7mxEXzTzaRa
+	KGOyEMBRXdPvCmb49tSTkxP4DkV+Omq0jBq8QbRFzq7/EHyemZl+oMEzJIQuOlAPkqAOzm4R3+/sw
+	lA6vNmzw==;
+Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
+	by fanzine2.igalia.com with esmtps 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1vzYkm-00C1Jk-Gf; Mon, 09 Mar 2026 12:26:28 +0100
+Received: from gate.service.igalia.com ([192.168.21.52])
+	by mail.igalia.com with esmtp (Exim)
+	id 1vzYkk-0038qY-En; Mon, 09 Mar 2026 12:26:28 +0100
+Received: from berto by gate.service.igalia.com with local (Exim 4.96)
+	(envelope-from <berto@igalia.com>)
+	id 1vzYkk-004MVG-0u;
+	Mon, 09 Mar 2026 11:26:26 +0000
+Date: Mon, 9 Mar 2026 12:26:26 +0100
+From: Alberto Garcia <berto@igalia.com>
+To: "Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Brian Geffon <bgeffon@google.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] PM: hibernate: Drain trailing zero pages on userspace
+ restore
+Message-ID: <aa6uYoVKegcac2Kq@igalia.com>
+References: <20260309001250.192841-1-berto@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,174 +74,62 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260204111950.3648160-6-philip.radford@arm.com>
-X-Rspamd-Queue-Id: 3A4B02366C8
+In-Reply-To: <20260309001250.192841-1-berto@igalia.com>
+X-Spam-Report: NO, Score=-2.2, Tests=ALL_TRUSTED=-3,BAYES_50=0.8
+X-Spam-Score: -21
+X-Spam-Bar: --
+X-Rspamd-Queue-Id: 3DABD237F2B
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_REJECT(1.00)[igalia.com:s=20170329];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[igalia.com : SPF not aligned (relaxed),none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-43935-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-43936-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,kernel.org,broadcom.com,gmail.com,linaro.org,st.com,oss.nxp.com,amd.com,quicinc.com,ti.com,arm.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[igalia.com:-];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.987];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sudeep.holla@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,arm.com:email]
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[berto@igalia.com,linux-pm@vger.kernel.org];
+	NEURAL_SPAM(0.00)[0.419];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-pm];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,igalia.com:mid]
 X-Rspamd-Action: no action
 
-On Wed, Feb 04, 2026 at 11:19:46AM +0000, Philip Radford wrote:
-> From: Cristian Marussi <cristian.marussi@arm.com>
-> 
-> Add support for new SCMIv4.0 Powercap Fastchannels.
-> 
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> [Philip: removed reference to old versioning logic]
-> Signed-off-by: Philip Radford <philip.radford@arm.com>
-> ---
-> V1->V2
-> - Removed creation of pi powercap_info struct due to legacy code
->   change
-> ---
->  drivers/firmware/arm_scmi/powercap.c | 323 ++++++++++++++++++---------
->  1 file changed, 221 insertions(+), 102 deletions(-)
-> 
-> diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
-> index 3291bde78367..22bf8e480450 100644
-> --- a/drivers/firmware/arm_scmi/powercap.c
-> +++ b/drivers/firmware/arm_scmi/powercap.c
->  
+On Mon, Mar 09, 2026 at 01:12:50AM +0100, Alberto Garcia wrote:
+>  	case SNAPSHOT_ATOMIC_RESTORE:
+> +		/*
+> +		 * We need to call snapshot_write_next() one last time
+> +		 * before finalizing in order to process any trailing
+> +		 * zero pages.
+> +		 */
+> +		error = snapshot_write_next(&data->handle);
+> +		if (error < 0)
+> +			break;
 
-[...]
+I realized that this patch assumes that userspace calls
+SNAPSHOT_ATOMIC_RESTORE only after having written the full image,
+but if that happens earlier I'm not sure that it's safe to call
+snapshot_write_next().
 
-> @@ -1019,37 +1092,77 @@ static const struct scmi_powercap_proto_ops powercap_proto_ops = {
->  };
->  
->  static void scmi_powercap_domain_init_fc(const struct scmi_protocol_handle *ph,
-> -					 u32 domain, struct scmi_fc_info **p_fc)
-> +					 struct scmi_powercap_info *dom_info)
->  {
-> -	struct scmi_fc_info *fc;
-> -
-> -	fc = devm_kcalloc(ph->dev, POWERCAP_FC_MAX, sizeof(*fc), GFP_KERNEL);
-> -	if (!fc)
-> -		return;
-> -
-> -	ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
-> -				   POWERCAP_CAP_SET, 4, domain, NULL,
-> -				   &fc[POWERCAP_FC_CAP].set_addr,
-> -				   &fc[POWERCAP_FC_CAP].set_db,
-> -				   &fc[POWERCAP_FC_CAP].rate_limit);
-> -
-> -	ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
-> -				   POWERCAP_CAP_GET, 4, domain, NULL,
-> -				   &fc[POWERCAP_FC_CAP].get_addr, NULL,
-> -				   &fc[POWERCAP_FC_CAP].rate_limit);
-> -
-> -	ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
-> -				   POWERCAP_PAI_SET, 4, domain, NULL,
-> -				   &fc[POWERCAP_FC_PAI].set_addr,
-> -				   &fc[POWERCAP_FC_PAI].set_db,
-> -				   &fc[POWERCAP_FC_PAI].rate_limit);
-> -
-> -	ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
-> -				   POWERCAP_PAI_GET, 4, domain, NULL,
-> -				   &fc[POWERCAP_FC_PAI].get_addr, NULL,
-> -				   &fc[POWERCAP_FC_PAI].rate_limit);
-> -
-> -	*p_fc = fc;
-> +	for (int id = 0; id < dom_info->num_cpli; id++) {
-> +		struct scmi_fc_info *fc;
-> +		u32 *cpl_id, zero_cpl_id = 0;
-> +
-> +		fc = devm_kcalloc(ph->dev, POWERCAP_FC_MAX, sizeof(*fc), GFP_KERNEL);
-> +		if (!fc)
-> +			return;
-> +
-> +		/* NOTE THAT when num_cpli == 1 the arg *cpl_id is 0 */
-> +		cpl_id = (PROTOCOL_REV_MAJOR(ph->version) >= 0x3) ? &id : NULL;
-> +
-> +		ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
-> +					   POWERCAP_CAP_SET, 4, dom_info->id,
-> +					   cpl_id,
-> +					   &fc[POWERCAP_FC_CAP].set_addr,
-> +					   &fc[POWERCAP_FC_CAP].set_db,
-> +					   &fc[POWERCAP_FC_CAP].rate_limit);
-> +
-> +		ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
-> +					   POWERCAP_CAP_GET, 4, dom_info->id,
-> +					   cpl_id,
-> +					   &fc[POWERCAP_FC_CAP].get_addr, NULL,
-> +					   &fc[POWERCAP_FC_CAP].rate_limit);
-> +
-> +		if (PROTOCOL_REV_MAJOR(ph->version) < 0x3) {
-> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
-> +						   POWERCAP_PAI_SET, 4,
-> +						   dom_info->id, NULL,
-> +						   &fc[POWERCAP_FC_XAI].set_addr,
-> +						   &fc[POWERCAP_FC_XAI].set_db,
-> +						   &fc[POWERCAP_FC_XAI].rate_limit);
-> +
-> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
-> +						   POWERCAP_PAI_GET, 4,
-> +						   dom_info->id, NULL,
-> +						   &fc[POWERCAP_FC_XAI].get_addr, NULL,
-> +						   &fc[POWERCAP_FC_XAI].rate_limit);
-> +		} else {
-> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
-> +						   POWERCAP_CAI_SET, 4,
-> +						   dom_info->id, &id,
-> +						   &fc[POWERCAP_FC_XAI].set_addr,
-> +						   &fc[POWERCAP_FC_XAI].set_db,
-> +						   &fc[POWERCAP_FC_XAI].rate_limit);
-> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
-> +						   POWERCAP_CAI_GET, 4,
-> +						   dom_info->id, &id,
-> +						   &fc[POWERCAP_FC_XAI].get_addr, NULL,
-> +						   &fc[POWERCAP_FC_XAI].rate_limit);
+An alternative solution would be to do it at the beginning of
+snapshot_write_finalize() if handle->cur > nr_meta_pages + 1.
 
-Can the above "&id" changed to cpl_id like the first 2 instance for consistency
-unless I am reading it wrong.
+If you think that's a better idea I can send v2 of the patch.
 
-> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
-> +						   POWERCAP_MAI_SET, 4,
-> +						   dom_info->id, &zero_cpl_id,
-> +						   &fc[POWERCAP_FC_MAI].set_addr,
-> +						   &fc[POWERCAP_FC_MAI].set_db,
-> +						   &fc[POWERCAP_FC_MAI].rate_limit);
-> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
-> +						   POWERCAP_MAI_GET, 4,
-> +						   dom_info->id, &zero_cpl_id,
-> +						   &fc[POWERCAP_FC_MAI].get_addr, NULL,
-> +						   &fc[POWERCAP_FC_MAI].rate_limit);
-> +			ph->hops->fastchannel_init(ph, POWERCAP_DESCRIBE_FASTCHANNEL,
-> +						   POWERCAP_MEASUREMENTS_GET, 4,
-> +						   dom_info->id, &zero_cpl_id,
-> +						   &fc[POWERCAP_FC_MEASUREMENT].get_addr, NULL,
-> +						   &fc[POWERCAP_FC_MEASUREMENT].rate_limit);
-
-Also why should the above 3 as well as the NULL cpl_id calls be inside this
-loop ?
-
--- 
 Regards,
-Sudeep
+
+Berto
 
